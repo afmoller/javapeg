@@ -5,10 +5,10 @@
 <entry key="fileChooser.window.width">1098</entry>
 <entry key="fileChooser.window.location.y">10</entry>
 <entry key="fileChooser.window.location.x">10</entry>
-<entry key="helpViewerGUI.window.location.x">540</entry>
-<entry key="helpViewerGUI.window.location.y">1098</entry>
-<entry key="helpViewerGUI.window.width">10</entry>
-<entry key="helpViewerGUI.window.height">10</entry>
+<entry key="helpViewerGUI.window.location.x">10</entry>
+<entry key="helpViewerGUI.window.location.y">10</entry>
+<entry key="helpViewerGUI.window.width">1098</entry>
+<entry key="helpViewerGUI.window.height">540</entry>
 <entry key="logger.log.level">ERROR</entry>
 <entry key="logger.developerMode">false</entry>
 <entry key="automaticLanguageSelection">true</entry>
