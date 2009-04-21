@@ -1,0 +1,339 @@
+# This is the english language file for JavaPEG.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
+# This file was created: by Fredrik Möller 2005-xx-xx
+# This file was updated: by Fredrik Möller 2005-11-08
+#                      : by Fredrik Möller 2006-11-09
+#                      : by fredrik Möller 2006-11-16
+#                      : by Fredrik Möller 2006-11-27
+#                      : by Fredrik Möller 2007-02-02
+#                      : by Fredrik Möller 2007-03-10
+#                      : by Fredrik Möller 2009-02-19
+#                      : by Fredrik Möller 2009-02-23
+#                      : by Fredrik Möller 2009-02-24
+#                      : by Fredrik Möller 2009-02-27
+#                      : by Fredrik Möller 2009-03-04
+#                      : by Fredrik Möller 2009-03-05
+#                      : by Fredrik Möller 2009-03-06
+#                      : by Fredrik Möller 2009-03-11
+#                      : by Fredrik Möller 2009-03-14
+#                      : by Fredrik Möller 2009-03-23
+#                      : by Fredrik Möller 2009-03-26
+#                      : by Fredrik Möller 2009-03-27
+#                      : by Fredrik Möller 2009-04-14
+#                      : by Fredrik Möller 2009-04-15
+#                      : by Fredrik Möller 2009-04-19
+#                      : by Fredrik Möller 2009-04-20
+
+#############################################################################################################
+# M E N U                                                                                                   #
+#############################################################################################################
+menu.file     = File
+menu.help     = Help
+menu.language = Language
+
+#############################################################################################################
+# M E N U  I T E M S                                                                                        #
+#############################################################################################################
+menu.item.exit                       = Exit
+menu.item.openSourceFileChooser      = Open Source File Chooser
+menu.item.openDestinationFileChooser = Open Destination File Chooser
+menu.item.startProcess               = Start Rename Process
+menu.item.programHelp                = Program help
+menu.item.versionInformation         = Version information
+menu.item.about                      = About JavaPEG 2.0
+menu.item.languageChoice             = Language selection
+
+#############################################################################################################
+# M E N U  M N E M O N I C                                                                                  #
+#############################################################################################################
+menu.mnemonic.file               = F
+menu.mnemonic.help               = H
+menu.mnemonic.language           = L
+
+#############################################################################################################
+# M E N U  A C C E L E R A T O R                                                                            #
+#############################################################################################################
+menu.iten.openSourceFileChooser.accelerator      = S
+menu.iten.openDestinationFileChooser.accelerator = D
+menu.iten.startProcess.accelerator               = P
+menu.iten.exit.accelerator                       = X
+menu.item.languageChoice.accelerator             = L
+menu.item.programHelp.accelerator                = H
+menu.item.versionInformation.accelerator         = V
+menu.item.about.accelerator                      = A
+
+##############################################################################################################
+# L A B E L S                                                                                                #
+##############################################################################################################
+labels.sourcePath       = PATH TO IMAGE DIRECTORY
+labels.destinatonPath   = PATH TO DESTINATION DIRECTORY
+labels.subFolderName    = SUB DIRECTORY NAME TEMPLATE
+labels.fileNameTemplate = FILENAME TEMPLATE
+labels.variables        = VARIABLES
+
+##############################################################################################################
+# V A R I A B L E S                                                                                          #
+##############################################################################################################
+variable.pictureDateVariable   = d
+variable.pictureDate           = Shooting date of picture
+variable.pictureTimeVariable   = t
+variable.pictureTime           = Shooting time of picture
+variable.cameraModelVariable   = m
+variable.cameraModel           = Camera model
+variable.shutterSpeedVariable  = s
+variable.shutterSpeed          = Shutter speed
+variable.isoValueVariable      = i
+variable.isoValue              = ISO value
+variable.pictureWidthVariable  = w
+variable.pictureWidth 	       = Picture width in pixels
+variable.pictureHeightVariable = h
+variable.pictureHeight         = Picture height in pixels
+variable.apertureValueVariable = av
+variable.apertureValue         = Aperture value
+variable.dateOftodayVariable   = td
+variable.dateOftoday           = Today´s date
+
+##############################################################################################################
+# V A R I A B L E S  C O M M E N T                                                                           #
+##############################################################################################################
+variable.comment.infoLabelA = * = Theese variables might be
+variable.comment.infoLabelB = used when naming a subfolder
+
+##############################################################################################################
+# C H E C K  B O X E S                                                                                       #
+##############################################################################################################
+checkbox.createThumbNails      = CREATE THUMBNAIL OVERVIEW
+
+##############################################################################################################
+# T O O L T I P S                                                                                            #
+##############################################################################################################
+tooltip.sourcePathButton             = Browse for image source path
+tooltip.destinationPathButton        = Browse for destination folder
+tooltip.createSubFolder              = Create subfolder with a name free of choice in which images will be put
+tooltip.subFolderName                = Specify name of folder with possible variables here
+tooltip.fileNameTemplate             = Specify filename template with possible variables here
+tooltip.createThumbNails             = Create thumbnail overview of name changed files
+tooltip.openDestinationFolder        = Open folder where name changed files will be present after finished process
+tooltip.beginNameChangeProcessButton = Start name change process
+
+##############################################################################################################
+# F I L E  S E L E C T I O N  D I A L O G S                                                                  #
+##############################################################################################################
+fileSelectionDialog.sourcePathFileChooser      = Choose image folder
+fileSelectionDialog.destinationPathFileChooser = Choose destination folder
+
+##############################################################################################################
+# A B O U T  D I A L O G                                                                                     #
+##############################################################################################################
+aboutDialog.Label    = About JavaPEG 2.0
+aboutDialog.TextRowA = JavaPEG, ver: 2.0
+aboutDialog.TextRowB = Copyright © 2005 - 2009
+aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-02-24.
+aboutDialog.TextRowE = Version 2.0 released 2009-??-??.
+aboutDialog.TextRowF = Developer:
+aboutDialog.TextRowG = Fredrik Möller     (fredrik.moller@telia.com)
+aboutDialog.TextRowH = _______________________________________
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  M A I N G U I                                                                  #
+##############################################################################################################
+errormessage.maingui.errorMessageLabel                       = Error
+errormessage.maingui.warningMessageLabel                     = Warning
+errormessage.maingui.locationError                           = Could not set window location according to settings. See logs for details
+errormessage.maingui.toLongFileNameInPreviewTable            = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
+errormessage.maingui.toLongTotalPathInPreviewTable           = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
+errormessage.maingui.sameSourceAndDestination                = Source and destination folder are the same
+
+##############################################################################################################
+# P R O G R E S S B A R                                                                                      #
+##############################################################################################################
+progress.ThumbNailLoading.title = Loading thumbnails
+
+progress.RenameProcess.title.processStarting                                  = Renaming images...
+progress.RenameProcess.title.processFinished                                  = Rename process finished
+progress.RenameProcess.dismissWindowButton.mnemonic                           = C
+progress.RenameProcess.dismissWindowButton.processStarting                    = wait..
+progress.RenameProcess.dismissWindowButton.processFinished                    = Close
+progress.RenameProcess.dismissWindowButton.processStarting.toolTip            = Rename in progress...
+progress.RenameProcess.dismissWindowButton.processFinished.toolTip            = Close this window
+progress.RenameProcess.openDestinationDirectoryButton.mnemonic                = O
+progress.RenameProcess.openDestinationDirectoryButton.processStarting         = wait..
+progress.RenameProcess.openDestinationDirectoryButton.processFinished         = Open
+progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip = Rename in progress...
+progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = Open destination directory in an explorer window
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
+##############################################################################################################
+errormessage.jpgrename.joptionPaneYes                            = Yes
+errormessage.jpgrename.joptionPaneNo                             = No
+errormessage.jpgrename.noImagesInPathLabel                       = Fault message
+errormessage.jpgrename.noImagesInPath                            = Chosen path contains no image files
+errormessage.jpgrename.noExifInImage                             = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImageLabel                        = No Exif
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
+##############################################################################################################
+errormessage.filehandler.fileNotFoundExceptionA = The file:
+errormessage.filehandler.fileNotFoundExceptionB = can not be found
+errormessage.filehandler.canNotReadFile         = Not possible to access the file:
+errormessage.filehandler.canNotWriteFile        = Can not write:
+
+##############################################################################################################
+# L A N G U A G E  O P T I O N S  G U I                                                                      #
+##############################################################################################################
+language.option.gui.windowTitle          = Language settings
+language.option.gui.selectionModeJLabel  = SELECTIONMODE
+language.option.gui.manualRadioButton    = Manually
+language.option.gui.automaticRadioButton = Automatic
+language.option.gui.currentLanguageLabel = CURRENT LANGUAGE
+language.option.gui.availableLanguages   = AVAILABLE LANGUAGES
+language.option.gui.languageNameNotFound = name of language not found
+
+##############################################################################################################
+# I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
+##############################################################################################################
+language.option.gui.information.windowlabel    = Information
+language.option.gui.information.restartMessage = Selected language will not be used until JavaPEG is restarted
+
+##############################################################################################################
+# I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
+##############################################################################################################
+information.window.userHelpWindowTitle           = Program help
+information.window.versionInformationWindowTitle = Version information
+
+##############################################################################################################
+# P I C T U R E  P A N E L                                                                                   #
+##############################################################################################################
+picture.panel.pictureLabel = IMAGES IN CHOSEN FOLDER
+
+##############################################################################################################
+# F I L E  C H O O S E R                                                                                     #
+##############################################################################################################
+filechooser.window.title                  = File Chooser
+filechooser.window.locationError          = Could not set window location according to settings. See logs for details 
+filechooser.button.ok                     = Ok
+filechooser.button.ok.mnemonic            = O
+filechooser.button.cancel                 = Cancel
+filechooser.button.cancel.mnemonic        = C
+
+##############################################################################################################
+# H E L P  V I E W E R                                                                                       #
+##############################################################################################################
+helpViewerGUI.window.locationError    = Could not set window location according to settings. See logs for details 
+helpViewerGUI.tree.content            = Content
+helpViewerGUI.tree.programHelp        = Program Help
+helpViewerGUI.tree.versionInformation = Version Information
+helpViewerGUI.tree.overviewCreator    = Thumbnail Overview
+
+##############################################################################################################
+# I N F O R M A T I O N  P A N E L                                                                           #
+##############################################################################################################
+information.panel.informationLabel   = INFORMATION
+information.panel.columnNameFileName = File name
+information.panel.fileNameCurrent    = Current file name
+information.panel.fileNamePreview    = File name preview
+information.panel.metaDataLabel      = METADATA
+information.panel.previewLabel       = PREVIEW
+information.panel.progressLabel      = PROCESS
+information.panel.subFolderNameLabel = Subfolder name
+
+##############################################################################################################
+# R E N A M E  P R O C E S S  I N F O R M A T I O N  M E S S A G E                                           #
+##############################################################################################################
+rename.PreFileProcessor.starting                           = Pre File Processing Started
+rename.PreFileProcessor.error                              = Pre File Processing Found Following Errors:
+rename.PreFileProcessor.finished                           = Pre File Processing Finished
+rename.PreFileProcessor.sourceAndDestinationPath           = Validating Source and Destination Paths
+rename.PreFileProcessor.fileAndSubDirectoryTemplate        = Validating File Name and Sub Directory Name Template
+rename.PreFileProcessor.destinationDirectoryDoesNotExist   = Validating Destination Directory Not Existing
+rename.PreFileProcessor.uniqueFilesInSourceDirectory       = Validating Unique Files In Source Directory
+rename.PreFileProcessor.jPEGTotalPathLength                = Validating Total Path Lengths Of JPEG Files
+rename.PreFileProcessor.nonJPEGTotalPathLength             = Validating Total Path Lengths Of Non JPEG Files
+rename.PreFileProcessor.availableDiskSpace                 = Validating Available Disk Space
+rename.PreFileProcessor.fileCreationAtDestinationDirectory = Validating File Creation At Destination Directory
+
+rename.FileProcessor.starting                               = File Processing Has Started
+rename.FileProcessor.finished                               = File Processing Has Finished
+rename.FileProcessor.createSubDirectory                     = Sub Directory Creation
+rename.FileProcessor.createThumbNailsDirectory              = Thumb Nails Directory Creation
+rename.FileProcessor.createAndTransferContentOfJPEGFiles    = JPEG Files Copy And Rename
+rename.FileProcessor.createThumbNails                       = Thumb Nails Creation
+rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Copy Non JPEG Files
+
+rename.PostFileProcessor.integrityCheck.starting = File Integrity Check Started
+rename.PostFileProcessor.integrityCheck.finished = File Integrity Check Finished
+rename.PostFileProcessor.integrityCheck.error    = Not All Files Where Copied Correct, See Log File For Details
+rename.PostFileProcessor.integrityCheck.checking = Integrity Of Copied Files Are Checked
+
+##############################################################################################################
+# P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #
+##############################################################################################################
+#
+# Available disk space validator
+validator.availablediskspace.notEnoughDiskSpace = Not enough disk space at selected destination.
+
+# Destination directory does not exist validator
+validator.destinationdirectorydoesnotexist.existingSubDirectory = Destination folder already exists.
+
+# File and sub directory template validator
+validator.fileandsubdirectorytemplate.noSubFolderNameError                    = Sub folder must have a name
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError   = Sub folder name contains illegal characters
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError    = Sub folder name may only contain these variables:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate         = A dot is not valid as first character in sub folder name
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate          = A dot is not valid as last character in sub folder name
+validator.fileandsubdirectorytemplate.noFileNameError                         = A filename template must be set
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError        = Filename template contains illegal characters
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate              = A dot is not valid as first character in filename template
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate               = A dot is not valid as last character in filename template
+
+# File creation at destination directory validator
+validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = Could not create sub directory
+validator.filecreationatdestinationdirectory.couldNotCreateAllJPEGFiles       = Could not create all JPEG Files
+validator.filecreationatdestinationdirectory.couldNotCreateThumbNailDirectory = Could not create thumb nail directory
+validator.filecreationatdestinationdirectory.couldNotCreateAllThumbNails      = Could not create all thumb nails
+validator.filecreationatdestinationdirectory.couldNotCreateAllNonJPEGFiles    = Could not create all non JPEG files
+validator.filecreationatdestinationdirectory.couldNotDeleateSubDirectory      = Could not delete sub directory
+
+# JPEG total path length validator
+validator.jpegtotalpathlength.toLongFileName               = With the current destination directory and templates the total paths\nof the renamed files will be longer than what is allowed.\n\nTo avoid this, either change the destination folder or change the\ntemplates.
+validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = No JPEG files in selected source directory
+
+# Non JPEG total path length validator
+validator.nonjpegtotalpathlength.toLongFileName      = The total path with the current destinaton directory will be to long for the file:
+validator.nonjpegtotalpathlength.toLongDirectoryPath = The total path with the current destinaton directory will be to long for the directory:
+
+# Source and destination path validator
+validator.sourceanddestinationpath.noSourcePathError                       = A path to source folder must be set
+validator.sourceanddestinationpath.noDestinationPathError                  = A path to destination folder must be set
+validator.sourceanddestinationpath.invalidCharactersInSourcePathError      = Path to source folder contains illegal characters
+validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = Path to destination folder contains illegal characters
+
+##############################################################################################################
+# T H U M B N A I L  O V E R V I E W                                                                         #
+##############################################################################################################
+
+thumbnailoverview.ThumbNailOverViewCreator.starting             = Thumb Nail Overview Creation Started
+thumbnailoverview.ThumbNailOverViewCreator.finished             = Thumb Nail Overview Creation Finished
+thumbnailoverview.ThumbNailOverViewCreator.error.createCSSFile  = Could not create CSS file in destination directory. See log file for details.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessCSSFile  = Could not access CSS file. See log file for details.
+thumbnailoverview.ThumbNailOverViewCreator.error.createHTMLFile = Could not create HTML file in destination directory.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Could not access HTML file. See log file for details.
+
+thumbnailoverview.LayoutParser.wrongElementAmount = The file layout.xml contains wrong amount of element:
+thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xml. See log file for details.

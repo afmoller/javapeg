@@ -1,0 +1,242 @@
+package moller.javapeg.program.logger;
+/**
+ * This class was created : 2009-02-27 by Fredrik Möller
+ * Latest changed         : 2009-03-01 by Fredrik Möller
+ *                        : 2009-03-02 by Fredrik Möller
+ *                        : 2009-03-03 by Fredrik Möller
+ *                        : 2009-03-13 by Fredrik Möller
+ *                        : 2009-04-04 by Fredrik Möller
+ *                        : 2009-04-15 by Fredrik Möller
+ */
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import moller.javapeg.program.Config;
+
+public class Logger {
+
+    private static Logger instance;
+        
+    private SimpleDateFormat sdf;
+    
+    private boolean rotateLog;
+    private boolean developerMode;
+    
+    private long rotateSize;
+    private long currentLogSize;
+        
+    private String logName;
+    
+    private BufferedWriter logWriter;
+    
+    private Level logLevel;
+    
+    private final static String FS = File.separator;
+    private final static String BASE_PATH = System.getProperty("user.dir") + FS + "logs";
+
+    private Logger() {
+
+    	Config conf = Config.getInstance();
+    	   
+    	rotateLog = conf.getBooleanProperty("logger.log.rotate");
+    	
+    	developerMode = conf.getBooleanProperty("logger.developerMode");
+    	
+    	if(rotateLog) {
+    		rotateSize = conf.getIntProperty("logger.log.rotate.size");
+    	}
+    	logName = conf.getStringProperty("logger.log.name");
+                
+        sdf = new SimpleDateFormat(conf.getStringProperty("logger.log.entry.timestamp.format"));
+    
+       logLevel = parseConfValue(conf.getStringProperty("logger.log.level"));
+        
+        File logFile = new File(BASE_PATH + FS + logName);
+        
+        if(logFile.exists()) {
+        	currentLogSize = logFile.length();
+        } else {
+        	createFile(logFile);
+        	currentLogSize = 0;
+        }
+        
+        try {
+			logWriter = new BufferedWriter(new FileWriter(logFile, true));
+		} catch (IOException e) {
+		}
+    }
+        
+    /**
+	 * Accessor method for this Singleton class.
+	 * 
+	 * @return the singleton instance of this class.
+	 */
+	public static Logger getInstance() {
+		if (instance != null)
+			return instance;
+		synchronized (Logger.class) {
+			if (instance == null) {
+				instance = new Logger();
+			}
+			return instance;
+		}
+	}
+	
+	/**
+	 * This method logs a debug entry to the log file if current log level 
+	 * allows that.
+	 * 
+	 * The meaning of the DEBUG level is: The DEBUG Level designates 
+	 * fine-grained informational events that are most useful to debug an
+	 * application.
+	 *  
+	 * @param logMessage is the message to log.
+	 */
+	public void logDEBUG(String logMessage) {
+    	this.log(logMessage, Level.DEBUG);
+    }
+    
+    /**
+     * This method logs an info entry to the log file if current log level 
+	 * allows that.
+	 * 
+	 * The meaning of the INFO level is: The INFO level designates 
+	 * informational messages that highlight the progress of the application
+	 * at coarse-grained level.
+	 * 
+     * @param logMessage is the message to log.
+     */
+    public void logINFO(String logMessage) {
+    	this.log(logMessage, Level.INFO);
+    }
+    
+    /**
+     * This method logs a warn entry to the log file if current log level 
+	 * allows that.
+	 * 
+	 * The meaning of the WARN level is: The WARN level designates potentially
+	 * harmful situations.
+	 * 
+     * @param logMessage is the message to log.
+     */
+    public void logWARN(String logMessage) {
+    	this.log(logMessage, Level.WARN);
+    }
+
+    /**
+     * This method logs an error entry to the log file if current log level 
+	 * allows that.
+	 * 
+	 * The meaning of the ERROR level is: The ERROR level designates error
+	 * events that might still allow the application to continue running.
+	 * 
+     * @param logMessage is the message to log.
+     */
+    public void logERROR(String logMessage) {
+    	this.log(logMessage, Level.ERROR);
+    }
+
+    /**
+     * This method logs a fatal entry to the log file if current log level 
+	 * allows that.
+	 * 
+	 * The meaning of the FATAL level is: The FATAL level designates very
+	 * severe error events that will presumably lead the application to abort.
+	 * 
+     * @param logMessage is the message to log.
+     */
+    public void logFATAL(String logMessage) {
+    	this.log(logMessage, Level.FATAL);
+    }
+	
+    private void log(String logMessage, Level level) {
+        
+        if ((level.ordinal() >= logLevel.ordinal()) || developerMode) {
+    	
+	    	String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
+	        
+	    	String logEntry = "";
+	    	
+	    	if (level == Level.INFO || level == Level.WARN) {
+	    		logEntry = formattedTimeStamp + " " + level.toString() + "  : " + logMessage;
+	    	} else {
+	    		logEntry = formattedTimeStamp + " " + level.toString() + " : " + logMessage;	
+	    	}
+	    		
+	        File logFile = new File(BASE_PATH + FS + logName);
+	                
+	        if ((currentLogSize + logEntry.length()) > rotateSize) {
+	        	try {
+					logWriter.close();
+				} catch (IOException e) {
+				}
+	        	logFile.renameTo(new File(BASE_PATH + FS + logName + System.currentTimeMillis()));
+	        	if(!logFile.exists()) {
+	        		createFile(logFile);
+	        		try {
+	        			logWriter = new BufferedWriter(new FileWriter(logFile, true));
+	        			logWriter.write(logEntry);
+						logWriter.newLine();
+		        		currentLogSize = logEntry.length();
+	        		} catch (IOException e) {
+	        		}
+	        	}
+	        } else {
+	        	try {
+	        		logWriter.write(logEntry);
+	        		logWriter.newLine();
+	        		currentLogSize += logEntry.length();
+	        	} catch (IOException e) {
+	        	}
+	        }
+	        if (developerMode) {
+    			flush();
+    		}
+        }
+    }
+            
+    private void createFile(File f) {
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private Level parseConfValue(String level) {
+    	
+    	if(level.equals("DEBUG")) {
+    		return Level.DEBUG;
+    	}
+    	if(level.equals("INFO")) {
+    		return Level.INFO;
+    	}
+    	if(level.equals("WARN")) {
+    		return Level.WARN;
+    	}
+    	if(level.equals("ERROR")) {
+    		return Level.ERROR;
+    	}
+    	if(level.equals("FATAL")) {
+    		return Level.FATAL;
+    	} else {
+    		return Level.DEBUG;
+    	}
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
+    }
+    
+    public void flush() {
+    	try {
+			logWriter.flush();
+		} catch (IOException e) {
+		}
+    }
+}

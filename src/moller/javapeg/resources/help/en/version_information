@@ -1,0 +1,26 @@
+VERSION INFORMATION<LF>
+===================<LF>
+<LF>
+Version 1.01<LF>
+============<LF>
+Released 2007-02-02: Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect behavior in rename engine and a problem with wrong error message.
+<LF>
+<LF>
+The program hang if a point was present as first or last character in file name template or sub folder name template. The exact same problem was also present if there was white spaces first or last in templates. Besides from this there was a correction of two error messages which was mixed up in the eglish language file.
+<LF>
+<LF>
+Version 1.0<LF>
+===========<LF>
+Released 2006-11-27: Version 1.0 of JavaPEG has the possibility to rename image files of type jgp if they have embedded Exif-information.
+<LF>
+<LF>
+The program will rename the files according to a, in the field "FILENAME TEMPLATE", by the user, given template. There is a couple of variables available and they can be found in the window with heading "VARABLES".
+<LF>
+<LF>
+The user has the possibility to choose whether to rename the original files or copies of them, which will be saved in the same folder as original files, or in another folder or in a subfolder in another folder than original folder. It is possible to give the subfolder a name in the same way as the files, in other words: by using variables. 
+<LF>
+<LF>
+Before rename process starts the user has the possibility to choose whether JavaPEG shall create any thumb nails of renamed images. If there will be any thumbnails there will also be a html file created, which will show all the created thumbnails and the thumbnails will link to the fullsize images. 
+<LF>
+<LF>
+As last option, it is also possible to instruct the program to open destination folder after finished rename process.

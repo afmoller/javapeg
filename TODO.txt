@@ -1,0 +1,28 @@
+2.0:
+====
+- Skapa repository på SF
+- Fixa resize problem i file choosern.
+- Uppdatera programhjälpen
+- Uppdatera info filer i den interna resources katalogen.
+- Testa all funktionalitet.
+- Fixa installationspaketering.
+
+2.1:
+====
+- Fixa en config där ordningen inte ändras beroende på parametervärde 
+- Fixa validering av extern layout.xml
+- Fixa detaljerade logutskrifter i rename flödet.
+- Fixa minnesläcka (Inte helt verifierad att den finns.)
+- Fixa så att GUI:t går att resizea
+- Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
+- Uppdatera info filer i den interna resources katalogen.
+- Testa all funktionalitet.
+- Fixa installationspaketering.
+
+2.x:
+====
+- Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
+- Skriva unittest
+- Uppdatera info filer i den interna resources katalogen.
+- Testa all funktionalitet.
+- Fixa installationspaketering.

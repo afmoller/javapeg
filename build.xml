@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="Compile and build java classes plus jar archives">
+	
+	<property name="jar.name" value="JavaPEG.jar" />
+	<property name="zip.name" value="JavaPEG_v2.zip" />
+	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
+
+	<target name="all" depends="clean_build,build,create_jar,create_release" />
+
+	<target name="clean_build">
+		<delete failonerror="no">
+			<fileset dir="build">
+				<include name="**" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="delete_build" description="Deleted the entire build folder">
+		<delete failonerror="yes" dir="build" />
+	</target>
+
+	<target name="build" depends="clean_build">
+		<mkdir dir="build" />
+		<javac srcdir="src" destdir="build" target="1.6" debug="true">
+			<classpath>
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+			<include name="moller/**" />
+			<exclude name="**/unittest/**" />
+		</javac>
+		<copy todir="build" overwrite="true">
+			<fileset dir="src">
+				<include name="**/*.properties" />
+				<include name="**/*.gif" />
+				<include name="**/iso639.dat" />
+				<include name="**/language.list" />
+				<include name="**/language.en" />
+				<include name="**/language.sv" />
+				<include name="**/style.css" />
+				<include name="**/layout.xml" />
+				<include name="**/conf.xml" />
+				<include name="**/language.info" />
+				<include name="**/layout.info" />
+				<include name="**/style.info" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="create_jar" depends="build">
+		<delete file="${jar.name}" />
+        <unjar src="lib/metadata-extractor-2.3.1.jar" dest="build" />
+		<unjar src="lib/util.jar" dest="build" />
+		<jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="build">
+				<exclude name="**/test/**" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="create_release">
+		<zip destfile="${zip.name}">
+			<fileset dir="./">
+				<include name="${jar.name}" />
+			</fileset>
+		</zip>
+	</target>
+</project>

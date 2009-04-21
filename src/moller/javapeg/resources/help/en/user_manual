@@ -1,0 +1,52 @@
+PROGRAM DESCRIPTION<LF>
+===================<LF>
+The purpose of this program is to make it possible to automatically rename image files of type jpeg with help of the embedded Exif-information. Thereby this program will work with the most part of images produced by a modern digital camera wich support the Exif standards.
+<LF>
+<LF>
+The program want to have a folder pointed out and when that is done it will rename all files in that folder according to the filename templates given by the user. The program has also the possibility to create thumb nails of renamed images.
+<LF>
+<LF>
+PROGRAM HELP<LF>
+============<LF>
+The following text will describe how a complete program cycle works. In other words start reading by going to next paragraph.
+<LF>
+<LF>
+1:<LF>
+In the field called "PATH TO IMAGE FOLDER" a path to the images, which shall be renamed, must be given. You do that by choose a folder in the file chooser window which appears when you push the button to the right of the text field.
+<LF>
+<LF>
+2:<LF>
+Next you have to choose whether original files or copies will be renamed. After that you choose where the files will be placed, if you chosen to make a copy of them. It is possible to select whether files will be copied to same folder as original files, an different folder or to a subfolder in another folder. "Another folder" may of course be the same folder as where original files are. To get destination folder path, you do the same procedure as getting source folder path. You will get the file chooser window by pushing the button to the right of the field with name "PATH TO DESTINATION FOLDER".
+<LF>
+<LF>
+3:<LF>
+"FILENAME TEMPLATE" and "SUBFOLDER NAME", in the case there will be a subfolder, is made up by those variables available in the window "VARIABLES". These variables will have it´s information from the embedded Exif-information in picture.
+<LF>
+<LF>
+"SUBFOLDER NAME" can only use those variables which are marked by an asterisk in the list. Besides from this variables it is possible to use word and numbers in any combination.
+<LF>
+<LF>
+ Example of a template may be: "Image %d% - %t%"
+<LF>
+<LF>
+ Which will give a result like this "Image 2005-06-15 - 16-25-14.jpg"
+<LF>
+<LF>
+4:<LF>
+To get thumbnails: mark the checkbox "Create thumnails".
+<LF>
+<LF>
+5:<LF>
+If there is, before the program itself has created the folder with thumbnails, a folder with the name "thumbnails" in the same position as the program will create the folder and if there is files inside of it, those files will be mixed up with the thumbnails created by the program. To avoid problems, do not create a folder with the name "thumbnails" in destination folder. To start the rename process, push the button at bottom right.
+<LF>
+<LF>
+<LF>
+Crib - five simple steps<LF>
+========================<LF>
+<LF>
+ 1. State path to images<LF>
+ 2. State destination folder and alternatives for rename process<LF>
+ 3. Enter file name template and subfoldertemplate, if applicable<LF>
+ 4. State if thumbnails shall be created<LF>
+ 5. Start rename process by pushing button to the bottom right<LF>
+ 
