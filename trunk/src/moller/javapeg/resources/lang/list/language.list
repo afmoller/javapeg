@@ -1,0 +1,10 @@
+# This file consists of a list of all embedded language files. So when a new
+# language file is added to the collection of embedded language files a new 
+# entry with the name of the new language file and a description must be added
+# to the listing below.
+
+# This file was created : 2009-03-24 by Fredrik Möller
+# Latest changed        : 
+
+language.en = The application embedded language file for English
+language.sv = The application embedded language file for Swedish

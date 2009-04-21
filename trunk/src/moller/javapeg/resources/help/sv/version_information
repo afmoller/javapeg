@@ -1,0 +1,26 @@
+VERSIONSINFORMATION<LF>
+===================<LF>
+<LF>
+Version 1.01<LF>
+============<LF>
+Släppt 2007-02-02: Version 1.01 av JavaPEG är en i första hand buggrättad version, med rättningar i felmeddelanden och i omdöpningsmotorn.
+<LF>
+<LF>
+Programmet hängde sig ifall en punkt fanns med som första eller sista tecken i filnamnsmall eller undermappsnamnsmallen. Samma problem fanns även för mellanslag först och sist i mallarna. Vidare fanns en förväxling mellan två felmeddelanden i den engelska språkfilen som rättades till.
+<LF>
+<LF>
+Version 1.0<LF>
+===========<LF>
+Släppt 2006-11-27: Version 1.0 av JavaPEG klarar av att byta namn på jpg-filer som innehåller Exif-information.
+<LF>
+<LF>
+Programmet byter namn enligt en mall som användaren anger i rutan för "FILNAMNSMALL". Det finns ett antal variabler att välja mellan, se rutan under rubriken "VARIABLER" för samtliga tillgängliga.
+<LF>
+<LF>
+Användaren kan välja mellan att byta namn på originalfilerna eller på kopior vilka sparas i samma mapp som originalfilerna eller i en annan mapp eller slutligen i en undermapp i en annan mapp än originalfilerna. Vidare är det möjligt att ange hur undermappens namns skall se ut. Detta går till på samma sätt som för bildfilerna.
+<LF>
+<LF>
+Innan processen sätts igång kan användaren välja ifall denne vill få tumnaglar av de omdöpta bilderna skapade. Samtidigt som detta skapas skapas också ett html-dokument, vilket, vid öppnande, visar samtliga skapade tumnaglar. Dessa tumnaglar länkar till respektive bilds fullskaleversion.
+<LF>
+<LF>
+Som sista alternativ kan användaren välja ifall mappen med de omdöpta filerna skall öppnas automatiskt efter att omdöpningsprocessen är avklarad.

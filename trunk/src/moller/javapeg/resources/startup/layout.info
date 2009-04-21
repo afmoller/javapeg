@@ -1,0 +1,125 @@
+ G E N E R A L  I N F O R M A T I O N
+ ------------------------------------
+ In this sub directory it is possible to put a customized file describing the 
+ layout of the generated thumb nail overview html file. It is important that 
+ the class attributes used by the tags corresponds to the ones that are used 
+ either in the embedded style or the ones that are declared in the style.css 
+ file found in the same directory as this file.
+
+ D E F A U L T  C S S  C L A S S E S
+ -----------------------------------
+ Refer to the style.info file found in the same directory as this file for the
+ CSS classes used by the application.
+ 
+ F I L E  N A M E
+ ----------------
+ The name of the created layout file must be "layout.xml" and must be stored in
+ the same directory as this information file.
+ 
+ A P P L I C A T I O N  E M B E D D E D   L A Y O U T 
+ ----------------------------------------------------
+ The content of the application embedded layout file is the following and can 
+ be used as a template when a customized file is created:
+ 
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ This section contains information about the syntax of the XML part of this file
+ and which attributes that are valid for each tag. Below is a listing of all 
+ valid tags and the use of them.
+  
+ <documenttitle> 
+ ===============
+ general   : There can only be one instance of this tag and it shall be placed
+             as a child to the <document> tag.
+ 
+ tag value : The value of this tag will be put as title in the web browser. 
+             
+ attributes: There are no attributes which are valid for this tag.
+ 
+ 
+ <row>
+ =====
+ general   : There can only be one start and stop instance of this tag and it
+             shall be placed as a child to the <document> tag.
+ 
+ tag value : No value for this tag. 
+ 
+ attributes: The class attribute is optional and used by the CSS. This is the
+             only valid attribute for this tag.
+ 
+ 
+ <column>
+ ========
+ general   : There can only be one start and stop instance of this tag and it
+             shall be placed as a child to the <row> tag.
+ 
+ tag value : No value for this tag.
+   
+ attributes: class and amount are the two attributes that are valid for this 
+             tag. The class attribute is optional, and used by the CSS. The
+             amount attribute is mandatory and shall contain an integer value
+             larger than zero. This attribute defines how many columns of 
+             images that will be generated in the thumb nail overview.  
+            
+            
+ <image/>
+ ========
+ general   : There can only be one instance of this tag and it shall be placed 
+             as a child to the <column> tag.
+ 
+ tag value : No value for this tag.
+   
+ attributes: The class attribute is optional and used by the CSS. This is the
+             only valid attribute for this tag.
+
+
+ <meta>
+ ======
+ general   : There can only be one start and stop instance of this tag and it
+             shall be placed as a child to the <column> tag.
+ 
+ tag value : No value for this tag.
+ 
+ attributes: The class attribute is optional and used by the CSS. This is the
+             only valid attribute for this tag.
+
+
+<metaitem/>
+===========
+ general   : There can be several instances of this tag and they shall all be 
+             placed as children to the <meta> tag.
+ 
+ tag value : No value for this tag.
+   
+ attributes: class, label and meta are the attributes that are valid for this 
+             tag. The class attribute is optional, and used by the CSS. The
+             label attribute is mandatory and shall contain a string value that
+             will be a label for the meta data value that will be defined by 
+             the last attribute, meta.
+             
+             Available values for the meta attribute are:
+             
+             "fileName"
+             "date"
+             "time"
+             "cameraModel"
+             "shutterSpeed"
+             "isoValue"
+             "pictureWidth"
+             "pictureHeight"
+             "apertureValue"
+             "fileSize"
+  -->
+<document>
+  <documenttitle>Image overview</documenttitle>
+  <row class="row">
+    <column class="column" amount="5">
+      <image class="image" />
+      <meta class="meta">
+        <metaitem class="metaitem" label="File size:" meta="fileSize" />
+        <metaitem class="metaitem" label="Date:" meta="date" />
+        <metaitem class="metaitem" label="Time:" meta="time" />
+      </meta>
+    </column>
+  </row>
+</document>  
