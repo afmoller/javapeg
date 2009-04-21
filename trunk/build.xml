@@ -42,6 +42,9 @@
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
+				<include name="**/thumbnail_overview" />
+				<include name="**/user_manual" />
+				<include name="**/version_information" />
 			</fileset>
 		</copy>
 	</target>
