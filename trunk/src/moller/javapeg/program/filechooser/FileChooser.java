@@ -10,6 +10,7 @@ package moller.javapeg.program.filechooser;
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-16 by Fredrik Möller
  *                        : 2009-04-19 by Fredrik Möller
+ *                        : 2009-04-22 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -65,10 +66,12 @@ public class FileChooser extends JFrame {
 	private JTree tree;
 	private Mouselistener mouseListener;
 	private JPanel thumbnailsJPanel;
+	private JPanel backgroundsPanel;
 	private ThumbNailLoading pb;
 	private Collection <File> jpgFilesAsFiles;
 	private GridLayout thumbNailGridLayout;
-	private int iconWidth = 1;
+	private int iconWidth = 160;
+	private int columnMargin = 0;
 	
 	private JButton okButton;
 	private JButton cancelButton;
@@ -122,19 +125,23 @@ public class FileChooser extends JFrame {
 	}
 	
 	private JSplitPane initiateSplitPane() {
+				
+		backgroundsPanel = new JPanel(new BorderLayout());
+		backgroundsPanel.add(this.initiateThumbnailsPanel(), BorderLayout.CENTER);
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(200);
 		splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
-		splitPane.add(this.initiateThumbnailsPanel(), JSplitPane.RIGHT);
+		splitPane.add(backgroundsPanel, JSplitPane.RIGHT);
 				
 		return splitPane;
 	}
 	
 	private void addListeners(){
 		this.addWindowListener(new WindowEventHandler());
-		thumbnailsJPanel.addComponentListener(new ComponentListener());
+		backgroundsPanel.addComponentListener(new ComponentListener());
+//		thumbnailsJPanel.addComponentListener(new ComponentListener());
 		okButton.addActionListener(new ButtonListener());
 		cancelButton.addActionListener(new ButtonListener());
 	}
@@ -238,6 +245,9 @@ public class FileChooser extends JFrame {
 							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
 							thumbContainer.setHorizontalAlignment(JLabel.CENTER);
 							
+							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+														
 							int width = thumbContainer.getIcon().getIconWidth();
 							
 							if (width > iconWidth) {
@@ -327,10 +337,9 @@ public class FileChooser extends JFrame {
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
-			if ((thumbnailsJPanel.getVisibleRect().width / iconWidth) != thumbNailGridLayout.getColumns()) {
-				thumbnailsJPanel.setSize(thumbnailsJPanel.getVisibleRect().width, thumbnailsJPanel.getVisibleRect().height);
+			if (((thumbnailsJPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
 				
-				int columns = thumbnailsJPanel.getWidth() / iconWidth;
+				int columns = (thumbnailsJPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
 				
 				thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
 				thumbnailsJPanel.invalidate();
