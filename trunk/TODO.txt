@@ -1,6 +1,5 @@
 2.0:
 ====
-- Fixa resize problem i file choosern.
 - Uppdatera programhjälpen
 - Uppdatera info filer i den interna resources katalogen.
 - Testa all funktionalitet.
