@@ -3,6 +3,7 @@
 	
 	<property name="jar.name" value="JavaPEG.jar" />
 	<property name="zip.name" value="JavaPEG_v2.zip" />
+	<property name="zip_src.name" value="JavaPEG_v2_src.zip" />
 	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
 
 	<target name="all" depends="clean_build,build,create_jar,create_release" />
@@ -72,4 +73,18 @@
 			</fileset>
 		</zip>
 	</target>
+	
+	<target name="create_release_src" description="Packs all necessary files for the source code release into one zip archive">
+	        <zip destfile="${zip_src.name}" update="false">
+	            <fileset dir="./">
+	                <include name="src/moller/**" />
+	                <include name="build.xml" />
+	                <include name="gpl.txt" />
+	            	<include name="CHANGELOG.txt" />
+	                <include name="TODO.txt" />
+	                <include name="lib/metadata-extractor-2.3.1.jar" />
+	                <include name="lib/util.jar" />
+	            </fileset>
+	        </zip>
+	    </target>
 </project>
