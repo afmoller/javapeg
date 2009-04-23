@@ -6,7 +6,7 @@
 	<property name="zip_src.name" value="JavaPEG_v2_src.zip" />
 	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
 
-	<target name="all" depends="clean_build,build,create_jar,create_release" />
+	<target name="all" depends="clean_build, build, create_jar, create_release, create_release_src" />
 
 	<target name="clean_build">
 		<delete failonerror="no">
