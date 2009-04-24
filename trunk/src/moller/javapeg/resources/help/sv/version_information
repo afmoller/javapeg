@@ -1,6 +1,47 @@
 VERSIONSINFORMATION<LF>
 ===================<LF>
 <LF>
+Version 2.0<LF>
+===========<LF>
+Släppt 2009-??-?? Version 2.0 av JavaPEG är mer eller mindre en ifrån grunden omskriven applikation i förhållande till versionerna 1.x, men med samma grundidé: att vara ett verktyg för att på ett enkelt och säkert sätt kunna byta namn på bilder tagna med en digitalkamera.
+<LF>
+<LF>
+Programmet vill fortfarande ha en sökväg angiven till en katalog med bilder. När detta är gjort så skall en destinationskatalog väljas. Därefter återstår att skapa filnamns- och underkatalogsmallar och slutligen innan namnbytesprocessen startas så är det möjligt att välja om man vill få en tumnagelöversikt skapad.
+<LF>
+<LF>
+En stor skillnad jämfört med de gamla versionerna är att denna enbart möjliggör kopiering av filerna och namnbytet kommer att ske på dess kopierade filer. Detta för att minimera risken för dataförluster.
+<LF>
+<LF>
+Nyheter i denna version jämfört med tidigare:
+<LF>
+<LF>
+Filväljaren för att leta upp katalogen med bilder som skall döpas om, visar tumnaglar av bilderna i den katalog som markerats i filväljaren, detta underlättar arbetet med att hitta rätt bilder.
+<LF>
+<LF>
+När en katalog med bilder valts i filväljaren så kommer dessa att visas i programmets huvudfönster.
+<LF>
+<LF>
+När en filnams- eller underkatalogsmall ändras så visas en omedelbar förhandsgranskning av hur de resulterande filnamnen blir med dessa mallarna.
+<LF>
+<LF>
+Om en felaktig vairabel, otillåtet tecken, eller maximal sökvägslängd övrerskridits så visas detta som ett felmeddelande så fort som felet inträffat.
+<LF>
+<LF>
+Innan namnbytesprocessen startar så sker en valideringprocess som säkerställer att alla inmatade värden är giltiga, att maximal sökvägslängd inte överskridits, att destinationskatalogen inte existerar, att det finns tillräkligt med utrymme att spara de nya kopierade filerna och att det går att skapa alla filer som finns i den valda källkatalogen i den valda destinationskatalogen. 
+<LF>
+<LF>
+Efter namnbytesprocessen så sker en validering av att alla filer fått rätt namn och innehåll vid kopieringen och namnbytet från källkatalog till destinationskatalog.
+<LF>
+<LF>
+Under hela namnbytesprocessen visas ett statusfönster som visar hur processen fortlöper.
+<LF>
+<LF>
+Det är möjligt att styra utseendet på den tumnagelöversikt som kan skapas.
+<LF>
+<LF>
+Det finns loggning till fil, för fel som kan inträffa. 
+<LF>
+<LF>
 Version 1.01<LF>
 ============<LF>
 Släppt 2007-02-02: Version 1.01 av JavaPEG är en i första hand buggrättad version, med rättningar i felmeddelanden och i omdöpningsmotorn.
