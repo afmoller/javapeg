@@ -1,50 +1,50 @@
 PROGRAMBESKRIVNING<LF>
 ==================<LF>
-Syftet med detta program är att bilder av typen jpeg skall kunna döpas om automatiskt med hjälp av den Exif-information som finns lagrad i bilden. Således bör programmet kunna användas på bilder tagna med flertalet av de digitalkameror som stödjer Exif-standarden.
+JavaPEG har möjligheten att ändra filnamn på jpeg bilder som innehåller Exif data, Exchangeable Image File Format. Flertalet digitalkameror stödjer detta format och lagrar på så sätt metadata (information om själva filen) när en bild sparas på digitalkamerans lagringsmedia. Exempel på metadata kan vara vilket datum bilden togs.
 <LF>
 <LF>
-Programmet vill få en mapp med bilder utpekad för sig och därefter döper det om filerna enligt de mallar användaren anger i programmet. Programmet har också möjlighet att tillverka tumnaglar av de bildfiler som döps om. 
+Förutom att ändra filnamnet så kan JavaPEG även skapa en bildöversikter. Dessa översikter visar tumnagelversioner av de fullstora bilderna. Under varje tumnagel finns det möjlighet att visa metadata om den fullstora bilden. Varje tumnagel länkar dessutom till den fullstora bilden. Dessa översikter är i HTML format och tanken med de är att det skall vara enkelt att kunna få en överblick av vilka bilder som finns i en katalog.
 <LF>
 <LF>
 PROGRAMHJÄLP<LF>
 ============<LF>
-Texten nedan är upplagd så att den uppifrån och ner visar hur en komplett programkörning kan gå till. Börja alltså med att läsa nästkommande stycke först.
+Texten nedan är upplagd så att den uppifrån och ner visar hur en komplett programkörning går till. Börja alltså med att läsa nästkommande stycke först.
 <LF>
 <LF>
 1:<LF>
-I det fält som heter "SÖKVÄG TILL BILDMAPP" skall en sökväg till de bilder du vill få omdöpta anges. Det vill säga att du letar upp rätt mapp med filväljarfönstret som kommer fram när du trycker på knappen bredvid textfältet.
+I det fält som heter "SÖKVÄG TILL BILDKATALOG" skall en sökväg till de bilder du vill få omdöpta anges. Det vill säga att du letar upp rätt katalog med filväljarfönstret som kommer fram när du trycker på knappen bredvid textfältet.
 <LF>
 <LF>
 2:<LF>
-Däreftet väljer du om originalfilerna skall döpas om eller om det skall göras på kopior. Härnäst väljer du var filerna skall hamna, i det fall då du valt att kopiera dem. Det är möjligt att välja mellan att få filerna kopierade till samma mapp som originalfilerna, eller en annan mapp eller till en undermapp i en annan mapp. "En annan mapp" kan givetvis även vara densamma som den i vilka originalfilerna ligger. Destinationsmappen letar du fram genom att trycka på den knapp som finns till höger om fältet som heter "SÖKVÄG TILL DESTINATIONSMAPP"
+En destinationkatalog skall väljas. Detta görs enligt samma princip som när bildkatalog valdes ovan. Tryck på den knapp som finns till höger om fältet som heter "SÖKVÄG TILL DESTINATIONSKATALOG" så kommer ett nytt fönster öppnas, där det går att välja en destinationskatalog.
 <LF>
 <LF>
 3:<LF>
-"FILNAMNSMALL" och "UNDERMAPPSNAMN", i de fall en undermapp skall skapas, skapas med hjälp av de variabler som finns i rutan "VARIABLER". Detta är variabler som hämtar sin information från bildens inbäddade Exif-information.
+"FILNAMNSMALL" och "UNDERKATALOGSMALL", skapas med hjälp av de variabler som finns i rutan "VARIABLER". Detta är variabler som hämtar sin information från bildens inbäddade Exif-information.
 <LF>
 <LF>
-"UNDERMAPPSNAMN" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom dessa variabler går det att använda sig av ord och siffror i valfri kombination. 
+"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom dessa variabler går det att använda sig av ord och siffror i valfri kombination. 
 <LF>
 <LF>
- Exempel på en mall kan vara: "Bild %d% - %t%" 
+ Exempel på en filnamsmall kan vara: "Bild %d% - %t%" 
 <LF>
 <LF>
  vilket ger ett resultat i stil med "Bild 2005-06-15 - 16-25-14.jpg"
 <LF>
 <LF>
 4:<LF>
-För att få tumnaglar skapade: klicka i kryssrutan för det och för att få destinationsmappen öppnad efter avslutad process skall kryssrutan för det kryssas i.
+För att skapa en tumnagelöversikt skall kryssrutan med texten "SKAPA TUMNAGELÖVERSIKT" markeras.
 <LF>
 <LF>
 5:<LF>
-Om det, innan programmet självt skapat mappen med tumnaglar, finns en mapp med namnet "thumbnails" där programmet kommer att skapa sin mapp så kommer eventuella filer som finns i den egenskapade mappen blandas upp med de tumnagelfiler som programmet skapar. För att undvika problem, skapa inte en egen mapp med namnet "thumbnails" i destinationsmappen. Namnomdöpningsprocessen startas genom att trycka på knappen längst ner till höger.
+Nu är alla förberedelser gjorda inför namnomdöpningsprocessen. Processen startas genom att klicka på knappen som har en pil pekandes åt höger, eller välja motsvarande alternativ i Arkiv-menyn.
 <LF>
 <LF>
 Lathund - fem enkla steg<LF>
 ========================<LF>
 <LF>
- 1. Ange sökväg till bilder<LF>
- 2. Ange destinationsmapp och alternativ för omdöpning<LF>
- 3. Skriv in filnamnsmall och undermappsnamn, om det är aktuellt<LF>
- 4. Ange om tumnaglar skall skapas och om destinationsmapp skall öppnas<LF>
- 5. Starta omdöpningen genom att trycka på knappen längst ner till höger<LF>
+ 1. Leta upp bildkatalog.<LF>
+ 2. Ange en destinationskatalog.<LF>
+ 3. Skriv in filnamnsmall och underkatalogsmall.<LF>
+ 4. Ange om tumnagelöversikt skall skapas.<LF>
+ 5. Starta omdöpningen genom att trycka på knappen med en högerpil<LF>
