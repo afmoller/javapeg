@@ -4,6 +4,7 @@ package moller.javapeg.program.helpviewer;
  * Latest changed         : 2009-04-19 by Fredrik Möller
  *                        : 2009-04-20 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
+ *                        : 2009-04-24 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -16,7 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -84,6 +87,16 @@ public class HelpViewerGUI extends JFrame {
 			}
 		}
 		this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);	
+		
+		InputStream imageStream = null;
+		try {
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Help16.gif");
+			this.setIconImage(ImageIO.read(imageStream));
+		} catch (Exception e) {
+			Logger.getInstance().logERROR("Could not open the image Help16.gif");
+		} finally {
+			StreamUtil.closeStream(imageStream);
+		}		
 	}
 	
 	private JSplitPane initiateSplitPane() {
@@ -121,7 +134,7 @@ public class HelpViewerGUI extends JFrame {
 		
 	private JScrollPane initiateJTree() {
 			
-		tree = new JTree(HelpViewerGUITreeNode.createNodes());
+		tree = new JTree(HelpViewerGUIUtil.createNodes());
 		tree.setShowsRootHandles (true);
 		tree.addMouseListener(new Mouselistener());
 		
@@ -136,27 +149,10 @@ public class HelpViewerGUI extends JFrame {
 	private JTextArea getContent(int selectedRow) {
 		
 		if (content.equals("") && selectedRow > -1) {
-		
 			String lang = conf.getStringProperty("gUILanguageISO6391");
-			
-			String fileToLoad = "";
-						
-			switch (selectedRow) {
-			case 1:
-				fileToLoad = "/user_manual";
-				break;
-			case 2:
-				fileToLoad = "/version_information";
-				break;
-			case 3:
-				fileToLoad = "/thumbnail_overview";
-				break;
-			default:
-				break;
-			}
-					
+							
 			try {
-				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + lang + fileToLoad));
+				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + lang + HelpViewerGUIUtil.getFile(selectedRow)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
