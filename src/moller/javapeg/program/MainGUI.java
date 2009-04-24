@@ -19,6 +19,7 @@ package moller.javapeg.program;
  *                        : 2009-04-12 by Fredrik Möller
  *                        : 2009-04-13 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
+ *                        : 2009-04-23 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -27,7 +28,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -144,7 +144,6 @@ public class MainGUI extends JFrame {
 	private JMenuItem openDestinationFileChooserJMenuItem;
 	private JMenuItem startProcessJMenuItem;
 	private JMenuItem helpJMenuItem;
-	private JMenuItem versionJMenuItem;
 	private JMenuItem aboutJMenuItem;
 
 	private JPanel mainPanel;
@@ -223,18 +222,18 @@ public class MainGUI extends JFrame {
 
 		// Skapa menyrader i arkiv-menyn
 		openSourceFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openSourceFileChooser"));
-		openSourceFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openSourceFileChooser.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		openSourceFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openSourceFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 
 		openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
-		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		openDestinationFileChooserJMenuItem.setEnabled(false);
 
 		startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
-		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		startProcessJMenuItem.setEnabled(false);
 		
 		shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
-		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		
 		fileMenu = new JMenu(lang.get("menu.file"));
 		fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
@@ -246,7 +245,7 @@ public class MainGUI extends JFrame {
 		
 		// Skapa menyrader i språk-menyn
 		languageOptionsJMenuItem = new JMenuItem(lang.get("menu.item.languageChoice"));
-		languageOptionsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.languageChoice.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		languageOptionsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.languageChoice.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		
 		languageMenu = new JMenu(lang.get("menu.language"));
 		languageMenu.setMnemonic(lang.get("menu.mnemonic.language").charAt(0));
@@ -255,19 +254,15 @@ public class MainGUI extends JFrame {
 
 		// Skapa menyrader i hjälp-menyn
 		helpJMenuItem = new JMenuItem(lang.get("menu.item.programHelp"));
-		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.programHelp.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
-		
-		versionJMenuItem = new JMenuItem(lang.get("menu.item.versionInformation"));
-		versionJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.versionInformation.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.programHelp.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		
 		aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
-		aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK));
+		aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
 		
 		helpMenu = new JMenu(lang.get("menu.help"));
 		helpMenu.setMnemonic(lang.get("menu.mnemonic.help").charAt(0));
 
 		helpMenu.add(helpJMenuItem);
-		helpMenu.add(versionJMenuItem);
 		helpMenu.add(aboutJMenuItem);
 
 		menuBar = new JMenuBar();
@@ -719,7 +714,6 @@ public class MainGUI extends JFrame {
 		destinationPathButton.addActionListener(new ButtonListener());
 		startProcessButton.addActionListener(new ButtonListener());
 		helpJMenuItem.addActionListener(new MenuListener());
-		versionJMenuItem.addActionListener(new MenuListener());
 		aboutJMenuItem.addActionListener(new MenuListener());
 		languageOptionsJMenuItem.addActionListener(new MenuListener());
 		
@@ -995,15 +989,9 @@ public class MainGUI extends JFrame {
 	    	}
 
 	    	else if (actionCommand.equals(lang.get("menu.item.programHelp"))) {
-				new HelpViewerGUI().setVisible(true);
-				
-//	    		new HTMLViewer("file:/" + System.getProperty("user.dir") + "/helptexts/user_manual." + conf.getStringProperty("gUILanguageISO6391"), lang.get("information.window.userHelpWindowTitle"));
+				new HelpViewerGUI().setVisible(true);				
 			}
-
-			else if (actionCommand.equals(lang.get("menu.item.versionInformation"))) {
-				new HTMLViewer("file:/" + System.getProperty("user.dir") + new File("/helptexts/version_information." + conf.getStringProperty("gUILanguageISO6391")).getPath(), lang.get("information.window.versionInformationWindowTitle"));
-			}
-
+			
 			else if (actionCommand.equals(lang.get("menu.item.languageChoice"))) {
 				LanguageOptionsGUI loGUI = new LanguageOptionsGUI();
 				loGUI.setVisible(true);
