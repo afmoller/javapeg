@@ -23,7 +23,7 @@ En destinationkatalog skall väljas. Detta görs enligt samma princip som när bild
 "FILNAMNSMALL" och "UNDERKATALOGSMALL", skapas med hjälp av de variabler som finns i rutan "VARIABLER". Detta är variabler som hämtar sin information från bildens inbäddade Exif-information.
 <LF>
 <LF>
-"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom dessa variabler går det att använda sig av ord och siffror i valfri kombination. 
+"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom detta ör det möjligt att blanda variabler med statiska strängar i form av ord och siffror i valfri kombination. 
 <LF>
 <LF>
  Exempel på en filnamsmall kan vara: "Bild %d% - %t%" 
