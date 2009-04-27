@@ -1,9 +1,8 @@
 2.0:
 ====
-- Uppdatera programhjälpen
-- Uppdatera info filer i den interna resources katalogen.
-- Testa all funktionalitet.
-- Fixa installationspaketering.
+- Update info files in the internal resources directory.
+- Test all functionality.
+- Fix installer.
 
 2.1:
 ====
