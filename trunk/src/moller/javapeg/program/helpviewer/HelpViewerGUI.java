@@ -97,7 +97,9 @@ public class HelpViewerGUI extends JFrame {
 			Logger.getInstance().logERROR("Could not open the image Help16.gif");
 		} finally {
 			StreamUtil.closeStream(imageStream);
-		}		
+		}
+		
+		this.setTitle(lang.get("helpViewerGUI.window.title"));
 	}
 	
 	private JSplitPane initiateSplitPane() {
