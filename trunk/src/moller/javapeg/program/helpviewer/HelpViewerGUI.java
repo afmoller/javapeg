@@ -5,6 +5,7 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-04-20 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
  *                        : 2009-04-24 by Fredrik Möller
+ *                        : 2009-04-27 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -178,7 +179,7 @@ public class HelpViewerGUI extends JFrame {
 	private class Mouselistener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
-			if(selRow != -1) {
+			if(selRow > 0) {
 				content = "";
 				contentJPanel.removeAll();
 				contentJPanel.updateUI();
