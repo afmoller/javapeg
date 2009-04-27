@@ -35,6 +35,7 @@
 #                      : by Fredrik Möller 2009-04-15
 #                      : by Fredrik Möller 2009-04-19
 #                      : by Fredrik Möller 2009-04-20
+#                      : by Fredrik Möller 2009-04-27
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -236,10 +237,12 @@ filechooser.button.cancel.mnemonic        = A
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
 helpViewerGUI.window.locationError    = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+helpViewerGUI.window.title            = Hjälp
 helpViewerGUI.tree.content            = Innehåll
 helpViewerGUI.tree.programHelp        = Programhjälp
 helpViewerGUI.tree.versionInformation = Versionsinformation
 helpViewerGUI.tree.overviewCreator    = Tumnagelöversikt
+helpViewerGUI.tree.references         = Referenser
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
