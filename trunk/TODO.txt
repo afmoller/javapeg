@@ -1,8 +1,8 @@
 2.0:
 ====
-- Update info files in the internal resources directory.
 - Test all functionality.
-- Fix installer.
+- Update release date for version 2.0 in the change log and in the about dialog
+- Add a release to Source Forge
 
 2.1:
 ====
@@ -15,13 +15,13 @@ _ Fixa så att det söks efter programuppdatering vid uppstart.
 - Fixa så att GUI:t går att resizea
 - Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
 - Uppdatera info filer i den interna resources katalogen.
-- Testa all funktionalitet.
-- Fixa installationspaketering.
+- Enter values to the change log.
+- Test all functionality.
 
 2.x:
 ====
 - Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
 - Skriva unittest
 - Uppdatera info filer i den interna resources katalogen.
-- Testa all funktionalitet.
-- Fixa installationspaketering.
+- Enter values to the change log.
+- Test all functionality.
