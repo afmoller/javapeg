@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Compile and build java classes plus jar archives">
 	
+	<property name="ver" value="2.0" />
 	<property name="jar.name" value="JavaPEG.jar" />
 	<property name="zip.name" value="JavaPEG_v2.zip" />
 	<property name="zip_src.name" value="JavaPEG_v2_src.zip" />
@@ -43,7 +44,7 @@
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
-				<include name="**/drew_noakes" />
+				<include name="**/references" />
 				<include name="**/thumbnail_overview" />
 				<include name="**/user_manual" />
 				<include name="**/version_information" />
@@ -67,14 +68,56 @@
 		</jar>
 	</target>
 
+	
 	<target name="create_release">
-		<zip destfile="${zip.name}">
-			<fileset dir="./">
-				<include name="${jar.name}" />
-			</fileset>
-		</zip>
+				
+		<!-- Allows us to use the IzPack Ant task, standalone-compiler.jar added to Ant lib -->
+		<taskdef name="izpack" 
+			     classpath="lib/standalone-compiler.jar" 
+			     classname="com.izforge.izpack.ant.IzPackTask"/>
+
+		<!-- Replace version token in short cut definition files -->
+		<antcall target="replace_tokens" />
+		
+		<!-- Run installer build -->
+		<echo message="Running IzPack to build the installer..."/>
+		<izpack input="izpack/install.xml"
+		        output="javapeg-install.jar"
+		        installerType="standard"
+		        inheritAll="true"
+		        basedir="izpack"
+		        compression="deflate"
+		        compressionlevel="9"/>
+		
+		<!-- Restore version token in short cut definition files -->
+		<antcall target="restore_tokens" />
+
+	</target>
+		
+	<target name="replace_tokens">
+	    <replace file="izpack/shortcutSpec.xml" 
+	       	     token="@ver@" 
+	       	     value="${ver}" 
+	       	     summary="yes"/>
+	        
+	    <replace file="izpack/Unix_shortcutSpec.xml"
+	             token="@ver@"
+	             value="${ver}"
+	             summary="yes"/>
 	</target>
 	
+	<target name="restore_tokens">
+	    <replace file="izpack/shortcutSpec.xml" 
+	             token="${ver}" 
+	             value="@ver@" 
+	             summary="yes"/>
+	            
+	    <replace file="izpack/Unix_shortcutSpec.xml"
+	             token="${ver}"
+	             value="@ver@"
+	             summary="yes"/>
+	</target>
+		
 	<target name="create_release_src" description="Packs all necessary files for the source code release into one zip archive">
 	        <zip destfile="${zip_src.name}" update="false">
 	            <fileset dir="./">
