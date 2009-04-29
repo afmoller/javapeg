@@ -20,6 +20,7 @@ package moller.javapeg.program;
  *                        : 2009-04-13 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-23 by Fredrik Möller
+ *                        : 2009-04-29 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -551,11 +552,13 @@ public class MainGUI extends JFrame {
     	
     	// Skapa tabellen för metadata-informatonen och sätt attribut till den
 		metaDataTable = new JTable(modelMetaData);
+		metaDataTable.setEnabled(false);
 		metaDataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		metaDataTable.getTableHeader().setReorderingAllowed(false);
 
 		// Skapa tabellen för namnförhandsgranskningen och sätt attribut till den
 		previewTable = new JTable(modelPreview);
+		previewTable.setEnabled(false);
 		previewTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		previewTable.getTableHeader().setReorderingAllowed(false);
 
