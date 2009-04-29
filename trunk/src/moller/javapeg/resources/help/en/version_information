@@ -8,16 +8,16 @@ Version 2.0<LF>
 Released 2009-??-?? Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x versions. Despite this the concept is still the same: A simple to use and secure tool to rename images created by a digital camera.
 <LF>
 <LF>
-The application still need a path to a source directory with images. When the source directory has been chosen the destination directory must be selected. After this a file name and sub directory template must be provided. As a last step before the actual rename process can begin, it is possible to select wether a thumb nail overview shall be created or not.
+The application still need a path to a source directory with images. When the source directory has been chosen the destination directory must be selected. After this a file name and sub directory template must be provided. As a last step before the actual rename process can begin, it is possible to select whether a thumb nail overview shall be created or not.
 <LF>
 <LF>
-A major difference with this verison compared to the 1.x versions it that this version only supports renaming of copied image files. The reason for this is to minimate the risk for data losses.
+A major difference with this version compared to the 1.x versions it that this version only supports renaming of copied image files. The reason for this is to minimize the risk for data losses.
 <LF>
 <LF>
 New functionality in this version:
 <LF>
 <LF>
-The file chooser used to find the directory containing the images that shall be renamed will show thumb nail versions of the iamges in the selected directory. This will ease up the work with finding the images to rename.
+The file chooser used to find the directory containing the images that shall be renamed will show thumb nail versions of the images in the selected directory. This will ease up the work with finding the images to rename.
 <LF>
 <LF>
 Thumb nails will be shown in the main application window, when a directory with images has been selected in the file chooser and the Ok button has been clicked. 
@@ -29,7 +29,7 @@ There is an instant preview of the resulting file names when the templates for e
 There is an instant errormessage shown if an illegal variable or an illegal character is used in the templates or the maximum path length has been exceeded for the resulting file names in the selected destination directory.
 <LF>
 <LF>
-Before the rename proces starts there is a validation process which makes sure that: all input is valid, that maximum path lenght has not been exceeded, that the sub directory does not exist in the destination directory, that there is enough space to store the copied files in the destination directory and that it is possible to create all the files in the destination directory that exists in the source directory.
+Before the rename process starts there is a validation process which makes sure that: all input is valid, that maximum path length has not been exceeded, that the sub directory does not exist in the destination directory, that there is enough space to store the copied files in the destination directory and that it is possible to create all the files in the destination directory that exists in the source directory.
 <LF>
 <LF>
 A validation takes place after the rename process has finished. This validation will check that all files that has been copied from the source directory to the destination directory has been given the correct name and has the exact same content.
@@ -49,21 +49,21 @@ Version 1.01<LF>
 Released 2007-02-02: Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect behavior in rename engine and a problem with wrong error message.
 <LF>
 <LF>
-The program hang if a point was present as first or last character in file name template or sub folder name template. The exact same problem was also present if there was white spaces first or last in templates. Besides from this there was a correction of two error messages which was mixed up in the eglish language file.
+The program hang if a dot was present as first or last character in file name template or sub folder name template. The exact same problem was also present if there was white spaces first or last in templates. Besides from this there was a correction of two error messages which was mixed up in the English language file.
 <LF>
 <LF>
 Version 1.0<LF>
 ===========<LF>
-Released 2006-11-27: Version 1.0 of JavaPEG has the possibility to rename image files of type jgp if they have embedded Exif-information.
+Released 2006-11-27: Version 1.0 of JavaPEG has the possibility to rename image files of type jpeg if they have embedded Exif-information.
 <LF>
 <LF>
 The program will rename the files according to a, in the field "FILENAME TEMPLATE", by the user, given template. There is a couple of variables available and they can be found in the window with heading "VARABLES".
 <LF>
 <LF>
-The user has the possibility to choose whether to rename the original files or copies of them, which will be saved in the same folder as original files, or in another folder or in a subfolder in another folder than original folder. It is possible to give the subfolder a name in the same way as the files, in other words: by using variables. 
+The user has the possibility to choose whether to rename the original files or copies of them, which will be saved in the same directory as original files, or in another directory or in a sub directory in another directory than original directory. It is possible to give the sub directory a name in the same way as the files, in other words: by using variables. 
 <LF>
 <LF>
-Before rename process starts the user has the possibility to choose whether JavaPEG shall create any thumb nails of renamed images. If there will be any thumbnails there will also be a html file created, which will show all the created thumbnails and the thumbnails will link to the fullsize images. 
+Before rename process starts the user has the possibility to choose whether JavaPEG shall create any thumb nails of renamed images. If there will be any thumb nails there will also be a HTML file created, which will show all the created thumb nails and the thumb nails will link to the full size images. 
 <LF>
 <LF>
-As last option, it is also possible to instruct the program to open destination folder after finished rename process.
+As last option, it is also possible to instruct the program to open destination directory after finished rename process.
