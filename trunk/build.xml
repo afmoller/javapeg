@@ -67,7 +67,6 @@
 			</fileset>
 		</jar>
 	</target>
-
 	
 	<target name="create_release">
 				
