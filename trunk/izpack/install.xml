@@ -113,11 +113,12 @@
 
         <!-- The core files -->
         <pack name="Core" required="yes">
-            <description>The JavaPEG core files.</description>
+            <description>The JavaPEG core files, which are needed to run the application.</description>
             <file src="../src/moller/javapeg/resources/startup/conf.xml"      targetdir="$INSTALL_PATH/config"/>
             <file src="../src/moller/javapeg/resources/startup/language.info" targetdir="$INSTALL_PATH/resources/lang"/>
             <file src="../src/moller/javapeg/resources/startup/layout.info"   targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="../src/moller/javapeg/resources/startup/style.info"    targetdir="$INSTALL_PATH/resources/thumb"/>
+            <file src="images/javapeg.ico"                                    targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                        targetdir="$INSTALL_PATH"/>
         </pack>
 
