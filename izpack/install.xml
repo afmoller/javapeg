@@ -1,0 +1,177 @@
+<!--
+    JavaPEG installer XML file
+
+    By Fredrik Möller
+-->
+
+<!-- The installation -->
+<installation version="1.0">
+
+    <!-- The info section -->
+    <info>
+        <appname>JavaPEG</appname>
+        <appversion>2.0</appversion>
+        <authors>
+            <author email="" name="Fredrik Möller"/>
+        </authors>
+        <url>http://sourceforge.net/projects/javapeg</url>
+        <javaversion>1.6</javaversion>
+        <requiresjdk>no</requiresjdk>
+        <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
+        <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
+    </info>
+
+    <!-- Flexible and in the screen proportions -->
+    <guiprefs height="640" resizable="yes" width="760">
+        <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
+        <modifier key="layoutAnchor" value="CENTER"/>
+        <modifier key="headingPanelCounter" value="progressbar"/>
+        <modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
+        <modifier key="allYGap" value="4"/>
+        <modifier key="paragraphYGap" value="10"/>
+        <modifier key="filler1YGap" value="5"/>
+        <modifier key="filler3XGap" value="10"/>
+    </guiprefs>
+
+    <variables>
+        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
+    </variables>
+
+    <!-- We include every langpack -->
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
+        <langpack iso3="deu"/>
+        <langpack iso3="ita"/>
+        <langpack iso3="jpn"/>
+        <langpack iso3="spa"/>
+        <langpack iso3="dan"/>
+        <langpack iso3="ell"/>
+        <langpack iso3="cat"/>
+        <langpack iso3="ned"/>
+        <langpack iso3="fin"/>
+        <langpack iso3="swe"/>
+        <langpack iso3="por"/>
+        <langpack iso3="pol"/>
+        <langpack iso3="rus"/>
+        <langpack iso3="ukr"/>
+        <langpack iso3="hun"/>
+        <langpack iso3="svk"/>
+        <langpack iso3="rom"/>
+        <langpack iso3="mys"/>
+        <langpack iso3="nor"/>
+        <langpack iso3="chn"/>
+        <langpack iso3="scg"/>
+        <langpack iso3="cze"/>
+        <langpack iso3="kor"/>
+        <langpack iso3="glg"/>
+    </locale>
+
+    <!-- The resources needed by the various panels -->
+    <resources>
+        <res src="text/install_readme_eng"  id="InfoPanel.info_eng"/>
+        <res src="text/install_readme_swe"  id="InfoPanel.info_swe"/>
+        <res src="text/install_license.txt" id="LicencePanel.licence"/>
+        
+        <res src="shortcutSpec.xml"      id="shortcutSpec.xml"/>
+        <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
+        
+        <res src="images/langsel.png" id="installer.langsel.img"/>
+        
+        <res src="images/border1.png" id="Installer.image.0"/>
+        <res src="images/border2.png" id="Installer.image.1"/>
+        <res src="images/border3.png" id="Installer.image.2"/>
+        <res src="images/border4.png" id="Installer.image.3"/>
+        <res src="images/border5.png" id="Installer.image.4"/>
+        <res src="images/border5.png" id="Installer.image.5"/>
+        <res src="images/border6.png" id="Installer.image.6"/>
+        <res src="images/border7.png" id="Installer.image.7"/>
+        <res src="images/border8.png" id="Installer.image.8"/>
+    </resources>
+
+    <!-- The panels in a classic order -->
+    <panels>
+        <panel classname="HelloPanel"    id="hellopanel"/>
+        <panel classname="InfoPanel"     id="infopanel" />
+        <panel classname="LicencePanel"  id="licensepanel"/>
+        <panel classname="TargetPanel"   id="targetpanel"/>
+        <panel classname="PacksPanel"    id="packspanel"/>
+        <panel classname="SummaryPanel"  id="summarypanel"/>
+        <panel classname="InstallPanel"  id="installpanel"/>
+        <panel classname="ShortcutPanel" id="shortcutpanel"/>
+        <panel classname="FinishPanel"   id="finishpanel"/>
+    </panels>
+
+    <!-- The listeners section for CustomActions -->
+    <listeners>
+        <listener installer="SummaryLoggerInstallerListener"/>
+    </listeners>
+
+    <!-- The packs section -->
+    <packs>
+
+        <!-- The core files -->
+        <pack name="Core" required="yes">
+            <description>The JavaPEG core files.</description>
+            <file src="../src/moller/javapeg/resources/startup/conf.xml"      targetdir="$INSTALL_PATH/config"/>
+            <file src="../src/moller/javapeg/resources/startup/language.info" targetdir="$INSTALL_PATH/resources/lang"/>
+            <file src="../src/moller/javapeg/resources/startup/layout.info"   targetdir="$INSTALL_PATH/resources/thumb"/>
+            <file src="../src/moller/javapeg/resources/startup/style.info"    targetdir="$INSTALL_PATH/resources/thumb"/>
+            <file src="../JavaPEG.jar"                                        targetdir="$INSTALL_PATH"/>
+        </pack>
+
+        <!-- The documentation 
+        <pack name="HTML Documentation" required="no">
+            <description>The IzPack documentation (HTML version).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="doc/izpack/html/**/*"/>
+            </fileset>
+        </pack>
+        <pack name="PDF Documentation" required="no">
+            <description>The IzPack documentation (PDF version).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="doc/izpack/pdf/**/*"/>
+            </fileset>
+        </pack>
+        <pack name="Javadocs Documentation" required="no">
+            <description>The IzPack Java documentation (Javadocs for IzPack developers).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="doc/izpack/javadoc/**/*"/>
+            </fileset>
+        </pack>
+        
+        <pack name="Utilities" required="no">
+            <description>IzPack utilities (izpack2exe, izpack2app, izpack2jnlp)</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="utils/**/*"/>
+            </fileset>
+            <executable 
+                targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
+                stage="never"/>
+        </pack>
+
+       
+        <pack name="Sample" required="no">
+            <description>A sample installation.</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="sample/**/*"/>
+            </fileset>
+        </pack>
+
+        
+        <pack name="Sources" required="no">
+            <description>The full IzPack source code.</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="src/**/*"/>
+                <exclude name="src/*.manifest"/>
+            </fileset>
+        </pack> -->
+
+    </packs>
+
+    <!-- The native libraries to add -->
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+    
+</installation>
