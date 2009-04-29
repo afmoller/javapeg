@@ -5,26 +5,6 @@
     <skipIfNotSupported/>
 
     <programGroup defaultName="JavaPEG @ver@" location="applications"/>
-
-    <!--
-      <shortcut
-         name="IzPack"
-         programGroup="yes"
-         desktop="yes"
-         applications="no"
-         startMenu="no"
-         startup="no"
-         target="$INSTALL_PATH\bin\izpack-fe.bat"
-         commandLine=""
-         description="Front-End for IzPack installation tool"
-         iconFile="$INSTALL_PATH\bin\icons\izpack.ico"
-         iconIndex="0"
-         initialState="noShow">
-
-         <createForPack name="Core"/>
-
-       </shortcut>
-    -->
     
     <shortcut
      name="JavaPEG @ver@"
@@ -35,6 +15,7 @@
      startup="no"
      target="$INSTALL_PATH\JavaPEG.jar"
      commandLine=""
+     iconFile="$INSTALL_PATH\javapeg.ico"
      workingDirectory="$INSTALL_PATH"
      description="This starts the program JavaPEG @ver@">
              
