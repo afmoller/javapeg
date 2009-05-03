@@ -7,10 +7,15 @@ package moller.javapeg.program;
  *                        : 2009-03-05 by Fredrik Möller
  *                        : 2009-03-23 by Fredrik Möller
  *                        : 2009-04-14 by Fredrik Möller
+ *                        : 2009-05-02 by Fredrik Möller
+ *                        : 2009-05-03 by Fredrik Möller
  */
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +29,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,7 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
-import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -49,6 +54,7 @@ public class LanguageOptionsGUI extends JFrame {
 	private static final long serialVersionUID = 6460865254657599037L;
 
 	private JPanel mainPanel;
+	private JPanel buttonPanel;
 	
 	private JLabel selectionModeJLabel;
 	private JLabel currentLanguageLabel;
@@ -60,9 +66,10 @@ public class LanguageOptionsGUI extends JFrame {
 	
 	private ButtonGroup languageSelectionMode;
 	
+	private JButton okButton;
+	private JButton cancelButton;
+	
 	private JList languageList;
-
-	private String currentLanguageString;
 	
 	private Config conf;
 	
@@ -90,24 +97,22 @@ public class LanguageOptionsGUI extends JFrame {
 		Dimension	dContent 	= new Dimension(280,200);
 
 		this.setLocation((dScreen.width-dContent.width)/2,(dScreen.height-dContent.height)/2);
-		this.setSize(dContent);
 		this.setResizable(false);
 		
-		mainPanel = new JPanel(null);
-		mainPanel.setBounds(3,3,269,163);
-		mainPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)); 
-	
+		mainPanel = new JPanel(new GridBagLayout());
+		mainPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		
+		JPanel leftPanel = new JPanel(new GridBagLayout());
+		JPanel rightPanel = new JPanel(new GridBagLayout());
+		
 		selectionModeJLabel = new JLabel(lang.get("language.option.gui.selectionModeJLabel"));
 		selectionModeJLabel.setForeground(Color.GRAY);
-		selectionModeJLabel.setBounds(7,8,120,14);
 		
 		manualRadioButton = new JRadioButton(lang.get("language.option.gui.manualRadioButton"));
 		manualRadioButton.setActionCommand("manualRadioButton");
-		manualRadioButton.setBounds(7,25,120,16);
 				
 		automaticRadioButton = new JRadioButton(lang.get("language.option.gui.automaticRadioButton"));
 		automaticRadioButton.setActionCommand("automaticRadioButton");
-		automaticRadioButton.setBounds(7,43,120,16);
 		
 		languageSelectionMode = new ButtonGroup();
 		languageSelectionMode.add(manualRadioButton);
@@ -115,10 +120,7 @@ public class LanguageOptionsGUI extends JFrame {
 		
 		currentLanguageLabel = new JLabel(lang.get("language.option.gui.currentLanguageLabel"));
 		currentLanguageLabel.setForeground(Color.GRAY);
-		currentLanguageLabel.setBounds(7,65,120,14);
 				
-		currentLanguageString = resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391"));
-		
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			if(!conf.getStringProperty("gUILanguageISO6391").equals(System.getProperty("user.language"))) {
 				conf.setStringProperty("gUILanguageISO6391", System.getProperty("user.language"));
@@ -126,11 +128,20 @@ public class LanguageOptionsGUI extends JFrame {
 		}
 				
 		currentLanguage = new JLabel(resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")));
-		currentLanguage.setBounds(7,85,120,14);
-				
+		
+		GBHelper posLeft = new GBHelper();
+		
+		leftPanel.add(selectionModeJLabel, posLeft);
+		leftPanel.add(new Gap(2), posLeft.nextRow());
+		leftPanel.add(manualRadioButton, posLeft.nextRow());
+		leftPanel.add(automaticRadioButton, posLeft.nextRow());
+		leftPanel.add(new Gap(15), posLeft.nextRow());
+		leftPanel.add(currentLanguageLabel, posLeft.nextRow());
+		leftPanel.add(new Gap(5), posLeft.nextRow());
+		leftPanel.add(currentLanguage, posLeft.nextRow());
+		
 		availableLanguages = new JLabel(lang.get("language.option.gui.availableLanguages"));
 		availableLanguages.setForeground(Color.GRAY);
-		availableLanguages.setBounds(130,8,130,14);
 		
 		languageList = new JList(listLanguagesFiles());
 		
@@ -139,18 +150,34 @@ public class LanguageOptionsGUI extends JFrame {
 		}
 		
 		JScrollPane sp = new JScrollPane(languageList);
-		sp.setBounds(130,25,120,130);
 
-		mainPanel.add(selectionModeJLabel);
-		mainPanel.add(manualRadioButton);
-		mainPanel.add(automaticRadioButton);
-		mainPanel.add(currentLanguageLabel);
-		mainPanel.add(currentLanguage);
-		mainPanel.add(availableLanguages);
-		mainPanel.add(sp);
+		GBHelper posRight = new GBHelper();
+
+		rightPanel.add(availableLanguages, posRight);
+		rightPanel.add(new Gap(2), posRight.nextRow());
+		rightPanel.add(sp, posRight.nextRow());
+			
+		GBHelper pos = new GBHelper();
+		
+		mainPanel.add(new Gap(5), pos);
+		mainPanel.add(new Gap(5), pos.nextRow());
+		mainPanel.add(leftPanel, pos.nextCol().align(GridBagConstraints.NORTH));
+		mainPanel.add(new Gap(5), pos.nextCol());
+		mainPanel.add(rightPanel, pos.nextCol());
+		mainPanel.add(new Gap(5), pos.nextCol());
+		mainPanel.add(new Gap(5), pos.nextRow());
+			
+		buttonPanel = new JPanel();
+		
+		okButton = new JButton("Ok");
+		cancelButton = new JButton("Cancel");
+		
+		buttonPanel.add(okButton);
+		buttonPanel.add(cancelButton);
 				
-		this.getContentPane().setLayout(null);
-		this.getContentPane().add(mainPanel);
+		this.getContentPane().setLayout(new BorderLayout());
+		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -170,6 +197,7 @@ public class LanguageOptionsGUI extends JFrame {
 		} else {
 			manualRadioButton.setSelected(true);
 		}
+		this.pack();
 	}
 	
 	private void addListeners(){
@@ -177,6 +205,8 @@ public class LanguageOptionsGUI extends JFrame {
 		automaticRadioButton.addActionListener(new RadioButtonListener());
 		languageList.addListSelectionListener(new ListListener());
 		addWindowListener(new WindowDestroyer());
+		okButton.addActionListener(new OkButtonListener());
+		cancelButton.addActionListener(new CancelButtonListener());
 	}
 	
 	private String [] listLanguagesFiles() {
@@ -225,19 +255,14 @@ public class LanguageOptionsGUI extends JFrame {
 						
 			if(actionCommand.equals("manualRadioButton")) {
 				languageList.setEnabled(true);
-				conf.setBooleanProperty("automaticLanguageSelection", false);
-			}
-			
-			else if(actionCommand.equals("automaticRadioButton")) {
+			} else if(actionCommand.equals("automaticRadioButton")) {
 				languageList.setEnabled(false);
 				
 				String userLanguage = System.getProperty("user.language");
 				
 				if(!conf.getStringProperty("gUILanguageISO6391").equals(userLanguage)) {
-					conf.setStringProperty("gUILanguageISO6391", userLanguage);
 					currentLanguage.setText(resolveCodeToLanguageName(userLanguage));
 				}
-				conf.setBooleanProperty("automaticLanguageSelection", true);
 			}
 		}
 	}
@@ -247,20 +272,42 @@ public class LanguageOptionsGUI extends JFrame {
 			
 			if(languageList.getSelectedIndex() > -1) {
 				currentLanguage.setText((String)languageList.getSelectedValue());
-				conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode((String)languageList.getSelectedValue()));
 			}
 		}
 	}
 	
+	private class OkButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			closeWindow();
+		}	
+	}
+	
+	private class CancelButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+		}	
+	}
+	
 	private class WindowDestroyer extends WindowAdapter	{
-		
-		Language lang = Language.getInstance();
-		
 		public void windowClosing(WindowEvent e) {
-			if(!resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguageString)) {
-				JOptionPane.showMessageDialog(null, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
-			}
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			dispose();
 		}
+	}
+			
+	private void closeWindow () {
+		if(!resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
+			JOptionPane.showMessageDialog(null, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
+		}
+		updateConfig();
+		dispose();
+	}
+	
+	private void updateConfig() {
+		if (automaticRadioButton.isSelected()) {
+			conf.setBooleanProperty("automaticLanguageSelection", true);
+		} else {
+			conf.setBooleanProperty("automaticLanguageSelection", false);
+		}		
+		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
 	}
 }
