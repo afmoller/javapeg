@@ -13,7 +13,7 @@
 <entry key="helpViewerGUI.window.height">540</entry>
 <entry key="logger.log.level">ERROR</entry>
 <entry key="logger.developerMode">false</entry>
-<entry key="automaticLanguageSelection">true</entry>
+<entry key="automaticLanguageSelection">false</entry>
 <entry key="logger.log.entry.timestamp.format">yyyy-MM-dd'T'HH:mm:ss:SSS</entry>
 <entry key="createThumbNailsCheckBox">true</entry>
 <entry key="logger.log.rotate">true</entry>
