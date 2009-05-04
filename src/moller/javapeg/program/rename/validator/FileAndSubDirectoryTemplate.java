@@ -4,6 +4,7 @@ package moller.javapeg.program.rename.validator;
  * Latest changed         : 2009-02-26 by Fredrik Möller
  *                        : 2009-02-27 by Fredrik Möller
  *                        : 2009-03-04 by Fredrik Möller
+ *                        : 2009-05-04 by Fredrik Möller
  */
 
 import moller.javapeg.program.ApplicationContext;
@@ -58,13 +59,6 @@ private static FileAndSubDirectoryTemplate instance;
 			if(result > -1) {
 				errorMessage += lang.get("validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError") + " (" + (char)result + ")\n";
 			}
-
-//			/***
-//			 * ...kontrollera så att undermappsnamnet inte är längre än 20 tecken
-//			 **/
-//			if(subFolderName.length() > 20) {
-//				errorMessage += lang.get("validator.fileandsubdirectorytemplate.toLongSubFolderNameTemplate") + "\n";
-//			}
 			/***
 			 * ...kontrollera så att undermappsnamnet inte innehåller felaktiga variabler
 			 **/
@@ -103,12 +97,6 @@ private static FileAndSubDirectoryTemplate instance;
 			if(result > -1) {
 				errorMessage += lang.get("validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError") + " (" + (char)result + ")\n";
 			}
-//			/***
-//			 * ...kontrollera så att filnamnsmallen inte är längre än 100 tecken
-//			 **/
-//			if(fileNameTemplate.length() > 90) {
-//				errorMessage += lang.get("validator.fileandsubdirectorytemplate.toLongFileNameTemplate") + "\n";
-//			}
 			/***
 			 * ...kontrollera så att filnamnsmallen inte innehåller en punkt som första tecken
 			 **/
