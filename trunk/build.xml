@@ -3,8 +3,7 @@
 	
 	<property name="ver" value="2.0" />
 	<property name="jar.name" value="JavaPEG.jar" />
-	<property name="zip.name" value="JavaPEG_v2.zip" />
-	<property name="zip_src.name" value="JavaPEG_v2_src.zip" />
+	<property name="zip_src.name" value="JavaPEG_${ver}_Src.zip" />
 	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
 
 	<target name="all" depends="clean_build, build, create_jar, create_release, create_release_src" />
@@ -75,20 +74,20 @@
 			     classpath="lib/standalone-compiler.jar" 
 			     classname="com.izforge.izpack.ant.IzPackTask"/>
 
-		<!-- Replace version token in short cut definition files -->
+		<!-- Replace version token in shortcut definition files -->
 		<antcall target="replace_tokens" />
 		
 		<!-- Run installer build -->
 		<echo message="Running IzPack to build the installer..."/>
 		<izpack input="izpack/install.xml"
-		        output="javapeg-install.jar"
+		        output="JavaPEG_${ver}_Install.jar"
 		        installerType="standard"
 		        inheritAll="true"
 		        basedir="izpack"
 		        compression="deflate"
 		        compressionlevel="9"/>
 		
-		<!-- Restore version token in short cut definition files -->
+		<!-- Restore version token in shortcut definition files -->
 		<antcall target="restore_tokens" />
 
 	</target>
