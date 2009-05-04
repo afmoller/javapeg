@@ -1,17 +1,16 @@
 2.0:
 ====
-- Save location of langue selection GUI
 - Test all functionality.
 - Update release date for version 2.0 in the change log and in the about dialog
 - Add a release to Source Forge
 
 2.1:
 ====
-_ Fixa så att det söks efter programuppdatering vid uppstart.
+- Add validation of external layout.xml
+- Add detailed logmessages in the renameprogresswindow, about file copy, and integrity check
+- Add functionality to check if the latest version of JavaPEG is installed.
 - Fixa så att en fråga om vilket språk och om det skall var automatiskt val kommer upp första gången applikationen startas.
 - Fixa en config där ordningen inte ändras beroende på parametervärde 
-- Fixa validering av extern layout.xml
-- Fixa detaljerade logutskrifter i rename flödet.
 - Fixa minnesläcka (Inte helt verifierad att den finns.)
 - Fixa så att GUI:t går att resizea
 - Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
