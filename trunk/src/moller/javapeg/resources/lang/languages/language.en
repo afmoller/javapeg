@@ -38,6 +38,7 @@
 #                      : by Fredrik Möller 2009-04-20
 #                      : by Fredrik Möller 2009-04-27
 #                      : by Fredrik Möller 2009-04-28
+#                      : by Fredrik Möller 2009-05-04
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -206,6 +207,9 @@ language.option.gui.automaticRadioButton = Automatic
 language.option.gui.currentLanguageLabel = CURRENT LANGUAGE
 language.option.gui.availableLanguages   = AVAILABLE LANGUAGES
 language.option.gui.languageNameNotFound = name of language not found
+language.option.gui.okButton             = Ok
+language.option.gui.cancelButton         = Cancel
+language.option.gui.window.locationError = Could not set window location according to settings. See logs for details
 
 ##############################################################################################################
 # I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #

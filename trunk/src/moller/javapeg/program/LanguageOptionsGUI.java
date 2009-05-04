@@ -9,14 +9,14 @@ package moller.javapeg.program;
  *                        : 2009-04-14 by Fredrik Möller
  *                        : 2009-05-02 by Fredrik Möller
  *                        : 2009-05-03 by Fredrik Möller
+ *                        : 2009-05-04 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -45,6 +45,7 @@ import javax.swing.event.ListSelectionListener;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.util.gui.Screen;
 
 public class LanguageOptionsGUI extends JFrame {
 	
@@ -92,11 +93,17 @@ public class LanguageOptionsGUI extends JFrame {
 		lang = Language.getInstance();
 		
 		this.setTitle(lang.get("language.option.gui.windowTitle"));
+				
+		Point xyFromConfig = new Point(conf.getIntProperty("languageOption.window.location.x"),conf.getIntProperty("languageOption.window.location.y"));
 		
-		Dimension	dScreen		= Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension	dContent 	= new Dimension(280,200);
-
-		this.setLocation((dScreen.width-dContent.width)/2,(dScreen.height-dContent.height)/2);
+		if(Screen.isOnScreen(xyFromConfig)) {
+			this.setLocation(xyFromConfig);
+		} else {
+			this.setLocation(0,0);
+			JOptionPane.showMessageDialog(null, lang.get("language.option.gui.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			logger.logERROR("Could not set location of Language Option GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+		}
+		
 		this.setResizable(false);
 		
 		mainPanel = new JPanel(new GridBagLayout());
@@ -169,8 +176,8 @@ public class LanguageOptionsGUI extends JFrame {
 			
 		buttonPanel = new JPanel();
 		
-		okButton = new JButton("Ok");
-		cancelButton = new JButton("Cancel");
+		okButton = new JButton(lang.get("language.option.gui.okButton"));
+		cancelButton = new JButton(lang.get("language.option.gui.cancelButton"));
 		
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
@@ -278,18 +285,21 @@ public class LanguageOptionsGUI extends JFrame {
 	
 	private class OkButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			updateWindowLocationAndSize();
 			closeWindow();
 		}	
 	}
 	
 	private class CancelButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			updateWindowLocationAndSize();
 			dispose();
 		}	
 	}
 	
 	private class WindowDestroyer extends WindowAdapter	{
 		public void windowClosing(WindowEvent e) {
+			updateWindowLocationAndSize();
 			dispose();
 		}
 	}
@@ -309,5 +319,10 @@ public class LanguageOptionsGUI extends JFrame {
 			conf.setBooleanProperty("automaticLanguageSelection", false);
 		}		
 		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
+	}
+	
+	private void updateWindowLocationAndSize() {
+		conf.setIntProperty("languageOption.window.location.x", this.getLocation().x);
+		conf.setIntProperty("languageOption.window.location.y", this.getLocation().y);
 	}
 }

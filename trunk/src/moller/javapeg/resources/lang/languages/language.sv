@@ -37,6 +37,7 @@
 #                      : by Fredrik Möller 2009-04-20
 #                      : by Fredrik Möller 2009-04-27
 #                      : by Fredrik Möller 2009-04-28
+#                      : by Fredrik Möller 2009-05-04
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -206,6 +207,9 @@ language.option.gui.automaticRadioButton = Automatiskt
 language.option.gui.currentLanguageLabel = AKTUELLT SPRÅK
 language.option.gui.availableLanguages   = TILLGÄNGLIGA SPRÅK
 language.option.gui.languageNameNotFound = namn på språk ej funnet
+language.option.gui.okButton             = Ok
+language.option.gui.cancelButton         = Avbryt
+language.option.gui.window.locationError = Kunde inte sätta fönsterposition enligt konfigurationen. Se loggfil för detaljer.
 
 ##############################################################################################################
 # I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
@@ -228,7 +232,7 @@ picture.panel.pictureLabel = BILDER I VALD MAPP
 # F I L E  C H O O S E R                                                                                     #
 ##############################################################################################################
 filechooser.window.title                  = Filväljare
-filechooser.window.locationError          = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+filechooser.window.locationError          = Kunde inte sätta fönsterposition enligt konfigurationen. Se loggfil för detaljer.
 filechooser.button.ok                     = Ok
 filechooser.button.ok.mnemonic            = O
 filechooser.button.cancel                 = Avbryt
