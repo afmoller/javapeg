@@ -21,6 +21,7 @@ package moller.javapeg.program;
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-23 by Fredrik Möller
  *                        : 2009-04-29 by Fredrik Möller
+ *                        : 2009-05-04 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -1109,7 +1110,7 @@ public class MainGUI extends JFrame {
 						rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
 						ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
 						logger.logDEBUG("Pre File Processing Finished");
-						rp.setLogMessage(lang.get("rename.PreFileProcessor.finished") + "\n");
+						rp.setLogMessage(lang.get("rename.PreFileProcessor.finished"));
 						
 						if(!vs.isValid()) {
 							rp.setAlwaysOnTop(false);
@@ -1134,8 +1135,7 @@ public class MainGUI extends JFrame {
 								rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.finished"));
 								rp.incProcessProgress();
 							}
-							
-							
+														
 							logger.logDEBUG("File Integrity Check Started");
 							rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.starting"));
 							if(!PostFileProcessor .getInstance().process(rp)) {
