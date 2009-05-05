@@ -8,7 +8,7 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
 
- 2.0 (2009-??-??)
+ 2.0 (2009-05-05)
 
  Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x
  versions. Despite this the concept is still the same: A simple to use and 
