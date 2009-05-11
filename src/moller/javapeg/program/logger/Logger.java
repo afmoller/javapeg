@@ -7,6 +7,7 @@ package moller.javapeg.program.logger;
  *                        : 2009-03-13 by Fredrik Möller
  *                        : 2009-04-04 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
+ *                        : 2009-05-10 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -86,7 +87,7 @@ public class Logger {
 			return instance;
 		}
 	}
-	
+		
 	/**
 	 * This method logs a debug entry to the log file if current log level 
 	 * allows that.
@@ -97,10 +98,14 @@ public class Logger {
 	 *  
 	 * @param logMessage is the message to log.
 	 */
-	public void logDEBUG(String logMessage) {
-    	this.log(logMessage, Level.DEBUG);
+	public void logDEBUG(Object logMessage) {
+		if (logMessage instanceof String) {
+			this.log(logMessage.toString(), Level.DEBUG);	
+		} else if (logMessage instanceof Exception) {
+			this.logException((Exception)logMessage, Level.DEBUG);
+		}
     }
-    
+	    
     /**
      * This method logs an info entry to the log file if current log level 
 	 * allows that.
@@ -111,8 +116,12 @@ public class Logger {
 	 * 
      * @param logMessage is the message to log.
      */
-    public void logINFO(String logMessage) {
-    	this.log(logMessage, Level.INFO);
+    public void logINFO(Object logMessage) {
+    	if (logMessage instanceof String) {
+			this.log(logMessage.toString(), Level.INFO);	
+		} else if (logMessage instanceof Exception) {
+			this.logException((Exception)logMessage, Level.INFO);
+		}
     }
     
     /**
@@ -124,21 +133,30 @@ public class Logger {
 	 * 
      * @param logMessage is the message to log.
      */
-    public void logWARN(String logMessage) {
-    	this.log(logMessage, Level.WARN);
+    public void logWARN(Object logMessage) {
+    	if (logMessage instanceof String) {
+			this.log(logMessage.toString(), Level.WARN);	
+		} else if (logMessage instanceof Exception) {
+			this.logException((Exception)logMessage, Level.WARN);
+		}
     }
-
+    
     /**
-     * This method logs an error entry to the log file if current log level 
+	 * This method logs a debug entry to the log file if current log level 
 	 * allows that.
 	 * 
-	 * The meaning of the ERROR level is: The ERROR level designates error
-	 * events that might still allow the application to continue running.
-	 * 
-     * @param logMessage is the message to log.
-     */
-    public void logERROR(String logMessage) {
-    	this.log(logMessage, Level.ERROR);
+	 * The meaning of the DEBUG level is: The DEBUG Level designates 
+	 * fine-grained informational events that are most useful to debug an
+	 * application.
+	 *  
+	 * @param logMessage is the message to log.
+	 */
+	public void logERROR(Object logMessage) {
+		if (logMessage instanceof String) {
+			this.log(logMessage.toString(), Level.ERROR);	
+		} else if (logMessage instanceof Exception) {
+			this.logException((Exception)logMessage, Level.ERROR);
+		}
     }
 
     /**
@@ -150,8 +168,26 @@ public class Logger {
 	 * 
      * @param logMessage is the message to log.
      */
-    public void logFATAL(String logMessage) {
-    	this.log(logMessage, Level.FATAL);
+    public void logFATAL(Object logMessage) {
+    	if (logMessage instanceof String) {
+			this.log(logMessage.toString(), Level.FATAL);	
+		} else if (logMessage instanceof Exception) {
+			this.logException((Exception)logMessage, Level.FATAL);
+		}
+    }
+        
+    /**
+     * This method logs an Exception to the log if current log level allows
+     * that.
+     * 
+     * @param ex is the Exception object that contains the message to log
+     * @param level is the severity of the log entry, see {@link Level} for
+     *        details.
+     */
+    private void logException(Exception ex, Level level) {
+    	for(StackTraceElement element : ex.getStackTrace()) {
+			this.log(element.toString(), Level.ERROR);	
+		}
     }
 	
     private void log(String logMessage, Level level) {
