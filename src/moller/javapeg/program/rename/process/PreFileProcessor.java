@@ -7,13 +7,17 @@ package moller.javapeg.program.rename.process;
  *                        : 2009-03-10 by Fredrik Möller
  *                        : 2009-03-11 by Fredrik Möller
  *                        : 2009-04-14 by Fredrik Möller
+ *                        : 2009-05-09 by Fredrik Möller
+ *                        : 2009-05-10 by Fredrik Möller
  */
 
+import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.javapeg.program.rename.validator.AvailableDiskSpace;
 import moller.javapeg.program.rename.validator.DestinationDirectoryDoesNotExist;
+import moller.javapeg.program.rename.validator.ExternalOverviewLayout;
 import moller.javapeg.program.rename.validator.FileAndSubDirectoryTemplate;
 import moller.javapeg.program.rename.validator.FileCreationAtDestinationDirectory;
 import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
@@ -52,8 +56,17 @@ public class PreFileProcessor {
 	public ValidatorStatus startTest(RenameProcess rp) {
 		
 		Language lang = Language.getInstance();
-		
+				
 		ValidatorStatus vs;
+		
+		if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
+			rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.externalOverviewLayout"));
+			vs = ExternalOverviewLayout.getInstance().test();
+			if(!vs.isValid()) {
+				return vs;
+			}
+			rp.incProcessProgress();
+		}
 		
 		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.sourceAndDestinationPath"));
 		vs = SourceAndDestinationPath.getInstance().test();
