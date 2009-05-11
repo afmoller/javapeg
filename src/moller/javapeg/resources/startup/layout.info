@@ -16,6 +16,74 @@
  The name of the created layout file must be "layout.xml" and must be stored in
  the same directory as this information file.
  
+ S C H E M A
+ -----------
+ The content of the schema that specifies the valid content for the layout.xml 
+ file, and which is used by the application to validate any existing external 
+ layout.xml file for validity, is listed here:
+ 
+ <?xml version="1.0" encoding="UTF-8"?>
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/layout" xmlns:tns="http://www.example.org/layout" elementFormDefault="qualified">
+    
+     <xs:element name="document" type="tns:Document"/>
+          
+     <xs:complexType name="Document">
+             <xs:sequence>
+                 <xs:element name="documenttitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                 <xs:element name="row" type="tns:Row" minOccurs="1" maxOccurs="1"/>    
+             </xs:sequence>
+         </xs:complexType>    
+        
+     <xs:complexType name="Row">
+         <xs:sequence>
+             <xs:element name="column" type="tns:Column" minOccurs="1" maxOccurs="1"></xs:element>
+         </xs:sequence>
+         <xs:attribute name="class"  type="xs:string"  use="optional"/>
+     </xs:complexType>
+    
+     <xs:complexType name="Column">
+         <xs:sequence>
+             <xs:element name="image" type="tns:Image" minOccurs="1" maxOccurs="1"/>
+             <xs:element name="meta"  type="tns:Meta"  minOccurs="1" maxOccurs="1"></xs:element>
+         </xs:sequence>
+         <xs:attribute name="class"  type="xs:string"  use="optional"/>
+         <xs:attribute name="amount" type="xs:integer" use="required"/>
+     </xs:complexType>
+    
+     <xs:complexType name="Image">
+         <xs:attribute name="class" type="xs:string" use="optional"/>
+     </xs:complexType>
+    
+     <xs:complexType name="Meta">
+         <xs:sequence>
+             <xs:element name="metaitem" type="tns:MetaItem" minOccurs="0" maxOccurs="unbounded"/>
+         </xs:sequence>
+         <xs:attribute name="class"  type="xs:string"  use="optional"/>  
+     </xs:complexType>
+    
+     <xs:complexType name="MetaItem">
+         <xs:attribute name="class" type="xs:string" use="optional"/>
+         <xs:attribute name="label" type="xs:string" use="required"/>
+         <xs:attribute name="meta"  type="tns:MetaEnumeration" use="required"/>
+     </xs:complexType>
+        
+     <xs:simpleType name="MetaEnumeration">
+         <xs:restriction base="xs:string">
+             <xs:enumeration value="fileName"/>
+             <xs:enumeration value="date"/>
+             <xs:enumeration value="time"/>
+             <xs:enumeration value="cameraModel"/>
+             <xs:enumeration value="shutterSpeed"/>
+             <xs:enumeration value="isoValue"/>
+             <xs:enumeration value="pictureWidth"/>
+             <xs:enumeration value="pictureHeight"/>
+             <xs:enumeration value="apertureValue"/>
+             <xs:enumeration value="fileSize"/>
+         </xs:restriction>
+     </xs:simpleType>
+    
+ </xs:schema> 
+  
  A P P L I C A T I O N  E M B E D D E D   L A Y O U T 
  ----------------------------------------------------
  The content of the application embedded layout file is the following and can 
@@ -25,92 +93,93 @@
 <!--
  This section contains information about the syntax of the XML part of this file
  and which attributes that are valid for each tag. Below is a listing of all 
- valid tags and the use of them.
+ valid tags and the use of them. See the layout.info file for the formal schema
+ definition that this file must conform to.
   
  <documenttitle> 
  ===============
- general   : There can only be one instance of this tag and it shall be placed
-             as a child to the <document> tag.
+ Description: There can only be one instance of this tag and it shall be placed
+              as a child to the <document> tag.
  
- tag value : The value of this tag will be put as title in the web browser. 
+ Tag value  : The value of this tag will be put as title in the web browser. 
              
- attributes: There are no attributes which are valid for this tag.
+ Attributes : There are no attributes which are valid for this tag.
  
  
  <row>
  =====
- general   : There can only be one start and stop instance of this tag and it
-             shall be placed as a child to the <document> tag.
+ Description: There can only be one start and stop instance of this tag and it
+              shall be placed as a child to the <document> tag.
  
- tag value : No value for this tag. 
+ Tag value  : No value for this tag. 
  
- attributes: The class attribute is optional and used by the CSS. This is the
-             only valid attribute for this tag.
+ Attributes : The class attribute is optional and used by the CSS. This is the
+              only valid attribute for this tag.
  
  
  <column>
  ========
- general   : There can only be one start and stop instance of this tag and it
-             shall be placed as a child to the <row> tag.
+ Description: There can only be one start and stop instance of this tag and it
+              shall be placed as a child to the <row> tag.
  
- tag value : No value for this tag.
+ Tag value  : No value for this tag.
    
- attributes: class and amount are the two attributes that are valid for this 
-             tag. The class attribute is optional, and used by the CSS. The
-             amount attribute is mandatory and shall contain an integer value
-             larger than zero. This attribute defines how many columns of 
-             images that will be generated in the thumb nail overview.  
+ Attributes : class and amount are the two attributes that are valid for this 
+              tag. The class attribute is optional, and used by the CSS. The
+              amount attribute is mandatory and shall contain an integer value
+              larger than zero. This attribute defines how many columns of 
+              images that will be generated in the thumb nail overview.  
             
             
  <image/>
  ========
- general   : There can only be one instance of this tag and it shall be placed 
-             as a child to the <column> tag.
+ Description: There can only be one instance of this tag and it shall be placed 
+              as a child to the <column> tag.
  
- tag value : No value for this tag.
+ Tag value  : No value for this tag.
    
- attributes: The class attribute is optional and used by the CSS. This is the
-             only valid attribute for this tag.
+ Attributes : The class attribute is optional and used by the CSS. This is the
+              only valid attribute for this tag.
 
 
  <meta>
  ======
- general   : There can only be one start and stop instance of this tag and it
-             shall be placed as a child to the <column> tag.
+ Description: There can only be one start and stop instance of this tag and it
+              shall be placed as a child to the <column> tag.
  
- tag value : No value for this tag.
+ Tag value  : No value for this tag.
  
- attributes: The class attribute is optional and used by the CSS. This is the
-             only valid attribute for this tag.
+ Attributes : The class attribute is optional and used by the CSS. This is the
+              only valid attribute for this tag.
 
 
 <metaitem/>
 ===========
- general   : There can be several instances of this tag and they shall all be 
-             placed as children to the <meta> tag.
+ Description: There can be several instances of this tag and they shall all be 
+              placed as children to the <meta> tag.
  
- tag value : No value for this tag.
+ Tag value  : No value for this tag.
    
- attributes: class, label and meta are the attributes that are valid for this 
-             tag. The class attribute is optional, and used by the CSS. The
-             label attribute is mandatory and shall contain a string value that
-             will be a label for the meta data value that will be defined by 
-             the last attribute, meta.
+ Attributes : class, label and meta are the attributes that are valid for this 
+              tag. The class attribute is optional, and used by the CSS. The
+              label attribute is mandatory and shall contain a string value that
+              will be a label for the meta data value that will be defined by 
+              the last attribute, meta.
              
-             Available values for the meta attribute are:
+              Available values for the meta attribute are:
              
-             "fileName"
-             "date"
-             "time"
-             "cameraModel"
-             "shutterSpeed"
-             "isoValue"
-             "pictureWidth"
-             "pictureHeight"
-             "apertureValue"
-             "fileSize"
+              "fileName"
+              "date"
+              "time"
+              "cameraModel"
+              "shutterSpeed"
+              "isoValue"
+              "pictureWidth"
+              "pictureHeight"
+              "apertureValue"
+              "fileSize"
   -->
-<document>
+<document xmlns="http://www.example.org/layout">
   <documenttitle>Image overview</documenttitle>
   <row class="row">
     <column class="column" amount="5">
@@ -122,4 +191,4 @@
       </meta>
     </column>
   </row>
-</document>  
+</document>
