@@ -8,6 +8,11 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
 
+ 2.1 (2009-??-??)
+ 
+ + Validation of the content in any existing external layout.xml file against
+   a schema. 
+
  2.0 (2009-05-05)
 
  Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x
