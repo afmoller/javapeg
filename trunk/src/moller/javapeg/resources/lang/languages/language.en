@@ -40,6 +40,8 @@
 #                      : by Fredrik Möller 2009-04-28
 #                      : by Fredrik Möller 2009-05-04
 #                      : by Fredrik Möller 2009-05-05
+#                      : by Fredrik Möller 2009-05-10
+#                      : by Fredrik Möller 2009-05-11
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -276,6 +278,7 @@ rename.PreFileProcessor.jPEGTotalPathLength                = Validating Total Pa
 rename.PreFileProcessor.nonJPEGTotalPathLength             = Validating Total Path Lengths Of Non JPEG Files
 rename.PreFileProcessor.availableDiskSpace                 = Validating Available Disk Space
 rename.PreFileProcessor.fileCreationAtDestinationDirectory = Validating File Creation At Destination Directory
+rename.PreFileProcessor.externalOverviewLayout             = Validating Layout For Thumbnail Overview
 
 rename.FileProcessor.starting                               = File Processing Has Started
 rename.FileProcessor.finished                               = File Processing Has Finished
@@ -332,6 +335,9 @@ validator.sourceanddestinationpath.noSourcePathError                       = A p
 validator.sourceanddestinationpath.noDestinationPathError                  = A path to destination folder must be set
 validator.sourceanddestinationpath.invalidCharactersInSourcePathError      = Path to source folder contains illegal characters
 validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = Path to destination folder contains illegal characters
+
+# Thumb nail overview layout validator
+validator.externalOverviewLayout.invalidXMLFile = The content of the file layout.xml is invalid. See log file for details. 
 
 ##############################################################################################################
 # T H U M B N A I L  O V E R V I E W                                                                         #
