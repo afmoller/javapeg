@@ -27,7 +27,7 @@
 <entry key="window.location.x">10</entry>
 <entry key="window.location.y">10</entry>
 <entry key="gUILanguageISO6391">en</entry>
+<entry key="update.checker.enabled">true</entry>
+<entry key="update.checker.timeout">60</entry>
+<entry key="update.checker.url">http://javapeg.sourceforge.net/PAGES/updates/version.php</entry>
 </properties>
-
-
-
