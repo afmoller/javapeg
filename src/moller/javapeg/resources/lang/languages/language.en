@@ -42,6 +42,7 @@
 #                      : by Fredrik Möller 2009-05-05
 #                      : by Fredrik Möller 2009-05-10
 #                      : by Fredrik Möller 2009-05-11
+#                      : by Fredrik Möller 2009-05-13
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -159,6 +160,7 @@ aboutDialog.TextRowH = _______________________________________
 ##############################################################################################################
 errormessage.maingui.errorMessageLabel                       = Error
 errormessage.maingui.warningMessageLabel                     = Warning
+errormessage.maingui.informationMessageLabel                 = Information
 errormessage.maingui.locationError                           = Could not set window location according to settings. See logs for details
 errormessage.maingui.toLongFileNameInPreviewTable            = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
 errormessage.maingui.toLongTotalPathInPreviewTable           = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
@@ -352,3 +354,12 @@ thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Could not acce
 
 thumbnailoverview.LayoutParser.wrongElementAmount = The file layout.xml contains wrong amount of element:
 thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xml. See log file for details.
+
+##############################################################################################################
+# U P D A T E  C H E C K E R                                                                                 #
+##############################################################################################################
+
+updatechecker.newVersion     = There exists a newer version of JavaPEG available. Visit http://javapeg.sourceforge.net to find a download link
+updatechecker.uRLInvalid     = Invalid format of the url to the update server. See log file for details.
+updatechecker.uRLWrong       = Wrong url to the update server. See log file for details.
+updatechecker.networkTimeOut = Update server did not respond, a retry will be done next application start.
