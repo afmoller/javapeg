@@ -1,6 +1,5 @@
 2.1:
 ====
-- Add functionality to check if the latest version of JavaPEG is installed.
 - Add functionality to ask for preferred language at first application start.
 - Add detailed log messages in the renameprogresswindow, about file copy, and integrity check
 - Update info files in the internal resources directory.
