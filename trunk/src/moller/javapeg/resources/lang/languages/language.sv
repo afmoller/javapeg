@@ -41,6 +41,7 @@
 #                      : by Fredrik Möller 2009-05-05
 #                      : by Fredrik Möller 2009-05-10
 #                      : by Fredrik Möller 2009-05-11
+#                      : by Fredrik Möller 2009-05-13
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -158,6 +159,7 @@ aboutDialog.TextRowH = _______________________________________
 ##############################################################################################################
 errormessage.maingui.errorMessageLabel                       = Fel
 errormessage.maingui.warningMessageLabel                     = Varning
+errormessage.maingui.informationMessageLabel                 = Information
 errormessage.maingui.locationError                           = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
 errormessage.maingui.toLongFileNameInPreviewTable            = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
 errormessage.maingui.toLongTotalPathInPreviewTable           = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
@@ -352,3 +354,12 @@ thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Åtkomst nekad 
 
 thumbnailoverview.LayoutParser.wrongElementAmount = Filen layout.xml innehåller fel antal av element:
 thumbnailoverview.LayoutParser.parseError         = Fel vid inläsning av layout.xml. Se loggfil för detaljer.
+
+##############################################################################################################
+# U P D A T E  C H E C K E R                                                                                 #
+##############################################################################################################
+
+updatechecker.newVersion     = Det finns en nyare version av JavaPEG tillgänglig. Besök http://javapeg.sourceforge.net för att finna nedladdningslänk
+updatechecker.uRLInvalid     = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.uRLWrong       = Fel url till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.networkTimeOut = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
