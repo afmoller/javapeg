@@ -8,6 +8,7 @@ package moller.javapeg.program.logger;
  *                        : 2009-04-04 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-05-10 by Fredrik Möller
+ *                        : 2009-05-13 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -44,8 +45,7 @@ public class Logger {
 
     	Config conf = Config.getInstance();
     	   
-    	rotateLog = conf.getBooleanProperty("logger.log.rotate");
-    	
+    	rotateLog     = conf.getBooleanProperty("logger.log.rotate");
     	developerMode = conf.getBooleanProperty("logger.developerMode");
     	
     	if(rotateLog) {
@@ -142,12 +142,11 @@ public class Logger {
     }
     
     /**
-	 * This method logs a debug entry to the log file if current log level 
+	 * This method logs an error entry to the log file if current log level 
 	 * allows that.
 	 * 
-	 * The meaning of the DEBUG level is: The DEBUG Level designates 
-	 * fine-grained informational events that are most useful to debug an
-	 * application.
+	 * The meaning of the ERROR level is: The ERROR level designates error 
+	 * events that might still allow the application to continue running.
 	 *  
 	 * @param logMessage is the message to log.
 	 */
@@ -180,14 +179,20 @@ public class Logger {
      * This method logs an Exception to the log if current log level allows
      * that.
      * 
-     * @param ex is the Exception object that contains the message to log
-     * @param level is the severity of the log entry, see {@link Level} for
+     * @param e is the Exception object that contains the message to log
+     * @param l is the severity of the log entry, see {@link Level} for
      *        details.
      */
-    private void logException(Exception ex, Level level) {
-    	for(StackTraceElement element : ex.getStackTrace()) {
-			this.log(element.toString(), Level.ERROR);	
+    private void logException(Exception e, Level l) {
+       	this.log("An Exception Has Occurred", l);
+       	this.log("START ==========================================================================", l);
+       	this.log("EXCEPTION MESSAGE:", l);
+    	this.log(e.getMessage() == null ? "" : e.getMessage(), l);
+    	this.log("STACKTRACE:", l);
+    	for(StackTraceElement element : e.getStackTrace()) {
+			this.log(element.toString(), l);	
 		}
+    	this.log("STOP ==========================================================================", l);
     }
 	
     private void log(String logMessage, Level level) {
