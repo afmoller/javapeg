@@ -9,7 +9,10 @@
  ~ = Changes   since previous version
 
  2.1 (2009-??-??)
- 
+
+ + From now on JavaPEG can do an optional (configurable) version check at 
+   application start it does it against an version server.
+     
  + Validation of the content in any existing external layout.xml file against
    a schema. 
 
