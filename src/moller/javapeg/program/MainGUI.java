@@ -22,6 +22,7 @@ package moller.javapeg.program;
  *                        : 2009-04-23 by Fredrik Möller
  *                        : 2009-04-29 by Fredrik Möller
  *                        : 2009-05-04 by Fredrik Möller
+ *                        : 2009-05-13 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -36,6 +37,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -92,6 +96,7 @@ import moller.util.gui.Table;
 import moller.util.gui.Update;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
+import moller.util.version.Version;
 
 public class MainGUI extends JFrame {
 
@@ -99,6 +104,20 @@ public class MainGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 4478711914847747931L;
+	
+	/**
+	 * This variable  contains a timestamp whcih is set to when the latest 
+	 * release is done. The value is the amount of milliseconds since 
+	 * 1970-01-01 with 
+	 */
+	private final static long VERSION_TIMESTAMP = 1242217288;
+	
+	private static Config config = Config.getInstance();
+	
+	private static Logger logger = Logger.getInstance();
+	
+	private static Language lang = Language.getInstance();
+		
 	private JButton pathSelectButton;
 	private JButton destinationPathButton;
 	private JButton startProcessButton;
@@ -174,49 +193,82 @@ public class MainGUI extends JFrame {
 	
 	private Timer fileChooserScanner;
 	
-	private Language lang;
-
 	public MainGUI(){
 		
 		FileSetup.check();
-		Logger logger = Logger.getInstance();
-		logger.logDEBUG("JavaPEG is starting");
+		logger.logDEBUG("JavaPEG is starting");		
 		logger.logDEBUG("Language File Loading Started");
-		readLanguageFile();
+		this.readLanguageFile();
 		logger.logDEBUG("Language File Loading Finished");
+		if(config.getBooleanProperty("update.checker.enabled")) {
+			this.checkApplicationUpdates();
+		}
 		logger.logDEBUG("Creation of Left Panel Started");
-		createLeftPanel();
+		this.createLeftPanel();
 		logger.logDEBUG("Creation of Left Panel Finished");
 		logger.logDEBUG("Creation of Right Panel Started");
-		createRightPanel();
+		this.createRightPanel();
 		logger.logDEBUG("Creation of Right Panel Finished");
 		logger.logDEBUG("Creation of Thumb Nails Background Panel Started");
-		createThumbNailsBackgroundPanel();
+		this.createThumbNailsBackgroundPanel();
 		logger.logDEBUG("Creation of Thumb Nails Background Panel Finished");
 		logger.logDEBUG("Creation of Info Panel Started");
-		createInfoPanel();
+		this.createInfoPanel();
 		logger.logDEBUG("Creation of Info Panel Finished");
 		logger.logDEBUG("Creation of Main Frame Started");
-		createMainFrame();
+		this.createMainFrame();
 		logger.logDEBUG("Creation of Main Frame Finished");
 		logger.logDEBUG("Creation of Menu Bar Started");
-		createMenuBar();
+		this.createMenuBar();
 		logger.logDEBUG("Creation of Menu Bar Finished");
-		createToolBar();
+		this.createToolBar();
 		logger.logDEBUG("Adding of Event Listeners Started");
-		addListeners();
+		this.addListeners();
 		logger.logDEBUG("Adding of Event Listeners Finished");
 		logger.logDEBUG("Application initialization Started");
-		initiateProgram();
+		this.initiateProgram();
 		logger.logDEBUG("Application initialization Finished");
 		logger.logDEBUG("Application Context initialization Started");
-		initiateApplicationContext();
+		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
+	}
+	
+	private void checkApplicationUpdates() {
+			
+		logger.logDEBUG("Search for Application Updates Started");
+		Thread updateCheck = new Thread(){
+
+			public void run(){
+				String errorMessage = "";
+				String urlString = config.getStringProperty("update.checker.url");
+				URL updateURL = null;
+				
+				try {
+					updateURL = new URL(urlString);
+					if (VERSION_TIMESTAMP < Version.check(updateURL, config.getIntProperty("update.checker.timeout"))) {
+						JOptionPane.showMessageDialog(null, lang.get("updatechecker.newVersion"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
+					}				
+				} catch (MalformedURLException e) {
+					errorMessage = lang.get("updatechecker.uRLInvalid") + "\n(" + urlString + ")";
+					logger.logERROR(e);
+				} catch (SocketTimeoutException e) {
+					errorMessage = lang.get("updatechecker.networkTimeOut") + "\n(" + updateURL.toString() + ")";
+					logger.logERROR(e);
+				} catch (IOException e) {
+					errorMessage = lang.get("updatechecker.uRLWrong") + "\n(" + updateURL.toString() + ")";
+					logger.logERROR(e);
+				}
+				if (errorMessage.length() > 0) {
+					JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+				}
+				logger.logDEBUG("Search for Application Updates Finished");
+			}
+		};
+		updateCheck.start();
 	}
 	
 	// Inläsning av språkfil
 	private void readLanguageFile(){
-		lang = Language.getInstance();
 		lang.loadLanguageFile();
 	}
 
@@ -299,7 +351,7 @@ public class MainGUI extends JFrame {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif");
 			openPictureImageIcon.setImage(ImageIO.read(imageStream));
 		} catch (Exception e) {
-			Logger.getInstance().logERROR("Could not open the image open.gif");
+			logger.logERROR("Could not open the image open.gif");
 		} finally {
 			StreamUtil.closeStream(imageStream);
 		}
@@ -479,7 +531,7 @@ public class MainGUI extends JFrame {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/play.gif");
 			playPictureImageIcon.setImage(ImageIO.read(imageStream));
 		} catch (Exception e) {
-			Logger.getInstance().logERROR("Could not open the image play.gif");
+			logger.logERROR("Could not open the image play.gif");
 		} finally {
 			StreamUtil.closeStream(imageStream);
 		}
@@ -648,9 +700,6 @@ public class MainGUI extends JFrame {
 	}
 
 	private void createMainFrame(){
-		
-		Config conf = Config.getInstance();
-		Logger logger = Logger.getInstance();
 
 		this.setTitle("JavaPEG 2.0");
 
@@ -668,7 +717,7 @@ public class MainGUI extends JFrame {
 		
 		this.setSize(new Dimension(1024,768));
 
-		Point xyFromConfig = new Point(conf.getIntProperty("window.location.x"),conf.getIntProperty("window.location.y"));
+		Point xyFromConfig = new Point(config.getIntProperty("window.location.x"),config.getIntProperty("window.location.y"));
 				
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -729,12 +778,10 @@ public class MainGUI extends JFrame {
 
 	public void initiateProgram(){
 		
-		Config conf = Config.getInstance();
-		
-	 	subFolderTextField.setText(conf.getStringProperty("subFolderName"));
-		fileNameTemplateTextField.setText(conf.getStringProperty("fileNameTemplate"));
+	 	subFolderTextField.setText(config.getStringProperty("subFolderName"));
+		fileNameTemplateTextField.setText(config.getStringProperty("fileNameTemplate"));
 
-		if(conf.getBooleanProperty("createThumbNailsCheckBox"))
+		if(config.getBooleanProperty("createThumbNailsCheckBox"))
 			createThumbNailsCheckBox.setSelected(true);
 
 		destinationPathLabel.setEnabled(false);
@@ -770,16 +817,14 @@ public class MainGUI extends JFrame {
 							tempArray[i] = '/';
 						}
 					}
-					
-					Config conf = Config.getInstance();
-					
+			
 					pathTextField.setText(String.valueOf(tempArray));
-					conf.setStringProperty("sourcePath", pathTextField.getText());
+					config.setStringProperty("sourcePath", pathTextField.getText());
 					destinationPathButton.setEnabled(true);
 					destinationPathLabel.setEnabled(true);
 					openDestinationFileChooserJMenuItem.setEnabled(true);
 
-					MetaDataUtil.setMetaDataObjects(conf.getStringProperty("sourcePath"));
+					MetaDataUtil.setMetaDataObjects(config.getStringProperty("sourcePath"));
 					Vector<Vector<String>> rowData = MetaDataUtil.getMetaData();
 					Vector<String> columnNames = new Vector<String>();
 					
@@ -807,7 +852,7 @@ public class MainGUI extends JFrame {
 
 					Table.packColumns(metaDataTable, 6);
 
-					populateThumbNailsPanel(conf.getStringProperty("sourcePath"));
+					populateThumbNailsPanel(config.getStringProperty("sourcePath"));
 					
 					tabbedPaneEnabled(true, false);
 				}
@@ -817,35 +862,28 @@ public class MainGUI extends JFrame {
 	}
 	
 	public void initiateApplicationContext() {
-					
-		Config conf = Config.getInstance();
-		
 		ApplicationContext ac = ApplicationContext.getInstance();
-		ac.setSourcePath(conf.getStringProperty("sourcePath"));
-		ac.setTemplateFileName(conf.getStringProperty("fileNameTemplate"));
-		ac.setTemplateSubFolderName(conf.getStringProperty("subFolderName"));
-		ac.setCreateThumbNailsCheckBoxSelected(conf.getBooleanProperty("createThumbNailsCheckBox"));
+		ac.setSourcePath(config.getStringProperty("sourcePath"));
+		ac.setTemplateFileName(config.getStringProperty("fileNameTemplate"));
+		ac.setTemplateSubFolderName(config.getStringProperty("subFolderName"));
+		ac.setCreateThumbNailsCheckBoxSelected(config.getBooleanProperty("createThumbNailsCheckBox"));
 	}
 
 	private void saveSettings(){
-		
-		Config conf = Config.getInstance();
-		Logger logger = Logger.getInstance();
-
 		if(!pathTextField.getText().equals(""))
-			conf.setStringProperty("sourcePath", pathTextField.getText());
+			config.setStringProperty("sourcePath", pathTextField.getText());
 
 		if(!destinationPathTextField.getText().equals(""))
-			conf.setStringProperty("destinationPath", destinationPathTextField.getText());
+			config.setStringProperty("destinationPath", destinationPathTextField.getText());
 
-		conf.setStringProperty("subFolderName", subFolderTextField.getText());
-		conf.setStringProperty("fileNameTemplate", fileNameTemplateTextField.getText());
-		conf.setBooleanProperty("createThumbNailsCheckBox", createThumbNailsCheckBox.isSelected());
-		conf.setIntProperty("window.location.x", this.getLocationOnScreen().x);
-		conf.setIntProperty("window.location.y", this.getLocationOnScreen().y);
+		config.setStringProperty("subFolderName", subFolderTextField.getText());
+		config.setStringProperty("fileNameTemplate", fileNameTemplateTextField.getText());
+		config.setBooleanProperty("createThumbNailsCheckBox", createThumbNailsCheckBox.isSelected());
+		config.setIntProperty("window.location.x", this.getLocationOnScreen().x);
+		config.setIntProperty("window.location.y", this.getLocationOnScreen().y);
 
 		try {
-			conf.saveSettings();
+			config.saveSettings();
 		} catch (FileNotFoundException e) {
 			logger.logFATAL("Could not save configuration to file: ");
 			for(StackTraceElement element : e.getStackTrace()) {
@@ -945,7 +983,6 @@ public class MainGUI extends JFrame {
 	private class WindowDestroyer extends WindowAdapter{
 		public void windowClosing (WindowEvent e){
 			saveSettings();
-			Logger logger = Logger.getInstance();
 			logger.logDEBUG("JavePEG was shut down");
 			logger.flush();
 			System.exit(0);
@@ -954,9 +991,6 @@ public class MainGUI extends JFrame {
 
 	// Menylyssnarklass
 	private class MenuListener implements ActionListener{
-		
-		Config conf = Config.getInstance();
-		
 		public void actionPerformed(ActionEvent e){
 			String actionCommand = e.getActionCommand();
 
@@ -1016,15 +1050,13 @@ public class MainGUI extends JFrame {
 			
 			if(actionCommand.equals("destinationPathButton")) {
 				destinationPathTextField.setEditable(true);
-				
-				Config conf = Config.getInstance();
 
 				/**
 			     * Kontrollera så att sparad sökväg fortfarande existerar
 			     * och i annat fall hoppa upp ett steg i trädstrukturen och
 			     * kontrollera ifall den sökvägen existerar
 			     **/
-				File tempFile = new File(conf.getStringProperty("destinationPath"));
+				File tempFile = new File(config.getStringProperty("destinationPath"));
 
 				boolean exists = false;
 				while(!exists) {
@@ -1062,7 +1094,7 @@ public class MainGUI extends JFrame {
 						
 						ApplicationContext.getInstance().setDestinationPath(String.valueOf(tempArray));
 						destinationPathTextField.setText(String.valueOf(tempArray));
-						conf.setStringProperty("destinationPath", destinationPathTextField.getText());
+						config.setStringProperty("destinationPath", destinationPathTextField.getText());
 						subFolderTextField.setEnabled(true);
 						fileNameTemplateTextField.setEnabled(true);	
 						destinationPathTextField.setEnabled(true);
@@ -1105,7 +1137,6 @@ public class MainGUI extends JFrame {
 						rp.init();
 						rp.setVisible(true);
 
-						Logger logger = Logger.getInstance();
 						logger.logDEBUG("Pre File Processing Started");
 						rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
 						ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
