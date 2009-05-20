@@ -10,8 +10,11 @@
 
  2.1 (2009-??-??)
 
- + From now on JavaPEG can do an optional (configurable) version check at 
-   application start it does it against an version server.
+ + JavaPEG can from now, do an optional (configurable) version check at 
+   application start. It does it against an version server. If there is a new
+   version available, the changes for that version compared to the current used
+   version is presented. It is also possible to download the new version 
+   through JavaPEG 
      
  + Validation of the content in any existing external layout.xml file against
    a schema. 
