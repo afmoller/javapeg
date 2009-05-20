@@ -4,6 +4,8 @@
 - Add detailed log messages in the renameprogresswindow, about file copy, and integrity check
 - Update info files in the internal resources directory.
 - Enter values to the change log.
+- Enter change log entries to the change log files on the update server.
+- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 - Test all functionality.
 
 2.2:
@@ -14,6 +16,8 @@
 - Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
 - Update info files in the internal resources directory.
 - Enter values to the change log.
+- Enter change log entries to the change log files on the update server.
+- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 - Test all functionality.
 
 2.x:
@@ -22,4 +26,6 @@
 - Create unittest
 - Update info files in the internal resources directory.
 - Enter values to the change log.
+- Enter change log entries to the change log files on the update server.
+- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 - Test all functionality.
