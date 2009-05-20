@@ -23,6 +23,11 @@ package moller.javapeg.program;
  *                        : 2009-04-29 by Fredrik Möller
  *                        : 2009-05-04 by Fredrik Möller
  *                        : 2009-05-13 by Fredrik Möller
+ *                        : 2009-05-14 by Fredrik Möller
+ *                        : 2009-05-15 by Fredrik Möller
+ *                        : 2009-05-16 by Fredrik Möller
+ *                        : 2009-05-19 by Fredrik Möller
+ *                        : 2009-05-20 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -37,9 +42,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -91,12 +93,15 @@ import moller.javapeg.program.rename.process.PreFileProcessor;
 import moller.javapeg.program.rename.validator.FileAndSubDirectoryTemplate;
 import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
+import moller.javapeg.program.updates.NewVersionChecker;
+import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.Update;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
-import moller.util.version.Version;
+import moller.util.version.containers.VersionInformation;
+
 
 public class MainGUI extends JFrame {
 
@@ -106,11 +111,11 @@ public class MainGUI extends JFrame {
 	private static final long serialVersionUID = 4478711914847747931L;
 	
 	/**
-	 * This variable  contains a timestamp whcih is set to when the latest 
+	 * This variable  contains a time stamp which is set to when the latest 
 	 * release is done. The value is the amount of milliseconds since 
 	 * 1970-01-01 with 
 	 */
-	private final static long VERSION_TIMESTAMP = 1242217288;
+	private final static long VERSION_TIMESTAMP = 1242217287;
 	
 	private static Config config = Config.getInstance();
 	
@@ -200,7 +205,7 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Language File Loading Started");
 		this.readLanguageFile();
 		logger.logDEBUG("Language File Loading Finished");
-		if(config.getBooleanProperty("update.checker.enabled")) {
+		if(config.getBooleanProperty("updatechecker.enabled")) {
 			this.checkApplicationUpdates();
 		}
 		logger.logDEBUG("Creation of Left Panel Started");
@@ -239,28 +244,25 @@ public class MainGUI extends JFrame {
 		Thread updateCheck = new Thread(){
 
 			public void run(){
-				String errorMessage = "";
-				String urlString = config.getStringProperty("update.checker.url");
-				URL updateURL = null;
+				NewVersionChecker nvc = NewVersionChecker.getInstance();
 				
-				try {
-					updateURL = new URL(urlString);
-					if (VERSION_TIMESTAMP < Version.check(updateURL, config.getIntProperty("update.checker.timeout"))) {
-						JOptionPane.showMessageDialog(null, lang.get("updatechecker.newVersion"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
-					}				
-				} catch (MalformedURLException e) {
-					errorMessage = lang.get("updatechecker.uRLInvalid") + "\n(" + urlString + ")";
-					logger.logERROR(e);
-				} catch (SocketTimeoutException e) {
-					errorMessage = lang.get("updatechecker.networkTimeOut") + "\n(" + updateURL.toString() + ")";
-					logger.logERROR(e);
-				} catch (IOException e) {
-					errorMessage = lang.get("updatechecker.uRLWrong") + "\n(" + updateURL.toString() + ")";
-					logger.logERROR(e);
-				}
-				if (errorMessage.length() > 0) {
-					JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-				}
+				long latestVersion = nvc.newVersionExists();
+				if(latestVersion > VERSION_TIMESTAMP) {
+					Map<Long, VersionInformation> vim = nvc.getVersionInformation(VERSION_TIMESTAMP);
+					
+					if(vim != null) {
+						VersionInformation vi = vim.get(latestVersion);
+						
+						String changeLog     = nvc.getChangeLog(vim, VERSION_TIMESTAMP);
+						String downloadURL   = vi.getDownnloadURL();
+						String versionNumber = vi.getVersionNumber();
+						int fileSize = vi.getFileSize();
+						
+						NewVersionGUI nvg = new NewVersionGUI(changeLog, downloadURL, versionNumber, fileSize);
+						nvg.init();
+						nvg.setVisible(true);
+					}
+				}			
 				logger.logDEBUG("Search for Application Updates Finished");
 			}
 		};
