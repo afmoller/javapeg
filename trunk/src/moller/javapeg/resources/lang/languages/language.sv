@@ -42,6 +42,8 @@
 #                      : by Fredrik Möller 2009-05-10
 #                      : by Fredrik Möller 2009-05-11
 #                      : by Fredrik Möller 2009-05-13
+#                      : by Fredrik Möller 2009-05-16
+#                      : by Fredrik Möller 2009-05-20
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -359,7 +361,14 @@ thumbnailoverview.LayoutParser.parseError         = Fel vid inläsning av layout.
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
 
-updatechecker.newVersion     = Det finns en nyare version av JavaPEG tillgänglig. Besök http://javapeg.sourceforge.net för att finna nedladdningslänk
-updatechecker.uRLInvalid     = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.uRLWrong       = Fel url till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.networkTimeOut = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
+updatechecker.errormessage.uRLInvalid     = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.errormessage.uRLWrong       = Fel url till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.errormessage.networkTimeOut = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
+updatechecker.errormessage.downloadError  = Kunde inte ladda ner den senaste versionen. Se loggfil för detaljer.
+
+updatechecker.informationmessage.downloadFinished = Nedladdningen klar.
+
+updatechecker.gui.title          = Ny version tillgänglig
+updatechecker.gui.newVersion     = Det finns en nyare version av JavaPEG tillgänglig. Se nedan för loggen över ändringar.
+updatechecker.gui.downloadButton = Ladda ner
+updatechecker.gui.closeButton    = Stäng
