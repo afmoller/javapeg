@@ -291,11 +291,18 @@ rename.FileProcessor.createThumbNailsDirectory              = Thumb Nails Direct
 rename.FileProcessor.createAndTransferContentOfJPEGFiles    = JPEG Files Copy And Rename
 rename.FileProcessor.createThumbNails                       = Thumb Nails Creation
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Copy Non JPEG Files
+rename.FileProcessor.renameFromLabel                        = File:
+rename.FileProcessor.renameToLabel                          = Renamed To:
 
 rename.PostFileProcessor.integrityCheck.starting = File Integrity Check Started
 rename.PostFileProcessor.integrityCheck.finished = File Integrity Check Finished
 rename.PostFileProcessor.integrityCheck.error    = Not All Files Where Copied Correct, See Log File For Details
 rename.PostFileProcessor.integrityCheck.checking = Integrity Of Copied Files Are Checked
+rename.PostFileProcessor.renameFromLabel         = File:
+rename.PostFileProcessor.copiedWithError         = Copied with ERROR to:
+rename.PostFileProcessor.copiedOK                = Copied OK to:
+rename.PostFileProcessor.renamedWithError        = Renamed with ERROR to:
+rename.PostFileProcessor.renamedOK               = Renamed OK to:
 
 ##############################################################################################################
 # P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #

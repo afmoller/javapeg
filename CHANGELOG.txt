@@ -9,6 +9,10 @@
  ~ = Changes   since previous version
 
  2.1 (2009-??-??)
+ 
+ + Detailed information about the JPEG rename process, process of copy non
+   JPEG files and the file integrity after the rename and file copy to the
+   rename process progress window. 
 
  + JavaPEG can from now, do an optional (configurable) version check at 
    application start. It does it against an version server. If there is a new
