@@ -8,6 +8,7 @@ package moller.javapeg.program.rename.process;
 *                        : 2009-04-04 by Fredrik Möller
 *                        : 2009-04-05 by Fredrik Möller
 *                        : 2009-04-14 by Fredrik Möller
+*                        : 2009-05-20 by Fredrik Möller
 */
 
 import java.io.File;
@@ -117,6 +118,8 @@ public class FileProcessor {
 		if (FileUtil.createFiles(allJPEGFileNameMappings.values())) {
 			for (File source : allJPEGFileNameMappings.keySet()) {
 				FileUtil.copyFile(source, allJPEGFileNameMappings.get(source));
+				rp.setLogMessage(lang.get("rename.FileProcessor.renameFromLabel") + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
+				logger.logDEBUG("File: " + source.getName() + " Renamed To: " + allJPEGFileNameMappings.get(source).getName());
 			}	
 		} else {
 			logger.logERROR("All JPEG files could not be created");		
@@ -171,6 +174,8 @@ public class FileProcessor {
 			if (type.equals(Type.FILE)) {
 				if (destinationFile.exists()) {
 					FileUtil.copyFile(sourceFile, destinationFile);
+					rp.setLogMessage(sourceFile.getAbsolutePath());
+					logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
 				} else {
 					logger.logERROR("Could not copy content of source file: " + sourceFile.getAbsolutePath() + " to destination file : " + destinationFile.getAbsolutePath() + " since destination file does not exist.");					
 					return false;

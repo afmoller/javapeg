@@ -2,6 +2,7 @@ package moller.javapeg.program.rename.process;
 /**
 * This class was created : 2009-04-13 by Fredrik Möller
 * Latest changed         : 2009-04-14 by Fredrik Möller
+*                        : 2009-05-20 by Fredrik Möller
 */
 
 import java.io.File;
@@ -61,7 +62,9 @@ public class PostFileProcessor {
 						
 			if(notEqual(sourceFile, destFile)) {
 				copySucess = false;
+				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.copiedWithError") + " " + destFile.getAbsolutePath());
 			}
+			rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.copiedOK") + " " + destFile.getAbsolutePath());
 		}
 		
 		Map<File, File> allJPEGFileNameMappings =  rpc.getAllJPEGFileNameMappings();
@@ -71,7 +74,9 @@ public class PostFileProcessor {
 									
 			if(notEqual(sourceFile, destFile)) {
 				copySucess = false;
-			}	
+				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.renamedWithError") + " " + destFile.getName());
+			}
+			rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.renamedOK") + " " + destFile.getName());
 		}
 		return copySucess;
 	}

@@ -291,11 +291,18 @@ rename.FileProcessor.createThumbNailsDirectory              = Skapande av Tumnag
 rename.FileProcessor.createAndTransferContentOfJPEGFiles    = Kopiering Och Namnbyte Av JPEG Filer
 rename.FileProcessor.createThumbNails                       = Skapande Av Tumnaglar
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Kopiering Av Icke JPEG Filer
+rename.FileProcessor.renameFromLabel                        = Fil:
+rename.FileProcessor.renameToLabel                          = Omdöpt till:
 
 rename.PostFileProcessor.integrityCheck.starting = Integritetskontroll Av Filer Startad
 rename.PostFileProcessor.integrityCheck.finished = Integritetskontroll Av Filer Avslutad
 rename.PostFileProcessor.integrityCheck.error    = Alla Filer Har Inte Kopierats Korrekt, Se Loggfil För Detaljer
 rename.PostFileProcessor.integrityCheck.checking = Integritet På Kopierade Filer Kontrolleras
+rename.PostFileProcessor.renameFromLabel         = Fil:
+rename.PostFileProcessor.copiedWithError         = Kopierad med FEL till:
+rename.PostFileProcessor.copiedOK                = Kopierad OK till:
+rename.PostFileProcessor.renamedWithError        = Namnbytt med FEL till:
+rename.PostFileProcessor.renamedOK               = Namnbytt OK till:
 
 ##############################################################################################################
 # P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #
