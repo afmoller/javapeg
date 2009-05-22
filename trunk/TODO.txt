@@ -1,18 +1,13 @@
-2.1:
-====
-- Add functionality to ask for preferred language at first application start.
-- Update info files in the internal resources directory.
-- Enter values to the change log.
-- Enter change log entries to the change log files on the update server.
-- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-- Test all functionality.
-
 2.2:
 ====
-- Fixa en config där ordningen inte ändras beroende på parametervärde 
+- Fix a resizable Main GUI
+- Add functionality to ask for preferred language at first application start.
+- Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
+  properties implementation does. 
 - Fixa minnesläcka (Inte helt verifierad att den finns.)
-- Fixa så att GUI:t går att resizea
 - Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
+- Update version numbers in language files
+- Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
@@ -23,6 +18,8 @@
 ====
 - Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
 - Create unittest
+- Update version numbers in language files
+- Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
