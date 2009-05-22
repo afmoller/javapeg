@@ -44,6 +44,7 @@
 #                      : by Fredrik Möller 2009-05-13
 #                      : by Fredrik Möller 2009-05-16
 #                      : by Fredrik Möller 2009-05-20
+#                      : by Fredrik Möller 2009-05-21
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -61,7 +62,7 @@ menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
-menu.item.about                      = Om JavaPEG 2.0
+menu.item.about                      = Om JavaPEG 2.1
 menu.item.languageChoice             = Språkval
 
 #############################################################################################################
@@ -79,7 +80,6 @@ menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
 menu.item.languageChoice.accelerator             = S
-menu.item.programHelp.accelerator                = H
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = O
 
@@ -146,12 +146,12 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = Om JavaPEG 2.0
-aboutDialog.TextRowA = JavaPEG, ver: 2.0
+aboutDialog.Label    = Om JavaPEG 2.1
+aboutDialog.TextRowA = JavaPEG, ver: 2.1
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
-aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-05-05.
-aboutDialog.TextRowE = Version 2.0 släppt 2009-05-05.
+aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-05-21.
+aboutDialog.TextRowE = Version 2.1 släppt 2009-05-21.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________

@@ -45,6 +45,7 @@
 #                      : by Fredrik Möller 2009-05-13
 #                      : by Fredrik Möller 2009-05-16
 #                      : by Fredrik Möller 2009-05-20
+#                      : by Fredrik Möller 2009-05-21
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -62,7 +63,7 @@ menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
-menu.item.about                      = About JavaPEG 2.0
+menu.item.about                      = About JavaPEG 2.1
 menu.item.languageChoice             = Language selection
 
 #############################################################################################################
@@ -80,7 +81,6 @@ menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
 menu.item.languageChoice.accelerator             = L
-menu.item.programHelp.accelerator                = H
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = A
 
@@ -147,12 +147,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = About JavaPEG 2.0
-aboutDialog.TextRowA = JavaPEG, ver: 2.0
+aboutDialog.Label    = About JavaPEG 2.1
+aboutDialog.TextRowA = JavaPEG, ver: 2.1
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
-aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-05-05.
-aboutDialog.TextRowE = Version 2.0 released 2009-05-05.
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-05-21.
+aboutDialog.TextRowE = Version 2.1 released 2009-05-21.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -378,4 +378,4 @@ updatechecker.informationmessage.downloadFinished = Download Finished
 updatechecker.gui.title          = New version available
 updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See changelog below for the changes.
 updatechecker.gui.downloadButton = Download
-updatechecker.gui.closelButton   = Close
+updatechecker.gui.closeButton   = Close
