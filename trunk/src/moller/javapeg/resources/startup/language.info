@@ -233,6 +233,9 @@
 #                      : by Fredrik Möller 2009-05-10
 #                      : by Fredrik Möller 2009-05-11
 #                      : by Fredrik Möller 2009-05-13
+#                      : by Fredrik Möller 2009-05-16
+#                      : by Fredrik Möller 2009-05-20
+#                      : by Fredrik Möller 2009-05-21
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -268,7 +271,6 @@ menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
 menu.item.languageChoice.accelerator             = L
-menu.item.programHelp.accelerator                = H
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = A
 
@@ -479,11 +481,18 @@ rename.FileProcessor.createThumbNailsDirectory              = Thumb Nails Direct
 rename.FileProcessor.createAndTransferContentOfJPEGFiles    = JPEG Files Copy And Rename
 rename.FileProcessor.createThumbNails                       = Thumb Nails Creation
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Copy Non JPEG Files
+rename.FileProcessor.renameFromLabel                        = File:
+rename.FileProcessor.renameToLabel                          = Renamed To:
 
 rename.PostFileProcessor.integrityCheck.starting = File Integrity Check Started
 rename.PostFileProcessor.integrityCheck.finished = File Integrity Check Finished
 rename.PostFileProcessor.integrityCheck.error    = Not All Files Where Copied Correct, See Log File For Details
 rename.PostFileProcessor.integrityCheck.checking = Integrity Of Copied Files Are Checked
+rename.PostFileProcessor.renameFromLabel         = File:
+rename.PostFileProcessor.copiedWithError         = Copied with ERROR to:
+rename.PostFileProcessor.copiedOK                = Copied OK to:
+rename.PostFileProcessor.renamedWithError        = Renamed with ERROR to:
+rename.PostFileProcessor.renamedOK               = Renamed OK to:
 
 ##############################################################################################################
 # P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #
@@ -549,7 +558,14 @@ thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xm
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
 
-updatechecker.newVersion     = There exists a newer version of JavaPEG available. Visit http://javapeg.sourceforge.net to find a download link
-updatechecker.uRLInvalid     = Invalid format of the url to the update server. See log file for details.
-updatechecker.uRLWrong       = Wrong url to the update server. See log file for details.
-updatechecker.networkTimeOut = Update server did not respond, a retry will be done next application start.
+updatechecker.errormessage.uRLInvalid     = Invalid format of the url to the update server. See log file for details.
+updatechecker.errormessage.uRLWrong       = Wrong url to the update server. See log file for details.
+updatechecker.errormessage.networkTimeOut = Update server did not respond, a retry will be done next application start.
+updatechecker.errormessage.downloadError  = Could not download the latest version. See log file for details.
+
+updatechecker.informationmessage.downloadFinished = Download Finished
+
+updatechecker.gui.title          = New version available
+updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See changelog below for the changes.
+updatechecker.gui.downloadButton = Download
+updatechecker.gui.closelButton   = Close
