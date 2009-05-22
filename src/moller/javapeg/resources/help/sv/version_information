@@ -3,9 +3,20 @@ VERSIONSINFORMATION<LF>
 Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskaper.
 <LF>
 <LF>
+Version 2.1<LF>
+===========<LF>
+Släppt 2009-05-21 Version 2.1 av JavaPEG har fått detaljerade utskrifter i loggen för namnbytes processen för namnbytet på JPEG-filer, kopierandet av icke JPEG filer och för kontrol av filitegriteten efter nämnda processer.
+<LF>
+<LF>
+Från och med version 2.1 så sker (konfigurerbart) en kontroll mot en uppdaterigsserver om det finns någon nyare version av JavaPEG tillgänglig. Om en ny version finns tillgänlig så kommer dess skillnader mot nuvarande version visas och dessutom går det att ladda ner den nya versionen via JavaPEG
+<LF>
+<LF>
+Om det finns en layout.xml fil som definierar hur tumnagelöversikten skall se ut som har skapats av användaren av JavPEG så kommer denna att valideras mot ett schema för att garantera dess korrekthet.
+<LF>
+<LF>
 Version 2.0<LF>
 ===========<LF>
-Släppt 2009-??-?? Version 2.0 av JavaPEG är mer eller mindre en ifrån grunden omskriven applikation i förhållande till versionerna 1.x, men med samma grundidé: att vara ett verktyg för att på ett enkelt och säkert sätt kunna byta namn på bilder tagna med en digitalkamera.
+Släppt 2009-05-05 Version 2.0 av JavaPEG är mer eller mindre en ifrån grunden omskriven applikation i förhållande till versionerna 1.x, men med samma grundidé: att vara ett verktyg för att på ett enkelt och säkert sätt kunna byta namn på bilder tagna med en digitalkamera.
 <LF>
 <LF>
 Programmet vill fortfarande ha en sökväg angiven till en katalog med bilder. När detta är gjort så skall en destinationskatalog väljas. Därefter återstår att skapa filnamns- och underkatalogsmallar och slutligen innan namnbytesprocessen startas så är det möjligt att välja om man vill få en tumnagelöversikt skapad.
