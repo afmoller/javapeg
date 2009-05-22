@@ -3,9 +3,20 @@ VERSION INFORMATION<LF>
 Below is a description of what each version of JavaPEG has been able to do.
 <LF>
 <LF>
+Version 2.1<LF>
+===========<LF>
+Released 2009-05-21 Version 2.1 av JavaPEG has got detailed information added to the rename process progress window about the JPEG rename process, process of copy any non JPEG files and the file integrity after the rename and file copy.
+<LF>
+<LF>
+JavaPEG can from version 2.1, do an optional (configurable) version check at application start. It does it against an version server. If there is a new version available, the changes for that version compared to the current used version is presented. It is also possible to download the new version through JavaPEG
+<LF>
+<LF>
+If there is an layout.xml file that defines how the thumb nail overview shall look like which have been defined by the JavaPEG user, then this file will be validated for validity against a schema.
+<LF>
+<LF>
 Version 2.0<LF>
 ===========<LF>
-Released 2009-??-?? Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x versions. Despite this the concept is still the same: A simple to use and secure tool to rename images created by a digital camera.
+Released 2009-05-05 Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x versions. Despite this the concept is still the same: A simple to use and secure tool to rename images created by a digital camera.
 <LF>
 <LF>
 The application still need a path to a source directory with images. When the source directory has been chosen the destination directory must be selected. After this a file name and sub directory template must be provided. As a last step before the actual rename process can begin, it is possible to select whether a thumb nail overview shall be created or not.
