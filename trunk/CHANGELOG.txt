@@ -8,9 +8,9 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
 
- 2.1 (2009-??-??)
+ 2.1 (2009-05-21)
  
- + Detailed information about the JPEG rename process, process of copy non
+ + Detailed information about the JPEG rename process, process of copy any non
    JPEG files and the file integrity after the rename and file copy to the
    rename process progress window. 
 
@@ -22,6 +22,14 @@
      
  + Validation of the content in any existing external layout.xml file against
    a schema. 
+   
+ ! Fixed the problems with the accelerator keys for menu items and buttons. 
+   The where collisions between globally defined accelerator keys and JavaPEG
+   defined.
+   
+ ~ GUI behavior changed after a rename process has finished. It was changed 
+   from being cleared from all inputs, as it is at application start, to not be
+   cleared at all.  
 
  2.0 (2009-05-05)
 
