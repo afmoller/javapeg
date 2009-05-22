@@ -28,6 +28,7 @@ package moller.javapeg.program;
  *                        : 2009-05-16 by Fredrik Möller
  *                        : 2009-05-19 by Fredrik Möller
  *                        : 2009-05-20 by Fredrik Möller
+ *                        : 2009-05-21 by Fredrik Möller
  */
 
 import java.awt.Color;
@@ -36,6 +37,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -115,13 +117,11 @@ public class MainGUI extends JFrame {
 	 * release is done. The value is the amount of milliseconds since 
 	 * 1970-01-01 with 
 	 */
-	private final static long VERSION_TIMESTAMP = 1242217287;
+	private final static long VERSION_TIMESTAMP = 1242936761;
 	
-	private static Config config = Config.getInstance();
-	
-	private static Logger logger = Logger.getInstance();
-	
-	private static Language lang = Language.getInstance();
+	private static Config config;
+	private static Logger logger;
+	private static Language lang;
 		
 	private JButton pathSelectButton;
 	private JButton destinationPathButton;
@@ -201,6 +201,11 @@ public class MainGUI extends JFrame {
 	public MainGUI(){
 		
 		FileSetup.check();
+		
+		config =  Config.getInstance();
+		logger =  Logger.getInstance();
+		lang   = Language.getInstance();
+		
 		logger.logDEBUG("JavaPEG is starting");		
 		logger.logDEBUG("Language File Loading Started");
 		this.readLanguageFile();
@@ -278,18 +283,18 @@ public class MainGUI extends JFrame {
 
 		// Skapa menyrader i arkiv-menyn
 		openSourceFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openSourceFileChooser"));
-		openSourceFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openSourceFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		openSourceFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openSourceFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
 		openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
-		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		openDestinationFileChooserJMenuItem.setEnabled(false);
 
 		startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
-		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		startProcessJMenuItem.setEnabled(false);
 		
 		shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
-		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		
 		fileMenu = new JMenu(lang.get("menu.file"));
 		fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
@@ -301,7 +306,7 @@ public class MainGUI extends JFrame {
 		
 		// Skapa menyrader i språk-menyn
 		languageOptionsJMenuItem = new JMenuItem(lang.get("menu.item.languageChoice"));
-		languageOptionsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.languageChoice.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		languageOptionsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.languageChoice.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		
 		languageMenu = new JMenu(lang.get("menu.language"));
 		languageMenu.setMnemonic(lang.get("menu.mnemonic.language").charAt(0));
@@ -310,10 +315,10 @@ public class MainGUI extends JFrame {
 
 		// Skapa menyrader i hjälp-menyn
 		helpJMenuItem = new JMenuItem(lang.get("menu.item.programHelp"));
-		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.programHelp.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
 		
 		aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
-		aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), ActionEvent.CTRL_MASK));
+		aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		
 		helpMenu = new JMenu(lang.get("menu.help"));
 		helpMenu.setMnemonic(lang.get("menu.mnemonic.help").charAt(0));
@@ -703,7 +708,7 @@ public class MainGUI extends JFrame {
 
 	private void createMainFrame(){
 
-		this.setTitle("JavaPEG 2.0");
+		this.setTitle("JavaPEG 2.1");
 
 		InputStream imageStream = null;
 		ImageIcon titleImageIcon = new ImageIcon();
@@ -856,7 +861,11 @@ public class MainGUI extends JFrame {
 
 					populateThumbNailsPanel(config.getStringProperty("sourcePath"));
 					
-					tabbedPaneEnabled(true, false);
+					if(subFolderTextField.isEnabled() && fileNameTemplateTextField.isEnabled()) {
+						tabbedPaneEnabled(true, true);
+					} else {
+						tabbedPaneEnabled(true, false);
+					}
 				}
 			}
 		};
@@ -952,7 +961,6 @@ public class MainGUI extends JFrame {
     private void validateInputInRealtime() {
 	    	
 		if (subFolderTextField.isFocusOwner() || fileNameTemplateTextField.isFocusOwner()) {
-	
 			ApplicationContext ac = ApplicationContext.getInstance();
 			ac.setTemplateFileName(fileNameTemplateTextField.getText());
 			ac.setTemplateSubFolderName(subFolderTextField.getText());
@@ -998,22 +1006,16 @@ public class MainGUI extends JFrame {
 
 			if(actionCommand.equals(lang.get("menu.item.exit"))){
 					saveSettings();
+					logger.logDEBUG("JavePEG was shut down");
+					logger.flush();
 					System.exit(0);
-			}
-
-			else if(actionCommand.equals(lang.get("menu.item.openSourceFileChooser"))) {
+			} else if(actionCommand.equals(lang.get("menu.item.openSourceFileChooser"))) {
 				pathSelectButton.doClick();
-			}
-
-			else if(actionCommand.equals(lang.get("menu.item.openDestinationFileChooser"))) {
+			} else if(actionCommand.equals(lang.get("menu.item.openDestinationFileChooser"))) {
 				destinationPathButton.doClick();
-			}
-
-			else if(actionCommand.equals(lang.get("menu.item.startProcess"))) {
+			} else if(actionCommand.equals(lang.get("menu.item.startProcess"))) {
 				startProcessButton.doClick();
-			}
-
-			else if (actionCommand.equals(lang.get("menu.item.about")))	{
+			} else if (actionCommand.equals(lang.get("menu.item.about")))	{
 
 				JOptionPane.showMessageDialog(null, lang.get("aboutDialog.TextRowA") +
                                              "\n" + lang.get("aboutDialog.TextRowB") +
@@ -1026,13 +1028,9 @@ public class MainGUI extends JFrame {
                                              "\n" + lang.get("aboutDialog.TextRowF") +
                                              "\n" + lang.get("aboutDialog.TextRowG") +
                                              "\n" + lang.get("aboutDialog.TextRowH"), lang.get("aboutDialog.Label"), JOptionPane.INFORMATION_MESSAGE);
-	    	}
-
-	    	else if (actionCommand.equals(lang.get("menu.item.programHelp"))) {
+	    	} else if (actionCommand.equals(lang.get("menu.item.programHelp"))) {
 				new HelpViewerGUI().setVisible(true);				
-			}
-			
-			else if (actionCommand.equals(lang.get("menu.item.languageChoice"))) {
+			} else if (actionCommand.equals(lang.get("menu.item.languageChoice"))) {
 				LanguageOptionsGUI loGUI = new LanguageOptionsGUI();
 				loGUI.setVisible(true);
 			}
@@ -1130,11 +1128,7 @@ public class MainGUI extends JFrame {
 					public void run(){
 						
 						setInputsEnabled(false);
-						pathSelectButton.setEnabled(false);
-						destinationPathButton.setEnabled(false);
-						fileNameTemplateTextField.setEnabled(false);
-						subFolderTextField.setEnabled(false);
-								
+														
 						RenameProcess rp = new RenameProcess();
 						rp.init();
 						rp.setVisible(true);
@@ -1158,8 +1152,7 @@ public class MainGUI extends JFrame {
 							FileProcessor.getInstance().process(rp);
 							logger.logDEBUG("File Processing Finished");
 							rp.setLogMessage(lang.get("rename.FileProcessor.finished"));
-							
-							
+														
 							if(createThumbNailsCheckBox.isSelected()) {
 								logger.logDEBUG("Thumb Nail Overview Creation Started");
 								rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.starting"));
@@ -1185,28 +1178,8 @@ public class MainGUI extends JFrame {
 							JOptionPane.showMessageDialog(null, lang.get("rename.FileProcessor.finished"), "", JOptionPane.INFORMATION_MESSAGE);
 							rp.setAlwaysOnTop(true);
 							
-							pathTextField.setText("");
-							destinationPathTextField.setText("");
-							
-							tabbedPane.setSelectedIndex(0);
+							setInputsEnabled(true);
 							tabbedPaneEnabled(false, false);
-														
-							pathSelectButton.setEnabled(true);
-							openSourceFileChooserJMenuItem.setEnabled(true);
-							destinationPathButton.setEnabled(false);
-							openDestinationFileChooserJMenuItem.setEnabled(false);
-							subFolderTextField.setEnabled(false);
-							fileNameTemplateTextField.setEnabled(false);
-							createThumbNailsCheckBox.setEnabled(false);
-							startProcessButton.setEnabled(false);
-							startProcessJMenuItem.setEnabled(false);
-							
-							modelPreview.setRowCount(0);
-							
-							modelMetaData.setRowCount(0);
-							modelMetaData.setColumnCount(0);
-							
-							thumbNailsPanel.removeAll();
 						}
 						rp.renameProcessFinished();
 					}
