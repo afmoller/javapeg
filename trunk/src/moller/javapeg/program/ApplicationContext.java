@@ -2,6 +2,7 @@ package moller.javapeg.program;
 /**
  * This class was created : 2009-03-14 by Fredrik Möller
  * Latest changed         : 2009-03-23 by Fredrik Möller
+ *                        : 2009-06-02 by Fredrik Möller
  */
 
 import java.util.ArrayList;
@@ -50,19 +51,7 @@ public class ApplicationContext {
 	 * template JTextField for sub folder in the GUI part of this application.
 	 */
 	private String templateSubFolderName;
-	
-	/**
-	 * This variable indicates if the "Ok" button in the file chooser GUI has 
-	 * been clicked.
-	 */
-	private boolean fileChooserOkButtonClicked;
-	
-	/**
-	 * This variable indicates if the "Cancel" button in the file chooser GUI has 
-	 * been clicked.
-	 */
-	private boolean fileChooserCancelButtonClicked;
-	
+		
 	/**
 	 * This variable indicates whether the check box for creating thumb nails has
 	 * been clicked in the GUI. 
@@ -87,8 +76,6 @@ public class ApplicationContext {
 	private ApplicationContext() {
 		sourcePath = "";
 		destinationPath = "";
-		fileChooserOkButtonClicked = false;
-		fileChooserCancelButtonClicked = false;
 		createThumbNailsCheckBoxSelected = false;
 		templateFileName = "";
 		templateSubFolderName = "";
@@ -122,14 +109,6 @@ public class ApplicationContext {
 	public String getDestinationPath() {
 		return destinationPath;
 	}
-
-	public boolean isFileChooserOkButtonClicked() {
-		return fileChooserOkButtonClicked;
-	}
-
-	public boolean isFileChooserCancelButtonClicked() {
-		return fileChooserCancelButtonClicked;
-	}
 	
 	public List<MetaData> getMetaDataObjects() {
 		return metaDataObjects;
@@ -161,14 +140,6 @@ public class ApplicationContext {
 	public void setDestinationPath(String destinationPath) {
 		this.destinationPath = destinationPath;
 	}
-
-	public void setFileChooserOkButtonClicked(boolean fileChooserOkButtonClicked) {
-		this.fileChooserOkButtonClicked = fileChooserOkButtonClicked;
-	}
-
-	public void setFileChooserCancelButtonClicked(boolean fileChooserCancelButtonClicked) {
-		this.fileChooserCancelButtonClicked = fileChooserCancelButtonClicked;
-	}
 	
 	public void setMetaDataObjects(List<MetaData> metaDataObjects) {
 		if (!this.metaDataObjects.isEmpty()) {
@@ -176,7 +147,7 @@ public class ApplicationContext {
 		}
 		this.metaDataObjects = metaDataObjects;
 	}
-
+	
 	public void setTemplateFileName(String templateFileName) {
 		this.templateFileName = templateFileName;
 	}
