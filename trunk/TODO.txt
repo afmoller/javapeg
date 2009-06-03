@@ -1,11 +1,20 @@
 2.2:
 ====
-- Fix a resizable Main GUI
+- Add status bar at the bottom of MainGUI that views currently selected directory, and so on.
+- Update version numbers in language files
+- Update version information files (Program help (version_information))
+- Update info files in the internal resources directory.
+- Enter values to the change log.
+- Enter change log entries to the change log files on the update server.
+- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
+- Test all functionality.
+
+2.3:
+====
+- Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
-  properties implementation does. 
-- Fixa minnesläcka (Inte helt verifierad att den finns.)
-- Fixa så att filechoosern kommer ihåg senast öppnade sökväg.
+  properties implementation does.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
