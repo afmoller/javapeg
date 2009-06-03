@@ -7,6 +7,17 @@
  + = Additions since previous version
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
+ 
+ 2.2 (2009-xx-xx)
+ 
+ + At application start the Main GUI sets it size to the size it had when it 
+   was shut down the the previous time. 
+ 
+ ~ Main GUI is from now on resizable and the layout is handled by layout 
+   managers.
+   
+ ~ The file chooser GUI, as a separate window, has been replaced by an always
+   visible and accessible tree structure in the main GUI.     
 
  2.1 (2009-05-21)
  
