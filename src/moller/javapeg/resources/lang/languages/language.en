@@ -46,6 +46,7 @@
 #                      : by Fredrik Möller 2009-05-16
 #                      : by Fredrik Möller 2009-05-20
 #                      : by Fredrik Möller 2009-05-21
+#                      : by Fredrik Möller 2009-06-02
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -58,7 +59,6 @@ menu.language = Language
 # M E N U  I T E M S                                                                                        #
 #############################################################################################################
 menu.item.exit                       = Exit
-menu.item.openSourceFileChooser      = Open Source File Chooser
 menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
@@ -76,7 +76,6 @@ menu.mnemonic.language           = L
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
 #############################################################################################################
-menu.iten.openSourceFileChooser.accelerator      = S
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
@@ -87,7 +86,6 @@ menu.item.about.accelerator                      = A
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
-labels.sourcePath       = PATH TO IMAGE DIRECTORY
 labels.destinatonPath   = PATH TO DESTINATION DIRECTORY
 labels.subFolderName    = SUB DIRECTORY NAME TEMPLATE
 labels.fileNameTemplate = FILENAME TEMPLATE
@@ -129,7 +127,6 @@ checkbox.createThumbNails      = CREATE THUMBNAIL OVERVIEW
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.sourcePathButton             = Browse for image source path
 tooltip.destinationPathButton        = Browse for destination folder
 tooltip.createSubFolder              = Create subfolder with a name free of choice in which images will be put
 tooltip.subFolderName                = Specify name of folder with possible variables here
@@ -141,7 +138,6 @@ tooltip.beginNameChangeProcessButton = Start name change process
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
 ##############################################################################################################
-fileSelectionDialog.sourcePathFileChooser      = Choose image folder
 fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 
 ##############################################################################################################
@@ -234,16 +230,6 @@ information.window.versionInformationWindowTitle = Version information
 # P I C T U R E  P A N E L                                                                                   #
 ##############################################################################################################
 picture.panel.pictureLabel = IMAGES IN CHOSEN FOLDER
-
-##############################################################################################################
-# F I L E  C H O O S E R                                                                                     #
-##############################################################################################################
-filechooser.window.title                  = File Chooser
-filechooser.window.locationError          = Could not set window location according to settings. See logs for details 
-filechooser.button.ok                     = Ok
-filechooser.button.ok.mnemonic            = O
-filechooser.button.cancel                 = Cancel
-filechooser.button.cancel.mnemonic        = C
 
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
