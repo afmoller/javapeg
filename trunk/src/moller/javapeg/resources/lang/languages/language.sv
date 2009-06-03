@@ -45,6 +45,7 @@
 #                      : by Fredrik Möller 2009-05-16
 #                      : by Fredrik Möller 2009-05-20
 #                      : by Fredrik Möller 2009-05-21
+#                      : by Fredrik Möller 2009-06-02
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -57,7 +58,6 @@ menu.language = Språk
 # M E N U  I T E M S                                                                                        #
 #############################################################################################################
 menu.item.exit                       = Avsluta
-menu.item.openSourceFileChooser      = Öppna Källfilsväljaren
 menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
@@ -75,7 +75,6 @@ menu.mnemonic.language           = S
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
 #############################################################################################################
-menu.iten.openSourceFileChooser.accelerator      = K
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
@@ -86,7 +85,6 @@ menu.item.about.accelerator                      = O
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
-labels.sourcePath       = SÖKVÄG TILL BILDKATALOG
 labels.destinatonPath   = SÖKVÄG TILL DESTINATIONSKATALOG
 labels.subFolderName    = UNDERKATALOGSMALL
 labels.fileNameTemplate = FILNAMNSMALL
@@ -128,7 +126,6 @@ checkbox.createThumbNails      = SKAPA TUMNAGELÖVERSIKT
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.sourcePathButton             = Leta fram rätt sökväg till bildmapp
 tooltip.destinationPathButton        = Välj sökväg för destinationsmapp
 tooltip.createSubFolder              = Skapa en undermapp med valfrit namn, i vilken bilderna läggs
 tooltip.subFolderName                = Ange namnet på mappen inklusive eventuella variabler här
@@ -140,7 +137,6 @@ tooltip.beginNameChangeProcessButton = Starta namnbytarprocessen
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
 ##############################################################################################################
-fileSelectionDialog.sourcePathFileChooser      = Välj bildmapp
 fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 
 ##############################################################################################################
@@ -234,16 +230,6 @@ information.window.versionInformationWindowTitle = Versionsinformation
 # P I C T U R E  P A N E L                                                                                   #
 ##############################################################################################################
 picture.panel.pictureLabel = BILDER I VALD MAPP
-
-##############################################################################################################
-# F I L E  C H O O S E R                                                                                     #
-##############################################################################################################
-filechooser.window.title                  = Filväljare
-filechooser.window.locationError          = Kunde inte sätta fönsterposition enligt konfigurationen. Se loggfil för detaljer.
-filechooser.button.ok                     = Ok
-filechooser.button.ok.mnemonic            = O
-filechooser.button.cancel                 = Avbryt
-filechooser.button.cancel.mnemonic        = A
 
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
