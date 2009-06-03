@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<entry key="fileChooser.window.height">540</entry>
-<entry key="fileChooser.window.width">1098</entry>
-<entry key="fileChooser.window.location.x">10</entry>
-<entry key="fileChooser.window.location.y">10</entry>
 <entry key="languageOption.window.location.x">10</entry>
 <entry key="languageOption.window.location.y">10</entry>
 <entry key="helpViewerGUI.window.location.x">10</entry>
@@ -24,11 +20,15 @@
 <entry key="rename.progress.log.timestamp.format">yyyy-MM-dd' 'HH:mm:ss:SSS</entry>
 <entry key="logger.log.rotate.size">1000000</entry>
 <entry key="logger.log.name">application.log</entry>
-<entry key="window.location.x">10</entry>
-<entry key="window.location.y">10</entry>
+<entry key="mainGUI.window.location.x">10</entry>
+<entry key="mainGUI.window.location.y">10</entry>
+<entry key="mainGUI.window.width">1024</entry>
+<entry key="mainGUI.window.height">768</entry>
 <entry key="gUILanguageISO6391">en</entry>
 <entry key="updatechecker.enabled">true</entry>
 <entry key="updatechecker.timeout">60</entry>
 <entry key="updatechecker.url.version">http://javapeg.sourceforge.net/PAGES/updates/version.php</entry>
 <entry key="updatechecker.url.changelog">http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</entry>
+<entry key="mainSplitPane.location">200</entry>
+<entry key="verticalSplitPane.location">450</entry>
 </properties>
