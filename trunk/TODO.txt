@@ -1,6 +1,6 @@
 2.2:
 ====
-- Add status bar at the bottom of MainGUI that views currently selected directory, and so on.
+- Fix wrong position of Thumb nail loading progress bar
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
