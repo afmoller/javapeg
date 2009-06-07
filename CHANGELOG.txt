@@ -10,6 +10,14 @@
  
  2.2 (2009-xx-xx)
  
+ + Status bar added to the bottom of the GUI, displaying selected directory,
+   number of images in selected directory and number of columns and rows in the 
+   thumb nail grid.
+ 
+ + Detailed meta data information is available in a panel next to the 
+   thumb nails panel for each image shown. The meta data for a specific image
+   is shown when the thumb nail is clicked.  
+ 
  + At application start the Main GUI sets it size to the size it had when it 
    was shut down the the previous time. 
  
