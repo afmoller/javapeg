@@ -47,6 +47,7 @@
 #                      : by Fredrik Möller 2009-05-20
 #                      : by Fredrik Möller 2009-05-21
 #                      : by Fredrik Möller 2009-06-02
+#                      : by Fredrik Möller 2009-06-06
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -117,7 +118,7 @@ variable.dateOftoday           = Today´s date
 # V A R I A B L E S  C O M M E N T                                                                           #
 ##############################################################################################################
 variable.comment.infoLabelA = * = Theese variables might be
-variable.comment.infoLabelB = used when naming a subfolder
+variable.comment.infoLabelB = used when naming a subdirectory
 
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
@@ -127,13 +128,13 @@ checkbox.createThumbNails      = CREATE THUMBNAIL OVERVIEW
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton        = Browse for destination folder
-tooltip.createSubFolder              = Create subfolder with a name free of choice in which images will be put
+tooltip.destinationPathButton        = Browse for destination directory
 tooltip.subFolderName                = Specify name of folder with possible variables here
 tooltip.fileNameTemplate             = Specify filename template with possible variables here
 tooltip.createThumbNails             = Create thumbnail overview of name changed files
 tooltip.openDestinationFolder        = Open folder where name changed files will be present after finished process
 tooltip.beginNameChangeProcessButton = Start name change process
+tooltip.enableTemplateFields         = To enable, select a destination directory
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
@@ -229,7 +230,7 @@ information.window.versionInformationWindowTitle = Version information
 ##############################################################################################################
 # P I C T U R E  P A N E L                                                                                   #
 ##############################################################################################################
-picture.panel.pictureLabel = IMAGES IN CHOSEN FOLDER
+picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
@@ -339,7 +340,6 @@ validator.externalOverviewLayout.invalidXMLFile = The content of the file layout
 ##############################################################################################################
 # T H U M B N A I L  O V E R V I E W                                                                         #
 ##############################################################################################################
-
 thumbnailoverview.ThumbNailOverViewCreator.starting             = Thumb Nail Overview Creation Started
 thumbnailoverview.ThumbNailOverViewCreator.finished             = Thumb Nail Overview Creation Finished
 thumbnailoverview.ThumbNailOverViewCreator.error.createCSSFile  = Could not create CSS file in destination directory. See log file for details.
@@ -353,7 +353,6 @@ thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xm
 ##############################################################################################################
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
-
 updatechecker.errormessage.uRLInvalid     = Invalid format of the url to the update server. See log file for details.
 updatechecker.errormessage.uRLWrong       = Wrong url to the update server. See log file for details.
 updatechecker.errormessage.networkTimeOut = Update server did not respond, a retry will be done next application start.
@@ -364,4 +363,26 @@ updatechecker.informationmessage.downloadFinished = Download Finished
 updatechecker.gui.title          = New version available
 updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See changelog below for the changes.
 updatechecker.gui.downloadButton = Download
-updatechecker.gui.closeButton   = Close
+updatechecker.gui.closeButton    = Close
+
+##############################################################################################################
+# M E T A  D A T A  P A N E L                                                                                #
+##############################################################################################################
+metadatapanel.titleDefaultText     = META DATA FOR IMAGE:
+metadatapanel.tableheader.type     = TYPE
+metadatapanel.tableheader.property = PROPERTY
+metadatapanel.tableheader.value    = VALUE
+
+##############################################################################################################
+# S T A T U S  B A R  M E S S A G E S                                                                        #
+##############################################################################################################
+statusbar.message.amountOfRows              = Number of rows
+statusbar.message.amountOfColumns           = Number of columns
+statusbar.message.amountOfImagesInDirectory = Amount of Images in directroy
+statusbar.message.selectedPath              = Selected Path:
+
+##############################################################################################################
+# T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
+##############################################################################################################
+tabbedpane.imageRename = RENAME IMAGES
+tabbedpane.imageView   = VIEW IMAGES

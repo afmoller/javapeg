@@ -46,6 +46,7 @@
 #                      : by Fredrik Möller 2009-05-20
 #                      : by Fredrik Möller 2009-05-21
 #                      : by Fredrik Möller 2009-06-02
+#                      : by Fredrik Möller 2009-06-06
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -89,6 +90,7 @@ labels.destinatonPath   = SÖKVÄG TILL DESTINATIONSKATALOG
 labels.subFolderName    = UNDERKATALOGSMALL
 labels.fileNameTemplate = FILNAMNSMALL
 labels.variables        = VARIABLER
+labels
 
 ##############################################################################################################
 # V A R I A B L E S                                                                                          #
@@ -126,13 +128,13 @@ checkbox.createThumbNails      = SKAPA TUMNAGELÖVERSIKT
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton        = Välj sökväg för destinationsmapp
-tooltip.createSubFolder              = Skapa en undermapp med valfrit namn, i vilken bilderna läggs
+tooltip.destinationPathButton        = Välj sökväg för destinationskatalog
 tooltip.subFolderName                = Ange namnet på mappen inklusive eventuella variabler här
 tooltip.fileNameTemplate             = Skriv in filnamnsmallen inklusive variabler här
 tooltip.createThumbNails             = Skapa tumnaglar av omdöpta filer
 tooltip.openDestinationFolder        = Öppna mappen där de omdöpta filerna hamnar efter avslutad process
 tooltip.beginNameChangeProcessButton = Starta namnbytarprocessen
+tooltip.enableTemplateFields         = För att aktivera, välj en destinationskatalog
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
@@ -365,3 +367,26 @@ updatechecker.gui.title          = Ny version tillgänglig
 updatechecker.gui.newVersion     = Det finns en nyare version av JavaPEG tillgänglig. Se nedan för loggen över ändringar.
 updatechecker.gui.downloadButton = Ladda ner
 updatechecker.gui.closeButton    = Stäng
+
+##############################################################################################################
+# M E T A  D A T A  P A N E L                                                                                #
+##############################################################################################################
+metadatapanel.titleDefaultText     = METADATA FÖR BILD:
+metadatapanel.tableheader.type     = TYP
+metadatapanel.tableheader.property = EGENSKAP
+metadatapanel.tableheader.value    = VÄRDE
+
+##############################################################################################################
+# S T A T U S  B A R  M E S S A G E S                                                                        #
+##############################################################################################################
+
+statusbar.message.amountOfRows              = Antal rader
+statusbar.message.amountOfColumns           = Antal kolumner
+statusbar.message.amountOfImagesInDirectory = Antal bilder i katalogen
+statusbar.message.selectedPath              = Vald sökväg:
+
+##############################################################################################################
+# T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
+##############################################################################################################
+tabbedpane.imageRename = BYT NAMN PÅ BILDER
+tabbedpane.imageView   = VISA BILDER
