@@ -31,4 +31,5 @@
 <entry key="updatechecker.url.changelog">http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</entry>
 <entry key="mainSplitPane.location">200</entry>
 <entry key="verticalSplitPane.location">450</entry>
+<entry key="thumbNailMetaDataPanelSplitPane.location">600</entry>
 </properties>
