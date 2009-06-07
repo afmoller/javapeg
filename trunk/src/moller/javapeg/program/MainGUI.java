@@ -35,6 +35,8 @@ package moller.javapeg.program;
  *                        : 2009-05-30 by Fredrik Möller
  *                        : 2009-06-01 by Fredrik Möller
  *                        : 2009-06-02 by Fredrik Möller
+ *                        : 2009-06-04 by Fredrik Möller
+ *                        : 2009-06-06 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -85,7 +87,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
-import javax.swing.RepaintManager;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -98,6 +99,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.gui.MetaDataPanel;
+import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
@@ -173,7 +176,7 @@ public class MainGUI extends JFrame {
 	private JPanel thumbNailsPanel;
 	private JPanel infoPanel;
 	
-	
+	private JSplitPane thumbNailMetaPanelSplitPane;
 	private JSplitPane verticalSplitPane;
 	private JSplitPane mainSplitPane;
 	
@@ -204,6 +207,11 @@ public class MainGUI extends JFrame {
 	private MetaDataTableModel metaDataTableModel;
 	private PreviewTableModel previewTableModel;
 	
+	private StatusPanel statusBar;
+	private MetaDataPanel imageMetaDataPanel;
+	
+	private ThumbNailListener thumbNailListener;
+	
 	public MainGUI(){
 		
 		FileSetup.check();
@@ -220,7 +228,7 @@ public class MainGUI extends JFrame {
 			this.checkApplicationUpdates();
 		}
 		logger.logDEBUG("Creation of Thumb Nails Background Panel Started");
-		this.createThumbNailsBackgroundPanel();
+//		this.createThumbNailsBackgroundPanel();
 		logger.logDEBUG("Creation of Thumb Nails Background Panel Finished");
 		logger.logDEBUG("Creation of Info Panel Started");
 //		this.createInfoPanel();
@@ -507,6 +515,8 @@ public class MainGUI extends JFrame {
 			}
 			logger.logERROR(sb.toString());
 		}
+		
+		thumbNailListener = new ThumbNailListener();
 
 		mainSplitPane = new JSplitPane();
 		mainSplitPane.setDividerLocation(config.getIntProperty("mainSplitPane.location"));
@@ -515,24 +525,42 @@ public class MainGUI extends JFrame {
 		verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		verticalSplitPane.setDividerLocation(config.getIntProperty("verticalSplitPane.location"));
 		verticalSplitPane.setOneTouchExpandable(true);
+				
+		thumbNailMetaPanelSplitPane = new JSplitPane();
+		thumbNailMetaPanelSplitPane.setDividerLocation(config.getIntProperty("thumbNailMetaDataPanelSplitPane.location"));
+		thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
+		thumbNailMetaPanelSplitPane.setDividerSize(10);
+
+		JLabel thumbNailsTitleLable = new JLabel(lang.get("picture.panel.pictureLabel"));
+		thumbNailsTitleLable.setForeground(Color.GRAY);
 		
 		thumbNailsBackgroundsPanel = new JPanel(new BorderLayout());
+		thumbNailsBackgroundsPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		thumbNailsBackgroundsPanel.add(thumbNailsTitleLable, BorderLayout.NORTH);
 		thumbNailsBackgroundsPanel.add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
-//		TODO: Fix hard coded strings
-		tabbedPane.addTab("Rename Images", this.createRenamePanel());
-		tabbedPane.addTab("View Images", new JPanel());
-		tabbedPane.addTab("Categorize Images", new JPanel());
-				
-		verticalSplitPane.setTopComponent(thumbNailsBackgroundsPanel);
-		verticalSplitPane.setBottomComponent(tabbedPane);
+		tabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
+		tabbedPane.addTab(lang.get("tabbedpane.imageView"), new JPanel());
+//		tabbedPane.addTab("Categorize Images", new JPanel());
+		
+		imageMetaDataPanel = new MetaDataPanel();
+		thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);			
+		thumbNailMetaPanelSplitPane.setRightComponent(imageMetaDataPanel);
+		
+		verticalSplitPane.setTopComponent(tabbedPane);
+		verticalSplitPane.setBottomComponent(thumbNailMetaPanelSplitPane);
 				
 		mainSplitPane.setLeftComponent(this.initiateJTree());
 		mainSplitPane.setRightComponent(verticalSplitPane);
 		
 		this.getContentPane().setLayout(new BorderLayout());
 		this.add(mainSplitPane, BorderLayout.CENTER);
+			
+		boolean [] timerStatus = {false,false,false,false};
+		statusBar = new StatusPanel(timerStatus);
+		
+		this.add(statusBar, BorderLayout.SOUTH);
 	}
 	
 	private JPanel createRenamePanel() {
@@ -601,16 +629,14 @@ public class MainGUI extends JFrame {
 
 		subFolderTextField = new JTextField();
 		subFolderTextField.setEnabled(false);
-//		TODO: Fix hard coded string
-		subFolderTextField.setToolTipText("To enable, select an destination direcotry");
+		subFolderTextField.setToolTipText(lang.get("tooltip.enableTemplateFields"));
 				
 		fileNameTemplateLabel = new JLabel(lang.get("labels.fileNameTemplate"));
 		fileNameTemplateLabel.setForeground(Color.GRAY);
 		
 		fileNameTemplateTextField = new JTextField();
 		fileNameTemplateTextField.setEnabled(false);
-//		TODO: Fix hard coded string
-		fileNameTemplateTextField.setToolTipText("To enable, select an destination direcotry");
+		fileNameTemplateTextField.setToolTipText(lang.get("tooltip.enableTemplateFields"));
 				
 		GBHelper inputPos = new GBHelper();
 		JPanel inputPanel = new JPanel(new GridBagLayout());
@@ -711,7 +737,8 @@ public class MainGUI extends JFrame {
 		config.setIntProperty("mainGUI.window.height", this.getSize().height);
 		config.setIntProperty("mainSplitPane.location", mainSplitPane.getDividerLocation());
 		config.setIntProperty("verticalSplitPane.location", verticalSplitPane.getDividerLocation());
-		
+		config.setIntProperty("thumbNailMetaDataPanelSplitPane.location", thumbNailMetaPanelSplitPane.getDividerLocation());
+				
 		try {
 			config.saveSettings();
 		} catch (FileNotFoundException e) {
@@ -741,10 +768,14 @@ public class MainGUI extends JFrame {
 			fr.loadFilesFromDisk(new File(sourcePath));
 			
 			jpgFilesAsFiles = fr.getJPEGFiles();
+
+			statusBar.setStatusMessage(Integer.toString(jpgFilesAsFiles.size()), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
+			this.setStatusMessages();
 			
 			if(jpgFilesAsFiles.size() > 0){
 				
-				removeMouseListener();
+				this.removeMouseListener();
+												
 				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size());
 				pb.setVisible(true);
 							
@@ -758,13 +789,13 @@ public class MainGUI extends JFrame {
 							// Hämta ur tumnageln ur angiven fil
 							JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 											
-							JLabel thumbContainer = new JLabel();
-				
+							JButton thumbContainer = new JButton();
 							thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-							thumbContainer.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+							thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
-							thumbContainer.setHorizontalAlignment(JLabel.CENTER);
-							
+							thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
+							thumbContainer.addActionListener(thumbNailListener);
+														
 							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
 							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
 														
@@ -787,8 +818,8 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
-	
-	private void addThumbnail(JLabel thumbNail) {
+		
+	private void addThumbnail(JButton thumbNail) {
 		thumbNailsPanel.add(thumbNail);
 	}
 	
@@ -1074,10 +1105,16 @@ public class MainGUI extends JFrame {
 					previewTableModel.setRowCount(0);
 				}
 				
+				// Clear the Panel with meta data from potentially already 
+				// shown meta data
+				imageMetaDataPanel.clearMetaData();
+				
 				ac.setSourcePath(totalPath);
 				config.setStringProperty("sourcePath", totalPath);
 				FileRetriever.getInstance().loadFilesFromDisk(new File(totalPath));
 				MetaDataUtil.setMetaDataObjects(totalPath);
+
+				statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + totalPath, lang.get("statusbar.message.selectedPath"), 0);
 				
 				// Byta till metadata-tabben ifall tabben skulle stå i annat läge.
 				tabbedPane.setSelectedIndex(0);
@@ -1109,18 +1146,43 @@ public class MainGUI extends JFrame {
 		tree.addMouseListener(mouseListener);
 	}
 	
+	private void setStatusMessages() {
+		if (jpgFilesAsFiles != null && jpgFilesAsFiles.size() > 0) {
+			int nrOfColumns = thumbNailGridLayout.getColumns();
+			int nrOfImages = jpgFilesAsFiles.size();
+
+			statusBar.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
+			
+			int extraRow = nrOfImages % nrOfColumns == 0 ? 0 : 1;
+			int rowsInGridLayout = (nrOfImages / nrOfColumns) + extraRow; 
+
+			statusBar.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
+		} else {
+			statusBar.setStatusMessage("", "", 1);
+			statusBar.setStatusMessage("", "", 2);
+		}
+	}
+	
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
 			if (((thumbNailsPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
 				
-				int columns = (thumbNailsPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
+				int columns = (thumbNailsPanel.getVisibleRect().width - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
 				
 				thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
 				thumbNailsPanel.invalidate();
 				thumbNailsPanel.repaint();
 				thumbNailsPanel.updateUI();
+				setStatusMessages();
 			}				
+		}
+	}
+	
+	private class ThumbNailListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			imageMetaDataPanel.setMetaData(new File(e.getActionCommand()));
 		}
 	}
 }
