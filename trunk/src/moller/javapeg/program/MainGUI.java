@@ -37,6 +37,13 @@ package moller.javapeg.program;
  *                        : 2009-06-02 by Fredrik Möller
  *                        : 2009-06-04 by Fredrik Möller
  *                        : 2009-06-06 by Fredrik Möller
+ *                        : 2009-06-10 by Fredrik Möller
+ *                        : 2009-06-12 by Fredrik Möller
+ *                        : 2009-06-15 by Fredrik Möller
+ *                        : 2009-06-16 by Fredrik Möller
+ *                        : 2009-06-17 by Fredrik Möller
+ *                        : 2009-07-02 by Fredrik Möller
+ *                        : 2009-07-03 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -62,23 +69,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -99,6 +110,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
@@ -125,6 +137,7 @@ import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.Update;
+import moller.util.io.JPEGUtil;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
@@ -150,12 +163,18 @@ public class MainGUI extends JFrame {
 
 	private JButton destinationPathButton;
 	private JButton startProcessButton;
+	private JButton transferSelectedImagesButton;
+	private JButton transferAllImagesButton;
+	private JButton removeSelectedImagesButton;
+	private JButton removeAllImagesButton;
+	private JButton openImageViewerButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
 	private JLabel subFolderPreviewTextFieldLabel;
 	private JLabel fileNameTemplateLabel;
 	private JLabel infoPanelLabel;
+	private JLabel amountOfImagesInImageListLabel;
 	
 	private JTextField destinationPathTextField;
 	private JTextField subFolderTextField;
@@ -172,6 +191,11 @@ public class MainGUI extends JFrame {
 	private JMenuItem startProcessJMenuItem;
 	private JMenuItem helpJMenuItem;
 	private JMenuItem aboutJMenuItem;
+	private JMenuItem popupMenuAddImageToViewList;
+	private JMenuItem popupMenuAddAllImagesToViewList;
+	
+	
+	private JPopupMenu rightClickMenu;
 
 	private JPanel thumbNailsPanel;
 	private JPanel infoPanel;
@@ -185,6 +209,7 @@ public class MainGUI extends JFrame {
 	private JCheckBox createThumbNailsCheckBox;
 
 	private JTabbedPane tabbedPane;
+	private JTabbedPane mainTabbedPane;
 
 	private JTable metaDataTable;
 	private JTable previewTable;
@@ -192,6 +217,7 @@ public class MainGUI extends JFrame {
 	private JTree tree;
 	
 	private Mouselistener mouseListener;
+	private MouseButtonListener mouseRightClickButtonListener;
 	
 	private Collection <File> jpgFilesAsFiles;
 	
@@ -212,6 +238,12 @@ public class MainGUI extends JFrame {
 	
 	private ThumbNailListener thumbNailListener;
 	
+//	private DefaultListModel imagesToTransferToVievListModel;
+	private DefaultListModel imagesToVievListModel;
+	
+//	private JList imagesToTransferToViewList;
+	private JList imagesToViewList;
+	   	
 	public MainGUI(){
 		
 		FileSetup.check();
@@ -240,6 +272,7 @@ public class MainGUI extends JFrame {
 		this.createMenuBar();
 		logger.logDEBUG("Creation of Menu Bar Finished");
 		this.createToolBar();
+		this.createRightClickMenu();
 		logger.logDEBUG("Adding of Event Listeners Started");
 		this.addListeners();
 		logger.logDEBUG("Adding of Event Listeners Finished");
@@ -428,7 +461,6 @@ public class MainGUI extends JFrame {
 		tabbedPane.addTab(lang.get("information.panel.metaDataLabel"), scrollpaneMeta);
 		tabbedPane.addTab(lang.get("information.panel.previewLabel"), previewTablePanel);
 				
-		
 		infoPanel.add(infoPanelLabel, BorderLayout.NORTH);
 		infoPanel.add(tabbedPane, BorderLayout.CENTER);
 		
@@ -517,6 +549,7 @@ public class MainGUI extends JFrame {
 		}
 		
 		thumbNailListener = new ThumbNailListener();
+		mouseRightClickButtonListener = new MouseButtonListener();
 
 		mainSplitPane = new JSplitPane();
 		mainSplitPane.setDividerLocation(config.getIntProperty("mainSplitPane.location"));
@@ -539,16 +572,16 @@ public class MainGUI extends JFrame {
 		thumbNailsBackgroundsPanel.add(thumbNailsTitleLable, BorderLayout.NORTH);
 		thumbNailsBackgroundsPanel.add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
-		tabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
-		tabbedPane.addTab(lang.get("tabbedpane.imageView"), new JPanel());
+		mainTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+		mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
+		mainTabbedPane.addTab(lang.get("tabbedpane.imageView")  , this.createViewPanel());
 //		tabbedPane.addTab("Categorize Images", new JPanel());
 		
 		imageMetaDataPanel = new MetaDataPanel();
 		thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);			
 		thumbNailMetaPanelSplitPane.setRightComponent(imageMetaDataPanel);
 		
-		verticalSplitPane.setTopComponent(tabbedPane);
+		verticalSplitPane.setTopComponent(mainTabbedPane);
 		verticalSplitPane.setBottomComponent(thumbNailMetaPanelSplitPane);
 				
 		mainSplitPane.setLeftComponent(this.initiateJTree());
@@ -576,6 +609,99 @@ public class MainGUI extends JFrame {
 				
 		return backgroundJPanel;
 	}
+	
+	private JPanel createViewPanel() {
+		
+		GBHelper posBackgroundPanel = new GBHelper();
+				
+		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
+		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.expandH());
+		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol().expandW());
+						
+		return backgroundJPanel;
+	}
+	
+	private JPanel createViewPanelListSection () {
+		
+		transferSelectedImagesButton = new JButton();
+		transferAllImagesButton      = new JButton();
+		removeSelectedImagesButton   = new JButton();
+		removeAllImagesButton        = new JButton();
+		
+		InputStream imageStream = null;
+		
+		ImageIcon addPictureImageIcon = new ImageIcon();
+		ImageIcon addAllPictureImageIcon = new ImageIcon();
+		ImageIcon removePictureImageIcon = new ImageIcon();
+		ImageIcon removeAllPictureImageIcon = new ImageIcon();
+		
+		try {
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/add.gif");
+			addPictureImageIcon.setImage(ImageIO.read(imageStream));
+			transferSelectedImagesButton.setIcon(addPictureImageIcon);
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
+			removePictureImageIcon.setImage(ImageIO.read(imageStream));
+			removeSelectedImagesButton.setIcon(removePictureImageIcon);
+//			TODO: Fix hard coded string
+			removeSelectedImagesButton.setToolTipText("Remove selected images from view list");
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/addall.gif");
+			addAllPictureImageIcon.setImage(ImageIO.read(imageStream));
+			transferAllImagesButton.setIcon(addAllPictureImageIcon);
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
+			removeAllPictureImageIcon.setImage(ImageIO.read(imageStream));
+			removeAllImagesButton.setIcon(removeAllPictureImageIcon);	
+//			TODO: Fix hard coded string
+			removeAllImagesButton.setToolTipText("Remove all images from view list");
+
+		} catch (Exception e) {
+			logger.logERROR("Could not open the image add.gif");
+		} finally {
+			StreamUtil.closeStream(imageStream);
+		}
+				
+		imagesToVievListModel = new DefaultListModel();
+		
+		imagesToViewList = new JList(imagesToVievListModel);
+		
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		
+//		TODO: Fix hard coded string
+		openImageViewerButton = new JButton("View");
+		openImageViewerButton.setToolTipText("Open the Image Viewer");
+		
+		GBHelper posButtonPanel = new GBHelper();
+		
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+//		buttonPanel.add(transferSelectedImagesButton, posButtonPanel);
+//		buttonPanel.add(transferAllImagesButton, posButtonPanel.nextRow());
+		buttonPanel.add(removeSelectedImagesButton, posButtonPanel);
+		buttonPanel.add(removeAllImagesButton, posButtonPanel.nextRow());
+		buttonPanel.add(openImageViewerButton, posButtonPanel.nextRow());
+				
+		GBHelper posBackgroundPanel = new GBHelper();
+
+		JScrollPane spImageList = new JScrollPane(imagesToViewList);
+		
+//		TODO: Fix hard coded string
+		JLabel imageListLabel = new JLabel("IMAGES TO VIEW");
+		imageListLabel.setForeground(Color.GRAY);
+
+		amountOfImagesInImageListLabel = new JLabel();
+		this.setNrOfImagesLabels();
+
+		backgroundPanel.add(imageListLabel, posBackgroundPanel);
+		backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(buttonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.SOUTH));
+		backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow());
+		
+		return backgroundPanel;
+	}
+		
 	
 	private JPanel createRenameInputPanel() {
 			
@@ -700,6 +826,27 @@ public class MainGUI extends JFrame {
 		tabbedPane.addChangeListener(new JTabbedPaneListener());
 		createThumbNailsCheckBox.addActionListener(new CheckBoxListener());
 		thumbNailsBackgroundsPanel.addComponentListener(new ComponentListener());
+		
+//		transferSelectedImagesButton.addActionListener(new TransferSelectedImagesListener());
+//		transferAllImagesButton.addActionListener(new TransferAllImagesListener());
+		removeSelectedImagesButton.addActionListener(new RemoveSelectedImagesListener());
+		removeAllImagesButton.addActionListener(new RemoveAllImagesListener());
+		openImageViewerButton.addActionListener(new OpenImageViewerListener());
+		
+		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
+		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
+	}
+	
+	public void createRightClickMenu(){
+		
+		rightClickMenu = new JPopupMenu();
+		
+//		TODO: Fix hard coded strings
+		popupMenuAddImageToViewList = new JMenuItem("Add image to view list");
+		popupMenuAddAllImagesToViewList = new JMenuItem("Add All images to view list");
+		
+		rightClickMenu.add(popupMenuAddImageToViewList);
+		rightClickMenu.add(popupMenuAddAllImagesToViewList);
 	}
 
 	public void initiateProgram(){
@@ -795,6 +942,7 @@ public class MainGUI extends JFrame {
 							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
 							thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
 							thumbContainer.addActionListener(thumbNailListener);
+							thumbContainer.addMouseListener(mouseRightClickButtonListener);
 														
 							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
 							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
@@ -1137,13 +1285,18 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
-	
+
 	private void removeMouseListener(){
 		tree.removeMouseListener(mouseListener);
 	}
 	
 	private void addMouseListener(){
 		tree.addMouseListener(mouseListener);
+	}
+	
+	private void setNrOfImagesLabels () {
+//		TODO: Fix hard coded strings
+		amountOfImagesInImageListLabel.setText("Number of images to view: " + Integer.toString(imagesToVievListModel.size()));
 	}
 	
 	private void setStatusMessages() {
@@ -1183,6 +1336,86 @@ public class MainGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			imageMetaDataPanel.setMetaData(new File(e.getActionCommand()));
+		}
+	}
+	
+	private class RemoveSelectedImagesListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			if (!imagesToViewList.isSelectionEmpty()) {
+				
+				int [] selectedIndices = imagesToViewList.getSelectedIndices();
+								
+				// Remove all the selected indices
+				while(selectedIndices.length > 0) {
+					imagesToVievListModel.remove(selectedIndices[0]);
+					selectedIndices = imagesToViewList.getSelectedIndices();
+				}
+				setNrOfImagesLabels();
+			}
+		}
+	}
+	
+	private class RemoveAllImagesListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (imagesToVievListModel.size() > 0) {
+				imagesToVievListModel.clear();
+				setNrOfImagesLabels();
+			}
+		}
+	}
+	
+	private class OpenImageViewerListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			int listSize = imagesToVievListModel.size();
+			
+			if (listSize > 0) {
+				List<File> images = new ArrayList<File>(listSize);
+				
+				for (int index = 0; index < listSize; index++) {
+					images.add((File)imagesToVievListModel.get(index));
+				}
+				new ImageViewer(images).setVisible(true);	
+			}
+		}
+	}
+	
+	private class AddImageToViewList implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			imagesToVievListModel.addElement(new File(e.getActionCommand()));
+			setNrOfImagesLabels();
+		}
+	}
+	
+	private class AddAllImagesToViewList implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+				
+			File imageFilePath = new File(ApplicationContext.getInstance().getSourcePath());
+			
+			for (File file : imageFilePath.listFiles()) {
+				try {
+					if (JPEGUtil.isJPEG(file)) {
+						imagesToVievListModel.addElement(file);
+					}
+				} catch (FileNotFoundException fnfex) {
+					// TODO Fix notification about file not found
+					fnfex.printStackTrace();
+				} catch (IOException iox) {
+					// TODO Fix notification about can not read from file.
+					iox.printStackTrace();
+				}
+			}
+			setNrOfImagesLabels();
+		}		
+	}
+	
+	private class MouseButtonListener extends MouseAdapter{
+		public void mouseReleased(MouseEvent e){
+			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
+				rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
+				popupMenuAddImageToViewList.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+			}
 		}
 	}
 }
