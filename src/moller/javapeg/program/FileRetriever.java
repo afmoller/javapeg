@@ -3,15 +3,18 @@ package moller.javapeg.program;
  * This class was created : 2007-01-18 by Fredrik Möller
  * Latest changed         : 2009-02-03 by Fredrik Möller
  *                        : 2009-03-10 by Fredrik Möller
+ *                        : 2009-06-17 by Fredrik Möller
  */
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import moller.javapeg.program.jpeg.JPEGValidator;
+import moller.util.io.JPEGUtil;
 
 public class FileRetriever {
 	
@@ -71,10 +74,18 @@ public class FileRetriever {
 
 		if(directoryPath.isDirectory()){
 			for (File file : directoryPath.listFiles()) {
-				if(JPEGValidator.isJPEG(file)) {
-					jpegFileNameFileObjectMap.put(file.getName(), file);
-				} else {
-					nonJpegFileNameFileObjectMap.put(file.getName(), file);
+				try {
+					if(JPEGUtil.isJPEG(file)) {
+						jpegFileNameFileObjectMap.put(file.getName(), file);
+					} else {
+						nonJpegFileNameFileObjectMap.put(file.getName(), file);
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Fix notification about file not found
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Fix notification about can not read from file.
+					e.printStackTrace();
 				}
 			}
   	  	}
