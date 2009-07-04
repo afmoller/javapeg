@@ -390,3 +390,29 @@ statusbar.message.selectedPath              = Vald sökväg:
 ##############################################################################################################
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
 tabbedpane.imageView   = VISA BILDER
+
+##############################################################################################################
+# I M A G E  V I E W E R                                                                                     #
+##############################################################################################################
+imageviewer.button.back.toolTip                         = Föregående (Alt + Z) 
+imageviewer.button.back.mnemonic                        = Z
+imageviewer.button.forward.toolTip                      = Nästa (Alt + X) 
+imageviewer.button.forward.mnemonic                     = X
+imageviewer.button.automaticAdjustToWindowSize.toolTip  = Automatisk anpassning till fönsterstorlek (Alt + C) 
+imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
+imageviewer.button.adjustToWindowSize.toolTip           = Anpassa till fönsterstorlek (Alt + A) 
+imageviewer.button.adjustToWindowSize.mnemonic          = A
+imageviewer.button.help.toolTip                         = Hjälp (Alt + H) 
+imageviewer.button.help.mnemonic                        = H
+
+imageviewer.popupmenu.back.text               = (Alt-Z) Föregående
+imageviewer.popupmenu.forward.text            = (Alt-X) Nästa
+imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Anpassa till fönsterstorlek
+
+imageviewer.statusbar.pathToPicture    = Sökväg till bildfilen
+imageviewer.statusbar.sizeLabel        = S:
+imageviewer.statusbar.sizeLabelImage   = Bildstorlek i 
+imageviewer.statusbar.widthLabel       = B:
+imageviewer.statusbar.widthLabelImage  = Bildbredd i pixlar
+imageviewer.statusbar.heightLabel      = H:
+imageviewer.statusbar.heightLabelImage = Bildhöjd i pixlar
