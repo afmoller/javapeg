@@ -386,3 +386,30 @@ statusbar.message.selectedPath              = Selected Path:
 ##############################################################################################################
 tabbedpane.imageRename = RENAME IMAGES
 tabbedpane.imageView   = VIEW IMAGES
+
+##############################################################################################################
+# I M A G E  V I E W E R                                                                                     #
+##############################################################################################################
+imageviewer.button.back.toolTip                         = Previous (Alt + Z) 
+imageviewer.button.back.mnemonic                        = Z
+imageviewer.button.forward.toolTip                      = Next (Alt + X) 
+imageviewer.button.forward.mnemonic                     = X
+imageviewer.button.automaticAdjustToWindowSize.toolTip  = Automatically adjust to window size (Alt + C) 
+imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
+imageviewer.button.adjustToWindowSize.toolTip           = Adjust to window size (Alt + A) 
+imageviewer.button.adjustToWindowSize.mnemonic          = A
+imageviewer.button.help.toolTip                         = Help (Alt + H) 
+imageviewer.button.help.mnemonic                        = H
+
+imageviewer.popupmenu.back.text               = (Alt-Z) Previous
+imageviewer.popupmenu.forward.text            = (Alt-X) Next
+imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Adjust to window size
+
+imageviewer.statusbar.pathToPicture    = Path to image file
+imageviewer.statusbar.sizeLabel        = S:
+imageviewer.statusbar.sizeLabelImage   = Image size in 
+imageviewer.statusbar.widthLabel       = W:
+imageviewer.statusbar.widthLabelImage  = Image width in pixels
+imageviewer.statusbar.heightLabel      = H:
+imageviewer.statusbar.heightLabelImage = Image height in pixels
+
