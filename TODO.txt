@@ -1,6 +1,6 @@
 2.2:
 ====
-- Fix wrong position of Thumb nail loading progress bar
+- Fix "before process validation" of inputs in rename mode.
 - Fix all TODO:s
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
