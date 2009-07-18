@@ -44,6 +44,10 @@ package moller.javapeg.program;
  *                        : 2009-06-17 by Fredrik Möller
  *                        : 2009-07-02 by Fredrik Möller
  *                        : 2009-07-03 by Fredrik Möller
+ *                        : 2009-07-04 by Fredrik Möller
+ *                        : 2009-07-13 by Fredrik Möller
+ *                        : 2009-07-15 by Fredrik Möller
+ *                        : 2009-07-18 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -98,6 +102,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -105,16 +110,19 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
+import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -137,6 +145,7 @@ import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.Update;
+import moller.util.io.FileUtil;
 import moller.util.io.JPEGUtil;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
@@ -163,11 +172,13 @@ public class MainGUI extends JFrame {
 
 	private JButton destinationPathButton;
 	private JButton startProcessButton;
-	private JButton transferSelectedImagesButton;
-	private JButton transferAllImagesButton;
 	private JButton removeSelectedImagesButton;
 	private JButton removeAllImagesButton;
-	private JButton openImageViewerButton;
+	private JButton openImageListButton;
+	private JButton saveImageListButton;
+	private JButton exportImageListButton;
+	private JButton moveUpButton;
+	private JButton moveDownButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -175,6 +186,7 @@ public class MainGUI extends JFrame {
 	private JLabel fileNameTemplateLabel;
 	private JLabel infoPanelLabel;
 	private JLabel amountOfImagesInImageListLabel;
+	private JLabel imagePreviewLabel;
 	
 	private JTextField destinationPathTextField;
 	private JTextField subFolderTextField;
@@ -238,14 +250,12 @@ public class MainGUI extends JFrame {
 	
 	private ThumbNailListener thumbNailListener;
 	
-//	private DefaultListModel imagesToTransferToVievListModel;
 	private DefaultListModel imagesToVievListModel;
 	
-//	private JList imagesToTransferToViewList;
 	private JList imagesToViewList;
-	   	
+		   	
 	public MainGUI(){
-		
+				
 		FileSetup.check();
 		
 		config =  Config.getInstance();
@@ -624,38 +634,66 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createViewPanelListSection () {
 		
-		transferSelectedImagesButton = new JButton();
-		transferAllImagesButton      = new JButton();
 		removeSelectedImagesButton   = new JButton();
 		removeAllImagesButton        = new JButton();
+		openImageListButton          = new JButton();
+		saveImageListButton          = new JButton();
+		exportImageListButton          = new JButton();
+		moveUpButton                 = new JButton();
+		moveDownButton               = new JButton();
 		
 		InputStream imageStream = null;
 		
-		ImageIcon addPictureImageIcon = new ImageIcon();
-		ImageIcon addAllPictureImageIcon = new ImageIcon();
 		ImageIcon removePictureImageIcon = new ImageIcon();
 		ImageIcon removeAllPictureImageIcon = new ImageIcon();
+		ImageIcon openImageListImageIcon = new ImageIcon();
+		ImageIcon saveImageListImageIcon = new ImageIcon();
+		ImageIcon exportImageListImageIcon = new ImageIcon();
+		ImageIcon moveUpImageIcon = new ImageIcon();
+		ImageIcon moveDownImageIcon = new ImageIcon();
 		
-		try {
-			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/add.gif");
-			addPictureImageIcon.setImage(ImageIO.read(imageStream));
-			transferSelectedImagesButton.setIcon(addPictureImageIcon);
-			
+		try {		
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
 			removePictureImageIcon.setImage(ImageIO.read(imageStream));
 			removeSelectedImagesButton.setIcon(removePictureImageIcon);
 //			TODO: Fix hard coded string
 			removeSelectedImagesButton.setToolTipText("Remove selected images from view list");
 			
-			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/addall.gif");
-			addAllPictureImageIcon.setImage(ImageIO.read(imageStream));
-			transferAllImagesButton.setIcon(addAllPictureImageIcon);
-			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
 			removeAllPictureImageIcon.setImage(ImageIO.read(imageStream));
 			removeAllImagesButton.setIcon(removeAllPictureImageIcon);	
 //			TODO: Fix hard coded string
 			removeAllImagesButton.setToolTipText("Remove all images from view list");
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif");
+			openImageListImageIcon.setImage(ImageIO.read(imageStream));
+			openImageListButton.setIcon(openImageListImageIcon);	
+//			TODO: Fix hard coded string
+			openImageListButton.setToolTipText("Open an saved Image List");
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif");
+			saveImageListImageIcon.setImage(ImageIO.read(imageStream));
+			saveImageListButton.setIcon(saveImageListImageIcon);	
+//			TODO: Fix hard coded string
+			saveImageListButton.setToolTipText("Save an Image List");
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/export.gif");
+			exportImageListImageIcon.setImage(ImageIO.read(imageStream));
+			exportImageListButton.setIcon(exportImageListImageIcon);	
+//			TODO: Fix hard coded string
+			exportImageListButton.setToolTipText("Export an Image List");
+						
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/up.gif");
+			moveUpImageIcon.setImage(ImageIO.read(imageStream));
+			moveUpButton.setIcon(moveUpImageIcon);	
+//			TODO: Fix hard coded string
+			moveUpButton.setToolTipText("Move selected image(s) up in the List");
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/down.gif");
+			moveDownImageIcon.setImage(ImageIO.read(imageStream));
+			moveDownButton.setIcon(moveDownImageIcon);	
+//			TODO: Fix hard coded string
+			moveDownButton.setToolTipText("Move selected image(s) down in the List");
 
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
@@ -666,37 +704,61 @@ public class MainGUI extends JFrame {
 		imagesToVievListModel = new DefaultListModel();
 		
 		imagesToViewList = new JList(imagesToVievListModel);
+		imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
-		
-//		TODO: Fix hard coded string
-		openImageViewerButton = new JButton("View");
-		openImageViewerButton.setToolTipText("Open the Image Viewer");
-		
+				
 		GBHelper posButtonPanel = new GBHelper();
 		
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
-//		buttonPanel.add(transferSelectedImagesButton, posButtonPanel);
-//		buttonPanel.add(transferAllImagesButton, posButtonPanel.nextRow());
 		buttonPanel.add(removeSelectedImagesButton, posButtonPanel);
 		buttonPanel.add(removeAllImagesButton, posButtonPanel.nextRow());
-		buttonPanel.add(openImageViewerButton, posButtonPanel.nextRow());
+		buttonPanel.add(openImageListButton, posButtonPanel.nextRow());
+		buttonPanel.add(saveImageListButton, posButtonPanel.nextRow());
+		buttonPanel.add(exportImageListButton, posButtonPanel.nextRow());
+		buttonPanel.add(moveUpButton, posButtonPanel.nextRow());
+		buttonPanel.add(moveDownButton, posButtonPanel.nextRow());
 				
 		GBHelper posBackgroundPanel = new GBHelper();
 
 		JScrollPane spImageList = new JScrollPane(imagesToViewList);
-		
+				
 //		TODO: Fix hard coded string
-		JLabel imageListLabel = new JLabel("IMAGES TO VIEW");
+		JLabel imageListLabel = new JLabel("IMAGE LIST");
 		imageListLabel.setForeground(Color.GRAY);
 
 		amountOfImagesInImageListLabel = new JLabel();
 		this.setNrOfImagesLabels();
+		
+//		TODO: Fix hard coded strings
+		JLabel previewLabel = new JLabel("PREVIEW");
+		previewLabel.setForeground(Color.GRAY);
+		
+		JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
+		
+		GBHelper posPreviewPanel = new GBHelper();
+				
+		imagePreviewLabel = new JLabel();
+				
+		JPanel previewPanel = new JPanel();
+		previewPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+							
+		previewPanel.add(imagePreviewLabel);
 
+		previewBackgroundPanel.add(previewPanel, posPreviewPanel);
+		
+		JPanel imageListPanel = new JPanel();
+		imageListPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+				
 		backgroundPanel.add(imageListLabel, posBackgroundPanel);
+		backgroundPanel.add(previewLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
 		backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH());
-		backgroundPanel.add(buttonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.SOUTH));
+		backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
+		backgroundPanel.add(buttonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
+		backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
+		backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
+		
 		backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow());
 		
 		return backgroundPanel;
@@ -827,14 +889,18 @@ public class MainGUI extends JFrame {
 		createThumbNailsCheckBox.addActionListener(new CheckBoxListener());
 		thumbNailsBackgroundsPanel.addComponentListener(new ComponentListener());
 		
-//		transferSelectedImagesButton.addActionListener(new TransferSelectedImagesListener());
-//		transferAllImagesButton.addActionListener(new TransferAllImagesListener());
 		removeSelectedImagesButton.addActionListener(new RemoveSelectedImagesListener());
 		removeAllImagesButton.addActionListener(new RemoveAllImagesListener());
-		openImageViewerButton.addActionListener(new OpenImageViewerListener());
+		openImageListButton.addActionListener(new OpenImageListListener());
+		saveImageListButton.addActionListener(new SaveImageListListener());
+		exportImageListButton.addActionListener(new ExportImageListListener());
+		moveUpButton.addActionListener(new MoveImageUpInListListener());
+		moveDownButton.addActionListener(new MoveImageDownInListListener());
 		
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
+		
+		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
 	}
 	
 	public void createRightClickMenu(){
@@ -923,7 +989,7 @@ public class MainGUI extends JFrame {
 				
 				this.removeMouseListener();
 												
-				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size());
+				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size(), this);
 				pb.setVisible(true);
 							
 				Thread thumbNailsFetcher = new Thread() {
@@ -1296,7 +1362,7 @@ public class MainGUI extends JFrame {
 	
 	private void setNrOfImagesLabels () {
 //		TODO: Fix hard coded strings
-		amountOfImagesInImageListLabel.setText("Number of images to view: " + Integer.toString(imagesToVievListModel.size()));
+		amountOfImagesInImageListLabel.setText("Number of images in list: " + Integer.toString(imagesToVievListModel.size()));
 	}
 	
 	private void setStatusMessages() {
@@ -1351,6 +1417,7 @@ public class MainGUI extends JFrame {
 					imagesToVievListModel.remove(selectedIndices[0]);
 					selectedIndices = imagesToViewList.getSelectedIndices();
 				}
+				imagePreviewLabel.setIcon(null);
 				setNrOfImagesLabels();
 			}
 		}
@@ -1360,23 +1427,168 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (imagesToVievListModel.size() > 0) {
 				imagesToVievListModel.clear();
+				imagePreviewLabel.setIcon(null);
 				setNrOfImagesLabels();
 			}
 		}
 	}
 	
-	private class OpenImageViewerListener implements ActionListener {
+	private class OpenImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
-			int listSize = imagesToVievListModel.size();
+			FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
 			
-			if (listSize > 0) {
-				List<File> images = new ArrayList<File>(listSize);
-				
-				for (int index = 0; index < listSize; index++) {
-					images.add((File)imagesToVievListModel.get(index));
+			JFileChooser chooser = new JFileChooser();
+							
+			chooser.setAcceptAllFileFilterUsed(false);
+//			TODO: Remove hard coded string
+			chooser.setDialogTitle("Open");
+										
+			chooser.addChoosableFileFilter(fileFilterPolyView);
+							
+			File source = null;	
+			
+			int returnVal = chooser.showOpenDialog(null);
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		    	
+		    	if(!imagesToVievListModel.isEmpty()) {
+//					TODO: Remove hard coded string
+		    		int returnValue = JOptionPane.showConfirmDialog(null, "Non saved image list exists, overwrite?");
+					
+					/**
+					 * 0 indicates a yes answer, and then the current list 
+					 * shall be overwritten, otherwise just return.
+					 */ 
+					if(returnValue != 0) {
+						return;
+					}	
+		    	}
+		    			    	
+		    	source = chooser.getSelectedFile();
+		    	
+		    	try {
+					List<String> fileContent = FileUtil.readFromFile(source);
+					
+					imagesToVievListModel.clear();
+					
+					List<String> notExistingFiles = new ArrayList<String>();
+									
+					for(String filePath : fileContent) {
+						File file = new File(filePath);
+						
+						if(file.exists()) {
+							imagesToVievListModel.addElement(file);
+						} else {
+							notExistingFiles.add(filePath);
+						}
+					}
+					
+					if(!notExistingFiles.isEmpty()) {		
+						StringBuilder missingFilesErrorMessage = new StringBuilder();
+						
+						String lS = System.getProperty("line.separator");
+						
+//						TODO: Remove hard coded string
+						missingFilesErrorMessage.append("The following files listed in the selected file does not exist, and was not loaded to the list:");
+						missingFilesErrorMessage.append(lS);
+						missingFilesErrorMessage.append(lS);
+													
+						for(String path : notExistingFiles) {
+							missingFilesErrorMessage.append(path);
+							missingFilesErrorMessage.append(lS);
+						}
+													
+						JOptionPane.showMessageDialog(null, missingFilesErrorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					setNrOfImagesLabels();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				new ImageViewer(images).setVisible(true);	
+		    }
+		}
+	}
+	
+	private class SaveImageListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			if (imagesToVievListModel.size() > 0) {
+				
+				FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
+				
+				JFileChooser chooser = new JFileChooser();
+								
+				chooser.setAcceptAllFileFilterUsed(false);
+//				TODO: Remove hard coded string
+				chooser.setDialogTitle("Save");
+											
+				chooser.addChoosableFileFilter(fileFilterPolyView);
+								
+				File destination = null;	
+				
+				int returnVal = chooser.showSaveDialog(null);
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			    	destination = chooser.getSelectedFile();
+			    				    	
+			    	ImageList.getInstance().createList(imagesToVievListModel, destination, "jil");
+			    }
+			}
+		}
+	}
+	
+	private class MoveImageUpInListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int selecteIndex = imagesToViewList.getSelectedIndex();
+			
+			if(selecteIndex > -1) {
+				if(selecteIndex > 0) {
+					Object obj = imagesToVievListModel.remove(selecteIndex);
+					imagesToVievListModel.add(selecteIndex - 1, obj);
+					imagesToViewList.setSelectedIndex(selecteIndex - 1);
+				}
+			}
+		}
+	}
+	
+	private class MoveImageDownInListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int selecteIndex = imagesToViewList.getSelectedIndex();
+			
+			if(selecteIndex > -1) {
+				if(selecteIndex < (imagesToVievListModel.size() - 1)) {
+					Object obj = imagesToVievListModel.remove(selecteIndex);
+					imagesToVievListModel.add(selecteIndex + 1, obj);
+					imagesToViewList.setSelectedIndex(selecteIndex + 1);
+				}
+			}			
+		}
+	}
+	
+	private class ExportImageListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			if (imagesToVievListModel.size() > 0) {
+				
+				FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("PolyView", "pvs");
+				
+				JFileChooser chooser = new JFileChooser();
+								
+				chooser.setAcceptAllFileFilterUsed(false);
+//				TODO: Remove hard coded string
+				chooser.setDialogTitle("Export");
+											
+				chooser.addChoosableFileFilter(fileFilterPolyView);
+								
+				File destination = null;	
+				
+				int returnVal = chooser.showSaveDialog(null);
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			    	destination = chooser.getSelectedFile();
+			    				    
+			    	String listFormat = ((FileNameExtensionFilter)chooser.getFileFilter()).getExtensions()[0];
+										
+			    	ImageList.getInstance().createList(imagesToVievListModel, destination, listFormat);
+			    }
 			}
 		}
 	}
@@ -1408,6 +1620,18 @@ public class MainGUI extends JFrame {
 			}
 			setNrOfImagesLabels();
 		}		
+	}
+	
+	private class ImagesToViewListListener implements ListSelectionListener {
+		
+		public void valueChanged(ListSelectionEvent e) {
+			int selectedIndex = imagesToViewList.getSelectedIndex();
+						
+			if (selectedIndex > -1) {
+				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom((File)imagesToVievListModel.get(selectedIndex));
+				imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
+			}
+		}
 	}
 	
 	private class MouseButtonListener extends MouseAdapter{
