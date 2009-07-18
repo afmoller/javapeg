@@ -1,29 +1,37 @@
 package moller.javapeg.program.gui;
 /**
-* This class was created : 2003-10-17 av Fredrik Möller
-* Latest changed         : 2003-10-19 av Fredrik Möller
-*                        : 2003-10-21 av Fredrik Möller
-*                        : 2003-11-04 av Fredrik Möller
-*                        : 2003-11-05 av Fredrik Möller
-*                        : 2003-11-07 av Fredrik Möller
-*                        : 2003-11-08 av Fredrik Möller
-*                        : 2003-11-15 av Fredrik Möller
-*                        : 2003-12-27 av Fredrik Möller
-*                        : 2003-12-28 av Fredrik Möller
-*                        : 2004-03-13 av Fredrik Möller
-*                        : 2004-04-23 av Fredrik Möller
-*                        : 2009-06-08 av Fredrik Möller
-*                        : 2009-06-16 av Fredrik Möller
-*                        : 2009-06-20 av Fredrik Möller
-*                        : 2009-07-03 av Fredrik Möller
-*                        : 2009-07-04 av Fredrik Möller
+* This class was created : 2003-10-17 by Fredrik Möller
+* Latest changed         : 2003-10-19 by Fredrik Möller
+*                        : 2003-10-21 by Fredrik Möller
+*                        : 2003-11-04 by Fredrik Möller
+*                        : 2003-11-05 by Fredrik Möller
+*                        : 2003-11-07 by Fredrik Möller
+*                        : 2003-11-08 by Fredrik Möller
+*                        : 2003-11-15 by Fredrik Möller
+*                        : 2003-12-27 by Fredrik Möller
+*                        : 2003-12-28 by Fredrik Möller
+*                        : 2004-03-13 by Fredrik Möller
+*                        : 2004-04-23 by Fredrik Möller
+*                        : 2009-06-08 by Fredrik Möller
+*                        : 2009-06-16 by Fredrik Möller
+*                        : 2009-06-20 by Fredrik Möller
+*                        : 2009-07-03 by Fredrik Möller
+*                        : 2009-07-04 by Fredrik Möller
+*                        : 2009-07-05 by Fredrik Möller
+*                        : 2009-07-06 by Fredrik Möller
+*                        : 2009-07-07 by Fredrik Möller
 */
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -31,8 +39,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -46,13 +60,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.RepaintManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.Config;
+import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
+import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Screen;
+import moller.util.gui.Update;
 import moller.util.mnemonic.MnemonicConverter;
 
 public class ImageViewer extends JFrame {
@@ -64,13 +85,16 @@ public class ImageViewer extends JFrame {
 	private static Language lang;
 	
 	private JLabel picture;
-	private JPanel imageBackground;
+		
 	private JToolBar toolBar;
 	private JPopupMenu rightClickMenu;
 	private StatusPanel statuspanel;
 	private ImageIcon pictureImageIcon;
 	private String pathToPicture;
 
+	private JPanel imageBackground;
+	private JPanel overViewBackgroundPanel;
+	
 	private JMenuItem popupMenuPrevious;
 	private JMenuItem popupMenuNext;
 	private JMenuItem popupMenuAdjustToWindowSize;
@@ -79,9 +103,15 @@ public class ImageViewer extends JFrame {
 	private JButton nextJButton;
 	private JButton adjustToWindowSizeJButton;
 	private JButton helpJButton;
+	
+	private JButton maximizeButton;
+	private JButton minimizeButton;
 
 	private JSplitPane imageMetaDataSplitPane;
 	
+	private JScrollPane overViewScrollpane;
+	private JScrollPane scrollpane;
+		
 	private MetaDataPanel metaDataPanel;
 	
 	private JToggleButton automaticAdjustToWindowSizeJToggleButton;
@@ -93,7 +123,10 @@ public class ImageViewer extends JFrame {
 	
 	private int imageToViewListIndex;
 	private int imagesToViewListSize;
-
+	
+	private boolean firstrun = true;
+	private Image two = null;
+	
 	public ImageViewer(List<File> imagesToView) {
 		
 		config =  Config.getInstance();
@@ -138,7 +171,7 @@ public class ImageViewer extends JFrame {
 		hSB.setUnitIncrement(40);
 		vSB.setUnitIncrement(40);
 		
-		JScrollPane scrollpane = new JScrollPane(imageBackground, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpane = new JScrollPane(imageBackground, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.setHorizontalScrollBar(hSB);
 		scrollpane.setVerticalScrollBar(vSB);
 		
@@ -148,7 +181,7 @@ public class ImageViewer extends JFrame {
 		
 		metaDataPanel = new MetaDataPanel();
 		metaDataPanel.setMetaData(thePicture);
-		
+						
 		imageMetaDataSplitPane = new JSplitPane();
 		imageMetaDataSplitPane.setOneTouchExpandable(true);
 		imageMetaDataSplitPane.setDividerSize(config.getIntProperty("imageViewerGUI.splitpane.width.image-metadata"));
@@ -158,12 +191,82 @@ public class ImageViewer extends JFrame {
 		imageMetaDataSplitPane.setRightComponent(metaDataPanel);
 		
 		this.getContentPane().add(imageMetaDataSplitPane, BorderLayout.CENTER);
-
+		
+		overViewBackgroundPanel = this.createOverviewPanel(); 
+		
+		this.getContentPane().add(overViewBackgroundPanel, BorderLayout.WEST);
+		
+		pictureImageIcon = null;
+		System.gc();
+		
 		pictureImageIcon = new ImageIcon(pathToPicture);
 	
 		picture = new JLabel(pictureImageIcon);
 		
+		imageBackground.removeAll();
+		imageBackground.updateUI();
 		imageBackground.add(picture, BorderLayout.CENTER);
+	}
+	
+	private JPanel createOverviewPanel() {
+		
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		JPanel buttonBackgroundPanel = new JPanel(new GridBagLayout());
+		
+		GBHelper posButtonPanel = new GBHelper();
+		GBHelper posButtonBackgroundPanel = new GBHelper();
+		
+		Dimension buttonSize = new Dimension(16, 16);
+		
+		maximizeButton = new JButton(new ImageIcon(StartJavaPEG.class.getResource(ICONFILEPATH + "Forward16.gif")));
+		maximizeButton.setPreferredSize(buttonSize);
+		maximizeButton.setMinimumSize(buttonSize);
+		
+		minimizeButton = new JButton(new ImageIcon(StartJavaPEG.class.getResource(ICONFILEPATH + "Back16.gif")));
+		minimizeButton.setPreferredSize(buttonSize);
+		minimizeButton.setMinimumSize(buttonSize);
+		
+		buttonPanel.add(maximizeButton, posButtonPanel);
+		buttonPanel.add(minimizeButton, posButtonPanel.nextRow());
+				
+		buttonBackgroundPanel.add(buttonPanel, posButtonBackgroundPanel.align(GridBagConstraints.NORTH));
+		
+		overViewScrollpane = new JScrollPane();
+		
+		JScrollBar vScrollBar = new JScrollBar();
+		vScrollBar.setUnitIncrement(40);
+				
+		overViewScrollpane.setVerticalScrollBar(vScrollBar);
+		overViewScrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		overViewScrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				
+		JPanel imageOverViewPanel = new JPanel(new GridLayout(0, 1));	
+		imageOverViewPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		
+		OverviewButtonListener overviewButtonListener = new OverviewButtonListener();
+		
+		for(int i = 0; i < imagesToView.size(); i++) {	
+			File jpegImage = imagesToView.get(i);
+			
+			JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData())); 
+			
+			imageButton.setActionCommand(Integer.toString(i));
+			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));
+			imageButton.addActionListener(overviewButtonListener);
+			
+			imageOverViewPanel.add(imageButton);
+		}
+		
+		overViewScrollpane.getViewport().add(imageOverViewPanel);
+		
+		GBHelper posBackgroundPanel = new GBHelper();
+						
+		backgroundPanel.add(overViewScrollpane, posBackgroundPanel.expandW());
+		backgroundPanel.add(buttonBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH).expandH());
+				
+		return backgroundPanel;
 	}
 	
 	// Create ToolBar
@@ -181,10 +284,7 @@ public class ImageViewer extends JFrame {
 		nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
 		nextJButton.setActionCommand("Forward");
 		nextJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.forward.mnemonic").charAt(0)));
-
-		JLabel delimiterOne = new JLabel(new ImageIcon(StartJavaPEG.class.getResource(ICONFILEPATH + "delimiter.gif")));
-		JLabel delimiterTwo = new JLabel(new ImageIcon(StartJavaPEG.class.getResource(ICONFILEPATH + "delimiter.gif")));
-
+		
 		automaticAdjustToWindowSizeJToggleButton = new JToggleButton(new ImageIcon(StartJavaPEG.class.getResource(ICONFILEPATH + "AutoAdjustToWindowSize16.gif")));
 		automaticAdjustToWindowSizeJToggleButton.setToolTipText(lang.get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
 		automaticAdjustToWindowSizeJToggleButton.setActionCommand("automaticAdjustToWindowSize");
@@ -202,10 +302,10 @@ public class ImageViewer extends JFrame {
 
 		toolBar.add(previousJButton);
 		toolBar.add(nextJButton);
-		toolBar.add(delimiterOne);
+		toolBar.addSeparator();
 		toolBar.add(automaticAdjustToWindowSizeJToggleButton);
 		toolBar.add(adjustToWindowSizeJButton);
-		toolBar.add(delimiterTwo);
+		toolBar.addSeparator();
 		toolBar.add(helpJButton);
 
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
@@ -246,15 +346,17 @@ public class ImageViewer extends JFrame {
 
 	private void addListeners() {
 		this.addWindowListener(new WindowDestroyer());
-		previousJButton.addActionListener(new ToolBarButtonListener());
-		nextJButton.addActionListener(new ToolBarButtonListener());
-		adjustToWindowSizeJButton.addActionListener(new ToolBarButtonListener());
-		automaticAdjustToWindowSizeJToggleButton.addActionListener(new ToolBarButtonListener());
-		helpJButton.addActionListener(new ToolBarButtonListener());
+		previousJButton.addActionListener(new ToolBarButtonPrevious());
+		nextJButton.addActionListener(new ToolBarButtonNext());
+		adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
+		automaticAdjustToWindowSizeJToggleButton.addActionListener(new ToolBarButtonAutomaticAdjustToWindowSize());
+		helpJButton.addActionListener(new ToolBarButtonHelp());
 		imageBackground.addMouseListener(new MouseButtonListener());
 		popupMenuPrevious.addActionListener(new RightClickMenuListenerPrevious());
 		popupMenuNext.addActionListener(new RightClickMenuListenerNext());
 		popupMenuAdjustToWindowSize.addActionListener(new RightClickMenuListenerAdjustToWindowSize());
+		maximizeButton.addActionListener(new OverviewMaximizeButton());
+		minimizeButton.addActionListener(new OverviewMinimizeButton());
 	}
 	
 	private void saveSettings() {
@@ -269,8 +371,59 @@ public class ImageViewer extends JFrame {
 	private void setStatusMessages (String fileSizeString, String prefix, String toolTipPrefix) {
 		statuspanel.setStatusMessage(" " + pathToPicture, lang.get("imageviewer.statusbar.pathToPicture"), 0);
 		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.sizeLabel") + " " + fileSizeString +  " " + prefix + "byte ", lang.get("imageviewer.statusbar.sizeLabelImage") + " " + toolTipPrefix + "bytes", 1);
-		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(pictureImageIcon.getIconWidth())  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
-		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(pictureImageIcon.getIconHeight()) + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
+//		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(pictureImageIcon.getIconWidth())  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
+//		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(pictureImageIcon.getIconHeight()) + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
+		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + "100"  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
+		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + "100" + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
+	}
+	
+	private void loadImageAndSetStatusBar(Image img) {
+			
+			
+			ImageIcon icon = new ImageIcon();
+			icon.setImage(img);
+		
+			pictureImageIcon = null;
+
+			picture.setIcon(null);
+			picture.setIcon(icon);
+
+			imageBackground.removeAll();
+			imageBackground.updateUI();
+		
+			imageBackground.add(picture, BorderLayout.CENTER);
+
+			File tempFile = new File(pathToPicture);
+
+			double fileSize = (double)tempFile.length();
+			String fileSizeString = "";
+			String prefix = "";
+			String toolTipPrefix = "";
+
+			if(fileSize > 10000){
+				fileSizeString = Double.toString(fileSize/1000);
+				prefix = "K";
+				toolTipPrefix = "Kilo";
+			}
+
+			setStatusMessages(fileSizeString, prefix, toolTipPrefix);
+
+			// Om knappen justera storlek automatiskt är intryckt
+			if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
+				double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
+				double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
+
+				Rectangle tempRect = imageBackground.getVisibleRect();
+
+				double backgroundWidth = tempRect.getWidth();
+				double backgroundHeight = tempRect.getHeight();
+
+				if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
+					adjustToWindowSizeJButton.doClick();
+					adjustToWindowSizeJButton.doClick();
+				}
+			}	
+			metaDataPanel.setMetaData(tempFile);			
 	}
 	
 	private void disposeFrame() {
@@ -310,137 +463,68 @@ public class ImageViewer extends JFrame {
 			adjustToWindowSizeJButton.doClick();
 		}
 	}
-	
-	// Knapplyssnare för toolbarknappar
-	private class ToolBarButtonListener implements ActionListener {
+		
+	private class ToolBarButtonPrevious implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String actionCommand = e.getActionCommand();
+			System.gc();
 
-			if(actionCommand.equals("Back")) {
-				System.gc();
-
-				if (imageToViewListIndex == 0) {
-					imageToViewListIndex = imagesToViewListSize - 1;
-				} else {
-					imageToViewListIndex -= 1;
-				}
-				
-				String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath(); 
-				
-				pictureImageIcon = new ImageIcon(imagePath);
-				
-				picture.setIcon(pictureImageIcon);
-				imageBackground.add(picture, BorderLayout.CENTER);
-
-				// Uppdatera värden
-				pathToPicture = imagePath;
-
-				File tempFile = new File(pathToPicture);
-				
-				double fileSize = (double)tempFile.length();
-				String fileSizeString = "";
-				String prefix = "";
-				String toolTipPrefix = "";
-				
-				if(fileSize > 10000){
-					fileSizeString = Double.toString(fileSize/1000);
-					prefix = "K";
-					toolTipPrefix = "Kilo";
-				}
-				
-				setStatusMessages(fileSizeString, prefix, toolTipPrefix);
-
-				// Om knappen justera storlek automatiskt är intryckt
-				if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
-					double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
-					double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
-
-					Rectangle tempRect = imageBackground.getVisibleRect();
-
-					double backgroundWidth = tempRect.getWidth();
-					double backgroundHeight = tempRect.getHeight();
-
-					if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
-						adjustToWindowSizeJButton.doClick();
-						adjustToWindowSizeJButton.doClick();
-					}
-				}
-				
-				metaDataPanel.setMetaData(tempFile);
+			if (imageToViewListIndex == 0) {
+				imageToViewListIndex = imagesToViewListSize - 1;
+			} else {
+				imageToViewListIndex -= 1;
 			}
-
-			else if(actionCommand.equals("Forward")) {
-				System.gc();
-				
-				if (imageToViewListIndex == imagesToViewListSize - 1) {
-					imageToViewListIndex = 0;
-				} else {
-					imageToViewListIndex += 1;
-				}
-				
-				String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath(); 
-				
-				pictureImageIcon = new ImageIcon(imagePath);
-
-				picture.setIcon(pictureImageIcon);
-				imageBackground.add(picture, BorderLayout.CENTER);
-
-				// Uppdatera värden
-				pathToPicture = imagePath;
-
-				File tempFile = new File(pathToPicture);
-
-				double fileSize = (double)tempFile.length();
-				String fileSizeString = "";
-				String prefix = "";
-				String toolTipPrefix = "";
-				
-				if(fileSize > 10000){
-					fileSizeString = Double.toString(fileSize/1000);
-					prefix = "K";
-					toolTipPrefix = "Kilo";
-				}
-				
-				setStatusMessages(fileSizeString, prefix, toolTipPrefix);
-							
-				// Om knappen justera storlek automatiskt är intryckt
-				if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
-					double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
-					double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
-
-					Rectangle tempRect = imageBackground.getVisibleRect();
-
-					double backgroundWidth = tempRect.getWidth();
-					double backgroundHeight = tempRect.getHeight();
-
-					if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
-						adjustToWindowSizeJButton.doClick();
-						adjustToWindowSizeJButton.doClick();
-					}
-				}
-				
-				metaDataPanel.setMetaData(tempFile);
+			
+			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
+			
+			// Uppdatera värden
+			pathToPicture = imagePath;
+			
+			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
+			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
+			    try {
+			    	Thread.sleep(200);
+			    } catch(InterruptedException ie) {
+			    }
 			}
-
-			 if(actionCommand.equals("automaticAdjustToWindowSize")) {
-				if(automaticAdjustToWindowSizeJToggleButton.isSelected()) { 
-					double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
-					double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
-
-					Rectangle tempRect = imageBackground.getVisibleRect();
-
-					double backgroundWidth = tempRect.getWidth();
-					double backgroundHeight = tempRect.getHeight();
-
-					if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
-						System.gc();
-						adjustToWindowSizeJButton.doClick();
-					}
-				}
+			
+			loadImageAndSetStatusBar(img);		
+		}	
+	}
+	
+	private class ToolBarButtonNext implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Total memory: " + Runtime.getRuntime().totalMemory());
+			
+			if (imageToViewListIndex == imagesToViewListSize - 1) {
+				imageToViewListIndex = 0;
+			} else {
+				imageToViewListIndex += 1;
 			}
-
-			else if(actionCommand.equals("adjustToWindowSize")) {
-				System.gc();
+			
+			
+			
+			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
+			
+			// Uppdatera värden
+			pathToPicture = imagePath;
+			
+			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
+			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
+			    try {
+			    	Thread.sleep(200);
+			    } catch(InterruptedException ie) {
+			    }
+			}
+			
+			
+				loadImageAndSetStatusBar(img);
+				System.out.println("Free memory : " + Runtime.getRuntime().freeMemory());
+		}
+	}
+	
+	private class ToolBarButtonAutomaticAdjustToWindowSize implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(automaticAdjustToWindowSizeJToggleButton.isSelected()) { 
 				double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
 				double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
 
@@ -449,36 +533,92 @@ public class ImageViewer extends JFrame {
 				double backgroundWidth = tempRect.getWidth();
 				double backgroundHeight = tempRect.getHeight();
 
-				if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)) {
-					Image tempImage;
-					if((iconWidth>backgroundWidth)&&(iconHeight<=backgroundHeight)) {
-						tempImage = pictureImageIcon.getImage();
-						tempImage = tempImage.getScaledInstance((int)backgroundWidth, (int)(iconHeight/(iconWidth/backgroundWidth)), Image.SCALE_FAST);
-						pictureImageIcon.setImage(tempImage);
-						imageBackground.updateUI();
-					} else if((iconWidth<=backgroundWidth)&&(iconHeight>backgroundHeight)) {
-						tempImage = pictureImageIcon.getImage();
-						tempImage = tempImage.getScaledInstance((int)(iconWidth/(iconHeight/backgroundHeight)), (int)backgroundHeight, Image.SCALE_FAST);
-						pictureImageIcon.setImage(tempImage);
-						imageBackground.updateUI();
-					} else if((iconWidth>backgroundWidth)&&(iconHeight>backgroundHeight)) {
-						tempImage = pictureImageIcon.getImage();
-
-						if((iconWidth/backgroundWidth)>(iconHeight/backgroundHeight)) {
-							tempImage = tempImage.getScaledInstance((int)backgroundWidth + 14, (int)(iconHeight/(iconWidth/backgroundWidth)) + 14, Image.SCALE_FAST);
-						} else {
-							tempImage = tempImage.getScaledInstance((int)(iconWidth/(iconHeight/backgroundHeight)) + 14, (int)backgroundHeight + 14, Image.SCALE_FAST);
-						}
-						pictureImageIcon.setImage(tempImage);
-
-						imageBackground.updateUI();
-					}
+				if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
+					System.gc();
+					adjustToWindowSizeJButton.doClick();
 				}
-			} 
-			
-			else if(actionCommand.equals("help")){
-				new HelpViewerGUI().setVisible(true);
 			}
+		}
+	}
+	
+	private class ToolBarButtonAdjustToWindowSize implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.gc();
+			double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
+			double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
+
+			Rectangle tempRect = imageBackground.getVisibleRect();
+
+			double backgroundWidth = tempRect.getWidth();
+			double backgroundHeight = tempRect.getHeight();
+
+			if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)) {
+				Image tempImage;
+				if((iconWidth>backgroundWidth)&&(iconHeight<=backgroundHeight)) {
+					tempImage = pictureImageIcon.getImage();
+					tempImage = tempImage.getScaledInstance((int)backgroundWidth, (int)(iconHeight/(iconWidth/backgroundWidth)), Image.SCALE_FAST);
+					pictureImageIcon.setImage(tempImage);
+					imageBackground.updateUI();
+				} else if((iconWidth<=backgroundWidth)&&(iconHeight>backgroundHeight)) {
+					tempImage = pictureImageIcon.getImage();
+					tempImage = tempImage.getScaledInstance((int)(iconWidth/(iconHeight/backgroundHeight)), (int)backgroundHeight, Image.SCALE_FAST);
+					pictureImageIcon.setImage(tempImage);
+					imageBackground.updateUI();
+				} else if((iconWidth>backgroundWidth)&&(iconHeight>backgroundHeight)) {
+					tempImage = pictureImageIcon.getImage();
+
+					if((iconWidth/backgroundWidth)>(iconHeight/backgroundHeight)) {
+						tempImage = tempImage.getScaledInstance((int)backgroundWidth + 14, (int)(iconHeight/(iconWidth/backgroundWidth)) + 14, Image.SCALE_FAST);
+					} else {
+						tempImage = tempImage.getScaledInstance((int)(iconWidth/(iconHeight/backgroundHeight)) + 14, (int)backgroundHeight + 14, Image.SCALE_FAST);
+					}
+					pictureImageIcon.setImage(tempImage);
+
+					imageBackground.updateUI();
+				}
+			}
+		}
+	}
+	
+	private class ToolBarButtonHelp implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			new HelpViewerGUI().setVisible(true);
+		}
+	}
+	
+	private class OverviewMaximizeButton implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			overViewScrollpane.setVisible(true);
+			Update.updateComponentTreeUI(overViewBackgroundPanel);
+			
+		}
+	}
+	
+	private class OverviewMinimizeButton implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			overViewScrollpane.setVisible(false);
+			Update.updateComponentTreeUI(overViewBackgroundPanel);
+		}
+	}
+	
+	private class OverviewButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			imageToViewListIndex = Integer.parseInt(e.getActionCommand());
+			
+			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
+			
+			// Uppdatera värden
+			pathToPicture = imagePath;
+			
+			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
+			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
+			    try {
+			    	Thread.sleep(200);
+			    } catch(InterruptedException ie) {
+			    }
+			}
+			
+			loadImageAndSetStatusBar(img);
 		}
 	}
 }
