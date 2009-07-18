@@ -47,6 +47,7 @@
 #                      : by Fredrik Möller 2009-05-21
 #                      : by Fredrik Möller 2009-06-02
 #                      : by Fredrik Möller 2009-06-06
+#                      : by Fredrik Möller 2009-07-13
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -389,7 +390,7 @@ statusbar.message.selectedPath              = Vald sökväg:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
-tabbedpane.imageView   = VISA BILDER
+tabbedpane.imageView   = SKAPA BILDLISTOR
 
 ##############################################################################################################
 # I M A G E  V I E W E R                                                                                     #
