@@ -5,6 +5,7 @@ package moller.javapeg.program.gui;
 *                        : 2004-04-23 av Fredrik Möller
 *                        : 2009-06-04 av Fredrik Möller
 *                        : 2009-06-06 av Fredrik Möller
+*                        : 2009-07-07 av Fredrik Möller
 */
 
 import java.awt.BorderLayout;
@@ -42,12 +43,15 @@ public class MetaDataPanel extends JPanel {
 		
 	private DefaultTableModel metaDataTableModel;
 	
-	private Language lang = Language.getInstance();
+	private static Language lang;
 	
 	private JLabel titleLabel;
 	private String titleLabelDefaultText;
 	
-	public MetaDataPanel() {		
+	public MetaDataPanel() {
+		
+		lang = Language.getInstance();
+		
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 
