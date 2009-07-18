@@ -10,6 +10,16 @@
  
  2.2 (2009-xx-xx)
  
+ + A new mode to the application has been added. It is from now on possible to
+   create images lists to be used in external applications. Lists compatible 
+   with the following applications are possible to create:
+   
+   PolyView (http://www.polybytes.com/)
+   
+   It is also possible to save lists in JavaPEG format which later on can be
+   exported to a supported 3rd party list format or having images added or 
+   removed.
+ 
  + Status bar added to the bottom of the GUI, displaying selected directory,
    number of images in selected directory and number of columns and rows in the 
    thumb nail grid.
@@ -25,7 +35,10 @@
    managers.
    
  ~ The file chooser GUI, as a separate window, has been replaced by an always
-   visible and accessible tree structure in the main GUI.     
+   visible and accessible tree structure in the main GUI.
+   
+ ! The progress bar for loading thumb nails was not always centered to the main
+   GUI window when thumb nails was loading.        
 
  2.1 (2009-05-21)
  
