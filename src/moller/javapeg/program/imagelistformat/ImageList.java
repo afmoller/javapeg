@@ -4,6 +4,7 @@ package moller.javapeg.program.imagelistformat;
 * Latest changed         : 2009-07-14 by Fredrik Möller
 *                        : 2009-07-16 by Fredrik Möller
 *                        : 2009-07-18 by Fredrik Möller
+*                        : 2009-07-19 by Fredrik Möller
 */
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.File;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import moller.javapeg.program.language.Language;
 import moller.util.io.FileUtil;
 
 public class ImageList {
@@ -19,11 +21,14 @@ public class ImageList {
 	 * The static singleton instance of this class.
 	 */
 	private static ImageList instance;
+	
+	private static Language lang;
 			
 	/**
 	 * Private constructor.
 	 */
 	private ImageList() {
+		lang = Language.getInstance();
 	}
 
 	/**
@@ -57,8 +62,7 @@ public class ImageList {
 		}
 
 		if(destination.exists()) {
-//			TODO: Remove hard coded string
-			int returnValue = JOptionPane.showConfirmDialog(null, destination.getAbsolutePath() + " already exists. Overwrite?");
+			int returnValue = JOptionPane.showConfirmDialog(null, destination.getAbsolutePath() + " " + lang.get("maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists"));
 				
 			/**
 			 * 0 indicates a yes answer, and then the file shall be overwritten
