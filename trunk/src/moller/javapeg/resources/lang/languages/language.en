@@ -223,6 +223,37 @@ language.option.gui.information.windowlabel    = Information
 language.option.gui.information.restartMessage = Selected language will not be used until JavaPEG is restarted
 
 ##############################################################################################################
+# M A I N  G U I  T A B B E D  P A N E                                                                       #
+##############################################################################################################
+maingui.tabbedpane.imagelist.label.list                 = IMAGE LIST
+maingui.tabbedpane.imagelist.label.preview              = PREVIEW
+maingui.tabbedpane.imagelist.label.numberOfImagesInList = Number of images in list:
+
+maingui.tabbedpane.imagelist.button.removeSelectedImages = Remove selected images from the list
+maingui.tabbedpane.imagelist.button.removeAllImages      = Remove all images from the list
+maingui.tabbedpane.imagelist.button.openImageList        = Open an saved image list
+maingui.tabbedpane.imagelist.button.saveImageList        = Save the image list
+maingui.tabbedpane.imagelist.button.exportImageList      = Export the image list
+maingui.tabbedpane.imagelist.button.moveUp               = Move selected image upwards in the list
+maingui.tabbedpane.imagelist.button.moveDown             = Move selected image downwards in the list
+
+maingui.tabbedpane.imagelist.filechooser.openImageList.title = Open 
+maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
+maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = The following files listed in the selected file does not exist, and was not loaded to the list:
+
+maingui.tabbedpane.imagelist.filechooser.saveImageList.title = Save
+
+maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
+
+maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = already exists. Overwrite?
+
+##############################################################################################################
+# M A I N  G U I  P O P U P  M E N U                                                                         #
+##############################################################################################################
+maingui.popupmenu.addImageToList     = Add image to image list
+maingui.popupmenu.addAllImagesToList = Add All images to image list
+
+##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
 ##############################################################################################################
 information.window.userHelpWindowTitle           = Program help

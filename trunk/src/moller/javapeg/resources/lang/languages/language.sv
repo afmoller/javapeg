@@ -91,7 +91,6 @@ labels.destinatonPath   = SÖKVÄG TILL DESTINATIONSKATALOG
 labels.subFolderName    = UNDERKATALOGSMALL
 labels.fileNameTemplate = FILNAMNSMALL
 labels.variables        = VARIABLER
-labels
 
 ##############################################################################################################
 # V A R I A B L E S                                                                                          #
@@ -222,6 +221,37 @@ language.option.gui.window.locationError = Kunde inte sätta fönsterposition enli
 ##############################################################################################################
 language.option.gui.information.windowlabel    = Information
 language.option.gui.information.restartMessage = Valt språk kommer inte användas innan JavaPEG startats om
+
+##############################################################################################################
+# M A I N  G U I  T A B B E D  P A N E                                                                       #
+##############################################################################################################
+maingui.tabbedpane.imagelist.label.list                 = BILDLISTA
+maingui.tabbedpane.imagelist.label.preview              = FÖRHANDSGRANSKNING
+maingui.tabbedpane.imagelist.label.numberOfImagesInList = Antal bilder i bildlistan:
+
+maingui.tabbedpane.imagelist.button.removeSelectedImages = Ta bort markerade bilder från listan
+maingui.tabbedpane.imagelist.button.removeAllImages      = Ta bort alla bilder från listan
+maingui.tabbedpane.imagelist.button.openImageList        = Öpna en sparad bildlista
+maingui.tabbedpane.imagelist.button.saveImageList        = Spara bildlistan
+maingui.tabbedpane.imagelist.button.exportImageList      = Exportera bildlistan
+maingui.tabbedpane.imagelist.button.moveUp               = Flytta vald bild uppåt i listan
+maingui.tabbedpane.imagelist.button.moveDown             = Flytta vald bild nedåt i listan
+
+maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Öppna 
+maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Bildlistan är inte sparad, skriv över?
+maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = Följande filer listade i den valda filen finns inte och laddades därmed inte till listan:
+
+maingui.tabbedpane.imagelist.filechooser.saveImageList.title = Spara
+
+maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
+
+maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva över?
+
+##############################################################################################################
+# M A I N  G U I  P O P U P  M E N U                                                                         #
+##############################################################################################################
+maingui.popupmenu.addImageToList     = Lägg till bild till bildlistan
+maingui.popupmenu.addAllImagesToList = Lägg till alla bilder till bildlistan
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
