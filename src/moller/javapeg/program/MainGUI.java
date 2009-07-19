@@ -48,6 +48,7 @@ package moller.javapeg.program;
  *                        : 2009-07-13 by Fredrik Möller
  *                        : 2009-07-15 by Fredrik Möller
  *                        : 2009-07-18 by Fredrik Möller
+ *                        : 2009-07-19 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -656,44 +657,37 @@ public class MainGUI extends JFrame {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
 			removePictureImageIcon.setImage(ImageIO.read(imageStream));
 			removeSelectedImagesButton.setIcon(removePictureImageIcon);
-//			TODO: Fix hard coded string
-			removeSelectedImagesButton.setToolTipText("Remove selected images from view list");
+			removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
 			removeAllPictureImageIcon.setImage(ImageIO.read(imageStream));
 			removeAllImagesButton.setIcon(removeAllPictureImageIcon);	
-//			TODO: Fix hard coded string
-			removeAllImagesButton.setToolTipText("Remove all images from view list");
+			removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif");
 			openImageListImageIcon.setImage(ImageIO.read(imageStream));
 			openImageListButton.setIcon(openImageListImageIcon);	
-//			TODO: Fix hard coded string
-			openImageListButton.setToolTipText("Open an saved Image List");
+			openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif");
 			saveImageListImageIcon.setImage(ImageIO.read(imageStream));
 			saveImageListButton.setIcon(saveImageListImageIcon);	
-//			TODO: Fix hard coded string
-			saveImageListButton.setToolTipText("Save an Image List");
+			saveImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.saveImageList"));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/export.gif");
 			exportImageListImageIcon.setImage(ImageIO.read(imageStream));
 			exportImageListButton.setIcon(exportImageListImageIcon);	
-//			TODO: Fix hard coded string
-			exportImageListButton.setToolTipText("Export an Image List");
+			exportImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.exportImageList"));
 						
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/up.gif");
 			moveUpImageIcon.setImage(ImageIO.read(imageStream));
 			moveUpButton.setIcon(moveUpImageIcon);	
-//			TODO: Fix hard coded string
-			moveUpButton.setToolTipText("Move selected image(s) up in the List");
+			moveUpButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveUp"));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/down.gif");
 			moveDownImageIcon.setImage(ImageIO.read(imageStream));
 			moveDownButton.setIcon(moveDownImageIcon);	
-//			TODO: Fix hard coded string
-			moveDownButton.setToolTipText("Move selected image(s) down in the List");
+			moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
 
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
@@ -723,16 +717,14 @@ public class MainGUI extends JFrame {
 		GBHelper posBackgroundPanel = new GBHelper();
 
 		JScrollPane spImageList = new JScrollPane(imagesToViewList);
-				
-//		TODO: Fix hard coded string
-		JLabel imageListLabel = new JLabel("IMAGE LIST");
+
+		JLabel imageListLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.list"));
 		imageListLabel.setForeground(Color.GRAY);
 
 		amountOfImagesInImageListLabel = new JLabel();
 		this.setNrOfImagesLabels();
-		
-//		TODO: Fix hard coded strings
-		JLabel previewLabel = new JLabel("PREVIEW");
+
+		JLabel previewLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.preview"));
 		previewLabel.setForeground(Color.GRAY);
 		
 		JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
@@ -906,10 +898,9 @@ public class MainGUI extends JFrame {
 	public void createRightClickMenu(){
 		
 		rightClickMenu = new JPopupMenu();
-		
-//		TODO: Fix hard coded strings
-		popupMenuAddImageToViewList = new JMenuItem("Add image to view list");
-		popupMenuAddAllImagesToViewList = new JMenuItem("Add All images to view list");
+
+		popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
+		popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
 		
 		rightClickMenu.add(popupMenuAddImageToViewList);
 		rightClickMenu.add(popupMenuAddAllImagesToViewList);
@@ -928,7 +919,8 @@ public class MainGUI extends JFrame {
 	
 	public void initiateApplicationContext() {
 		ApplicationContext ac = ApplicationContext.getInstance();
-		ac.setSourcePath(config.getStringProperty("sourcePath"));
+		// Disabled to avoid NPE:s with current model of load previous path at application start (Not loading)
+//		ac.setSourcePath(config.getStringProperty("sourcePath"));
 		ac.setTemplateFileName(config.getStringProperty("fileNameTemplate"));
 		ac.setTemplateSubFolderName(config.getStringProperty("subFolderName"));
 		ac.setCreateThumbNailsCheckBoxSelected(config.getBooleanProperty("createThumbNailsCheckBox"));
@@ -1194,7 +1186,7 @@ public class MainGUI extends JFrame {
 				fileNameTemplate = fileNameTemplateTextField.getText();
 				fileNameTemplate = fileNameTemplate.trim();
 				fileNameTemplateTextField.setText(fileNameTemplate);
-								
+												
 				Thread renameThread = new Thread() {
 					
 					public void run(){
@@ -1361,8 +1353,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void setNrOfImagesLabels () {
-//		TODO: Fix hard coded strings
-		amountOfImagesInImageListLabel.setText("Number of images in list: " + Integer.toString(imagesToVievListModel.size()));
+		amountOfImagesInImageListLabel.setText(lang.get("maingui.tabbedpane.imagelist.label.numberOfImagesInList") + " " + Integer.toString(imagesToVievListModel.size()));
 	}
 	
 	private void setStatusMessages() {
@@ -1441,9 +1432,7 @@ public class MainGUI extends JFrame {
 			JFileChooser chooser = new JFileChooser();
 							
 			chooser.setAcceptAllFileFilterUsed(false);
-//			TODO: Remove hard coded string
-			chooser.setDialogTitle("Open");
-										
+			chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.title"));
 			chooser.addChoosableFileFilter(fileFilterPolyView);
 							
 			File source = null;	
@@ -1452,8 +1441,7 @@ public class MainGUI extends JFrame {
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
 		    	
 		    	if(!imagesToVievListModel.isEmpty()) {
-//					TODO: Remove hard coded string
-		    		int returnValue = JOptionPane.showConfirmDialog(null, "Non saved image list exists, overwrite?");
+		    		int returnValue = JOptionPane.showConfirmDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage"));
 					
 					/**
 					 * 0 indicates a yes answer, and then the current list 
@@ -1487,9 +1475,8 @@ public class MainGUI extends JFrame {
 						StringBuilder missingFilesErrorMessage = new StringBuilder();
 						
 						String lS = System.getProperty("line.separator");
-						
-//						TODO: Remove hard coded string
-						missingFilesErrorMessage.append("The following files listed in the selected file does not exist, and was not loaded to the list:");
+
+						missingFilesErrorMessage.append(lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage"));
 						missingFilesErrorMessage.append(lS);
 						missingFilesErrorMessage.append(lS);
 													
@@ -1519,17 +1506,14 @@ public class MainGUI extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 								
 				chooser.setAcceptAllFileFilterUsed(false);
-//				TODO: Remove hard coded string
-				chooser.setDialogTitle("Save");
-											
+				chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.saveImageList.title"));
 				chooser.addChoosableFileFilter(fileFilterPolyView);
 								
 				File destination = null;	
 				
 				int returnVal = chooser.showSaveDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-			    	destination = chooser.getSelectedFile();
-			    				    	
+			    	destination = chooser.getSelectedFile();			    				    	
 			    	ImageList.getInstance().createList(imagesToVievListModel, destination, "jil");
 			    }
 			}
@@ -1574,9 +1558,7 @@ public class MainGUI extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 								
 				chooser.setAcceptAllFileFilterUsed(false);
-//				TODO: Remove hard coded string
-				chooser.setDialogTitle("Export");
-											
+				chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.exportImageList.title"));
 				chooser.addChoosableFileFilter(fileFilterPolyView);
 								
 				File destination = null;	
