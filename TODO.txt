@@ -1,6 +1,5 @@
 2.2:
 ====
-- Fix "before process validation" of inputs in rename mode.
 - Fix all TODO:s
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
@@ -12,9 +11,7 @@
 
 2.3:
 ====
-- Add move up / down buttons to the "Images to view" list
 - Add move to top / bottom buttons to the "Images to view" list
-- Add possibility to save and open "view lists"
 - Add functionality to load latest showed image path at application start.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
