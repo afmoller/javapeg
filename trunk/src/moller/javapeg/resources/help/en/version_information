@@ -3,9 +3,26 @@ VERSION INFORMATION<LF>
 Below is a description of what each version of JavaPEG has been able to do.
 <LF>
 <LF>
+Version 2.2<LF>
+===========<LF>
+Released 2009-xx-xx Version 2.2 of JavaPEG has got a new layout of the graphical user interface. From now on it can be resized and thereby can be made to use the entire screen of a high resolution monitor. All major panels can be adjusted regarding their size and they can also be completely hidden to free up space for the nonhidden panels. The size of each panel is saved between application sessions.
+<LF>
+<LF>
+The second major difference is that the source selection window has been removed and has been replaced with an instant available tree structure displaying the file system. 
+<LF>
+<LF>
+There is also an added meta data panel which is showing detailed meta data for the images. The meta data is loaded and displayed when a thumb nail images is marked.
+<LF>
+<LF>
+A statusbar has been added to the bottom of the user interface. That statusbar displays selected path and the amount of images in that directory and how many columns and rows that is displayed in the thumb nail grid.
+<LF>
+<LF>
+Besides from above JavaPEG 2.2 has been given an entire new mode of operation. It is from now on possible, not only to rename images but also, to create image lists (slide shows). It is possible to save lists in an internal JavaPEG format and then load them later on for further processing. It is also possible to export image lists to image list formats supported by third party software. In version 2.2 of JavaPEG there is support for exporting lists to PolyView format.
+<LF>
+<LF>
 Version 2.1<LF>
 ===========<LF>
-Released 2009-05-21 Version 2.1 av JavaPEG has got detailed information added to the rename process progress window about the JPEG rename process, process of copy any non JPEG files and the file integrity after the rename and file copy.
+Released 2009-05-21 Version 2.1 of JavaPEG has got detailed information added to the rename process progress window about the JPEG rename process, process of copy any non JPEG files and the file integrity after the rename and file copy.
 <LF>
 <LF>
 JavaPEG can from version 2.1, do an optional (configurable) version check at application start. It does it against an version server. If there is a new version available, the changes for that version compared to the current used version is presented. It is also possible to download the new version through JavaPEG

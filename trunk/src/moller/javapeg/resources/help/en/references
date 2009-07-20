@@ -1,4 +1,4 @@
 LIBRARIES<LF>
 =========<LF>
-Internally JavaPEG uses the meta data extractor library, created by Drew Noakes, to fetch the meta data for each image that shall be renamed. 
+The meta data extractor library, created by Drew Noakes, is used internally in JavaPEG to fetch the meta data for each image that shall be renamed. 
 Information about this library can be found at: http://www.drewnoakes.com/code/exif/
