@@ -1,6 +1,5 @@
 2.2:
 ====
-- Fix all TODO:s
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
