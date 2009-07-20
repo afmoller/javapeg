@@ -66,7 +66,7 @@ menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
-menu.item.about                      = Om JavaPEG 2.1
+menu.item.about                      = Om JavaPEG 2.2
 menu.item.languageChoice             = Språkval
 
 #############################################################################################################
@@ -146,12 +146,12 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = Om JavaPEG 2.1
-aboutDialog.TextRowA = JavaPEG, ver: 2.1
+aboutDialog.Label    = Om JavaPEG 2.2
+aboutDialog.TextRowA = JavaPEG, ver: 2.2
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
 aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-05-21.
-aboutDialog.TextRowE = Version 2.1 släppt 2009-05-21.
+aboutDialog.TextRowE = Version 2.2 släppt 2009-05-21.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -275,14 +275,17 @@ picture.panel.pictureLabel = BILDER I VALD MAPP
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
-helpViewerGUI.window.locationError    = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-helpViewerGUI.window.title            = Hjälp
-helpViewerGUI.errorMessage            = Kunde inte ladda hjälpfil, se loggfil för detaljer.
-helpViewerGUI.tree.content            = Innehåll
-helpViewerGUI.tree.programHelp        = Programhjälp
-helpViewerGUI.tree.versionInformation = Versionsinformation
-helpViewerGUI.tree.overviewCreator    = Tumnagelöversikt
-helpViewerGUI.tree.references         = Referenser
+helpViewerGUI.window.locationError      = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+helpViewerGUI.window.title              = Hjälp
+helpViewerGUI.errorMessage              = Kunde inte ladda hjälpfil, se loggfil för detaljer.
+
+helpViewerGUI.tree.content                    = Innehåll
+helpViewerGUI.tree.programHelpOverView        = Programhjälp Översikt
+helpViewerGUI.tree.programHelpRename          = Byt namn
+helpViewerGUI.tree.programHelpImageList       = Bildlista
+helpViewerGUI.tree.programHelpOverviewCreator = Tumnagelöversikt
+helpViewerGUI.tree.versionInformation         = Versionsinformation
+helpViewerGUI.tree.references                 = Referenser
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
