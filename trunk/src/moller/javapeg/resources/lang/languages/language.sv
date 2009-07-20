@@ -48,6 +48,8 @@
 #                      : by Fredrik Möller 2009-06-02
 #                      : by Fredrik Möller 2009-06-06
 #                      : by Fredrik Möller 2009-07-13
+#                      : by Fredrik Möller 2009-07-19
+#                      : by Fredrik Möller 2009-07-20
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -247,6 +249,12 @@ maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
 maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva över?
 
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = Bildlistan sparades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = Bildlistan kunde inte sparas, se loggfil för detaljer.
+
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = Bildlistan i PolyView-format skapades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
+
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
 ##############################################################################################################
@@ -269,6 +277,7 @@ picture.panel.pictureLabel = BILDER I VALD MAPP
 ##############################################################################################################
 helpViewerGUI.window.locationError    = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
 helpViewerGUI.window.title            = Hjälp
+helpViewerGUI.errorMessage            = Kunde inte ladda hjälpfil, se loggfil för detaljer.
 helpViewerGUI.tree.content            = Innehåll
 helpViewerGUI.tree.programHelp        = Programhjälp
 helpViewerGUI.tree.versionInformation = Versionsinformation
@@ -387,10 +396,12 @@ thumbnailoverview.LayoutParser.parseError         = Fel vid inläsning av layout.
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
 
-updatechecker.errormessage.uRLInvalid     = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.errormessage.uRLWrong       = Fel url till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.errormessage.networkTimeOut = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
-updatechecker.errormessage.downloadError  = Kunde inte ladda ner den senaste versionen. Se loggfil för detaljer.
+updatechecker.errormessage.uRLInvalid                  = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.errormessage.uRLWrong                    = Fel url till uppdateringsservern. Se loggfil för detaljer.
+updatechecker.errormessage.networkTimeOut              = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
+updatechecker.errormessage.downloadError               = Kunde inte ladda ner den senaste versionen. Se loggfil för detaljer.
+updatechecker.errormessage.parseException              = Kunde inte läsa hämtad fil, se loggfil för detaljer.
+updatechecker.errormessage.parseConfigurationException = Kunde inte konfigurera en XML parser. Se loggfil för detaljer.
 
 updatechecker.informationmessage.downloadFinished = Nedladdningen klar.
 
@@ -447,3 +458,9 @@ imageviewer.statusbar.widthLabel       = B:
 imageviewer.statusbar.widthLabelImage  = Bildbredd i pixlar
 imageviewer.statusbar.heightLabel      = H:
 imageviewer.statusbar.heightLabelImage = Bildhöjd i pixlar
+
+##############################################################################################################
+# F I L E  R E T R I E V E R                                                                                 #
+##############################################################################################################
+fileretriever.canNotFindFile     = Kan inte hitta filen. Se loggfil för detaljer.
+fileretriever.canNotReadFromFile = Kan inte läsa från filen. Det kan vara ett annat program som låst filen. Se loggfil för detaljer.
