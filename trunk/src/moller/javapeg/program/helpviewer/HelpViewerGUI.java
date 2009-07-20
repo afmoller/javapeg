@@ -6,6 +6,7 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-04-21 by Fredrik Möller
  *                        : 2009-04-24 by Fredrik Möller
  *                        : 2009-04-27 by Fredrik Möller
+ *                        : 2009-07-20 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -50,20 +51,23 @@ public class HelpViewerGUI extends JFrame {
 	
 	private JSplitPane splitPane;
 			
-	private Config conf = Config.getInstance();
-	private Language lang = Language.getInstance();
-	
+	private Config   conf;
+	private Logger   logger;
+	private Language lang;
+		
 	private String content = "";
 		
 	public HelpViewerGUI() {
+		conf   = Config.getInstance();
+		logger = Logger.getInstance();
+		lang   = Language.getInstance();
+				
 		this.initiateWindow();
 		this.addListeners();
 	}
 	
 	private void initiateWindow() {
-				
-		Logger logger = Logger.getInstance();
-						
+								
 		this.setSize(new Dimension(conf.getIntProperty("helpViewerGUI.window.width"),conf.getIntProperty("helpViewerGUI.window.height")));
 				
 		Point xyFromConfig = new Point(conf.getIntProperty("helpViewerGUI.window.location.x"),conf.getIntProperty("helpViewerGUI.window.location.y"));
@@ -102,8 +106,7 @@ public class HelpViewerGUI extends JFrame {
 		this.setTitle(lang.get("helpViewerGUI.window.title"));
 	}
 	
-	private JSplitPane initiateSplitPane() {
-		
+	private JSplitPane initiateSplitPane() {	
 		backgroundsPanel = new JPanel(new BorderLayout());
 		backgroundsPanel.add(this.initiateContentPanel(), BorderLayout.CENTER);
 		
@@ -135,8 +138,7 @@ public class HelpViewerGUI extends JFrame {
 		conf.setIntProperty("helpViewerGUI.window.height", this.getSize().height);	
 	}
 		
-	private JScrollPane initiateJTree() {
-			
+	private JScrollPane initiateJTree() {		
 		tree = new JTree(HelpViewerGUIUtil.createNodes());
 		tree.setShowsRootHandles (true);
 		tree.addMouseListener(new Mouselistener());
@@ -150,15 +152,16 @@ public class HelpViewerGUI extends JFrame {
 	}
 		
 	private JTextArea getContent(int selectedRow) {
-		
 		if (content.equals("") && selectedRow > -1) {
-			String lang = conf.getStringProperty("gUILanguageISO6391");
+			String confLang = conf.getStringProperty("gUILanguageISO6391");
 							
 			try {
-				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + lang + HelpViewerGUIUtil.getFile(selectedRow)));
+				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + HelpViewerGUIUtil.getFile(selectedRow)));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.errorMessage"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+				logger.logERROR("Could not load embedded help file:");
+				logger.logERROR(e);
 			}
 			content = content.replaceAll("\r", "");
 			content = content.replaceAll("\n", "");

@@ -1,7 +1,7 @@
 package moller.javapeg.program.imagelistformat;
 /**
 * This class was created : 2009-07-18 by Fredrik Möller
-* Latest changed         : 
+* Latest changed         : 2009-07-20 by Fredrik Möller
 */
 
 import java.io.File;
@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
 
@@ -35,7 +36,7 @@ public class PolyView {
 	
 	private static Logger  logger = Logger.getInstance();
 	
-	public static void createAndWriteToFile(DefaultListModel images, File file) {
+	public static void createAndWriteToFile(DefaultListModel images, File file, Language lang) {
 		
 		boolean success = true;
 		
@@ -61,12 +62,9 @@ public class PolyView {
 		}
 		
 		if(success) {
-//			TODO: Remove hard coded string
-			JOptionPane.showMessageDialog(null, "The Image list in PolyView format was successfully created.", "", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated"), "", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-//			TODO: Remove hard coded string
-			JOptionPane.showMessageDialog(null, "The Image list in PolyView format could not be created, see log file for details.", "", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated"), "", JOptionPane.ERROR_MESSAGE);
 		}	
 	}
-
 }

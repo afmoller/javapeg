@@ -5,6 +5,7 @@ package moller.javapeg.program.imagelistformat;
 *                        : 2009-07-16 by Fredrik Möller
 *                        : 2009-07-18 by Fredrik Möller
 *                        : 2009-07-19 by Fredrik Möller
+*                        : 2009-07-20 by Fredrik Möller
 */
 
 import java.io.File;
@@ -22,6 +23,9 @@ public class ImageList {
 	 */
 	private static ImageList instance;
 	
+	/**
+	 * Language instance, to be able to have localization
+	 */
 	private static Language lang;
 			
 	/**
@@ -45,10 +49,6 @@ public class ImageList {
 			}
 			return instance;
 		}
-	}
-		
-	public String getName() {
-		return "ImageList";
 	}
 		
 	public void createList(DefaultListModel images, File destination, String fileExtension) {
@@ -75,9 +75,9 @@ public class ImageList {
 		}
 		
 		if (fileExtension.equals("pvs")) {
-			PolyView.createAndWriteToFile(images, destination);
+			PolyView.createAndWriteToFile(images, destination, lang);
 		} else if (fileExtension.equals("jil")) {
-			JavaPEG.createAndWriteToFile(images, destination);	
+			JavaPEG.createAndWriteToFile(images, destination, lang);	
 		}
 	}
 }

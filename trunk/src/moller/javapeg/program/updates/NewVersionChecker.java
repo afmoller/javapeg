@@ -3,6 +3,7 @@ package moller.javapeg.program.updates;
  * This class was created : 2009-05-16 by Fredrik Möller
  * Latest changed         : 2009-05-17 by Fredrik Möller
  *                        : 2009-05-20 by Fredrik Möller
+ *                        : 2009-07-20 by Fredrik Möller
  */
 
 import java.io.IOException;
@@ -88,11 +89,11 @@ public class NewVersionChecker {
 			errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + versionURL.toString() + ")";
 			logger.logERROR(e);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + versionURL.toString() + ")";
+			logger.logERROR(e);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + versionURL.toString() + ")";
+			logger.logERROR(e);
 		}
 		if (errorMessage.length() > 0) {
 			JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
@@ -101,7 +102,8 @@ public class NewVersionChecker {
 	}
 	
 	public Map<Long, VersionInformation> getVersionInformation (long applicationVersion) {
-			
+		
+		String errorMessage = "";
 		URL changeLogURL = null;
 				
 		Map<Long, VersionInformation> vim = null;
@@ -110,54 +112,56 @@ public class NewVersionChecker {
 			changeLogURL = new URL(urlChangeLog);
 			vim = UpdateChecker.getVersionInformationMap(changeLogURL, timeOut);	
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlChangeLog + ")";
+			logger.logERROR(e);
 		} catch (SocketTimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + changeLogURL.toString() + ")";
+			logger.logERROR(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + changeLogURL.toString() + ")";
+			logger.logERROR(e);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + changeLogURL.toString() + ")";
+			logger.logERROR(e);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+			errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + changeLogURL.toString() + ")";
+			logger.logERROR(e);
+		}
+		if (errorMessage.length() > 0) {
+			JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+		}
 		return vim;
 	}
 	
 	public String getChangeLog(Map<Long, VersionInformation> versionInformationMap, long applicationVersion) {
 				
 		StringBuilder changeLogsText = null;
-		changeLogsText = new StringBuilder();
+		changeLogsText = new StringBuilder(512);
 		
 		Set<Long> reversedOrderSortedTimeStamps = new TreeSet<Long>(Collections.reverseOrder());
 		reversedOrderSortedTimeStamps.addAll(versionInformationMap.keySet());
 
-		String lineSeparator = System.getProperty("line.separator");
+		String lS = System.getProperty("line.separator");
+		
+		String prolog =                                          lS +
+		                "+ = Additions since previous version" + lS +
+		                "! = Bug fixes since previous version" + lS +
+		                "~ = Changes   since previous version" + lS +
+		                                                         lS;
 		
 		if (reversedOrderSortedTimeStamps.size() > 0) {
-			changeLogsText.append(lineSeparator);
-			changeLogsText.append("+ = Additions since previous version");
-			changeLogsText.append(lineSeparator);
-			changeLogsText.append("! = Bug fixes since previous version");
-			changeLogsText.append(lineSeparator);
-			changeLogsText.append("~ = Changes   since previous version");
-			changeLogsText.append(lineSeparator);
-			changeLogsText.append(lineSeparator);
+			changeLogsText.append(prolog);
 		}
 				
 		for (Long  timeStamp : reversedOrderSortedTimeStamps) {
 			if(timeStamp > applicationVersion) {
 				changeLogsText.append("Version: ");
 				changeLogsText.append(versionInformationMap.get(timeStamp).getVersionNumber());
-				changeLogsText.append(lineSeparator);
-				changeLogsText.append(lineSeparator);
+				changeLogsText.append(lS);
+				changeLogsText.append(lS);
 				changeLogsText.append(versionInformationMap.get(timeStamp).getChangeLogs().get(timeStamp).getChangeLog());
-				changeLogsText.append(lineSeparator);
-				changeLogsText.append(lineSeparator);
+				changeLogsText.append(lS);
+				changeLogsText.append(lS);
 			}	
 		}
 		return changeLogsText.toString();
