@@ -1,12 +1,10 @@
 2.2:
 ====
 - Update version numbers in language files
-- Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
-- Enter values to the change log.
+- Test all functionality.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-- Test all functionality.
 
 2.3:
 ====
