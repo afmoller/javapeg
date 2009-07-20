@@ -4,6 +4,7 @@ package moller.javapeg.program;
  * Latest changed         : 2009-02-03 by Fredrik Möller
  *                        : 2009-03-10 by Fredrik Möller
  *                        : 2009-06-17 by Fredrik Möller
+ *                        : 2009-07-20 by Fredrik Möller
  */
 
 import java.io.File;
@@ -14,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
+
+import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.JPEGUtil;
 
 public class FileRetriever {
@@ -37,6 +42,9 @@ public class FileRetriever {
 	 */
 	private Map<String, File> nonJpegFileNameFileObjectMap;
 	
+	private static Language lang;
+	private static Logger   logger;
+	
 	/**
 	 * Accessor method for this Singleton class.
 	 * 
@@ -54,6 +62,9 @@ public class FileRetriever {
 	}
 	
 	private FileRetriever() {
+		lang   = Language.getInstance();
+		logger = Logger.getInstance();
+		
 		jpegFileNameFileObjectMap    = new HashMap<String, File>(128);
 		nonJpegFileNameFileObjectMap = new HashMap<String, File>(128);
 	}
@@ -80,12 +91,14 @@ public class FileRetriever {
 					} else {
 						nonJpegFileNameFileObjectMap.put(file.getName(), file);
 					}
-				} catch (FileNotFoundException e) {
-					// TODO Fix notification about file not found
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Fix notification about can not read from file.
-					e.printStackTrace();
+				} catch (FileNotFoundException fnfex) {
+					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					logger.logERROR("Could not find file:");
+					logger.logERROR(fnfex);
+				} catch (IOException iox) {
+					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotReadFromFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					logger.logERROR("Can not read from file:");
+					logger.logERROR(iox);
 				}
 			}
   	  	}
