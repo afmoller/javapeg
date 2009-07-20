@@ -67,7 +67,7 @@ menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
-menu.item.about                      = About JavaPEG 2.1
+menu.item.about                      = About JavaPEG 2.2
 menu.item.languageChoice             = Language selection
 
 #############################################################################################################
@@ -147,12 +147,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = About JavaPEG 2.1
-aboutDialog.TextRowA = JavaPEG, ver: 2.1
+aboutDialog.Label    = About JavaPEG 2.2
+aboutDialog.TextRowA = JavaPEG, ver: 2.2
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
 aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-05-21.
-aboutDialog.TextRowE = Version 2.1 released 2009-05-21.
+aboutDialog.TextRowE = Version 2.2 released 2009-05-21.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -276,14 +276,17 @@ picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
-helpViewerGUI.window.locationError    = Could not set window location according to settings. See logs for details 
-helpViewerGUI.window.title            = Help
-helpViewerGUI.errorMessage            = Could not load help file, see log file for details.
-helpViewerGUI.tree.content            = Content
-helpViewerGUI.tree.programHelp        = Program Help
-helpViewerGUI.tree.versionInformation = Version Information
-helpViewerGUI.tree.overviewCreator    = Thumbnail Overview
-helpViewerGUI.tree.references         = References
+helpViewerGUI.window.locationError      = Could not set window location according to settings. See logs for details 
+helpViewerGUI.window.title              = Help
+helpViewerGUI.errorMessage              = Could not load help file, see log file for details.
+helpViewerGUI.tree.content              = Content
+
+helpViewerGUI.tree.programHelpOverView        = Program Help Overview
+helpViewerGUI.tree.programHelpRename          = Rename
+helpViewerGUI.tree.programHelpImageList       = Image List
+helpViewerGUI.tree.programHelpOverviewCreator = Thumbnail Overview
+helpViewerGUI.tree.versionInformation         = Version Information
+helpViewerGUI.tree.references                 = References
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
