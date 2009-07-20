@@ -1,0 +1,6 @@
+PROGRAM DESCRIPTION<LF>
+===================<LF>
+JavaPEG has the possibility to change the file names of jpeg images that contains Exif data, Exchangeable Image File Format. The majority of digital cameras supports this format and saves thereby meta data (information about the file itself) when the image is saved to the media storage of the camera. An example of meta data might be the date when the image was shot.
+<LF>
+<LF>
+As an addition to the rename feature JavaPEG also has the possibility to create thumb nail overviews. These overviews shows thumb nail versions of the full size images. Below each thumb nail it is possible to show meta data about the full size image. Each thumb nail is linked to the full size image. These overviews are created in the HTML format and the purpose with them are that it shall be easy to get an overview of which images that are present in a directory.

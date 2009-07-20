@@ -3,6 +3,23 @@ VERSIONSINFORMATION<LF>
 Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskaper.
 <LF>
 <LF>
+Version 2.2<LF>
+===========<LF>
+Släppt 2009-xx-xx Version 2.2 av JavaPEG har fått en ny layout av det grafiska användargränssnittet. Från och med nu kan storleken förändras och således kan hela skärmytan på en högupplöst monitor utnyttjas helt. Storleken på alla huvudpaneler kan enkelt ändras och de kan även gömmas helt för att ge återstående synliga paneler mer yta. Storleken på varje panel sparas mellan programkörningar.
+<LF>
+<LF>
+En andra stor skilland är att det separata filväljarfönstret för att välja källkatalog har ersatts med en ständigt tillgänglig trädstruktur som visar filsystemet. 
+<LF>
+<LF>
+Det har också lagts till en meta data panel som visar detaljerad meta data för bilderna. Meta datat laddas och visas när en en tumnagelbild markeras.
+<LF>
+<LF>
+En statusrad har lagts till i nederkanten av användargränssnittet. Statusraden visas vald sökväg och antalet bilder i den katalogen och hur många kolumner och rader som visas i tumnagelrutnätet.
+<LF>
+<LF>
+Förutom ovanstående så finns det ett helt nytt funktionalitetsområde i JavaPEG 2.2. Det är från och med nu möjligt, inte bara att byta namn på bilder utan också, att skapa bildlistor (slide shows). Det är möjligt att spara listor i ett internt JavaPEG-format för att senare laddas in igen för vidare bearbetning. Det är också möjligt att exportera bildlistor till listformat som stödjs av tredjeparts programvaror. I version 2.2 av JavaPEG finns det stöd för export av bildlistor till PolyView-format.
+<LF>
+<LF>
 Version 2.1<LF>
 ===========<LF>
 Släppt 2009-05-21 Version 2.1 av JavaPEG har fått detaljerade utskrifter i loggen för namnbytes processen för namnbytet på JPEG-filer, kopierandet av icke JPEG filer och för kontrol av filitegriteten efter nämnda processer.
