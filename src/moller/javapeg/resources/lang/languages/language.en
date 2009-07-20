@@ -49,6 +49,8 @@
 #                      : by Fredrik Möller 2009-06-02
 #                      : by Fredrik Möller 2009-06-06
 #                      : by Fredrik Möller 2009-07-13
+#                      : by Fredrik Möller 2009-07-19
+#                      : by Fredrik Möller 2009-07-20
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -237,15 +239,22 @@ maingui.tabbedpane.imagelist.button.exportImageList      = Export the image list
 maingui.tabbedpane.imagelist.button.moveUp               = Move selected image upwards in the list
 maingui.tabbedpane.imagelist.button.moveDown             = Move selected image downwards in the list
 
-maingui.tabbedpane.imagelist.filechooser.openImageList.title = Open 
+maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Open 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
 maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = The following files listed in the selected file does not exist, and was not loaded to the list:
+maingui.tabbedpane.imagelist.filechooser.openImageList.couldNotReadFile         = Could not read the file, see log file for details. 
 
 maingui.tabbedpane.imagelist.filechooser.saveImageList.title = Save
 
 maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
 maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = already exists. Overwrite?
+
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = The image list was successfully saved.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = The image list could not be saved, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = The Image list in PolyView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = The Image list in PolyView format could not be created, see log file for details.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
@@ -269,6 +278,7 @@ picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 ##############################################################################################################
 helpViewerGUI.window.locationError    = Could not set window location according to settings. See logs for details 
 helpViewerGUI.window.title            = Help
+helpViewerGUI.errorMessage            = Could not load help file, see log file for details.
 helpViewerGUI.tree.content            = Content
 helpViewerGUI.tree.programHelp        = Program Help
 helpViewerGUI.tree.versionInformation = Version Information
@@ -385,10 +395,12 @@ thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xm
 ##############################################################################################################
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
-updatechecker.errormessage.uRLInvalid     = Invalid format of the url to the update server. See log file for details.
-updatechecker.errormessage.uRLWrong       = Wrong url to the update server. See log file for details.
-updatechecker.errormessage.networkTimeOut = Update server did not respond, a retry will be done next application start.
-updatechecker.errormessage.downloadError  = Could not download the latest version. See log file for details.
+updatechecker.errormessage.uRLInvalid                  = Invalid format of the url to the update server. See log file for details.
+updatechecker.errormessage.uRLWrong                    = Wrong url to the update server. See log file for details.
+updatechecker.errormessage.networkTimeOut              = Update server did not respond, a retry will be done next application start.
+updatechecker.errormessage.downloadError               = Could not download the latest version. See log file for details.
+updatechecker.errormessage.parseException              = Could not read the fetched file. See log file for details.
+updatechecker.errormessage.parseConfigurationException = Could not configure an XML parser. See log file for details.
 
 updatechecker.informationmessage.downloadFinished = Download Finished
 
@@ -445,3 +457,8 @@ imageviewer.statusbar.widthLabelImage  = Image width in pixels
 imageviewer.statusbar.heightLabel      = H:
 imageviewer.statusbar.heightLabelImage = Image height in pixels
 
+##############################################################################################################
+# F I L E  R E T R I E V E R                                                                                 #
+##############################################################################################################
+fileretriever.canNotFindFile     = Can not find file, see log file for details.
+fileretriever.canNotReadFromFile = Can not read from file, It might be another application that has locked the file. See log file for details.
