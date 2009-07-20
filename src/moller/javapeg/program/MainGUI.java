@@ -49,6 +49,7 @@ package moller.javapeg.program;
  *                        : 2009-07-15 by Fredrik Möller
  *                        : 2009-07-18 by Fredrik Möller
  *                        : 2009-07-19 by Fredrik Möller
+ *                        : 2009-07-20 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -1485,12 +1486,13 @@ public class MainGUI extends JFrame {
 							missingFilesErrorMessage.append(lS);
 						}
 													
-						JOptionPane.showMessageDialog(null, missingFilesErrorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, missingFilesErrorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 					}
 					setNrOfImagesLabels();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (IOException ioe) {
+					JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.couldNotReadFile") + "\n(" + source.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					logger.logERROR("Could not read from file:");
+					logger.logERROR(ioe);
 				}
 		    }
 		}
@@ -1593,11 +1595,13 @@ public class MainGUI extends JFrame {
 						imagesToVievListModel.addElement(file);
 					}
 				} catch (FileNotFoundException fnfex) {
-					// TODO Fix notification about file not found
-					fnfex.printStackTrace();
+					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					logger.logERROR("Could not find file:");
+					logger.logERROR(fnfex);
 				} catch (IOException iox) {
-					// TODO Fix notification about can not read from file.
-					iox.printStackTrace();
+					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotReadFromFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					logger.logERROR("Can not read from file:");
+					logger.logERROR(iox);
 				}
 			}
 			setNrOfImagesLabels();
