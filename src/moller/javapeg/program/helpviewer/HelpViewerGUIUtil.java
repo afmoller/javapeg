@@ -16,14 +16,20 @@ public class HelpViewerGUIUtil {
 		
 		Language lang = Language.getInstance();
 
-		DefaultMutableTreeNode root               = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.content"));
-		DefaultMutableTreeNode programHelp        = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelp"));
-		DefaultMutableTreeNode versionInformation = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.versionInformation"));
-		DefaultMutableTreeNode overViewCreator    = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.overviewCreator"));
-		DefaultMutableTreeNode references         = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.references"));
+		DefaultMutableTreeNode root                = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.content"));
+		DefaultMutableTreeNode programHelpOverView = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpOverView"));
+		DefaultMutableTreeNode versionInformation  = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.versionInformation"));
+		DefaultMutableTreeNode references          = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.references"));
+				
+		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpRename"));
+		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpImageList"));
+		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"));
 		
-		root.add(programHelp);
-		root.add(overViewCreator);
+		programHelpOverView.add(programHelpRename);
+		programHelpOverView.add(programHelpImageList);
+		programHelpOverView.add(programHeplOverViewCreator);
+		
+		root.add(programHelpOverView);
 		root.add(versionInformation);
 		root.add(references);
 		
@@ -35,15 +41,21 @@ public class HelpViewerGUIUtil {
 		
 		switch (selectedRow) {
 		case 1:
-			fileToLoad = "/user_manual";
+			fileToLoad = "/user_manual_overview";
 			break;
 		case 2:
-			fileToLoad = "/thumbnail_overview";
+			fileToLoad = "/user_manual_rename";
 			break;
 		case 3:
-			fileToLoad = "/version_information";
+			fileToLoad = "/user_manual_imagelist";
 			break;
 		case 4:
+			fileToLoad = "/thumbnail_overview";
+			break;
+		case 5:
+			fileToLoad = "/version_information";
+			break;
+		case 6:
 			fileToLoad = "/references";
 			break;
 		default:
