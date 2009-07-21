@@ -1,5 +1,5 @@
-TUMBNAIL OVERVIEW<LF>
-=================<LF>
+PROGRAM HELP THUMBNAIL OVERVIEW<LF>
+===============================<LF>
 JavaPEG has the possibility to create a thumb nail overview in the form of a HTML document, which shows thumb nail versions of the files that has been renamed. Each thumb nail links to the full size image. The purpose of this overview is to offer a quick and easy way to see which images there is in a directory.
 <LF>
 <LF>

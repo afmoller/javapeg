@@ -4,18 +4,18 @@ Texten nedan är upplagd så att den uppifrån och ner visar hur en komplett progra
 <LF>
 <LF>
 1:<LF>
-I det fält som heter "SÖKVÄG TILL BILDKATALOG" skall en sökväg till de bilder du vill få omdöpta anges. Det vill säga att du letar upp rätt katalog med filväljarfönstret som kommer fram när du trycker på knappen bredvid textfältet.
+Välj en katalog med bilder i trädstrukturen till vänster.
 <LF>
 <LF>
 2:<LF>
-En destinationkatalog skall väljas. Detta görs enligt samma princip som när bildkatalog valdes ovan. Tryck på den knapp som finns till höger om fältet som heter "SÖKVÄG TILL DESTINATIONSKATALOG" så kommer ett nytt fönster öppnas, där det går att välja en destinationskatalog.
+En destinationkatalog skall väljas. Detta görs genom att trycka på den knapp som finns till höger om fältet som heter "SÖKVÄG TILL DESTINATIONSKATALOG" så kommer ett nytt fönster öppnas, där det går att välja en destinationskatalog.
 <LF>
 <LF>
 3:<LF>
 "FILNAMNSMALL" och "UNDERKATALOGSMALL", skapas med hjälp av de variabler som finns i rutan "VARIABLER". Detta är variabler som hämtar sin information från bildens inbäddade Exif-information.
 <LF>
 <LF>
-"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom detta ör det möjligt att blanda variabler med statiska strängar i form av ord och siffror i valfri kombination. 
+"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom detta är det möjligt att blanda variabler med statiska strängar i form av ord och siffror i valfri kombination. 
 <LF>
 <LF>
  Exempel på en filnamsmall kan vara: "Bild %d% - %t%" 

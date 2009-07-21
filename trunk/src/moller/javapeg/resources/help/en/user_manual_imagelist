@@ -1,2 +1,34 @@
 PROGRAM HELP IMAGE LIST<LF>
 =======================<LF>
+The following text will describe how an image list is created. In other words start reading by going to next paragraph.
+<LF>
+<LF>
+1:<LF>
+If there has not been any directory with images selected in the tree structure to the left, that has to be done.
+<LF>
+<LF>
+2:<LF>
+Click on the tab with the label "CREATE IMAGE LISTS"
+<LF>
+<LF>
+3:<LF>
+Now it is possible to add images to the list by right clicking the thumbnails that is displayed. Either it is possible to add only the marked image or all images in the selected directory. It is possible to add the same image(s) multiple times if wanted.
+<LF>
+<LF>
+4:<LF>
+It is possible to select other directories with images in the tree structure to the left and repeat step 3 before the image list is saved or exported.
+<LF>
+<LF>
+5:<LF>
+When all desired images have been chosen (or earlier), it is possible to have a preview of the images by clicking the file name in the frame with the image list.
+<LF>
+<LF>
+6:<LF>
+It is also possible to change the order of the images in the list. That is done by selecting the image in the list which shall be moved and then click the button with an arrow pointing up or down to, depending whether the image shall be moved upwards or downwards in the list. 
+<LF>
+<LF>
+7:<LF>
+Now it is possible to either save the list for further future processing according to above or to export it to a list format supported by a third party application. That is done by either clicking the save or export button. JavaPEG supports the creation of image lists in the formats used by the following applications:
+<LF>
+<LF>
+PolyView (http://www.polybytes.com/)

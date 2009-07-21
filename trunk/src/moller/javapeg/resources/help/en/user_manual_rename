@@ -4,11 +4,11 @@ The following text will describe how a complete program cycle works. In other wo
 <LF>
 <LF>
 1:<LF>
-In the field called "PATH TO IMAGE DIRECTORY" a path to the images, which shall be renamed, must be given. That is done by choosing a directory in the file chooser window that appears when the button to the right of the text field is pushed.
+Select a directory with images in the tree structure to the left.
 <LF>
 <LF>
 2:<LF>
-A destination directory must be selected. This is done according to the same procedure as when an image folder was selected in step 1. Push the button to the right of the field labeled "PATH TO DESTINATION DIRECTORY" and a file chooser will appear, in which the destination directory must be selected.
+A destination directory must be selected. That is done by pushing the button to the right of the field labeled "PATH TO DESTINATION DIRECTORY". When the button is clicked a file chooser will appear, in which the destination directory must be selected.
 <LF>
 <LF>
 3:<LF>

@@ -4,3 +4,6 @@ JavaPEG has the possibility to change the file names of jpeg images that contain
 <LF>
 <LF>
 As an addition to the rename feature JavaPEG also has the possibility to create thumb nail overviews. These overviews shows thumb nail versions of the full size images. Below each thumb nail it is possible to show meta data about the full size image. Each thumb nail is linked to the full size image. These overviews are created in the HTML format and the purpose with them are that it shall be easy to get an overview of which images that are present in a directory.
+<LF>
+<LF>
+It is  also possible to create image lists (slide shows) with JavaPEG. It is possible to create lists in an internal JavaPEG format, which might be saved and later on opened again for further processing. It is also possible to export image lists to format supported by third party software. This makes it possible for further processing of the lists in the third party software or to show the images in the image list.
