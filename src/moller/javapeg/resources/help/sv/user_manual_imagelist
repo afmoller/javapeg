@@ -1,2 +1,34 @@
 PROGRAMHJÄLP BILDLISTA<LF>
 ======================<LF>
+Texten nedan är upplagd så att den uppifrån och ner beskriver hur en bildlista skapas. Börja alltså med att läsa nästkommande stycke först.
+<LF>
+<LF>
+1:<LF>
+Om inte en katalog med bilder valts i filväljarträdet till vänster så gör det.
+<LF>
+<LF>
+2:<LF>
+Klicka på den flik som heter "SKAPA BILDLISTOR"
+<LF>
+<LF>
+3:<LF>
+Nu kan bilder läggas till genom att högerklicka på de tumnaglar som visas. Det går att välja att antingen lägga till enbart den bild som markerats eller samtliga bilder som finns i vald katalog. Det är möjligt att lägga till samma bild(er) flera gånger om så önskas.
+<LF>
+<LF>
+4:<LF>
+Innan bildlistan sparas eller exporteras är det möjligt att välja andra kataloger med bilder i det vänstra filväljarträdet och upprepa steg 3 igen.
+<LF>
+<LF>
+5:<LF>
+När alla bilder som önskats valts (eller tidigare), är det möjligt att få en förhandgranskning av bilderna visade genom att klicka på filnamnet i rutan med bildlistan.
+<LF>
+<LF>
+6:<LF>
+Det är också möjligt att byta ordning på bilderna i listan. Det görs genom att markera den bild i listan som skall flyttas och därefter trycka på knappen med en pil upp eller ner, beroende på om bilden skall flyttas uppåt eller nedåt i listan.
+<LF>
+<LF>
+7:<LF>
+Nu är det möjligt att antingen spara listan för framtida ytterligare bearbetning enligt ovan eller att exportera den till ett listformat som stöds av tredjeparts programvara. Detta görs antingen genom att trycka på spara eller exportera-knappen. JavaPEG kan skapa bildlistor i de format som används av följande programvaror:
+<LF>
+<LF>
+PolyView (http://www.polybytes.com/)
