@@ -10,6 +10,12 @@
  
  2.2 (2009-xx-xx)
  
+ + A new variable has been added to the set of variables. The new variable 
+   gives access to the original file name. So by using this new variable in the
+   file name template the original file name except the suffix will be inserted
+   at the position of the variable. The code for this new variable was written
+   by: Angel Bueno
+ 
  + A new mode to the application has been added. It is from now on possible to
    create images lists to be used in external applications. Lists compatible 
    with the following applications are possible to create:
