@@ -1,5 +1,5 @@
-PROGRAMHJÄLP TUMNAGELÖVERSIKT<LF>
-=============================<LF>
+SKAPA TUMNAGELÖVERSIKT<LF>
+======================<LF>
 JavaPEG kan skapa en tumnagelöversikt i form av ett HTML-dokument som visar tumnagelversioner av de bilder som döpts om. Varje tumnagel länkar vidare till den fullstora bilden. Syftet med denna översikt är att snabbt ge en överblick om vilka bilder som finns i en katalog med bilder.
 <LF>
 <LF>
