@@ -2,6 +2,7 @@ package moller.javapeg.program.gui;
 /**
 * This class was created : 2009-05-26 by Fredrik Möller
 * Latest changed         : 2009-05-27 by Fredrik Möller
+*                        : 2009-07-22 by Fredrik Möller
 */
 
 import java.awt.Color;
@@ -55,6 +56,8 @@ public class VariablesPanel extends JPanel {
 		JLabel apertureLabelB     = new JLabel("=  " + lang.get("variable.apertureValue"));
 		JLabel todaysDateLabelA   = new JLabel("%" + lang.get("variable.dateOftodayVariable") + "%");
 		JLabel todaysDateLabelB   = new JLabel("=  " + lang.get("variable.dateOftoday") + " (*)");
+		JLabel sourceNameLabelA   = new JLabel("%" + lang.get("variable.sourceNameVariable") + "%");
+		JLabel sourceNameLabelB   = new JLabel("=  " + lang.get("variable.sourceName"));
 
 		JLabel infoLabelA = new JLabel(lang.get("variable.comment.infoLabelA"));
 		JLabel infoLabelB = new JLabel(lang.get("variable.comment.infoLabelB"));
@@ -79,6 +82,8 @@ public class VariablesPanel extends JPanel {
 		variables.add(apertureLabelB, posVariables.nextCol());
 		variables.add(todaysDateLabelA, posVariables.nextRow());
 		variables.add(todaysDateLabelB, posVariables.nextCol());
+		variables.add(sourceNameLabelA, posVariables.nextRow());
+		variables.add(sourceNameLabelB, posVariables.nextCol());
 				
 		GBHelper posInformation = new GBHelper();
 		information.add(infoLabelA, posInformation);

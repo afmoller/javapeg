@@ -50,6 +50,7 @@
 #                      : by Fredrik Möller 2009-07-13
 #                      : by Fredrik Möller 2009-07-19
 #                      : by Fredrik Möller 2009-07-20
+#                      : by Fredrik Möller 2009-07-22
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -115,6 +116,8 @@ variable.apertureValueVariable = bl
 variable.apertureValue         = Bländarvärde
 variable.dateOftodayVariable   = dd
 variable.dateOftoday           = Dagens datum
+variable.sourceNameVariable    = f
+variable.sourceName            = Ursprungligt filnamn
 
 ##############################################################################################################
 # V A R I A B L E S  C O M M E N T                                                                           #
