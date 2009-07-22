@@ -280,12 +280,12 @@ helpViewerGUI.window.title              = Hjälp
 helpViewerGUI.errorMessage              = Kunde inte ladda hjälpfil, se loggfil för detaljer.
 
 helpViewerGUI.tree.content                    = Innehåll
-helpViewerGUI.tree.programHelpOverView        = Programhjälp Översikt
-helpViewerGUI.tree.programHelpRename          = Byt namn
-helpViewerGUI.tree.programHelpImageList       = Bildlista
-helpViewerGUI.tree.programHelpOverviewCreator = Tumnagelöversikt
-helpViewerGUI.tree.versionInformation         = Versionsinformation
-helpViewerGUI.tree.references                 = Referenser
+helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
+helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
+helpViewerGUI.tree.programHelpImageList       = SKAPA BILDLISTOR
+helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
+helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
+helpViewerGUI.tree.references                 = REFERNSER / TACK TILL
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #

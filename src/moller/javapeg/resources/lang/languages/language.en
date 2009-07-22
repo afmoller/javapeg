@@ -279,14 +279,14 @@ picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 helpViewerGUI.window.locationError      = Could not set window location according to settings. See logs for details 
 helpViewerGUI.window.title              = Help
 helpViewerGUI.errorMessage              = Could not load help file, see log file for details.
-helpViewerGUI.tree.content              = Content
 
-helpViewerGUI.tree.programHelpOverView        = Program Help Overview
-helpViewerGUI.tree.programHelpRename          = Rename
-helpViewerGUI.tree.programHelpImageList       = Image List
-helpViewerGUI.tree.programHelpOverviewCreator = Thumbnail Overview
-helpViewerGUI.tree.versionInformation         = Version Information
-helpViewerGUI.tree.references                 = References
+helpViewerGUI.tree.content                    = Content
+helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
+helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
+helpViewerGUI.tree.programHelpImageList       = CREATE IMAGE LISTS
+helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
+helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
+helpViewerGUI.tree.references                 = REFERENCES / CREDITS
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
