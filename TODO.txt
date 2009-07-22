@@ -1,5 +1,6 @@
 2.2:
 ====
+- Fix disabled menu items in the File menu
 - Update version numbers in language files
 - Update info files in the internal resources directory.
 - Test all functionality.
