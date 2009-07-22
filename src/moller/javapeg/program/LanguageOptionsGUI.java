@@ -10,6 +10,7 @@ package moller.javapeg.program;
  *                        : 2009-05-02 by Fredrik Möller
  *                        : 2009-05-03 by Fredrik Möller
  *                        : 2009-05-04 by Fredrik Möller
+ *                        : 2009-07-22 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -306,7 +307,7 @@ public class LanguageOptionsGUI extends JFrame {
 			
 	private void closeWindow () {
 		if(!resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
-			JOptionPane.showMessageDialog(null, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
 		}
 		updateConfig();
 		dispose();
