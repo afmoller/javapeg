@@ -3,6 +3,8 @@ package moller.javapeg.program.helpviewer;
  * This class was created : 2009-04-20 by Fredrik Möller
  * Latest changed         : 2009-04-24 by Fredrik Möller
  *                        : 2009-04-27 by Fredrik Möller
+ *                        : 2009-07-21 by Fredrik Möller
+ *                        : 2009-07-22 by Fredrik Möller
  */
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -25,11 +27,10 @@ public class HelpViewerGUIUtil {
 		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpImageList"));
 		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"));
 		
-		programHelpOverView.add(programHelpRename);
-		programHelpOverView.add(programHelpImageList);
-		programHelpOverView.add(programHeplOverViewCreator);
-		
 		root.add(programHelpOverView);
+		root.add(programHelpRename);
+		root.add(programHelpImageList);
+		root.add(programHeplOverViewCreator);		
 		root.add(versionInformation);
 		root.add(references);
 		
