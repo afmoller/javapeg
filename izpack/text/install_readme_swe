@@ -1,12 +1,19 @@
-JavaPEG har möjligheten att ändra filnamn på jpeg bilder som innehåller Exif 
+JavaPEG har möjligheten att ändra filnamn på jpeg bilder som innehåller Exif
 data, Exchangeable Image File Format. Flertalet digitalkameror stödjer detta
-format och lagrar på så sätt metadata (information om själva filen) när en bild
-sparas på digitalkamerans lagringsmedia. Exempel på metadata kan vara vilket 
-datum bilden togs.
+format och lagrar på så sätt metadata (information om själva filen) när en 
+bild sparas på digitalkamerans lagringsmedia. Exempel på metadata kan vara 
+vilket datum bilden togs.
 
-Förutom att ändra filnamnet så kan JavaPEG även skapa en bildöversikter. Dessa
+Förutom att ändra filnamnet så kan JavaPEG även skapa bildöversikter. Dessa
 översikter visar tumnagelversioner av de fullstora bilderna. Under varje 
-tumnagel finns det möjlighet att visa metadata om den fullstora bilden. Varje
+tumnagel finns det möjlighet att visa metadata om den fullstora bilden. Varje 
 tumnagel länkar dessutom till den fullstora bilden. Dessa översikter är i HTML 
-format och tanken med de är att det skall vara enkelt att kunna få en överblick
-av vilka bilder som finns i en katalog.
+format och tanken med dem är att det skall vara enkelt att kunna få en 
+överblick av vilka bilder som finns i en katalog.
+
+Det är också möjligt att skapa bildlistor (slide shows) med JavaPEG. Dels är 
+det möjligt att skapa listor i ett internt JavaPEG format, vilka kan sparas och
+därefter öppnas igen för vidare bearbetning. Det är dessutom möjligt att 
+exportera bildlistor till format som stödjs av tredjeparts programvaror, för 
+att på så sätt kunna arbeta vidare med listan i dessa program eller för att 
+visa själva listan med bilder.
