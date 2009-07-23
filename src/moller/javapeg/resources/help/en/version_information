@@ -14,6 +14,9 @@ The second major difference is that the source selection window has been removed
 There is also an added meta data panel which is showing detailed meta data for the images. The meta data is loaded and displayed when a thumb nail images is marked.
 <LF>
 <LF>
+There is a new variable available, "Original file name", for the file name template. It will insert the original file name of each image at the positions of all occurences of the variable in the template when the rename process takes place.
+<LF>
+<LF>
 A statusbar has been added to the bottom of the user interface. That statusbar displays selected path and the amount of images in that directory and how many columns and rows that is displayed in the thumb nail grid.
 <LF>
 <LF>
