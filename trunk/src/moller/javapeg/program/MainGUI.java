@@ -50,6 +50,7 @@ package moller.javapeg.program;
  *                        : 2009-07-18 by Fredrik Möller
  *                        : 2009-07-19 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
+ *                        : 2009-07-23 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -337,11 +338,9 @@ public class MainGUI extends JFrame {
 		// Skapa menyrader i arkiv-menyn
 		openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
 		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
-		openDestinationFileChooserJMenuItem.setEnabled(false);
-
+		
 		startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
 		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
-		startProcessJMenuItem.setEnabled(false);
 		
 		shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
 		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
@@ -1053,10 +1052,13 @@ public class MainGUI extends JFrame {
 	
 	private void setInputsEnabled(boolean state) {
 		destinationPathButton.setEnabled(state);
+		openDestinationFileChooserJMenuItem.setEnabled(state);
 		fileNameTemplateTextField.setEnabled(state);
 		subFolderTextField.setEnabled(state);
 		createThumbNailsCheckBox.setEnabled(state);
-		startProcessButton.setEnabled(state);	
+		startProcessButton.setEnabled(state);
+		startProcessJMenuItem.setEnabled(state);
+		tree.setEnabled(state);
 	}
 		
 	// WindowDestroyer
@@ -1175,6 +1177,10 @@ public class MainGUI extends JFrame {
 			}
 			
 			if(actionCommand.equals("startProcessButton")){
+				
+				removeMouseListener();
+				setInputsEnabled(false);		
+				
 				String subFolderName = "";
 				String fileNameTemplate = ""; 
 
@@ -1191,9 +1197,7 @@ public class MainGUI extends JFrame {
 				Thread renameThread = new Thread() {
 					
 					public void run(){
-						
-						setInputsEnabled(false);
-														
+																				
 						RenameProcess rp = new RenameProcess();
 						rp.init();
 						rp.setVisible(true);
@@ -1211,6 +1215,7 @@ public class MainGUI extends JFrame {
 							rp.setLogMessage(lang.get("rename.PreFileProcessor.error")+ "\n" + vs.getStatusMessage());
 							rp.setAlwaysOnTop(true);
 							setInputsEnabled(true);
+							addMouseListener();
 						} else {
 							logger.logDEBUG("File Processing Started");
 							rp.setLogMessage(lang.get("rename.FileProcessor.starting"));
@@ -1244,6 +1249,7 @@ public class MainGUI extends JFrame {
 							rp.setAlwaysOnTop(true);
 							
 							setInputsEnabled(true);
+							addMouseListener();
 						}
 						rp.renameProcessFinished();
 					}
