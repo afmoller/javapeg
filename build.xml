@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Compile and build java classes plus jar archives">
 	
-	<property name="ver" value="2.1" />
+	<property name="ver" value="2.2" />
 	<property name="jar.name" value="JavaPEG.jar" />
 	<property name="zip_src.name" value="JavaPEG_${ver}_Src.zip" />
 	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
@@ -31,21 +31,23 @@
 		</javac>
 		<copy todir="build" overwrite="true">
 			<fileset dir="src">
-				<include name="**/*.properties" />
 				<include name="**/*.gif" />
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
 				<include name="**/language.en" />
 				<include name="**/language.sv" />
-				<include name="**/style.css" />
 				<include name="**/layout.xml" />
+				<include name="**/layout.xsd" />
+				<include name="**/style.css" />
 				<include name="**/conf.xml" />
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
 				<include name="**/references" />
 				<include name="**/thumbnail_overview" />
-				<include name="**/user_manual" />
+				<include name="**/user_manual_imagelist" />
+				<include name="**/user_manual_overview" />
+				<include name="**/user_manual_rename" />
 				<include name="**/version_information" />
 			</fileset>
 		</copy>
