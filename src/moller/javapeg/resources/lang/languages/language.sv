@@ -288,7 +288,7 @@ helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
 helpViewerGUI.tree.programHelpImageList       = SKAPA BILDLISTOR
 helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
 helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
-helpViewerGUI.tree.references                 = REFERNSER / TACK TILL
+helpViewerGUI.tree.references                 = REFERENSER / TACK TILL
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
