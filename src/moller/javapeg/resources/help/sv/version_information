@@ -14,6 +14,9 @@ En andra stor skilland är att det separata filväljarfönstret för att välja källk
 Det har också lagts till en meta data panel som visar detaljerad meta data för bilderna. Meta datat laddas och visas när en en tumnagelbild markeras.
 <LF>
 <LF>
+Det har lagts till en ny variabel, "Ursprungligt filnamn", som kan användas i filnamnsmallen. Den sätter in det ursprungliga filnamnet för varje bild på den plats som variablen finns i filnamnsmallen. 
+<LF>
+<LF>
 En statusrad har lagts till i nederkanten av användargränssnittet. Statusraden visas vald sökväg och antalet bilder i den katalogen och hur många kolumner och rader som visas i tumnagelrutnätet.
 <LF>
 <LF>
