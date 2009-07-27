@@ -10,17 +10,20 @@
  
  2.2 (2009-xx-xx)
  
+ + Spanish translation added. The translation was performed by: Ángel Bueno
+ 
  + A new variable has been added to the set of variables. The new variable 
    gives access to the original file name. So by using this new variable in the
    file name template the original file name except the suffix will be inserted
    at the position of the variable. The code for this new variable was written
-   by: Angel Bueno
+   by: Ángel Bueno
  
  + A new mode to the application has been added. It is from now on possible to
    create images lists to be used in external applications. Lists compatible 
    with the following applications are possible to create:
    
-   PolyView (http://www.polybytes.com/)
+   PolyView  (http://www.polybytes.com/)
+   IrfanView (http://www.irfanview.com/)
    
    It is also possible to save lists in JavaPEG format which later on can be
    exported to a supported 3rd party list format or having images added or 
