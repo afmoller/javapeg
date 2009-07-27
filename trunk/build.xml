@@ -35,6 +35,7 @@
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
 				<include name="**/language.en" />
+				<include name="**/language.es" />
 				<include name="**/language.sv" />
 				<include name="**/layout.xml" />
 				<include name="**/layout.xsd" />
