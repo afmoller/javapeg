@@ -31,4 +31,5 @@ Det är också möjligt att byta ordning på bilderna i listan. Det görs genom att m
 Nu är det möjligt att antingen spara listan för framtida ytterligare bearbetning enligt ovan eller att exportera den till ett listformat som stöds av tredjeparts programvara. Detta görs antingen genom att trycka på spara eller exportera-knappen. JavaPEG kan skapa bildlistor i de format som används av följande programvaror:
 <LF>
 <LF>
-PolyView (http://www.polybytes.com/)
+PolyView  (http://www.polybytes.com/)<LF>
+IrfanView (http://www.irfanview.com/)

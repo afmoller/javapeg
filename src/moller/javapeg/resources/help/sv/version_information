@@ -20,7 +20,7 @@ Det har lagts till en ny variabel, "Ursprungligt filnamn", som kan användas i fi
 En statusrad har lagts till i nederkanten av användargränssnittet. Statusraden visas vald sökväg och antalet bilder i den katalogen och hur många kolumner och rader som visas i tumnagelrutnätet.
 <LF>
 <LF>
-Förutom ovanstående så finns det ett helt nytt funktionalitetsområde i JavaPEG 2.2. Det är från och med nu möjligt, inte bara att byta namn på bilder utan också, att skapa bildlistor (slide shows). Det är möjligt att spara listor i ett internt JavaPEG-format för att senare laddas in igen för vidare bearbetning. Det är också möjligt att exportera bildlistor till listformat som stödjs av tredjeparts programvaror. I version 2.2 av JavaPEG finns det stöd för export av bildlistor till PolyView-format.
+Förutom ovanstående så finns det ett helt nytt funktionalitetsområde i JavaPEG 2.2. Det är från och med nu möjligt, inte bara att byta namn på bilder utan också, att skapa bildlistor (slide shows). Det är möjligt att spara listor i ett internt JavaPEG-format för att senare laddas in igen för vidare bearbetning. Det är också möjligt att exportera bildlistor till listformat som stödjs av tredjeparts programvaror. I version 2.2 av JavaPEG finns det stöd för export av bildlistor till PolyView- och IrfanView-format.
 <LF>
 <LF>
 Version 2.1<LF>
