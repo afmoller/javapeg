@@ -20,7 +20,7 @@ There is a new variable available, "Original file name", for the file name templ
 A statusbar has been added to the bottom of the user interface. That statusbar displays selected path and the amount of images in that directory and how many columns and rows that is displayed in the thumb nail grid.
 <LF>
 <LF>
-Besides from above JavaPEG 2.2 has been given an entire new mode of operation. It is from now on possible, not only to rename images but also, to create image lists (slide shows). It is possible to save lists in an internal JavaPEG format and then load them later on for further processing. It is also possible to export image lists to image list formats supported by third party software. In version 2.2 of JavaPEG there is support for exporting lists to PolyView format.
+Besides from above JavaPEG 2.2 has been given an entire new mode of operation. It is from now on possible, not only to rename images but also, to create image lists (slide shows). It is possible to save lists in an internal JavaPEG format and then load them later on for further processing. It is also possible to export image lists to image list formats supported by third party software. In version 2.2 of JavaPEG there is support for exporting lists to PolyView and IrfanView format.
 <LF>
 <LF>
 Version 2.1<LF>
