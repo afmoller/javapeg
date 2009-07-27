@@ -252,11 +252,14 @@ maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
 maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva över?
 
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = Bildlistan sparades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = Bildlistan kunde inte sparas, se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved        = Bildlistan sparades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved     = Bildlistan kunde inte sparas, se loggfil för detaljer.
 
-maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = Bildlistan i PolyView-format skapades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated     = Bildlistan i PolyView-format skapades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated  = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
+
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = Bildlistan i IrfanView-format skapades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = Bildlistan i IrfanView-format kunde inte skapas. Se loggfil för detaljer.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
