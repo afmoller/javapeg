@@ -31,4 +31,5 @@ It is also possible to change the order of the images in the list. That is done 
 Now it is possible to either save the list for further future processing according to above or to export it to a list format supported by a third party application. That is done by either clicking the save or export button. JavaPEG supports the creation of image lists in the formats used by the following applications:
 <LF>
 <LF>
-PolyView (http://www.polybytes.com/)
+PolyView  (http://www.polybytes.com/)<LF>
+IrfanView (http://www.irfanview.com/)
