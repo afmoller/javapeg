@@ -253,11 +253,14 @@ maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
 maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = already exists. Overwrite?
 
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = The image list was successfully saved.
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = The image list could not be saved, see log file for details.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved        = The image list was successfully saved.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved     = The image list could not be saved, see log file for details.
 
-maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = The Image list in PolyView format was successfully created.
-maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = The Image list in PolyView format could not be created, see log file for details.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated     = The Image list in PolyView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated  = The Image list in PolyView format could not be created, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = The Image list in IrfanView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = The Image list in IrfanView format could not be created, see log file for details.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
