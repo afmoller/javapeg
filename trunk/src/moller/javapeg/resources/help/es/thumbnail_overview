@@ -1,0 +1,9 @@
+CREAR VISTA EN MINIATURAS<LF>
+=========================<LF>
+JavaPEG tiene la posibilidad de crear miniaturas en forma de documento HTML, lo que muestra versiones en miniatura de los ficheros que han sido renombrados. Cada miniatura enlaza a la imagen en tamaño completo. El propósito de esta visualización es ofrecer una forma rápida y fácil para ver las imágenes que hay en un directorio.
+<LF>
+<LF>
+El aspecto de la visualización de miniaturas se puede cambiar creando fichero layout.xml y / o style.css. El contenido y la sintáxis de estos ficheros se describe en los ficheros: layout.info y style.info. Se almacenan en la siguiente ubicación: <directorio de instalación de JavaPEG>/resources/thumb/
+<LF>
+<LF>
+No es obligatorio crear ambos ficheros. Es adecuado crear sólo uno de ellos si se desea. El fichero / ficheros se deben crear en la misma ubicación que los ficheros de información indicados más arriba. 

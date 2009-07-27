@@ -1,0 +1,100 @@
+INFORMACION DE VERSION<LF>
+======================<LF>
+Lo de abajo es una descripción de lo que cada verisón de JavaPEG ha sido capaz de hacer.
+<LF>
+<LF>
+Versión 2.2<LF>
+===========<LF>
+Liberada el 2009-xx-xx la versión 2.2 of JavaPEG ha obtenido una nueva vista del interfaz gráfico. A partir de ahora se puede redimensionar y además se puede poner a pantalla completa en un monitor de alta resolución. Se puede ajustar el tamaño de todos los paneles principales y se pueden ocultar completamente para liberar espacio de los paneles no ocultos. El tamaño de cada panel se almacena entre sesiones de la aplicación.
+<LF>
+<LF>
+La segunda diferencia principal es que la ventana de selección del origen ha sido eliminada y reemplazada con una estructura de arbol que muestra el sistema de ficheros. 
+<LF>
+<LF>
+También hay añadido un panel de metadatos que muestra metadatos detallados de las imágenes. Los metadatos se cargan y muestran cuando se marca una miniatura.
+<LF>
+<LF>
+Hay una nueva variable disponible, "Nombre de fichero original", para la plantilla del nombre de fichero. Insertará el nombre original de cada imagen en la posición de todas las ocurrencias de la variable en la plantilla cuando el proceso de renombrado se lance.
+<LF>
+<LF>
+Se ha añadido una barra de estado al final de la interfaz de usuario. Esa barra muestra la ruta seleccionada, la cantidad de imagenes en ese directorioT y cuantas columnas y filas se muestran en el cuadrante de miniaturas.
+<LF>
+<LF>
+Además, desde la versión JavaPEG 2.2 se ha añadido por completo un nuevo modelo de operación. Desde ahora no sólo es posible renombrar imágenes, sino también crear listas (diapositivas). Es posible guardar las listas en un formato interno a JavaPEG y cargarlas luego para posteriores procesados. También es posible exportar las listas a formatos soportados por software de terceros. En la versión 2.2 de JavaPEG hay soporte para exportar listas en formato PolyView.
+<LF>
+<LF>
+Versión 2.1<LF>
+===========<LF>
+Liberada el 2009-05-21 la versión 2.1 de JavaPEG ha añadido información detallada en una nueva ventana sobre el progreso del renombrado de los ficheros JPEG, proceso de copia de ficheros no JPEG y la integridad de los ficheros después del renombrado y copiado de los ficheros.
+<LF>
+<LF>
+JavaPEG puede desde la versión 2.1, hacer un opcional (configurable) chequeo de versión al inicio de la aplicación. Lo hace comparando con la versión del servidor. Si hay una nueva versión disponible, se muestran los cambios de la nueva versión comparados con los de la actual. También se puede descargar la nueva versión a través de JavaPEG
+<LF>
+<LF>
+Si hay un fichero layout.xml que define como la vista de miniaturas se debe mostrar, que ha sido definido por el usuario de JavaPEG, entonces este fichero será validado para comprobar su esquema.
+<LF>
+<LF>
+Versión 2.0<LF>
+===========<LF>
+Liberada el 2009-05-05 la versión 2.0 de JavaPEG es más o menos una reescritura completa comparado con las versiones 1.x. A persar de esto, el concepto sigue siendo el mismo: Una herramienta simple y segura para renombrar las imágenes creadas con una cámara digital.
+<LF>
+<LF>
+La aplicación sigue necesitando una ruta al directorio que contiene las imágenes. Cuando el directorio origen se ha elegido, hay que seleccionar el directorio de destino. Después hay que indicar una plantilla para el nombre de los ficheros y para el nombre de los subdirectorios. Como último paso antes de que comience el renombrado, es posible indicar que se cree una vista de miniaturas.
+<LF>
+<LF>
+La prinicipal diferencia con respecto a las versiones 1.x es que esta versión sólo soporta renombrado de imágenes copiadas. La razón es minimizar el riesgo de pérdida de datos.
+<LF>
+<LF>
+Nuevas funcionalidades de esta versión:
+<LF>
+<LF>
+El selector de ficheros usado para encontrar el directorio que contiene las imágenes que se deberían renombrar mostrará las miniaturas de los ficheros a renombrar en el directorio indicado. Esto facilitará el trabajo para encontrar las imágenes a renombrar.
+<LF>
+<LF>
+Las miniaturas se mostrarán en la ventana principal de la aplicación, cuando un directorio con imágenes ha sido seleccionado en el selector de ficheros y el botón Ok ha sido pulsado. 
+<LF>
+<LF>
+Hay una previsualización rápida del resultado de los nombres de fichero cuando las plantillas de los nombres de fichero o de los subdirectorios cambian.
+<LF>
+<LF>
+Se muestra un mensaje de error rápido si se usan una variable o un carácter no permitidos en las plantillas o se excede la longitud máxima para el resultado de los ficheros en el directorio de destino indicado.
+<LF>
+<LF>
+Antes de que comience el proceso de renombrado hay un proceso de validación que se asegura de que: toda la entrada es válida, no se ha excedido la longitud máxima, el sundirectorio no existe en el directorio de destino, hay suficiente espacio para almacenar los ficheros copiados en el directorio de destino y que es posible crear todos los ficheros en el directorio de destino que existen en el directorio origen.
+<LF>
+<LF>
+Una validación toma lugar después de que el proceso de renombrado haya finalizado. Esta validación chequeará que todos los ficheros que han sido copiados del directorio de origen al directorio de destino tienen el nombre correcto y el mismo contenido.
+<LF>
+<LF>
+Bajo el proceso de renombrado, hay una ventana de estado que muestra el progreso del proceso de renombrado.
+<LF>
+<LF>
+Es posible cambiar el aspecto de la vista de miniaturas.
+<LF>
+<LF>
+Por un potencial error que pueda ocurrir, hay un fichero de log.
+<LF>
+<LF>
+Versión 1.01<LF>
+============<LF>
+Liberada el 2007-02-02: La versión 1.01 de JavaPEG es sólo una versión que corrige errores. Corrige características erróneas en el motor de renombrado y un problema on mensajes de error incorrectos.
+<LF>
+<LF>
+El programa se cuelga si se utiliza un punto como primer o último caracter en la plantilla del nombre de fichero y/o subdirectorio. El mismo problema se presentó si se utiliza un espacio en blanco como primer o último carácter en las plantillas. Además desde esta verisón hay una corrección en dos mensajes de error en inglés que se mezclaron en el fichero de idioma Inglés.
+<LF>
+<LF>
+Versión 1.0<LF>
+===========<LF>
+Liberada el 2006-11-27: La versión 1.0 de JavaPEG tiene la posibilidad de renombrar imágenes de tipo jpeg si contienen información Exif.
+<LF>
+<LF>
+El programa renombrará los ficheros conforme al campo "PLANTILLA DE NOMBRE DE FICHERO", definida por el usuario, en la plantilla dad. Hay un conjunto de variables disponibles que se pueden encontrar en la ventana con la cabecera "VARABLES".
+<LF>
+<LF>
+El usuario tiene la posibilidad de indicar el renombrado de los ficheros originales, o la copia de ellos, lo que los almacenará en el mismo directorio que los originales, o en otro directorio diferente al original. Es posible dar un nombre al subdirectorio de la misma forma que al nombre del fichero, en otras palabras: usando variables. 
+<LF>
+<LF>
+Antes de que el proceso de renombrado comience, el usuario tiene la posibilidad de indicar si JavaPEG creará vistas en miniaturas de los ficheros renombrados. Si se crearán las miniatiras, también se creará un fichero HTML, que mostrará las miniaturas y un enlace a las imágenes a tamaño completo. 
+<LF>
+<LF>
+Como última opción, también es posible indicar al programa que abra el directorio de destino al finalizar el proceso de renombrado.
