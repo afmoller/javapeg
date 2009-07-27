@@ -1,0 +1,19 @@
+JavaPEG tiene la posibilidad de cambiar los nombres de fichero de las imágenes
+jpeg que contienen datos Exif, Exchangeable Image File Format (formato de 
+fichero imagen intercambiable). La mayoría de las cámaras digitales soportan 
+este formato y guardan varios metadatos (información acerca del propio fichero)
+cuando la imagen se guarda en el almacenamiento de la cámara. un ejemplo de 
+metadato puede ser la fecha de captura de la imagen.
+
+Como característica adicional al renombrado, JavaPEG también dispone la 
+posibilidad de crear vistas en miniatura. Estas vistas muestran miniaturas de 
+las imágenes completas. Debajo de cada miniatura se pueden mostrar los 
+metadatos de los imágenes a tamaño completo. Cada miniatura enlaza a la imagen 
+en tamaño completo. Estas vistas son creadas en formato HTML y el propósito de 
+ellas es dar un vistazo rápido a las imágenes presentes en un directorio.
+
+Es posible crear listas de imágenes (diapositivas) con JavaPEG. Es posible 
+crear listas en formato JavaPEG, que se puede guardar y abrir más tarde para
+procesarlo. También se puede exportar la lista de imágenes a formatos 
+soportados por herramientas de terceros. Esto hace posible otros procesos en 
+las herramientas de terceros o mostrar la lista de imágenes.
