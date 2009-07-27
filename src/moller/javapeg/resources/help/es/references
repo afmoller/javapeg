@@ -1,0 +1,10 @@
+REFERENCIAS<LF>
+===========<LF>
+La librería para extraer los metadatos, creada por Drew Noakes, es usada internamente in JavaPEG para obtener los metadatos de cada imagen que ha de ser renombrada. 
+Información sobre la librería se puede encontrar en: http://www.drewnoakes.com/code/exif/
+<LF>
+<LF>
+CREDITOS<LF>
+========<LF>
+Angel Bueno:<LF>
+Por la creación de la lógica detrás de la variable "Nombre de fichero original"
