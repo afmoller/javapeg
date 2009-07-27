@@ -6,6 +6,7 @@ package moller.javapeg.program.imagelistformat;
 *                        : 2009-07-18 by Fredrik Möller
 *                        : 2009-07-19 by Fredrik Möller
 *                        : 2009-07-20 by Fredrik Möller
+*                        : 2009-07-24 by Fredrik Möller
 */
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class ImageList {
 		}
 	}
 		
-	public void createList(DefaultListModel images, File destination, String fileExtension) {
+	public void createList(DefaultListModel images, File destination, String fileExtension, String fileDescription) {
 							
 		/**
 		 * This check is done to see if an file extension has been entered in
@@ -74,9 +75,11 @@ public class ImageList {
 			}
 		}
 		
-		if (fileExtension.equals("pvs")) {
+		if (fileDescription.equals("IrfanView")) {
+			IrfanView.createAndWriteToFile(images, destination, lang);
+		} else if (fileDescription.equals("PolyView")) {
 			PolyView.createAndWriteToFile(images, destination, lang);
-		} else if (fileExtension.equals("jil")) {
+		} else if (fileDescription.equals("JavaPEG Image List")) {
 			JavaPEG.createAndWriteToFile(images, destination, lang);	
 		}
 	}
