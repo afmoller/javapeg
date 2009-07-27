@@ -6,4 +6,4 @@ JavaPEG kan skapa en tumnagelöversikt i form av ett HTML-dokument som visar tumn
 Utseendet på tumnagelöversikten går att förändra genom att skapa en layout.xml fil och / eller style.css fil. Hur innehållet i dessa filer skall se ut finns beskrivet i följande två filer: layout.info och style.info. Dessa finns lagrade på följande plats: <installationskatalog för JavaPEG>/resources/thumb/
 <LF>
 <LF>
-Det är inte tvunget att skapa båda filerna, utan det går bra att skapa bara den ena av dem. Filen / filern skall skapas på samma plats som info-filerna finns. 
+Det är inte tvunget att skapa båda filerna, utan det går bra att skapa bara den ena av dem. Filen / filerna skall skapas på samma plats som info-filerna finns. 
