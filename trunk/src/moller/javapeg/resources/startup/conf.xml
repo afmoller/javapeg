@@ -30,7 +30,7 @@
 <entry key="updatechecker.url.version">http://javapeg.sourceforge.net/PAGES/updates/version.php</entry>
 <entry key="updatechecker.url.changelog">http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</entry>
 <entry key="mainSplitPane.location">200</entry>
-<entry key="verticalSplitPane.location">450</entry>
+<entry key="verticalSplitPane.location">300</entry>
 <entry key="thumbNailMetaDataPanelSplitPane.location">600</entry>
 <entry key="imageViewerGUI.window.location.x">10</entry>
 <entry key="imageViewerGUI.window.location.y">10</entry>
