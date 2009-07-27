@@ -51,6 +51,7 @@ package moller.javapeg.program;
  *                        : 2009-07-19 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-07-23 by Fredrik Möller
+ *                        : 2009-07-24 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -1522,7 +1523,7 @@ public class MainGUI extends JFrame {
 				int returnVal = chooser.showSaveDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
 			    	destination = chooser.getSelectedFile();			    				    	
-			    	ImageList.getInstance().createList(imagesToVievListModel, destination, "jil");
+			    	ImageList.getInstance().createList(imagesToVievListModel, destination, "jil", "JavaPEG Image List");
 			    }
 			}
 		}
@@ -1561,23 +1562,26 @@ public class MainGUI extends JFrame {
 			
 			if (imagesToVievListModel.size() > 0) {
 				
-				FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("PolyView", "pvs");
-				
+				FileNameExtensionFilter fileFilterIrfanView = new FileNameExtensionFilter("IrfanView", "txt");
+				FileNameExtensionFilter fileFilterPolyView  = new FileNameExtensionFilter("PolyView" , "pvs");
+								
 				JFileChooser chooser = new JFileChooser();
 								
 				chooser.setAcceptAllFileFilterUsed(false);
 				chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.exportImageList.title"));
+				chooser.addChoosableFileFilter(fileFilterIrfanView);
 				chooser.addChoosableFileFilter(fileFilterPolyView);
-								
+												
 				File destination = null;	
 				
 				int returnVal = chooser.showSaveDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
 			    	destination = chooser.getSelectedFile();
 			    				    
-			    	String listFormat = ((FileNameExtensionFilter)chooser.getFileFilter()).getExtensions()[0];
+			    	String listFormat      = ((FileNameExtensionFilter)chooser.getFileFilter()).getExtensions()[0];
+			    	String listDescription = ((FileNameExtensionFilter)chooser.getFileFilter()).getDescription();
 										
-			    	ImageList.getInstance().createList(imagesToVievListModel, destination, listFormat);
+			    	ImageList.getInstance().createList(imagesToVievListModel, destination, listFormat, listDescription);
 			    }
 			}
 		}
