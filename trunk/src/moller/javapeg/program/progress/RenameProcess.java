@@ -17,6 +17,7 @@ package moller.javapeg.program.progress;
  *                        : 2009-04-13 by Fredrik Möller
  *                        : 2009-04-14 by Fredrik Möller
  *                        : 2009-05-09 by Fredrik Möller
+ *                        : 2009-07-23 by Fredrik Möller
  */
 
 import java.awt.Dimension;
@@ -87,6 +88,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 		} else {
 			processProgressBar = new JProgressBar(0, 11);
 		}
+		processProgressBar.setStringPainted(true);
 				
 		log = new CustomizedJTextArea();
 		log.setEditable(false);
