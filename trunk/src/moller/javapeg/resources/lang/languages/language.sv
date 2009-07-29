@@ -91,6 +91,7 @@ menu.item.about.accelerator                      = O
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
+labels.sourcePath       = KÄLLKATALOG
 labels.destinatonPath   = SÖKVÄG TILL DESTINATIONSKATALOG
 labels.subFolderName    = UNDERKATALOGSMALL
 labels.fileNameTemplate = FILNAMNSMALL
