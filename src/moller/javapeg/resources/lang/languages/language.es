@@ -57,6 +57,7 @@ menu.item.about.accelerator                      = A
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
+labels.sourcePath       = SOURCE DIRECTORY
 labels.destinatonPath   = RUTA AL DIRECTORIO DE DESTINO
 labels.subFolderName    = PLANTILLA PARA EL NOMBRE DEL SUBDIRECTORIO
 labels.fileNameTemplate = PLANTILLA PARA EL NOMBRE DEL FICHERO
