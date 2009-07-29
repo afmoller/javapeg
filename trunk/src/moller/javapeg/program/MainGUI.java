@@ -108,6 +108,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -595,8 +596,8 @@ public class MainGUI extends JFrame {
 		
 		verticalSplitPane.setTopComponent(mainTabbedPane);
 		verticalSplitPane.setBottomComponent(thumbNailMetaPanelSplitPane);
-				
-		mainSplitPane.setLeftComponent(this.initiateJTree());
+					
+		mainSplitPane.setLeftComponent(createTreePanel());
 		mainSplitPane.setRightComponent(verticalSplitPane);
 		
 		this.getContentPane().setLayout(new BorderLayout());
@@ -606,6 +607,24 @@ public class MainGUI extends JFrame {
 		statusBar = new StatusPanel(timerStatus);
 		
 		this.add(statusBar, BorderLayout.SOUTH);
+	}
+	
+	private JPanel createTreePanel() {
+			
+		JPanel treePanelBackground = new JPanel(new BorderLayout());
+		treePanelBackground.setBorder(BorderFactory.createCompoundBorder((new EtchedBorder(EtchedBorder.LOWERED)), new EmptyBorder(2, 2, 2, 2)));
+		
+		JLabel inputLabel = new JLabel(lang.get("labels.sourcePath"));
+		inputLabel.setForeground(Color.GRAY);
+		
+		treePanelBackground.add(inputLabel, BorderLayout.NORTH);
+		treePanelBackground.add(this.initiateJTree(), BorderLayout.CENTER);
+		
+		JPanel borderPanel = new JPanel(new BorderLayout());
+		borderPanel.setBorder(BorderFactory.createCompoundBorder((new BevelBorder(BevelBorder.LOWERED)), new EmptyBorder(2, 2, 0, 2)));
+		borderPanel.add(treePanelBackground, BorderLayout.CENTER);
+		
+		return borderPanel;
 	}
 	
 	private JPanel createRenamePanel() {
