@@ -51,6 +51,7 @@
 #                      : by Fredrik Möller 2009-07-19
 #                      : by Fredrik Möller 2009-07-20
 #                      : by Fredrik Möller 2009-07-22
+#                      : by Fredrik Möller 2009-07-29
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -133,13 +134,16 @@ checkbox.createThumbNails      = SKAPA TUMNAGELÖVERSIKT
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton        = Välj sökväg för destinationskatalog
-tooltip.subFolderName                = Ange namnet på mappen inklusive eventuella variabler här
-tooltip.fileNameTemplate             = Skriv in filnamnsmallen inklusive variabler här
-tooltip.createThumbNails             = Skapa tumnaglar av omdöpta filer
-tooltip.openDestinationFolder        = Öppna mappen där de omdöpta filerna hamnar efter avslutad process
-tooltip.beginNameChangeProcessButton = Starta namnbytarprocessen
-tooltip.enableTemplateFields         = För att aktivera, välj en destinationskatalog
+tooltip.destinationPathButton                                  = Välj sökväg för destinationskatalog
+tooltip.subFolderName                                          = Ange namnet på mappen inklusive eventuella variabler här
+tooltip.fileNameTemplate                                       = Skriv in filnamnsmallen inklusive variabler här
+tooltip.createThumbNails                                       = Skapa tumnaglar av omdöpta filer
+tooltip.openDestinationFolder                                  = Öppna mappen där de omdöpta filerna hamnar efter avslutad process
+tooltip.beginNameChangeProcessButton                           = Starta namnbytarprocessen
+tooltip.selectSourceDirectoryWithImages                        = Välj en katalog med bilder
+tooltip.selectDestinationDirectory                             = Välj en destinationskatalog
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Välj en källkatalog med bilder och en destinationskatalog
+tooltip.enableTemplateFields                                   = För att aktivera, välj en destinationskatalog
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
