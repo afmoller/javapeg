@@ -1,6 +1,6 @@
 2.2:
 ====
-- Fix that it is possible to start the rename process with a source directory not having any images.
+- Put in translated strings in the Spanish language file. (Start rename process button)
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.
