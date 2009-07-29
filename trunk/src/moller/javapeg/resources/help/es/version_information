@@ -20,7 +20,8 @@ Hay una nueva variable disponible, "Nombre de fichero original", para la plantil
 Se ha añadido una barra de estado al final de la interfaz de usuario. Esa barra muestra la ruta seleccionada, la cantidad de imagenes en ese directorioT y cuantas columnas y filas se muestran en el cuadrante de miniaturas.
 <LF>
 <LF>
-Además, desde la versión JavaPEG 2.2 se ha añadido por completo un nuevo modelo de operación. Desde ahora no sólo es posible renombrar imágenes, sino también crear listas (diapositivas). Es posible guardar las listas en un formato interno a JavaPEG y cargarlas luego para posteriores procesados. También es posible exportar las listas a formatos soportados por software de terceros. En la versión 2.2 de JavaPEG hay soporte para exportar listas en formato PolyView.
+Además, desde la versión JavaPEG 2.2 se ha añadido por completo un nuevo modelo de operación. Desde ahora no sólo es posible renombrar imágenes, sino también crear listas (diapositivas). Es posible guardar las listas en un formato interno a JavaPEG y cargarlas luego para posteriores procesados. También es posible exportar las listas a formatos soportados por software de terceros. En la versión 2.2 de JavaPEG hay soporte para exportar listas en
+formato PolyView e IrfanView.
 <LF>
 <LF>
 Versión 2.1<LF>
