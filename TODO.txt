@@ -1,6 +1,6 @@
 2.2:
 ====
-- Put in translated strings in the Spanish language file. (Start rename process button)
+- Put in translated strings in the Spanish language file. (Start renameprocess button, and source directory label)
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.
