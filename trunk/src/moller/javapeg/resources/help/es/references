@@ -6,5 +6,6 @@ Información sobre la librería se puede encontrar en: http://www.drewnoakes.com/c
 <LF>
 CREDITOS<LF>
 ========<LF>
-Angel Bueno:<LF>
-Por la creación de la lógica detrás de la variable "Nombre de fichero original"
+Ángel Bueno:<LF>
+  - Creación de la lógica existente en la variable "Nombre de fichero original"<LF>
+  - Traducción al castellano de JavaPEG 2.2"
