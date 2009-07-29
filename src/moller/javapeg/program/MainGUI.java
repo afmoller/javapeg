@@ -756,8 +756,26 @@ public class MainGUI extends JFrame {
 		
 		return backgroundPanel;
 	}
-		
 	
+	private boolean setStartProcessButtonState() {
+		
+		ApplicationContext ac = ApplicationContext.getInstance();
+		
+		if (ac.getMetaDataObjects().size() > 0 && ac.getDestinationPath().length() > 0) {
+			startProcessButton.setToolTipText(lang.get("tooltip.beginNameChangeProcessButton"));
+			return true;
+		} else if (ac.getMetaDataObjects().size() > 0) {
+			startProcessButton.setToolTipText(lang.get("tooltip.selectDestinationDirectory"));
+			return false;
+		} else if (ac.getDestinationPath().length() > 0) {
+			startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImages"));
+			return false;
+		} else {
+			startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
+			return false;
+		}
+	}
+		
 	private JPanel createRenameInputPanel() {
 			
 		createThumbNailsCheckBox = new JCheckBox(lang.get("checkbox.createThumbNails"));
@@ -777,9 +795,10 @@ public class MainGUI extends JFrame {
 				
 		startProcessButton = new JButton(playPictureImageIcon);
 		startProcessButton.setActionCommand("startProcessButton");
-		startProcessButton.setToolTipText(lang.get("tooltip.beginNameChangeProcessButton"));
+		startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
 		startProcessButton.setPreferredSize(new Dimension(30, 20));
 		startProcessButton.setMinimumSize(new Dimension(30, 20));
+		startProcessButton.setEnabled(this.setStartProcessButtonState());
 		
 		imageStream = null;
 		ImageIcon openPictureImageIcon = new ImageIcon();
@@ -1145,8 +1164,7 @@ public class MainGUI extends JFrame {
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setDialogTitle(lang.get("fileSelectionDialog.destinationPathFileChooser"));
 				int returnVal = chooser.showOpenDialog(MainGUI.this);
-				if(returnVal == JFileChooser.APPROVE_OPTION)
-				{
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					String temp = chooser.getSelectedFile().getAbsolutePath();
 					
 					char [] tempArray = temp.toCharArray();
@@ -1171,6 +1189,8 @@ public class MainGUI extends JFrame {
 							
 						destinationPathTextField.setEnabled(true);
 						destinationPathTextField.setEditable(false);
+						
+						startProcessButton.setEnabled(setStartProcessButtonState());
 					} else {
 						JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.sameSourceAndDestination"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 					}	
@@ -1343,6 +1363,7 @@ public class MainGUI extends JFrame {
 					metaDataTableModel.setColumns();
 					metaDataTableModel.setTableContent(MetaDataUtil.getMetaData());
 				}
+				startProcessButton.setEnabled(setStartProcessButtonState());
 
 				Table.packColumns(metaDataTable, 6);
 				thumbNailsPanel.removeAll();
