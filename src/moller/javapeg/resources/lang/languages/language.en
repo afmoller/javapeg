@@ -52,6 +52,7 @@
 #                      : by Fredrik Möller 2009-07-19
 #                      : by Fredrik Möller 2009-07-20
 #                      : by Fredrik Möller 2009-07-22
+#                      : by Fredrik Möller 2009-07-29
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -134,13 +135,16 @@ checkbox.createThumbNails      = CREATE THUMBNAIL OVERVIEW
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton        = Browse for destination directory
-tooltip.subFolderName                = Specify name of folder with possible variables here
-tooltip.fileNameTemplate             = Specify filename template with possible variables here
-tooltip.createThumbNails             = Create thumbnail overview of name changed files
-tooltip.openDestinationFolder        = Open folder where name changed files will be present after finished process
-tooltip.beginNameChangeProcessButton = Start name change process
-tooltip.enableTemplateFields         = To enable, select a destination directory
+tooltip.destinationPathButton                                  = Browse for destination directory
+tooltip.subFolderName                                          = Specify name of folder with possible variables here
+tooltip.fileNameTemplate                                       = Specify filename template with possible variables here
+tooltip.createThumbNails                                       = Create thumbnail overview of name changed files
+tooltip.openDestinationFolder                                  = Open folder where name changed files will be present after finished process
+tooltip.beginNameChangeProcessButton                           = Start name change process
+tooltip.selectSourceDirectoryWithImages                        = Select a directory with images
+tooltip.selectDestinationDirectory                             = Select a destination directory
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Select a directory with images and a destination directory
+tooltip.enableTemplateFields                                   = To enable, select a destination directory
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #

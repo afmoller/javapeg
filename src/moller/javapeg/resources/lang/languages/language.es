@@ -16,6 +16,8 @@
 # This file was created: by Fredrik Möller 2005-xx-xx
 # This file was updated: by Angel Bueno    2009-07-25
 #                        by Fredrik Möller 2009-07-26
+#                        by Fredrik Möller 2009-07-28
+#                      : by Fredrik Möller 2009-07-29
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -93,18 +95,21 @@ variable.comment.infoLabelB = para nombrar los subdirectorios
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
 ##############################################################################################################
-checkbox.createThumbNails      = CREAR VISTA EN MinIATURA
+checkbox.createThumbNails      = CREAR VISTA EN MINIATURA
 
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton        = Buscar un directorio de destino
-tooltip.subFolderName                = Especificar un nombre de directorio con posibles variables aquí
-tooltip.fileNameTemplate             = Especificar un nombre de fichero con posibles variables aquí
-tooltip.createThumbNails             = Crear una vista en miniaturas de los ficheros renombrados
-tooltip.openDestinationFolder        = Abrir carpeta de destino después de finalizar el proceso
-tooltip.beginNameChangeProcessButton = Iniciar proceso de renombrado
-tooltip.enableTemplateFields         = Para habilitar, selecciona el directorio de destino
+tooltip.destinationPathButton                                  = Buscar un directorio de destino
+tooltip.subFolderName                                          = Especificar un nombre de directorio con posibles variables aquí
+tooltip.fileNameTemplate                                       = Especificar un nombre de fichero con posibles variables aquí
+tooltip.createThumbNails                                       = Crear una vista en miniaturas de los ficheros renombrados
+tooltip.openDestinationFolder                                  = Abrir carpeta de destino después de finalizar el proceso
+tooltip.beginNameChangeProcessButton                           = Iniciar proceso de renombrado
+tooltip.selectSourceDirectoryWithImages                        = Select a directory with images
+tooltip.selectDestinationDirectory                             = Select a destination directory
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Select a directory with images and a destination directory
+tooltip.enableTemplateFields                                   = Para habilitar, selecciona el directorio de destino
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
