@@ -18,6 +18,7 @@
 #                        by Fredrik Möller 2009-07-26
 #                        by Fredrik Möller 2009-07-28
 #                      : by Fredrik Möller 2009-07-29
+#                      : by Fredrik Möller 2009-07-31
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -57,7 +58,7 @@ menu.item.about.accelerator                      = A
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
-labels.sourcePath       = SOURCE DIRECTORY
+labels.sourcePath       = DIRECTORIO ORIGEN
 labels.destinatonPath   = RUTA AL DIRECTORIO DE DESTINO
 labels.subFolderName    = PLANTILLA PARA EL NOMBRE DEL SUBDIRECTORIO
 labels.fileNameTemplate = PLANTILLA PARA EL NOMBRE DEL FICHERO
@@ -107,9 +108,9 @@ tooltip.fileNameTemplate                                       = Especificar un 
 tooltip.createThumbNails                                       = Crear una vista en miniaturas de los ficheros renombrados
 tooltip.openDestinationFolder                                  = Abrir carpeta de destino después de finalizar el proceso
 tooltip.beginNameChangeProcessButton                           = Iniciar proceso de renombrado
-tooltip.selectSourceDirectoryWithImages                        = Select a directory with images
-tooltip.selectDestinationDirectory                             = Select a destination directory
-tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Select a directory with images and a destination directory
+tooltip.selectSourceDirectoryWithImages                        = Selecciona un directorio con imágenes
+tooltip.selectDestinationDirectory                             = Selecciona un directorio de destino
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Selecciona un directorio con imágenes y un directorio de destino
 tooltip.enableTemplateFields                                   = Para habilitar, selecciona el directorio de destino
 
 ##############################################################################################################
