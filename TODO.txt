@@ -1,8 +1,5 @@
 2.2:
 ====
-- Test all functionality.
-- Update version numbers in language files
-- Update info files in the internal resources directory.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
