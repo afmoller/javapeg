@@ -52,6 +52,7 @@
 #                      : by Fredrik Möller 2009-07-20
 #                      : by Fredrik Möller 2009-07-22
 #                      : by Fredrik Möller 2009-07-29
+#                      : by Fredrik Möller 2009-08-02
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -74,9 +75,9 @@ menu.item.languageChoice             = Språkval
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
-menu.mnemonic.file               = A
-menu.mnemonic.help               = H
-menu.mnemonic.language           = S
+menu.mnemonic.file     = A
+menu.mnemonic.help     = H
+menu.mnemonic.language = S
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -130,7 +131,7 @@ variable.comment.infoLabelB = vid namngivning av undermapp
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
 ##############################################################################################################
-checkbox.createThumbNails      = SKAPA TUMNAGELÖVERSIKT
+checkbox.createThumbNails = SKAPA TUMNAGELÖVERSIKT
 
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
@@ -167,14 +168,14 @@ aboutDialog.TextRowH = _______________________________________
 ##############################################################################################################
 # E R R O R  M E S S A G E S  M A I N G U I                                                                  #
 ##############################################################################################################
-errormessage.maingui.errorMessageLabel                       = Fel
-errormessage.maingui.warningMessageLabel                     = Varning
-errormessage.maingui.informationMessageLabel                 = Information
-errormessage.maingui.locationError                           = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-errormessage.maingui.toLongFileNameInPreviewTable            = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
-errormessage.maingui.toLongTotalPathInPreviewTable           = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
-errormessage.maingui.invalidVariablesInSubFolderNameError    = Namnet på undermappen kan bara innehålla följande variabler:
-errormessage.maingui.sameSourceAndDestination                = Käll och destinationskatalog är samma.
+errormessage.maingui.errorMessageLabel                    = Fel
+errormessage.maingui.warningMessageLabel                  = Varning
+errormessage.maingui.informationMessageLabel              = Information
+errormessage.maingui.locationError                        = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+errormessage.maingui.toLongFileNameInPreviewTable         = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
+errormessage.maingui.toLongTotalPathInPreviewTable        = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
+errormessage.maingui.invalidVariablesInSubFolderNameError = Namnet på undermappen kan bara innehålla följande variabler:
+errormessage.maingui.sameSourceAndDestination             = Käll och destinationskatalog är samma.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
@@ -197,12 +198,12 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes                            = Ja
-errormessage.jpgrename.joptionPaneNo                             = Nej
-errormessage.jpgrename.noImagesInPathLabel                       = Felmeddelande
-errormessage.jpgrename.noImagesInPath                            = Den valda sökvägen innehåller inga bildfiler
-errormessage.jpgrename.noExifInImage                             = Ingen exif information kunde hittas. För att göra om processen från början, ta bort följande fil från de filer som skall döpas om:
-errormessage.jpgrename.noExifInImageLabel                        = Ingen Exif
+errormessage.jpgrename.joptionPaneYes      = Ja
+errormessage.jpgrename.joptionPaneNo       = Nej
+errormessage.jpgrename.noImagesInPathLabel = Felmeddelande
+errormessage.jpgrename.noImagesInPath      = Den valda sökvägen innehåller inga bildfiler
+errormessage.jpgrename.noExifInImage       = Ingen exif information kunde hittas. För att göra om processen från början, ta bort följande fil från de filer som skall döpas om:
+errormessage.jpgrename.noExifInImageLabel  = Ingen Exif
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
@@ -257,11 +258,11 @@ maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
 maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva över?
 
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved        = Bildlistan sparades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved     = Bildlistan kunde inte sparas, se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = Bildlistan sparades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = Bildlistan kunde inte sparas, se loggfil för detaljer.
 
-maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated     = Bildlistan i PolyView-format skapades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated  = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = Bildlistan i PolyView-format skapades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
 
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = Bildlistan i IrfanView-format skapades korrekt.
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = Bildlistan i IrfanView-format kunde inte skapas. Se loggfil för detaljer.
@@ -286,9 +287,9 @@ picture.panel.pictureLabel = BILDER I VALD MAPP
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
-helpViewerGUI.window.locationError      = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-helpViewerGUI.window.title              = Hjälp
-helpViewerGUI.errorMessage              = Kunde inte ladda hjälpfil, se loggfil för detaljer.
+helpViewerGUI.window.locationError = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+helpViewerGUI.window.title         = Hjälp
+helpViewerGUI.errorMessage         = Kunde inte ladda hjälpfil, se loggfil för detaljer.
 
 helpViewerGUI.tree.content                    = Innehåll
 helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
@@ -357,15 +358,15 @@ validator.availablediskspace.notEnoughDiskSpace = Det finns inte tillräckligt me
 validator.destinationdirectorydoesnotexist.existingSubDirectory = Destinations katalogen existerar redan.
 
 # File and sub directory template validator
-validator.fileandsubdirectorytemplate.noSubFolderNameError                    = Ett namn på underkatalogen måste anges
-validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError   = Namnet på undermappen innehåller otillåtna tecken
-validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError    = Namnet på undermappen kan bara innehålla följande variabler:
-validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate         = En punkt som första tecken i undermappsnamnet är inte tillåtet
-validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate          = En punkt som sista tecken i undermappsnamnet är inte tillåtet
-validator.fileandsubdirectorytemplate.noFileNameError                         = En filnamnsmall måste definieras
-validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError        = Filnamnsmallen innehåller otillåtna tecken
-validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate              = En punkt som första tecken i filnamnsmallen är inte tillåtet
-validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate               = En punkt som sista tecken i filnamnsmallen är inte tillåtet
+validator.fileandsubdirectorytemplate.noSubFolderNameError                  = Ett namn på underkatalogen måste anges
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = Namnet på undermappen innehåller otillåtna tecken
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = Namnet på undermappen kan bara innehålla följande variabler:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = En punkt som första tecken i undermappsnamnet är inte tillåtet
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = En punkt som sista tecken i undermappsnamnet är inte tillåtet
+validator.fileandsubdirectorytemplate.noFileNameError                       = En filnamnsmall måste definieras
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = Filnamnsmallen innehåller otillåtna tecken
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = En punkt som första tecken i filnamnsmallen är inte tillåtet
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = En punkt som sista tecken i filnamnsmallen är inte tillåtet
 
 # File creation at destination directory
 validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = Kunde inte skapa underkatalog
