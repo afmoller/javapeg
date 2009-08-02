@@ -12,10 +12,10 @@ Se debe indicar un directorio de destino. Esto se hace pulsando el botón de la d
 <LF>
 <LF>
 3:<LF>
-"PLANTILLA DE NOMBRE DE FICHERO" and "PLANTILLA DE NOMBRE DE SUB DIRECTORIO" son hechas con las variables disponibles en la ventana "VARIABLES". Estas variables obtendrán su información de los metadatos Exif de la imagen.
+la "PLANTILLA DE NOMBRE DE FICHERO" y la "PLANTILLA DE NOMBRE DE SUB DIRECTORIO" son hechas con las variables disponibles en la ventana "VARIABLES". Estas variables obtendrán su información de los metadatos Exif de la imagen.
 <LF>
 <LF>
-"PLANTILLA DE NOMBRE DE SUB DIRECTORIO" sólo puede usar las variables marcadas con un asterisco en la lista. Además es posible mezclar variables con cadenas de texto estáticas en forma de palabras y números en cualquier combinación.
+la "PLANTILLA DE NOMBRE DE SUB DIRECTORIO" sólo puede usar las variables marcadas con un asterisco en la lista. Además es posible mezclar variables con cadenas de texto estáticas en forma de palabras y números en cualquier combinación.
 <LF>
 <LF>
  Un ejemplo de plantilla puede ser : "Imagen %d% - %t%"
@@ -33,7 +33,7 @@ En este punto ya se ha preparado todo lo necesario para el renombrado. Para inic
 <LF>
 <LF>
 <LF>
-Resumen - cinco pasos simples<LF>
+Resumen en cinco pasos simples<LF>
 =============================<LF>
 <LF>
  1. Selecciona las imágenes<LF>

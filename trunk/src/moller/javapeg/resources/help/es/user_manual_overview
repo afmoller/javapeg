@@ -1,4 +1,4 @@
-DESCRIOCION DEL PROGRAMA<LF>
+DESCRIPCION DEL PROGRAMA<LF>
 ========================<LF>
 JavaPEG tiene la posibilidad de cambiar los nombres de fichero de las imágenes jpeg que contienen datos Exif, Exchangeable Image File Format (formato de fichero imagen intercambiable). La mayoría de las cámaras digitales soportan este formato y guardan varios metadatos (información acerca del propio fichero) cuando la imagen se guarda en el almacenamiento de la cámara. un ejemplo de metadato puede ser la fecha de captura de la imagen.
 <LF>
