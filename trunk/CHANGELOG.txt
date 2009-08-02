@@ -8,7 +8,7 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
  
- 2.2 (2009-xx-xx)
+ 2.2 (2009-08-02)
  
  + Spanish translation added. The translation was performed by: Angel Bueno
  
@@ -31,11 +31,11 @@
  
  + Status bar added to the bottom of the GUI, displaying selected directory,
    number of images in selected directory and number of columns and rows in the 
-   thumb nail grid.
+   thumbnail grid.
  
  + Detailed meta data information is available in a panel next to the 
-   thumb nails panel for each image shown. The meta data for a specific image
-   is shown when the thumb nail is clicked.  
+   thumbnails panel for each image shown. The meta data for a specific image
+   is shown when the thumbnail is clicked.  
  
  + At application start the Main GUI sets it size to the size it had when it 
    was shut down the the previous time. 
@@ -46,8 +46,8 @@
  ~ The file chooser GUI, as a separate window, has been replaced by an always
    visible and accessible tree structure in the main GUI.
    
- ! The progress bar for loading thumb nails was not always centered to the main
-   GUI window when thumb nails was loading.        
+ ! The progress bar for loading thumbnails was not always centered to the main
+   GUI window when thumbnails was loading.        
 
  2.1 (2009-05-21)
  
