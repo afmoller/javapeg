@@ -81,7 +81,7 @@ Versión 1.01<LF>
 Liberada el 2007-02-02: La versión 1.01 de JavaPEG es sólo una versión que corrige errores. Corrige características erróneas en el motor de renombrado y un problema on mensajes de error incorrectos.
 <LF>
 <LF>
-El programa se cuelga si se utiliza un punto como primer o último caracter en la plantilla del nombre de fichero y/o subdirectorio. El mismo problema se presentó si se utiliza un espacio en blanco como primer o último carácter en las plantillas. Además desde esta verisón hay una corrección en dos mensajes de error en inglés que se mezclaron en el fichero de idioma Inglés.
+El programa se cuelga si se utiliza un punto como primer o último caracter en la plantilla del nombre de fichero y/o subdirectorio. El mismo problema se presentó si se utiliza un espacio en blanco como primer o último carácter en las plantillas. Además desde esta versión hay una corrección en dos mensajes de error en inglés que se mezclaron en el fichero de idioma Inglés.
 <LF>
 <LF>
 Versión 1.0<LF>
