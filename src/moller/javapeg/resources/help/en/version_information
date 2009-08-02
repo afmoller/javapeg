@@ -5,7 +5,7 @@ Below is a description of what each version of JavaPEG has been able to do.
 <LF>
 Version 2.2<LF>
 ===========<LF>
-Released 2009-xx-xx Version 2.2 of JavaPEG has got a new layout of the graphical user interface. From now on it can be resized and thereby can be made to use the entire screen of a high resolution monitor. All major panels can be adjusted regarding their size and they can also be completely hidden to free up space for the nonhidden panels. The size of each panel is saved between application sessions.
+Released 2009-08-02 Version 2.2 of JavaPEG has got a new layout of the graphical user interface. From now on it can be resized and thereby can be made to use the entire screen of a high resolution monitor. All major panels can be adjusted regarding their size and they can also be completely hidden to free up space for the nonhidden panels. The size of each panel is saved between application sessions.
 <LF>
 <LF>
 The second major difference is that the source selection window has been removed and has been replaced with an instant available tree structure displaying the file system. 
