@@ -342,7 +342,9 @@ public class MainGUI extends JFrame {
 		openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 		
 		startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
+		startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
 		startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+		startProcessJMenuItem.setEnabled(false);
 		
 		shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
 		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
@@ -782,15 +784,19 @@ public class MainGUI extends JFrame {
 		
 		if (ac.getMetaDataObjects().size() > 0 && ac.getDestinationPath().length() > 0) {
 			startProcessButton.setToolTipText(lang.get("tooltip.beginNameChangeProcessButton"));
+			startProcessJMenuItem.setToolTipText("");
 			return true;
 		} else if (ac.getMetaDataObjects().size() > 0) {
 			startProcessButton.setToolTipText(lang.get("tooltip.selectDestinationDirectory"));
+			startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectDestinationDirectory"));
 			return false;
 		} else if (ac.getDestinationPath().length() > 0) {
 			startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImages"));
+			startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImages"));
 			return false;
 		} else {
 			startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
+			startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
 			return false;
 		}
 	}
@@ -817,7 +823,7 @@ public class MainGUI extends JFrame {
 		startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
 		startProcessButton.setPreferredSize(new Dimension(30, 20));
 		startProcessButton.setMinimumSize(new Dimension(30, 20));
-		startProcessButton.setEnabled(this.setStartProcessButtonState());
+		startProcessButton.setEnabled(false);
 		
 		imageStream = null;
 		ImageIcon openPictureImageIcon = new ImageIcon();
@@ -1009,7 +1015,6 @@ public class MainGUI extends JFrame {
 		
 		File sourceFile = new File(sourcePath);
 		if (sourceFile.exists()) {
-			fr.loadFilesFromDisk(new File(sourcePath));
 			
 			jpgFilesAsFiles = fr.getJPEGFiles();
 
@@ -1210,6 +1215,7 @@ public class MainGUI extends JFrame {
 						destinationPathTextField.setEditable(false);
 						
 						startProcessButton.setEnabled(setStartProcessButtonState());
+						startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 					} else {
 						JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.sameSourceAndDestination"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 					}	
@@ -1383,6 +1389,7 @@ public class MainGUI extends JFrame {
 					metaDataTableModel.setTableContent(MetaDataUtil.getMetaData());
 				}
 				startProcessButton.setEnabled(setStartProcessButtonState());
+				startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
 				Table.packColumns(metaDataTable, 6);
 				thumbNailsPanel.removeAll();
