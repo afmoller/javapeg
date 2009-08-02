@@ -52,6 +52,7 @@ package moller.javapeg.program;
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-07-23 by Fredrik Möller
  *                        : 2009-07-24 by Fredrik Möller
+ *                        : 2009-08-02 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -169,7 +170,7 @@ public class MainGUI extends JFrame {
 	 * release is done. The value is the amount of milliseconds since 
 	 * 1970-01-01 with 
 	 */
-	private final static long VERSION_TIMESTAMP = 1242936761;
+	private final static long VERSION_TIMESTAMP = 1249222958;
 	
 	private static Config config;
 	private static Logger logger;
