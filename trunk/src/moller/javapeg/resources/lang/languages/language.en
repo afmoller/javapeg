@@ -53,6 +53,7 @@
 #                      : by Fredrik Möller 2009-07-20
 #                      : by Fredrik Möller 2009-07-22
 #                      : by Fredrik Möller 2009-07-29
+#                      : by Fredrik Möller 2009-08-02
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -75,9 +76,9 @@ menu.item.languageChoice             = Language selection
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
-menu.mnemonic.file               = F
-menu.mnemonic.help               = H
-menu.mnemonic.language           = L
+menu.mnemonic.file     = F
+menu.mnemonic.help     = H
+menu.mnemonic.language = L
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -131,7 +132,7 @@ variable.comment.infoLabelB = used when naming a subdirectory
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
 ##############################################################################################################
-checkbox.createThumbNails      = CREATE THUMBNAIL OVERVIEW
+checkbox.createThumbNails = CREATE THUMBNAIL OVERVIEW
 
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
@@ -168,13 +169,13 @@ aboutDialog.TextRowH = _______________________________________
 ##############################################################################################################
 # E R R O R  M E S S A G E S  M A I N G U I                                                                  #
 ##############################################################################################################
-errormessage.maingui.errorMessageLabel                       = Error
-errormessage.maingui.warningMessageLabel                     = Warning
-errormessage.maingui.informationMessageLabel                 = Information
-errormessage.maingui.locationError                           = Could not set window location according to settings. See logs for details
-errormessage.maingui.toLongFileNameInPreviewTable            = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
-errormessage.maingui.toLongTotalPathInPreviewTable           = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
-errormessage.maingui.sameSourceAndDestination                = Source and destination folder are the same
+errormessage.maingui.errorMessageLabel             = Error
+errormessage.maingui.warningMessageLabel           = Warning
+errormessage.maingui.informationMessageLabel       = Information
+errormessage.maingui.locationError                 = Could not set window location according to settings. See logs for details
+errormessage.maingui.toLongFileNameInPreviewTable  = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
+errormessage.maingui.toLongTotalPathInPreviewTable = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
+errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
@@ -197,12 +198,12 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes                            = Yes
-errormessage.jpgrename.joptionPaneNo                             = No
-errormessage.jpgrename.noImagesInPathLabel                       = Fault message
-errormessage.jpgrename.noImagesInPath                            = Chosen path contains no image files
-errormessage.jpgrename.noExifInImage                             = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
-errormessage.jpgrename.noExifInImageLabel                        = No Exif
+errormessage.jpgrename.joptionPaneYes      = Yes
+errormessage.jpgrename.joptionPaneNo       = No
+errormessage.jpgrename.noImagesInPathLabel = Fault message
+errormessage.jpgrename.noImagesInPath      = Chosen path contains no image files
+errormessage.jpgrename.noExifInImage       = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImageLabel  = No Exif
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
@@ -287,9 +288,9 @@ picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
-helpViewerGUI.window.locationError      = Could not set window location according to settings. See logs for details 
-helpViewerGUI.window.title              = Help
-helpViewerGUI.errorMessage              = Could not load help file, see log file for details.
+helpViewerGUI.window.locationError = Could not set window location according to settings. See logs for details 
+helpViewerGUI.window.title         = Help
+helpViewerGUI.errorMessage         = Could not load help file, see log file for details.
 
 helpViewerGUI.tree.content                    = Content
 helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
@@ -358,15 +359,15 @@ validator.availablediskspace.notEnoughDiskSpace = Not enough disk space at selec
 validator.destinationdirectorydoesnotexist.existingSubDirectory = Destination folder already exists.
 
 # File and sub directory template validator
-validator.fileandsubdirectorytemplate.noSubFolderNameError                    = Sub folder must have a name
-validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError   = Sub folder name contains illegal characters
-validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError    = Sub folder name may only contain these variables:
-validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate         = A dot is not valid as first character in sub folder name
-validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate          = A dot is not valid as last character in sub folder name
-validator.fileandsubdirectorytemplate.noFileNameError                         = A filename template must be set
-validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError        = Filename template contains illegal characters
-validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate              = A dot is not valid as first character in filename template
-validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate               = A dot is not valid as last character in filename template
+validator.fileandsubdirectorytemplate.noSubFolderNameError                  = Sub folder must have a name
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = Sub folder name contains illegal characters
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = Sub folder name may only contain these variables:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = A dot is not valid as first character in sub folder name
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = A dot is not valid as last character in sub folder name
+validator.fileandsubdirectorytemplate.noFileNameError                       = A filename template must be set
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = Filename template contains illegal characters
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = A dot is not valid as first character in filename template
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = A dot is not valid as last character in filename template
 
 # File creation at destination directory validator
 validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = Could not create sub directory
