@@ -1,24 +1,25 @@
-# This is the Spanish language file for JavaPEG.
+# Este es el fichero de castellano de JavaPEG.
 
-# The structure of the file is as follows:
+# La estructura del fichero es como se indica a continuación:
 
-# A line starting with "#" is interpreted as a comment.
+# Una linea que comience con "#" se interpreta como un comentario.
 
-# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
-# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+# Una línea válida que no sea un comentario puede ser como "file = Archivo" donde "file" es la variable, = el
+# separador y "Archivo" es el valor de la variable, en este caso la palabra escrita en castellano.
 
-# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
-# or other character after the value of the variable will be trimmed away.
+# Puede haber espacios en blanco o tabulaciones entre la variable y el símbolo "=". Cualquier espacio en blanco
+# u otro carácter después del valor de la variable también será omitido.
 
-# For more information regarding the rules for the syntax of this file please visit:
+# Para más información acerca de las reglas de la sintáxis de este fichero , por favor, visita:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# This file was created: by Fredrik Möller 2005-xx-xx
-# This file was updated: by Angel Bueno    2009-07-25
-#                        by Fredrik Möller 2009-07-26
-#                        by Fredrik Möller 2009-07-28
-#                      : by Fredrik Möller 2009-07-29
-#                      : by Fredrik Möller 2009-07-31
+# Este fichero fue creado     : por Fredrik Möller 2005-xx-xx
+# Este fichero fue actualizado: por Angel Bueno    2009-07-25
+#                             : por Fredrik Möller 2009-07-26
+#                             : por Fredrik Möller 2009-07-28
+#                             : por Fredrik Möller 2009-07-29
+#                             : por Fredrik Möller 2009-07-31
+#                             : por Angel Bueno    2009-07-31
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -28,7 +29,7 @@ menu.help     = Ayuda
 menu.language = Idioma
 
 #############################################################################################################
-# M E N U  I T E M S                                                                                        #
+# E L E M E N T O S  D E L  M E N U																			#
 #############################################################################################################
 menu.item.exit                       = Salir
 menu.item.openDestinationFileChooser = Abrir selector de destino
@@ -39,14 +40,14 @@ menu.item.about                      = Acerca de JavaPEG 2.2
 menu.item.languageChoice             = Selección de idioma
 
 #############################################################################################################
-# M E N U  M N E M O N I C                                                                                  #
+# T E C L A S  R A P I D A S  D E L  M E N U																#
 #############################################################################################################
-menu.mnemonic.file               = F
-menu.mnemonic.help               = H
-menu.mnemonic.language           = L
+menu.mnemonic.file     = F
+menu.mnemonic.help     = H
+menu.mnemonic.language = L
 
 #############################################################################################################
-# M E N U  A C C E L E R A T O R                                                                            #
+# A C E L E R A D O R  D E L  M E N U                                                                       #
 #############################################################################################################
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
@@ -56,7 +57,7 @@ menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = A
 
 ##############################################################################################################
-# L A B E L S                                                                                                #
+# E T I Q U E T A S                                                                                          #
 ##############################################################################################################
 labels.sourcePath       = DIRECTORIO ORIGEN
 labels.destinatonPath   = RUTA AL DIRECTORIO DE DESTINO
@@ -89,18 +90,18 @@ variable.sourceNameVariable    = sn
 variable.sourceName            = Nombre del fichero original
 
 ##############################################################################################################
-# V A R I A B L E S  C O M M E N T                                                                           #
+# C O M E N T A R I O  D E  V A R I A B L E S                                                                #
 ##############################################################################################################
 variable.comment.infoLabelA = * = Estas variables se pueden usar
 variable.comment.infoLabelB = para nombrar los subdirectorios
 
 ##############################################################################################################
-# C H E C K  B O X E S                                                                                       #
+# C A S I L L A S  P A R A  M A R C A R                                                                      #
 ##############################################################################################################
-checkbox.createThumbNails      = CREAR VISTA EN MINIATURA
+checkbox.createThumbNails = CREAR VISTA EN MINIATURA
 
 ##############################################################################################################
-# T O O L T I P S                                                                                            #
+# A V I S O S                                                                                                #
 ##############################################################################################################
 tooltip.destinationPathButton                                  = Buscar un directorio de destino
 tooltip.subFolderName                                          = Especificar un nombre de directorio con posibles variables aquí
@@ -114,12 +115,12 @@ tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Selecciona un d
 tooltip.enableTemplateFields                                   = Para habilitar, selecciona el directorio de destino
 
 ##############################################################################################################
-# F I L E  S E L E C T I O N  D I A L O G S                                                                  #
+# D I A L O G O S  D E  S E L E C C I O N  D E  F I C H E R O S                                              #
 ##############################################################################################################
 fileSelectionDialog.destinationPathFileChooser = Selecciona el directorio de destino
 
 ##############################################################################################################
-# A B O U T  D I A L O G                                                                                     #
+# D I A L O G O  A C E R C A  D E                                                                            #
 ##############################################################################################################
 aboutDialog.Label    = Acerca de JavaPEG 2.2
 aboutDialog.TextRowA = JavaPEG, ver: 2.2
@@ -132,18 +133,18 @@ aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
 
 ##############################################################################################################
-# E R R O R  M E S S A G E S  M A I N G U I                                                                  #
+# M E N S A J E S  D E  E R R O R  D E  L A  V E N T A N A  P R I N C I P A L                                #
 ##############################################################################################################
-errormessage.maingui.errorMessageLabel                       = Error
-errormessage.maingui.warningMessageLabel                     = Advertencia
-errormessage.maingui.informationMessageLabel                 = Información
-errormessage.maingui.locationError                           = No se pudo ajustar la ventana acorde a los ajustes. Revise el log para más detalles
-errormessage.maingui.toLongFileNameInPreviewTable            = Con esta plantilla para el nombre, el nombre del fichero superará los 200 caracteres.\n\nEsto puede ser un problema, porque una ruta no puede ser superior a 255 caracteres.\nPuede que no se pueda mover el fichero a otro directorio, si la ruta\ntotal: ruta al fichero + nombre del fichero es superior a 255 caracteres.
-errormessage.maingui.toLongTotalPathInPreviewTable           = La ruta total: ruta al directorio de destino y plantilla para el nombre del fichero seleccionada\ngenerarán una ruta superior a 255 caracteres, y esto no está permitido.\nO el nombre del fichero se hace más corto (cambiar la plantilla del nombre del fichero) o se selecciona un directorio de destino más corto.
-errormessage.maingui.sameSourceAndDestination                = El directorio de origen y destino es el mismo
+errormessage.maingui.errorMessageLabel             = Error
+errormessage.maingui.warningMessageLabel           = Advertencia
+errormessage.maingui.informationMessageLabel       = Información
+errormessage.maingui.locationError                 = No se pudo ajustar la ventana acorde a los ajustes. Revise el log para más detalles
+errormessage.maingui.toLongFileNameInPreviewTable  = Con esta plantilla para el nombre, el nombre del fichero superará los 200 caracteres.\n\nEsto puede ser un problema, porque una ruta no puede ser superior a 255 caracteres.\nPuede que no se pueda mover el fichero a otro directorio, si la ruta\ntotal: ruta al fichero + nombre del fichero es superior a 255 caracteres.
+errormessage.maingui.toLongTotalPathInPreviewTable = La ruta total: ruta al directorio de destino y plantilla para el nombre del fichero seleccionada\ngenerarán una ruta superior a 255 caracteres, y esto no está permitido.\nO el nombre del fichero se hace más corto (cambiar la plantilla del nombre del fichero) o se selecciona un directorio de destino más corto.
+errormessage.maingui.sameSourceAndDestination      = El directorio de origen y destino es el mismo
 
 ##############################################################################################################
-# P R O G R E S S B A R                                                                                      #
+# B A R R A  D E  P R O G R E S O                                                                            #
 ##############################################################################################################
 progress.ThumbNailLoading.title = Cargando miniaturas
 
@@ -161,17 +162,17 @@ progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip = 
 progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = Abrir el directorio de destino en un navegador
 
 ##############################################################################################################
-# E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
+# M E N S A J E S  D E  E R R O R  D E  J P G R E N A M E                                                    #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes                            = Si
-errormessage.jpgrename.joptionPaneNo                             = No
-errormessage.jpgrename.noImagesInPathLabel                       = Mensaje de error
-errormessage.jpgrename.noImagesInPath                            = La ruta seleccionada no contiene imágenes
-errormessage.jpgrename.noExifInImageLabel                        = No Exif
-errormessage.jpgrename.noExifInImage                             = No se encontró información exif. Para deshacer el proceso desde el principio, borra el siguiente fichero de los ficheros a renombrar:
+errormessage.jpgrename.joptionPaneYes      = Si
+errormessage.jpgrename.joptionPaneNo       = No
+errormessage.jpgrename.noImagesInPathLabel = Mensaje de error
+errormessage.jpgrename.noImagesInPath      = La ruta seleccionada no contiene imágenes
+errormessage.jpgrename.noExifInImageLabel  = No Exif
+errormessage.jpgrename.noExifInImage       = No se encontró información exif. Para deshacer el proceso desde el principio, borra el siguiente fichero de los ficheros a renombrar:
 
 ##############################################################################################################
-# E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
+# M E N S A J E S  D E  E R R O R  D E L  M A N E J A D O R  D E  F I C H E R O S                            #
 ##############################################################################################################
 errormessage.filehandler.fileNotFoundExceptionA = El fichero:
 errormessage.filehandler.fileNotFoundExceptionB = no se encontró
@@ -179,7 +180,7 @@ errormessage.filehandler.canNotReadFile         = No se pudo acceder al fichero:
 errormessage.filehandler.canNotWriteFile        = No se pudo escribir:
 
 ##############################################################################################################
-# L A N G U A G E  O P T I O N S  G U I                                                                      #
+# G U I  C O N  L A S  O P C I O N E S  D E  I D I O M A                                                     #
 ##############################################################################################################
 language.option.gui.windowTitle          = Ajustes de idioma
 language.option.gui.selectionModeJLabel  = MODO DE SELECCION
@@ -193,13 +194,13 @@ language.option.gui.cancelButton         = Cancelar
 language.option.gui.window.locationError = No se pudo ajustar la ventana de acuerdo a los ajustes. Revise los logs para más detalles
 
 ##############################################################################################################
-# I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
+# M E N S A J E S  D E  I N F O R M A C I O N  D E L  G U I  C O N  L A S  O P C I O N E S  D E  I D I O M A #
 ##############################################################################################################
 language.option.gui.information.windowlabel    = Información
 language.option.gui.information.restartMessage = El idioma seleccionado no se usará hasta que JavaPEG se reinicie
 
 ##############################################################################################################
-# M A I N  G U I  T A B B E D  P A N E                                                                       #
+# P A N E L  T A B U L A D O  D E L  G U I  P R I N C I P A L                                                #
 ##############################################################################################################
 maingui.tabbedpane.imagelist.label.list                 = LISTA DE IMAGENES
 maingui.tabbedpane.imagelist.label.preview              = PREVISUALIZACION
@@ -233,29 +234,30 @@ maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = L
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = La lista de imágenes en formato IrfanView se creó correctamente.
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = La lista de imágenes en formato IrfanView no se pudo crear, revise el log para más detalles.
 
-###########################################################################################################
-# M A I N  G U I  P O P U P  M E N U                                                                         #
+##############################################################################################################
+# M E N U  E M E R G E N T E  D E L  G U I  P R I N C I P A L                                                #
 ##############################################################################################################
 maingui.popupmenu.addImageToList     = Añadir imagen a la lista
 maingui.popupmenu.addAllImagesToList = Añadir todas las imágenes a la lista
 
 ##############################################################################################################
-# I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
+# V E N T A N A  D E  I N F O R M A C I O N  ( A Y U D A  D E  U S U A R I O  E                              # 
+# I N F O R M A C I O N  D E  V E R S I O N )      															 #
 ##############################################################################################################
 information.window.userHelpWindowTitle           = Programa de ayuda
 information.window.versionInformationWindowTitle = Información de versión
 
 ##############################################################################################################
-# P I C T U R E  P A N E L                                                                                   #
+# P A N E L  D E  I M A G E N E S                                                                            #
 ##############################################################################################################
 picture.panel.pictureLabel = IMAGENES EN EL DIRECTORIO SELECCIONADO
 
 ##############################################################################################################
-# H E L P  V I E W E R                                                                                       #
+# V I S O R  D E  A Y U D A                                                                                  #
 ##############################################################################################################
-helpViewerGUI.window.locationError      = No se pudo ajustar la ventana conforme a la configuración. Revise los logs para más detalles
-helpViewerGUI.window.title              = Ayuda
-helpViewerGUI.errorMessage              = No se pudo cargar el fichero de ayuda, revise el fichero de logs para más detalles.
+helpViewerGUI.window.locationError = No se pudo ajustar la ventana conforme a la configuración. Revise los logs para más detalles
+helpViewerGUI.window.title         = Ayuda
+helpViewerGUI.errorMessage         = No se pudo cargar el fichero de ayuda, revise el fichero de logs para más detalles.
 
 helpViewerGUI.tree.content                    = Contenido
 helpViewerGUI.tree.programHelpOverView        = DESCRIPCION DEL PROGRAMA
@@ -266,7 +268,7 @@ helpViewerGUI.tree.versionInformation         = INFORMACION DE VERSION
 helpViewerGUI.tree.references                 = REFERENCIAS / CREDITOS
 
 ##############################################################################################################
-# I N F O R M A T I O N  P A N E L                                                                           #
+# P A N E L  D E  I N F O R M A C I O N                                                                      #
 ##############################################################################################################
 information.panel.informationLabel   = INFORMACION
 information.panel.columnNameFileName = Nombre del fichero
@@ -278,7 +280,7 @@ information.panel.progressLabel      = PROCESO
 information.panel.subFolderNameLabel = Nombre de subcarpeta
 
 ##############################################################################################################
-# R E N A M E  P R O C E S S  I N F O R M A T I O N  M E S S A G E                                           #
+# M E N S A J E  D E  I N F O R M A C I O N  D E L  P R O C E S O                                            #
 ##############################################################################################################
 rename.PreFileProcessor.starting                           = Pre procesado de fichero iniciado
 rename.PreFileProcessor.error                              = El pre procesado del fichero encontró los siguientes errores:
@@ -314,7 +316,7 @@ rename.PostFileProcessor.renamedWithError        = Renombrado con ERROR a:
 rename.PostFileProcessor.renamedOK               = Renombrado OK a:
 
 ##############################################################################################################
-# P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #
+# P R E  P R O C E S A D O R  V A L I D A D O R  D E L  F I C H E R O                                        #
 ##############################################################################################################
 #
 # Available disk space validator
@@ -324,15 +326,15 @@ validator.availablediskspace.notEnoughDiskSpace = No hay espacio en disco sufici
 validator.destinationdirectorydoesnotexist.existingSubDirectory = El directorio de destino ya existe.
 
 # File and sub directory template validator
-validator.fileandsubdirectorytemplate.noSubFolderNameError                    = El Sub directorio debe tener un nombre
-validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError   = El nombre del sub directorio contiene caracteres ilegales
-validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError    = El nombre del subdirectorio sólo puede tener estas variables:
-validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate         = Un punto no es un caracter válido para el comienzo del nombre de un subdirectorio
-validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate          = Un punto no es un caracter válido para el final del nombre de un subdirectorio
-validator.fileandsubdirectorytemplate.noFileNameError                         = Es neceasario indocar una plantilla para el nombre del fichero
-validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError        = La plantilla para el nombre del fichero contiene caracteres ilegales
-validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate              = Un punto no es un caracter válido para el comienzo de la plantilla del nombre de fichero
-validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate               = Un punto no es un caracter válido para el final de la plantilla del nombre de fichero
+validator.fileandsubdirectorytemplate.noSubFolderNameError                  = El Sub directorio debe tener un nombre
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = El nombre del sub directorio contiene caracteres ilegales
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = El nombre del subdirectorio sólo puede tener estas variables:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = Un punto no es un caracter válido para el comienzo del nombre de un subdirectorio
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = Un punto no es un caracter válido para el final del nombre de un subdirectorio
+validator.fileandsubdirectorytemplate.noFileNameError                       = Es neceasario indocar una plantilla para el nombre del fichero
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = La plantilla para el nombre del fichero contiene caracteres ilegales
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = Un punto no es un caracter válido para el comienzo de la plantilla del nombre de fichero
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = Un punto no es un caracter válido para el final de la plantilla del nombre de fichero
 
 # File creation at destination directory validator
 validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = No se pudo crear el sub directorio
@@ -360,7 +362,7 @@ validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = La 
 validator.externalOverviewLayout.invalidXMLFile = El contenido del fichero layout.xml no es válido. Revisa el log para más información. 
 
 ##############################################################################################################
-# T H U M B N A I L  O V E R V I E W                                                                         #
+# V I S T A  E N  M I N I A T U R A                                                                          #
 ##############################################################################################################
 thumbnailoverview.ThumbNailOverViewCreator.starting             = Iniciada la creación de miniaturas
 thumbnailoverview.ThumbNailOverViewCreator.finished             = Finalizada la creación de miniaturas
@@ -373,7 +375,7 @@ thumbnailoverview.LayoutParser.wrongElementAmount = El fichero layout.xml contie
 thumbnailoverview.LayoutParser.parseError         = Error cuando se analizaba layout.xml. Revise el log para más detalles.
 
 ##############################################################################################################
-# U P D A T E  C H E C K E R                                                                                 #
+# C H E Q U E A D O R  D E  A C T U A L I Z A C I O N                                                        #
 ##############################################################################################################
 updatechecker.errormessage.uRLInvalid                  = Formato de la url del servidor de actualizaciones inválido. Revise el log para más detalles.
 updatechecker.errormessage.uRLWrong                    = Url del servidor de actualizaciones errónea. Revise el log para más detalles.
@@ -390,7 +392,7 @@ updatechecker.gui.downloadButton = Descargar
 updatechecker.gui.closeButton    = Cerrar
 
 ##############################################################################################################
-# M E T A  D A T A  P A N E L                                                                                #
+# P A N E L  D E  M E T A D A T O S                                                                          #
 ##############################################################################################################
 metadatapanel.titleDefaultText     = META DATOS PARA LA IMAGEN:
 metadatapanel.tableheader.type     = TIPO
@@ -398,7 +400,7 @@ metadatapanel.tableheader.property = PROPIEDAD
 metadatapanel.tableheader.value    = VALOR
 
 ##############################################################################################################
-# S T A T U S  B A R  M E S S A G E S                                                                        #
+# M E N S A J E S  D E  L A  B A R R A  D E  E S T A D O                                                     #
 ##############################################################################################################
 statusbar.message.amountOfRows              = Número de filas
 statusbar.message.amountOfColumns           = Número de columnas
@@ -406,13 +408,13 @@ statusbar.message.amountOfImagesInDirectory = Cantidad de imágenes en directorio
 statusbar.message.selectedPath              = Ruta seleccionada:
 
 ##############################################################################################################
-# T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
+# P A N E L  T A B U L A D O  (F U N C I O N E S  P R I N C I P A L E S)                                     #
 ##############################################################################################################
 tabbedpane.imageRename = RENOMBRAR IMAGENES
 tabbedpane.imageView   = CREAR LISTA DE IMAGENES
 
 ##############################################################################################################
-# I M A G E  V I E W E R                                                                                     #
+# V I S O R  D E  I M A G E N E S                                                                            #
 ##############################################################################################################
 imageviewer.button.back.toolTip                         = Anterior (Alt + Z) 
 imageviewer.button.back.mnemonic                        = Z
@@ -438,7 +440,7 @@ imageviewer.statusbar.heightLabel      = H:
 imageviewer.statusbar.heightLabelImage = Alto de imagen en pixeles
 
 ##############################################################################################################
-# F I L E  R E T R I E V E R                                                                                 #
+# O B T E N E R  F I C H E R O S                                                                             #
 ##############################################################################################################
 fileretriever.canNotFindFile     = No se pudo encontrar el fichero, revise el log para más detalles.
 fileretriever.canNotReadFromFile = No se puede leer el fichero, puede que otra aplicación tenga el fichero bloqueado. Revise el log para más detalles.
