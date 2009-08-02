@@ -5,7 +5,7 @@ Lo de abajo es una descripción de lo que cada verisón de JavaPEG ha sido capaz d
 <LF>
 Versión 2.2<LF>
 ===========<LF>
-Liberada el 2009-xx-xx la versión 2.2 of JavaPEG ha obtenido una nueva vista del interfaz gráfico. A partir de ahora se puede redimensionar y además se puede poner a pantalla completa en un monitor de alta resolución. Se puede ajustar el tamaño de todos los paneles principales y se pueden ocultar completamente para liberar espacio de los paneles no ocultos. El tamaño de cada panel se almacena entre sesiones de la aplicación.
+Liberada el 2009-08-02 la versión 2.2 of JavaPEG ha obtenido una nueva vista del interfaz gráfico. A partir de ahora se puede redimensionar y además se puede poner a pantalla completa en un monitor de alta resolución. Se puede ajustar el tamaño de todos los paneles principales y se pueden ocultar completamente para liberar espacio de los paneles no ocultos. El tamaño de cada panel se almacena entre sesiones de la aplicación.
 <LF>
 <LF>
 La segunda diferencia principal es que la ventana de selección del origen ha sido eliminada y reemplazada con una estructura de arbol que muestra el sistema de ficheros. 
