@@ -5,7 +5,7 @@ Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskape
 <LF>
 Version 2.3<LF>
 ===========<LF>
-Released 2009-08-03 Version 2.3 of JavaPEG is a pure bug fix release. The embedded download functionality which downloads the latest version JavaPEG was broken and still is in all prior versions to this version, which supports version check against a version server (2.1 & 2.2). The reason for this bug to arise was that SourceForge made changes to the format of the URL to the released files. And unfortunately JavaPEG of earlier versions was not generic enough to handle that change.
+Släppt 2009-08-03 Version 2.3 av JavaPEG är en ren buggrättningsversion. Den inbyggda funktionaliteten för nedladdning av den senaste versionen av JavaPEG fungerade inte och fungerar fortfarande inte i de föregående versioner som har stöd för att kontrollera om det finns en nyare version tillgänglig (2.1 & 2.2). Anledningen till att denna bugg uppkommit är att formatet på de URL:er som SourceForge har till de släppta versionerna av JavaPEG har ändrats och tidigare versioner av JavaPEG var inte generella nog att hantera denna förändring.
 <LF>
 <LF>
 Version 2.2<LF>
