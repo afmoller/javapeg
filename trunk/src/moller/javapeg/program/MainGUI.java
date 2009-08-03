@@ -53,6 +53,7 @@ package moller.javapeg.program;
  *                        : 2009-07-23 by Fredrik Möller
  *                        : 2009-07-24 by Fredrik Möller
  *                        : 2009-08-02 by Fredrik Möller
+ *                        : 2009-08-03 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -170,7 +171,7 @@ public class MainGUI extends JFrame {
 	 * release is done. The value is the amount of milliseconds since 
 	 * 1970-01-01 with 
 	 */
-	private final static long VERSION_TIMESTAMP = 1249222958;
+	private final static long VERSION_TIMESTAMP = 1249304521;
 	
 	private static Config config;
 	private static Logger logger;
@@ -524,7 +525,7 @@ public class MainGUI extends JFrame {
 
 	private void createMainFrame(){
 
-		this.setTitle("JavaPEG 2.2");
+		this.setTitle("JavaPEG 2.3");
 
 		InputStream imageStream = null;
 		ImageIcon titleImageIcon = new ImageIcon();
