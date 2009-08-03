@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Compile and build java classes plus jar archives">
 	
-	<property name="ver" value="2.2" />
+	<property name="ver" value="2.3" />
 	<property name="jar.name" value="JavaPEG.jar" />
 	<property name="zip_src.name" value="JavaPEG_${ver}_Src.zip" />
 	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
