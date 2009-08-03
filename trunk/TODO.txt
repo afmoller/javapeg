@@ -1,9 +1,4 @@
-2.2:
-====
-- Enter change log entries to the change log files on the update server.
-- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-
-2.3:
+2.4:
 ====
 - Add possibility to use file date instead of exif date if it is missing.
 - Add image list format for XnView
