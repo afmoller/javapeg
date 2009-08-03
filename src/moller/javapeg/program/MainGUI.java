@@ -317,10 +317,11 @@ public class MainGUI extends JFrame {
 						
 						String changeLog     = nvc.getChangeLog(vim, VERSION_TIMESTAMP);
 						String downloadURL   = vi.getDownnloadURL();
+						String fileName      = vi.getFileName();
 						String versionNumber = vi.getVersionNumber();
 						int fileSize = vi.getFileSize();
 						
-						NewVersionGUI nvg = new NewVersionGUI(changeLog, downloadURL, versionNumber, fileSize);
+						NewVersionGUI nvg = new NewVersionGUI(changeLog, downloadURL, fileName, versionNumber, fileSize);
 						nvg.init();
 						nvg.setVisible(true);
 					}
