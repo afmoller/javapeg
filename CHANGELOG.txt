@@ -8,6 +8,15 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
  
+ 2.3 (2009-08-03)
+ 
+ ! The embedded download functionality which downloads the latest version 
+   JavaPEG was broken and still is in all prior versions to this version, which
+   supports version check against a version server (2.1 & 2.2). The reason for 
+   this bug to arise was that SourceForge made changes to the format of the URL
+   to the released files. And unfortunately JavaPEG of earlier versions was not
+   generic enough to handle that change.
+ 
  2.2 (2009-08-02)
  
  + Spanish translation added. The translation was performed by: Angel Bueno
