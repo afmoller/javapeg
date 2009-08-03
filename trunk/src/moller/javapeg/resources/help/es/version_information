@@ -3,6 +3,11 @@ INFORMACION DE VERSION<LF>
 Lo de abajo es una descripción de lo que cada verisón de JavaPEG ha sido capaz de hacer.
 <LF>
 <LF>
+Version 2.3<LF>
+===========<LF>
+Released 2009-08-03 Version 2.3 of JavaPEG is a pure bug fix release. The embedded download functionality which downloads the latest version JavaPEG was broken and still is in all prior versions to this version, which supports version check against a version server (2.1 & 2.2). The reason for this bug to arise was that SourceForge made changes to the format of the URL to the released files. And unfortunately JavaPEG of earlier versions was not generic enough to handle that change.
+<LF>
+<LF>
 Versión 2.2<LF>
 ===========<LF>
 Liberada el 2009-08-02 la versión 2.2 of JavaPEG ha obtenido una nueva vista del interfaz gráfico. A partir de ahora se puede redimensionar y además se puede poner a pantalla completa en un monitor de alta resolución. Se puede ajustar el tamaño de todos los paneles principales y se pueden ocultar completamente para liberar espacio de los paneles no ocultos. El tamaño de cada panel se almacena entre sesiones de la aplicación.

@@ -260,7 +260,7 @@ menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
-menu.item.about                      = About JavaPEG 2.2
+menu.item.about                      = About JavaPEG 2.3
 menu.item.languageChoice             = Language selection
 
 #############################################################################################################
@@ -346,12 +346,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = About JavaPEG 2.2
-aboutDialog.TextRowA = JavaPEG, ver: 2.2
+aboutDialog.Label    = About JavaPEG 2.3
+aboutDialog.TextRowA = JavaPEG, ver: 2.3
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
-aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-08-02.
-aboutDialog.TextRowE = Version 2.2 released 2009-08-02.
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-08-03.
+aboutDialog.TextRowE = Version 2.3 released 2009-08-03.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
