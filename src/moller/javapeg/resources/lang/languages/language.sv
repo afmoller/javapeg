@@ -69,7 +69,7 @@ menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
-menu.item.about                      = Om JavaPEG 2.2
+menu.item.about                      = Om JavaPEG 2.3
 menu.item.languageChoice             = Språkval
 
 #############################################################################################################
@@ -155,12 +155,12 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = Om JavaPEG 2.2
-aboutDialog.TextRowA = JavaPEG, ver: 2.2
+aboutDialog.Label    = Om JavaPEG 2.3
+aboutDialog.TextRowA = JavaPEG, ver: 2.3
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
-aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-08-02.
-aboutDialog.TextRowE = Version 2.2 släppt 2009-08-02.
+aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-08-03.
+aboutDialog.TextRowE = Version 2.3 släppt 2009-08-03.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________

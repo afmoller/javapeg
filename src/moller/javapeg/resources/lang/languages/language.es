@@ -20,6 +20,7 @@
 #                             : por Fredrik Möller 2009-07-29
 #                             : por Fredrik Möller 2009-07-31
 #                             : por Angel Bueno    2009-07-31
+#                             : por Fredrik Möller 2009-08-02
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -36,7 +37,7 @@ menu.item.openDestinationFileChooser = Abrir selector de destino
 menu.item.startProcess               = Iniciar proceso de renombrado
 menu.item.programHelp                = Ayuda del programa
 menu.item.versionInformation         = Información de versión
-menu.item.about                      = Acerca de JavaPEG 2.2
+menu.item.about                      = Acerca de JavaPEG 2.3
 menu.item.languageChoice             = Selección de idioma
 
 #############################################################################################################
@@ -122,12 +123,12 @@ fileSelectionDialog.destinationPathFileChooser = Selecciona el directorio de des
 ##############################################################################################################
 # D I A L O G O  A C E R C A  D E                                                                            #
 ##############################################################################################################
-aboutDialog.Label    = Acerca de JavaPEG 2.2
-aboutDialog.TextRowA = JavaPEG, ver: 2.2
+aboutDialog.Label    = Acerca de JavaPEG 2.3
+aboutDialog.TextRowA = JavaPEG, ver: 2.3
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Este programa está hecho en Java (JDK 1.6).
-aboutDialog.TextRowD = Programado entre 2005-05-24 - 2009-08-02.
-aboutDialog.TextRowE = Version 2.2 generada el 2009-08-02.
+aboutDialog.TextRowD = Programado entre 2005-05-24 - 2009-08-03.
+aboutDialog.TextRowE = Version 2.3 generada el 2009-08-03.
 aboutDialog.TextRowF = Desarrolador:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
