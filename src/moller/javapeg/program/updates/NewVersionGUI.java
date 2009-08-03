@@ -3,6 +3,7 @@ package moller.javapeg.program.updates;
  * This class was created : 2009-05-16 by Fredrik Möller
  * Latest changed         : 2009-05-19 by Fredrik Möller
  *                        : 2009-05-20 by Fredrik Möller
+ *                        : 2009-08-02 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -17,8 +18,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -41,7 +43,6 @@ import moller.javapeg.program.Config;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
-import moller.util.web.QueryString;
 
 public class NewVersionGUI extends JFrame{
 		
@@ -60,6 +61,7 @@ public class NewVersionGUI extends JFrame{
 	private Language lang;
 	
 	private String downloadURL;
+	private String fileName;
 		
 	private JProgressBar progress;
 	
@@ -72,7 +74,7 @@ public class NewVersionGUI extends JFrame{
 	
 	private File destination;
 
-	public NewVersionGUI(String changeLogText, String downloadURL, String versionNumber, int fileSize) {
+	public NewVersionGUI(String changeLogText, String downloadURL, String fileName, String versionNumber, int fileSize) {
 
 		conf = Config.getInstance();
 		lang = Language.getInstance();
@@ -80,8 +82,9 @@ public class NewVersionGUI extends JFrame{
 		
 		updateTask = new UpdateTask();
 		guiUpdater = new GUIUpdater();
-		
+
 		this.downloadURL = downloadURL;
+		this.fileName    = fileName;
 				
 		this.setTitle(lang.get("updatechecker.gui.title") + ": " + versionNumber);
 
@@ -98,6 +101,7 @@ public class NewVersionGUI extends JFrame{
 		JScrollPane sp = new JScrollPane(changeLog, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		progress = new JProgressBar(0, fileSize);
+		progress.setStringPainted(true);
 		
 		mainPanel.add(newVersionJLabel, BorderLayout.NORTH);
 		mainPanel.add(sp, BorderLayout.CENTER);
@@ -140,8 +144,8 @@ public class NewVersionGUI extends JFrame{
 			mainGUILocationX = this.getParent().getLocation().x;
 			mainGUILocationY = this.getParent().getLocation().y;
 		} else {
-			mainGUILocationX = conf.getIntProperty("window.location.x");
-			mainGUILocationY = conf.getIntProperty("window.location.y");		
+			mainGUILocationX = conf.getIntProperty("mainGUI.window.location.x");
+			mainGUILocationY = conf.getIntProperty("mainGUI.window.location.y");		
 		}
 		
 		int mainGUICenterX = mainGUILocationX + (mainGUIWidth / 2);
@@ -169,8 +173,27 @@ public class NewVersionGUI extends JFrame{
 				
 		try {
 			URL source = new URL(downloadURL);
-			destinationFile = new FileOutputStream(destination);
+			HttpURLConnection huc = (HttpURLConnection)source.openConnection();
+			
+			huc.connect();
+			
+			if ("DEBUG".equals(conf.getStringProperty("logger.log.level"))) {
+				Map<String, List<String>> headers = huc.getHeaderFields();
+				
+				logger.logDEBUG("Response headers and their values for the request to: " + downloadURL);	
+				for (String key : headers.keySet()) {
+					logger.logDEBUG("Header: " + key + " Headervalue: " + headers.get(key));
+				}
+			}
+							
+			if (HttpURLConnection.HTTP_MOVED_TEMP == huc.getResponseCode()) {
+				logger.logDEBUG("Following redirect to: " + huc.getHeaderField("location"));
+				source = new URL(huc.getHeaderField("location"));	
+			}
+			
 			fileStream = source.openStream();
+						
+			destinationFile = new FileOutputStream(destination);
 
 			byte[] buf = new byte[32 * 1024];
 			
@@ -182,6 +205,7 @@ public class NewVersionGUI extends JFrame{
 				bytesReadTotal += bytesRead;
 				this.setProgressValue(bytesReadTotal);
 			}
+			huc.disconnect();
 			JOptionPane.showMessageDialog(this, lang.get("updatechecker.informationmessage.downloadFinished"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(this, lang.get("updatechecker.errormessage.downloadError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);			
@@ -200,21 +224,10 @@ public class NewVersionGUI extends JFrame{
 					
 			alwaysOnTop(false);
 			JFileChooser fc = new JFileChooser();
-			fc.setFileHidingEnabled(true);
-						
-			URL url = null;
 			
-			try {
-				url = new URL(downloadURL);
-				
-				Map<String, String> parameters = QueryString.getQueryMap(url.getQuery());
-				fc.setSelectedFile(new File(parameters.get("filename")));	
-			} catch (MalformedURLException mue) {
-				// This should never happen, and can not be solved by the user,
-				// since the URL is fetched from the update server.
-				logger.logERROR(mue);
-			}			
-						
+			fc.setFileHidingEnabled(true);
+			fc.setSelectedFile(new File(fileName));	
+								
 			if (fc.showSaveDialog(NewVersionGUI.this) == JFileChooser.APPROVE_OPTION) {
 				destination = fc.getSelectedFile();
 								
