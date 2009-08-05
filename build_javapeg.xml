@@ -57,7 +57,6 @@
 	<target name="create_jar" depends="build">
 		<delete file="${jar.name}" />
         <unjar src="lib/metadata-extractor-2.3.1.jar" dest="build" />
-		<unjar src="lib/util.jar" dest="build" />
 		<jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
@@ -128,7 +127,6 @@
 	            	<include name="CHANGELOG.txt" />
 	                <include name="TODO.txt" />
 	                <include name="lib/metadata-extractor-2.3.1.jar" />
-	                <include name="lib/util.jar" />
 	            </fileset>
 	        </zip>
 	    </target>
