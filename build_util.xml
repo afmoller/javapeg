@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="Compile and build java classes plus jar archives">
+	
+	<property name="jar.name" value="util.jar" />
+	
+	<target name="all" depends="clean_build,build,create_jar" />
+
+	<target name="clean_build">
+		<delete failonerror="no">
+			<fileset dir="build">
+				<include name="**" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="delete_build" description="Deleted the entire build folder">
+		<delete failonerror="yes" dir="build" />
+	</target>
+
+	<target name="build" depends="clean_build">
+		<mkdir dir="build" />
+		<javac srcdir="src" destdir="build" target="1.6" debug="true">
+			<include name="moller/**" />
+			<exclude name="**/unittest/**" />
+		</javac>
+	</target>
+
+	<target name="create_jar" depends="build">
+		<delete file="${jar.name}" />
+		<jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="build">
+				<exclude name="**/test/**" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</jar>
+	</target>
+</project>
