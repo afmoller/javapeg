@@ -41,8 +41,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import moller.javapeg.program.ApplicationContext;
-import moller.javapeg.program.Config;
 import moller.javapeg.program.GBC;
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
 import moller.util.mnemonic.MnemonicConverter;
 

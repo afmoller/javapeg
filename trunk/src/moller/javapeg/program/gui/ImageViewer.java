@@ -65,8 +65,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.Config;
 import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;

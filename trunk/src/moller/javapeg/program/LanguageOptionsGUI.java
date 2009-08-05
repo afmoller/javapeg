@@ -43,6 +43,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
