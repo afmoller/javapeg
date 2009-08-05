@@ -1,4 +1,4 @@
-package moller.javapeg.program;
+package moller.javapeg.program.config;
 /**
  * This class was created : 2003-12-28 by Fredrik Möller
  * Latest changed         : 2004-03-11 by Fredrik Möller
