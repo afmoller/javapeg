@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.ApplicationContext;
-import moller.javapeg.program.Config;
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.logger.Logger;
 
 public class Language {

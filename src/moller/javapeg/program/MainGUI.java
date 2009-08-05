@@ -125,6 +125,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
@@ -203,7 +205,9 @@ public class MainGUI extends JFrame {
 	private JMenu fileMenu;
 	private JMenu helpMenu;
 	private JMenu languageMenu;
+	private JMenu configMenu;
 
+	private JMenuItem configGUIJMenuItem;
 	private JMenuItem languageOptionsJMenuItem;
 	private JMenuItem shutDownProgramJMenuItem;
 	private JMenuItem openDestinationFileChooserJMenuItem;
@@ -367,7 +371,18 @@ public class MainGUI extends JFrame {
 		languageMenu.setMnemonic(lang.get("menu.mnemonic.language").charAt(0));
 
 		languageMenu.add(languageOptionsJMenuItem);
-
+				
+		// Create rows in the Configuration menu
+//		TODO: Remove hard coded strings
+		configGUIJMenuItem = new JMenuItem("Configuration");
+		configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+		
+//		TODO: Remove hard coded strings
+		configMenu = new JMenu("Configuration");
+		configMenu.setMnemonic('c');
+		
+		configMenu.add(configGUIJMenuItem);
+		
 		// Skapa menyrader i hjälp-menyn
 		helpJMenuItem = new JMenuItem(lang.get("menu.item.programHelp"));
 		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
@@ -385,6 +400,7 @@ public class MainGUI extends JFrame {
 
 		menuBar.add(fileMenu);
 		menuBar.add(languageMenu);
+		menuBar.add(configMenu);
 		menuBar.add(helpMenu);
 
 		this.setJMenuBar(menuBar);
@@ -922,6 +938,7 @@ public class MainGUI extends JFrame {
 		helpJMenuItem.addActionListener(new MenuListener());
 		aboutJMenuItem.addActionListener(new MenuListener());
 		languageOptionsJMenuItem.addActionListener(new MenuListener());
+		configGUIJMenuItem.addActionListener(new MenuListener());
 		
 		subFolderTextField.getDocument().addDocumentListener(new JTextFieldListener());
 		fileNameTemplateTextField.getDocument().addDocumentListener(new JTextFieldListener());
@@ -1152,6 +1169,10 @@ public class MainGUI extends JFrame {
 			} else if (actionCommand.equals(lang.get("menu.item.languageChoice"))) {
 				LanguageOptionsGUI loGUI = new LanguageOptionsGUI();
 				loGUI.setVisible(true);
+			} 
+//			TODO: Remove hard coded string
+			else if (actionCommand.equals("Configuration")) {
+				new ConfigViewerGUI().setVisible(true);				
 			}
 		}
 	}

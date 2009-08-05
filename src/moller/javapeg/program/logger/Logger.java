@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import moller.javapeg.program.Config;
+import moller.javapeg.program.config.Config;
 
 public class Logger {
 
