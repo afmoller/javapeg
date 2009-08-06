@@ -5,8 +5,8 @@
 <entry key="languageOption.window.location.y">10</entry>
 <entry key="helpViewerGUI.window.location.x">10</entry>
 <entry key="helpViewerGUI.window.location.y">10</entry>
-<entry key="helpViewerGUI.window.width">1098</entry>
-<entry key="helpViewerGUI.window.height">540</entry>
+<entry key="helpViewerGUI.window.width">800</entry>
+<entry key="helpViewerGUI.window.height">600</entry>
 <entry key="logger.log.level">ERROR</entry>
 <entry key="logger.developerMode">false</entry>
 <entry key="automaticLanguageSelection">false</entry>
@@ -38,4 +38,8 @@
 <entry key="imageViewerGUI.window.height">768</entry>
 <entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
 <entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
+<entry key="configViewerGUI.window.width">800</entry>
+<entry key="configViewerGUI.window.height">600</entry>
+<entry key="configViewerGUI.window.location.x">10</entry>
+<entry key="configViewerGUI.window.location.y">10</entry>
 </properties>
