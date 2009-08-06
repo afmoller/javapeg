@@ -1,5 +1,6 @@
 2.4:
 ====
+- Add graphical GUI to the configuration parameters.
 - Add possibility to use file date instead of exif date if it is missing.
 - Add image list format for XnView
 - Add move to top / bottom buttons to the "Images to view" list
@@ -7,13 +8,13 @@
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
   properties implementation does.
+- Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-- Test all functionality.
 
 2.x:
 ====
