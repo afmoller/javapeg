@@ -6,6 +6,7 @@ package moller.util.version;
  *                        : 2009-05-17 by Fredrik Möller
  *                        : 2009-05-19 by Fredrik Möller
  *                        : 2009-08-02 by Fredrik Möller
+ *                        : 2009-08-09 by Fredrik Möller
  */
 
 import java.io.IOException;
@@ -29,18 +30,18 @@ import org.xml.sax.SAXException;
 
 public class UpdateChecker {
 	
-	public static long getLatestVersion(URL url, int timeOut) throws IOException, ParserConfigurationException, SAXException {
-		Document xmlDoc = getDocument(url, timeOut);
+	public static long getLatestVersion(URL url, String applicationVersion, boolean addHeader, int timeOut) throws IOException, ParserConfigurationException, SAXException {
+		Document xmlDoc = getDocument(url, applicationVersion, addHeader, timeOut);
 		Element root = xmlDoc.getDocumentElement();
 		
 		return Long.parseLong(root.getElementsByTagName("latestVersion").item(0).getTextContent());
 	}
 			
-	public static Map<Long, VersionInformation> getVersionInformationMap(URL url, int timeOut) throws SocketTimeoutException, IOException, SAXException, ParserConfigurationException{
+	public static Map<Long, VersionInformation> getVersionInformationMap(URL url, String applicationVersion, boolean addHeader, int timeOut) throws SocketTimeoutException, IOException, SAXException, ParserConfigurationException{
 		
 		Map<Long, VersionInformation> vim = new HashMap<Long, VersionInformation>();
 		
-		Document xmlDoc = getDocument(url, timeOut);
+		Document xmlDoc = getDocument(url, applicationVersion, addHeader, timeOut);
 		Element root = xmlDoc.getDocumentElement();
 					
 		NodeList versions = root.getElementsByTagName("version");
@@ -82,11 +83,14 @@ public class UpdateChecker {
 		return vim;
 	}
 	
-	private static Document getDocument(URL url, int timeOut) throws IOException, ParserConfigurationException, SAXException {
+	private static Document getDocument(URL url, String applicationVersion, boolean addHeader, int timeOut) throws IOException, ParserConfigurationException, SAXException {
 		
 		HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 		huc.setConnectTimeout(1000 * timeOut);
 		huc.setRequestMethod("GET");
+		if (addHeader) {
+			huc.setRequestProperty("JavaPEG-Version", applicationVersion);
+		}
 		huc.connect();
 		
 		int code = huc.getResponseCode();

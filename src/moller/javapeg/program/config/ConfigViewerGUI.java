@@ -38,6 +38,8 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -86,6 +88,7 @@ public class ConfigViewerGUI extends JFrame {
 	 * Variables for the updates panel
 	 */
 	private JCheckBox updatesEnabled;
+	private JCheckBox sendVersionInformationEnabled;
 	
 	/**
 	 * Variables for the language panel
@@ -173,6 +176,7 @@ public class ConfigViewerGUI extends JFrame {
 		manualRadioButton.addActionListener(new ManualRadioButtonListener());
 		automaticRadioButton.addActionListener(new AutomaticRadioButtonListener());
 		languageList.addListSelectionListener(new LanguageListListener());
+		updatesEnabled.addChangeListener(new UpdatesEnabledCheckBoxListener());
 		okButton.addActionListener(new OkButtonListener());
 		applyButton.addActionListener(new ApplyButtonListener());
 		cancelButton.addActionListener(new CancelButtonListener());
@@ -195,6 +199,7 @@ public class ConfigViewerGUI extends JFrame {
 	
 	private void createLoggingConfigurationPanel() {
 		loggingConfigurationPanel = new JPanel(new GridBagLayout());
+		loggingConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
 		GBHelper posLoggingPanel = new GBHelper();
 						
@@ -264,6 +269,7 @@ public class ConfigViewerGUI extends JFrame {
 	
 	private void createUpdateConfigurationPanel() {
 		updatesConfigurationPanel = new JPanel(new GridBagLayout());
+		updatesConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
 		GBHelper posUpdatesPanel = new GBHelper();
 		
@@ -271,10 +277,17 @@ public class ConfigViewerGUI extends JFrame {
 		updatesEnabled = new JCheckBox();
 		updatesEnabled.setSelected(conf.getBooleanProperty("updatechecker.enabled"));
 		
+		JLabel attachVersionInformationLabel = new JLabel("Add Version Information To Update Check");
+		sendVersionInformationEnabled = new JCheckBox();
+		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
+		sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
 		
 		updatesConfigurationPanel.add(updatesEnabledLabel, posUpdatesPanel);
 		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
-		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.nextCol());	
+		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.nextCol());
+		updatesConfigurationPanel.add(attachVersionInformationLabel, posUpdatesPanel.nextRow());
+		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
+		updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextCol());
 	}
 	
 	private void createLanguageConfigurationPanel() {
@@ -385,6 +398,7 @@ public class ConfigViewerGUI extends JFrame {
 		 * Update Updates Configuration
 		 */
 		conf.setBooleanProperty("updatechecker.enabled", updatesEnabled.isSelected());
+		conf.setBooleanProperty("updatechecker.attachVersionInformation", sendVersionInformationEnabled.isSelected());
 		
 		/**
 		 * Update Language Configuration
@@ -453,6 +467,13 @@ public class ConfigViewerGUI extends JFrame {
 		}
 	}
 	
+	private class UpdatesEnabledCheckBoxListener implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
+		}
+	}
+
 	private class OkButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
