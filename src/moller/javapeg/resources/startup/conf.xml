@@ -26,6 +26,7 @@
 <entry key="mainGUI.window.height">768</entry>
 <entry key="gUILanguageISO6391">en</entry>
 <entry key="updatechecker.enabled">true</entry>
+<entry key="updatechecker.attachVersionInformation">true</entry>
 <entry key="updatechecker.timeout">60</entry>
 <entry key="updatechecker.url.version">http://javapeg.sourceforge.net/PAGES/updates/version.php</entry>
 <entry key="updatechecker.url.changelog">http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</entry>
