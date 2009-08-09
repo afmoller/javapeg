@@ -59,7 +59,6 @@
 #############################################################################################################
 menu.file     = Arkiv
 menu.help     = Hjälp
-menu.language = Språk
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
@@ -70,14 +69,12 @@ menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
 menu.item.about                      = Om JavaPEG 2.3
-menu.item.languageChoice             = Språkval
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
 menu.mnemonic.file     = A
 menu.mnemonic.help     = H
-menu.mnemonic.language = S
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -85,7 +82,6 @@ menu.mnemonic.language = S
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
-menu.item.languageChoice.accelerator             = S
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = O
 

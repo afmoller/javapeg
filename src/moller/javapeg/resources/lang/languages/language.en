@@ -60,7 +60,6 @@
 #############################################################################################################
 menu.file     = File
 menu.help     = Help
-menu.language = Language
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
@@ -71,14 +70,12 @@ menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
 menu.item.about                      = About JavaPEG 2.3
-menu.item.languageChoice             = Language selection
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
 menu.mnemonic.file     = F
 menu.mnemonic.help     = H
-menu.mnemonic.language = L
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -86,7 +83,6 @@ menu.mnemonic.language = L
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
-menu.item.languageChoice.accelerator             = L
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = A
 
