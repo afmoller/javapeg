@@ -4,6 +4,7 @@ package moller.javapeg.program.updates;
  * Latest changed         : 2009-05-17 by Fredrik Möller
  *                        : 2009-05-20 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
+ *                        : 2009-08-09 by Fredrik Möller
  */
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class NewVersionChecker {
 		}
 	}
 	
-	public long newVersionExists() {
+	public long newVersionExists(long applicationVersion) {
 		
 		long latestVersion = 0;
 		String errorMessage = "";	
@@ -78,7 +79,7 @@ public class NewVersionChecker {
 		
 		try {
 			versionURL = new URL(urlVersion);
-			latestVersion=  UpdateChecker.getLatestVersion(versionURL, timeOut);
+			latestVersion=  UpdateChecker.getLatestVersion(versionURL, Long.toString(applicationVersion), config.getBooleanProperty("updatechecker.attachVersionInformation"), timeOut);
 		} catch (MalformedURLException e) {
 			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlVersion + ")";
 			logger.logERROR(e);
@@ -110,7 +111,7 @@ public class NewVersionChecker {
 		
 		try {
 			changeLogURL = new URL(urlChangeLog);
-			vim = UpdateChecker.getVersionInformationMap(changeLogURL, timeOut);	
+			vim = UpdateChecker.getVersionInformationMap(changeLogURL, Long.toString(applicationVersion), config.getBooleanProperty("updatechecker.attachVersionInformation"), timeOut);	
 		} catch (MalformedURLException e) {
 			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlChangeLog + ")";
 			logger.logERROR(e);

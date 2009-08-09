@@ -54,6 +54,7 @@ package moller.javapeg.program;
  *                        : 2009-07-24 by Fredrik Möller
  *                        : 2009-08-02 by Fredrik Möller
  *                        : 2009-08-03 by Fredrik Möller
+ *                        : 2009-08-09 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -204,11 +205,11 @@ public class MainGUI extends JFrame {
 
 	private JMenu fileMenu;
 	private JMenu helpMenu;
-	private JMenu languageMenu;
+//	private JMenu languageMenu;
 	private JMenu configMenu;
 
 	private JMenuItem configGUIJMenuItem;
-	private JMenuItem languageOptionsJMenuItem;
+//	private JMenuItem languageOptionsJMenuItem;
 	private JMenuItem shutDownProgramJMenuItem;
 	private JMenuItem openDestinationFileChooserJMenuItem;
 	private JMenuItem startProcessJMenuItem;
@@ -313,7 +314,7 @@ public class MainGUI extends JFrame {
 			public void run(){
 				NewVersionChecker nvc = NewVersionChecker.getInstance();
 				
-				long latestVersion = nvc.newVersionExists();
+				long latestVersion = nvc.newVersionExists(VERSION_TIMESTAMP);
 				if(latestVersion > VERSION_TIMESTAMP) {
 					Map<Long, VersionInformation> vim = nvc.getVersionInformation(VERSION_TIMESTAMP);
 					
@@ -362,16 +363,7 @@ public class MainGUI extends JFrame {
 		fileMenu.add(openDestinationFileChooserJMenuItem);
 		fileMenu.add(startProcessJMenuItem);
 		fileMenu.add(shutDownProgramJMenuItem);
-		
-		// Skapa menyrader i språk-menyn
-		languageOptionsJMenuItem = new JMenuItem(lang.get("menu.item.languageChoice"));
-		languageOptionsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.languageChoice.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
-		
-		languageMenu = new JMenu(lang.get("menu.language"));
-		languageMenu.setMnemonic(lang.get("menu.mnemonic.language").charAt(0));
-
-		languageMenu.add(languageOptionsJMenuItem);
-				
+								
 		// Create rows in the Configuration menu
 //		TODO: Remove hard coded strings
 		configGUIJMenuItem = new JMenuItem("Configuration");
@@ -399,7 +391,6 @@ public class MainGUI extends JFrame {
 		menuBar = new JMenuBar();
 
 		menuBar.add(fileMenu);
-		menuBar.add(languageMenu);
 		menuBar.add(configMenu);
 		menuBar.add(helpMenu);
 
@@ -937,7 +928,6 @@ public class MainGUI extends JFrame {
 		startProcessButton.addActionListener(new ButtonListener());
 		helpJMenuItem.addActionListener(new MenuListener());
 		aboutJMenuItem.addActionListener(new MenuListener());
-		languageOptionsJMenuItem.addActionListener(new MenuListener());
 		configGUIJMenuItem.addActionListener(new MenuListener());
 		
 		subFolderTextField.getDocument().addDocumentListener(new JTextFieldListener());
@@ -1166,9 +1156,6 @@ public class MainGUI extends JFrame {
                                              "\n" + lang.get("aboutDialog.TextRowH"), lang.get("aboutDialog.Label"), JOptionPane.INFORMATION_MESSAGE);
 	    	} else if (actionCommand.equals(lang.get("menu.item.programHelp"))) {
 				new HelpViewerGUI().setVisible(true);				
-			} else if (actionCommand.equals(lang.get("menu.item.languageChoice"))) {
-				LanguageOptionsGUI loGUI = new LanguageOptionsGUI();
-				loGUI.setVisible(true);
 			} 
 //			TODO: Remove hard coded string
 			else if (actionCommand.equals("Configuration")) {
