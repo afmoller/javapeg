@@ -8,6 +8,24 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
  
+ 2.4 (2009-xx-xx)
+ 
+ + A graphical user interface for the configuration parameters has been added.
+   This removes the insecure way of manually changing (Although it is still 
+   possible if wanted) the parameter values in the conf.xml file.
+ 
+ + For statistical purposes it is possible to let JavaPEG attach the version 
+   number to the version update check request made to the version update 
+   server. The only information sent is which version of JavaPEG that is making 
+   the version update check. In other words this is totally anonymous, no 
+   system unique information is sent.
+       
+ ~ The Language selection GUI has been removed and all settings that was made 
+   via that interface has been moved to the new graphical configuration 
+   interface.
+   
+      
+ 
  2.3 (2009-08-03)
  
  ! The embedded download functionality which downloads the latest version 
