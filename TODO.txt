@@ -1,13 +1,15 @@
 2.4:
 ====
-- Add graphical GUI to the configuration parameters.
-- Add possibility to use file date instead of exif date if it is missing.
+- Add validation of inputs in the new configuration GUI
+- Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add image list format for XnView
 - Add move to top / bottom buttons to the "Images to view" list
 - Add functionality to load latest showed image path at application start.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
   properties implementation does.
+- Fix all TODO:s
+- Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
