@@ -19,6 +19,10 @@
    server. The only information sent is which version of JavaPEG that is making 
    the version update check. In other words this is totally anonymous, no 
    system unique information is sent.
+   
+ + It is possible (by configuration parameters) to let JavaPEG use the latest 
+   modified timestamp for the image files to populate the date and time 
+   variables if they are missing in the Exif meta data.  
        
  ~ The Language selection GUI has been removed and all settings that was made 
    via that interface has been moved to the new graphical configuration 
