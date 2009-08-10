@@ -5,6 +5,7 @@ package moller.util.io;
  *                        : 2009-05-17 by Fredrik Möller
  *                        : 2009-07-14 by Fredrik Möller
  *                        : 2009-07-18 by Fredrik Möller
+ *                        : 2009-08-10 by Fredrik Möller
  */
 
 import java.awt.Point;
@@ -22,8 +23,10 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class FileUtil {
@@ -297,5 +300,34 @@ public class FileUtil {
 			input.close();
 		}			
 		return content;
+	}
+	
+	/**
+	 * @param file
+	 * @param simpleDateFormatString
+	 * @return
+	 */
+	public static String getLatestModified(File file, String simpleDateFormatString) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(simpleDateFormatString);
+		Date date = new Date(file.lastModified());
+		
+		return sdf.format(date);
+	}
+	
+	/**
+	 * @param file
+	 * @return
+	 */
+	public static String getLatestModifiedDate(File file) {
+		return getLatestModified(file,"yyyy-MM-dd");
+	}
+	
+	/**
+	 * @param file
+	 * @return
+	 */
+	public static String getLatestModifiedTime(File file) {
+		return getLatestModified(file,"HH-mm-ss");
 	}
 }

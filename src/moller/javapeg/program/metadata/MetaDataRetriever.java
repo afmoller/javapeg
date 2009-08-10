@@ -1,11 +1,16 @@
 package moller.javapeg.program.metadata;
-/* Denna klass skapades	: 2007-01-17 av Fredrik Möller
- * Senast ändrad		: 2007-02-27 av Fredrik Möller
- *                      : 2007-02-28 av Fredrik Möller
+/**
+ * This class was created : 2007-01-17 by Fredrik Möller
+ * Latest changed         : 2007-02-27 by Fredrik Möller
+ *                        : 2007-02-28 by Fredrik Möller
+ *                        : 2009-08-10 by Fredrik Möller
  */
 
 import java.io.File;
 import java.util.Iterator;
+
+import moller.javapeg.program.config.Config;
+import moller.util.io.FileUtil;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -21,9 +26,10 @@ public class MetaDataRetriever {
 
 	// Konstruktor
 	public MetaDataRetriever (File imageFile) {
+		
+		Config conf = Config.getInstance(); 
 
 		try {
-
 			// Läsa in filens metadata (Exif)
 			Metadata metadata = JpegMetadataReader.readMetadata(imageFile);
 
@@ -71,8 +77,7 @@ public class MetaDataRetriever {
 									md.setExifDate(tagValue.substring(0, tagValue.indexOf(" ")));
 									md.setExifTime(tagValue.substring(tagValue.indexOf(" "), tagValue.length()));
 								}
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -82,8 +87,7 @@ public class MetaDataRetriever {
 
 								if(md.getExifCameraModel().length() > 15)
 									md.setExifCameraModel(md.getExifCameraModel().substring(0,14));
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -93,8 +97,7 @@ public class MetaDataRetriever {
 						if(tag.getTagTypeHex().equals("0x9201") || tag.getTagTypeHex().equals("0x829a")){
 							try {
 								md.setExifShutterSpeed(tag.getDescription());
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -106,24 +109,21 @@ public class MetaDataRetriever {
 						|| tag.getTagTypeHex().equals("0xa215") || tag.getTagName().equals("ISO")){
 							try {
 								md.setExifISOValue(tag.getDescription());
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
 						if(tag.getTagName().equals("Exif Image Width")){
 							try {
 								md.setExifPictureWidth(tag.getDescription());
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
 						if(tag.getTagName().equals("Exif Image Height")){
 							try {
 								md.setExifPictureHeight(tag.getDescription());
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -133,8 +133,7 @@ public class MetaDataRetriever {
 						if(tag.getTagTypeHex().equals("0x829d") || tag.getTagTypeHex().equals("0x9202")){
 							try {
 								md.setExifApertureValue(tag.getDescription());
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -143,8 +142,7 @@ public class MetaDataRetriever {
 								String temp = tag.getDescription();
 								temp = temp.substring(0, temp.indexOf(" "));
 								md.setThumbNailOffset(Integer.parseInt(temp));
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 
@@ -153,8 +151,7 @@ public class MetaDataRetriever {
 								String temp = tag.getDescription();
 								temp = temp.substring(0, temp.indexOf(" "));
 								md.setThumbNailLength(Integer.parseInt(temp));
-							}
-							catch (Exception ex) {
+							} catch (Exception ex) {
 							}
 						}
 					}
@@ -167,8 +164,7 @@ public class MetaDataRetriever {
 					}
 				}
 			}
-		}
-		catch (JpegProcessingException jpex) {
+		} catch (JpegProcessingException jpex) {
 			// Inte nödvändigt att göra något här då koden precis här nedanför tar hand om det
 			// faktum att varibalerna inte fått något värde.
 		}
@@ -179,69 +175,68 @@ public class MetaDataRetriever {
 		 * otillåtna tecken.
 		 **/
 		if(md.getExifDate().equals("")) {
-			md.setExifDate("na");
-		}
-		else {
+			if(conf.getBooleanProperty("rename.use.lastmodified.date")) {
+				FileUtil.getLatestModifiedDate(imageFile);
+			} else {
+				md.setExifDate("na");	
+			}
+		} else {
 			md.setExifDate(filterString(md.getExifDate(), "exifDateAndTime"));
 			md.setExifDate(md.getExifDate().trim());
 		}
 
 		if(md.getExifTime().equals("")) {
-			md.setExifTime("na");
-		}
-		else {
+			if(conf.getBooleanProperty("rename.use.lastmodified.time")) {
+				FileUtil.getLatestModifiedTime(imageFile);
+			} else {
+				md.setExifTime("na");
+			}
+		} else {
 			md.setExifTime(filterString(md.getExifTime(), "exifDateAndTime"));
 			md.setExifTime(md.getExifTime().trim());
 		}
 
 		if(md.getExifCameraModel().equals("")) {
 			md.setExifCameraModel("na");
-		}
-		else {
+		} else {
 			md.setExifCameraModel(filterString(md.getExifCameraModel(), "exifCameraModel"));
 			md.setExifCameraModel(md.getExifCameraModel().trim());
 		}
 
 		if(md.getExifShutterSpeed().equals("")) {
 			md.setExifShutterSpeed("na");
-		}
-		else {
+		} else {
 			md.setExifShutterSpeed(filterString(md.getExifShutterSpeed(), "exifShutterSpeed"));
 			md.setExifShutterSpeed(md.getExifShutterSpeed().trim());
 		}
 
 		if(md.getExifISOValue().equals("")) {
 			md.setExifISOValue("na");
-		}
-		else {
+		} else {
 			md.setExifISOValue(filterString(md.getExifISOValue(), "exifISOValue"));
 			md.setExifISOValue(md.getExifISOValue().trim());
 		}
 
 		if(md.getExifPictureWidth().equals("")) {
 			md.setExifPictureWidth("na");
-		}
-		else {
+		} else {
 			md.setExifPictureWidth(filterString(md.getExifPictureWidth(), "exifPictureWidth"));
 			md.setExifPictureWidth(md.getExifPictureWidth().trim());
 		}
 
 		if(md.getExifPictureHeight().equals("")) {
 			md.setExifPictureHeight("na");
-		}
-		else {
+		} else {
 			md.setExifPictureHeight(filterString(md.getExifPictureHeight(), "exifPictureHeight"));
 			md.setExifPictureHeight(md.getExifPictureHeight().trim());
 		}
 
 		if(md.getExifApertureValue().equals("")) {
 			md.setExifApertureValue("na");
-		}
-		else {
+		} else {
 			md.setExifApertureValue(filterString(md.getExifApertureValue(), "exifApertureValue"));
 			md.setExifApertureValue(md.getExifApertureValue().trim());
 		}
-		
 		md.setFileObject(imageFile);
 	}
 
@@ -294,9 +289,7 @@ public class MetaDataRetriever {
 					break;
 			}
 		}
-		theStringToFilter = String.valueOf(stringToChar);
-
-		return theStringToFilter;
+		return String.valueOf(stringToChar);
 	}
 
 	public void debug() {

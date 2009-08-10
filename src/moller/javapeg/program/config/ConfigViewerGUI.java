@@ -3,6 +3,7 @@ package moller.javapeg.program.config;
  * This class was created : 2009-08-05 by Fredrik Möller
  * Latest changed         : 2009-08-06 by Fredrik Möller
  *                        : 2009-08-09 by Fredrik Möller
+ *                        : 2009-08-10 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -64,15 +65,14 @@ public class ConfigViewerGUI extends JFrame {
 	private JPanel loggingConfigurationPanel;
 	private JPanel updatesConfigurationPanel;
 	private JPanel languageConfigurationPanel;
+	private JPanel renameConfigurationPanel;
 	
 	private JSplitPane splitPane;
 	
 	private JButton okButton;
 	private JButton applyButton;
 	private JButton cancelButton;
-	
-	
-	
+		
 	/**
 	 * Variables for the logging panel
 	 */
@@ -95,6 +95,13 @@ public class ConfigViewerGUI extends JFrame {
 	 */
 	private JList languageList;
 	
+	/**
+	 * Variables for the rename panel
+	 */
+	
+	private JCheckBox useLastModifiedDate;
+	private JCheckBox useLastModifiedTime;
+	
 	private  JLabel currentLanguage;
 			
 	private JRadioButton manualRadioButton;
@@ -113,6 +120,7 @@ public class ConfigViewerGUI extends JFrame {
 		this.createLoggingConfigurationPanel();
 		this.createUpdateConfigurationPanel();
 		this.createLanguageConfigurationPanel();
+		this.createRenameConfigurationPanel();
 		this.addListeners();	
 	}
 	
@@ -273,10 +281,12 @@ public class ConfigViewerGUI extends JFrame {
 		
 		GBHelper posUpdatesPanel = new GBHelper();
 		
+//		TODO: Remove hard coded string
 		JLabel updatesEnabledLabel = new JLabel("Enable Application Update Check");
 		updatesEnabled = new JCheckBox();
 		updatesEnabled.setSelected(conf.getBooleanProperty("updatechecker.enabled"));
 		
+//		TODO: Remove hard coded string
 		JLabel attachVersionInformationLabel = new JLabel("Add Version Information To Update Check");
 		sendVersionInformationEnabled = new JCheckBox();
 		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
@@ -288,6 +298,30 @@ public class ConfigViewerGUI extends JFrame {
 		updatesConfigurationPanel.add(attachVersionInformationLabel, posUpdatesPanel.nextRow());
 		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
 		updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextCol());
+	}
+	
+	private void createRenameConfigurationPanel() {
+		renameConfigurationPanel = new JPanel(new GridBagLayout());
+		renameConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		
+		GBHelper posRenamePanel = new GBHelper();
+		
+//		TODO: Remove hard coded string
+		JLabel useLastModifiedDateLabel = new JLabel("Use Last Modified Date if Exif date is missing");
+		useLastModifiedDate = new JCheckBox();
+		useLastModifiedDate.setSelected(conf.getBooleanProperty("rename.use.lastmodified.date"));
+
+//		TODO: Remove hard coded string
+		JLabel useLastModifiedTimeLabel = new JLabel("Use Last Modified Time if Exif time is missing");
+		useLastModifiedTime = new JCheckBox();
+		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
+		
+		renameConfigurationPanel.add(useLastModifiedDateLabel, posRenamePanel);
+		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
+		renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextCol());
+		renameConfigurationPanel.add(useLastModifiedTimeLabel, posRenamePanel.nextRow());
+		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
+		renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextCol());
 	}
 	
 	private void createLanguageConfigurationPanel() {
@@ -409,6 +443,12 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
 		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
+		
+		/**
+		 * Update Rename Configuration
+		 */
+		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
+		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
 	}
 	
 	private void closeWindow() {
@@ -433,7 +473,7 @@ public class ConfigViewerGUI extends JFrame {
 				} else if (selRow == 2) {
 					backgroundsPanel.add(updatesConfigurationPanel);
 				} else if (selRow == 3) {
-					
+					backgroundsPanel.add(renameConfigurationPanel);
 				} else if (selRow == 4) {
 					backgroundsPanel.add(languageConfigurationPanel);
 				}
