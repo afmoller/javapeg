@@ -139,6 +139,7 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
+import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
 import moller.javapeg.program.model.PreviewTableModel;
 import moller.javapeg.program.progress.RenameProcess;
