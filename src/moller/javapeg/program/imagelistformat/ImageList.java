@@ -7,6 +7,7 @@ package moller.javapeg.program.imagelistformat;
 *                        : 2009-07-19 by Fredrik Möller
 *                        : 2009-07-20 by Fredrik Möller
 *                        : 2009-07-24 by Fredrik Möller
+*                        : 2009-08-11 by Fredrik Möller
 */
 
 import java.io.File;
@@ -79,6 +80,8 @@ public class ImageList {
 			IrfanView.createAndWriteToFile(images, destination, lang);
 		} else if (fileDescription.equals("PolyView")) {
 			PolyView.createAndWriteToFile(images, destination, lang);
+		} else if (fileDescription.equals("XnView")) {
+			XnView.createAndWriteToFile(images, destination, lang);
 		} else if (fileDescription.equals("JavaPEG Image List")) {
 			JavaPEG.createAndWriteToFile(images, destination, lang);	
 		}

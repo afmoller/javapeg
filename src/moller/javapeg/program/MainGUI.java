@@ -55,6 +55,7 @@ package moller.javapeg.program;
  *                        : 2009-08-02 by Fredrik Möller
  *                        : 2009-08-03 by Fredrik Möller
  *                        : 2009-08-09 by Fredrik Möller
+ *                        : 2009-08-11 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -1622,6 +1623,7 @@ public class MainGUI extends JFrame {
 				
 				FileNameExtensionFilter fileFilterIrfanView = new FileNameExtensionFilter("IrfanView", "txt");
 				FileNameExtensionFilter fileFilterPolyView  = new FileNameExtensionFilter("PolyView" , "pvs");
+				FileNameExtensionFilter fileFilterXnView    = new FileNameExtensionFilter("XnView"   , "sld");
 								
 				JFileChooser chooser = new JFileChooser();
 								
@@ -1629,6 +1631,7 @@ public class MainGUI extends JFrame {
 				chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.exportImageList.title"));
 				chooser.addChoosableFileFilter(fileFilterIrfanView);
 				chooser.addChoosableFileFilter(fileFilterPolyView);
+				chooser.addChoosableFileFilter(fileFilterXnView);
 												
 				File destination = null;	
 				

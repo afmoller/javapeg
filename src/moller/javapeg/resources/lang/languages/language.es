@@ -21,6 +21,8 @@
 #                             : por Fredrik Möller 2009-07-31
 #                             : por Angel Bueno    2009-07-31
 #                             : por Fredrik Möller 2009-08-02
+#                             : por Fredrik Möller 2009-08-09
+#                             : por Fredrik Möller 2009-08-11
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -230,6 +232,9 @@ maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = L
 
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = La lista de imágenes en formato IrfanView se creó correctamente.
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = La lista de imágenes en formato IrfanView no se pudo crear, revise el log para más detalles.
+
+maingui.tabbedpane.imagelist.imagelistformat.xnView.successfullyCreated    = La lista de imágenes en formato XnView se creó correctamente.
+maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = La lista de imágenes en formato XnView no se pudo crear, revise el log para más detalles.
 
 ##############################################################################################################
 # M E N U  E M E R G E N T E  D E L  G U I  P R I N C I P A L                                                #

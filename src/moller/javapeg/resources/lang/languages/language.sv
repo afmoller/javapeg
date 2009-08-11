@@ -53,6 +53,8 @@
 #                      : by Fredrik Möller 2009-07-22
 #                      : by Fredrik Möller 2009-07-29
 #                      : by Fredrik Möller 2009-08-02
+#                      : by Fredrik Möller 2009-08-09
+#                      : by Fredrik Möller 2009-08-11
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -262,6 +264,9 @@ maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = B
 
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = Bildlistan i IrfanView-format skapades korrekt.
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = Bildlistan i IrfanView-format kunde inte skapas. Se loggfil för detaljer.
+
+maingui.tabbedpane.imagelist.imagelistformat.xnView.successfullyCreated    = Bildlistan i XnView-format skapades korrekt.
+maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = Bildlistan i XnView-format kunde inte skapas. Se loggfil för detaljer.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
