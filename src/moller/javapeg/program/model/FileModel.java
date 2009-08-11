@@ -1,4 +1,4 @@
-package moller.javapeg.program;
+package moller.javapeg.program.model;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -33,8 +33,8 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.CustomizedJScrollPane;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.gui.CustomizedJScrollPane;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
