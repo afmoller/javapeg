@@ -23,13 +23,16 @@
  + It is possible (by configuration parameters) to let JavaPEG use the latest 
    modified timestamp for the image files to populate the date and time 
    variables if they are missing in the Exif meta data.  
-       
+      
+ + A new Image List format has been added. It is from now on possible to export
+   image lists supported by the XnView image viewer.
+   
+   XnView (http://www.xnview.com/)
+         
  ~ The Language selection GUI has been removed and all settings that was made 
    via that interface has been moved to the new graphical configuration 
    interface.
    
-      
- 
  2.3 (2009-08-03)
  
  ! The embedded download functionality which downloads the latest version 

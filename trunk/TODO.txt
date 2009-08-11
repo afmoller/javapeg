@@ -2,7 +2,6 @@
 ====
 - Add validation of inputs in the new configuration GUI
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
-- Add image list format for XnView
 - Add move to top / bottom buttons to the "Images to view" list
 - Add functionality to load latest showed image path at application start.
 - Add functionality to ask for preferred language at first application start.
