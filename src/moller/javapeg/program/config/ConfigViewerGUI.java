@@ -4,6 +4,7 @@ package moller.javapeg.program.config;
  * Latest changed         : 2009-08-06 by Fredrik Möller
  *                        : 2009-08-09 by Fredrik Möller
  *                        : 2009-08-10 by Fredrik Möller
+ *                        : 2009-08-12 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -14,11 +15,19 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -41,6 +50,8 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -52,6 +63,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Level;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
+import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
 
 public class ConfigViewerGUI extends JFrame {
@@ -77,12 +89,13 @@ public class ConfigViewerGUI extends JFrame {
 	 * Variables for the logging panel
 	 */
 	private JCheckBox developerMode;
-	private JComboBox logLevels;
 	private JCheckBox rotateLog;
-	
-	private JTextField rotateLogSize;
+	private JComboBox logLevels;
+	private JComboBox logEntryTimeStampFormats;
+		
+	private JComboBox rotateLogSize;
 	private JTextField logName;
-	private JTextField logEntryTimeStampFormat;
+	private JTextField logEntryTimeStampPreview;
 	
 	/**
 	 * Variables for the updates panel
@@ -181,10 +194,13 @@ public class ConfigViewerGUI extends JFrame {
 	
 	private void addListeners(){
 		this.addWindowListener(new WindowEventHandler());
+		logName.getDocument().addDocumentListener(new LogNameJTextFieldListener());
+		logEntryTimeStampFormats.addItemListener(new LogEntryTimestampFormatsJComboBoxListener());
 		manualRadioButton.addActionListener(new ManualRadioButtonListener());
 		automaticRadioButton.addActionListener(new AutomaticRadioButtonListener());
 		languageList.addListSelectionListener(new LanguageListListener());
 		updatesEnabled.addChangeListener(new UpdatesEnabledCheckBoxListener());
+		rotateLog.addChangeListener(new RotateLogCheckBoxListener());
 		okButton.addActionListener(new OkButtonListener());
 		applyButton.addActionListener(new ApplyButtonListener());
 		cancelButton.addActionListener(new CancelButtonListener());
@@ -237,9 +253,25 @@ public class ConfigViewerGUI extends JFrame {
 		
 //		TODO: Remove hard coded string
 		JLabel rotateLogSizeLabel = new JLabel("Rotate Log Size");
-		rotateLogSize = new JTextField();
-		rotateLogSize.setText(conf.getStringProperty("logger.log.rotate.size"));
+//		rotateLogSize = new JTextField();
+//		rotateLogSize.setEnabled(conf.getBooleanProperty("logger.log.rotate"));
+//		rotateLogSize.setText(conf.getStringProperty("logger.log.rotate.size"));
+		
+		JPanel logSizePanel = new JPanel(new GridBagLayout());
+		GBHelper posLogSizePanel = new GBHelper();
+		
+		String [] sizeValues = {"10", "20", "30", "40", "50", "60", "70", "80", "90", "100",};
+		rotateLogSize = new JComboBox(sizeValues);
+		
+		String [] factors = {"KiB", "MiB"};
+				
+		JComboBox rotateLogSizeFactor = new JComboBox(factors);
 
+		logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
+		logSizePanel.add(new Gap(10), posLogSizePanel.nextCol());
+		logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
+		
+		
 //		TODO: Remove hard coded string
 		JLabel logNameLabel = new JLabel("Log Name");
 		logName = new JTextField();
@@ -247,8 +279,20 @@ public class ConfigViewerGUI extends JFrame {
 		
 //		TODO: Remove hard coded string
 		JLabel logEntryTimeStampFormatLabel = new JLabel("Log Entry Timestamp Format");
-		logEntryTimeStampFormat = new JTextField();
-		logEntryTimeStampFormat.setText(conf.getStringProperty("logger.log.entry.timestamp.format"));
+	
+		Set<String> formats = new HashSet<String>();
+		
+		formats.add(conf.getStringProperty("logger.log.entry.timestamp.format"));
+		formats.add("yyyy-MM-dd'T'HH:mm:ss:SSS");
+		formats.add("EEE, d MMM yyyy HH:mm:ss");
+
+		logEntryTimeStampFormats = new JComboBox(formats.toArray());
+			
+//		TODO: Remove hard coded string
+		JLabel logEntryTimeStampPreviewLabel = new JLabel("Log Entry Timestamp Preview");
+		logEntryTimeStampPreview = new JTextField();
+		logEntryTimeStampPreview.setEditable(false);
+		this.updatePreviewTimestamp();
 				
 		loggingConfigurationPanel.add(developerModeLabel, posLoggingPanel);
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
@@ -260,7 +304,7 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(rotateLogSizeLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-		loggingConfigurationPanel.add(rotateLogSize, posLoggingPanel.nextCol());
+		loggingConfigurationPanel.add(logSizePanel, posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(logLevelsLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
@@ -272,7 +316,11 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(logEntryTimeStampFormatLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-		loggingConfigurationPanel.add(logEntryTimeStampFormat, posLoggingPanel.nextCol());	
+		loggingConfigurationPanel.add(logEntryTimeStampFormats, posLoggingPanel.nextCol());
+		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+		loggingConfigurationPanel.add(logEntryTimeStampPreviewLabel, posLoggingPanel.nextRow());
+		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
+		loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol());
 	}
 	
 	private void createUpdateConfigurationPanel() {
@@ -417,40 +465,68 @@ public class ConfigViewerGUI extends JFrame {
 		return new JScrollPane(tree);
 	}
 	
-	private void updateConfiguration() {
-		/**
-		 * Update Logging Configuration
-		 */
-		conf.setStringProperty("logger.log.level", logLevels.getSelectedItem().toString());
-		conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
-		conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
-		conf.setStringProperty("logger.log.rotate.size", rotateLogSize.getText());
-		conf.setStringProperty("logger.log.name", logName.getText());
-		conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormat.getText());
+	private void updatePreviewTimestamp() {
+		Date date = new Date();
 		
-		/**
-		 * Update Updates Configuration
-		 */
-		conf.setBooleanProperty("updatechecker.enabled", updatesEnabled.isSelected());
-		conf.setBooleanProperty("updatechecker.attachVersionInformation", sendVersionInformationEnabled.isSelected());
-		
-		/**
-		 * Update Language Configuration
-		 */
-		if(!ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
-//			TODO: Move string to new language file
-			JOptionPane.showMessageDialog(this, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
-		}
-		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
-		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
-		
-		/**
-		 * Update Rename Configuration
-		 */
-		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
-		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
+		SimpleDateFormat sdf = new SimpleDateFormat(logEntryTimeStampFormats.getSelectedItem().toString());
+		logEntryTimeStampPreview.setText(sdf.format(date));
 	}
 	
+	private boolean updateConfiguration() {
+		boolean valuesValid = true;
+		
+		valuesValid = validateLogName();
+		
+		if(valuesValid) {
+		
+			/**
+			 * Update Logging Configuration
+			 */
+			conf.setStringProperty("logger.log.level", logLevels.getSelectedItem().toString());
+			conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
+			conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
+//			conf.setStringProperty("logger.log.rotate.size", rotateLogSize.getText());
+			conf.setStringProperty("logger.log.name", logName.getText());
+			conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());
+			
+			/**
+			 * Update Updates Configuration
+			 */
+			conf.setBooleanProperty("updatechecker.enabled", updatesEnabled.isSelected());
+			conf.setBooleanProperty("updatechecker.attachVersionInformation", sendVersionInformationEnabled.isSelected());
+			
+			/**
+			 * Update Language Configuration
+			 */
+			if(!ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
+	//			TODO: Move string to new language file
+				JOptionPane.showMessageDialog(this, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
+			}
+			conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
+			conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
+			
+			/**
+			 * Update Rename Configuration
+			 */
+			conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
+			conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
+		}
+		return valuesValid;
+	}
+	
+	private boolean validateLogName() {
+    	boolean isValid = true;
+    	
+		int result = PathUtil.validateString(logName.getText(), false);
+    	
+    	if (result > -1) {
+//    		TODO: remove hard coded string
+    		isValid = false;
+    		JOptionPane.showMessageDialog(this, "The file name can not contain the character: " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+    	}
+    	return isValid;
+    }
+		
 	private void closeWindow() {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
@@ -481,6 +557,27 @@ public class ConfigViewerGUI extends JFrame {
 		}
 	}
 	
+	private class LogEntryTimestampFormatsJComboBoxListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				updatePreviewTimestamp();
+			}
+		}
+	}
+		
+	private class LogNameJTextFieldListener implements DocumentListener {
+
+	    public void insertUpdate(DocumentEvent e) {
+	    	validateLogName();
+	    }
+	    public void removeUpdate(DocumentEvent e) {
+	    	validateLogName();
+	    }
+	    public void changedUpdate(DocumentEvent e) {
+	    }   
+	}
+		
 	private class ManualRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			languageList.setEnabled(true);
@@ -513,12 +610,21 @@ public class ConfigViewerGUI extends JFrame {
 			sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
 		}
 	}
-
+	
+	private class RotateLogCheckBoxListener implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			rotateLogSize.setEnabled(rotateLog.isSelected());
+		}
+	}
+	
 	private class OkButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			updateConfiguration();
-			closeWindow();
+			if (updateConfiguration()) {
+				closeWindow();	
+			}
+			
 		}
 	}
 
@@ -526,7 +632,6 @@ public class ConfigViewerGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			updateConfiguration();
-			
 		}	
 	}
 
@@ -536,7 +641,6 @@ public class ConfigViewerGUI extends JFrame {
 			closeWindow();
 		}
 	}
-
 	
 	private class WindowEventHandler extends WindowAdapter {
 		public void windowClosing(WindowEvent e) {
