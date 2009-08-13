@@ -5,6 +5,7 @@ package moller.javapeg.program.config;
  *                        : 2009-08-09 by Fredrik Möller
  *                        : 2009-08-10 by Fredrik Möller
  *                        : 2009-08-12 by Fredrik Möller
+ *                        : 2009-08-13 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -23,10 +24,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -90,10 +89,11 @@ public class ConfigViewerGUI extends JFrame {
 	 */
 	private JCheckBox developerMode;
 	private JCheckBox rotateLog;
+	private JComboBox rotateLogSizeFactor;
 	private JComboBox logLevels;
 	private JComboBox logEntryTimeStampFormats;
 		
-	private JComboBox rotateLogSize;
+	private JTextField rotateLogSize;
 	private JTextField logName;
 	private JTextField logEntryTimeStampPreview;
 	
@@ -194,6 +194,8 @@ public class ConfigViewerGUI extends JFrame {
 	
 	private void addListeners(){
 		this.addWindowListener(new WindowEventHandler());
+		rotateLogSize.getDocument().addDocumentListener(new RotateLogSizeJTextFieldListener());
+		rotateLogSizeFactor.addItemListener(new RotateLogSizeFactorJComboBoxListener());
 		logName.getDocument().addDocumentListener(new LogNameJTextFieldListener());
 		logEntryTimeStampFormats.addItemListener(new LogEntryTimestampFormatsJComboBoxListener());
 		manualRadioButton.addActionListener(new ManualRadioButtonListener());
@@ -253,20 +255,31 @@ public class ConfigViewerGUI extends JFrame {
 		
 //		TODO: Remove hard coded string
 		JLabel rotateLogSizeLabel = new JLabel("Rotate Log Size");
-//		rotateLogSize = new JTextField();
-//		rotateLogSize.setEnabled(conf.getBooleanProperty("logger.log.rotate"));
-//		rotateLogSize.setText(conf.getStringProperty("logger.log.rotate.size"));
-		
+	
 		JPanel logSizePanel = new JPanel(new GridBagLayout());
 		GBHelper posLogSizePanel = new GBHelper();
+				
+		rotateLogSize = new JTextField();
+		rotateLogSize.setEnabled(conf.getBooleanProperty("logger.log.rotate"));
 		
-		String [] sizeValues = {"10", "20", "30", "40", "50", "60", "70", "80", "90", "100",};
-		rotateLogSize = new JComboBox(sizeValues);
+		long logSize = 0;
 		
+		try {
+			logSize = Long.parseLong(conf.getStringProperty("logger.log.rotate.size"));
+		} catch (NumberFormatException nfex) {
+			logSize = 1024000;
+		}
+						
 		String [] factors = {"KiB", "MiB"};
 				
-		JComboBox rotateLogSizeFactor = new JComboBox(factors);
+		rotateLogSizeFactor = new JComboBox(factors);
 
+		/**
+		 * Set values to the rotate log size JTextField and rotate log size
+		 * factor JComboBox
+		 */ 
+		longToHuman(logSize);
+		
 		logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
 		logSizePanel.add(new Gap(10), posLogSizePanel.nextCol());
 		logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
@@ -322,7 +335,7 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol());
 	}
-	
+		
 	private void createUpdateConfigurationPanel() {
 		updatesConfigurationPanel = new JPanel(new GridBagLayout());
 		updatesConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -464,7 +477,7 @@ public class ConfigViewerGUI extends JFrame {
 		
 		return new JScrollPane(tree);
 	}
-	
+		
 	private void updatePreviewTimestamp() {
 		Date date = new Date();
 		
@@ -476,6 +489,7 @@ public class ConfigViewerGUI extends JFrame {
 		boolean valuesValid = true;
 		
 		valuesValid = validateLogName();
+		valuesValid = validateLogRotateSize();
 		
 		if(valuesValid) {
 		
@@ -485,7 +499,7 @@ public class ConfigViewerGUI extends JFrame {
 			conf.setStringProperty("logger.log.level", logLevels.getSelectedItem().toString());
 			conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
 			conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
-//			conf.setStringProperty("logger.log.rotate.size", rotateLogSize.getText());
+			conf.setStringProperty("logger.log.rotate.size", Long.toString(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString())));
 			conf.setStringProperty("logger.log.name", logName.getText());
 			conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());
 			
@@ -520,17 +534,91 @@ public class ConfigViewerGUI extends JFrame {
 		int result = PathUtil.validateString(logName.getText(), false);
     	
     	if (result > -1) {
-//    		TODO: remove hard coded string
     		isValid = false;
+//    		TODO: remove hard coded string
     		JOptionPane.showMessageDialog(this, "The file name can not contain the character: " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
     	}
     	return isValid;
     }
+	
+	private boolean validateLogRotateSize() {
+		boolean isValid = true;
+		
+		try {			
+			Long size = Long.parseLong(rotateLogSize.getText());
+			
+			String factor = rotateLogSizeFactor.getSelectedItem().toString();
+			
+			size = calculateRotateLogSize(size, factor);
+			
+			if(size > 100 * 1024 * 1024) {
+				isValid = false;
+
+				if(factor.equals("KiB")) {
+//					TODO: Remove hard coded string
+					JOptionPane.showMessageDialog(this, "The rotate log size is to large: Maximum allowed is 100000 KiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
+				} else {
+//					TODO: Remove hard coded string
+					JOptionPane.showMessageDialog(this, "The rotate log size is to large: Maximum allowed is 100 MiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+			if(size < 10 * 1024) {
+//				TODO: Remove hard coded string
+				JOptionPane.showMessageDialog(this, "The rotate log size is to small: Minimum allowed is 10 KiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);					
+			}
+		} catch (NumberFormatException nfex) {
+			isValid = false;
+//			TODO: Remove hard coded string
+			JOptionPane.showMessageDialog(this, "The rotate log size must be an integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+		}
+		return isValid;
+	}
+	
+	private long calculateRotateLogSize(Long size, String factor) {
+				
+		if (factor.equals("KiB")) {
+			size *= 1024;
+		} else {
+			size *= 1024 * 1024;
+		}
+		return size;
+	}
+	
+	private void longToHuman (Long logSize) {
+		if (logSize / (1024 * 1024) > 1) {
+			rotateLogSize.setText(Long.toString(logSize / (1024 * 1024)));
+			rotateLogSizeFactor.setSelectedIndex(1);
+		} else {
+			rotateLogSize.setText(Long.toString(logSize / (1024)));
+			rotateLogSizeFactor.setSelectedIndex(0);
+		}
+	}
 		
 	private void closeWindow() {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
 		this.dispose();
+	}
+	
+	private class RotateLogSizeJTextFieldListener implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+		public void insertUpdate(DocumentEvent e) {
+			validateLogRotateSize();
+		}
+		public void removeUpdate(DocumentEvent e) {
+		}
+	}
+	
+	private class RotateLogSizeFactorJComboBoxListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				validateLogRotateSize();
+			}
+		}
 	}
 				
 	/**
@@ -572,7 +660,6 @@ public class ConfigViewerGUI extends JFrame {
 	    	validateLogName();
 	    }
 	    public void removeUpdate(DocumentEvent e) {
-	    	validateLogName();
 	    }
 	    public void changedUpdate(DocumentEvent e) {
 	    }   
@@ -623,8 +710,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if (updateConfiguration()) {
 				closeWindow();	
-			}
-			
+			}	
 		}
 	}
 
