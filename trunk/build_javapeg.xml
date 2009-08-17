@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Compile and build java classes plus jar archives">
 	
-	<property name="ver" value="2.3" />
-	<property name="jar.name" value="JavaPEG.jar" />
-	<property name="zip_src.name" value="JavaPEG_${ver}_Src.zip" />
-	<property name="main.class" value="moller.javapeg.StartJavaPEG" />
+	<property name="ver" value="2.4" />
+	<property name="imageviewer.jar.name" value="ImageViewer.jar" />
+	<property name="javapeg.jar.name"     value="JavaPEG.jar" />
+	
+	<property name="zip_src.name"         value="JavaPEG_${ver}_Src.zip" />
+	
+	<property name="imageviewer.main.class" value="moller.imageviewer.StartImageViewer" />
+	<property name="javepeg.main.class"     value="moller.javapeg.StartJavaPEG" />
 
-	<target name="all" depends="clean_build, build, create_jar, create_release, create_release_src" />
+	<target name="all" depends="clean_build, build, create_jar, create_imageviewer_jar, create_release, create_release_src" />
 
 	<target name="clean_build">
 		<delete failonerror="no">
@@ -55,19 +59,38 @@
 	</target>
 
 	<target name="create_jar" depends="build">
-		<delete file="${jar.name}" />
+		<delete file="${javapeg.jar.name}" />
         <unjar src="lib/metadata-extractor-2.3.1.jar" dest="build" />
-		<jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
+		<jar destfile="${javapeg.jar.name}" filesetmanifest="mergewithoutmain">
 			<manifest>
-				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Main-Class" value="${javepeg.main.class}" />
 				<attribute name="Class-Path" value="." />
 			</manifest>
 			<fileset dir="build">
+				<exclude name="**/imageviewer/**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</jar>
 	</target>
+	
+	<target name="create_imageviewer_jar" depends="build">
+	        <delete file="${imageviewer.jar.name}" />
+	        
+	        <jar destfile="${imageviewer.jar.name}" filesetmanifest="mergewithoutmain">
+	            <manifest>
+	                <attribute name="Main-Class" value="${imageviewer.main.class}" />
+	                <attribute name="Class-Path" value="${javapeg.jar.name}" />
+	            </manifest>
+	            <fileset dir="build">
+	            	<exclude name="**/com/**" />
+	            	<exclude name="**/javapeg/**" />
+	            	<exclude name="**/util/**" />
+	                <exclude name="**/test/**" />
+	                <exclude name="**/*.java" />
+	            </fileset>
+	        </jar>
+	    </target>
 	
 	<target name="create_release">
 				
