@@ -10,7 +10,7 @@
     <!-- The info section -->
     <info>
         <appname>JavaPEG</appname>
-        <appversion>2.3</appversion>
+        <appversion>2.4</appversion>
         <authors>
             <author email="" name="Fredrik Möller"/>
         </authors>
@@ -123,6 +123,7 @@
             <file src="../src/moller/javapeg/resources/startup/style.info"    targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="images/javapeg.ico"                                    targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                        targetdir="$INSTALL_PATH"/>
+            <file src="../ImageViewer.jar"                                        targetdir="$INSTALL_PATH"/>
         </pack>
 
         <!-- The documentation 
