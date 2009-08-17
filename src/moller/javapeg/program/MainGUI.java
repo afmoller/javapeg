@@ -56,6 +56,7 @@ package moller.javapeg.program;
  *                        : 2009-08-03 by Fredrik Möller
  *                        : 2009-08-09 by Fredrik Möller
  *                        : 2009-08-11 by Fredrik Möller
+ *                        : 2009-08-16 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -191,6 +192,7 @@ public class MainGUI extends JFrame {
 	private JButton exportImageListButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
+	private JButton openImageViewerButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -207,11 +209,9 @@ public class MainGUI extends JFrame {
 
 	private JMenu fileMenu;
 	private JMenu helpMenu;
-//	private JMenu languageMenu;
 	private JMenu configMenu;
 
 	private JMenuItem configGUIJMenuItem;
-//	private JMenuItem languageOptionsJMenuItem;
 	private JMenuItem shutDownProgramJMenuItem;
 	private JMenuItem openDestinationFileChooserJMenuItem;
 	private JMenuItem startProcessJMenuItem;
@@ -219,7 +219,6 @@ public class MainGUI extends JFrame {
 	private JMenuItem aboutJMenuItem;
 	private JMenuItem popupMenuAddImageToViewList;
 	private JMenuItem popupMenuAddAllImagesToViewList;
-	
 	
 	private JPopupMenu rightClickMenu;
 
@@ -669,13 +668,14 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createViewPanelListSection () {
 		
-		removeSelectedImagesButton   = new JButton();
-		removeAllImagesButton        = new JButton();
-		openImageListButton          = new JButton();
-		saveImageListButton          = new JButton();
-		exportImageListButton          = new JButton();
-		moveUpButton                 = new JButton();
-		moveDownButton               = new JButton();
+		removeSelectedImagesButton = new JButton();
+		removeAllImagesButton      = new JButton();
+		openImageListButton        = new JButton();
+		saveImageListButton        = new JButton();
+		exportImageListButton      = new JButton();
+		moveUpButton               = new JButton();
+		moveDownButton             = new JButton();
+		openImageViewerButton      = new JButton("Open"); 
 		
 		InputStream imageStream = null;
 		
@@ -747,6 +747,8 @@ public class MainGUI extends JFrame {
 		buttonPanel.add(exportImageListButton, posButtonPanel.nextRow());
 		buttonPanel.add(moveUpButton, posButtonPanel.nextRow());
 		buttonPanel.add(moveDownButton, posButtonPanel.nextRow());
+		buttonPanel.add(openImageViewerButton, posButtonPanel.nextRow());
+		
 				
 		GBHelper posBackgroundPanel = new GBHelper();
 
@@ -945,6 +947,7 @@ public class MainGUI extends JFrame {
 		exportImageListButton.addActionListener(new ExportImageListListener());
 		moveUpButton.addActionListener(new MoveImageUpInListListener());
 		moveDownButton.addActionListener(new MoveImageDownInListListener());
+		openImageViewerButton.addActionListener(new OpenImageViewerListener());
 		
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
@@ -1617,6 +1620,31 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private class OpenImageViewerListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(!imagesToVievListModel.isEmpty()) {
+				
+				String [] cmdArray = new String [imagesToVievListModel.size() + 3];
+				
+				cmdArray[0] = "java";
+				cmdArray[1] = "-jar";
+				cmdArray[2] = System.getProperty("user.dir") + System.getProperty("file.separator") + "ImageViewer.jar";
+				
+				for (int i = 0; i < imagesToVievListModel.size(); i++) {
+					cmdArray[i + 3] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
+				}
+								
+				Runtime runtime = Runtime.getRuntime();
+				try {
+					runtime.exec(cmdArray);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+		}
+	}
+		
 	private class ExportImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
