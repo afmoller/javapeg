@@ -22,6 +22,7 @@ package moller.imageviewer.program.gui;
 *                        : 2009-07-07 by Fredrik Möller
 *                        : 2009-08-16 by Fredrik Möller
 *                        : 2009-08-17 by Fredrik Möller
+*                        : 2009-08-18 by Fredrik Möller
 */
 
 import java.awt.BorderLayout;
@@ -91,7 +92,6 @@ public class ImageViewer extends JFrame {
 	private JPopupMenu rightClickMenu;
 	private StatusPanel statuspanel;
 	private ImageIcon pictureImageIcon;
-	private String pathToPicture;
 
 	private JPanel imageBackground;
 	private JPanel overViewBackgroundPanel;
@@ -132,19 +132,20 @@ public class ImageViewer extends JFrame {
 		lang.loadLanguageFile();
 		
 		this.imagesToView = imagesToView;
-		pathToPicture = imagesToView.get(0).getAbsolutePath();
+				
 		imageToViewListIndex = 0;
 		imagesToViewListSize = imagesToView.size();
 		
-		this.createMainFrame(pathToPicture);
+		this.createMainFrame();
 		this.createToolBar();
 		this.createRightClickMenu();
-		this.createStatusPanel(pathToPicture);
+		this.createStatusPanel();
 		this.addListeners();
+		this.createImage(imagesToView.get(0).getAbsolutePath());
 	}
 
 	// Create Main Window
-	public void createMainFrame(String pathToPicture) {
+	public void createMainFrame() {
 		
 		this.setSize(new Dimension(config.getIntProperty("imageViewerGUI.window.width"), config.getIntProperty("imageViewerGUI.window.height")));
 
@@ -163,19 +164,20 @@ public class ImageViewer extends JFrame {
 		}
 		catch (Exception e){
 			logger.logERROR("Could not set desired Look And Feel for Main GUI");
-			
-			StringBuilder sb = new StringBuilder(4096);
-			
-			for(StackTraceElement element : e.getStackTrace()) {
-				sb.append(element.toString());
-				sb.append(System.getProperty("line.separator"));
-			}
-			logger.logERROR(sb.toString());
+			logger.logERROR(e);
 		}
 
-//		ImageIcon image = new ImageIcon(StartImageViewer.class.getResource(ICONFILEPATH + "Open16.gif"));
-//		this.setIconImage(image.getImage());
-		
+		InputStream imageStream = StartImageViewer.class.getResourceAsStream(ICONFILEPATH + "Open16.gif");
+				
+		ImageIcon image = new ImageIcon();
+		try {
+			image.setImage(ImageIO.read(imageStream));
+			this.setIconImage(image.getImage());
+		} catch (IOException e) {
+			logger.logERROR("Could not load icon: Open16.gif");
+			logger.logERROR(e);
+		}
+				
 		imageBackground = new JPanel(new BorderLayout());
 		
 		JScrollBar hSB = new JScrollBar(JScrollBar.HORIZONTAL);
@@ -188,7 +190,7 @@ public class ImageViewer extends JFrame {
 		scrollpane.setHorizontalScrollBar(hSB);
 		scrollpane.setVerticalScrollBar(vSB);
 		
-		thePicture = new File(pathToPicture);
+		thePicture = new File(imagesToView.get(0).getAbsolutePath());
 
 		this.setTitle(thePicture.getParent());
 		
@@ -209,16 +211,7 @@ public class ImageViewer extends JFrame {
 		
 		this.getContentPane().add(overViewBackgroundPanel, BorderLayout.WEST);
 		
-		pictureImageIcon = null;
-		System.gc();
-		
-		pictureImageIcon = new ImageIcon(pathToPicture);
-	
-		picture = new JLabel(pictureImageIcon);
-		
-		imageBackground.removeAll();
-		imageBackground.updateUI();
-		imageBackground.add(picture, BorderLayout.CENTER);
+		picture = new JLabel();				
 	}
 	
 	private JPanel createOverviewPanel() {
@@ -255,8 +248,8 @@ public class ImageViewer extends JFrame {
 			minimizeButton.setMinimumSize(buttonSize);
 		
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.logERROR("Could not load image. See Stack Trace below for details");
+			logger.logERROR(e);
 		}
 		
 		buttonPanel.add(maximizeButton, posButtonPanel);
@@ -323,32 +316,28 @@ public class ImageViewer extends JFrame {
 			previousImageIcon.setImage(ImageIO.read(imageStream));
 			previousJButton.setIcon(previousImageIcon);
 			previousJButton.setToolTipText(lang.get("imageviewer.button.back.toolTip"));
-			previousJButton.setActionCommand("Back");
 			previousJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.back.mnemonic").charAt(0)));
-	
+						
 			imageStream = StartImageViewer.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
 			nextImageIcon.setImage(ImageIO.read(imageStream));
 			nextJButton.setIcon(nextImageIcon);
 			nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
-			nextJButton.setActionCommand("Forward");
 			nextJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.forward.mnemonic").charAt(0)));
 			
 			imageStream = StartImageViewer.class.getResourceAsStream(ICONFILEPATH + "AutoAdjustToWindowSize16.gif");
 			automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
 			automaticAdjustToWindowSizeJToggleButton.setIcon(automaticAdjustToWindowSizeImageIcon);
 			automaticAdjustToWindowSizeJToggleButton.setToolTipText(lang.get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
-			automaticAdjustToWindowSizeJToggleButton.setActionCommand("automaticAdjustToWindowSize");
 			automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
 	
 			imageStream = StartImageViewer.class.getResourceAsStream(ICONFILEPATH + "Zoom16.gif");
 			adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
 			adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
 			adjustToWindowSizeJButton.setToolTipText(lang.get("imageviewer.button.adjustToWindowSize.toolTip"));
-			adjustToWindowSizeJButton.setActionCommand("adjustToWindowSize");
 			adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.logERROR("Could not load image. See Stack Trace below for details");
+			logger.logERROR(e);
 		}
 		
 		toolBar.add(previousJButton);
@@ -374,23 +363,10 @@ public class ImageViewer extends JFrame {
 	}
 
 	// Create Status Bar
-	public void createStatusPanel(String pathToPicture)
-	{
+	public void createStatusPanel() {
 		boolean [] timerStatus = {false,false,false,false};
 		statuspanel = new StatusPanel(timerStatus);
 		this.getContentPane().add(statuspanel, BorderLayout.SOUTH);
-
-		double fileSize = (double)thePicture.length();
-		String fileSizeString = "";
-		String prefix = "";
-		String toolTipPrefix = "";
-		
-		if(fileSize > 10000){
-			fileSizeString = Double.toString(fileSize/1000);
-			prefix = "K";
-			toolTipPrefix = "Kilo";
-		}
-		setStatusMessages(fileSizeString, prefix, toolTipPrefix);
 	}
 
 	private void addListeners() {
@@ -426,61 +402,54 @@ public class ImageViewer extends JFrame {
 		}
 	}
 	
-	private void setStatusMessages (String fileSizeString, String prefix, String toolTipPrefix) {
-		statuspanel.setStatusMessage(" " + pathToPicture, lang.get("imageviewer.statusbar.pathToPicture"), 0);
+	private void setStatusMessages (String imagePath, String fileSizeString, String prefix, String toolTipPrefix, int imageWidht, int imageHeight) {
+		statuspanel.setStatusMessage(" " + imagePath, lang.get("imageviewer.statusbar.pathToPicture"), 0);
 		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.sizeLabel") + " " + fileSizeString +  " " + prefix + "byte ", lang.get("imageviewer.statusbar.sizeLabelImage") + " " + toolTipPrefix + "bytes", 1);
-//		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(pictureImageIcon.getIconWidth())  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
-//		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(pictureImageIcon.getIconHeight()) + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
-		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + "100"  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
-		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + "100" + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
+		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(imageWidht)  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
+		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(imageHeight) + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
 	}
 	
-	private void loadImageAndSetStatusBar(Image img) {
+	private void loadImageAndSetStatusBar(Image img, String imagePath) {
 			
-			ImageIcon icon = new ImageIcon();
-			icon.setImage(img);
+		ImageIcon icon = new ImageIcon();
+		icon.setImage(img);
 		
-			pictureImageIcon = null;
+		picture.setIcon(null);
+		picture.setIcon(icon);
 
-			picture.setIcon(null);
-			picture.setIcon(icon);
-
-			imageBackground.removeAll();
-			imageBackground.updateUI();
+		imageBackground.removeAll();
+		imageBackground.updateUI();
+	
+		imageBackground.add(picture, BorderLayout.CENTER);
 		
-			imageBackground.add(picture, BorderLayout.CENTER);
+		File tempFile = new File(imagePath);
 
-			File tempFile = new File(pathToPicture);
+		double fileSize = (double)tempFile.length();
+		String fileSizeString = "";
+		String prefix = "";
+		String toolTipPrefix = "";
 
-			double fileSize = (double)tempFile.length();
-			String fileSizeString = "";
-			String prefix = "";
-			String toolTipPrefix = "";
+		if(fileSize > 10000){
+			fileSizeString = Double.toString(fileSize/1000);
+			prefix = "K";
+			toolTipPrefix = "Kilo";
+		}
 
-			if(fileSize > 10000){
-				fileSizeString = Double.toString(fileSize/1000);
-				prefix = "K";
-				toolTipPrefix = "Kilo";
+		int imageWidth  = img.getWidth(null);
+		int imageHeight = img.getHeight(null);
+		
+		setStatusMessages(imagePath, fileSizeString, prefix, toolTipPrefix, imageWidth, imageHeight);
+
+		// Om knappen justera storlek automatiskt är intryckt
+		if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {	
+			Rectangle visibleImageBackgroundRectangle = imageBackground.getVisibleRect();
+
+			if((imageWidth > visibleImageBackgroundRectangle.getWidth())||(imageHeight > visibleImageBackgroundRectangle.getHeight())){
+				adjustToWindowSizeJButton.doClick();
+				adjustToWindowSizeJButton.doClick();
 			}
-
-			setStatusMessages(fileSizeString, prefix, toolTipPrefix);
-
-			// Om knappen justera storlek automatiskt är intryckt
-			if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
-				double iconWidth  = Double.parseDouble(Integer.toString(pictureImageIcon.getIconWidth()));
-				double iconHeight = Double.parseDouble(Integer.toString(pictureImageIcon.getIconHeight()));
-
-				Rectangle tempRect = imageBackground.getVisibleRect();
-
-				double backgroundWidth = tempRect.getWidth();
-				double backgroundHeight = tempRect.getHeight();
-
-				if((iconWidth>backgroundWidth)||(iconHeight>backgroundHeight)){
-					adjustToWindowSizeJButton.doClick();
-					adjustToWindowSizeJButton.doClick();
-				}
-			}	
-			metaDataPanel.setMetaData(tempFile);			
+		}	
+		metaDataPanel.setMetaData(tempFile);			
 	}
 	
 	private void disposeFrame() {
@@ -488,6 +457,17 @@ public class ImageViewer extends JFrame {
 		this.setVisible(false);
 		logger.flush();
 		System.exit(0);
+	}
+	
+	private void createImage(String imagePath) {
+		Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
+		while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
+		    try {
+		    	Thread.sleep(200);
+		    } catch(InterruptedException ie) {
+		    }
+		}
+		loadImageAndSetStatusBar(img, imagePath);
 	}
 
 	private class WindowDestroyer extends WindowAdapter {
@@ -523,60 +503,24 @@ public class ImageViewer extends JFrame {
 	}
 		
 	private class ToolBarButtonPrevious implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			System.gc();
-
+		public void actionPerformed(ActionEvent e) {	
 			if (imageToViewListIndex == 0) {
 				imageToViewListIndex = imagesToViewListSize - 1;
 			} else {
 				imageToViewListIndex -= 1;
-			}
-			
-			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
-			
-			// Uppdatera värden
-			pathToPicture = imagePath;
-			
-			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
-			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
-			    try {
-			    	Thread.sleep(200);
-			    } catch(InterruptedException ie) {
-			    }
-			}
-			
-			loadImageAndSetStatusBar(img);		
+			}			
+			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());		
 		}	
 	}
 	
 	private class ToolBarButtonNext implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Total memory: " + Runtime.getRuntime().totalMemory());
-			
+		public void actionPerformed(ActionEvent e) {				
 			if (imageToViewListIndex == imagesToViewListSize - 1) {
 				imageToViewListIndex = 0;
 			} else {
 				imageToViewListIndex += 1;
-			}
-			
-			
-			
-			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
-			
-			// Uppdatera värden
-			pathToPicture = imagePath;
-			
-			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
-			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
-			    try {
-			    	Thread.sleep(200);
-			    } catch(InterruptedException ie) {
-			    }
-			}
-			
-			
-				loadImageAndSetStatusBar(img);
-				System.out.println("Free memory : " + Runtime.getRuntime().freeMemory());
+			}			
+			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());	
 		}
 	}
 	
@@ -641,8 +585,7 @@ public class ImageViewer extends JFrame {
 	private class OverviewMaximizeButton implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			overViewScrollpane.setVisible(true);
-			Update.updateComponentTreeUI(overViewBackgroundPanel);
-			
+			Update.updateComponentTreeUI(overViewBackgroundPanel);	
 		}
 	}
 	
@@ -655,22 +598,8 @@ public class ImageViewer extends JFrame {
 	
 	private class OverviewButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			imageToViewListIndex = Integer.parseInt(e.getActionCommand());
-			
-			String imagePath = imagesToView.get(imageToViewListIndex).getAbsolutePath();
-			
-			// Uppdatera värden
-			pathToPicture = imagePath;
-			
-			Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
-			while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
-			    try {
-			    	Thread.sleep(200);
-			    } catch(InterruptedException ie) {
-			    }
-			}
-			
-			loadImageAndSetStatusBar(img);
+			imageToViewListIndex = Integer.parseInt(e.getActionCommand());			
+			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());	
 		}
 	}
 }
