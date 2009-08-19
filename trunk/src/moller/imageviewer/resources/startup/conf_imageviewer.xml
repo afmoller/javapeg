@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="imageViewerGUI.window.location.y">10</entry>
+<entry key="imageViewerGUI.window.location.x">10</entry>
+<entry key="imageViewerGUI.window.width">1024</entry>
+<entry key="imageViewerGUI.window.height">768</entry>
+<entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
+<entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
+</properties>
