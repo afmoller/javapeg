@@ -2,7 +2,7 @@ package moller.imageviewer.program.config;
 
 /**
  * This class was created : 2009-08-16 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2009-08-19 by Fredrik Möller
  */
 
 import java.io.File;
@@ -21,7 +21,7 @@ public class ImageViewerConfig {
 	 */
 	private static ImageViewerConfig instance;
 	
-	private final static String PATH_TO_CONF_FILE = System.getProperty("user.dir") + File.separator + "config" + File.separator + "imageviewer_conf.xml";
+	private final static String PATH_TO_CONF_FILE = System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf_imageviewer.xml";
 	
 	private Properties properties;
 	
