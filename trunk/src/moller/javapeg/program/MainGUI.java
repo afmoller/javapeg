@@ -57,6 +57,7 @@ package moller.javapeg.program;
  *                        : 2009-08-09 by Fredrik Möller
  *                        : 2009-08-11 by Fredrik Möller
  *                        : 2009-08-16 by Fredrik Möller
+ *                        : 2009-08-19 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -675,7 +676,7 @@ public class MainGUI extends JFrame {
 		exportImageListButton      = new JButton();
 		moveUpButton               = new JButton();
 		moveDownButton             = new JButton();
-		openImageViewerButton      = new JButton("Open"); 
+		openImageViewerButton      = new JButton(); 
 		
 		InputStream imageStream = null;
 		
@@ -686,6 +687,7 @@ public class MainGUI extends JFrame {
 		ImageIcon exportImageListImageIcon = new ImageIcon();
 		ImageIcon moveUpImageIcon = new ImageIcon();
 		ImageIcon moveDownImageIcon = new ImageIcon();
+		ImageIcon viewImagesImageIcon = new ImageIcon();
 		
 		try {		
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
@@ -722,6 +724,13 @@ public class MainGUI extends JFrame {
 			moveDownImageIcon.setImage(ImageIO.read(imageStream));
 			moveDownButton.setIcon(moveDownImageIcon);	
 			moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/view.gif");
+			viewImagesImageIcon.setImage(ImageIO.read(imageStream));
+			openImageViewerButton.setIcon(viewImagesImageIcon);	
+//			TODO: Remove hard coded string
+			openImageViewerButton.setToolTipText("View selected images in the ImageViewer");
+			
 
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
