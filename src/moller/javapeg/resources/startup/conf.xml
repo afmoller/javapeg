@@ -35,12 +35,6 @@
 <entry key="mainSplitPane.location">200</entry>
 <entry key="verticalSplitPane.location">300</entry>
 <entry key="thumbNailMetaDataPanelSplitPane.location">600</entry>
-<entry key="imageViewerGUI.window.location.x">10</entry>
-<entry key="imageViewerGUI.window.location.y">10</entry>
-<entry key="imageViewerGUI.window.width">1024</entry>
-<entry key="imageViewerGUI.window.height">768</entry>
-<entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
-<entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
 <entry key="configViewerGUI.window.width">800</entry>
 <entry key="configViewerGUI.window.height">600</entry>
 <entry key="configViewerGUI.window.location.x">10</entry>
