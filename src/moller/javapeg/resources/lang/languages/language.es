@@ -23,6 +23,7 @@
 #                             : por Fredrik Möller 2009-08-02
 #                             : por Fredrik Möller 2009-08-09
 #                             : por Fredrik Möller 2009-08-11
+#                             : por Fredrik Möller 2009-08-20
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -414,32 +415,6 @@ statusbar.message.selectedPath              = Ruta seleccionada:
 ##############################################################################################################
 tabbedpane.imageRename = RENOMBRAR IMAGENES
 tabbedpane.imageView   = CREAR LISTA DE IMAGENES
-
-##############################################################################################################
-# V I S O R  D E  I M A G E N E S                                                                            #
-##############################################################################################################
-imageviewer.button.back.toolTip                         = Anterior (Alt + Z) 
-imageviewer.button.back.mnemonic                        = Z
-imageviewer.button.forward.toolTip                      = Siguiente (Alt + X) 
-imageviewer.button.forward.mnemonic                     = X
-imageviewer.button.automaticAdjustToWindowSize.toolTip  = Ajustar automáticamente al tamaño de ventana (Alt + C) 
-imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
-imageviewer.button.adjustToWindowSize.toolTip           = Ajustar al tamaño de ventana (Alt + A) 
-imageviewer.button.adjustToWindowSize.mnemonic          = A
-imageviewer.button.help.toolTip                         = Ayuda (Alt + H) 
-imageviewer.button.help.mnemonic                        = H
-
-imageviewer.popupmenu.back.text               = (Alt-Z) Anterior
-imageviewer.popupmenu.forward.text            = (Alt-X) Siguiente
-imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Ajustar al tamaño de ventana
-
-imageviewer.statusbar.pathToPicture    = Ruta al fichero
-imageviewer.statusbar.sizeLabel        = S:
-imageviewer.statusbar.sizeLabelImage   = Tamaño de imagen en
-imageviewer.statusbar.widthLabel       = W:
-imageviewer.statusbar.widthLabelImage  = Ancho de imagen en pixeles
-imageviewer.statusbar.heightLabel      = H:
-imageviewer.statusbar.heightLabelImage = Alto de imagen en pixeles
 
 ##############################################################################################################
 # O B T E N E R  F I C H E R O S                                                                             #
