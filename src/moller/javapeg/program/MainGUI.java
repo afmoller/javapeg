@@ -58,6 +58,7 @@ package moller.javapeg.program;
  *                        : 2009-08-11 by Fredrik Möller
  *                        : 2009-08-16 by Fredrik Möller
  *                        : 2009-08-19 by Fredrik Möller
+ *                        : 2009-08-20 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -1633,14 +1634,20 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(!imagesToVievListModel.isEmpty()) {
 				
-				String [] cmdArray = new String [imagesToVievListModel.size() + 3];
+				String [] cmdArray = new String [imagesToVievListModel.size() + 4];
 				
 				cmdArray[0] = "java";
 				cmdArray[1] = "-jar";
 				cmdArray[2] = System.getProperty("user.dir") + System.getProperty("file.separator") + "ImageViewer.jar";
 				
+				if(config.getBooleanProperty("automaticLanguageSelection")) {
+					cmdArray[3] = System.getProperty("user.language");
+				} else {
+					cmdArray[3] = config.getStringProperty("gUILanguageISO6391");
+				}
+								
 				for (int i = 0; i < imagesToVievListModel.size(); i++) {
-					cmdArray[i + 3] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
+					cmdArray[i + 4] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
 				}
 								
 				Runtime runtime = Runtime.getRuntime();
