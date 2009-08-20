@@ -12,7 +12,7 @@
 	<property name="main.class.imageviewer" value="moller.imageviewer.StartImageViewer" />
 	<property name="main.class.javepeg"     value="moller.javapeg.StartJavaPEG" />
 
-	<target name="all" depends="clean_build, build, create_javapeg_jar, create_imageviewer_jar, create_util_jar, create_release, create_release_src" />
+	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_imageviewer, create_jar_util, create_release, create_release_src" />
 
 	<target name="clean_build">
 		<delete failonerror="no">
@@ -61,7 +61,7 @@
 		</copy>
 	</target>
 
-	<target name="create_javapeg_jar" depends="build">
+	<target name="create_jar_javapeg" depends="build">
 		<delete file="${jar.name.javapeg}" />
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
@@ -77,7 +77,7 @@
 		</jar>
 	</target>
 	
-	<target name="create_imageviewer_jar" depends="build">
+	<target name="create_jar_imageviewer" depends="build">
         <delete file="${jar.name.imageviewer}" />
         
         <jar destfile="${jar.name.imageviewer}" filesetmanifest="mergewithoutmain">
@@ -94,7 +94,7 @@
         </jar>
     </target>
 	
-	<target name="create_util_jar" depends="build">
+	<target name="create_jar_util" depends="build">
         <delete file="${jar.name.util}" />
         <jar destfile="${jar.name.util}" filesetmanifest="mergewithoutmain">
             <manifest>
