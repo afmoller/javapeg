@@ -24,6 +24,7 @@ package moller.imageviewer.program.gui;
 *                        : 2009-08-17 by Fredrik Möller
 *                        : 2009-08-18 by Fredrik Möller
 *                        : 2009-08-19 by Fredrik Möller
+*                        : 2009-08-20 by Fredrik Möller
 */
 
 import java.awt.BorderLayout;
@@ -68,13 +69,11 @@ import javax.swing.border.EtchedBorder;
 
 import moller.imageviewer.StartImageViewer;
 import moller.imageviewer.program.config.ImageViewerConfig;
+import moller.imageviewer.program.language.ImageViewerLanguage;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
-import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Screen;
 import moller.util.gui.Update;
 import moller.util.mnemonic.MnemonicConverter;
@@ -86,7 +85,7 @@ public class ImageViewer extends JFrame {
 	
 	private static ImageViewerConfig config;
 	private static Logger logger;
-	private static Language lang;
+	private static ImageViewerLanguage lang;
 	
 	private JLabel picture;
 		
@@ -116,7 +115,7 @@ public class ImageViewer extends JFrame {
 	private JScrollBar hSB;
 	private JScrollBar vSB;
 	
-	private MetaDataPanel metaDataPanel;
+	private ImageViewerMetaDataPanel metaDataPanel;
 	
 	private JToggleButton automaticAdjustToWindowSizeJToggleButton;
 	private File thePicture;
@@ -132,9 +131,8 @@ public class ImageViewer extends JFrame {
 		
 		config =  ImageViewerConfig.getInstance();
 		logger =  Logger.getInstance();
-		lang   = Language.getInstance();
-		lang.loadLanguageFile();
-		
+		lang   = ImageViewerLanguage.getInstance();
+				
 		this.imagesToView = imagesToView;
 				
 		imageToViewListIndex = 0;
@@ -198,7 +196,7 @@ public class ImageViewer extends JFrame {
 
 		this.setTitle(thePicture.getParent());
 		
-		metaDataPanel = new MetaDataPanel();
+		metaDataPanel = new ImageViewerMetaDataPanel();
 		metaDataPanel.setMetaData(thePicture);
 						
 		imageMetaDataSplitPane = new JSplitPane();
@@ -280,7 +278,7 @@ public class ImageViewer extends JFrame {
 			JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData())); 
 			
 			imageButton.setActionCommand(Integer.toString(i));
-			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));
+//			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));
 			imageButton.addActionListener(overviewButtonListener);
 			
 			imageOverViewPanel.add(imageButton);
