@@ -28,6 +28,11 @@
    image lists supported by the XnView image viewer.
    
    XnView (http://www.xnview.com/)
+   
+ + An ImageViewer has been added. It is opened from the "VIEW IMAGES" 
+   (Previous "CREATE IMAGE LISTS" tab) tab and it will show all the images that
+   has been selected and added to the IMAGE LIST The Image Viewer opens in a 
+   separate window.
          
  ~ The Language selection GUI has been removed and all settings that was made 
    via that interface has been moved to the new graphical configuration 
