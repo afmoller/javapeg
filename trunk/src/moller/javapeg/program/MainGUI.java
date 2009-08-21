@@ -59,6 +59,7 @@ package moller.javapeg.program;
  *                        : 2009-08-16 by Fredrik Möller
  *                        : 2009-08-19 by Fredrik Möller
  *                        : 2009-08-20 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -140,7 +141,6 @@ import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
@@ -163,6 +163,7 @@ import moller.util.gui.Update;
 import moller.util.io.FileUtil;
 import moller.util.io.JPEGUtil;
 import moller.util.io.StreamUtil;
+import moller.util.logger.Logger;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
 
@@ -268,13 +269,14 @@ public class MainGUI extends JFrame {
 	private DefaultListModel imagesToVievListModel;
 	
 	private JList imagesToViewList;
-		   	
+		
 	public MainGUI(){
 				
 		FileSetup.check();
 		
 		config =  Config.getInstance();
 		logger =  Logger.getInstance();
+		this.initiateLogger(logger);
 		lang   = Language.getInstance();
 		
 		logger.logDEBUG("JavaPEG is starting");		
@@ -307,6 +309,19 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Application Context initialization Started");
 		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
+	}
+	
+	private void initiateLogger(Logger logger) {
+		boolean rotateLog      = config.getBooleanProperty("logger.log.rotate");
+    	boolean developerMode  = config.getBooleanProperty("logger.developerMode");
+    	
+    	String logName         = config.getStringProperty("logger.log.name");
+        String timeStampFormat = config.getStringProperty("logger.log.entry.timestamp.format");
+        String logLevel        = config.getStringProperty("logger.log.level");
+		
+        int	rotateSize         = config.getIntProperty("logger.log.rotate.size");
+        
+		logger.initiateLogger(rotateLog, developerMode, rotateSize, logName, timeStampFormat, logLevel);
 	}
 	
 	private void checkApplicationUpdates() {
@@ -1634,7 +1649,7 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(!imagesToVievListModel.isEmpty()) {
 				
-				String [] cmdArray = new String [imagesToVievListModel.size() + 4];
+				String [] cmdArray = new String [imagesToVievListModel.size() + 10];
 				
 				cmdArray[0] = "java";
 				cmdArray[1] = "-jar";
@@ -1646,8 +1661,16 @@ public class MainGUI extends JFrame {
 					cmdArray[3] = config.getStringProperty("gUILanguageISO6391");
 				}
 								
+				cmdArray[4] = config.getStringProperty("logger.log.rotate");
+				cmdArray[5] = config.getStringProperty("logger.developerMode");
+//				TODO: Make configurable
+				cmdArray[6] = "imageviewer.log";
+				cmdArray[7] = config.getStringProperty("logger.log.entry.timestamp.format");
+				cmdArray[8] = config.getStringProperty("logger.log.level");
+				cmdArray[9] = config.getStringProperty("logger.log.rotate.size");
+								
 				for (int i = 0; i < imagesToVievListModel.size(); i++) {
-					cmdArray[i + 4] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
+					cmdArray[i + 10] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
 				}
 								
 				Runtime runtime = Runtime.getRuntime();
