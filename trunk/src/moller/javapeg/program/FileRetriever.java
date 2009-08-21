@@ -5,6 +5,7 @@ package moller.javapeg.program;
  *                        : 2009-03-10 by Fredrik Möller
  *                        : 2009-06-17 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -18,8 +19,8 @@ import java.util.TreeSet;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.util.io.JPEGUtil;
+import moller.util.logger.Logger;
 
 public class FileRetriever {
 	

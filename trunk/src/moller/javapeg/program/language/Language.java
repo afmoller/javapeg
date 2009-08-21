@@ -8,6 +8,7 @@ package moller.javapeg.program.language;
  *                        : 2009-03-24 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -24,7 +25,7 @@ import javax.swing.JOptionPane;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.config.Config;
-import moller.javapeg.program.logger.Logger;
+import moller.util.logger.Logger;
 
 public class Language {
 	

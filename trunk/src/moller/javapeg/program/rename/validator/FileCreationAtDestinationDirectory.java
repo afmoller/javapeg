@@ -5,6 +5,7 @@ package moller.javapeg.program.rename.validator;
  *                        : 2009-02-27 by Fredrik Möller
  *                        : 2009-03-03 by Fredrik Möller
  *                        : 2009-04-05 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -12,13 +13,13 @@ import java.util.Map;
 
 import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.Type;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
+import moller.util.logger.Logger;
 
 public class FileCreationAtDestinationDirectory {
 	

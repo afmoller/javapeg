@@ -4,6 +4,7 @@ package moller.javapeg.program.updates;
  * Latest changed         : 2009-05-19 by Fredrik Möller
  *                        : 2009-05-20 by Fredrik Möller
  *                        : 2009-08-02 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -41,8 +42,8 @@ import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
+import moller.util.logger.Logger;
 
 public class NewVersionGUI extends JFrame{
 		

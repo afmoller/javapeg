@@ -3,17 +3,18 @@ package moller.javapeg.program.rename.process;
 * This class was created : 2009-04-13 by Fredrik Möller
 * Latest changed         : 2009-04-14 by Fredrik Möller
 *                        : 2009-05-20 by Fredrik Möller
+*                        : 2009-08-21 by Fredrik Möller
 */
 
 import java.io.File;
 import java.util.Map;
 
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.hash.MD5;
+import moller.util.logger.Logger;
 
 public class PostFileProcessor {
 

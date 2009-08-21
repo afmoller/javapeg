@@ -6,6 +6,7 @@ package moller.javapeg.program.config;
  *                        : 2009-08-10 by Fredrik Möller
  *                        : 2009-08-12 by Fredrik Möller
  *                        : 2009-08-13 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -25,7 +26,7 @@ import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -59,11 +60,10 @@ import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Level;
-import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
-import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
+import moller.util.logger.Level;
+import moller.util.logger.Logger;
 
 public class ConfigViewerGUI extends JFrame {
 	
@@ -94,7 +94,6 @@ public class ConfigViewerGUI extends JFrame {
 	private JComboBox logEntryTimeStampFormats;
 		
 	private JTextField rotateLogSize;
-	private JTextField logName;
 	private JTextField logEntryTimeStampPreview;
 	
 	/**
@@ -196,7 +195,6 @@ public class ConfigViewerGUI extends JFrame {
 		this.addWindowListener(new WindowEventHandler());
 		rotateLogSize.getDocument().addDocumentListener(new RotateLogSizeJTextFieldListener());
 		rotateLogSizeFactor.addItemListener(new RotateLogSizeFactorJComboBoxListener());
-		logName.getDocument().addDocumentListener(new LogNameJTextFieldListener());
 		logEntryTimeStampFormats.addItemListener(new LogEntryTimestampFormatsJComboBoxListener());
 		manualRadioButton.addActionListener(new ManualRadioButtonListener());
 		automaticRadioButton.addActionListener(new AutomaticRadioButtonListener());
@@ -239,7 +237,7 @@ public class ConfigViewerGUI extends JFrame {
 			}	
 		}
 //		TODO: Remove hard coded string
-		JLabel logLevelsLabel = new JLabel("Log Levels");
+		JLabel logLevelsLabel = new JLabel("Log Level");
 		logLevels = new JComboBox(Level.values());				
 		logLevels.setSelectedIndex(seletedIndex);
 		
@@ -249,7 +247,7 @@ public class ConfigViewerGUI extends JFrame {
 		developerMode.setSelected(conf.getBooleanProperty("logger.developerMode"));
 				
 //		TODO: Remove hard coded string
-		JLabel rotateLogLabel = new JLabel("Rotate Log");
+		JLabel rotateLogLabel = new JLabel("Rotate Log Automatically");
 		rotateLog = new JCheckBox();
 		rotateLog.setSelected(conf.getBooleanProperty("logger.log.rotate"));
 		
@@ -285,20 +283,21 @@ public class ConfigViewerGUI extends JFrame {
 		logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
 		
 		
-//		TODO: Remove hard coded string
-		JLabel logNameLabel = new JLabel("Log Name");
-		logName = new JTextField();
-		logName.setText(conf.getStringProperty("logger.log.name"));
+
 		
 //		TODO: Remove hard coded string
 		JLabel logEntryTimeStampFormatLabel = new JLabel("Log Entry Timestamp Format");
 	
-		Set<String> formats = new HashSet<String>();
+		Set<String> formats = new LinkedHashSet<String>();
 		
 		formats.add(conf.getStringProperty("logger.log.entry.timestamp.format"));
-		formats.add("yyyy-MM-dd'T'HH:mm:ss:SSS");
-		formats.add("EEE, d MMM yyyy HH:mm:ss");
-
+		formats.add("yyyy-MM-dd'T'HH:mm:ss:SSSZ");
+		formats.add("yyyyMMdd'T'HHmmssSSSZ");
+		formats.add("yyyy-D'T'HH:mm:ss:SSSZ");
+		formats.add("yyyyD'T'HHmmssSSSZ");
+		formats.add("MM/dd/yyyy:HH:mm:ss:SSS");
+		formats.add("dd/MM/yyyy:HH:mm:ss:SSS");
+				
 		logEntryTimeStampFormats = new JComboBox(formats.toArray());
 			
 //		TODO: Remove hard coded string
@@ -322,10 +321,6 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(logLevelsLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(logLevels, posLoggingPanel.nextCol());
-		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
-		loggingConfigurationPanel.add(logNameLabel, posLoggingPanel.nextRow());
-		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-		loggingConfigurationPanel.add(logName, posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(logEntryTimeStampFormatLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
@@ -487,8 +482,7 @@ public class ConfigViewerGUI extends JFrame {
 	
 	private boolean updateConfiguration() {
 		boolean valuesValid = true;
-		
-		valuesValid = validateLogName();
+				
 		valuesValid = validateLogRotateSize();
 		
 		if(valuesValid) {
@@ -500,7 +494,6 @@ public class ConfigViewerGUI extends JFrame {
 			conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
 			conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
 			conf.setStringProperty("logger.log.rotate.size", Long.toString(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString())));
-			conf.setStringProperty("logger.log.name", logName.getText());
 			conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());
 			
 			/**
@@ -527,20 +520,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return valuesValid;
 	}
-	
-	private boolean validateLogName() {
-    	boolean isValid = true;
-    	
-		int result = PathUtil.validateString(logName.getText(), false);
-    	
-    	if (result > -1) {
-    		isValid = false;
-//    		TODO: remove hard coded string
-    		JOptionPane.showMessageDialog(this, "The file name can not contain the character: " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-    	}
-    	return isValid;
-    }
-	
+		
 	private boolean validateLogRotateSize() {
 		boolean isValid = true;
 		
@@ -653,18 +633,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 	}
-		
-	private class LogNameJTextFieldListener implements DocumentListener {
-
-	    public void insertUpdate(DocumentEvent e) {
-	    	validateLogName();
-	    }
-	    public void removeUpdate(DocumentEvent e) {
-	    }
-	    public void changedUpdate(DocumentEvent e) {
-	    }   
-	}
-		
+			
 	private class ManualRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			languageList.setEnabled(true);

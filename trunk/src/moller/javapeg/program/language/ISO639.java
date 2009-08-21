@@ -5,6 +5,7 @@ package moller.javapeg.program.language;
  *                        : 2009-03-03 by Fredrik Möller
  *                        : 2009-03-05 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.FileNotFoundException;
@@ -16,7 +17,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.logger.Logger;
+import moller.util.logger.Logger;
 
 public class ISO639 {
 	
