@@ -1,12 +1,10 @@
 2.4:
 ====
-- Add validation of inputs in the new configuration GUI
+- Check if rotate log bug exists in previous versions.
+- Add configuration for the ImageViewer logging.
+- Add detection of OOME in the ImageViewer.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add move to top / bottom buttons to the "Images to view" list
-- Add functionality to load latest showed image path at application start.
-- Add functionality to ask for preferred language at first application start.
-- Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
-  properties implementation does.
 - Fix all TODO:s
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
@@ -17,10 +15,12 @@
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
-2.x:
+2.5:
 ====
-- Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
-- Create unittest
+- Add functionality to load latest showed image path at application start.
+- Add functionality to ask for preferred language at first application start.
+- Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
+  properties implementation does.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
@@ -28,3 +28,8 @@
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 - Test all functionality.
+
+2.x:
+====
+- Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
+- Create unittest
