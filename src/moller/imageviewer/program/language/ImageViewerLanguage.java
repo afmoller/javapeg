@@ -2,7 +2,7 @@ package moller.imageviewer.program.language;
 
 /**
  * This class was created : 2009-08-20 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import moller.imageviewer.StartImageViewer;
-import moller.javapeg.program.logger.Logger;
+import moller.util.logger.Logger;
 
 public class ImageViewerLanguage {
 			
