@@ -25,6 +25,7 @@ package moller.imageviewer.program.gui;
 *                        : 2009-08-18 by Fredrik Möller
 *                        : 2009-08-19 by Fredrik Möller
 *                        : 2009-08-20 by Fredrik Möller
+*                        : 2009-08-21 by Fredrik Möller
 */
 
 import java.awt.BorderLayout;
@@ -73,9 +74,9 @@ import moller.imageviewer.program.language.ImageViewerLanguage;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
-import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 import moller.util.gui.Update;
+import moller.util.logger.Logger;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 
@@ -145,7 +146,7 @@ public class ImageViewer extends JFrame {
 		this.addListeners();
 		this.createImage(imagesToView.get(0).getAbsolutePath());
 	}
-
+	
 	// Create Main Window
 	public void createMainFrame() {
 		
@@ -497,7 +498,8 @@ public class ImageViewer extends JFrame {
 			} else {
 				imageToViewListIndex -= 1;
 			}			
-			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());		
+			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+			logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 		}	
 	}
 	
@@ -508,7 +510,8 @@ public class ImageViewer extends JFrame {
 			} else {
 				imageToViewListIndex += 1;
 			}			
-			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());	
+			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+			logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 		}
 	}
 	
