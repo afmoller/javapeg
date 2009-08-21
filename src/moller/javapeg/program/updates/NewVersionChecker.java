@@ -5,6 +5,7 @@ package moller.javapeg.program.updates;
  *                        : 2009-05-20 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-08-09 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
+import moller.util.logger.Logger;
 import moller.util.version.UpdateChecker;
 import moller.util.version.containers.VersionInformation;
 

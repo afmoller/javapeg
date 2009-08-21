@@ -1,7 +1,7 @@
 package moller.javapeg.program.imagelistformat;
 /**
 * This class was created : 2009-07-24 by Fredrik Möller
-* Latest changed         :
+* Latest changed         : 2009-08-21 by Fredrik Möller
 */
 
 import java.io.File;
@@ -11,8 +11,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
+import moller.util.logger.Logger;
 
 public class IrfanView {
 

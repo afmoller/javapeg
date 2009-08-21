@@ -1,18 +1,19 @@
 package moller.javapeg.program;
 
-import java.io.File;
-import java.io.IOException;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.logger.Logger;
-import moller.util.io.FileUtil;
-import moller.util.io.StreamUtil;
-
 /**
  * This class was created : 2009-04-09 by Fredrik Möller
  * Latest changed         : 2009-04-12 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
+
+import java.io.File;
+import java.io.IOException;
+
+import moller.javapeg.StartJavaPEG;
+import moller.util.io.FileUtil;
+import moller.util.io.StreamUtil;
+import moller.util.logger.Logger;
 
 public class FileSetup {
 		

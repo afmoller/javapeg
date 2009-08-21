@@ -5,6 +5,7 @@ package moller.javapeg.program.thumbnailoverview;
  *                        : 2009-03-22 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -22,7 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
+import moller.util.logger.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

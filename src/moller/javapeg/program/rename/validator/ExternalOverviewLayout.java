@@ -4,6 +4,7 @@ package moller.javapeg.program.rename.validator;
  * Latest changed         : 2009-05-09 by Fredrik Möller
  *                        : 2009-05-10 by Fredrik Möller
  *                        : 2009-05-11 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.io.File;
@@ -21,8 +22,8 @@ import org.xml.sax.SAXException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.rename.ValidatorStatus;
+import moller.util.logger.Logger;
 
 /**
  * This class validates the content of an external layout.xml file, if it 

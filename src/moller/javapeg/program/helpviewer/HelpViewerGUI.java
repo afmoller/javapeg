@@ -7,6 +7,7 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-04-24 by Fredrik Möller
  *                        : 2009-04-27 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
+ *                        : 2009-08-21 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -36,9 +37,9 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.gui.CustomizedJScrollPane;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 import moller.util.io.StreamUtil;
+import moller.util.logger.Logger;
 
 public class HelpViewerGUI extends JFrame {
 	
