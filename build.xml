@@ -95,8 +95,8 @@
     </target>
 	
 	<target name="create_jar_util" depends="build">
-        <delete file="${jar.name.util}" />
-        <jar destfile="${jar.name.util}" filesetmanifest="mergewithoutmain">
+        <delete file="lib/${jar.name.util}" />
+        <jar destfile="lib/${jar.name.util}" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Class-Path" value="." />
             </manifest>
