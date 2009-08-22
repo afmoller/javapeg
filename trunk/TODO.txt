@@ -1,5 +1,6 @@
 2.4:
 ====
+- Change the name in the Image List tab to "VIEW IMAGES"
 - Check if rotate log bug exists in previous versions.
 - Add configuration for the ImageViewer logging.
 - Add detection of OOME in the ImageViewer.
