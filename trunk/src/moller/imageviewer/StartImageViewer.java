@@ -4,14 +4,16 @@ package moller.imageviewer;
  * Latest changed         : 2009-08-16 by Fredrik Möller
  *                        : 2009-08-20 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-08-23 by Fredrik Möller
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import moller.imageviewer.program.gui.ImageViewer;
 import moller.imageviewer.program.language.ImageViewerLanguage;
+import moller.javapeg.program.gui.ImageViewer;
 import moller.util.logger.Logger;
 
 public class StartImageViewer {
@@ -56,10 +58,15 @@ public class StartImageViewer {
         int	rotateSize         = Integer.parseInt(args[6]);
         		        
 		Logger logger = Logger.getInstance();
-		logger.initiateLogger(rotateLog, developerMode, rotateSize, logName, timeStampFormat, logLevel);
+		try {
+			logger.initiateLogger(rotateLog, developerMode, rotateSize, logName, timeStampFormat, logLevel);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 				
 		List<File> images = new ArrayList<File>(args.length);
-				
+						
 		ImageViewerLanguage imageViewerLanguage = ImageViewerLanguage.getInstance();
 		imageViewerLanguage.loadLanguageFile(args[0]);
 				
