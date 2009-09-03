@@ -1,0 +1,51 @@
+# This is the English language file for ImageViewer.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
+# This file was created: by Fredrik Möller 2009-08-20
+# This file was updated: 
+
+##############################################################################################################
+# I M A G E  V I E W E R                                                                                     #
+##############################################################################################################
+imageviewer.button.back.toolTip                         = Previous (Alt + Z) 
+imageviewer.button.back.mnemonic                        = Z
+imageviewer.button.forward.toolTip                      = Next (Alt + X) 
+imageviewer.button.forward.mnemonic                     = X
+imageviewer.button.automaticAdjustToWindowSize.toolTip  = Automatically adjust to window size (Alt + C) 
+imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
+imageviewer.button.adjustToWindowSize.toolTip           = Adjust to window size (Alt + A) 
+imageviewer.button.adjustToWindowSize.mnemonic          = A
+imageviewer.button.help.toolTip                         = Help (Alt + H) 
+imageviewer.button.help.mnemonic                        = H
+
+imageviewer.popupmenu.back.text               = (Alt-Z) Previous
+imageviewer.popupmenu.forward.text            = (Alt-X) Next
+imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Adjust to window size
+
+imageviewer.statusbar.pathToPicture    = Path to image file
+imageviewer.statusbar.sizeLabel        = S:
+imageviewer.statusbar.sizeLabelImage   = Image size in 
+imageviewer.statusbar.widthLabel       = W:
+imageviewer.statusbar.widthLabelImage  = Image width in pixels
+imageviewer.statusbar.heightLabel      = H:
+imageviewer.statusbar.heightLabelImage = Image height in pixels
+
+##############################################################################################################
+# M E T A  D A T A  P A N E L                                                                                #
+##############################################################################################################
+metadatapanel.titleDefaultText     = META DATA FOR IMAGE:
+metadatapanel.tableheader.type     = TYPE
+metadatapanel.tableheader.property = PROPERTY
+metadatapanel.tableheader.value    = VALUE
