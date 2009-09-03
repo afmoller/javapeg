@@ -23,7 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.language.Language;
-import moller.util.logger.Logger;
+import moller.javapeg.program.logger.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

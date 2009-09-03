@@ -37,13 +37,13 @@ import javax.swing.JOptionPane;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.html.DocType;
 import moller.util.html.Tag;
 import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
-import moller.util.logger.Logger;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 

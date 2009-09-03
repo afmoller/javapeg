@@ -19,8 +19,8 @@ import java.util.TreeSet;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.JPEGUtil;
-import moller.util.logger.Logger;
 
 public class FileRetriever {
 	

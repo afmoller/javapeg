@@ -11,9 +11,9 @@ import java.io.File;
 import java.io.IOException;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
-import moller.util.logger.Logger;
 
 public class FileSetup {
 		

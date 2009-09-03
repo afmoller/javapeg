@@ -17,7 +17,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
-import moller.util.logger.Logger;
+import moller.javapeg.program.logger.Logger;
 
 public class ISO639 {
 	
