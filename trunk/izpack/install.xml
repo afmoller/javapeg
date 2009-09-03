@@ -118,15 +118,14 @@
         <pack name="Core" required="yes">
             <description>The JavaPEG core files, which are needed to run the application.</description>
             <file src="../src/moller/javapeg/resources/startup/conf.xml"                 targetdir="$INSTALL_PATH/config"/>
-            <file src="../src/moller/imageviewer/resources/startup/conf_imageviewer.xml" targetdir="$INSTALL_PATH/config"/>
             <file src="../src/moller/javapeg/resources/startup/language.info"            targetdir="$INSTALL_PATH/resources/lang"/>
             <file src="../src/moller/javapeg/resources/startup/layout.info"              targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="../src/moller/javapeg/resources/startup/style.info"               targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="images/javapeg.ico"                                               targetdir="$INSTALL_PATH"/>
+            <file src="launch/launcher.bat"                                              targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                                   targetdir="$INSTALL_PATH"/>
-            <file src="../ImageViewer.jar"                                               targetdir="$INSTALL_PATH"/>
-            <file src="../Util.jar"                                                      targetdir="$INSTALL_PATH/lib"/>
-            <file src="../lib/metadata-extractor-2.3.1.jar"                              targetdir="$INSTALL_PATH/lib"/>
+            <file src="../lib/Util.jar"                                                  targetdir="$INSTALL_PATH/lib"/>
+            <file src="../libraries/metadata-extractor-2.3.1.jar"                        targetdir="$INSTALL_PATH/lib"/>
         </pack>
 
         <!-- The documentation 
