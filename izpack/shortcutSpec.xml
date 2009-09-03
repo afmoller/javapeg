@@ -13,7 +13,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\JavaPEG.jar"
+     target="$INSTALL_PATH\launcher.bat"
      commandLine=""
      iconFile="$INSTALL_PATH\javapeg.ico"
      workingDirectory="$INSTALL_PATH"
