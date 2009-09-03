@@ -73,10 +73,10 @@ import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Screen;
 import moller.util.gui.Update;
-import moller.util.logger.Logger;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 

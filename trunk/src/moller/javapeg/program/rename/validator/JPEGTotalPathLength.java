@@ -18,10 +18,10 @@ import java.util.Set;
 import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.TemplateUtil;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
-import moller.util.logger.Logger;
 
 /**
  * This class validates the lengths of all converted paths that 

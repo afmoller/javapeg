@@ -22,7 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
-import moller.util.logger.Logger;
+import moller.javapeg.program.logger.Logger;
 import moller.util.version.UpdateChecker;
 import moller.util.version.containers.VersionInformation;
 

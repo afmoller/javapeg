@@ -18,12 +18,12 @@ import java.util.Map;
 import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.Type;
 import moller.util.io.FileUtil;
-import moller.util.logger.Logger;
 
 public class FileProcessor {
 	

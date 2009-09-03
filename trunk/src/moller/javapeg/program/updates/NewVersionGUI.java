@@ -42,8 +42,8 @@ import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
-import moller.util.logger.Logger;
 
 public class NewVersionGUI extends JFrame{
 		

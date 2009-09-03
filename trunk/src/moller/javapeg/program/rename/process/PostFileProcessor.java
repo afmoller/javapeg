@@ -10,11 +10,11 @@ import java.io.File;
 import java.util.Map;
 
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.hash.MD5;
-import moller.util.logger.Logger;
 
 public class PostFileProcessor {
 

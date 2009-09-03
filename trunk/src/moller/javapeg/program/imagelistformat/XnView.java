@@ -11,8 +11,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
-import moller.util.logger.Logger;
 
 public class XnView {
 	
