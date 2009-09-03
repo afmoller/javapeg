@@ -2,17 +2,15 @@
 <project default="all" name="Compile and build java classes plus jar archives">
 	
 	<property name="ver" value="2.4" />
-	
-	<property name="jar.name.imageviewer" value="ImageViewer.jar" />
+		
 	<property name="jar.name.javapeg"     value="JavaPEG.jar" />
 	<property name="jar.name.util"        value="Util.jar" />
 	
 	<property name="zip_src.name"         value="JavaPEG_${ver}_Src.zip" />
-	
-	<property name="main.class.imageviewer" value="moller.imageviewer.StartImageViewer" />
+		
 	<property name="main.class.javepeg"     value="moller.javapeg.StartJavaPEG" />
 
-	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_imageviewer, create_jar_util, create_release, create_release_src" />
+	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_util, create_release, create_release_src" />
 
 	<target name="clean_build">
 		<delete failonerror="no">
@@ -30,7 +28,7 @@
 		<mkdir dir="build" />
 		<javac srcdir="src" destdir="build" target="1.6" debug="true">
 			<classpath>
-				<fileset dir="lib" includes="*.jar" />
+				<fileset dir="libraries" includes="*.jar" />
 			</classpath>
 			<include name="moller/**" />
 			<exclude name="**/unittest/**" />
@@ -40,14 +38,16 @@
 				<include name="**/*.gif" />
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
-				<include name="**/language.en" />
-				<include name="**/language.es" />
-				<include name="**/language.sv" />
+				<include name="**/imageviewer.en" />
+				<include name="**/javapeg.en" />
+				<include name="**/imageviewer.es" />
+				<include name="**/javapeg.es" />
+				<include name="**/imageviewer.sv" />
+				<include name="**/javapeg.sv" />
 				<include name="**/layout.xml" />
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
 				<include name="**/conf.xml" />
-				<include name="**/conf_imageviewer.xml" />
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
@@ -69,31 +69,13 @@
 				<attribute name="Class-Path" value="lib/metadata-extractor-2.3.1.jar lib/${jar.name.util}" />
 			</manifest>
 			<fileset dir="build">
-				<exclude name="**/imageviewer/**" />
 				<exclude name="**/util/**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</jar>
 	</target>
-	
-	<target name="create_jar_imageviewer" depends="build">
-        <delete file="${jar.name.imageviewer}" />
-        
-        <jar destfile="${jar.name.imageviewer}" filesetmanifest="mergewithoutmain">
-            <manifest>
-                <attribute name="Main-Class" value="${main.class.imageviewer}" />
-                <attribute name="Class-Path" value="${jar.name.javapeg} lib/${jar.name.util}" />
-            </manifest>
-            <fileset dir="build">
-            	<exclude name="**/javapeg/**" />
-            	<exclude name="**/util/**" />
-                <exclude name="**/test/**" />
-                <exclude name="**/*.java" />
-            </fileset>
-        </jar>
-    </target>
-	
+		
 	<target name="create_jar_util" depends="build">
         <delete file="lib/${jar.name.util}" />
         <jar destfile="lib/${jar.name.util}" filesetmanifest="mergewithoutmain">
@@ -102,7 +84,6 @@
             </manifest>
             <fileset dir="build">
             	<exclude name="**/javapeg/**" />
-            	<exclude name="**/imageviewer/**" />
             	<exclude name="**/test/**" />
                 <exclude name="**/*.java" />
             </fileset>
@@ -113,7 +94,7 @@
 				
 		<!-- Allows us to use the IzPack Ant task, standalone-compiler.jar added to Ant lib -->
 		<taskdef name="izpack" 
-			     classpath="lib/standalone-compiler.jar" 
+			     classpath="libraries/standalone-compiler.jar" 
 			     classname="com.izforge.izpack.ant.IzPackTask"/>
 
 		<!-- Replace version token in shortcut definition files -->
@@ -166,7 +147,7 @@
 	                <include name="gpl.txt" />
 	            	<include name="CHANGELOG.txt" />
 	                <include name="TODO.txt" />
-	                <include name="lib/metadata-extractor-2.3.1.jar" />
+	                <include name="libraries/metadata-extractor-2.3.1.jar" />
 	            </fileset>
 	        </zip>
 	    </target>
