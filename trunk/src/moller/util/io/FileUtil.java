@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileUtil {
 	
@@ -329,5 +331,29 @@ public class FileUtil {
 	 */
 	public static String getLatestModifiedTime(File file) {
 		return getLatestModified(file,"HH-mm-ss");
+	}
+	
+	/**
+	 * @param theFileToZip
+	 * @throws IOException
+	 */
+	public static void zipTheFile (File theFileToZip) throws IOException {
+		 
+	    byte[] buf = new byte[8096];
+	    
+	    File zipFile = new File(theFileToZip.getParent(), theFileToZip.getName() + ".zip");
+	    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
+
+	    FileInputStream fis = new FileInputStream(theFileToZip);
+
+	    zos.putNextEntry(new ZipEntry(theFileToZip.getName()));
+
+	    int lenght;
+	    while ((lenght = fis.read(buf)) > 0) {
+	    	zos.write(buf, 0, lenght);
+	    }
+	    zos.closeEntry();
+	    fis.close();
+	    zos.close();
 	}
 }
