@@ -60,6 +60,8 @@ package moller.javapeg.program;
  *                        : 2009-08-19 by Fredrik Möller
  *                        : 2009-08-20 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-08-23 by Fredrik Möller
+ *                        : 2009-08-30 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -133,6 +135,7 @@ import javax.swing.tree.TreePath;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
+import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
@@ -141,6 +144,7 @@ import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
@@ -163,7 +167,6 @@ import moller.util.gui.Update;
 import moller.util.io.FileUtil;
 import moller.util.io.JPEGUtil;
 import moller.util.io.StreamUtil;
-import moller.util.logger.Logger;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
 
@@ -276,7 +279,6 @@ public class MainGUI extends JFrame {
 		
 		config =  Config.getInstance();
 		logger =  Logger.getInstance();
-		this.initiateLogger(logger);
 		lang   = Language.getInstance();
 		
 		logger.logDEBUG("JavaPEG is starting");		
@@ -310,20 +312,7 @@ public class MainGUI extends JFrame {
 		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
 	}
-	
-	private void initiateLogger(Logger logger) {
-		boolean rotateLog      = config.getBooleanProperty("logger.log.rotate");
-    	boolean developerMode  = config.getBooleanProperty("logger.developerMode");
-    	
-    	String logName         = config.getStringProperty("logger.log.name");
-        String timeStampFormat = config.getStringProperty("logger.log.entry.timestamp.format");
-        String logLevel        = config.getStringProperty("logger.log.level");
 		
-        int	rotateSize         = config.getIntProperty("logger.log.rotate.size");
-        
-		logger.initiateLogger(rotateLog, developerMode, rotateSize, logName, timeStampFormat, logLevel);
-	}
-	
 	private void checkApplicationUpdates() {
 			
 		logger.logDEBUG("Search for Application Updates Started");
@@ -1649,37 +1638,14 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(!imagesToVievListModel.isEmpty()) {
 				
-				String [] cmdArray = new String [imagesToVievListModel.size() + 10];
+				List<File> imagesToView = new ArrayList<File>();
 				
-				cmdArray[0] = "java";
-				cmdArray[1] = "-jar";
-				cmdArray[2] = System.getProperty("user.dir") + System.getProperty("file.separator") + "ImageViewer.jar";
-				
-				if(config.getBooleanProperty("automaticLanguageSelection")) {
-					cmdArray[3] = System.getProperty("user.language");
-				} else {
-					cmdArray[3] = config.getStringProperty("gUILanguageISO6391");
-				}
-								
-				cmdArray[4] = config.getStringProperty("logger.log.rotate");
-				cmdArray[5] = config.getStringProperty("logger.developerMode");
-//				TODO: Make configurable
-				cmdArray[6] = "imageviewer.log";
-				cmdArray[7] = config.getStringProperty("logger.log.entry.timestamp.format");
-				cmdArray[8] = config.getStringProperty("logger.log.level");
-				cmdArray[9] = config.getStringProperty("logger.log.rotate.size");
-								
 				for (int i = 0; i < imagesToVievListModel.size(); i++) {
-					cmdArray[i + 10] = ((File)imagesToVievListModel.get(i)).getAbsolutePath();
+					imagesToView.add((File)imagesToVievListModel.get(i));
 				}
-								
-				Runtime runtime = Runtime.getRuntime();
-				try {
-					runtime.exec(cmdArray);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
+				
+				ImageViewer imageViewer = new ImageViewer(imagesToView);
+				imageViewer.setVisible(true);
 			}
 		}
 	}
