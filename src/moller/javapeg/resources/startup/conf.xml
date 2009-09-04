@@ -21,7 +21,7 @@
 <entry key="rename.use.lastmodified.date">true</entry>
 <entry key="rename.use.lastmodified.time">true</entry>
 <entry key="logger.log.rotate.size">1048576</entry>
-<entry key="logger.log.name">application.log</entry>
+<entry key="logger.log.name">javapeg.log</entry>
 <entry key="mainGUI.window.location.x">10</entry>
 <entry key="mainGUI.window.location.y">10</entry>
 <entry key="mainGUI.window.width">1024</entry>
@@ -39,4 +39,10 @@
 <entry key="configViewerGUI.window.height">600</entry>
 <entry key="configViewerGUI.window.location.x">10</entry>
 <entry key="configViewerGUI.window.location.y">10</entry>
+<entry key="imageViewerGUI.window.location.y">10</entry>
+<entry key="imageViewerGUI.window.location.x">10</entry>
+<entry key="imageViewerGUI.window.width">1024</entry>
+<entry key="imageViewerGUI.window.height">768</entry>
+<entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
+<entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
 </properties>
