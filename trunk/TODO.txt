@@ -2,8 +2,7 @@
 ====
 - Fix better image loading, to reduce the lag before the progress bar is shown.
 - Change the name in the Image List tab to "VIEW IMAGES"
-- Fix start.sh file to the Unix installations.
-- Add detection of OOME in the ImageViewer.
+- Add logging when an OOME has occured.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add move to top / bottom buttons to the "Images to view" list
 - Fix all TODO:s

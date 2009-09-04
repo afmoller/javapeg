@@ -49,7 +49,7 @@
         applications="no"
         startMenu="no"
         startup="no"
-        target="$INSTALL_PATH/JavaPEG.jar"
+        target="$INSTALL_PATH/launcher.sh"
         commandLine=""
         iconFile="$INSTALL_PATH/javapeg.ico"
         workingDirectory="$INSTALL_PATH"
