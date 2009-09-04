@@ -92,6 +92,7 @@ public class ConfigViewerGUI extends JFrame {
 	 */
 	private JCheckBox developerMode;
 	private JCheckBox rotateLog;
+	private JCheckBox zipLog;
 	private JComboBox rotateLogSizeFactor;
 	private JComboBox logLevels;
 	private JComboBox logEntryTimeStampFormats;
@@ -255,6 +256,12 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel rotateLogLabel = new JLabel("Rotate Log Automatically");
 		rotateLog = new JCheckBox();
 		rotateLog.setSelected(conf.getBooleanProperty("logger.log.rotate"));
+
+//		TODO: Remove hard coded string
+		JLabel zipLogLabel = new JLabel("Zip Rotated Log");
+		zipLog = new JCheckBox();
+		zipLog.setSelected(conf.getBooleanProperty("logger.log.rotate.zip"));
+		
 		
 //		TODO: Remove hard coded string
 		JLabel rotateLogSizeLabel = new JLabel("Rotate Log Size");
@@ -321,6 +328,10 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(rotateLogLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(rotateLog, posLoggingPanel.nextCol());
+		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+		loggingConfigurationPanel.add(zipLogLabel, posLoggingPanel.nextRow());
+		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
+		loggingConfigurationPanel.add(zipLog, posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(rotateLogSizeLabel, posLoggingPanel.nextRow());
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
@@ -507,6 +518,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("logger.log.level", logLevels.getSelectedItem().toString());
 		conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
 		conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
+		conf.setBooleanProperty("logger.log.rotate.zip", zipLog.isSelected());
 		conf.setStringProperty("logger.log.rotate.size", Long.toString(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString())));
 		conf.setStringProperty("logger.log.name", logName.getText().trim());
 		conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());

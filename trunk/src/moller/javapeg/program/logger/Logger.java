@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import moller.javapeg.program.config.Config;
+import moller.util.io.FileUtil;
 
 public class Logger {
 
@@ -41,6 +42,7 @@ public class Logger {
     
     private boolean developerMode;
     private boolean rotateLog;
+    private boolean zipLog;
     
     private int	rotateSize;
     private String logName;
@@ -57,6 +59,7 @@ public class Logger {
     	logName       = config.getStringProperty("logger.log.name");
     	logLevel      = parseConfValue(config.getStringProperty("logger.log.level"));
     	rotateSize    = config.getIntProperty("logger.log.rotate.size");
+    	zipLog        =	config.getBooleanProperty("logger.log.rotate.zip");
     	    	
     	date     = new Date();
     	sdf      = new SimpleDateFormat(config.getStringProperty("logger.log.entry.timestamp.format"));
@@ -222,7 +225,15 @@ public class Logger {
 		    	if (rotateLog && ((currentLogSize + logEntry.length()) > rotateSize)) {
 		        	logWriter.close();
 					
-		        	logFile.renameTo(new File(BASE_PATH + FS + logName + System.currentTimeMillis()));
+		        	File renamedFile = new File(BASE_PATH + FS + logName + System.currentTimeMillis());
+		        	
+		        	logFile.renameTo(renamedFile);
+		        	
+		        	if(zipLog) {
+		        		FileUtil.zipTheFile(renamedFile);
+		        		renamedFile.delete();
+		        	}
+		        	
 		        	if(!logFile.exists()) {
 		        		if(!logFile.createNewFile()) {
 		        			throw new IOException("Could  not create file: " + logFile.getAbsolutePath());
