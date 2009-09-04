@@ -33,6 +33,10 @@
    (Previous "CREATE IMAGE LISTS" tab) tab and it will show all the images that
    has been selected and added to the IMAGE LIST The Image Viewer opens in a 
    separate window.
+   
+ ! If the automatic rotation of log file was disabled, then the log was 
+   rotated for each entry written to log, resulting in a lot of log files with
+   only one log entry in each log file.
          
  ~ The Language selection GUI has been removed and all settings that was made 
    via that interface has been moved to the new graphical configuration 
