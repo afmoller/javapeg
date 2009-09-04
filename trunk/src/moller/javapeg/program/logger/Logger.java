@@ -1,5 +1,4 @@
 package moller.javapeg.program.logger;
-
 /**
  * This class was created : 2009-02-27 by Fredrik Möller
  * Latest changed         : 2009-03-01 by Fredrik Möller
@@ -12,6 +11,7 @@ package moller.javapeg.program.logger;
  *                        : 2009-05-13 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-23 by Fredrik Möller
+ *                        : 2009-09-04 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -20,6 +20,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import moller.javapeg.program.config.Config;
 
 public class Logger {
 
@@ -30,24 +32,56 @@ public class Logger {
     private Date date;
     
     private File logFile;
-        
-    private boolean rotateLog;
-    private boolean developerMode;
     
-    private long rotateSize;
     private long currentLogSize;
-        
-    private String logName;
     
     private BufferedWriter logWriter;
     
     private Level logLevel;
     
-    private final static String FS = File.separator;
+    private boolean developerMode;
+    private boolean rotateLog;
+    
+    private int	rotateSize;
+    private String logName;
+        	    
+    private final static String FS        = File.separator;
     private final static String BASE_PATH = System.getProperty("user.dir") + FS + "logs";
 
     private Logger() {
-    	date = new Date();
+    	
+    	Config config = Config.getInstance();
+    	    	
+    	developerMode = config.getBooleanProperty("logger.developerMode");
+    	rotateLog     = config.getBooleanProperty("logger.log.rotate");
+    	logName       = config.getStringProperty("logger.log.name");
+    	logLevel      = parseConfValue(config.getStringProperty("logger.log.level"));
+    	rotateSize    = config.getIntProperty("logger.log.rotate.size");
+    	    	
+    	date     = new Date();
+    	sdf      = new SimpleDateFormat(config.getStringProperty("logger.log.entry.timestamp.format"));
+    	    	
+    	logFile = new File(BASE_PATH + FS + logName);
+    	
+    	if(logFile.exists()) {
+        	currentLogSize = logFile.length();
+        } else {
+        	try {
+				if(!logFile.createNewFile()) {
+//    			throw new IOException("Could  not create file: " + logFile.getAbsolutePath());
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	currentLogSize = 0;
+        }
+        try {
+			logWriter = new BufferedWriter(new FileWriter(logFile, true));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
         
     /**
@@ -66,28 +100,6 @@ public class Logger {
 		}
 	}
 	
-	public void initiateLogger(boolean rotateLog, boolean developerMode, int rotateSize, String logName, String timeStampFormat, String logLevel) throws IOException {
-		
-		this.rotateLog     = rotateLog;
-		this.developerMode = developerMode;
-		this.rotateSize    = rotateSize;
-		this.logName       = logName;
-		this.sdf           = new SimpleDateFormat(timeStampFormat);
-		this.logLevel      = parseConfValue(logLevel);
-		        
-        logFile = new File(BASE_PATH + FS + logName);
-        
-        if(logFile.exists()) {
-        	currentLogSize = logFile.length();
-        } else {
-        	if(!logFile.createNewFile()) {
-    			throw new IOException("Could  not create file: " + logFile.getAbsolutePath());
-    		}
-        	currentLogSize = 0;
-        }
-        logWriter = new BufferedWriter(new FileWriter(logFile, true));
-	}
-		
 	/**
 	 * This method logs a debug entry to the log file if current log level 
 	 * allows that.
@@ -197,20 +209,14 @@ public class Logger {
     }
 	
     private void log(String logMessage, Level level) {
-        
+        	        
         if ((level.ordinal() >= logLevel.ordinal()) || developerMode) {
     	
         	date.setTime(System.currentTimeMillis());
         	
-	    	String formattedTimeStamp = sdf.format(date);
-	        
-	    	String logEntry = "";
-	    	
-	    	if (level == Level.INFO || level == Level.WARN) {
-	    		logEntry = formattedTimeStamp + " " + level.toString() + "  : " + logMessage;
-	    	} else {
-	    		logEntry = formattedTimeStamp + " " + level.toString() + " : " + logMessage;	
-	    	}
+        	String padding = (level == Level.INFO || level == Level.WARN) ? " " : ""; 
+        		    	
+	    	String logEntry = sdf.format(date) + " " + level + padding +  " : " + logMessage;
 	    		                
 	        try {
 		    	if (rotateLog && ((currentLogSize + logEntry.length()) > rotateSize)) {
