@@ -9,6 +9,7 @@ package moller.javapeg.program.config;
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-23 by Fredrik Möller
  *                        : 2009-09-04 by Fredrik Möller
+ *                        : 2009-09-05 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -151,8 +152,7 @@ public class ConfigViewerGUI extends JFrame {
 			this.setLocation(xyFromConfig);
 		} else {
 			this.setLocation(0,0);
-//			TODO: Change errror message
-			JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, lang.get("configviewer.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			logger.logERROR("Could not set location of Config Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
 		}
 		this.setLayout(new BorderLayout());
@@ -179,9 +179,7 @@ public class ConfigViewerGUI extends JFrame {
 		} finally {
 			StreamUtil.closeStream(imageStream);
 		}
-		
-//		TODO: Fix hard coded string
-		this.setTitle("Configuration");
+		this.setTitle(lang.get("configviewer.window.title"));
 	}
 	
 	private JSplitPane initiateSplitPane() {	
@@ -200,7 +198,7 @@ public class ConfigViewerGUI extends JFrame {
 		this.addWindowListener(new WindowEventHandler());
 		rotateLogSize.getDocument().addDocumentListener(new RotateLogSizeJTextFieldListener());
 		rotateLogSizeFactor.addItemListener(new RotateLogSizeFactorJComboBoxListener());
-		logName.getDocument().addDocumentListener(new JavaPEGLogNameJTextFieldListener());
+		logName.getDocument().addDocumentListener(new LogNameJTextFieldListener());
 		logEntryTimeStampFormats.addItemListener(new LogEntryTimestampFormatsJComboBoxListener());
 		manualRadioButton.addActionListener(new ManualRadioButtonListener());
 		automaticRadioButton.addActionListener(new AutomaticRadioButtonListener());
@@ -215,10 +213,9 @@ public class ConfigViewerGUI extends JFrame {
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 
-//		TODO: Remove hard coded strings
-		okButton = new JButton("Ok");
-		applyButton = new JButton("Apply");
-		cancelButton = new JButton("Cancel");
+		okButton     = new JButton(lang.get("common.button.ok.label"));
+		applyButton  = new JButton(lang.get("common.button.apply.label"));
+		cancelButton = new JButton(lang.get("common.button.cancel.label"));
 		
 		buttonPanel.add(okButton);
 		buttonPanel.add(applyButton);
@@ -242,29 +239,23 @@ public class ConfigViewerGUI extends JFrame {
 				break;
 			}	
 		}
-//		TODO: Remove hard coded string
-		JLabel logLevelsLabel = new JLabel("Log Level");
+		JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
 		logLevels = new JComboBox(Level.values());				
 		logLevels.setSelectedIndex(seletedIndex);
 		
-//		TODO: Remove hard coded string
-		JLabel developerModeLabel = new JLabel("Unbuffered Logging");
+		JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
 		developerMode = new JCheckBox();
 		developerMode.setSelected(conf.getBooleanProperty("logger.developerMode"));
-				
-//		TODO: Remove hard coded string
-		JLabel rotateLogLabel = new JLabel("Rotate Log Automatically");
+
+		JLabel rotateLogLabel = new JLabel(lang.get("configviewer.logging.label.rotateLog.text"));
 		rotateLog = new JCheckBox();
 		rotateLog.setSelected(conf.getBooleanProperty("logger.log.rotate"));
 
-//		TODO: Remove hard coded string
-		JLabel zipLogLabel = new JLabel("Zip Rotated Log");
+		JLabel zipLogLabel = new JLabel(lang.get("configviewer.logging.label.zipLog.text"));
 		zipLog = new JCheckBox();
 		zipLog.setSelected(conf.getBooleanProperty("logger.log.rotate.zip"));
-		
-		
-//		TODO: Remove hard coded string
-		JLabel rotateLogSizeLabel = new JLabel("Rotate Log Size");
+
+		JLabel rotateLogSizeLabel = new JLabel(lang.get("configviewer.logging.label.rotateLogSize.text"));
 	
 		JPanel logSizePanel = new JPanel(new GridBagLayout());
 		GBHelper posLogSizePanel = new GBHelper();
@@ -293,15 +284,12 @@ public class ConfigViewerGUI extends JFrame {
 		logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
 		logSizePanel.add(new Gap(10), posLogSizePanel.nextCol());
 		logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
-		
-		
-//		TODO: Remove hard coded string
-		JLabel logNameLabel = new JLabel("Log Name");
+
+		JLabel logNameLabel = new JLabel(lang.get("configviewer.logging.label.logName.text"));
 		logName = new JTextField();
 		logName.setText(conf.getStringProperty("logger.log.name"));
-		
-//		TODO: Remove hard coded string
-		JLabel logEntryTimeStampFormatLabel = new JLabel("Log Entry Timestamp Format");
+
+		JLabel logEntryTimeStampFormatLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text"));
 	
 		Set<String> formats = new LinkedHashSet<String>();
 		
@@ -314,9 +302,8 @@ public class ConfigViewerGUI extends JFrame {
 		formats.add("dd/MM/yyyy:HH:mm:ss:SSS");
 				
 		logEntryTimeStampFormats = new JComboBox(formats.toArray());
-			
-//		TODO: Remove hard coded string
-		JLabel logEntryTimeStampPreviewLabel = new JLabel("Log Entry Timestamp Preview");
+
+		JLabel logEntryTimeStampPreviewLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampPreview.text"));
 		logEntryTimeStampPreview = new JTextField();
 		logEntryTimeStampPreview.setEditable(false);
 		this.updatePreviewTimestamp();
@@ -359,14 +346,12 @@ public class ConfigViewerGUI extends JFrame {
 		updatesConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
 		GBHelper posUpdatesPanel = new GBHelper();
-		
-//		TODO: Remove hard coded string
-		JLabel updatesEnabledLabel = new JLabel("Enable Application Update Check");
+
+		JLabel updatesEnabledLabel = new JLabel(lang.get("configviewer.update.label.updateEnabled.text"));
 		updatesEnabled = new JCheckBox();
 		updatesEnabled.setSelected(conf.getBooleanProperty("updatechecker.enabled"));
-		
-//		TODO: Remove hard coded string
-		JLabel attachVersionInformationLabel = new JLabel("Add Version Information To Update Check");
+
+		JLabel attachVersionInformationLabel = new JLabel(lang.get("configviewer.update.label.attachVersionInformation.text"));
 		sendVersionInformationEnabled = new JCheckBox();
 		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
 		sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
@@ -384,14 +369,12 @@ public class ConfigViewerGUI extends JFrame {
 		renameConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
 		GBHelper posRenamePanel = new GBHelper();
-		
-//		TODO: Remove hard coded string
-		JLabel useLastModifiedDateLabel = new JLabel("Use Last Modified Date if Exif date is missing");
+
+		JLabel useLastModifiedDateLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
 		useLastModifiedDate = new JCheckBox();
 		useLastModifiedDate.setSelected(conf.getBooleanProperty("rename.use.lastmodified.date"));
 
-//		TODO: Remove hard coded string
-		JLabel useLastModifiedTimeLabel = new JLabel("Use Last Modified Time if Exif time is missing");
+		JLabel useLastModifiedTimeLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
 		useLastModifiedTime = new JCheckBox();
 		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
 		
@@ -410,21 +393,18 @@ public class ConfigViewerGUI extends JFrame {
 						
 		JPanel leftPanel = new JPanel(new GridBagLayout());
 		JPanel rightPanel = new JPanel(new GridBagLayout());
-		
-//		TODO: Move string to new language file
-		JLabel selectionModeJLabel = new JLabel(lang.get("language.option.gui.selectionModeJLabel"));
+
+		JLabel selectionModeJLabel = new JLabel(lang.get("configviewer.language.label.selectionMode"));
 		selectionModeJLabel.setForeground(Color.GRAY);
-		
-//		TODO: Move string to new language file
-		manualRadioButton = new JRadioButton(lang.get("language.option.gui.manualRadioButton"));
-		automaticRadioButton = new JRadioButton(lang.get("language.option.gui.automaticRadioButton"));
+
+		manualRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.manual"));
+		automaticRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.automatic"));
 				
 		ButtonGroup languageSelectionMode = new ButtonGroup();
 		languageSelectionMode.add(manualRadioButton);
 		languageSelectionMode.add(automaticRadioButton);
-		
-//		TODO: Move string to new language file
-		JLabel currentLanguageLabel = new JLabel(lang.get("language.option.gui.currentLanguageLabel"));
+
+		JLabel currentLanguageLabel = new JLabel(lang.get("configviewer.language.label.currentLanguage"));
 		currentLanguageLabel.setForeground(Color.GRAY);
 				
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
@@ -445,9 +425,8 @@ public class ConfigViewerGUI extends JFrame {
 		leftPanel.add(currentLanguageLabel, posLeft.nextRow());
 		leftPanel.add(new Gap(5), posLeft.nextRow());
 		leftPanel.add(currentLanguage, posLeft.nextRow());
-		
-//		TODO: Move string to new language file
-		JLabel availableLanguages = new JLabel(lang.get("language.option.gui.availableLanguages"));
+
+		JLabel availableLanguages = new JLabel(lang.get("configviewer.language.label.availableLanguages"));
 		availableLanguages.setForeground(Color.GRAY);
 		
 		languageList = new JList(ConfigUtil.listLanguagesFiles());
@@ -533,8 +512,7 @@ public class ConfigViewerGUI extends JFrame {
 		 * Update Language Configuration
 		 */
 		if(!ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
-//			TODO: Move string to new language file
-			JOptionPane.showMessageDialog(this, lang.get("language.option.gui.information.restartMessage"), lang.get("language.option.gui.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, lang.get("configviewer.language.information.restartMessage"), lang.get("configviewer.language.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
 		}
 		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
 		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
@@ -555,8 +533,7 @@ public class ConfigViewerGUI extends JFrame {
     	
     	if (result > -1) {
     		isValid = false;
-//    		TODO: remove hard coded string
-    		JOptionPane.showMessageDialog(this, "The file name can not contain the character: " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+    		JOptionPane.showMessageDialog(this, lang.get("common.message.error.invalidFileName") + " " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
     	}
     	return isValid;
     }
@@ -575,28 +552,23 @@ public class ConfigViewerGUI extends JFrame {
 				isValid = false;
 
 				if(factor.equals("KiB")) {
-//					TODO: Remove hard coded string
-					JOptionPane.showMessageDialog(this, "The rotate log size is to large: Maximum allowed is 100000 KiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
+					JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeKiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
 				} else {
-//					TODO: Remove hard coded string
-					JOptionPane.showMessageDialog(this, "The rotate log size is to large: Maximum allowed is 100 MiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeMiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
 			if(size < 10 * 1024) {
-//				TODO: Remove hard coded string
-				JOptionPane.showMessageDialog(this, "The rotate log size is to small: Minimum allowed is 10 KiB", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);					
+				JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToSmall"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);					
 			}
 		} catch (NumberFormatException nfex) {
 			isValid = false;
-//			TODO: Remove hard coded string
-			JOptionPane.showMessageDialog(this, "The rotate log size must be an integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeNotAnInteger"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 		}
 		return isValid;
 	}
 	
 	private long calculateRotateLogSize(Long size, String factor) {
-				
 		if (factor.equals("KiB")) {
 			size *= 1024;
 		} else {
@@ -674,7 +646,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 	}
 			
-	private class JavaPEGLogNameJTextFieldListener implements DocumentListener {
+	private class LogNameJTextFieldListener implements DocumentListener {
 
 	    public void insertUpdate(DocumentEvent e) {
 	    	validateLogName(logName.getText());

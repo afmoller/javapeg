@@ -10,6 +10,7 @@ package moller.javapeg.program.language;
  *                        : 2009-04-21 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-30 by Fredrik Möller
+ *                        : 2009-09-05 by Fredrik Möller
  */
 
 import java.io.File;
@@ -97,8 +98,10 @@ public class Language {
 		Config conf = Config.getInstance();
 		
 		try {
-			InputStream langFileJavaPEG     = null;
-			InputStream langFileImageViewer = null;
+			InputStream langFileJavaPEG      = null;
+			InputStream langFileImageViewer  = null;
+			InputStream langFileCommon       = null;
+			InputStream langFileConfigViewer = null;
 			
 			String languageToLoad = "";
 			String languageCode = "";
@@ -118,8 +121,10 @@ public class Language {
 				logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in directroy: " + LANGUAGE_FILE_BASE);
 				logger.logDEBUG("Try to load language file: " + languageToLoad + " from JAR file instead");				
 				
-				langFileJavaPEG     = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."     + languageCode);
-				langFileImageViewer = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer." + languageCode);
+				langFileJavaPEG      = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."     + languageCode);
+				langFileImageViewer  = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer." + languageCode);
+				langFileCommon       = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common." + languageCode);
+				langFileConfigViewer = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer." + languageCode);
 				
 				if(langFileJavaPEG == null) {
 					logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in JAR file either.");
@@ -141,6 +146,16 @@ public class Language {
 			
 			loader.clear();
 			loader.load(langFileImageViewer);
+			
+			properties.putAll(loader);
+			
+			loader.clear();
+			loader.load(langFileCommon);
+			
+			properties.putAll(loader);
+			
+			loader.clear();
+			loader.load(langFileConfigViewer);
 			
 			properties.putAll(loader);
 			

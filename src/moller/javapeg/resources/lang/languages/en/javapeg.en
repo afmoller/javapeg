@@ -57,6 +57,7 @@
 #                      : by Fredrik Möller 2009-08-09
 #                      : by Fredrik Möller 2009-08-11
 #                      : by Fredrik Möller 2009-08-20
+#                      : by Fredrik Möller 2009-09-05
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -211,26 +212,6 @@ errormessage.filehandler.fileNotFoundExceptionA = The file:
 errormessage.filehandler.fileNotFoundExceptionB = can not be found
 errormessage.filehandler.canNotReadFile         = Not possible to access the file:
 errormessage.filehandler.canNotWriteFile        = Can not write:
-
-##############################################################################################################
-# L A N G U A G E  O P T I O N S  G U I                                                                      #
-##############################################################################################################
-language.option.gui.windowTitle          = Language settings
-language.option.gui.selectionModeJLabel  = SELECTIONMODE
-language.option.gui.manualRadioButton    = Manually
-language.option.gui.automaticRadioButton = Automatic
-language.option.gui.currentLanguageLabel = CURRENT LANGUAGE
-language.option.gui.availableLanguages   = AVAILABLE LANGUAGES
-language.option.gui.languageNameNotFound = name of language not found
-language.option.gui.okButton             = Ok
-language.option.gui.cancelButton         = Cancel
-language.option.gui.window.locationError = Could not set window location according to settings. See logs for details
-
-##############################################################################################################
-# I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
-##############################################################################################################
-language.option.gui.information.windowlabel    = Information
-language.option.gui.information.restartMessage = Selected language will not be used until JavaPEG is restarted
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
