@@ -1,7 +1,7 @@
 package moller.javapeg.program.config;
 /**
  * This class was created : 2009-08-09 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2009-09-05 by Fredrik Möller
  */
 
 import java.io.File;
@@ -56,7 +56,7 @@ public class ConfigUtil {
 		String language = ISO639.getInstance().getLanguage(code);
 		
 		if (language == null) {
-			return Language.getInstance().get("language.option.gui.languageNameNotFound");
+			return Language.getInstance().get("configviewer.language.languageNameNotFound");
 		}
 		return language;
 	}

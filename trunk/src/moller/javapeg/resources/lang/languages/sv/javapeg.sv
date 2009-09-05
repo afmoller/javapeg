@@ -56,6 +56,7 @@
 #                      : by Fredrik Möller 2009-08-09
 #                      : by Fredrik Möller 2009-08-11
 #                      : by Fredrik Möller 2009-08-20
+#                      : by Fredrik Möller 2009-09-05
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -211,26 +212,6 @@ errormessage.filehandler.fileNotFoundExceptionA = Filen:
 errormessage.filehandler.fileNotFoundExceptionB = kan inte hittas 
 errormessage.filehandler.canNotReadFile         = Kan inte läsa filen: 
 errormessage.filehandler.canNotWriteFile        = Kan inte skriva:
-
-##############################################################################################################
-# L A N G U A G E  O P T I O N S  G U I                                                                      #
-##############################################################################################################
-language.option.gui.windowTitle          = Språkinställningar
-language.option.gui.selectionModeJLabel  = SPRÅKVALSMETOD
-language.option.gui.manualRadioButton    = Manuellt
-language.option.gui.automaticRadioButton = Automatiskt
-language.option.gui.currentLanguageLabel = AKTUELLT SPRÅK
-language.option.gui.availableLanguages   = TILLGÄNGLIGA SPRÅK
-language.option.gui.languageNameNotFound = namn på språk ej funnet
-language.option.gui.okButton             = Ok
-language.option.gui.cancelButton         = Avbryt
-language.option.gui.window.locationError = Kunde inte sätta fönsterposition enligt konfigurationen. Se loggfil för detaljer.
-
-##############################################################################################################
-# I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
-##############################################################################################################
-language.option.gui.information.windowlabel    = Information
-language.option.gui.information.restartMessage = Valt språk kommer inte användas innan JavaPEG startats om
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
