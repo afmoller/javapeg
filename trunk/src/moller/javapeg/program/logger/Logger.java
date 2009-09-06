@@ -12,6 +12,8 @@ package moller.javapeg.program.logger;
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-23 by Fredrik Möller
  *                        : 2009-09-04 by Fredrik Möller
+ *                        : 2009-09-05 by Fredrik Möller
+ *                        : 2009-09-06 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -116,8 +118,8 @@ public class Logger {
 	public void logDEBUG(Object logMessage) {
 		if (logMessage instanceof String) {
 			this.log(logMessage.toString(), Level.DEBUG);	
-		} else if (logMessage instanceof Exception) {
-			this.logException((Exception)logMessage, Level.DEBUG);
+		} else if (logMessage instanceof Throwable) {
+			this.logThrowable((Throwable)logMessage, Level.DEBUG);
 		}
     }
 	    
@@ -134,8 +136,8 @@ public class Logger {
     public void logINFO(Object logMessage) {
     	if (logMessage instanceof String) {
 			this.log(logMessage.toString(), Level.INFO);	
-		} else if (logMessage instanceof Exception) {
-			this.logException((Exception)logMessage, Level.INFO);
+		} else if (logMessage instanceof Throwable) {
+			this.logThrowable((Throwable)logMessage, Level.INFO);
 		}
     }
     
@@ -151,8 +153,8 @@ public class Logger {
     public void logWARN(Object logMessage) {
     	if (logMessage instanceof String) {
 			this.log(logMessage.toString(), Level.WARN);	
-		} else if (logMessage instanceof Exception) {
-			this.logException((Exception)logMessage, Level.WARN);
+		} else if (logMessage instanceof Throwable) {
+			this.logThrowable((Throwable)logMessage, Level.WARN);
 		}
     }
     
@@ -168,8 +170,8 @@ public class Logger {
 	public void logERROR(Object logMessage) {
 		if (logMessage instanceof String) {
 			this.log(logMessage.toString(), Level.ERROR);	
-		} else if (logMessage instanceof Exception) {
-			this.logException((Exception)logMessage, Level.ERROR);
+		} else if (logMessage instanceof Throwable) {
+			this.logThrowable((Throwable)logMessage, Level.ERROR);
 		}
     }
 
@@ -185,8 +187,8 @@ public class Logger {
     public void logFATAL(Object logMessage) {
     	if (logMessage instanceof String) {
 			this.log(logMessage.toString(), Level.FATAL);	
-		} else if (logMessage instanceof Exception) {
-			this.logException((Exception)logMessage, Level.FATAL);
+		} else if (logMessage instanceof Throwable) {
+			this.logThrowable((Throwable)logMessage, Level.FATAL);
 		}
     }
         
@@ -194,18 +196,22 @@ public class Logger {
      * This method logs an Exception to the log if current log level allows
      * that.
      * 
-     * @param e is the Exception object that contains the message to log
+     * @param t is the Exception object that contains the message to log
      * @param l is the severity of the log entry, see {@link Level} for
      *        details.
      * @throws IOException 
      */
-    private void logException(Exception e, Level l) {
-       	this.log("An Exception Has Occurred", l);
+    private void logThrowable(Throwable t, Level l) {
+       	if(t instanceof Throwable) {
+       		this.log("A Throwable has been thrown", l);
+       	} else {
+       		this.log("An Exception Has Occurred", l);	
+       	}    	
        	this.log("START ==========================================================================", l);
-       	this.log("EXCEPTION MESSAGE:", l);
-    	this.log(e.getMessage() == null ? "" : e.getMessage(), l);
+       	this.log("MESSAGE:", l);
+    	this.log(t.getMessage() == null ? "" : t.getMessage(), l);
     	this.log("STACKTRACE:", l);
-    	for(StackTraceElement element : e.getStackTrace()) {
+    	for(StackTraceElement element : t.getStackTrace()) {
 			this.log(element.toString(), l);	
 		}
     	this.log("STOP ==========================================================================", l);
