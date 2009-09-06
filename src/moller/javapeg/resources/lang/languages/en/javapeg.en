@@ -58,12 +58,14 @@
 #                      : by Fredrik Möller 2009-08-11
 #                      : by Fredrik Möller 2009-08-20
 #                      : by Fredrik Möller 2009-09-05
+#                      : by Fredrik Möller 2009-09-06
 
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
-menu.file     = File
-menu.help     = Help
+menu.file          = File
+menu.help          = Help
+menu.configuration = Configuration
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
@@ -73,13 +75,15 @@ menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
-menu.item.about                      = About JavaPEG 2.3
+menu.item.about                      = About JavaPEG 2.4
+menu.item.configuration              = Configuration
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
-menu.mnemonic.file     = F
-menu.mnemonic.help     = H
+menu.mnemonic.file          = F
+menu.mnemonic.help          = H
+menu.mnemonic.configuration = C
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -156,12 +160,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = About JavaPEG 2.3
-aboutDialog.TextRowA = JavaPEG, ver: 2.3
+aboutDialog.Label    = About JavaPEG 2.4
+aboutDialog.TextRowA = JavaPEG, ver: 2.4
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
 aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-08-03.
-aboutDialog.TextRowE = Version 2.3 released 2009-08-03.
+aboutDialog.TextRowE = Version 2.4 released 2009-08-03.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -227,6 +231,7 @@ maingui.tabbedpane.imagelist.button.saveImageList        = Save the image list
 maingui.tabbedpane.imagelist.button.exportImageList      = Export the image list
 maingui.tabbedpane.imagelist.button.moveUp               = Move selected image upwards in the list
 maingui.tabbedpane.imagelist.button.moveDown             = Move selected image downwards in the list
+maingui.tabbedpane.imagelist.button.viewImages           = View selected images in the ImageViewer
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Open 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
@@ -427,7 +432,7 @@ statusbar.message.selectedPath              = Selected Path:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = RENAME IMAGES
-tabbedpane.imageView   = CREATE IMAGE LISTS
+tabbedpane.imageView   = VIEW IMAGES
 
 ##############################################################################################################
 # F I L E  R E T R I E V E R                                                                                 #

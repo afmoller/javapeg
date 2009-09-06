@@ -57,12 +57,14 @@
 #                      : by Fredrik Möller 2009-08-11
 #                      : by Fredrik Möller 2009-08-20
 #                      : by Fredrik Möller 2009-09-05
+#                      : by Fredrik Möller 2009-09-06
 
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
-menu.file     = Arkiv
-menu.help     = Hjälp
+menu.file          = Arkiv
+menu.help          = Hjälp
+menu.configuration = Inställningar
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
@@ -72,13 +74,15 @@ menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
-menu.item.about                      = Om JavaPEG 2.3
+menu.item.about                      = Om JavaPEG 2.4
+menu.item.configuration              = Inställningar
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
-menu.mnemonic.file     = A
-menu.mnemonic.help     = H
+menu.mnemonic.file          = A
+menu.mnemonic.help          = H
+menu.mnemonic.configuration = I
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -155,12 +159,12 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = Om JavaPEG 2.3
-aboutDialog.TextRowA = JavaPEG, ver: 2.3
+aboutDialog.Label    = Om JavaPEG 2.4
+aboutDialog.TextRowA = JavaPEG, ver: 2.4
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
 aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-08-03.
-aboutDialog.TextRowE = Version 2.3 släppt 2009-08-03.
+aboutDialog.TextRowE = Version 2.4 släppt 2009-08-03.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -227,6 +231,7 @@ maingui.tabbedpane.imagelist.button.saveImageList        = Spara bildlistan
 maingui.tabbedpane.imagelist.button.exportImageList      = Exportera bildlistan
 maingui.tabbedpane.imagelist.button.moveUp               = Flytta vald bild uppåt i listan
 maingui.tabbedpane.imagelist.button.moveDown             = Flytta vald bild nedåt i listan
+maingui.tabbedpane.imagelist.button.viewImages           = Visa valda bilder i bildvisaren
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Öppna 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Bildlistan är inte sparad, skriv över?
@@ -429,7 +434,7 @@ statusbar.message.selectedPath              = Vald sökväg:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
-tabbedpane.imageView   = SKAPA BILDLISTOR
+tabbedpane.imageView   = VISA BILDER
 
 ##############################################################################################################
 # F I L E  R E T R I E V E R                                                                                 #
