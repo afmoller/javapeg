@@ -14,7 +14,7 @@
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
 # This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: 
+# This file was updated: by Fredrik Möller 2009-09-06
 
 ##############################################################################################################
 # W I N D O W                                                                                                #
@@ -65,3 +65,12 @@ configviewer.errormessage.rotateLogSizeToLargeKiB   = Loggroteringsstorleken är 
 configviewer.errormessage.rotateLogSizeToLargeMiB   = Loggroteringsstorleken är för stor: Maximalt tillåtna är 100 MiB 
 configviewer.errormessage.rotateLogSizeToSmall      = Loggroteringsstorleken är för liten: Minsta tillåtna är 10 KiB
 configviewer.errormessage.rotateLogSizeNotAnInteger = Logroteringsstorleken måste vara ett heltal
+
+##############################################################################################################
+# T R E E  N O D E S                                                                                         #
+##############################################################################################################
+configviewer.tree.root          = Inställningar
+configviewer.tree.node.logging  = Loggning
+configviewer.tree.node.updates  = Uppdateringar
+configviewer.tree.node.rename   = Namnbyte
+configviewer.tree.node.language = Språk
