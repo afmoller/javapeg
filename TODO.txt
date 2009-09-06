@@ -1,9 +1,7 @@
 2.4:
 ====
+- Add memory check at startup.
 - Fix better image loading, to reduce the lag before the progress bar is shown.
-- Change the name in the Image List tab to "VIEW IMAGES"
-- Add logging when an OOME has occured.
-- Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add move to top / bottom buttons to the "Images to view" list
 - Fix all TODO:s
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
@@ -17,6 +15,8 @@
 
 2.5:
 ====
+- Fix layout of the Config Viewer GUI.
+- Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add functionality to load latest showed image path at application start.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
