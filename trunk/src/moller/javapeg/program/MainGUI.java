@@ -62,6 +62,8 @@ package moller.javapeg.program;
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-23 by Fredrik Möller
  *                        : 2009-08-30 by Fredrik Möller
+ *                        : 2009-09-05 by Fredrik Möller
+ *                        : 2009-09-06 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -199,6 +201,8 @@ public class MainGUI extends JFrame {
 	private JButton moveUpButton;
 	private JButton moveDownButton;
 	private JButton openImageViewerButton;
+	private JButton moveToTopButton;
+	private JButton moveToBottomButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -372,13 +376,11 @@ public class MainGUI extends JFrame {
 		fileMenu.add(shutDownProgramJMenuItem);
 								
 		// Create rows in the Configuration menu
-//		TODO: Remove hard coded strings
-		configGUIJMenuItem = new JMenuItem("Configuration");
+		configGUIJMenuItem = new JMenuItem(lang.get("menu.item.configuration"));
 		configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
-		
-//		TODO: Remove hard coded strings
-		configMenu = new JMenu("Configuration");
-		configMenu.setMnemonic('c');
+
+		configMenu = new JMenu(lang.get("menu.configuration"));
+		configMenu.setMnemonic(lang.get("menu.mnemonic.configuration").charAt(0));
 		
 		configMenu.add(configGUIJMenuItem);
 		
@@ -539,7 +541,7 @@ public class MainGUI extends JFrame {
 
 	private void createMainFrame(){
 
-		this.setTitle("JavaPEG 2.3");
+		this.setTitle("JavaPEG 2.4");
 
 		InputStream imageStream = null;
 		ImageIcon titleImageIcon = new ImageIcon();
@@ -681,7 +683,9 @@ public class MainGUI extends JFrame {
 		exportImageListButton      = new JButton();
 		moveUpButton               = new JButton();
 		moveDownButton             = new JButton();
-		openImageViewerButton      = new JButton(); 
+		openImageViewerButton      = new JButton();
+		moveToTopButton            = new JButton();
+		moveToBottomButton         = new JButton();
 		
 		InputStream imageStream = null;
 		
@@ -693,6 +697,8 @@ public class MainGUI extends JFrame {
 		ImageIcon moveUpImageIcon = new ImageIcon();
 		ImageIcon moveDownImageIcon = new ImageIcon();
 		ImageIcon viewImagesImageIcon = new ImageIcon();
+		ImageIcon moveToTopImageIcon = new ImageIcon();
+		ImageIcon moveToBottomImageIcon = new ImageIcon();
 		
 		try {		
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
@@ -733,9 +739,19 @@ public class MainGUI extends JFrame {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/view.gif");
 			viewImagesImageIcon.setImage(ImageIO.read(imageStream));
 			openImageViewerButton.setIcon(viewImagesImageIcon);	
-//			TODO: Remove hard coded string
-			openImageViewerButton.setToolTipText("View selected images in the ImageViewer");
+			openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
+
+//			TODO: Fix tooltiptext
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/top.gif");
+			moveToTopImageIcon.setImage(ImageIO.read(imageStream));
+			moveToTopButton.setIcon(moveToTopImageIcon);
+			moveToTopButton.setToolTipText("");
 			
+//			TODO: Fix tooltiptext
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/bottom.gif");
+			moveToBottomImageIcon.setImage(ImageIO.read(imageStream));
+			moveToBottomButton.setIcon(moveToBottomImageIcon);
+			moveToBottomButton.setToolTipText("");
 
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
@@ -751,18 +767,25 @@ public class MainGUI extends JFrame {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 				
-		GBHelper posButtonPanel = new GBHelper();
+		GBHelper posVerticalButtonPanel = new GBHelper();
 		
-		JPanel buttonPanel = new JPanel(new GridBagLayout());
-		buttonPanel.add(removeSelectedImagesButton, posButtonPanel);
-		buttonPanel.add(removeAllImagesButton, posButtonPanel.nextRow());
-		buttonPanel.add(openImageListButton, posButtonPanel.nextRow());
-		buttonPanel.add(saveImageListButton, posButtonPanel.nextRow());
-		buttonPanel.add(exportImageListButton, posButtonPanel.nextRow());
-		buttonPanel.add(moveUpButton, posButtonPanel.nextRow());
-		buttonPanel.add(moveDownButton, posButtonPanel.nextRow());
-		buttonPanel.add(openImageViewerButton, posButtonPanel.nextRow());
+		JPanel verticalButtonPanel = new JPanel(new GridBagLayout());
+		verticalButtonPanel.add(removeSelectedImagesButton, posVerticalButtonPanel);
+		verticalButtonPanel.add(removeAllImagesButton, posVerticalButtonPanel.nextRow());
+		verticalButtonPanel.add(moveToTopButton, posVerticalButtonPanel.nextRow());
+		verticalButtonPanel.add(moveUpButton, posVerticalButtonPanel.nextRow());
+		verticalButtonPanel.add(moveDownButton, posVerticalButtonPanel.nextRow());
+		verticalButtonPanel.add(moveToBottomButton, posVerticalButtonPanel.nextRow());
 		
+		
+		GBHelper posHorisontalButtonPanel = new GBHelper();
+		
+		JPanel horisontalButtonPanel = new JPanel(new GridBagLayout());
+		
+		horisontalButtonPanel.add(openImageListButton, posHorisontalButtonPanel);
+		horisontalButtonPanel.add(saveImageListButton, posHorisontalButtonPanel.nextCol());
+		horisontalButtonPanel.add(exportImageListButton, posHorisontalButtonPanel.nextCol());
+		horisontalButtonPanel.add(openImageViewerButton, posHorisontalButtonPanel.nextCol());
 				
 		GBHelper posBackgroundPanel = new GBHelper();
 
@@ -796,12 +819,14 @@ public class MainGUI extends JFrame {
 		backgroundPanel.add(imageListLabel, posBackgroundPanel);
 		backgroundPanel.add(previewLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
 		backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH());
+		
 		backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
-		backgroundPanel.add(buttonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
+		backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
 		backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
 		backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-		
-		backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(new Gap(3), posBackgroundPanel.nextRow());
+		backgroundPanel.add(horisontalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.WEST));
+		backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
 		
 		return backgroundPanel;
 	}
@@ -1045,8 +1070,11 @@ public class MainGUI extends JFrame {
 		File sourceFile = new File(sourcePath);
 		if (sourceFile.exists()) {
 			
+			System.out.println(System.currentTimeMillis());
 			jpgFilesAsFiles = fr.getJPEGFiles();
-
+			System.out.println(System.currentTimeMillis());
+			
+			
 			statusBar.setStatusMessage(Integer.toString(jpgFilesAsFiles.size()), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
 			this.setStatusMessages();
 			
@@ -1175,9 +1203,7 @@ public class MainGUI extends JFrame {
                                              "\n" + lang.get("aboutDialog.TextRowH"), lang.get("aboutDialog.Label"), JOptionPane.INFORMATION_MESSAGE);
 	    	} else if (actionCommand.equals(lang.get("menu.item.programHelp"))) {
 				new HelpViewerGUI().setVisible(true);				
-			} 
-//			TODO: Remove hard coded string
-			else if (actionCommand.equals("Configuration")) {
+			} else if (actionCommand.equals(lang.get("menu.item.configuration"))) {
 				new ConfigViewerGUI().setVisible(true);				
 			}
 		}
