@@ -2,7 +2,6 @@
 ====
 - Add memory check at startup.
 - Fix better image loading, to reduce the lag before the progress bar is shown.
-- Add move to top / bottom buttons to the "Images to view" list
 - Fix all TODO:s
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.

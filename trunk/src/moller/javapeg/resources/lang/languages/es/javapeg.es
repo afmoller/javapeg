@@ -26,6 +26,8 @@
 #                             : por Fredrik Möller 2009-08-20
 #                             : por Fredrik Möller 2009-09-05
 #                             : por Fredrik Möller 2009-09-06
+#                             : por Fredrik Möller 2009-09-08
+
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -199,6 +201,8 @@ maingui.tabbedpane.imagelist.button.exportImageList      = Exportar la lista de 
 maingui.tabbedpane.imagelist.button.moveUp               = Mover la imagen seleccionada arriba en la lista
 maingui.tabbedpane.imagelist.button.moveDown             = Mover la imagen seleccionada abajo en la lista
 maingui.tabbedpane.imagelist.button.viewImages           = View selected images in the ImageViewer
+maingui.tabbedpane.imagelist.button.moveToTop            = Move selected image to top of the list
+maingui.tabbedpane.imagelist.button.moveToBottom         = Move selected image to bottom of the list
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Abrir
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = La lista de imágenes existe, ¿sobreescribir?
