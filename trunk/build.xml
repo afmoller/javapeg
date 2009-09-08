@@ -38,10 +38,16 @@
 				<include name="**/*.gif" />
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
+				<include name="**/common.en" />
+				<include name="**/configviewer.en" />
 				<include name="**/imageviewer.en" />
 				<include name="**/javapeg.en" />
+				<include name="**/common.es" />
+				<include name="**/configviewer.es" />
 				<include name="**/imageviewer.es" />
 				<include name="**/javapeg.es" />
+				<include name="**/common.sv" />
+				<include name="**/configviewer.sv" />
 				<include name="**/imageviewer.sv" />
 				<include name="**/javapeg.sv" />
 				<include name="**/layout.xml" />
