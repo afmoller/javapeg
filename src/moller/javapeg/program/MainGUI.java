@@ -64,6 +64,7 @@ package moller.javapeg.program;
  *                        : 2009-08-30 by Fredrik Möller
  *                        : 2009-09-05 by Fredrik Möller
  *                        : 2009-09-06 by Fredrik Möller
+ *                        : 2009-09-08 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -273,7 +274,7 @@ public class MainGUI extends JFrame {
 	
 	private ThumbNailListener thumbNailListener;
 	
-	private DefaultListModel imagesToVievListModel;
+	private DefaultListModel imagesToViewListModel;
 	
 	private JList imagesToViewList;
 		
@@ -759,9 +760,9 @@ public class MainGUI extends JFrame {
 			StreamUtil.closeStream(imageStream);
 		}
 				
-		imagesToVievListModel = new DefaultListModel();
+		imagesToViewListModel = new DefaultListModel();
 		
-		imagesToViewList = new JList(imagesToVievListModel);
+		imagesToViewList = new JList(imagesToViewListModel);
 		imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -986,6 +987,8 @@ public class MainGUI extends JFrame {
 		exportImageListButton.addActionListener(new ExportImageListListener());
 		moveUpButton.addActionListener(new MoveImageUpInListListener());
 		moveDownButton.addActionListener(new MoveImageDownInListListener());
+		moveToTopButton.addActionListener(new MoveImageToTopInListListener());
+		moveToBottomButton.addActionListener(new MoveImageToBottomInListListener());
 		openImageViewerButton.addActionListener(new OpenImageViewerListener());
 		
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
@@ -1464,7 +1467,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void setNrOfImagesLabels () {
-		amountOfImagesInImageListLabel.setText(lang.get("maingui.tabbedpane.imagelist.label.numberOfImagesInList") + " " + Integer.toString(imagesToVievListModel.size()));
+		amountOfImagesInImageListLabel.setText(lang.get("maingui.tabbedpane.imagelist.label.numberOfImagesInList") + " " + Integer.toString(imagesToViewListModel.size()));
 	}
 	
 	private void setStatusMessages() {
@@ -1516,7 +1519,7 @@ public class MainGUI extends JFrame {
 								
 				// Remove all the selected indices
 				while(selectedIndices.length > 0) {
-					imagesToVievListModel.remove(selectedIndices[0]);
+					imagesToViewListModel.remove(selectedIndices[0]);
 					selectedIndices = imagesToViewList.getSelectedIndices();
 				}
 				imagePreviewLabel.setIcon(null);
@@ -1527,8 +1530,8 @@ public class MainGUI extends JFrame {
 	
 	private class RemoveAllImagesListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (imagesToVievListModel.size() > 0) {
-				imagesToVievListModel.clear();
+			if (imagesToViewListModel.size() > 0) {
+				imagesToViewListModel.clear();
 				imagePreviewLabel.setIcon(null);
 				setNrOfImagesLabels();
 			}
@@ -1551,7 +1554,7 @@ public class MainGUI extends JFrame {
 			int returnVal = chooser.showOpenDialog(null);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
 		    	
-		    	if(!imagesToVievListModel.isEmpty()) {
+		    	if(!imagesToViewListModel.isEmpty()) {
 		    		int returnValue = JOptionPane.showConfirmDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage"));
 					
 					/**
@@ -1568,7 +1571,7 @@ public class MainGUI extends JFrame {
 		    	try {
 					List<String> fileContent = FileUtil.readFromFile(source);
 					
-					imagesToVievListModel.clear();
+					imagesToViewListModel.clear();
 					
 					List<String> notExistingFiles = new ArrayList<String>();
 									
@@ -1576,7 +1579,7 @@ public class MainGUI extends JFrame {
 						File file = new File(filePath);
 						
 						if(file.exists()) {
-							imagesToVievListModel.addElement(file);
+							imagesToViewListModel.addElement(file);
 						} else {
 							notExistingFiles.add(filePath);
 						}
@@ -1611,7 +1614,7 @@ public class MainGUI extends JFrame {
 	private class SaveImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
-			if (imagesToVievListModel.size() > 0) {
+			if (imagesToViewListModel.size() > 0) {
 				
 				FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
 				
@@ -1626,7 +1629,7 @@ public class MainGUI extends JFrame {
 				int returnVal = chooser.showSaveDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
 			    	destination = chooser.getSelectedFile();			    				    	
-			    	ImageList.getInstance().createList(imagesToVievListModel, destination, "jil", "JavaPEG Image List");
+			    	ImageList.getInstance().createList(imagesToViewListModel, destination, "jil", "JavaPEG Image List");
 			    }
 			}
 		}
@@ -1638,8 +1641,8 @@ public class MainGUI extends JFrame {
 			
 			if(selecteIndex > -1) {
 				if(selecteIndex > 0) {
-					Object obj = imagesToVievListModel.remove(selecteIndex);
-					imagesToVievListModel.add(selecteIndex - 1, obj);
+					Object obj = imagesToViewListModel.remove(selecteIndex);
+					imagesToViewListModel.add(selecteIndex - 1, obj);
 					imagesToViewList.setSelectedIndex(selecteIndex - 1);
 				}
 			}
@@ -1651,23 +1654,47 @@ public class MainGUI extends JFrame {
 			int selecteIndex = imagesToViewList.getSelectedIndex();
 			
 			if(selecteIndex > -1) {
-				if(selecteIndex < (imagesToVievListModel.size() - 1)) {
-					Object obj = imagesToVievListModel.remove(selecteIndex);
-					imagesToVievListModel.add(selecteIndex + 1, obj);
+				if(selecteIndex < (imagesToViewListModel.size() - 1)) {
+					Object obj = imagesToViewListModel.remove(selecteIndex);
+					imagesToViewListModel.add(selecteIndex + 1, obj);
 					imagesToViewList.setSelectedIndex(selecteIndex + 1);
 				}
 			}			
 		}
 	}
 	
+	private class MoveImageToTopInListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int selecteIndex = imagesToViewList.getSelectedIndex();
+			
+			if (selecteIndex > 0) {
+				Object obj = imagesToViewListModel.remove(selecteIndex);
+				imagesToViewListModel.add(0, obj);
+				imagesToViewList.setSelectedIndex(0);
+			}	
+		}
+	}
+	
+	private class MoveImageToBottomInListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			int selecteIndex = imagesToViewList.getSelectedIndex();
+			
+			if (selecteIndex > -1) {
+				Object obj = imagesToViewListModel.remove(selecteIndex);
+				imagesToViewListModel.addElement(obj);
+				imagesToViewList.setSelectedIndex(imagesToViewListModel.size() - 1);
+			}	
+		}
+	}
+	
 	private class OpenImageViewerListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(!imagesToVievListModel.isEmpty()) {
+			if(!imagesToViewListModel.isEmpty()) {
 				
 				List<File> imagesToView = new ArrayList<File>();
 				
-				for (int i = 0; i < imagesToVievListModel.size(); i++) {
-					imagesToView.add((File)imagesToVievListModel.get(i));
+				for (int i = 0; i < imagesToViewListModel.size(); i++) {
+					imagesToView.add((File)imagesToViewListModel.get(i));
 				}
 				
 				ImageViewer imageViewer = new ImageViewer(imagesToView);
@@ -1679,7 +1706,7 @@ public class MainGUI extends JFrame {
 	private class ExportImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
-			if (imagesToVievListModel.size() > 0) {
+			if (imagesToViewListModel.size() > 0) {
 				
 				FileNameExtensionFilter fileFilterIrfanView = new FileNameExtensionFilter("IrfanView", "txt");
 				FileNameExtensionFilter fileFilterPolyView  = new FileNameExtensionFilter("PolyView" , "pvs");
@@ -1702,7 +1729,7 @@ public class MainGUI extends JFrame {
 			    	String listFormat      = ((FileNameExtensionFilter)chooser.getFileFilter()).getExtensions()[0];
 			    	String listDescription = ((FileNameExtensionFilter)chooser.getFileFilter()).getDescription();
 										
-			    	ImageList.getInstance().createList(imagesToVievListModel, destination, listFormat, listDescription);
+			    	ImageList.getInstance().createList(imagesToViewListModel, destination, listFormat, listDescription);
 			    }
 			}
 		}
@@ -1710,7 +1737,7 @@ public class MainGUI extends JFrame {
 	
 	private class AddImageToViewList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			imagesToVievListModel.addElement(new File(e.getActionCommand()));
+			imagesToViewListModel.addElement(new File(e.getActionCommand()));
 			setNrOfImagesLabels();
 		}
 	}
@@ -1723,7 +1750,7 @@ public class MainGUI extends JFrame {
 			for (File file : imageFilePath.listFiles()) {
 				try {
 					if (JPEGUtil.isJPEG(file)) {
-						imagesToVievListModel.addElement(file);
+						imagesToViewListModel.addElement(file);
 					}
 				} catch (FileNotFoundException fnfex) {
 					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
@@ -1745,7 +1772,7 @@ public class MainGUI extends JFrame {
 			int selectedIndex = imagesToViewList.getSelectedIndex();
 						
 			if (selectedIndex > -1) {
-				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom((File)imagesToVievListModel.get(selectedIndex));
+				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom((File)imagesToViewListModel.get(selectedIndex));
 				imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
 			}
 		}

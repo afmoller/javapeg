@@ -58,6 +58,7 @@
 #                      : by Fredrik Möller 2009-08-20
 #                      : by Fredrik Möller 2009-09-05
 #                      : by Fredrik Möller 2009-09-06
+#                      : by Fredrik Möller 2009-09-08
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -232,6 +233,8 @@ maingui.tabbedpane.imagelist.button.exportImageList      = Exportera bildlistan
 maingui.tabbedpane.imagelist.button.moveUp               = Flytta vald bild uppåt i listan
 maingui.tabbedpane.imagelist.button.moveDown             = Flytta vald bild nedåt i listan
 maingui.tabbedpane.imagelist.button.viewImages           = Visa valda bilder i bildvisaren
+maingui.tabbedpane.imagelist.button.moveToTop            = Flytta vald bild till toppen av listan
+maingui.tabbedpane.imagelist.button.moveToBottom         = Flytta vald bild till botten av listan
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Öppna 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Bildlistan är inte sparad, skriv över?

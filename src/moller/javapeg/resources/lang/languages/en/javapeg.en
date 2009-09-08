@@ -59,6 +59,7 @@
 #                      : by Fredrik Möller 2009-08-20
 #                      : by Fredrik Möller 2009-09-05
 #                      : by Fredrik Möller 2009-09-06
+#                      : by Fredrik Möller 2009-09-08
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -224,7 +225,7 @@ maingui.tabbedpane.imagelist.label.list                 = IMAGE LIST
 maingui.tabbedpane.imagelist.label.preview              = PREVIEW
 maingui.tabbedpane.imagelist.label.numberOfImagesInList = Number of images in list:
 
-maingui.tabbedpane.imagelist.button.removeSelectedImages = Remove selected images from the list
+maingui.tabbedpane.imagelist.button.removeSelectedImages = Remove selected image from the list
 maingui.tabbedpane.imagelist.button.removeAllImages      = Remove all images from the list
 maingui.tabbedpane.imagelist.button.openImageList        = Open an saved image list
 maingui.tabbedpane.imagelist.button.saveImageList        = Save the image list
@@ -232,6 +233,8 @@ maingui.tabbedpane.imagelist.button.exportImageList      = Export the image list
 maingui.tabbedpane.imagelist.button.moveUp               = Move selected image upwards in the list
 maingui.tabbedpane.imagelist.button.moveDown             = Move selected image downwards in the list
 maingui.tabbedpane.imagelist.button.viewImages           = View selected images in the ImageViewer
+maingui.tabbedpane.imagelist.button.moveToTop            = Move selected image to top of the list
+maingui.tabbedpane.imagelist.button.moveToBottom         = Move selected image to bottom of the list
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Open 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
