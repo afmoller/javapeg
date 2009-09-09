@@ -59,6 +59,7 @@
 #                      : by Fredrik Möller 2009-09-05
 #                      : by Fredrik Möller 2009-09-06
 #                      : by Fredrik Möller 2009-09-08
+#                      : by Fredrik Möller 2009-09-09
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -173,14 +174,14 @@ aboutDialog.TextRowH = _______________________________________
 ##############################################################################################################
 # E R R O R  M E S S A G E S  M A I N G U I                                                                  #
 ##############################################################################################################
-errormessage.maingui.errorMessageLabel                    = Fel
-errormessage.maingui.warningMessageLabel                  = Varning
-errormessage.maingui.informationMessageLabel              = Information
-errormessage.maingui.locationError                        = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-errormessage.maingui.toLongFileNameInPreviewTable         = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
-errormessage.maingui.toLongTotalPathInPreviewTable        = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
-errormessage.maingui.invalidVariablesInSubFolderNameError = Namnet på undermappen kan bara innehålla följande variabler:
-errormessage.maingui.sameSourceAndDestination             = Käll och destinationskatalog är samma.
+errormessage.maingui.errorMessageLabel             = Fel
+errormessage.maingui.warningMessageLabel           = Varning
+errormessage.maingui.informationMessageLabel       = Information
+errormessage.maingui.locationError                 = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
+errormessage.maingui.toLongFileNameInPreviewTable  = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
+errormessage.maingui.toLongTotalPathInPreviewTable = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
+errormessage.maingui.sameSourceAndDestination      = Käll och destinationskatalog är samma.
+errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med medföljande launcher-fil eller med -Xmx256m som JVM parameter.\n\nSe loggfil för detaljer. 
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #

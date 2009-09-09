@@ -291,14 +291,10 @@ public class MainGUI extends JFrame {
 		this.readLanguageFile();
 		logger.logDEBUG("Language File Loading Finished");
 		if(config.getBooleanProperty("updatechecker.enabled")) {
+			logger.logDEBUG("Application Update Check Started");
 			this.checkApplicationUpdates();
+			logger.logDEBUG("Application Update Check Finished");
 		}
-		logger.logDEBUG("Creation of Thumb Nails Background Panel Started");
-//		this.createThumbNailsBackgroundPanel();
-		logger.logDEBUG("Creation of Thumb Nails Background Panel Finished");
-		logger.logDEBUG("Creation of Info Panel Started");
-//		this.createInfoPanel();
-		logger.logDEBUG("Creation of Info Panel Finished");
 		logger.logDEBUG("Creation of Main Frame Started");
 		this.createMainFrame();
 		logger.logDEBUG("Creation of Main Frame Finished");
@@ -316,6 +312,9 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Application Context initialization Started");
 		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
+		logger.logDEBUG("Check Available Memory Started");
+		this.checkAvailableMemory();
+		logger.logDEBUG("Check Available Memory Finished");
 	}
 		
 	private void checkApplicationUpdates() {
@@ -348,6 +347,16 @@ public class MainGUI extends JFrame {
 			}
 		};
 		updateCheck.start();
+	}
+	
+	private void checkAvailableMemory() {
+		long maxHeapSize = Runtime.getRuntime().maxMemory(); 
+		
+		if (maxHeapSize < 266403840) {
+			logger.logERROR("Maximum Size of Java Heap is to small. Current size is: " + maxHeapSize + " bytes and it must be atleast 266403840 bytes");
+			JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			closeApplication(1);
+		}
 	}
 	
 	// Inläsning av språkfil
@@ -1164,14 +1173,20 @@ public class MainGUI extends JFrame {
 		startProcessJMenuItem.setEnabled(state);
 		tree.setEnabled(state);
 	}
+	
+	private void closeApplication(int exitValue) {
+		if(exitValue == 0) {
+			saveSettings();
+		}
+		logger.logDEBUG("JavePEG was shut down");
+		logger.flush();
+		System.exit(exitValue);
+	}
 		
 	// WindowDestroyer
 	private class WindowDestroyer extends WindowAdapter{
 		public void windowClosing (WindowEvent e){
-			saveSettings();
-			logger.logDEBUG("JavePEG was shut down");
-			logger.flush();
-			System.exit(0);
+			closeApplication(0);
 		}
 	}
 
@@ -1181,10 +1196,7 @@ public class MainGUI extends JFrame {
 			String actionCommand = e.getActionCommand();
 
 			if(actionCommand.equals(lang.get("menu.item.exit"))){
-					saveSettings();
-					logger.logDEBUG("JavePEG was shut down");
-					logger.flush();
-					System.exit(0);
+				closeApplication(0);
 			} 
 			
 			else if(actionCommand.equals(lang.get("menu.item.openDestinationFileChooser"))) {

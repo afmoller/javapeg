@@ -4,15 +4,15 @@ package moller.javapeg;
  * Latest changed         : 2009-09-03 by Fredrik Möller
  */
 
-import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
+import moller.javapeg.program.MainGUI;
 
 public class StartJavaPEG {
 	
 	public static void main (String [] args){
 	
 		ApplicationUncaughtExceptionHandler.registerExceptionHandler();
-		
+						
 		MainGUI mainGUI = new MainGUI();
 		mainGUI.setVisible(true);
 	}

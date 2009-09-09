@@ -60,6 +60,7 @@
 #                      : by Fredrik Möller 2009-09-05
 #                      : by Fredrik Möller 2009-09-06
 #                      : by Fredrik Möller 2009-09-08
+#                      : by Fredrik Möller 2009-09-09
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -181,6 +182,7 @@ errormessage.maingui.locationError                 = Could not set window locati
 errormessage.maingui.toLongFileNameInPreviewTable  = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
 errormessage.maingui.toLongTotalPathInPreviewTable = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
 errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx256m as JVM parameter.\nSee log file for details.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #

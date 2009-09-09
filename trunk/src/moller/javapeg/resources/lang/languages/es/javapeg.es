@@ -27,7 +27,7 @@
 #                             : por Fredrik Möller 2009-09-05
 #                             : por Fredrik Möller 2009-09-06
 #                             : por Fredrik Möller 2009-09-08
-
+#                             : por Fredrik Möller 2009-09-09
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -149,6 +149,7 @@ errormessage.maingui.locationError                 = No se pudo ajustar la venta
 errormessage.maingui.toLongFileNameInPreviewTable  = Con esta plantilla para el nombre, el nombre del fichero superará los 200 caracteres.\n\nEsto puede ser un problema, porque una ruta no puede ser superior a 255 caracteres.\nPuede que no se pueda mover el fichero a otro directorio, si la ruta\ntotal: ruta al fichero + nombre del fichero es superior a 255 caracteres.
 errormessage.maingui.toLongTotalPathInPreviewTable = La ruta total: ruta al directorio de destino y plantilla para el nombre del fichero seleccionada\ngenerarán una ruta superior a 255 caracteres, y esto no está permitido.\nO el nombre del fichero se hace más corto (cambiar la plantilla del nombre del fichero) o se selecciona un directorio de destino más corto.
 errormessage.maingui.sameSourceAndDestination      = El directorio de origen y destino es el mismo
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx256m as JVM parameter\n\nSee log file for details.
 
 ##############################################################################################################
 # B A R R A  D E  P R O G R E S O                                                                            #
