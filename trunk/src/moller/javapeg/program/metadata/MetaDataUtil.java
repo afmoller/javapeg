@@ -1,7 +1,7 @@
 package moller.javapeg.program.metadata;
 /**
  * This class was created : 2009-03-14 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2009-09-13 by Fredrik Möller
  */
 
 import java.io.File;
@@ -81,5 +81,10 @@ public class MetaDataUtil {
 			metaDataVector.addElement(temp);
 		}
 		return metaDataVector;
+	}
+	
+	public static MetaData getMetaData(File jpegFile) {
+		MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
+		return mdr.getMetaData();
 	}
 }
