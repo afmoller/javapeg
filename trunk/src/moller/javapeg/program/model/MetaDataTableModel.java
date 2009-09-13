@@ -3,6 +3,7 @@ package moller.javapeg.program.model;
 * This class was created : 2009-05-27 by Fredrik Möller
 * Latest changed         : 2009-05-30 by Fredrik Möller
 *                        : 2009-06-01 by Fredrik Möller
+*                        : 2009-09-13 by Fredrik Möller
 */
 
 import java.util.Vector;
@@ -10,6 +11,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.metadata.MetaData;
 
 public class MetaDataTableModel extends DefaultTableModel {
 	
@@ -63,5 +65,22 @@ public class MetaDataTableModel extends DefaultTableModel {
 		for (Vector<String> rowData : dataVector) {
 			this.addRow(rowData);
 		}
+	}
+	
+	public void addTableRow(MetaData metaData) {
+		
+		Object [] meta = new Object[9];
+		
+		meta[0] = metaData.getFileName();
+		meta[1] = metaData.getExifDate();
+		meta[2] = metaData.getExifTime();
+		meta[3] = metaData.getExifCameraModel();
+		meta[4] = metaData.getExifShutterSpeed();
+		meta[5] = metaData.getExifISOValue();
+		meta[6] = metaData.getExifPictureWidth();
+		meta[7] = metaData.getExifPictureHeight();
+		meta[8] = metaData.getExifApertureValue();
+				
+		this.addRow(meta);
 	}
 }
