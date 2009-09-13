@@ -5,6 +5,7 @@ package moller.javapeg.program;
  *                        : 2009-06-02 by Fredrik Möller
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -70,6 +71,9 @@ public class ApplicationContext {
 	 */
 	private Set<String> jarFileEmbeddedLanguageFiles;
 	
+	
+	private List<File> jpegFileLoadBuffer;
+	
 	/**
 	 * Private constructor.
 	 */
@@ -80,7 +84,8 @@ public class ApplicationContext {
 		templateFileName = "";
 		templateSubFolderName = "";
 		metaDataObjects = new ArrayList<MetaData>();
-		jarFileEmbeddedLanguageFiles = new HashSet<String>(); 
+		jarFileEmbeddedLanguageFiles = new HashSet<String>();
+		jpegFileLoadBuffer = new ArrayList<File>();
 	}
 
 	/**
@@ -130,6 +135,14 @@ public class ApplicationContext {
 		return jarFileEmbeddedLanguageFiles;
 	}
 	
+//	public File getFirstInJpegFileLoadBuffer() {
+//		if (jpegFileLoadBuffer.size() > 0) {
+//			return jpegFileLoadBuffer.remove(0);	
+//		} else {
+//			return null;
+//		}
+//	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -166,4 +179,25 @@ public class ApplicationContext {
 		}
 		this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
 	}
+	
+	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
+		switch (action) {
+		case ADD:
+			jpegFileLoadBuffer.add(image);
+			return image;	
+		case RETRIEVE:
+			if (jpegFileLoadBuffer.size() > 0) {
+				return jpegFileLoadBuffer.remove(0);	
+			} else {
+				return image;
+			}
+		default:
+			return image; 
+
+		}
+	}
+	
+//	public void addImageToJpegFileLoadBuffer(File image) {
+//		jpegFileLoadBuffer.add(image);
+//	}
 }
