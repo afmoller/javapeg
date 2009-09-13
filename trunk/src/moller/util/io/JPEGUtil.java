@@ -24,13 +24,13 @@ public class JPEGUtil {
 	 */
 	public static boolean isJPEG(File file) throws FileNotFoundException, IOException{
 		if (file.isFile() && file.canRead()) {
-			byte[]magicByte = new byte[2];
+			byte[]mB = new byte[2];
 
 			FileInputStream fis = new FileInputStream(file);
-			fis.read(magicByte);
+			fis.read(mB);
 
-			String fileName = file.getName();
-			String extension = fileName.substring(fileName.indexOf(".") + 1);
+			String fName = file.getName();
+			String ext = fName.substring(fName.indexOf(".") + 1);
 
 			/**
 			 * Här kontrolleras så att de två första byten i filen har värdet 255 (FF)
@@ -39,10 +39,10 @@ public class JPEGUtil {
 			 * filnamnet slutar på JPG eller JPEG så att inte tumnaglar eller liknande med
 			 * annan filändelse slinker igenom. 
 			 */
-			return ((magicByte[0] & 0xFF) == 255 &&	
-					(magicByte[1] & 0xFF) == 216) && 
-					(extension.equalsIgnoreCase("jpg") || 
-                     extension.equalsIgnoreCase("jpeg"));	
+			return ((mB[0] & 0xFF) == 255 && 
+					(mB[1] & 0xFF) == 216) && 
+					((ext.equalsIgnoreCase("jpg") || 
+					  ext.equalsIgnoreCase("jpeg")));
 		} else {
 			return false;
 		}
