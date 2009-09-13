@@ -6,6 +6,8 @@ package moller.javapeg.program;
  *                        : 2009-06-17 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-09-11 by Fredrik Möller
+ *                        : 2009-09-13 by Fredrik Möller
  */
 
 import java.io.File;
@@ -43,6 +45,8 @@ public class FileRetriever {
 	 */
 	private Map<String, File> nonJpegFileNameFileObjectMap;
 	
+	private int nrOfJpegImages;
+	
 	private static Language lang;
 	private static Logger   logger;
 	
@@ -66,6 +70,8 @@ public class FileRetriever {
 		lang   = Language.getInstance();
 		logger = Logger.getInstance();
 		
+		nrOfJpegImages = 0;
+		
 		jpegFileNameFileObjectMap    = new HashMap<String, File>(128);
 		nonJpegFileNameFileObjectMap = new HashMap<String, File>(128);
 	}
@@ -81,14 +87,20 @@ public class FileRetriever {
 	 */
 	public void loadFilesFromDisk (File directoryPath) {
 
+		nrOfJpegImages = 0;
 		jpegFileNameFileObjectMap.clear();
 		nonJpegFileNameFileObjectMap.clear();
+		
+		ApplicationContext ac = ApplicationContext.getInstance();
 
 		if(directoryPath.isDirectory()){
 			for (File file : directoryPath.listFiles()) {
 				try {
 					if(JPEGUtil.isJPEG(file)) {
 						jpegFileNameFileObjectMap.put(file.getName(), file);
+						handleNrOfJpegImages(Action.SET);
+						ac.handleJpegFileLoadBuffer(file, Action.ADD);
+//						ac.addImageToJpegFileLoadBuffer(file);
 					} else {
 						nonJpegFileNameFileObjectMap.put(file.getName(), file);
 					}
@@ -103,6 +115,18 @@ public class FileRetriever {
 				}
 			}
   	  	}
+	}
+	
+	public synchronized int handleNrOfJpegImages(Action action) {
+		switch (action) {
+		case RETRIEVE:
+			return nrOfJpegImages;
+		case SET:
+			nrOfJpegImages++;
+			return -1;
+		default:
+			throw new RuntimeException("Unsupported Action");
+		}
 	}
 
 	/**

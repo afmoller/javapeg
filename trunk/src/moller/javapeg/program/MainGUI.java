@@ -65,6 +65,7 @@ package moller.javapeg.program;
  *                        : 2009-09-05 by Fredrik Möller
  *                        : 2009-09-06 by Fredrik Möller
  *                        : 2009-09-08 by Fredrik Möller
+ *                        : 2009-09-13 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -88,7 +89,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -255,7 +255,7 @@ public class MainGUI extends JFrame {
 	private Mouselistener mouseListener;
 	private MouseButtonListener mouseRightClickButtonListener;
 	
-	private Collection <File> jpgFilesAsFiles;
+//	private Collection <File> jpgFilesAsFiles;
 	
 	private int iconWidth = 160;
 	private int columnMargin = 0;
@@ -751,17 +751,15 @@ public class MainGUI extends JFrame {
 			openImageViewerButton.setIcon(viewImagesImageIcon);	
 			openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
 
-//			TODO: Fix tooltiptext
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/top.gif");
 			moveToTopImageIcon.setImage(ImageIO.read(imageStream));
 			moveToTopButton.setIcon(moveToTopImageIcon);
-			moveToTopButton.setToolTipText("");
-			
-//			TODO: Fix tooltiptext
+			moveToTopButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToTop"));
+
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/bottom.gif");
 			moveToBottomImageIcon.setImage(ImageIO.read(imageStream));
 			moveToBottomButton.setIcon(moveToBottomImageIcon);
-			moveToBottomButton.setToolTipText("");
+			moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
 
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
@@ -1071,72 +1069,72 @@ public class MainGUI extends JFrame {
 		}
 	}
 
-	private void addThumbnails(String sourcePath) {
-		
-		// Skapa en länkad lista som skall innehålla jpgfiler
-		jpgFilesAsFiles = new ArrayList<File>();
-
-		// Hämta alla jpgfiler ifrån utpekad källkatalog
-		FileRetriever fr = FileRetriever.getInstance();
-		
-		File sourceFile = new File(sourcePath);
-		if (sourceFile.exists()) {
-			
-			System.out.println(System.currentTimeMillis());
-			jpgFilesAsFiles = fr.getJPEGFiles();
-			System.out.println(System.currentTimeMillis());
-			
-			
-			statusBar.setStatusMessage(Integer.toString(jpgFilesAsFiles.size()), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
-			this.setStatusMessages();
-			
-			if(jpgFilesAsFiles.size() > 0){
-				
-				this.removeMouseListener();
-												
-				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size(), this);
-				pb.setVisible(true);
-							
-				Thread thumbNailsFetcher = new Thread() {
-					
-					public void run(){
-											
-						// Iterera igenom alla filer och leta upp och ta ut tumnageln ur varje bild.
-						for (File jpegFile : jpgFilesAsFiles) {	
-							
-							// Hämta ur tumnageln ur angiven fil
-							JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
-											
-							JButton thumbContainer = new JButton();
-							thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-							thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
-							thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
-							thumbContainer.addActionListener(thumbNailListener);
-							thumbContainer.addMouseListener(mouseRightClickButtonListener);
-														
-							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
-							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
-														
-							int width = thumbContainer.getIcon().getIconWidth();
-							
-							if (width > iconWidth) {
-								iconWidth = width;
-							}
-				
-							addThumbnail(thumbContainer);
-							updateGUI();
-							
-							pb.updateProgressBar();
-						}
-						pb.dispose();
-						addMouseListener();
-					}
-				};
-				thumbNailsFetcher.start();
-			}
-		}
-	}
+//	private void addThumbnails(String sourcePath) {
+//		
+//		// Skapa en länkad lista som skall innehålla jpgfiler
+//		jpgFilesAsFiles = new ArrayList<File>();
+//
+//		// Hämta alla jpgfiler ifrån utpekad källkatalog
+//		FileRetriever fr = FileRetriever.getInstance();
+//		
+//		File sourceFile = new File(sourcePath);
+//		if (sourceFile.exists()) {
+//			
+//			System.out.println(System.currentTimeMillis());
+//			jpgFilesAsFiles = fr.getJPEGFiles();
+//			System.out.println(System.currentTimeMillis());
+//			
+//			
+//			statusBar.setStatusMessage(Integer.toString(jpgFilesAsFiles.size()), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
+//			this.setStatusMessages();
+//			
+//			if(jpgFilesAsFiles.size() > 0){
+//				
+//				this.removeMouseListener();
+//												
+//				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size(), this);
+//				pb.setVisible(true);
+//							
+//				Thread thumbNailsFetcher = new Thread() {
+//					
+//					public void run(){
+//											
+//						// Iterera igenom alla filer och leta upp och ta ut tumnageln ur varje bild.
+//						for (File jpegFile : jpgFilesAsFiles) {	
+//							
+//							// Hämta ur tumnageln ur angiven fil
+//							JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
+//											
+//							JButton thumbContainer = new JButton();
+//							thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+//							thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+//							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
+//							thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
+//							thumbContainer.addActionListener(thumbNailListener);
+//							thumbContainer.addMouseListener(mouseRightClickButtonListener);
+//														
+//							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+//							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+//														
+//							int width = thumbContainer.getIcon().getIconWidth();
+//							
+//							if (width > iconWidth) {
+//								iconWidth = width;
+//							}
+//				
+//							addThumbnail(thumbContainer);
+//							updateGUI();
+//							
+//							pb.updateProgressBar();
+//						}
+//						pb.dispose();
+//						addMouseListener();
+//					}
+//				};
+//				thumbNailsFetcher.start();
+//			}
+//		}
+//	}
 		
 	private void addThumbnail(JButton thumbNail) {
 		thumbNailsPanel.add(thumbNail);
@@ -1407,6 +1405,108 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private void loadThumbNails(final File sourcePath) {
+		this.removeMouseListener();
+		
+		ApplicationContext ac = ApplicationContext.getInstance();
+		
+		thumbNailsPanel.removeAll();
+		thumbNailsPanel.updateUI();
+		
+		// Rensa en eventuellt ifylld filnamnsförhandsgranskningstabell.
+		// Detta kan ske då det redan öppnats bilder tidigare och dessa
+		// fått förhandsgranskning på sina filnamn
+		previewTableModel.setRowCount(0);
+						
+		// Clear the Panel with meta data from potentially already 
+		// shown meta data
+		imageMetaDataPanel.clearMetaData();
+		
+		metaDataTableModel.setColumnCount(0);
+		metaDataTableModel.setRowCount(0);
+		
+		String sourcePathString = sourcePath.getAbsolutePath();
+		
+		ac.setSourcePath(sourcePathString);
+		config.setStringProperty("sourcePath", sourcePathString);
+		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
+				
+		final Thread loadFilesThread = new Thread() {
+			public void run() {
+				FileRetriever.getInstance().loadFilesFromDisk(sourcePath);
+			}
+		};
+		loadFilesThread.start();
+		
+		pb = new ThumbNailLoading(0, sourcePath.listFiles().length, this);
+		pb.setVisible(true);
+		
+		metaDataTableModel.setColumns();
+		
+		Thread thumbNailsFetcher = new Thread() {
+			
+			public void run(){
+		
+				boolean bufferContainsImages = true;
+				while (loadFilesThread.isAlive() || bufferContainsImages) {
+					
+					final File jpegFile = ApplicationContext.getInstance().handleJpegFileLoadBuffer(null, Action.RETRIEVE);
+					
+					if(jpegFile != null) {
+									
+						// Hämta ur tumnageln ur angiven fil
+						JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
+		
+						JButton thumbContainer = new JButton();
+						thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+						thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+						thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
+						thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
+						thumbContainer.addActionListener(thumbNailListener);
+						thumbContainer.addMouseListener(mouseRightClickButtonListener);
+		
+						columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+						columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+		
+						int width = thumbContainer.getIcon().getIconWidth();
+		
+						if (width > iconWidth) {
+							iconWidth = width;
+						}
+		
+						addThumbnail(thumbContainer);
+						metaDataTableModel.addTableRow(MetaDataUtil.getMetaData(jpegFile));
+						setStatusMessages();
+						updateGUI();
+						pb.updateProgressBar();							
+					} else if (!loadFilesThread.isAlive()){
+						bufferContainsImages = false;
+					}
+										
+					try {
+						if (loadFilesThread.isAlive()) {
+							Thread.sleep(10);
+						}
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				pb.dispose();
+				addMouseListener();
+				startProcessButton.setEnabled(setStartProcessButtonState());
+				startProcessJMenuItem.setEnabled(setStartProcessButtonState());
+
+				Table.packColumns(metaDataTable, 6);
+			}
+		};
+		thumbNailsFetcher.start();
+		setStatusMessages();
+				
+		// Byta till metadata-tabben ifall tabben skulle stå i annat läge.
+		tabbedPane.setSelectedIndex(0);	
+	}
+		
 	/**
 	 * Mouse listener
 	 */
@@ -1420,53 +1520,12 @@ public class MainGUI extends JFrame {
 				for(int i=0; i<path.length; i++){
 					if(i==0 || i==1 || i==path.length-1){
 						totalPath = totalPath + path[i].toString();
-					}
-					else{
+					} else{
 						totalPath = totalPath + path[i].toString() + "\\";
 					}
-				}
-				
-				ApplicationContext ac = ApplicationContext.getInstance();
-				
-				// Rensa en eventuellt ifylld filnamnsförhandsgranskningstabell.
-				// Detta kan ske då det redan öppnats bilder tidigare och dessa
-				// fått förhandsgranskning på sina filnamn
-				if(previewTableModel.getRowCount() > 0) {
-					previewTableModel.setRowCount(0);
-				}
-				
-				// Clear the Panel with meta data from potentially already 
-				// shown meta data
-				imageMetaDataPanel.clearMetaData();
-				
-				ac.setSourcePath(totalPath);
-				config.setStringProperty("sourcePath", totalPath);
-				FileRetriever.getInstance().loadFilesFromDisk(new File(totalPath));
-				MetaDataUtil.setMetaDataObjects(totalPath);
-
-				statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + totalPath, lang.get("statusbar.message.selectedPath"), 0);
-				
-				// Byta till metadata-tabben ifall tabben skulle stå i annat läge.
-				tabbedPane.setSelectedIndex(0);
-					
-				// If there was no JPEG files in the selected directory, the 
-				// table model shall be cleared, since there might have been 
-				// other directories with JPEG files selected earlier.
-				if (ac.getMetaDataObjects().isEmpty()) {
-					metaDataTableModel.setColumnCount(0);
-					metaDataTableModel.setRowCount(0);
-				} else {
-					metaDataTableModel.setColumns();
-					metaDataTableModel.setTableContent(MetaDataUtil.getMetaData());
-				}
-				startProcessButton.setEnabled(setStartProcessButtonState());
-				startProcessJMenuItem.setEnabled(setStartProcessButtonState());
-
-				Table.packColumns(metaDataTable, 6);
-				thumbNailsPanel.removeAll();
-				thumbNailsPanel.updateUI();
-				addThumbnails(totalPath);
-			}
+				}	
+				loadThumbNails(new File(totalPath));
+			}	
 		}
 	}
 
@@ -1483,19 +1542,22 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void setStatusMessages() {
-		if (jpgFilesAsFiles != null && jpgFilesAsFiles.size() > 0) {
+		int nrOfImages =  FileRetriever.getInstance().handleNrOfJpegImages(Action.RETRIEVE);
+		
+		if (nrOfImages > 0) {
 			int nrOfColumns = thumbNailGridLayout.getColumns();
-			int nrOfImages = jpgFilesAsFiles.size();
-
+			
 			statusBar.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
 			
 			int extraRow = nrOfImages % nrOfColumns == 0 ? 0 : 1;
 			int rowsInGridLayout = (nrOfImages / nrOfColumns) + extraRow; 
 
 			statusBar.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
+			statusBar.setStatusMessage(Integer.toString(nrOfImages), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
 		} else {
-			statusBar.setStatusMessage("", "", 1);
-			statusBar.setStatusMessage("", "", 2);
+			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfColumns"), 1);
+			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfRows"), 2);
+			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
 		}
 	}
 	
