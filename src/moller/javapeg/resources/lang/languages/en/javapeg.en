@@ -61,6 +61,7 @@
 #                      : by Fredrik Möller 2009-09-06
 #                      : by Fredrik Möller 2009-09-08
 #                      : by Fredrik Möller 2009-09-09
+#                      : by Fredrik Möller 2009-09-14
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -219,6 +220,13 @@ errormessage.filehandler.fileNotFoundExceptionA = The file:
 errormessage.filehandler.fileNotFoundExceptionB = can not be found
 errormessage.filehandler.canNotReadFile         = Not possible to access the file:
 errormessage.filehandler.canNotWriteFile        = Can not write:
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
+##############################################################################################################
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occured:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
