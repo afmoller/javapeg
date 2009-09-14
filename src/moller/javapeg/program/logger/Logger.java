@@ -14,6 +14,7 @@ package moller.javapeg.program.logger;
  *                        : 2009-09-04 by Fredrik Möller
  *                        : 2009-09-05 by Fredrik Möller
  *                        : 2009-09-06 by Fredrik Möller
+ *                        : 2009-09-14 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -22,6 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.swing.JOptionPane;
 
 import moller.javapeg.program.config.Config;
 import moller.util.io.FileUtil;
@@ -55,7 +58,7 @@ public class Logger {
     private Logger() {
     	
     	Config config = Config.getInstance();
-    	    	
+    	    	    	
     	developerMode = config.getBooleanProperty("logger.developerMode");
     	rotateLog     = config.getBooleanProperty("logger.log.rotate");
     	logName       = config.getStringProperty("logger.log.name");
@@ -73,19 +76,17 @@ public class Logger {
         } else {
         	try {
 				if(!logFile.createNewFile()) {
-//    			throw new IOException("Could  not create file: " + logFile.getAbsolutePath());
+					JOptionPane.showMessageDialog(null, "Could not create file: " + logFile, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Could not create file: " + logFile + "\nException: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
         	currentLogSize = 0;
         }
         try {
 			logWriter = new BufferedWriter(new FileWriter(logFile, true));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Could not create FileWriter: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
     }
         
@@ -293,8 +294,10 @@ public class Logger {
     	try {
 			logWriter.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			/**
+			 * Not much to do. Logging is done at best effort, and if it fails
+			 * to write the log to disk then there is nothing to do.
+			 */
 		}	
     }
 }
