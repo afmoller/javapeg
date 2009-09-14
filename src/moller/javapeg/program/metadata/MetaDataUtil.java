@@ -2,15 +2,14 @@ package moller.javapeg.program.metadata;
 /**
  * This class was created : 2009-03-14 by Fredrik Möller
  * Latest changed         : 2009-09-13 by Fredrik Möller
+ *                        : 2009-09-14 by Fredrik Möller
  */
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import moller.javapeg.program.ApplicationContext;
-import moller.javapeg.program.FileRetriever;
 import moller.javapeg.program.language.Language;
 
 public class MetaDataUtil {
@@ -42,21 +41,6 @@ public class MetaDataUtil {
 		         "<td>" + metaDataKey + "</td>" +
 		         "<td>" + ": " + metaDataValue + "</td>" +
 	           "</tr>";
-	}
-	
-	public static void setMetaDataObjects(String sourcePath) {
-
-		// Skapa en länkad lista som skall inehålla MetaData-objekt
-		List<MetaData> metaDataObjects = new ArrayList<MetaData>();
-
-		// Hämta alla jpgfiler ifrån utpekad källkatalog
-		FileRetriever fr = FileRetriever.getInstance();
-		
-		for (File jpegFile : fr.getJPEGFiles()) {
-			MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
-			metaDataObjects.add(mdr.getMetaData());
-		}
-		ApplicationContext.getInstance().setMetaDataObjects(metaDataObjects);
 	}
 	
 	public static Vector<Vector<String>> getMetaData() {
