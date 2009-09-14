@@ -1,7 +1,5 @@
 2.4:
 ====
-- Fix better image loading, to reduce the lag before the progress bar is shown.
-- Fix all TODO:s
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update version numbers in language files
