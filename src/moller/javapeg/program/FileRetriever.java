@@ -100,7 +100,6 @@ public class FileRetriever {
 						jpegFileNameFileObjectMap.put(file.getName(), file);
 						handleNrOfJpegImages(Action.SET);
 						ac.handleJpegFileLoadBuffer(file, Action.ADD);
-//						ac.addImageToJpegFileLoadBuffer(file);
 					} else {
 						nonJpegFileNameFileObjectMap.put(file.getName(), file);
 					}
