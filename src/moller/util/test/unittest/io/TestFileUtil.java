@@ -1,10 +1,6 @@
 package moller.util.test.unittest.io;
 
-import java.awt.Point;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import moller.util.io.FileUtil;
 
@@ -104,10 +100,8 @@ public class TestFileUtil {
 //		try {
 //			FileUtil.downloadAndSaveFile(new URL("http://javapeg.sourceforge.net/PAGES/updates/JavaPEG_2.0_Install.jar"), new File("C:/JavaPEG_2.0_Install.jar"), 1407008, 4, new Point(500, 500));
 //		} catch (MalformedURLException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
