@@ -3,6 +3,7 @@ package moller.javapeg.program;
  * This class was created : 2009-03-14 by Fredrik Möller
  * Latest changed         : 2009-03-23 by Fredrik Möller
  *                        : 2009-06-02 by Fredrik Möller
+ *                        : 2009-09-14 by Fredrik Möller
  */
 
 import java.io.File;
@@ -135,14 +136,6 @@ public class ApplicationContext {
 		return jarFileEmbeddedLanguageFiles;
 	}
 	
-//	public File getFirstInJpegFileLoadBuffer() {
-//		if (jpegFileLoadBuffer.size() > 0) {
-//			return jpegFileLoadBuffer.remove(0);	
-//		} else {
-//			return null;
-//		}
-//	}
-	
 	/**
 	 * SET  - methods
 	 */
@@ -154,11 +147,12 @@ public class ApplicationContext {
 		this.destinationPath = destinationPath;
 	}
 	
-	public void setMetaDataObjects(List<MetaData> metaDataObjects) {
-		if (!this.metaDataObjects.isEmpty()) {
-			this.metaDataObjects.clear();
-		}
-		this.metaDataObjects = metaDataObjects;
+	public void clearMetaDataObjects () {
+		this.metaDataObjects.clear();
+	}
+	
+	public void addMetaDataObject(MetaData metaData) {
+		this.metaDataObjects.add(metaData);
 	}
 	
 	public void setTemplateFileName(String templateFileName) {
@@ -195,9 +189,5 @@ public class ApplicationContext {
 			return image; 
 
 		}
-	}
-	
-//	public void addImageToJpegFileLoadBuffer(File image) {
-//		jpegFileLoadBuffer.add(image);
-//	}
+	}	
 }
