@@ -47,6 +47,10 @@
    via that interface has been moved to the new graphical configuration 
    interface.
    
+ ~ The image loading (When selecting a directory in the tree structure to the
+   left) has been improved by reducing the initial lag when a directory was 
+   selected. The lag was linear to the amount of images in selected directory
+      
  2.3 (2009-08-03)
  
  ! The embedded download functionality which downloads the latest version 
