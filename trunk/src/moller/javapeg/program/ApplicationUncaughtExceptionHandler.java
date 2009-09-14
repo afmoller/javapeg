@@ -8,6 +8,7 @@ package moller.javapeg.program;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 
 public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
@@ -35,16 +36,16 @@ public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExcep
 
     private void showException(Throwable t) {
     	logException(t);
+    	Language lang = Language.getInstance();
     	
     	String errorMessage = "";
-    	
-//    	TODO: Remove hard coded strings
+
     	if("Java heap space".equals(t.getMessage())) {
-    		errorMessage = "JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down";
+    		errorMessage = lang.get("errormessage.uncaughtexceptionhandler.outOfMemoryError");
     	} else {
-    		errorMessage = "An unexpected error has occured: " + t.getMessage() + ".\n\nSee log file for details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down";
+    		errorMessage = lang.get("errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne") + " " + t.getMessage() + "." + lang.get("errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo");
     	}
-        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
         System.exit(1);
     }
 
