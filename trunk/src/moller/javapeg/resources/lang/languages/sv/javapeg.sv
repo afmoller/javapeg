@@ -60,6 +60,7 @@
 #                      : by Fredrik Möller 2009-09-06
 #                      : by Fredrik Möller 2009-09-08
 #                      : by Fredrik Möller 2009-09-09
+#                      : by Fredrik Möller 2009-09-14
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -218,6 +219,13 @@ errormessage.filehandler.fileNotFoundExceptionA = Filen:
 errormessage.filehandler.fileNotFoundExceptionB = kan inte hittas 
 errormessage.filehandler.canNotReadFile         = Kan inte läsa filen: 
 errormessage.filehandler.canNotWriteFile        = Kan inte skriva:
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
+##############################################################################################################
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG har fått slut på minne.\n\nSe loggfil för detaljer och se README-filen\ni installationskatalogen för en lösning.\n\nJavaPEG kommer att avslutas.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = Ett oväntat fel har inträffat:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSe loggfil för detaljer och se README-filen\ni installationskatalogen för en lösning.\n\nJavaPEG kommer att avslutas.
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
