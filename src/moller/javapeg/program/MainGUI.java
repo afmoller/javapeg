@@ -66,6 +66,7 @@ package moller.javapeg.program;
  *                        : 2009-09-06 by Fredrik Möller
  *                        : 2009-09-08 by Fredrik Möller
  *                        : 2009-09-13 by Fredrik Möller
+ *                        : 2009-09-14 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -148,6 +149,7 @@ import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
@@ -1068,73 +1070,6 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
-
-//	private void addThumbnails(String sourcePath) {
-//		
-//		// Skapa en länkad lista som skall innehålla jpgfiler
-//		jpgFilesAsFiles = new ArrayList<File>();
-//
-//		// Hämta alla jpgfiler ifrån utpekad källkatalog
-//		FileRetriever fr = FileRetriever.getInstance();
-//		
-//		File sourceFile = new File(sourcePath);
-//		if (sourceFile.exists()) {
-//			
-//			System.out.println(System.currentTimeMillis());
-//			jpgFilesAsFiles = fr.getJPEGFiles();
-//			System.out.println(System.currentTimeMillis());
-//			
-//			
-//			statusBar.setStatusMessage(Integer.toString(jpgFilesAsFiles.size()), lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
-//			this.setStatusMessages();
-//			
-//			if(jpgFilesAsFiles.size() > 0){
-//				
-//				this.removeMouseListener();
-//												
-//				pb = new ThumbNailLoading(0, jpgFilesAsFiles.size(), this);
-//				pb.setVisible(true);
-//							
-//				Thread thumbNailsFetcher = new Thread() {
-//					
-//					public void run(){
-//											
-//						// Iterera igenom alla filer och leta upp och ta ut tumnageln ur varje bild.
-//						for (File jpegFile : jpgFilesAsFiles) {	
-//							
-//							// Hämta ur tumnageln ur angiven fil
-//							JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
-//											
-//							JButton thumbContainer = new JButton();
-//							thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-//							thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-//							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
-//							thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
-//							thumbContainer.addActionListener(thumbNailListener);
-//							thumbContainer.addMouseListener(mouseRightClickButtonListener);
-//														
-//							columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
-//							columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
-//														
-//							int width = thumbContainer.getIcon().getIconWidth();
-//							
-//							if (width > iconWidth) {
-//								iconWidth = width;
-//							}
-//				
-//							addThumbnail(thumbContainer);
-//							updateGUI();
-//							
-//							pb.updateProgressBar();
-//						}
-//						pb.dispose();
-//						addMouseListener();
-//					}
-//				};
-//				thumbNailsFetcher.start();
-//			}
-//		}
-//	}
 		
 	private void addThumbnail(JButton thumbNail) {
 		thumbNailsPanel.add(thumbNail);
@@ -1407,6 +1342,7 @@ public class MainGUI extends JFrame {
 	
 	private void loadThumbNails(final File sourcePath) {
 		this.removeMouseListener();
+		setInputsEnabled(false);
 		
 		ApplicationContext ac = ApplicationContext.getInstance();
 		
@@ -1428,6 +1364,8 @@ public class MainGUI extends JFrame {
 		String sourcePathString = sourcePath.getAbsolutePath();
 		
 		ac.setSourcePath(sourcePathString);
+		ac.clearMetaDataObjects();
+		
 		config.setStringProperty("sourcePath", sourcePathString);
 		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
 				
@@ -1454,7 +1392,6 @@ public class MainGUI extends JFrame {
 					
 					if(jpegFile != null) {
 									
-						// Hämta ur tumnageln ur angiven fil
 						JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 		
 						JButton thumbContainer = new JButton();
@@ -1475,7 +1412,11 @@ public class MainGUI extends JFrame {
 						}
 		
 						addThumbnail(thumbContainer);
-						metaDataTableModel.addTableRow(MetaDataUtil.getMetaData(jpegFile));
+						
+						MetaData metaData = MetaDataUtil.getMetaData(jpegFile);
+						
+						metaDataTableModel.addTableRow(metaData);
+						ApplicationContext.getInstance().addMetaDataObject(metaData);
 						setStatusMessages();
 						updateGUI();
 						pb.updateProgressBar();							
@@ -1488,8 +1429,6 @@ public class MainGUI extends JFrame {
 							Thread.sleep(10);
 						}
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
 				}
 				pb.dispose();
@@ -1498,6 +1437,7 @@ public class MainGUI extends JFrame {
 				startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
 				Table.packColumns(metaDataTable, 6);
+				setInputsEnabled(true);
 			}
 		};
 		thumbNailsFetcher.start();
