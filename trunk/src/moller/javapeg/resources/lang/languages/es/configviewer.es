@@ -15,36 +15,37 @@
 
 # This file was created: by Fredrik Möller 2009-09-05
 # This file was updated: by Fredrik Möller 2009-09-06
+#                      : by Fredrik Möller 2009-09-16
 
 ##############################################################################################################
 # W I N D O W                                                                                                #
 ##############################################################################################################
-configviewer.window.locationError = Could not set window location according to settings. See logs for details
-configviewer.window.title         = Configuration
+configviewer.window.locationError = No se puede configurar la ventana acorde a los ajustes. Revisa el fichero de logs para más detalles
+configviewer.window.title         = Configuración
 
 ##############################################################################################################
 # L O G G I N G                                                                                              #
 ##############################################################################################################
-configviewer.logging.label.logLevel.text                 = Log Level
-configviewer.logging.label.developerMode.text            = Unbuffered Logging
-configviewer.logging.label.rotateLog.text                = Rotate Log Automatically
-configviewer.logging.label.zipLog.text                   = Compress Rotated Log File
-configviewer.logging.label.rotateLogSize.text            = Rotate Log Size
-configviewer.logging.label.logName.text                  = Log Name
-configviewer.logging.label.logEntryTimeStampFormat.text  = Log Entry Timestamp Format
-configviewer.logging.label.logEntryTimeStampPreview.text = Log Entry Timestamp Preview
+configviewer.logging.label.logLevel.text                 = Nivel de log
+configviewer.logging.label.developerMode.text            = Log sin buffer
+configviewer.logging.label.rotateLog.text                = Rotar los logs automáticamente
+configviewer.logging.label.zipLog.text                   = Comprimir los ficheros de log rotados
+configviewer.logging.label.rotateLogSize.text            = Tamaño de rotación de Logs
+configviewer.logging.label.logName.text                  = Nombre del Log
+configviewer.logging.label.logEntryTimeStampFormat.text  = Formato de fecha para las entradas de Log
+configviewer.logging.label.logEntryTimeStampPreview.text = Previsualización de fecha en las entradas de Log
 
 ##############################################################################################################
 # U P D A T E                                                                                                #
 ##############################################################################################################
-configviewer.update.label.updateEnabled.text            = Enable Application Update Check
-configviewer.update.label.attachVersionInformation.text = Add Version Information To Update Check
+configviewer.update.label.updateEnabled.text            = Habilitar chequeo de actualización
+configviewer.update.label.attachVersionInformation.text = Añadir Información de versión para comprobar la actualización
 
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Use Last Modified Date if Exif date is missing
-configviewer.rename.label.useLastModifiedTime.text = Use Last Modified Time if Exif time is missing
+configviewer.rename.label.useLastModifiedDate.text = Usar la última fecha de modificación si la fecha Exif no existe
+configviewer.rename.label.useLastModifiedTime.text = Usar la última hora de modificación si la hora Exif no existe
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
@@ -61,16 +62,16 @@ configviewer.language.information.restartMessage = El idioma seleccionado no se 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
-configviewer.errormessage.rotateLogSizeToLargeKiB   = The log rotate size is to large: Maximum allowed is 100000 KiB 
-configviewer.errormessage.rotateLogSizeToLargeMiB   = The log rotate size is to large: Maximum allowed is 100 MiB 
-configviewer.errormessage.rotateLogSizeToSmall      = The log rotate size is to small: Minimum allowed is 10 KiB
-configviewer.errormessage.rotateLogSizeNotAnInteger = The log rotate size must be an integer
+configviewer.errormessage.rotateLogSizeToLargeKiB   = Tamaño de rotación grande: El máximo permitido son 100000 KiB
+configviewer.errormessage.rotateLogSizeToLargeMiB   = Tamaño de rotación grande: El máximo permitido son 100 MiB
+configviewer.errormessage.rotateLogSizeToSmall      = Tamaño de rotación pequeño: El mínimo permitido son 10 KiB
+configviewer.errormessage.rotateLogSizeNotAnInteger = El tamaño de rotación para el log debe ser un entero
 
 ##############################################################################################################
 # T R E E  N O D E S                                                                                         #
 ##############################################################################################################
-configviewer.tree.root          = Configuration
+configviewer.tree.root          = Configuración
 configviewer.tree.node.logging  = Logging
-configviewer.tree.node.updates  = Updates
-configviewer.tree.node.rename   = Rename
-configviewer.tree.node.language = Language
+configviewer.tree.node.updates  = Actualizaciones
+configviewer.tree.node.rename   = Renombrar
+configviewer.tree.node.language = Idioma

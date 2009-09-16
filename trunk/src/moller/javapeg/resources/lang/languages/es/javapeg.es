@@ -29,13 +29,14 @@
 #                             : por Fredrik Möller 2009-09-08
 #                             : por Fredrik Möller 2009-09-09
 #                             : por Fredrik Möller 2009-09-14
+#                             : por Fredrik Möller 2009-09-16
 
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
 menu.file          = Fichero
 menu.help          = Ayuda
-menu.configuration = Configuration
+menu.configuration = Configuración
 
 #############################################################################################################
 # E L E M E N T O S  D E L  M E N U																			#
@@ -150,7 +151,7 @@ errormessage.maingui.locationError                 = No se pudo ajustar la venta
 errormessage.maingui.toLongFileNameInPreviewTable  = Con esta plantilla para el nombre, el nombre del fichero superará los 200 caracteres.\n\nEsto puede ser un problema, porque una ruta no puede ser superior a 255 caracteres.\nPuede que no se pueda mover el fichero a otro directorio, si la ruta\ntotal: ruta al fichero + nombre del fichero es superior a 255 caracteres.
 errormessage.maingui.toLongTotalPathInPreviewTable = La ruta total: ruta al directorio de destino y plantilla para el nombre del fichero seleccionada\ngenerarán una ruta superior a 255 caracteres, y esto no está permitido.\nO el nombre del fichero se hace más corto (cambiar la plantilla del nombre del fichero) o se selecciona un directorio de destino más corto.
 errormessage.maingui.sameSourceAndDestination      = El directorio de origen y destino es el mismo
-errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx256m as JVM parameter\n\nSee log file for details.
+errormessage.maingui.notEnoughMemory               = Error de Memoria - Falló el inicio de la aplicación.\n\nJavaPEG se tiene que iniciar con el lanzador apropiado o con el parámetro Java -Xmx256m \nRevisa el fichero de logs para más detalles.
 
 ##############################################################################################################
 # B A R R A  D E  P R O G R E S O                                                                            #
@@ -191,9 +192,9 @@ errormessage.filehandler.canNotWriteFile        = No se pudo escribir:
 ##############################################################################################################
 # E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
 ##############################################################################################################
-errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occured:
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG se ha quedado sin memoria.\n\nRevisa el fichero de logs para más detalles y consulta el fichero README\ndel directorio de instalación para encontrar una solución\n\nJavaPEG finalizará
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = Ha ocurrido un error inesperado:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nRevisa el fichero de logs para más detalles y consulta el fichero README\ndel directorio de instalación para encontrar una solución\n\nJavaPEG finalizará
 
 ##############################################################################################################
 # P A N E L  T A B U L A D O  D E L  G U I  P R I N C I P A L                                                #
@@ -209,9 +210,9 @@ maingui.tabbedpane.imagelist.button.saveImageList        = Guardar la lista de i
 maingui.tabbedpane.imagelist.button.exportImageList      = Exportar la lista de imágenes
 maingui.tabbedpane.imagelist.button.moveUp               = Mover la imagen seleccionada arriba en la lista
 maingui.tabbedpane.imagelist.button.moveDown             = Mover la imagen seleccionada abajo en la lista
-maingui.tabbedpane.imagelist.button.viewImages           = View selected images in the ImageViewer
-maingui.tabbedpane.imagelist.button.moveToTop            = Move selected image to top of the list
-maingui.tabbedpane.imagelist.button.moveToBottom         = Move selected image to bottom of the list
+maingui.tabbedpane.imagelist.button.viewImages           = Ver las imágenes seleccionadas en el visor
+maingui.tabbedpane.imagelist.button.moveToTop            = Mover las imágenes seleccionadas al inicio de la lista
+maingui.tabbedpane.imagelist.button.moveToBottom         = Mover las imágenes seleccionadas al final de la lista
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Abrir
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = La lista de imágenes existe, ¿sobreescribir?
@@ -413,7 +414,7 @@ statusbar.message.selectedPath              = Ruta seleccionada:
 # P A N E L  T A B U L A D O  (F U N C I O N E S  P R I N C I P A L E S)                                     #
 ##############################################################################################################
 tabbedpane.imageRename = RENOMBRAR IMAGENES
-tabbedpane.imageView   = VIEW IMAGES
+tabbedpane.imageView   = VER IMAGENES
 
 ##############################################################################################################
 # O B T E N E R  F I C H E R O S                                                                             #
