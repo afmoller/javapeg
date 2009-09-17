@@ -14,8 +14,8 @@
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
 # This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: 
+# This file was updated: by Fredrik Möller 2009-09-17
 
 common.button.ok.label = Ok
-common.button.apply.label = Apply
-common.button.cancel.label = Cancel
+common.button.apply.label = Aplicar
+common.button.cancel.label = Cancelar
