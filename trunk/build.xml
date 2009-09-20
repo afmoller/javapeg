@@ -63,6 +63,10 @@
 				<include name="**/user_manual_overview" />
 				<include name="**/user_manual_rename" />
 				<include name="**/version_information" />
+				<include name="**/configuration_logging" />
+				<include name="**/configuration_updates" />
+				<include name="**/configuration_rename" />
+				<include name="**/configuration_language" />
 			</fileset>
 		</copy>
 	</target>
