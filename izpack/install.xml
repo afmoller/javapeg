@@ -122,7 +122,6 @@
             <file src="../src/moller/javapeg/resources/startup/layout.info"              targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="../src/moller/javapeg/resources/startup/style.info"               targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="images/javapeg.ico"                                               targetdir="$INSTALL_PATH"/>
-            <file src="launch/launcher.bat"                                              targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                                   targetdir="$INSTALL_PATH"/>
             <file src="../lib/Util.jar"                                                  targetdir="$INSTALL_PATH/lib"/>
             <file src="../libraries/metadata-extractor-2.3.1.jar"                        targetdir="$INSTALL_PATH/lib"/>
