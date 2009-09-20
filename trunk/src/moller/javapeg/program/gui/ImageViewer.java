@@ -27,6 +27,7 @@ package moller.javapeg.program.gui;
 *                        : 2009-08-20 by Fredrik Möller
 *                        : 2009-08-21 by Fredrik Möller
 *                        : 2009-08-30 by Fredrik Möller
+*                        : 2009-09-19 by Fredrik Möller
 */
 
 import java.awt.BorderLayout;
@@ -69,6 +70,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -405,6 +407,7 @@ public class ImageViewer extends JFrame {
 		this.saveSettings();
 		this.setVisible(false);
 		this.dispose();
+		ApplicationContext.getInstance().setImageViewerDisplayed(false);
 	}
 	
 	private void createImage(String imagePath) {
