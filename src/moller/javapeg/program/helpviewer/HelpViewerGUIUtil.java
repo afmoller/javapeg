@@ -5,6 +5,8 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-04-27 by Fredrik Möller
  *                        : 2009-07-21 by Fredrik Möller
  *                        : 2009-07-22 by Fredrik Möller
+ *                        : 2009-09-19 by Fredrik Möller
+ *                        : 2009-09-20 by Fredrik Möller
  */
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -17,51 +19,40 @@ public class HelpViewerGUIUtil {
 	public static TreeNode createNodes() {
 		
 		Language lang = Language.getInstance();
-
-		DefaultMutableTreeNode root                = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.content"));
-		DefaultMutableTreeNode programHelpOverView = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpOverView"));
-		DefaultMutableTreeNode versionInformation  = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.versionInformation"));
-		DefaultMutableTreeNode references          = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.references"));
 				
-		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpRename"));
-		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpImageList"));
-		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"));
-		
+		//Create root node
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.content"), null));
+				
+		// Create child nodes to the root node.
+		DefaultMutableTreeNode programHelpOverView        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
+		DefaultMutableTreeNode versionInformation         = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
+		DefaultMutableTreeNode references                 = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.references"), "references"));
+		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
+		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImageList"), "user_manual_imagelist"));
+		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"), "thumbnail_overview"));
+		DefaultMutableTreeNode configuration              = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.configuration"), null));
+				
+		// Create child nodes to the Configuration node.
+		DefaultMutableTreeNode logging       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.logging"), "configuration_logging"));
+		DefaultMutableTreeNode updates       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.updates"), "configuration_updates"));
+		DefaultMutableTreeNode rename        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.rename"), "configuration_rename"));
+		DefaultMutableTreeNode language      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.language"), "configuration_language"));
+				
+		// Add configuration help items to the Configuration node
+		configuration.add(logging);
+		configuration.add(updates);
+		configuration.add(rename);
+		configuration.add(language);
+				
+		// Add nodes to the root node.
 		root.add(programHelpOverView);
 		root.add(programHelpRename);
 		root.add(programHelpImageList);
 		root.add(programHeplOverViewCreator);		
 		root.add(versionInformation);
 		root.add(references);
-		
+		root.add(configuration);
+			
 		return root;	
-	}
-	
-	public static String getFile(int selectedRow) {
-		String fileToLoad = "";
-		
-		switch (selectedRow) {
-		case 1:
-			fileToLoad = "/user_manual_overview";
-			break;
-		case 2:
-			fileToLoad = "/user_manual_rename";
-			break;
-		case 3:
-			fileToLoad = "/user_manual_imagelist";
-			break;
-		case 4:
-			fileToLoad = "/thumbnail_overview";
-			break;
-		case 5:
-			fileToLoad = "/version_information";
-			break;
-		case 6:
-			fileToLoad = "/references";
-			break;
-		default:
-			break;
-		}
-		return fileToLoad;
 	}
 }
