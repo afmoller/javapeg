@@ -15,7 +15,10 @@
 
 # This file was created: by Fredrik Möller 2009-09-05
 # This file was updated: by Fredrik Möller 2009-09-17
+#                      : by Fredrik Möller 2009-09-19
 
 common.button.ok.label = Ok
 common.button.apply.label = Aplicar
 common.button.cancel.label = Cancelar
+
+common.message.error.invalidFileName = The file name can not contain the character:

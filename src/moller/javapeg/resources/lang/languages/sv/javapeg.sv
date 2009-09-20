@@ -61,6 +61,7 @@
 #                      : by Fredrik Möller 2009-09-08
 #                      : by Fredrik Möller 2009-09-09
 #                      : by Fredrik Möller 2009-09-14
+#                      : by Fredrik Möller 2009-09-19
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -179,10 +180,9 @@ errormessage.maingui.errorMessageLabel             = Fel
 errormessage.maingui.warningMessageLabel           = Varning
 errormessage.maingui.informationMessageLabel       = Information
 errormessage.maingui.locationError                 = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-errormessage.maingui.toLongFileNameInPreviewTable  = Med denna filnamnsmall kommer filnamnet att bli 200 tecken långt."\n\n"Det kan innebära framtida problem då en sökväg inte kan vara längre än 255 tecken.\nFlytt till annan katalog än nuvarande valda kan då eventuellt bli omöjlig, då den\ntotala sökvägen: sökväg till mapp plus filnamnet får en längd som övertiger 255 tecken.
-errormessage.maingui.toLongTotalPathInPreviewTable = Den totala sökvägen: sökvägen till vald destinationsmapp och vald filnamsmall\nkommer att ge en sökväg som är längre än 255 tecken, vilket inte är tillåtet.\nAntingen måste filnamnet bli kortare (förändra filnamnsmallen) eller så måste\ndestinationsmapp med kortare sökväg väljas.
 errormessage.maingui.sameSourceAndDestination      = Käll och destinationskatalog är samma.
-errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med medföljande launcher-fil eller med -Xmx256m som JVM parameter.\n\nSe loggfil för detaljer. 
+errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med medföljande launcher-fil eller med -Xmx384m som JVM parameter.\n\nSe loggfil för detaljer. 
+errormessage.maingui.onlyOneImageViewer            = Det är bara möjligt att starta en bildvisare.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
@@ -205,12 +205,13 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes      = Ja
-errormessage.jpgrename.joptionPaneNo       = Nej
-errormessage.jpgrename.noImagesInPathLabel = Felmeddelande
-errormessage.jpgrename.noImagesInPath      = Den valda sökvägen innehåller inga bildfiler
-errormessage.jpgrename.noExifInImage       = Ingen exif information kunde hittas. För att göra om processen från början, ta bort följande fil från de filer som skall döpas om:
-errormessage.jpgrename.noExifInImageLabel  = Ingen Exif
+errormessage.jpgrename.joptionPaneYes          = Ja
+errormessage.jpgrename.joptionPaneNo           = Nej
+errormessage.jpgrename.noImagesInPathLabel     = Felmeddelande
+errormessage.jpgrename.noImagesInPath          = Den valda sökvägen innehåller inga bildfiler
+errormessage.jpgrename.noExifInImage           = Ingen exif information kunde hittas. För att göra om processen från början, ta bort följande fil från de filer som skall döpas om:
+errormessage.jpgrename.noExifInImageLabel      = Ingen Exif
+errormessage.jpgrename.imageViewerMustBeClosed = Namnbytesprocessen kan inte starta när bildvisaren är startad.\nVänligen stäng bildvisaren och starta namnbytesprocessen igen.
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
@@ -298,6 +299,11 @@ helpViewerGUI.tree.programHelpImageList       = SKAPA BILDLISTOR
 helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
 helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
 helpViewerGUI.tree.references                 = REFERENSER / TACK TILL
+helpViewerGUI.tree.configuration              = Inställningar
+helpViewerGUI.tree.logging                    = LOGGNING
+helpViewerGUI.tree.updates                    = UPPDATERINGAR
+helpViewerGUI.tree.rename                     = NAMNBYTE
+helpViewerGUI.tree.language                   = SPRÅK
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
@@ -381,8 +387,8 @@ validator.jpegtotalpathlength.toLongFileName               = Med nuvarande desti
 validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = Inga JPEG filer i den valda källkatalogen
 
 # Non JPEG total path length
-validator.nonjpegtotalpathlength.toLongFileName      = The total path with the current destinaton directory will be to long for the file:
-validator.nonjpegtotalpathlength.toLongDirectoryPath = The total path with the current destinaton directory will be to long for the directory:
+validator.nonjpegtotalpathlength.toLongFileName      = Den totala sökvägen med vald destinationskatalog kommer att bli för lång för filen:
+validator.nonjpegtotalpathlength.toLongDirectoryPath = Den totala sökvägen med vald destinationskatalog kommer att bli för lång för katalogen:
 
 # Source and destination path validator
 validator.sourceanddestinationpath.noSourcePathError                       = En sökväg till bildmappen måste anges

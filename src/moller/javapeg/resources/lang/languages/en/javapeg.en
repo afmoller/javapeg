@@ -62,6 +62,7 @@
 #                      : by Fredrik Möller 2009-09-08
 #                      : by Fredrik Möller 2009-09-09
 #                      : by Fredrik Möller 2009-09-14
+#                      : by Fredrik Möller 2009-09-19
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -180,10 +181,9 @@ errormessage.maingui.errorMessageLabel             = Error
 errormessage.maingui.warningMessageLabel           = Warning
 errormessage.maingui.informationMessageLabel       = Information
 errormessage.maingui.locationError                 = Could not set window location according to settings. See logs for details
-errormessage.maingui.toLongFileNameInPreviewTable  = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
-errormessage.maingui.toLongTotalPathInPreviewTable = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
 errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
-errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx256m as JVM parameter.\nSee log file for details.
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx384m as JVM parameter.\nSee log file for details.
+errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
@@ -206,12 +206,13 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes      = Yes
-errormessage.jpgrename.joptionPaneNo       = No
-errormessage.jpgrename.noImagesInPathLabel = Fault message
-errormessage.jpgrename.noImagesInPath      = Chosen path contains no image files
-errormessage.jpgrename.noExifInImage       = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
-errormessage.jpgrename.noExifInImageLabel  = No Exif
+errormessage.jpgrename.joptionPaneYes          = Yes
+errormessage.jpgrename.joptionPaneNo           = No
+errormessage.jpgrename.noImagesInPathLabel     = Fault message
+errormessage.jpgrename.noImagesInPath          = Chosen path contains no image files
+errormessage.jpgrename.noExifInImage           = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImageLabel      = No Exif
+errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
@@ -300,6 +301,11 @@ helpViewerGUI.tree.programHelpImageList       = CREATE IMAGE LISTS
 helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
 helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
 helpViewerGUI.tree.references                 = REFERENCES / CREDITS
+helpViewerGUI.tree.configuration              = Configuration
+helpViewerGUI.tree.logging                    = LOGGING
+helpViewerGUI.tree.updates                    = UPDATES
+helpViewerGUI.tree.rename                     = RENAME
+helpViewerGUI.tree.language                   = LANGUAGE
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
