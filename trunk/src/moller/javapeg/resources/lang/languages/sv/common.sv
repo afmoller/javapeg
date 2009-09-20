@@ -14,8 +14,10 @@
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
 # This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: 
+# This file was updated: by Fredrik Möller 2009-09-19
 
 common.button.ok.label = Ok
 common.button.apply.label = Verkställ
 common.button.cancel.label = Avbryt
+
+common.message.error.invalidFileName = Filnamnet kan inte innehålla tecknet:

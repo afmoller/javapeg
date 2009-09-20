@@ -30,6 +30,7 @@
 #                             : por Fredrik Möller 2009-09-09
 #                             : por Fredrik Möller 2009-09-14
 #                             : por Fredrik Möller 2009-09-16
+#                             : por Fredrik Möller 2009-09-19
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -148,10 +149,9 @@ errormessage.maingui.errorMessageLabel             = Error
 errormessage.maingui.warningMessageLabel           = Advertencia
 errormessage.maingui.informationMessageLabel       = Información
 errormessage.maingui.locationError                 = No se pudo ajustar la ventana acorde a los ajustes. Revise el log para más detalles
-errormessage.maingui.toLongFileNameInPreviewTable  = Con esta plantilla para el nombre, el nombre del fichero superará los 200 caracteres.\n\nEsto puede ser un problema, porque una ruta no puede ser superior a 255 caracteres.\nPuede que no se pueda mover el fichero a otro directorio, si la ruta\ntotal: ruta al fichero + nombre del fichero es superior a 255 caracteres.
-errormessage.maingui.toLongTotalPathInPreviewTable = La ruta total: ruta al directorio de destino y plantilla para el nombre del fichero seleccionada\ngenerarán una ruta superior a 255 caracteres, y esto no está permitido.\nO el nombre del fichero se hace más corto (cambiar la plantilla del nombre del fichero) o se selecciona un directorio de destino más corto.
 errormessage.maingui.sameSourceAndDestination      = El directorio de origen y destino es el mismo
-errormessage.maingui.notEnoughMemory               = Error de Memoria - Falló el inicio de la aplicación.\n\nJavaPEG se tiene que iniciar con el lanzador apropiado o con el parámetro Java -Xmx256m \nRevisa el fichero de logs para más detalles.
+errormessage.maingui.notEnoughMemory               = Error de Memoria - Falló el inicio de la aplicación.\n\nJavaPEG se tiene que iniciar con el lanzador apropiado o con el parámetro Java -Xmx384m \nRevisa el fichero de logs para más detalles.
+errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer
 
 ##############################################################################################################
 # B A R R A  D E  P R O G R E S O                                                                            #
@@ -174,12 +174,13 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # M E N S A J E S  D E  E R R O R  D E  J P G R E N A M E                                                    #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes      = Si
-errormessage.jpgrename.joptionPaneNo       = No
-errormessage.jpgrename.noImagesInPathLabel = Mensaje de error
-errormessage.jpgrename.noImagesInPath      = La ruta seleccionada no contiene imágenes
-errormessage.jpgrename.noExifInImageLabel  = No Exif
-errormessage.jpgrename.noExifInImage       = No se encontró información exif. Para deshacer el proceso desde el principio, borra el siguiente fichero de los ficheros a renombrar:
+errormessage.jpgrename.joptionPaneYes          = Si
+errormessage.jpgrename.joptionPaneNo           = No
+errormessage.jpgrename.noImagesInPathLabel     = Mensaje de error
+errormessage.jpgrename.noImagesInPath          = La ruta seleccionada no contiene imágenes
+errormessage.jpgrename.noExifInImage           = No se encontró información exif. Para deshacer el proceso desde el principio, borra el siguiente fichero de los ficheros a renombrar:
+errormessage.jpgrename.noExifInImageLabel      = No Exif
+errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
 
 ##############################################################################################################
 # M E N S A J E S  D E  E R R O R  D E L  M A N E J A D O R  D E  F I C H E R O S                            #
@@ -269,6 +270,11 @@ helpViewerGUI.tree.programHelpImageList       = CREAR LISTA DE IMAGENES
 helpViewerGUI.tree.programHelpOverviewCreator = CREAR VISTA EN MINIATURAS
 helpViewerGUI.tree.versionInformation         = INFORMACION DE VERSION
 helpViewerGUI.tree.references                 = REFERENCIAS / CREDITOS
+helpViewerGUI.tree.configuration              = Configuración
+helpViewerGUI.tree.logging                    = LOGGING
+helpViewerGUI.tree.updates                    = ACTUALIZACIONES
+helpViewerGUI.tree.rename                     = RENOMBRAR
+helpViewerGUI.tree.language                   = IDIOMA
 
 ##############################################################################################################
 # P A N E L  D E  I N F O R M A C I O N                                                                      #
