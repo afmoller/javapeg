@@ -4,6 +4,7 @@ package moller.javapeg.program;
  * Latest changed         : 2009-03-23 by Fredrik Möller
  *                        : 2009-06-02 by Fredrik Möller
  *                        : 2009-09-14 by Fredrik Möller
+ *                        : 2009-09-19 by Fredrik Möller
  */
 
 import java.io.File;
@@ -73,7 +74,19 @@ public class ApplicationContext {
 	private Set<String> jarFileEmbeddedLanguageFiles;
 	
 	
+	/**
+	 * This list contains File objects and is populated when a directory is 
+	 * selected in the tree structure. When a jpeg image is found that is added
+	 * to this buffer list. At the same time there is another task populating
+	 * the grid with image thumbnails and that task get it´s images from this
+	 * buffer list. 
+	 */
 	private List<File> jpegFileLoadBuffer;
+	
+	/**
+	 * This flag indicates whether the iamgeviewer is displayed or not 
+	 */
+	private boolean imageViewerDisplayed;
 	
 	/**
 	 * Private constructor.
@@ -87,6 +100,7 @@ public class ApplicationContext {
 		metaDataObjects = new ArrayList<MetaData>();
 		jarFileEmbeddedLanguageFiles = new HashSet<String>();
 		jpegFileLoadBuffer = new ArrayList<File>();
+		imageViewerDisplayed = false;
 	}
 
 	/**
@@ -132,6 +146,10 @@ public class ApplicationContext {
 		return createThumbNailsCheckBoxSelected;
 	}
 	
+	public boolean isImageViewerDisplayed() {
+		return imageViewerDisplayed;
+	}
+	
 	public Set<String> getJarFileEmbeddedLanguageFiles() {
 		return jarFileEmbeddedLanguageFiles;
 	}
@@ -174,6 +192,10 @@ public class ApplicationContext {
 		this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
 	}
 	
+	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
+		this.imageViewerDisplayed = imageViewerDisplayed;
+	}	
+		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
 		switch (action) {
 		case ADD:
@@ -189,5 +211,5 @@ public class ApplicationContext {
 			return image; 
 
 		}
-	}	
+	}
 }
