@@ -62,6 +62,7 @@
 #                      : by Fredrik Möller 2009-09-09
 #                      : by Fredrik Möller 2009-09-14
 #                      : by Fredrik Möller 2009-09-19
+#                      : by Fredrik Möller 2009-09-20
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -181,7 +182,7 @@ errormessage.maingui.warningMessageLabel           = Varning
 errormessage.maingui.informationMessageLabel       = Information
 errormessage.maingui.locationError                 = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
 errormessage.maingui.sameSourceAndDestination      = Käll och destinationskatalog är samma.
-errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med medföljande launcher-fil eller med -Xmx384m som JVM parameter.\n\nSe loggfil för detaljer. 
+errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med sin genväg eller med -Xmx384m som JVM parameter.\n\nSe loggfil för detaljer. 
 errormessage.maingui.onlyOneImageViewer            = Det är bara möjligt att starta en bildvisare.
 
 ##############################################################################################################

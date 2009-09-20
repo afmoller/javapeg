@@ -182,7 +182,7 @@ errormessage.maingui.warningMessageLabel           = Warning
 errormessage.maingui.informationMessageLabel       = Information
 errormessage.maingui.locationError                 = Could not set window location according to settings. See logs for details
 errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
-errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied launcher file or with -Xmx384m as JVM parameter.\nSee log file for details.
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied shortcut file or with -Xmx384m as JVM parameter.\nSee log file for details.
 errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer.
 
 ##############################################################################################################
