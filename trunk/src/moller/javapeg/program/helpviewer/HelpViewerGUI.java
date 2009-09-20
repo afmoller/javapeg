@@ -8,6 +8,7 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-04-27 by Fredrik Möller
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-09-20 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -32,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
@@ -141,9 +143,8 @@ public class HelpViewerGUI extends JFrame {
 		
 	private JScrollPane initiateJTree() {		
 		tree = new JTree(HelpViewerGUIUtil.createNodes());
-		tree.setShowsRootHandles (true);
+		tree.setShowsRootHandles(true);
 		tree.addMouseListener(new Mouselistener());
-		
 		return new JScrollPane(tree);
 	}
 	
@@ -152,14 +153,13 @@ public class HelpViewerGUI extends JFrame {
 		return new CustomizedJScrollPane(contentJPanel);
 	}
 		
-	private JTextArea getContent(int selectedRow) {
-		if (content.equals("") && selectedRow > -1) {
+	private JTextArea getContent(String identityString) {
+		if (content.equals("") && identityString != null) {
 			String confLang = conf.getStringProperty("gUILanguageISO6391");
 							
 			try {
-				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + HelpViewerGUIUtil.getFile(selectedRow)));
+				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString));
 			} catch (IOException e) {
-				
 				JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.errorMessage"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				logger.logERROR("Could not load embedded help file:");
 				logger.logERROR(e);
@@ -185,11 +185,14 @@ public class HelpViewerGUI extends JFrame {
 	private class Mouselistener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
-			if(selRow > 0) {
+						
+			if(selRow > -1) {
+				String identity = ((UserObject)((DefaultMutableTreeNode)tree.getLastSelectedPathComponent()).getUserObject()).getIdentityString();
+								
 				content = "";
 				contentJPanel.removeAll();
 				contentJPanel.updateUI();
-				contentJPanel.add(getContent(selRow), BorderLayout.CENTER);
+				contentJPanel.add(getContent(identity), BorderLayout.CENTER);
 			}
 		}
 	}
@@ -199,7 +202,7 @@ public class HelpViewerGUI extends JFrame {
 		public void componentResized(ComponentEvent e) {
 			contentJPanel.removeAll();
 			contentJPanel.updateUI();
-			contentJPanel.add(getContent(-1), BorderLayout.CENTER);
+			contentJPanel.add(getContent(null), BorderLayout.CENTER);
 		}		
 	}
 }
