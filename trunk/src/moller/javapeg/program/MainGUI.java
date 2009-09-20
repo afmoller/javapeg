@@ -67,6 +67,7 @@ package moller.javapeg.program;
  *                        : 2009-09-08 by Fredrik Möller
  *                        : 2009-09-13 by Fredrik Möller
  *                        : 2009-09-14 by Fredrik Möller
+ *                        : 2009-09-19 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -257,8 +258,6 @@ public class MainGUI extends JFrame {
 	private Mouselistener mouseListener;
 	private MouseButtonListener mouseRightClickButtonListener;
 	
-//	private Collection <File> jpgFilesAsFiles;
-	
 	private int iconWidth = 160;
 	private int columnMargin = 0;
 	
@@ -286,7 +285,7 @@ public class MainGUI extends JFrame {
 		
 		config =  Config.getInstance();
 		logger =  Logger.getInstance();
-		lang   = Language.getInstance();
+		lang   =  Language.getInstance();
 		
 		logger.logDEBUG("JavaPEG is starting");		
 		logger.logDEBUG("Language File Loading Started");
@@ -311,12 +310,12 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Application initialization Started");
 		this.initiateProgram();
 		logger.logDEBUG("Application initialization Finished");
-		logger.logDEBUG("Application Context initialization Started");
-		this.initiateApplicationContext();
-		logger.logDEBUG("Application Context initialization Finished");
 		logger.logDEBUG("Check Available Memory Started");
 		this.checkAvailableMemory();
 		logger.logDEBUG("Check Available Memory Finished");
+		logger.logDEBUG("Application Context initialization Started");
+		this.initiateApplicationContext();
+		logger.logDEBUG("Application Context initialization Finished");
 	}
 		
 	private void checkApplicationUpdates() {
@@ -353,9 +352,9 @@ public class MainGUI extends JFrame {
 	
 	private void checkAvailableMemory() {
 		long maxHeapSize = Runtime.getRuntime().maxMemory(); 
-		
-		if (maxHeapSize < 266403840) {
-			logger.logERROR("Maximum Size of Java Heap is to small. Current size is: " + maxHeapSize + " bytes and it must be atleast 266403840 bytes");
+				
+		if (maxHeapSize < 399572992) {
+			logger.logERROR("Maximum Size of Java Heap is to small. Current size is: " + maxHeapSize + " bytes and it must be atleast 399572992 bytes");
 			JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			closeApplication(1);
 		}
@@ -1227,84 +1226,87 @@ public class MainGUI extends JFrame {
 			}
 			
 			if(actionCommand.equals("startProcessButton")){
-				
-				removeMouseListener();
-				setInputsEnabled(false);		
-				
-				String subFolderName = "";
-				String fileNameTemplate = ""; 
+				if(ApplicationContext.getInstance().isImageViewerDisplayed()) {
+					JOptionPane.showMessageDialog(null, lang.get("errormessage.jpgrename.imageViewerMustBeClosed"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					removeMouseListener();
+					setInputsEnabled(false);		
 
-				// Ta bort eventuella mellanslag först och sist i undermappsnamnsmallen
-				subFolderName = subFolderTextField.getText();
-				subFolderName = subFolderName.trim();
-				subFolderTextField.setText(subFolderName);
+					String subFolderName = "";
+					String fileNameTemplate = ""; 
 
-				// Ta bort eventuella mellanslag först och sist i filnamnsmallen
-				fileNameTemplate = fileNameTemplateTextField.getText();
-				fileNameTemplate = fileNameTemplate.trim();
-				fileNameTemplateTextField.setText(fileNameTemplate);
-												
-				Thread renameThread = new Thread() {
-					
-					public void run(){
-																				
-						RenameProcess rp = new RenameProcess();
-						rp.init();
-						rp.setVisible(true);
+					// Ta bort eventuella mellanslag först och sist i undermappsnamnsmallen
+					subFolderName = subFolderTextField.getText();
+					subFolderName = subFolderName.trim();
+					subFolderTextField.setText(subFolderName);
 
-						logger.logDEBUG("Pre File Processing Started");
-						rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
-						ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
-						logger.logDEBUG("Pre File Processing Finished");
-						rp.setLogMessage(lang.get("rename.PreFileProcessor.finished"));
-						
-						if(!vs.isValid()) {
-							rp.setAlwaysOnTop(false);
-							JOptionPane.showMessageDialog(null, vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-							logger.logERROR("Pre File Processing found following errors:\n" + vs.getStatusMessage());
-							rp.setLogMessage(lang.get("rename.PreFileProcessor.error")+ "\n" + vs.getStatusMessage());
-							rp.setAlwaysOnTop(true);
-							setInputsEnabled(true);
-							addMouseListener();
-						} else {
-							logger.logDEBUG("File Processing Started");
-							rp.setLogMessage(lang.get("rename.FileProcessor.starting"));
-							FileProcessor.getInstance().process(rp);
-							logger.logDEBUG("File Processing Finished");
-							rp.setLogMessage(lang.get("rename.FileProcessor.finished"));
-														
-							if(createThumbNailsCheckBox.isSelected()) {
-								logger.logDEBUG("Thumb Nail Overview Creation Started");
-								rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.starting"));
-								ThumbNailOverViewCreator.getInstance().create();
-								logger.logDEBUG("Thumb Nail Overview Creation Finished");
-								rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.finished"));
-								rp.incProcessProgress();
-							}
-														
-							logger.logDEBUG("File Integrity Check Started");
-							rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.starting"));
-							if(!PostFileProcessor .getInstance().process(rp)) {
+					// Ta bort eventuella mellanslag först och sist i filnamnsmallen
+					fileNameTemplate = fileNameTemplateTextField.getText();
+					fileNameTemplate = fileNameTemplate.trim();
+					fileNameTemplateTextField.setText(fileNameTemplate);
+
+					Thread renameThread = new Thread() {
+
+						public void run(){
+
+							RenameProcess rp = new RenameProcess();
+							rp.init();
+							rp.setVisible(true);
+
+							logger.logDEBUG("Pre File Processing Started");
+							rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
+							ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
+							logger.logDEBUG("Pre File Processing Finished");
+							rp.setLogMessage(lang.get("rename.PreFileProcessor.finished"));
+
+							if(!vs.isValid()) {
 								rp.setAlwaysOnTop(false);
-								JOptionPane.showMessageDialog(null, lang.get("rename.PostFileProcessor.integrityCheck.error"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+								logger.logERROR("Pre File Processing found following errors:\n" + vs.getStatusMessage());
+								rp.setLogMessage(lang.get("rename.PreFileProcessor.error")+ "\n" + vs.getStatusMessage());
 								rp.setAlwaysOnTop(true);
-								rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.error"));
+								setInputsEnabled(true);
+								addMouseListener();
+							} else {
+								logger.logDEBUG("File Processing Started");
+								rp.setLogMessage(lang.get("rename.FileProcessor.starting"));
+								FileProcessor.getInstance().process(rp);
+								logger.logDEBUG("File Processing Finished");
+								rp.setLogMessage(lang.get("rename.FileProcessor.finished"));
+
+								if(createThumbNailsCheckBox.isSelected()) {
+									logger.logDEBUG("Thumb Nail Overview Creation Started");
+									rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.starting"));
+									ThumbNailOverViewCreator.getInstance().create();
+									logger.logDEBUG("Thumb Nail Overview Creation Finished");
+									rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.finished"));
+									rp.incProcessProgress();
+								}
+
+								logger.logDEBUG("File Integrity Check Started");
+								rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.starting"));
+								if(!PostFileProcessor .getInstance().process(rp)) {
+									rp.setAlwaysOnTop(false);
+									JOptionPane.showMessageDialog(null, lang.get("rename.PostFileProcessor.integrityCheck.error"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+									rp.setAlwaysOnTop(true);
+									rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.error"));
+								}
+								logger.logDEBUG("File Integrity Check Finished");
+								rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.finished"));
+								rp.incProcessProgress();
+
+								rp.setAlwaysOnTop(false);
+								JOptionPane.showMessageDialog(null, lang.get("rename.FileProcessor.finished"), "", JOptionPane.INFORMATION_MESSAGE);
+								rp.setAlwaysOnTop(true);
+
+								setInputsEnabled(true);
+								addMouseListener();
 							}
-							logger.logDEBUG("File Integrity Check Finished");
-							rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.finished"));
-							rp.incProcessProgress();
-							
-							rp.setAlwaysOnTop(false);
-							JOptionPane.showMessageDialog(null, lang.get("rename.FileProcessor.finished"), "", JOptionPane.INFORMATION_MESSAGE);
-							rp.setAlwaysOnTop(true);
-							
-							setInputsEnabled(true);
-							addMouseListener();
+							rp.renameProcessFinished();
 						}
-						rp.renameProcessFinished();
-					}
-				};
-				renameThread.start();	
+					};
+					renameThread.start();	
+				}
 			}
 		}
 	}
@@ -1705,14 +1707,20 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(!imagesToViewListModel.isEmpty()) {
 				
-				List<File> imagesToView = new ArrayList<File>();
-				
-				for (int i = 0; i < imagesToViewListModel.size(); i++) {
-					imagesToView.add((File)imagesToViewListModel.get(i));
+				ApplicationContext ac = ApplicationContext.getInstance();
+				if (ac.isImageViewerDisplayed()) {
+					JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.onlyOneImageViewer"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					List<File> imagesToView = new ArrayList<File>();
+
+					for (int i = 0; i < imagesToViewListModel.size(); i++) {
+						imagesToView.add((File)imagesToViewListModel.get(i));
+					}
+
+					ImageViewer imageViewer = new ImageViewer(imagesToView);
+					imageViewer.setVisible(true);
+					ac.setImageViewerDisplayed(true);
 				}
-				
-				ImageViewer imageViewer = new ImageViewer(imagesToView);
-				imageViewer.setVisible(true);
 			}
 		}
 	}
