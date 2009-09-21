@@ -25,7 +25,7 @@ configviewer.window.title         = Inställningar
 ##############################################################################################################
 # L O G G I N G                                                                                              #
 ##############################################################################################################
-configviewer.logging.label.logLevel.text                 = Loggnings Nivå
+configviewer.logging.label.logLevel.text                 = Loggningsnivå
 configviewer.logging.label.developerMode.text            = Obuffrad Loggning
 configviewer.logging.label.rotateLog.text                = Rotera Loggen automatiskt
 configviewer.logging.label.zipLog.text                   = Komprimera Roterad Loggfil
@@ -43,8 +43,8 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Använd senast ändraddatum om Efix datum saknas
-configviewer.rename.label.useLastModifiedTime.text = Använd senast ändradtid om Efix tid saknas
+configviewer.rename.label.useLastModifiedDate.text = Använd senast ändraddatum om Exif-datum saknas
+configviewer.rename.label.useLastModifiedTime.text = Använd senast ändradtid om Exif-tid saknas
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
