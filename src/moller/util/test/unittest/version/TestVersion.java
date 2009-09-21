@@ -1,19 +1,5 @@
 package moller.util.test.unittest.version;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import moller.util.version.UpdateChecker;
-import moller.util.version.containers.ChangeLog;
-import moller.util.version.containers.VersionInformation;
-
-import org.junit.Test;
-import org.xml.sax.SAXException;
 
 public class TestVersion {
 		
