@@ -1,7 +1,6 @@
 package moller.util.test.unittest.io;
 
 import java.io.File;
-import java.io.IOException;
 
 import moller.util.io.DirectoryUtil;
 
