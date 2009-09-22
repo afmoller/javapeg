@@ -1,1 +1,5 @@
-Placeholder
+Aktivera Programuppdateringskontroll:<LF>
+Uppdateringskontroll kommer att ske vid varje programstart för att kontrollera om det finns en nyare verison av JavaPEG.<LF>
+<LF>
+Bifoga versionsinformation vid uppdateringskontroll:<LF>
+Versionsnumret av JavaPEG bifogas till uppdateringskontrollen som sker vid uppstart. Detta används enbart till statistiska ändamål och är helt anonym. INGEN annan information än JavaPEG:s versionsnummer skickas.
