@@ -1,5 +1,5 @@
-Använd senast ändraddatum om Exif-datum saknas:<LF>
-Om datuminformation saknas i Exif-informationen så används det datum som filen senast ändrades istället.<LF>
+Use Last Modified Date If Exif Date Is Missing:<LF>
+If date information is missing in the Exif information, then latest changed date for the file will be used instead.<LF>
 <LF>
-Använd senast ändradtid om Exif-tid saknas:<LF>
-Om tidformation saknas i Exif-informationen så används den tidpunkt som filen senast ändrades istället.
+Use Last Modified Time If Exif Time Is Missing:<LF>
+If time information is missing in the Exif information, then latest changed time for the file will be used instead.<LF>

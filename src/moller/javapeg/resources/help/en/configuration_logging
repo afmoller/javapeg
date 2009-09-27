@@ -1,23 +1,23 @@
-Obuffrad Loggning:<LF>
-All loggning skrivs direkt ner till loggiflen utan att buffras i minnet. Är användbart vid felsökning.<LF>
+Unbuffered Logging:<LF>
+All logging is instantly written to the log file and is not being buffered in the memory. This might be useful for debugging.<LF> 
 <LF>
-Rotera Loggen Automatiskt:<LF>
-Betyder att loggfilen kommer att roteras, det vill säga att nuvarande fil kommer att stängas och en ny kommer att skapas automatiskt.<LF>
+Rotate Log Automatically:<LF>
+Means that the log file will be rotated, in other words that the current file will be closed and a new will be created automatically.<LF>
 <LF>
-Komprimera Roterad Loggfil:<LF>
-När en loggfil roteras kan denna komprimeras för att spara utrymme. Komprimeringsformatet som används är ZIP.<LF>
+Compress Rotated Log File:<LF>
+When a log file is rotated it is possible to have it compressed to save space. The compression format used is ZIP.<LF>
 <LF>
-Loggroteringsstorlek:<LF>
-Här anges vid vilken storlek som loggfilen roteras. Storleken anges i KiB eller MiB, minsta storlek är 10 KiB och största storlek är 100 MiB.<LF>
+Log Rotate Size:<LF>
+Defines at which size the log file will be rotated. The size is set either in KiB or in MiB. Smallest allowed size is 10 KiB and largest size is 100 MiB.<LF>
 <LF>
-Loggningsnivå:<LF>
-Specificerar hur detaljerad loggning som sker. Valbara alternativ är DEBUG, INFO, WARN, ERROR och FATAL. DEBUG innebär mest detaljerad loggning och FATAL minst detaljerad.<LF>
+Log Level:<LF>
+Specifies how detailed the logging will be. Possible alternatives are: DEBUG, INFO, WARN, ERROR and FATAL. DEBUG will generate most detailed logging and FATAL least detailed.<LF>
 <LF>
-Loggnamn:<LF>
-Anger det namn som loggfilen kommer att ha.<LF>
+Log Name:<LF>
+The name that the log file will have.<LF>
 <LF>
-Tidsstämpelsformat för loggfilsnotering:<LF>
-Specificerar hur tidsstämpeln i loggfilen kommer att se ut.<LF>
+Log Entry Timestamp Format:<LF>
+Specifies what the timestamp in the log file will look like.<LF>
 <LF>
-Förhandsgranskning av tidsstämpel för loggfilsnotering:<LF>
-Visar en förhandsgranskning av hur en tidsstämpel för en loggfilsnotering kommer att se ut i loggfilen.
+Log Entry Timestamp Preview:<LF>
+Displays a preview of what a log entry timestamp will look like in the log file.
