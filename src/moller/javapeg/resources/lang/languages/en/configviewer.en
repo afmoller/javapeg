@@ -29,7 +29,7 @@ configviewer.logging.label.logLevel.text                 = Log Level
 configviewer.logging.label.developerMode.text            = Unbuffered Logging
 configviewer.logging.label.rotateLog.text                = Rotate Log Automatically
 configviewer.logging.label.zipLog.text                   = Compress Rotated Log File
-configviewer.logging.label.rotateLogSize.text            = Rotate Log Size
+configviewer.logging.label.rotateLogSize.text            = Log Rotate Size
 configviewer.logging.label.logName.text                  = Log Name
 configviewer.logging.label.logEntryTimeStampFormat.text  = Log Entry Timestamp Format
 configviewer.logging.label.logEntryTimeStampPreview.text = Log Entry Timestamp Preview
@@ -43,8 +43,8 @@ configviewer.update.label.attachVersionInformation.text = Add Version Informatio
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Use Last Modified Date if Exif date is missing
-configviewer.rename.label.useLastModifiedTime.text = Use Last Modified Time if Exif time is missing
+configviewer.rename.label.useLastModifiedDate.text = Use Last Modified Date If Exif Date Is Missing
+configviewer.rename.label.useLastModifiedTime.text = Use Last Modified Time If Exif Time Is Missing
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
