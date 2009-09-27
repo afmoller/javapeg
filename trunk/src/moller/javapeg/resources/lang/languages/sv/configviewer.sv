@@ -43,8 +43,8 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Använd senast ändraddatum om Exif-datum saknas
-configviewer.rename.label.useLastModifiedTime.text = Använd senast ändradtid om Exif-tid saknas
+configviewer.rename.label.useLastModifiedDate.text = Använd Senast Ändraddatum Om Exif-datum Saknas
+configviewer.rename.label.useLastModifiedTime.text = Använd Senast Ändradtid Om Exif-tid Saknas
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
