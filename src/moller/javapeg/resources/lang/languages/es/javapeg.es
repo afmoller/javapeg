@@ -150,8 +150,8 @@ errormessage.maingui.warningMessageLabel           = Advertencia
 errormessage.maingui.informationMessageLabel       = Información
 errormessage.maingui.locationError                 = No se pudo ajustar la ventana acorde a los ajustes. Revise el log para más detalles
 errormessage.maingui.sameSourceAndDestination      = El directorio de origen y destino es el mismo
-errormessage.maingui.notEnoughMemory               = Error de Memoria - Falló el inicio de la aplicación.\n\nJavaPEG se tiene que iniciar con el lanzador apropiado o con el parámetro Java -Xmx384m \nRevisa el fichero de logs para más detalles.
-errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer
+errormessage.maingui.notEnoughMemory               = Error de memoria - El inicio de la aplicación se ha abortado.\n\nJavaPEG se ha de iniciar con el acceso directo suministrado o con -Xmx384m como parámetro JVM.\nRevisa el fichero de log para más detalles.
+errormessage.maingui.onlyOneImageViewer            = Sólo se puede iniciar un visor de imágenes.
 
 ##############################################################################################################
 # B A R R A  D E  P R O G R E S O                                                                            #
@@ -180,7 +180,7 @@ errormessage.jpgrename.noImagesInPathLabel     = Mensaje de error
 errormessage.jpgrename.noImagesInPath          = La ruta seleccionada no contiene imágenes
 errormessage.jpgrename.noExifInImage           = No se encontró información exif. Para deshacer el proceso desde el principio, borra el siguiente fichero de los ficheros a renombrar:
 errormessage.jpgrename.noExifInImageLabel      = No Exif
-errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
+errormessage.jpgrename.imageViewerMustBeClosed = El proceso de renombrado no puede comenzar cuando el visor esté en ejecución.\nPor favor, cierra en visor de imágenes y reinicia el proceso de renombrado.
 
 ##############################################################################################################
 # M E N S A J E S  D E  E R R O R  D E L  M A N E J A D O R  D E  F I C H E R O S                            #
