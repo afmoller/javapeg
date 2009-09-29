@@ -3,6 +3,35 @@ VERSIONSINFORMATION<LF>
 Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskaper.
 <LF>
 <LF>
+Version 2.4<LF>
+===========<LF>
+Släppt 2009-??-?? Version 2.4 av JavaPEG har två större tillägg. Det första är en inbyggd bildvisare som visar de bilder som lagts till i bildlistan på VISA BILDER tabben. Bildvisaren har förutom navigationssupport för framåt, bakåt och till valfri bild i bildlistan också möjlighet att automatiskt anpassa bildstorleken för att passa fönsterstorleken.
+<LF>
+<LF>
+Det andra större tilläget är ett grafiskt gränssnitt för inställningarna. Från och med nu är det inte nödvändingt att göra inställningsändringar manuellt i inställningsfilen. Alla inställningsändringar kan göras inifrån JavaPEG-applikationen.
+<LF>
+<LF>
+Som ett resultat av det nya inställnignsgränssnittet så har det föregående fristående gränssnittet för språkval tagits bort då den funktionaliteten har hamnat i det nya gränssnittet.
+<LF>
+<LF>
+Övrig ny funktionalitet listas här nedan:
+<LF>
+<LF>
+A new Image List format has been added. It is from now on possible to export image lists supported by the XnView image viewer. (http://www.xnview.com/)
+<LF>
+<LF>
+It is possible to use the time and date from when a image was latest changed when renaming images if time and date information is missing in the Exif information. (This behavior is activated in the configuration).
+<LF>
+<LF>
+Automatic rotated log files might be compressed in Zip format, to save space.
+<LF>
+<LF>
+For statistical purposes it is possible to let JavaPEG attach the version number to the version update check request made to the version update server. The only information sent is which version of JavaPEG that is making the version update check. In other words this is totally anonymous, no system unique information is sent.
+<LF>
+<LF>
+Move to top and bottom buttons for the images in the Image List at the VIEW IMAGES tab has been added.
+<LF>
+<LF>
 Version 2.3<LF>
 ===========<LF>
 Släppt 2009-08-03 Version 2.3 av JavaPEG är en ren buggrättningsversion. Den inbyggda funktionaliteten för nedladdning av den senaste versionen av JavaPEG fungerade inte och fungerar fortfarande inte i de föregående versioner som har stöd för att kontrollera om det finns en nyare version tillgänglig (2.1 & 2.2). Anledningen till att denna bugg uppkommit är att formatet på de URL:er som SourceForge har till de släppta versionerna av JavaPEG har ändrats och tidigare versioner av JavaPEG var inte generella nog att hantera denna förändring.
