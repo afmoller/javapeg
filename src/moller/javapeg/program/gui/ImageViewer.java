@@ -443,10 +443,8 @@ public class ImageViewer extends JFrame {
 		icon.setImage(img);
 		
 		picture.setIcon(null);
-		System.out.println("Before " + Runtime.getRuntime().freeMemory());
 		picture.setIcon(icon);
-		System.out.println("After " + Runtime.getRuntime().freeMemory());
-
+		
 		imageBackground.removeAll();
 		imageBackground.updateUI();
 		imageBackground.add(picture, BorderLayout.CENTER);
@@ -455,9 +453,7 @@ public class ImageViewer extends JFrame {
 		
 		setStatusMessages(imagePath, imageFile.length(), imageWidth, imageHeight);
 		
-		metaDataPanel.setMetaData(imageFile);
-		
-		
+		metaDataPanel.setMetaData(imageFile);	
 	}
 
 	private class WindowDestroyer extends WindowAdapter {
