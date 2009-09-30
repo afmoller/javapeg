@@ -17,19 +17,19 @@ Som ett resultat av det nya inställnignsgränssnittet så har det föregående frist
 Övrig ny funktionalitet listas här nedan:
 <LF>
 <LF>
-A new Image List format has been added. It is from now on possible to export image lists supported by the XnView image viewer. (http://www.xnview.com/)
+Ett nytt bildlisteformat har lagts till. Från och med nu är det möjligt att exportera bildlistor som stöds av bildvisare XnView. (http://www.xnview.com/)
 <LF>
 <LF>
-It is possible to use the time and date from when a image was latest changed when renaming images if time and date information is missing in the Exif information. (This behavior is activated in the configuration).
+Det är möjligt att använda tid- och datuminformation från när bildfilen senast ändrades när namnbyte sker, om det är så att tid och datuminformation saknas i Exif-informationen. Detta aktiveras i inställningarna.
 <LF>
 <LF>
-Automatic rotated log files might be compressed in Zip format, to save space.
+För att spara utrymme så är det möjligt att få loggfilerna komprimerade i Zip-format när de roteras. 
 <LF>
 <LF>
-For statistical purposes it is possible to let JavaPEG attach the version number to the version update check request made to the version update server. The only information sent is which version of JavaPEG that is making the version update check. In other words this is totally anonymous, no system unique information is sent.
+För statistiska ändamål så är det möjligt att låta JavaPEG skicka med versionsnumret när en uppdateringskontroll mot uppdateringsservern sker. Den enda information som skickas är vilken version av JavaPEG det är som gör uppdateringskontrollen. Med andra ord, detta är totalt anonymt och ingen systemunik information skickas.
 <LF>
 <LF>
-Move to top and bottom buttons for the images in the Image List at the VIEW IMAGES tab has been added.
+Knappar för att flytta en bild till toppen eller botten av bildlistan har lagts till på VISA BILDER-tabben.
 <LF>
 <LF>
 Version 2.3<LF>
