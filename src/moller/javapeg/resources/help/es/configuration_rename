@@ -1,1 +1,5 @@
-Placeholder
+Utiliza la fecha de modificación si la fecha Exif no se encuentra:<LF>
+Si la información de la fecha no se encuentra en la información Exif, entonces se utiliza la fecha del último cambio del fichero.<LF>
+<LF>
+Usa la última hora de modificación si la hora Exif no se encuentra:<LF>
+Si la información de la hora no se encuentra en la información Exif, entonces se utiliza la hora del último cambio del fichero.<LF>

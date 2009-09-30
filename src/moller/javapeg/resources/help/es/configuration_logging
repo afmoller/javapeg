@@ -1,1 +1,23 @@
-Placeholder
+Log sin buffer:<LF>
+Todos los logs son escritos de forma instantánea en el fichero de log y no se almacenan temporalmente en memoria. Esto puede ser útil para depuración.<LF>
+<LF>
+Rotar los logs automáticamente:<LF>
+Significa que el fichero de log será rotado, en otras palabras que el fichero actual se cerrará y se creará uno nuevo automáticamente.<LF>
+<LF>
+Fichero de log rotado y comprimido:<LF>
+Cuando se rota un fichero de log se puede comprimir para ahorrar espacio. El formato de compresión utilizado es ZIP.<LF>
+<LF>
+Tamaño de rotación de log:<LF>
+Define a qué tamaño se rotará el fichero de log. El tamaño se ajusta en KiB o en MiB. El tamaño más pequeño permitido son 10 KiB y el mayor son 100 MiB.<LF>
+<LF>
+Nivel de log:<LF>
+Especifica el nivel de detalle del log. Las posibles alternativas son: DEBUG, INFO, WARN, ERROR y FATAL. DEBUG generará el nivel de log más detallado y FATAL el menos detallado.<LF>
+<LF>
+Nombre de log:<LF>
+Nombre que tendrá el fichero de log.<LF>
+<LF>
+Formato de tiempo en las entradas del log:<LF>
+Especifica como se mostrará el tiempo en el fichero de log.<LF>
+<LF>
+Previsualización del formato de tiempo en las entradas del log:<LF>
+Muestra una previsualización de cómo aparecerá el tiempo en las entradas del fichero de log.

@@ -1,1 +1,5 @@
-Placeholder
+Habilitar chequeo de actualización:<LF>
+Se llevará a cabo un chequeo de actualización cada vez que se inicie la aplicación para ver si hay una nueva versión de JavaPEG.<LF>
+<LF>
+Añade la información de versión al chequeo de actualización:<LF>
+El número de versión de JavaPEG se añadirá al chequeo de actualización realizado en el arranque de la aplicación. Esta información sólo se utiliza para propósitos estadísticos y es completamente anónima. NO se envía ninguna información adicional al número de versión de JavaPEG.
