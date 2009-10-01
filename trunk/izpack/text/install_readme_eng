@@ -18,3 +18,12 @@ and later on opened again for further processing. It is also possible to export
 image lists to format supported by third party software. This makes it possible
 for further processing of the lists in the third party software or to show the 
 images in the image list.
+
+There is also an embedded Image Viewer available, which displays images that 
+have been gathered in an image list (same list as the one mentioned above). The
+image viewer offer possibility to navigate forward and backwards in the list of
+images and it is also possible to directly view any image in the list by 
+clicking a thumbnail version in the user interface. The image viewer can also 
+show detailed meta data information about the displayed image. It is also 
+possible to let the viewer automatically resize the image to fit the current 
+screen size.
