@@ -3,6 +3,35 @@ INFORMACION DE VERSION<LF>
 Lo de abajo es una descripción de lo que cada verisón de JavaPEG ha sido capaz de hacer.
 <LF>
 <LF>
+Versión 2.4<LF>
+===========<LF>
+Distribuida el 2009-??-?? la versión 2.4 de JavaPEG tiene dos mejoras importantes. La primera es un visor de imágenes incrustado que muestra las imágenes que se han añadido a la lista de imágenes en la pestaña VER IMAGENES. El visor, excepto en la navegación tiene soporte para que en las imágenes anterior, posterior y cualquiera de las de la lista, adaptarlas para ajustarse al tamaño de la ventana.
+<LF>
+<LF>
+La segunda mejora es la inclusión de una interfaz gráfica para la configuración. De ahora en adelante no hay necesidad de hacer cambios manuales en el fichero de configuración. Toda la configuración se puede hacer desde la aplicación JavaPEG.
+<LF>
+<LF>
+La interfaz de selección de idioma previo se ha eliminado como resultado de la nueva interfaz de configuración y la funcionalidad se ha incorporado a la nueva interfaz.
+<LF>
+<LF>
+Otras nuevas funcionalidades se listan aquí abajo:
+<LF>
+<LF>
+Se ha añadido una nueva lista de formatos. Desde ahora es posible exportar la lista de imágenes soportadas por el visor XnView. (http://www.xnview.com/)
+<LF>
+<LF>
+Es posible usar la hora y la fecha del último cambio del fichero de la imagen cuando la renombramos, si la información de la hora y la fecha no se encuentra en la información Exif. (Esta característica está activada en la configuración).
+<LF>
+<LF>
+Los ficheros de log rotados automáticamente se pueden comprimir en formato Zip para ahorrar espacio.
+<LF>
+<LF>
+Para propósitos estadísticos, es posible permitirle a JavaPEG adjuntar el número de versión a la hora de chequear las actualizaciones disponibles en el servidor. La única información que se envía es la versión de JavaPEG que está comprobando la actualización. En otras palabras, es totalmente anónimo, no se envía información personal del sistema.
+<LF>
+<LF>
+Se han añadido botones para mover las imágenes al principio y al final de la lista en la pestaña VER IMAGENES.
+<LF>
+<LF>
 Versión 2.3<LF>
 ===========<LF>
 Liberada el 2009-08-03 La versión 2.3 de JavaPEG sólo es un parche. La funcionalidad de actualización automática de JavaPEG dejó de funcionar en versiones anteriores a ésta, no pudiendo comprobar la versión del servidor (2.1 & 2.2). La razón de este error es debida a que SourceForge ha cambiado el formato de la URL de descarga de ficheros. Y desafortunadamente las versiones anteriores de JavaPEG no eran lo suficientemente genéricas para manejar dicho cambio.
