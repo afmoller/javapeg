@@ -1,11 +1,13 @@
 2.4:
 ====
+- Create help file about the Image Viewer.
 - Fix notification about changed configuration.
 - Create README file
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update version numbers in language files
 - Update release date in version information file
+- Update Install readme in Izpack directory.
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
