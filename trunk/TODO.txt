@@ -7,7 +7,7 @@
 - Test all functionality.
 - Update version numbers in language files
 - Update release date in version information file
-- Update Install readme in Izpack directory.
+- Update Install readme in Izpack directory for swedish and spanish.
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
