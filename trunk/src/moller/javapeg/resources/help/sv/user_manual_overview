@@ -7,3 +7,6 @@ Förutom att ändra filnamnet så kan JavaPEG även skapa bildöversikter. Dessa över
 <LF>
 <LF>
 Det är också möjligt att skapa bildlistor (slide shows) med JavaPEG. Dels är det möjligt att skapa listor i ett internt JavaPEG format, vilka kan sparas och därefter öppnas igen för vidare bearbetning. Det är dessutom möjligt att exportera bildlistor till format som stödjs av tredjeparts programvaror, för att på så sätt kunna arbeta vidare med listan i dessa program eller för att visa själva listan med bilder.
+<LF>
+<LF>
+Det finns också en inbyggd bildvisare tillgänglig, vilken visar bilder som samlats i en bildlista (samma lista som nämns ovan). Bildvisaren erbjuder möjlighet att navigera framåt och bakåt i listan av bilder men också att välja valfri bild i listan genom att klicka på en tumnagelversion som finns tillgänglig i användargränssnittet. Bildvisaren kan också visa detaljerad metadata om den visade bilden. Det är också möjligt att låta bildvisaren automatiskt skala om bilderna så att de passar fönsterstorleken.
