@@ -17,3 +17,12 @@ crear listas en formato JavaPEG, que se puede guardar y abrir más tarde para
 procesarlo. También se puede exportar la lista de imágenes a formatos 
 soportados por herramientas de terceros. Esto hace posible otros procesos en 
 las herramientas de terceros o mostrar la lista de imágenes.
+
+También hay disponible un visor de imágenes, que muestra las imágenes que han 
+sido escogidas en la lista d eimagenes (la misma lista que se menciona más 
+arriba). El visor ofrece posibilidad de navegar hacia atrás y hacia delante en 
+el listado y también permite ver directamente una imagen de la lista, pulsando 
+la miniatura de la misma en la interfaz de usuario. El visor también puede 
+mostrar el detalle de los metadatos de la imagen expuesta. También es posible 
+dejar que el visor redimensione de forma automática la imagen al tamaño de la 
+ventana actual.
