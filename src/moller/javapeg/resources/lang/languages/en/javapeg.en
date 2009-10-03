@@ -63,6 +63,7 @@
 #                      : by Fredrik Möller 2009-09-09
 #                      : by Fredrik Möller 2009-09-14
 #                      : by Fredrik Möller 2009-09-19
+#                      : by Fredrik Möller 2009-10-03
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -297,7 +298,8 @@ helpViewerGUI.errorMessage         = Could not load help file, see log file for 
 helpViewerGUI.tree.content                    = Content
 helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
 helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
-helpViewerGUI.tree.programHelpImageList       = CREATE IMAGE LISTS
+helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
+helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
 helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
 helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
 helpViewerGUI.tree.references                 = REFERENCES / CREDITS

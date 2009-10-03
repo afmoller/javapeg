@@ -63,6 +63,7 @@
 #                      : by Fredrik Möller 2009-09-14
 #                      : by Fredrik Möller 2009-09-19
 #                      : by Fredrik Möller 2009-09-20
+#                      : by Fredrik Möller 2009-10-03
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -296,7 +297,8 @@ helpViewerGUI.errorMessage         = Kunde inte ladda hjälpfil, se loggfil för d
 helpViewerGUI.tree.content                    = Innehåll
 helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
 helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
-helpViewerGUI.tree.programHelpImageList       = SKAPA BILDLISTOR
+helpViewerGUI.tree.programHelpViewImages      = VISA BILDER
+helpViewerGUI.tree.programHelpImageViewer     = BILDVISARE
 helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
 helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
 helpViewerGUI.tree.references                 = REFERENSER / TACK TILL
