@@ -35,10 +35,10 @@ public class HelpViewerGUIUtil {
 		DefaultMutableTreeNode configuration              = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.configuration"), null));
 				
 		// Create child nodes to the Configuration node.
-		DefaultMutableTreeNode logging       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.logging"), "configuration_logging"));
-		DefaultMutableTreeNode updates       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.updates"), "configuration_updates"));
-		DefaultMutableTreeNode rename        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.rename"), "configuration_rename"));
-		DefaultMutableTreeNode language      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.language"), "configuration_language"));
+		DefaultMutableTreeNode logging  = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.logging"), "configuration_logging"));
+		DefaultMutableTreeNode updates  = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.updates"), "configuration_updates"));
+		DefaultMutableTreeNode rename   = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.rename"), "configuration_rename"));
+		DefaultMutableTreeNode language = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.language"), "configuration_language"));
 				
 		// Add configuration help items to the Configuration node
 		configuration.add(logging);
