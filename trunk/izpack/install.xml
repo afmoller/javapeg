@@ -113,7 +113,6 @@
 
     <!-- The packs section -->
     <packs>
-
         <!-- The core files -->
         <pack name="Core" required="yes">
             <description>The JavaPEG core files, which are needed to run the application.</description>
@@ -121,59 +120,13 @@
             <file src="../src/moller/javapeg/resources/startup/language.info"            targetdir="$INSTALL_PATH/resources/lang"/>
             <file src="../src/moller/javapeg/resources/startup/layout.info"              targetdir="$INSTALL_PATH/resources/thumb"/>
             <file src="../src/moller/javapeg/resources/startup/style.info"               targetdir="$INSTALL_PATH/resources/thumb"/>
+            <file src="readme/README.html"                                               targetdir="$INSTALL_PATH/"/>
+            <file src="text/gpl.txt"                                                     targetdir="$INSTALL_PATH/"/>
             <file src="images/javapeg.ico"                                               targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                                   targetdir="$INSTALL_PATH"/>
             <file src="../lib/Util.jar"                                                  targetdir="$INSTALL_PATH/lib"/>
             <file src="../libraries/metadata-extractor-2.3.1.jar"                        targetdir="$INSTALL_PATH/lib"/>
         </pack>
-
-        <!-- The documentation 
-        <pack name="HTML Documentation" required="no">
-            <description>The IzPack documentation (HTML version).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/html/**/*"/>
-            </fileset>
-        </pack>
-        <pack name="PDF Documentation" required="no">
-            <description>The IzPack documentation (PDF version).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/pdf/**/*"/>
-            </fileset>
-        </pack>
-        <pack name="Javadocs Documentation" required="no">
-            <description>The IzPack Java documentation (Javadocs for IzPack developers).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/javadoc/**/*"/>
-            </fileset>
-        </pack>
-        
-        <pack name="Utilities" required="no">
-            <description>IzPack utilities (izpack2exe, izpack2app, izpack2jnlp)</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="utils/**/*"/>
-            </fileset>
-            <executable 
-                targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
-                stage="never"/>
-        </pack>
-
-       
-        <pack name="Sample" required="no">
-            <description>A sample installation.</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="sample/**/*"/>
-            </fileset>
-        </pack>
-
-        
-        <pack name="Sources" required="no">
-            <description>The full IzPack source code.</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="src/**/*"/>
-                <exclude name="src/*.manifest"/>
-            </fileset>
-        </pack> -->
-
     </packs>
 
     <!-- The native libraries to add -->
