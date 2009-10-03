@@ -1,9 +1,8 @@
 2.4:
 ====
 - Create help file for the Image Viewer (Spanish).
-- Update the help file for create image list.
+- Update the help file for create view images (Spanish).
 - Fix notification about changed configuration.
-- Create README file
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update version numbers in language files
