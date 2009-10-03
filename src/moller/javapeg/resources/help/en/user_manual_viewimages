@@ -1,6 +1,6 @@
-CREATE IMAGE LISTS<LF>
-==================<LF>
-The following text will describe how an image list is created. In other words start reading by going to next paragraph.
+VIEW IMAGES<LF>
+===========<LF>
+The following text will describe how an image list is created and how that list can be saved, exported and or viewed in the Image Viewer. In other words start reading by going to next paragraph.
 <LF>
 <LF>
 1:<LF>
@@ -8,7 +8,7 @@ If there has not been any directory with images selected in the tree structure t
 <LF>
 <LF>
 2:<LF>
-Click on the tab with the label "CREATE IMAGE LISTS"
+Click on the tab with the label "VIEW IMAGES"
 <LF>
 <LF>
 3:<LF>
@@ -16,7 +16,7 @@ Now it is possible to add images to the list by right clicking the thumbnails th
 <LF>
 <LF>
 4:<LF>
-It is possible to select other directories with images in the tree structure to the left and repeat step 3 before the image list is saved or exported.
+It is possible to select other directories with images in the tree structure to the left and repeat step 3 before the image list is saved, exported and or displayed in the Image Viewer.
 <LF>
 <LF>
 5:<LF>
@@ -28,8 +28,9 @@ It is also possible to change the order of the images in the list. That is done 
 <LF>
 <LF>
 7:<LF>
-Now it is possible to either save the list for further future processing according to above or to export it to a list format supported by a third party application. That is done by either clicking the save or export button. JavaPEG supports the creation of image lists in the formats used by the following applications:
+Now it is possible to either save the list for further future processing according to above, export it to a list format supported by a third party application and or display the list in the Image Viewer. That is done by either clicking the "save"-button, "export"-button or "view selected images in the ImageViewer"-button. JavaPEG supports the creation of image lists in the formats used by the following applications:
 <LF>
 <LF>
 PolyView  (http://www.polybytes.com/)<LF>
-IrfanView (http://www.irfanview.com/)
+IrfanView (http://www.irfanview.com/)<LF>
+XnView    (http://www.xnview.com/)
