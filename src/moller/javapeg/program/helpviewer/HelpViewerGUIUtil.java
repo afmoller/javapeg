@@ -7,6 +7,7 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-07-22 by Fredrik Möller
  *                        : 2009-09-19 by Fredrik Möller
  *                        : 2009-09-20 by Fredrik Möller
+ *                        : 2009-10-03 by Fredrik Möller
  */
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -28,6 +29,7 @@ public class HelpViewerGUIUtil {
 		DefaultMutableTreeNode versionInformation         = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
 		DefaultMutableTreeNode references                 = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.references"), "references"));
 		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
+		DefaultMutableTreeNode programHelpImageViewer     = new DefaultMutableTreeNode(new UserObject("BILDVISARE", "user_manual_imageviewer"));
 		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImageList"), "user_manual_imagelist"));
 		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"), "thumbnail_overview"));
 		DefaultMutableTreeNode configuration              = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.configuration"), null));
@@ -47,6 +49,7 @@ public class HelpViewerGUIUtil {
 		// Add nodes to the root node.
 		root.add(programHelpOverView);
 		root.add(programHelpRename);
+		root.add(programHelpImageViewer);
 		root.add(programHelpImageList);
 		root.add(programHeplOverViewCreator);		
 		root.add(versionInformation);

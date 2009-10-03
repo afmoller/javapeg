@@ -1,0 +1,31 @@
+BILDVISARE<LF>
+==========<LF>
+JavaPEG har möjlighet att visa bilder. De bilder som kan visas är sådanan som lagts till i "BILDLISTA"-listan i fliken "VISA BILDER". Se hjälpavsnitt för "VISA BILDER" för hjälp med att skapa en bildlista.
+<LF>
+<LF>
+1:<LF>
+Om en lista med bilder skapats enligt ovan så kan knappen "Visa valda bilder i bildivsaren" i tabben "VISA BILDER" tryckas på för att få fram bildvisaren, annars skapa en bildlista först.
+<LF>
+<LF>
+Egenskaper för bildvisaren:
+<LF>
+<LF>
+Bildvisaren innehåller tre huvudelement: En lista med tillgängliga bilder för bildvisaren att visa (visas som en lista med tumnagelversioner av bilderna.) som finns till vänster i användargränssnittet. I mitten finns själva ytan för att visa upp bilderna på. Till höger finns en panel som visar detaljerad metadatainformation om visad bild.
+<LF>
+<LF>
+Tumnagellistan till vänster och metadatapanelen till höger går att dölja för att ge mer plats för att visa bilder.
+<LF>
+<LF>
+Det finns stöd för följande aktiviteter i bildvisaren:
+<LF>
+<LF>
+* Navigering framåt och bakåt i listan med bilder, med antingen knapp i knapplistan, eller genom högerklicksmeny på själva bilden, eller med snabbkommando.
+<LF>
+<LF>
+* Navigation till valfri bild i listan genom att markera en bild i tumnagelöversikten till vänster.
+<LF>
+<LF>
+* Anpassa storleken på visad bild så att den får plats i tillgängligt utrymme för bildvisarytan.
+<LF>
+<LF>
+* Automatiskt anpassa storleken på visad bild så att den får plats i tillgängligt utrymme för bildvisarytan när en bild väljs.

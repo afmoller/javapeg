@@ -1,0 +1,31 @@
+IMAGE VIEWER<LF>
+============<LF>
+JavaPEG has the possibility to display images. The images that can be displayed are those that have been added to the "IMAGE LIST" list in the "VIEW IMAGES" tab. See help for the creation of an image list in the help section "VIEW IMAGES".
+<LF>
+<LF>
+1:<LF>
+If an image list has been created according to above then it is possible to click the button "View selected images in the ImageViewer" in the "VIEW IMAGES" tab to display the Image Viewer, otherwise create an image list first.
+<LF>
+<LF>
+Characteristics of the Image Viewer:
+<LF>
+<LF>
+The Image Viewer consists of three main elements: A list with available images to display (is displayed as a list with thumbnails of the images) to the left in the user interface. In the middle there is the actual area for displaying the images. To the right there is a meta data panel which displays detailed meta data about the displayed image.
+<LF>
+<LF>
+The thumbnail list to the left and the meta data panel to the right are possible to hide, to give more space for displaying images.
+<LF>
+<LF>
+There is support for following activities in the Image Viewer:
+<LF>
+<LF>
+* Navigation forward and backwards in the list of images, either with button in the button list, or by right-clicking the acutal image or by using keyboard accelerators.
+<LF>
+<LF>
+* Navigation to any image in the list by clicking it in the thumbnail overview to the left.
+<LF>
+<LF>
+* Adjust the size of the displayed image to fit the avaiable size of the image display area.
+<LF>
+<LF>
+* Automatically adjust the size of the displayed image to fit the avaiable size of the image display area when an image is selected.
