@@ -26,12 +26,12 @@ public class HelpViewerGUIUtil {
 				
 		// Create child nodes to the root node.
 		DefaultMutableTreeNode programHelpOverView        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
+		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
+		DefaultMutableTreeNode programHelpViewImages      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpViewImages"), "user_manual_viewimages"));
+		DefaultMutableTreeNode programHelpImageViewer     = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImageViewer"), "user_manual_imageviewer"));
+		DefaultMutableTreeNode programHelpOverViewCreator = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"), "thumbnail_overview"));
 		DefaultMutableTreeNode versionInformation         = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
 		DefaultMutableTreeNode references                 = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.references"), "references"));
-		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
-		DefaultMutableTreeNode programHelpImageViewer     = new DefaultMutableTreeNode(new UserObject("BILDVISARE", "user_manual_imageviewer"));
-		DefaultMutableTreeNode programHelpImageList       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImageList"), "user_manual_imagelist"));
-		DefaultMutableTreeNode programHeplOverViewCreator = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"), "thumbnail_overview"));
 		DefaultMutableTreeNode configuration              = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.configuration"), null));
 				
 		// Create child nodes to the Configuration node.
@@ -49,9 +49,9 @@ public class HelpViewerGUIUtil {
 		// Add nodes to the root node.
 		root.add(programHelpOverView);
 		root.add(programHelpRename);
+		root.add(programHelpViewImages);
 		root.add(programHelpImageViewer);
-		root.add(programHelpImageList);
-		root.add(programHeplOverViewCreator);		
+		root.add(programHelpOverViewCreator);		
 		root.add(versionInformation);
 		root.add(references);
 		root.add(configuration);
