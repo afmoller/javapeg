@@ -1,6 +1,6 @@
-SKAPA BILDLISTOR<LF>
-================<LF>
-Texten nedan är upplagd så att den uppifrån och ner beskriver hur en bildlista skapas. Börja alltså med att läsa nästkommande stycke först.
+VISA BILDER<LF>
+===========<LF>
+Texten nedan är upplagd så att den uppifrån och ner beskriver hur en bildlista skapas och hur denna antingen kan sparas, exporteras och eller visas i bildvisaren. Börja alltså med att läsa nästkommande stycke först.
 <LF>
 <LF>
 1:<LF>
@@ -8,7 +8,7 @@ Om inte en katalog med bilder valts i filväljarträdet till vänster så gör det.
 <LF>
 <LF>
 2:<LF>
-Klicka på den flik som heter "SKAPA BILDLISTOR"
+Klicka på den flik som heter "VISA BILDER"
 <LF>
 <LF>
 3:<LF>
@@ -16,7 +16,7 @@ Nu kan bilder läggas till genom att högerklicka på de tumnaglar som visas. Det g
 <LF>
 <LF>
 4:<LF>
-Innan bildlistan sparas eller exporteras är det möjligt att välja andra kataloger med bilder i det vänstra filväljarträdet och upprepa steg 3 igen.
+Innan bildlistan sparas, exporteras och eller visas i bildvisaren är det möjligt att välja andra kataloger med bilder i det vänstra filväljarträdet och upprepa steg 3 igen.
 <LF>
 <LF>
 5:<LF>
@@ -28,8 +28,9 @@ Det är också möjligt att byta ordning på bilderna i listan. Det görs genom att m
 <LF>
 <LF>
 7:<LF>
-Nu är det möjligt att antingen spara listan för framtida ytterligare bearbetning enligt ovan eller att exportera den till ett listformat som stöds av tredjeparts programvara. Detta görs antingen genom att trycka på spara eller exportera-knappen. JavaPEG kan skapa bildlistor i de format som används av följande programvaror:
+Nu är det möjligt att antingen spara listan för framtida ytterligare bearbetning enligt ovan, att exportera den till ett listformat som stöds av tredjeparts programvara och eller att visa den i bildvisaren. Detta görs antingen genom att trycka på "spara"-knappen, "exportera"-knappen eller "visa valda bilder i bildvisaren"-knappen. JavaPEG kan skapa bildlistor i de format som används av följande programvaror:
 <LF>
 <LF>
 PolyView  (http://www.polybytes.com/)<LF>
-IrfanView (http://www.irfanview.com/)
+IrfanView (http://www.irfanview.com/)<LF>
+XnView    (http://www.xnview.com/)
