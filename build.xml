@@ -59,7 +59,8 @@
 				<include name="**/style.info" />
 				<include name="**/references" />
 				<include name="**/thumbnail_overview" />
-				<include name="**/user_manual_imagelist" />
+				<include name="**/user_manual_viewimages" />
+				<include name="**/user_manual_imageviewer" />
 				<include name="**/user_manual_overview" />
 				<include name="**/user_manual_rename" />
 				<include name="**/version_information" />
