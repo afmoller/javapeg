@@ -10,6 +10,7 @@ package moller.javapeg.program.config;
  *                        : 2009-08-23 by Fredrik Möller
  *                        : 2009-09-04 by Fredrik Möller
  *                        : 2009-09-05 by Fredrik Möller
+ *                        : 2009-10-04 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -128,18 +129,52 @@ public class ConfigViewerGUI extends JFrame {
 	private Config   conf;
 	private Logger   logger;
 	private Language lang;
-			
+	
+	// Configuration values read from configuration.
+	private String LOG_LEVEL;
+	private String LOG_NAME;
+	private String LOG_ROTATE_SIZE;
+	private String LOG_ENTRY_TIMESTAMP_FORMAT;
+	private String GUI_LANGUAGE_ISO6391;
+	
+	private boolean DEVELOPER_MODE;
+	private boolean LOG_ROTATE;
+	private boolean LOG_ROTATE_ZIP;
+	private boolean UPDATE_CHECK_ENABLED;
+	private boolean UPDATE_CHECK_ATTACH_VERSION;
+	private boolean USE_LAST_MODIFIED_DATE;
+	private boolean USE_LAST_MODIFIED_TIME;
+	private boolean AUTOMATIC_LANGUAGE_SELECTION;
+		
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
-				
+			
+		this.setStartupConfig();
 		this.initiateWindow();
 		this.createLoggingConfigurationPanel();
 		this.createUpdateConfigurationPanel();
 		this.createLanguageConfigurationPanel();
 		this.createRenameConfigurationPanel();
 		this.addListeners();	
+	}
+	
+	private void setStartupConfig() {
+		 
+		LOG_LEVEL = conf.getStringProperty("logger.log.level");
+		DEVELOPER_MODE = conf.getBooleanProperty("logger.developerMode");
+		LOG_ROTATE = conf.getBooleanProperty("logger.log.rotate");
+		LOG_ROTATE_ZIP = conf.getBooleanProperty("logger.log.rotate.zip");
+		LOG_ROTATE_SIZE = conf.getStringProperty("logger.log.rotate.size");
+		LOG_NAME = conf.getStringProperty("logger.log.name");
+		LOG_ENTRY_TIMESTAMP_FORMAT = conf.getStringProperty("logger.log.entry.timestamp.format");
+		UPDATE_CHECK_ENABLED = conf.getBooleanProperty("updatechecker.enabled");
+		UPDATE_CHECK_ATTACH_VERSION = conf.getBooleanProperty("updatechecker.attachVersionInformation");
+		USE_LAST_MODIFIED_DATE = conf.getBooleanProperty("rename.use.lastmodified.date");
+		USE_LAST_MODIFIED_TIME = conf.getBooleanProperty("rename.use.lastmodified.time");
+		AUTOMATIC_LANGUAGE_SELECTION = conf.getBooleanProperty("automaticLanguageSelection");
+		GUI_LANGUAGE_ISO6391 = conf.getStringProperty("gUILanguageISO6391");
 	}
 	
 	private void initiateWindow() {
@@ -511,9 +546,6 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Update Language Configuration
 		 */
-		if(!ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")).equals(currentLanguage.getText())) {
-			JOptionPane.showMessageDialog(this, lang.get("configviewer.language.information.restartMessage"), lang.get("configviewer.language.information.windowlabel"), JOptionPane.INFORMATION_MESSAGE);
-		}
 		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
 		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
 		
@@ -522,8 +554,76 @@ public class ConfigViewerGUI extends JFrame {
 		 */
 		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
 		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
+				
+		/**
+		 * Show configuration changes.
+		 */
+		this.displayChangedConfigurationMessage();
 		
 		return true;
+	}
+	
+	private void displayChangedConfigurationMessage() {
+
+		String preMessage = lang.get("configviewer.changed.configuration.start");
+		String postMessage = lang.get("configviewer.changed.configuration.end");
+		StringBuilder displayMessage = new StringBuilder();
+
+		if(DEVELOPER_MODE != developerMode.isSelected()){
+			displayMessage.append(lang.get("configviewer.logging.label.developerMode.text") + ": " + developerMode.isSelected() + " (" + DEVELOPER_MODE + ")\n");
+		}
+		
+		if(LOG_ROTATE != rotateLog.isSelected()){
+			displayMessage.append(lang.get("configviewer.logging.label.rotateLog.text") + ": " + rotateLog.isSelected() + " (" + LOG_ROTATE + ")\n");
+		}
+
+		if(LOG_ROTATE_ZIP != zipLog.isSelected()){
+			displayMessage.append(lang.get("configviewer.logging.label.zipLog.text") + ": " + zipLog.isSelected() + " (" + LOG_ROTATE_ZIP + ")\n");
+		}
+
+		if(!LOG_ROTATE_SIZE.equals(calculateRotateLogSize(rotateLogSize.getText(), rotateLogSizeFactor.getSelectedItem().toString()))){
+			displayMessage.append(lang.get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(LOG_ROTATE_SIZE, rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
+		}
+		
+		if(!LOG_LEVEL.equals(logLevels.getSelectedItem().toString())) {
+			displayMessage.append(lang.get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + LOG_LEVEL + ")\n");
+		}
+		
+		if(!LOG_NAME.equals(logName.getText())){
+			displayMessage.append(lang.get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + LOG_NAME + ")\n");
+		}
+
+		if(!LOG_ENTRY_TIMESTAMP_FORMAT.equals(logEntryTimeStampFormats.getSelectedItem().toString())) {
+			displayMessage.append(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + LOG_ENTRY_TIMESTAMP_FORMAT + ")\n");
+		}
+
+		if(UPDATE_CHECK_ENABLED != updatesEnabled.isSelected()){
+			displayMessage.append(lang.get("configviewer.update.label.updateEnabled.text") + ": " + updatesEnabled.isSelected() + " (" + UPDATE_CHECK_ENABLED + ")\n");
+		}
+
+		if(UPDATE_CHECK_ATTACH_VERSION != sendVersionInformationEnabled.isSelected()){
+			displayMessage.append(lang.get("configviewer.update.label.attachVersionInformation.text") + ": " + sendVersionInformationEnabled.isSelected() + " (" + UPDATE_CHECK_ATTACH_VERSION + ")\n");
+		}
+				
+		if(USE_LAST_MODIFIED_DATE != useLastModifiedDate.isSelected()){
+			displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedDate.text") + ": " + useLastModifiedDate.isSelected() + " (" + USE_LAST_MODIFIED_DATE + ")\n");
+		}
+
+		if(USE_LAST_MODIFIED_TIME != useLastModifiedTime.isSelected()){
+			displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedTime.text") + ": " + useLastModifiedTime.isSelected() + " (" + USE_LAST_MODIFIED_TIME + ")\n");
+		}
+		
+		if(AUTOMATIC_LANGUAGE_SELECTION != automaticRadioButton.isSelected()){
+			displayMessage.append(lang.get("configviewer.language.radiobutton.automatic") + ": " + automaticRadioButton.isSelected() + " (" + AUTOMATIC_LANGUAGE_SELECTION + ")\n");
+		}
+		
+		if(!GUI_LANGUAGE_ISO6391.equals(ISO639.getInstance().getCode(currentLanguage.getText()))){
+			displayMessage.append(lang.get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(GUI_LANGUAGE_ISO6391) + ")\n");
+		}
+		
+		if(displayMessage.length() > 0) {
+			JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 		
 	private boolean validateLogName(String logName) {
@@ -566,6 +666,23 @@ public class ConfigViewerGUI extends JFrame {
 			JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeNotAnInteger"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 		}
 		return isValid;
+	}
+	
+	private String calculateRotateLogSize(String size, String factor) {
+		return Long.toString(calculateRotateLogSize(Long.parseLong(size), factor));
+	}
+	
+	private String parseRotateLongSize(String size, String factor) {
+		
+		long longSize = Long.parseLong(size);
+		
+		if (factor.equals("KiB")) {
+			longSize /= 1024;
+		} else {
+			longSize /= 1024 * 1024;
+		}
+		return Long.toString(longSize);
+		
 	}
 	
 	private long calculateRotateLogSize(Long size, String factor) {
@@ -710,6 +827,7 @@ public class ConfigViewerGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			updateConfiguration();
+			setStartupConfig();
 		}	
 	}
 
