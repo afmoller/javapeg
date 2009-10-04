@@ -15,6 +15,7 @@
 
 # This file was created: by Fredrik Möller 2009-09-05
 # This file was updated: by Fredrik Möller 2009-09-06
+#                      : by Fredrik Möller 2009-10-04
 
 ##############################################################################################################
 # W I N D O W                                                                                                #
@@ -74,3 +75,9 @@ configviewer.tree.node.logging  = Loggning
 configviewer.tree.node.updates  = Uppdateringar
 configviewer.tree.node.rename   = Namnbyte
 configviewer.tree.node.language = Språk
+
+##############################################################################################################
+# C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
+##############################################################################################################
+configviewer.changed.configuration.start = Följande inställningar har ändrats:
+configviewer.changed.configuration.end   = JavaPEG måste startas om för att ändringarna skall ha effekt
