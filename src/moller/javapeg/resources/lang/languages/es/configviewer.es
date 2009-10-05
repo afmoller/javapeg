@@ -17,6 +17,7 @@
 # This file was updated: by Fredrik Möller 2009-09-06
 #                      : by Fredrik Möller 2009-09-16
 #                      : by Fredrik Möller 2009-10-04
+#                      : by Fredrik Möller 2009-10-05
 
 ##############################################################################################################
 # W I N D O W                                                                                                #
@@ -80,5 +81,5 @@ configviewer.tree.node.language = Idioma
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
 ##############################################################################################################
-configviewer.changed.configuration.start = The following has been changed in the configuration:
-configviewer.changed.configuration.end   = JavaPEG has to be restarted for the changes to take effect
+configviewer.changed.configuration.start = Lo siguiente ha sido cambiado en la configuración:
+configviewer.changed.configuration.end   = JavaPEG se tiene que reiniciar para aplicar los cambios

@@ -1,35 +1,36 @@
-CREAR LISTA DE IMAGENES<LF>
-=======================<LF>
-El siguiente texto describirá como se crea una lista de imágenes. En otras palabras, empieza a leer en el siguiente párrafo.
+VER IMAGENES<LF>
+============<LF>
+El siguiente texto describirá como se crea una lista de imágenes y como se puede almacenar, exportar y/o ver en el visrode imágenes. En otras palabras, empieza a leer en el siguiente párrafo.
 <LF>
 <LF>
 1:<LF>
-Si no se ha seleccionado un directorio con imágenes en el árbol de la izquierda, es necesario hacerlo.
+Si no se ha seleccionado ningún directorio con imágenes en el árbol de la izquierda, hay que hacerlo.
 <LF>
 <LF>
 2:<LF>
-Pulsa en la pestaña con la etiqueta "CREAR LISTA DE IMAGENES"
+Pulsa en la pestaña con la etiqueta "VER IMAGENES"
 <LF>
 <LF>
 3:<LF>
-Ahora es posible agregar imágenes a la lista con el botón derecho encima de la miniatura que se muestra. Se puede añadir sólo la imagen marcada, o todas las imágenes del directorio seleccionado. Es posible añadir la misma imágen varias veces si se desea.
+Ahora es posible añadir imágenes a la lista pulsando el botón derecho en las miniaturas que se muestran. Es posible añadir sólo ma imagen marcada o todas las imágenes del directorio seleccionado. Es posible añadir la misma imagen varias veces si se desea.
 <LF>
 <LF>
 4:<LF>
-Es posible seleccionar otros directorio con imágenes in la estructura de de la izquierda y repetir el paso 3 antes de guardar o exportar la lista de imágenes.
+Es posible seleccionar otros directorios con imágenes en la estructura de árbol de la izquierda y repetir el paso 3 antes de guardar la lista, exportarla y/o mostrarla en el visor.
 <LF>
 <LF>
 5:<LF>
-Cuando se han seleccionado todas las imagenes deseadas (o antes), es posible ver una previsualización de las imágenes pulsando el nombre del fichero en el marco con la lista de las imágenes.
+Cuando se han seleccionado todas las imágenes que se desean (o antes), es posible hacer una previsualización de las imágenes pulsando el nombre del fichero en el marco con la lista de imágenes.
 <LF>
 <LF>
 6:<LF>
-También se pude cambiar el orden de las imágenes en la lista. Eso se hace seleccionando la imagen en la lista que se debe mover, y luego pulsando el botón con una flecha arriba o abajo, dependiendo del orden donde queremos mover la imagen. 
+Es posible cambiar el orden de las imágenes en la lista. Esto se hace seleccionando la imagen que queremos mover en la lista y luego pulsando el botón con una flecha apuntando arriba o abajo, dependiendo del orden al que queramos mover la imagen dentro de la lista.
 <LF>
 <LF>
 7:<LF>
-Ahora es posible salvar la lista para futuros usos, o exportarla en un formato soportado por terceras aplicaciones. Esto se hace pulsando los botones guardar o exportar. JavaPEG suporta la creación de listas de imágenes in formatos usados por las siguientes aplicaciones:
+Ahora es posible guardar la lista para llevar a cabo el proceso posteriormente, exportarla a un formato soportado por aplicaciones de terceros y/o mostrar la lista en el visor de imágenes. Esto se puede hacer pulsando el botón "guardar", "exportar" o "ver las imágenes seleccionadas en el visor". JavaPEG suporta la creación de listas de imágenes en formatos usados por las siguientes aplicaciones:
 <LF>
 <LF>
 PolyView  (http://www.polybytes.com/)<LF>
-IrfanView (http://www.irfanview.com/)
+IrfanView (http://www.irfanview.com/)<LF>
+XnView    (http://www.xnview.com/)

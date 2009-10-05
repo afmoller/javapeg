@@ -32,6 +32,7 @@
 #                             : por Fredrik Möller 2009-09-16
 #                             : por Fredrik Möller 2009-09-19
 #                             : por Fredrik Möller 2009-10-03
+#                             : por Fredrik Möller 2009-10-05
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -268,7 +269,7 @@ helpViewerGUI.tree.content                    = Contenido
 helpViewerGUI.tree.programHelpOverView        = DESCRIPCION DEL PROGRAMA
 helpViewerGUI.tree.programHelpRename          = RENOMBRAR IMAGENES
 helpViewerGUI.tree.programHelpViewImages      = VER IMAGENES
-helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
+helpViewerGUI.tree.programHelpImageViewer     = VISOR DE IMAGENES
 helpViewerGUI.tree.programHelpOverviewCreator = CREAR VISTA EN MINIATURAS
 helpViewerGUI.tree.versionInformation         = INFORMACION DE VERSION
 helpViewerGUI.tree.references                 = REFERENCIAS / CREDITOS
