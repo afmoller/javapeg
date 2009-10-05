@@ -1,6 +1,5 @@
 2.4:
 ====
-- Update the help file for create view images (Spanish).
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update version numbers in language files
