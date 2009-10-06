@@ -2,9 +2,7 @@
 ====
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
-- Update version numbers in language files
-- Update release date in version information file
-- Update info files in the internal resources directory.
+- Update release date in javapeg.** and in version_information.**
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
