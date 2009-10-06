@@ -244,13 +244,23 @@
 #                      : by Fredrik Möller 2009-07-22
 #                      : by Fredrik Möller 2009-07-29
 #                      : by Fredrik Möller 2009-08-02
+#                      : by Fredrik Möller 2009-08-09
+#                      : by Fredrik Möller 2009-08-11
+#                      : by Fredrik Möller 2009-08-20
+#                      : by Fredrik Möller 2009-09-05
+#                      : by Fredrik Möller 2009-09-06
+#                      : by Fredrik Möller 2009-09-08
+#                      : by Fredrik Möller 2009-09-09
+#                      : by Fredrik Möller 2009-09-14
+#                      : by Fredrik Möller 2009-09-19
+#                      : by Fredrik Möller 2009-10-03
 
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
-menu.file     = File
-menu.help     = Help
-menu.language = Language
+menu.file          = File
+menu.help          = Help
+menu.configuration = Configuration
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
@@ -260,15 +270,15 @@ menu.item.openDestinationFileChooser = Open Destination File Chooser
 menu.item.startProcess               = Start Rename Process
 menu.item.programHelp                = Program help
 menu.item.versionInformation         = Version information
-menu.item.about                      = About JavaPEG 2.3
-menu.item.languageChoice             = Language selection
+menu.item.about                      = About JavaPEG 2.4
+menu.item.configuration              = Configuration
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
 #############################################################################################################
-menu.mnemonic.file     = F
-menu.mnemonic.help     = H
-menu.mnemonic.language = L
+menu.mnemonic.file          = F
+menu.mnemonic.help          = H
+menu.mnemonic.configuration = C
 
 #############################################################################################################
 # M E N U  A C C E L E R A T O R                                                                            #
@@ -276,7 +286,6 @@ menu.mnemonic.language = L
 menu.iten.openDestinationFileChooser.accelerator = D
 menu.iten.startProcess.accelerator               = P
 menu.iten.exit.accelerator                       = X
-menu.item.languageChoice.accelerator             = L
 menu.item.versionInformation.accelerator         = V
 menu.item.about.accelerator                      = A
 
@@ -303,7 +312,7 @@ variable.shutterSpeed          = Shutter speed
 variable.isoValueVariable      = i
 variable.isoValue              = ISO value
 variable.pictureWidthVariable  = w
-variable.pictureWidth          = Picture width in pixels
+variable.pictureWidth 	       = Picture width in pixels
 variable.pictureHeightVariable = h
 variable.pictureHeight         = Picture height in pixels
 variable.apertureValueVariable = av
@@ -346,12 +355,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = About JavaPEG 2.3
-aboutDialog.TextRowA = JavaPEG, ver: 2.3
+aboutDialog.Label    = About JavaPEG 2.4
+aboutDialog.TextRowA = JavaPEG, ver: 2.4
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
 aboutDialog.TextRowD = Programmed between 2005-05-24 - 2009-08-03.
-aboutDialog.TextRowE = Version 2.3 released 2009-08-03.
+aboutDialog.TextRowE = Version 2.4 released 2009-08-03.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -363,9 +372,9 @@ errormessage.maingui.errorMessageLabel             = Error
 errormessage.maingui.warningMessageLabel           = Warning
 errormessage.maingui.informationMessageLabel       = Information
 errormessage.maingui.locationError                 = Could not set window location according to settings. See logs for details
-errormessage.maingui.toLongFileNameInPreviewTable  = With this filename template the filename will be 200 characters long.\n\nIt can lead to future problem as a path not may be longer than 255 characters.\nA move to another folder than the current selected may be impossible, that if the\ntotal path: path to folder plus filename will have a length greater than 255 characters.
-errormessage.maingui.toLongTotalPathInPreviewTable = The total path: path to chosen destination folder and chosen filename template\nwill result in a path longer than 255 characters,which is not allowed.\nEither the filename have to be shorter (change filename template) or a destinationfolder with shorter path has to be chosen.
 errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied shortcut file or with -Xmx384m as JVM parameter.\nSee log file for details.
+errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
@@ -388,12 +397,13 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
 ##############################################################################################################
-errormessage.jpgrename.joptionPaneYes      = Yes
-errormessage.jpgrename.joptionPaneNo       = No
-errormessage.jpgrename.noImagesInPathLabel = Fault message
-errormessage.jpgrename.noImagesInPath      = Chosen path contains no image files
-errormessage.jpgrename.noExifInImage       = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
-errormessage.jpgrename.noExifInImageLabel  = No Exif
+errormessage.jpgrename.joptionPaneYes          = Yes
+errormessage.jpgrename.joptionPaneNo           = No
+errormessage.jpgrename.noImagesInPathLabel     = Fault message
+errormessage.jpgrename.noImagesInPath          = Chosen path contains no image files
+errormessage.jpgrename.noExifInImage           = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImageLabel      = No Exif
+errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
@@ -404,24 +414,11 @@ errormessage.filehandler.canNotReadFile         = Not possible to access the fil
 errormessage.filehandler.canNotWriteFile        = Can not write:
 
 ##############################################################################################################
-# L A N G U A G E  O P T I O N S  G U I                                                                      #
+# E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
 ##############################################################################################################
-language.option.gui.windowTitle          = Language settings
-language.option.gui.selectionModeJLabel  = SELECTIONMODE
-language.option.gui.manualRadioButton    = Manually
-language.option.gui.automaticRadioButton = Automatic
-language.option.gui.currentLanguageLabel = CURRENT LANGUAGE
-language.option.gui.availableLanguages   = AVAILABLE LANGUAGES
-language.option.gui.languageNameNotFound = name of language not found
-language.option.gui.okButton             = Ok
-language.option.gui.cancelButton         = Cancel
-language.option.gui.window.locationError = Could not set window location according to settings. See logs for details
-
-##############################################################################################################
-# I N F O R M A T I O N  M E S S A G E S  L A N G U A G E  O P T I O N S  G U I                              #
-##############################################################################################################
-language.option.gui.information.windowlabel    = Information
-language.option.gui.information.restartMessage = Selected language will not be used until JavaPEG is restarted
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occured:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
@@ -430,13 +427,16 @@ maingui.tabbedpane.imagelist.label.list                 = IMAGE LIST
 maingui.tabbedpane.imagelist.label.preview              = PREVIEW
 maingui.tabbedpane.imagelist.label.numberOfImagesInList = Number of images in list:
 
-maingui.tabbedpane.imagelist.button.removeSelectedImages = Remove selected images from the list
+maingui.tabbedpane.imagelist.button.removeSelectedImages = Remove selected image from the list
 maingui.tabbedpane.imagelist.button.removeAllImages      = Remove all images from the list
 maingui.tabbedpane.imagelist.button.openImageList        = Open an saved image list
 maingui.tabbedpane.imagelist.button.saveImageList        = Save the image list
 maingui.tabbedpane.imagelist.button.exportImageList      = Export the image list
 maingui.tabbedpane.imagelist.button.moveUp               = Move selected image upwards in the list
 maingui.tabbedpane.imagelist.button.moveDown             = Move selected image downwards in the list
+maingui.tabbedpane.imagelist.button.viewImages           = View selected images in the ImageViewer
+maingui.tabbedpane.imagelist.button.moveToTop            = Move selected image to top of the list
+maingui.tabbedpane.imagelist.button.moveToBottom         = Move selected image to bottom of the list
 
 maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Open 
 maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
@@ -457,6 +457,9 @@ maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated  = 
 
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = The Image list in IrfanView format was successfully created.
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = The Image list in IrfanView format could not be created, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.xnView.successfullyCreated    = The Image list in XnView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = The Image list in XnView format could not be created, see log file for details.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
@@ -485,10 +488,16 @@ helpViewerGUI.errorMessage         = Could not load help file, see log file for 
 helpViewerGUI.tree.content                    = Content
 helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
 helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
-helpViewerGUI.tree.programHelpImageList       = CREATE IMAGE LISTS
+helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
+helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
 helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
 helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
 helpViewerGUI.tree.references                 = REFERENCES / CREDITS
+helpViewerGUI.tree.configuration              = Configuration
+helpViewerGUI.tree.logging                    = LOGGING
+helpViewerGUI.tree.updates                    = UPDATES
+helpViewerGUI.tree.rename                     = RENAME
+helpViewerGUI.tree.language                   = LANGUAGE
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
@@ -634,7 +643,13 @@ statusbar.message.selectedPath              = Selected Path:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = RENAME IMAGES
-tabbedpane.imageView   = CREATE IMAGE LISTS
+tabbedpane.imageView   = VIEW IMAGES
+
+##############################################################################################################
+# F I L E  R E T R I E V E R                                                                                 #
+##############################################################################################################
+fileretriever.canNotFindFile     = Can not find file, see log file for details.
+fileretriever.canNotReadFromFile = Can not read from file, It might be another application that has locked the file. See log file for details.
 
 ##############################################################################################################
 # I M A G E  V I E W E R                                                                                     #
@@ -663,7 +678,83 @@ imageviewer.statusbar.heightLabel      = H:
 imageviewer.statusbar.heightLabelImage = Image height in pixels
 
 ##############################################################################################################
-# F I L E  R E T R I E V E R                                                                                 #
+# M E T A  D A T A  P A N E L                                                                                #
 ##############################################################################################################
-fileretriever.canNotFindFile     = Can not find file, see log file for details.
-fileretriever.canNotReadFromFile = Can not read from file, It might be another application that has locked the file. See log file for details.
+metadatapanel.titleDefaultText     = META DATA FOR IMAGE:
+metadatapanel.tableheader.type     = TYPE
+metadatapanel.tableheader.property = PROPERTY
+metadatapanel.tableheader.value    = VALUE
+
+##############################################################################################################
+# W I N D O W                                                                                                #
+##############################################################################################################
+configviewer.window.locationError = Could not set window location according to settings. See logs for details
+configviewer.window.title         = Configuration
+
+##############################################################################################################
+# L O G G I N G                                                                                              #
+##############################################################################################################
+configviewer.logging.label.logLevel.text                 = Log Level
+configviewer.logging.label.developerMode.text            = Unbuffered Logging
+configviewer.logging.label.rotateLog.text                = Rotate Log Automatically
+configviewer.logging.label.zipLog.text                   = Compress Rotated Log File
+configviewer.logging.label.rotateLogSize.text            = Log Rotate Size
+configviewer.logging.label.logName.text                  = Log Name
+configviewer.logging.label.logEntryTimeStampFormat.text  = Log Entry Timestamp Format
+configviewer.logging.label.logEntryTimeStampPreview.text = Log Entry Timestamp Preview
+
+##############################################################################################################
+# U P D A T E                                                                                                #
+##############################################################################################################
+configviewer.update.label.updateEnabled.text            = Enable Application Update Check
+configviewer.update.label.attachVersionInformation.text = Add Version Information To Update Check
+
+##############################################################################################################
+# R E N A M E                                                                                                #
+##############################################################################################################
+configviewer.rename.label.useLastModifiedDate.text = Use Last Modified Date If Exif Date Is Missing
+configviewer.rename.label.useLastModifiedTime.text = Use Last Modified Time If Exif Time Is Missing
+
+##############################################################################################################
+# L A N G U A G E                                                                                            #
+##############################################################################################################
+configviewer.language.label.selectionMode        = SELECTIONMODE
+configviewer.language.radiobutton.manual         = Manually
+configviewer.language.radiobutton.automatic      = Automatic
+configviewer.language.label.currentLanguage      = CURRENT LANGUAGE
+configviewer.language.label.availableLanguages   = AVAILABLE LANGUAGES
+configviewer.language.languageNameNotFound       = name of language not found
+configviewer.language.information.windowlabel    = Information
+configviewer.language.information.restartMessage = Selected language will not be used until JavaPEG is restarted
+
+##############################################################################################################
+# E R R O R  M E S S A G E S                                                                                 #
+##############################################################################################################
+configviewer.errormessage.rotateLogSizeToLargeKiB   = The log rotate size is to large: Maximum allowed is 100000 KiB 
+configviewer.errormessage.rotateLogSizeToLargeMiB   = The log rotate size is to large: Maximum allowed is 100 MiB 
+configviewer.errormessage.rotateLogSizeToSmall      = The log rotate size is to small: Minimum allowed is 10 KiB
+configviewer.errormessage.rotateLogSizeNotAnInteger = The log rotate size must be an integer
+
+##############################################################################################################
+# T R E E  N O D E S                                                                                         #
+##############################################################################################################
+configviewer.tree.root          = Configuration
+configviewer.tree.node.logging  = Logging
+configviewer.tree.node.updates  = Updates
+configviewer.tree.node.rename   = Rename
+configviewer.tree.node.language = Language
+
+##############################################################################################################
+# C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
+##############################################################################################################
+configviewer.changed.configuration.start = The following has been changed in the configuration:
+configviewer.changed.configuration.end   = JavaPEG has to be restarted for the changes to take effect
+
+##############################################################################################################
+# C O M M O N                                                                                                #
+##############################################################################################################
+common.button.ok.label = Ok
+common.button.apply.label = Apply
+common.button.cancel.label = Cancel
+
+common.message.error.invalidFileName = The file name can not contain the character:
