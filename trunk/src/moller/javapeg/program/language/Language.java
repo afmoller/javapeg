@@ -11,6 +11,7 @@ package moller.javapeg.program.language;
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-08-30 by Fredrik Möller
  *                        : 2009-09-05 by Fredrik Möller
+ *                        : 2009-10-07 by Fredrik Möller
  */
 
 import java.io.File;
@@ -88,7 +89,7 @@ public class Language {
 	 * current language used by the system running this application, otherwise
 	 * the language according to the configuration is loaded. If, for some 
 	 * reason, the desired files are non existing, then the default language 
-	 * file, english, is loaded.
+	 * file, English, is loaded.
 	 * 
 	 * @return if neither the desired language file exists nor the default 
 	 *         file then this method return false, otherwise true.
@@ -114,6 +115,8 @@ public class Language {
 				languageToLoad = "language." + languageCode;
 			}
 			
+			boolean embeddedFileLoad = false;
+			
 			try {
 				langFileJavaPEG = new FileInputStream(LANGUAGE_FILE_BASE + FS + languageToLoad);
 				logger.logDEBUG("Language file: \"" + languageToLoad + "\" found in directroy: " + LANGUAGE_FILE_BASE);
@@ -121,9 +124,11 @@ public class Language {
 				logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in directroy: " + LANGUAGE_FILE_BASE);
 				logger.logDEBUG("Try to load language file: " + languageToLoad + " from JAR file instead");				
 				
-				langFileJavaPEG      = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."     + languageCode);
-				langFileImageViewer  = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer." + languageCode);
-				langFileCommon       = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common." + languageCode);
+				embeddedFileLoad = true;
+				
+				langFileJavaPEG      = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."      + languageCode);
+				langFileImageViewer  = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer."  + languageCode);
+				langFileCommon       = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common."       + languageCode);
 				langFileConfigViewer = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer." + languageCode);
 				
 				if(langFileJavaPEG == null) {
@@ -144,20 +149,22 @@ public class Language {
 			
 			properties.putAll(loader);
 			
-			loader.clear();
-			loader.load(langFileImageViewer);
-			
-			properties.putAll(loader);
-			
-			loader.clear();
-			loader.load(langFileCommon);
-			
-			properties.putAll(loader);
-			
-			loader.clear();
-			loader.load(langFileConfigViewer);
-			
-			properties.putAll(loader);
+			if(embeddedFileLoad) {
+				loader.clear();
+				loader.load(langFileImageViewer);
+
+				properties.putAll(loader);
+
+				loader.clear();
+				loader.load(langFileCommon);
+
+				properties.putAll(loader);
+
+				loader.clear();
+				loader.load(langFileConfigViewer);
+
+				properties.putAll(loader);
+			}
 			
 			loader = null;
         } catch (IOException e) {
