@@ -14,7 +14,7 @@
 <entry key="createThumbNailsCheckBox">true</entry>
 <entry key="destinationPath"></entry>
 <entry key="sourcePath"></entry>
-<entry key="subFolderName">Images %d%k</entry>
+<entry key="subFolderName">Images %d%</entry>
 <entry key="fileNameTemplate">Image %d% Time %t%</entry>
 <entry key="rename.progress.log.timestamp.format">yyyy-MM-dd' 'HH:mm:ss:SSS</entry>
 <entry key="rename.use.lastmodified.date">true</entry>
