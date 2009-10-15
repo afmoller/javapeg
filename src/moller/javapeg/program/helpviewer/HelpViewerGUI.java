@@ -9,6 +9,8 @@ package moller.javapeg.program.helpviewer;
  *                        : 2009-07-20 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
  *                        : 2009-09-20 by Fredrik Möller
+ *                        : 2009-10-14 by Fredrik Möller
+ *                        : 2009-10-15 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -20,6 +22,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,6 +47,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 import moller.util.io.StreamUtil;
+import moller.util.string.StringUtil;
 
 public class HelpViewerGUI extends JFrame {
 	
@@ -59,6 +65,17 @@ public class HelpViewerGUI extends JFrame {
 	private Language lang;
 		
 	private String content = "";
+	
+	/**
+	 * The system dependent file separator char
+	 */
+	private final static String FS = File.separator;
+	
+	/**
+	 * The base path to the language files including the common "language" part
+	 * of the file name.
+	 */
+	private final static String HELP_FILE_BASE = System.getProperty("user.dir") + FS + "resources" + FS + "help";
 		
 	public HelpViewerGUI() {
 		conf   = Config.getInstance();
@@ -156,29 +173,48 @@ public class HelpViewerGUI extends JFrame {
 	private JTextArea getContent(String identityString) {
 		if (content.equals("") && identityString != null) {
 			String confLang = conf.getStringProperty("gUILanguageISO6391");
+			
+			InputStream helpFile = null;
 							
 			try {
-				content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString));
+				helpFile = new FileInputStream(HELP_FILE_BASE + FS + confLang + FS + identityString);
+				content = StreamUtil.getString(helpFile);
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.errorMessage"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-				logger.logERROR("Could not load embedded help file:");
-				logger.logERROR(e);
+				logger.logDEBUG("Could not find help file: \"" + identityString + "\" in directroy: " + HELP_FILE_BASE + FS + confLang + FS);
+				logger.logDEBUG("Try to load help file: " + identityString + " from JAR file instead");				
+				
+				helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString); 
+								
+				if(helpFile == null) {
+					logger.logDEBUG("Could not find help file: \"" + identityString + "\" in JAR file either.");
+					try {
+						logger.logDEBUG("Try to load default help file: " + identityString + " from directory: " + HELP_FILE_BASE + FS + confLang + FS);
+						helpFile = new FileInputStream(HELP_FILE_BASE + FS + "en" + FS + identityString);
+					} catch (FileNotFoundException fnfe2) {
+						logger.logDEBUG("Could not find help file: \"" + identityString + "\" in directroy: " + HELP_FILE_BASE + FS + "en" + FS);
+						logger.logDEBUG("Try to load help file: \"" + identityString + "\" from JAR file instead");
+						helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/en/" + identityString);
+					}
+				}
+				try {
+					content = StreamUtil.getString(helpFile);
+				} catch (IOException iox) {
+					logger.logFATAL("Could not read content from helpfile");
+					logger.logFATAL(iox);
+				}
 			}
-			content = content.replaceAll("\r", "");
-			content = content.replaceAll("\n", "");
-			content = content.replaceAll("<LF>", System.getProperty("line.separator"));
 		}
 		
 		JTextArea textarea = new JTextArea();
 		textarea.setLineWrap(true);
 		textarea.setWrapStyleWord(true);
 		textarea.setEditable(false);
-		textarea.setText(content);
+		textarea.setText(StringUtil.formatString(content));
 		textarea.setCaretPosition(0);
 		
 		return textarea;
 	}
-			
+				
 	/**
 	 * Mouse listener
 	 */
