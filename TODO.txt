@@ -1,10 +1,13 @@
 2.4:
 ====
+- Test help file structure to handle the case when an external language file is used.
+- Finish the content of help.info file.
+- Add help.info file to izpack project.
+- Add changelog note about the new possibility to have externally localized help files and that the existing bug was solved when a new external language file was added. 
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update release date in javapeg.** and in version_information.**
-- Enter values to the change log.
-- Enter change log entries to the change log files on the update server.
+- Rename the change log files on the update server from next to actual release timestamp.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
 2.5:
