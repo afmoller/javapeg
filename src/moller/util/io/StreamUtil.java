@@ -27,6 +27,10 @@ public class StreamUtil {
 	
 	public static String getString(InputStream in) throws IOException {
 		
+		if(null == in) {
+			throw new IOException("InputStream is null");
+		}
+		
 		int length = in.available();
 		
 		byte [] content = new byte [length];
@@ -34,7 +38,7 @@ public class StreamUtil {
 		int readLength = in.read(content);
 		
 		if (readLength < length) {
-			throw new RuntimeException("Entire stream not read. " + readLength + " bytes read of " + length + " bytes available");
+			throw new IOException("Entire stream not read. " + readLength + " bytes read of " + length + " bytes available");
 		}
 		return new String(content);
 	}
