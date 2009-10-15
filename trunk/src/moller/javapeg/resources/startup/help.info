@@ -1,0 +1,16 @@
+G E N E R A L  I N F O R M A T I O N
+ ------------------------------------
+ In the sub directory where this file can be found it is possible to put 
+ customized translations of, the help files used by JavaPEG. It is both 
+ possible to override an existing help files language and to create an entire
+ new translation for a non existing language. For a new language that does
+ not already exist in JavaPEG, then there also has to be a corresponding
+ language.** file added to the <JavaPEG base directory>/resources/lang
+ directory. See the language.info file for more information about creating
+ this language file.
+ 
+ H E L P  F I L E  F O R M A T
+ ------------------------------
+ The format of the file is an ordinary java properties file with key - value
+ pairs.
+ 
