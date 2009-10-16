@@ -8,7 +8,7 @@ Version 2.4<LF>
 Released 2009-??-?? Version 2.4 of JavaPEG has got two major improvements. The first is an embedded Image Viewer which displays images that has been added to the image list at the VIEW IMAGES tab. The image viewer has except for navigation support of: forward backward and to any of the images in the list also the possibility to automatically adapt the image to fit the window size.
 <LF>
 <LF>
-The second major improvement is the addition of a graphical interface for the configuration. From now on there is no need to manually change the values in the configurtion file. All configuration can be done inside the JavaPEG application.
+The second major improvement is the addition of a graphical interface for the configuration. From now on there is no need to manually change the values in the configuration file. All configuration can be done inside the JavaPEG application.
 <LF>
 <LF>
 The previously stand alone language selection interface has been removed as a result of the new configuration interface and the functionality has been incorporated in the new interface.
@@ -48,7 +48,7 @@ The second major difference is that the source selection window has been removed
 There is also an added meta data panel which is showing detailed meta data for the images. The meta data is loaded and displayed when a thumb nail images is marked.
 <LF>
 <LF>
-There is a new variable available, "Original file name", for the file name template. It will insert the original file name of each image at the positions of all occurences of the variable in the template when the rename process takes place.
+There is a new variable available, "Original file name", for the file name template. It will insert the original file name of each image at the positions of all occurrences of the variable in the template when the rename process takes place.
 <LF>
 <LF>
 A statusbar has been added to the bottom of the user interface. That statusbar displays selected path and the amount of images in that directory and how many columns and rows that is displayed in the thumb nail grid.
@@ -91,7 +91,7 @@ Thumb nails will be shown in the main application window, when a directory with 
 There is an instant preview of the resulting file names when the templates for either the file name or the sub directory has been changed.
 <LF>
 <LF>
-There is an instant errormessage shown if an illegal variable or an illegal character is used in the templates or the maximum path length has been exceeded for the resulting file names in the selected destination directory.
+There is an instant error message shown if an illegal variable or an illegal character is used in the templates or the maximum path length has been exceeded for the resulting file names in the selected destination directory.
 <LF>
 <LF>
 Before the rename process starts there is a validation process which makes sure that: all input is valid, that maximum path length has not been exceeded, that the sub directory does not exist in the destination directory, that there is enough space to store the copied files in the destination directory and that it is possible to create all the files in the destination directory that exists in the source directory.
