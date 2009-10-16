@@ -19,13 +19,13 @@ The thumbnail list to the left and the meta data panel to the right are possible
 There is support for following activities in the Image Viewer:
 <LF>
 <LF>
-* Navigation forward and backwards in the list of images, either with button in the button list, or by right-clicking the acutal image or by using keyboard accelerators.
+* Navigation forward and backwards in the list of images, either with button in the button list, or by right-clicking the actual image or by using keyboard accelerators.
 <LF>
 <LF>
 * Navigation to any image in the list by clicking it in the thumbnail overview to the left.
 <LF>
 <LF>
-* Adjust the size of the displayed image to fit the avaiable size of the image display area.
+* Adjust the size of the displayed image to fit the available size of the image display area.
 <LF>
 <LF>
-* Automatically adjust the size of the displayed image to fit the avaiable size of the image display area when an image is selected.
+* Automatically adjust the size of the displayed image to fit the available size of the image display area when an image is selected.
