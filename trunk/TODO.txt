@@ -1,6 +1,5 @@
 2.4:
 ====
-- Test help file structure to handle the case when an external language file is used.
 - Finish the content of help.info file.
 - Add help.info file to izpack project.
 - Add changelog note about the new possibility to have externally localized help files and that the existing bug was solved when a new external language file was added. 
