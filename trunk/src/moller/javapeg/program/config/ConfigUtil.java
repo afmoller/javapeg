@@ -2,6 +2,7 @@ package moller.javapeg.program.config;
 /**
  * This class was created : 2009-08-09 by Fredrik Möller
  * Latest changed         : 2009-09-05 by Fredrik Möller
+ *                        : 2009-11-13 by Fredrik Möller
  */
 
 import java.io.File;
@@ -11,20 +12,16 @@ import java.util.List;
 import java.util.Set;
 
 import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.C;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 
 public class ConfigUtil {
-
-	/**
-	 * The system dependent file separator char
-	 */
-	private final static String FS = File.separator;
 	
 	public static  String [] listLanguagesFiles() {
 		Set<String> languageFiles = ApplicationContext.getInstance().getJarFileEmbeddedLanguageFiles();
 				
-		File languageFolder = new File(System.getProperty("user.dir") + FS + "resources" + FS + "lang");
+		File languageFolder = new File(C.USER_HOME + C.FS + "resources" + C.FS + "lang");
 		File [] files = languageFolder.listFiles();
 				
 		for (File file : files) {
