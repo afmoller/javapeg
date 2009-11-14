@@ -1,36 +1,39 @@
-package moller.javapeg.program;
+package moller.javapeg.program.applicationstart;
 
 /**
  * This class was created : 2009-04-09 by Fredrik Möller
  * Latest changed         : 2009-04-12 by Fredrik Möller
  *                        : 2009-04-21 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-11-11 by Fredrik Möller
+ *                        : 2009-11-13 by Fredrik Möller
+ *                        : 2009-11-14 by Fredrik Möller
  */
 
 import java.io.File;
 import java.io.IOException;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
-import moller.util.io.StreamUtil;
 
-public class FileSetup {
-		
+public class ValidateFileSetup {
+	
 	public static void check() {
-							
-		File userDir = new File(System.getProperty("user.dir"));
 		
-		String fs = File.separator;
-						
-		File configFile = new File(userDir, "config" + fs +  "conf.xml");
-		File logDirectory = new File(userDir, "logs");
-		File languageInfo = new File(userDir, "resources" + fs + "lang" + fs + "language.info");
-		File layoutInfo = new File(userDir, "resources" + fs + "thumb" + fs + "layout.info");
-		File styleInfo = new File(userDir, "resources" + fs + "thumb" + fs + "style.info");
+		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
+
+		File configFile   = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
+		File logDirectory = new File(javaPEGuserHome, "logs");
+		File helpInfo     = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
+		File languageInfo = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
+		File layoutInfo   = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
+		File styleInfo    = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
 		
 		checkFileObject(configFile);
 		checkFileObject(logDirectory);
+		checkFileObject(helpInfo);
 		checkFileObject(languageInfo);
 		checkFileObject(layoutInfo);
 		checkFileObject(styleInfo);
@@ -57,6 +60,7 @@ public class FileSetup {
 				if (!parent.mkdirs()) {
 					if (log(fileNameToCheck)) {
 						logger.logFATAL("Could not create directory: " + parent.getAbsolutePath());
+						logger.flush();
 					}
 					System.exit(1);
 				} else {
@@ -67,6 +71,7 @@ public class FileSetup {
 				if(!createFile(fileToCheck)) {
 					if (log(fileNameToCheck)) {
 						logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
+						logger.flush();
 					}
 					System.exit(1);
 				} else {
@@ -77,10 +82,7 @@ public class FileSetup {
 			} else {
 				if (fileNameToCheck.equals("logs")) {
 					if(!fileToCheck.mkdir()) {
-						if (log(fileNameToCheck)) {
-							logger.logFATAL("Could not create directory: " + fileToCheck.getAbsolutePath());
-							System.exit(1);
-						}
+						System.exit(1);
 					} else {
 						if (log(fileNameToCheck)) {
 							logger.logDEBUG("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
@@ -90,6 +92,7 @@ public class FileSetup {
 					if(!createFile(fileToCheck)) {
 						if (log(fileNameToCheck)) {
 							logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
+							logger.flush();
 						}
 						System.exit(1);
 					} else {
@@ -108,8 +111,7 @@ public class FileSetup {
 			return false;
 		}
 		try {
-			String fileContent = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()));
-			FileUtil.writeToFile(fileToCreate, fileContent, false);
+			FileUtil.copyContentToFile(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
 		} catch (IOException e) {
 			if (log(fileToCreate.getName())) {
 				Logger logger = Logger.getInstance();
