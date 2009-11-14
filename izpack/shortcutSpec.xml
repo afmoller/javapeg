@@ -14,8 +14,8 @@
      startMenu="no"
      startup="no"
      type="Application"
-     target="javaw" 
-     commandLine="-jar -Xms64m -Xmx384m $INSTALL_PATH\JavaPEG.jar"
+     target="$JAVA_HOME\bin\javaw.exe" 
+     commandLine="-jar -Xms64m -Xmx384m &quot;$INSTALL_PATH\JavaPEG.jar&quot;"
      iconFile="$INSTALL_PATH\javapeg.ico"
      workingDirectory="$INSTALL_PATH"
      description="This starts the program JavaPEG @ver@">
