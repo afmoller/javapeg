@@ -15,6 +15,8 @@ package moller.javapeg.program.logger;
  *                        : 2009-09-05 by Fredrik Möller
  *                        : 2009-09-06 by Fredrik Möller
  *                        : 2009-09-14 by Fredrik Möller
+ *                        : 2009-11-11 by Fredrik Möller
+ *                        : 2009-11-13 by Fredrik Möller
  */
 
 import java.io.BufferedWriter;
@@ -26,6 +28,7 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
 import moller.util.io.FileUtil;
 
@@ -51,9 +54,8 @@ public class Logger {
     
     private int	rotateSize;
     private String logName;
-        	    
-    private final static String FS        = File.separator;
-    private final static String BASE_PATH = System.getProperty("user.dir") + FS + "logs";
+    
+    private final static String BASE_PATH = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "logs";
 
     private Logger() {
     	
@@ -69,7 +71,7 @@ public class Logger {
     	date     = new Date();
     	sdf      = new SimpleDateFormat(config.getStringProperty("logger.log.entry.timestamp.format"));
     	    	
-    	logFile = new File(BASE_PATH + FS + logName);
+    	logFile = new File(BASE_PATH + C.FS + logName);
     	
     	if(logFile.exists()) {
         	currentLogSize = logFile.length();
@@ -232,7 +234,7 @@ public class Logger {
 		    	if (rotateLog && ((currentLogSize + logEntry.length()) > rotateSize)) {
 		        	logWriter.close();
 					
-		        	File renamedFile = new File(BASE_PATH + FS + logName + System.currentTimeMillis());
+		        	File renamedFile = new File(BASE_PATH + C.FS + logName + System.currentTimeMillis());
 		        	
 		        	logFile.renameTo(renamedFile);
 		        	
