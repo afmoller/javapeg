@@ -1,8 +1,5 @@
 2.4:
 ====
-- Finish the content of help.info file.
-- Add help.info file to izpack project.
-- Add changelog note about the new possibility to have externally localized help files and that the existing bug was solved when a new external language file was added. 
 - Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
 - Test all functionality.
 - Update release date in javapeg.** and in version_information.**
