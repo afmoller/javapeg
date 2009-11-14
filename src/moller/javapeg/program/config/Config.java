@@ -9,9 +9,10 @@ package moller.javapeg.program.config;
  *                        : 2009-03-01 by Fredrik Möller
  *                        : 2009-03-03 by Fredrik Möller
  *                        : 2009-03-18 by Fredrik Möller
+ *                        : 2009-11-11 by Fredrik Möller
+ *                        : 2009-11-13 by Fredrik Möller
  */
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,6 +21,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import moller.javapeg.program.C;
+
 public class Config {
 	
 	/**
@@ -27,7 +30,7 @@ public class Config {
 	 */
 	private static Config instance;
 	
-	private final static String PATH_TO_CONF_FILE = System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf.xml";
+	private final static String PATH_TO_CONF_FILE = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml";
 	
 	private Properties properties;
 	
