@@ -10,6 +10,10 @@
  
  2.4 (2009-xx-xx)
  
+ + Possible to create customized help files. Either by overriding an existing 
+   language or to create help files for a new language (to match a new not
+   embedded language file) 
+  
  + Added move to top and bottom buttons for the images in the Image List at the
    VIEW IMAGES tab.
  
@@ -39,9 +43,17 @@
    has been selected and added to the IMAGE LIST The Image Viewer opens in a 
    separate window.
    
+ + As a bonus for the fix of the bug described below, with wrong help files 
+   (possibly non existing) being loaded there is now support for creating 
+   localized help files in the same manner as for the language files.   
+   
  ! If the automatic rotation of log file was disabled, then the log was 
    rotated for each entry written to log, resulting in a lot of log files with
    only one log entry in each log file.
+   
+ ! If a new language file was created (with a new language) then the help file
+   management tried to load help files for that language. The solution was to
+   load default language help files if desired files does not exist.   
          
  ~ The Language selection GUI has been removed and all settings that was made 
    via that interface has been moved to the new graphical configuration 
@@ -50,6 +62,14 @@
  ~ The image loading (When selecting a directory in the tree structure to the
    left) has been improved by reducing the initial lag when a directory was 
    selected. The lag was linear to the amount of images in selected directory
+  
+ ~ In Windows Vista, Windows 7 or other Operating system that restricts file
+   access according to user rights there where problems with JavaPEG. All files
+   and directories that are dynamic have been moved from the application 
+   installation directory to a directory named 
+   "javapeg-<JAVEPEG_VERSION_NUMBER>" in the home directory for the user that
+   starts JavaPEG. For instance: C:\Users\Fredrik\javapeg-2.4 in a Windows 
+   Vista or Windows 7 environment.   
       
  2.3 (2009-08-03)
  
