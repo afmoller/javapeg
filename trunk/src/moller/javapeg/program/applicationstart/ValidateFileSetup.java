@@ -111,7 +111,7 @@ public class ValidateFileSetup {
 			return false;
 		}
 		try {
-			FileUtil.copyContentToFile(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
+			FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
 		} catch (IOException e) {
 			if (log(fileToCreate.getName())) {
 				Logger logger = Logger.getInstance();
