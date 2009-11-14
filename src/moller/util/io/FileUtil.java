@@ -6,11 +6,14 @@ package moller.util.io;
  *                        : 2009-07-14 by Fredrik Möller
  *                        : 2009-07-18 by Fredrik Möller
  *                        : 2009-08-10 by Fredrik Möller
+ *                        : 2009-11-14 by Fredrik Möller
  */
 
 import java.awt.Point;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -106,6 +109,36 @@ public class FileUtil {
 			}
 		}
 		return copySuccessfull;
+	}
+	
+	/**
+	 * This method copies the content of a InputStream to a file.
+	 * 
+	 * @param source is the InputStream that has the content that shall be
+	 *        copied.
+	 * @param destinationFile is to which folder and name 
+	 *        the the source InputStream will be copied.
+	 *        
+	 * @return a boolean value indicating whether the file 
+	 *         copy was successful or not (true == success,
+	 *         false == failure).
+	 *         
+	 * @throws IOException is thrown if it is not possible to read from the 
+	 *         BufferedInputStream.
+	 */
+	public static boolean copy(InputStream source, File destinationFile) throws IOException {
+		
+		BufferedInputStream bis = new BufferedInputStream(source);
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		
+		byte [] buffer = new byte [8096];
+		
+		int result = bis.read(buffer);
+		while(result != -1) {
+			buf.write(buffer, 0, result);
+			result = bis.read(buffer);
+		}        
+		return copyFile(buf.toByteArray(), destinationFile);
 	}
 	
 	/**
@@ -207,7 +240,7 @@ public class FileUtil {
 		bw.write(text);
 		bw.close();
 	}
-	
+		
 	/**
 	 * This method downloads a file from an URL and saves it to a File object
 	 * 
@@ -355,5 +388,15 @@ public class FileUtil {
 	    zos.closeEntry();
 	    fis.close();
 	    zos.close();
+	}
+	
+	public static boolean testWriteAccess(File directory) {
+		File test = new File(directory, System.currentTimeMillis() + "javapeg-test.txt");
+		
+		if(FileUtil.createFile(test)) {
+			return test.delete();
+		} else {
+			return false;
+		}
 	}
 }
