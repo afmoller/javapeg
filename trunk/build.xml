@@ -54,6 +54,7 @@
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
 				<include name="**/conf.xml" />
+				<include name="**/help.info" />
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
