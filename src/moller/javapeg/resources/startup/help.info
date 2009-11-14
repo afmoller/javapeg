@@ -516,9 +516,67 @@ G E N E R A L  I N F O R M A T I O N
   
  configuration_logging:
  
+ Unbuffered Logging:<LF>
+ All logging is instantly written to the log file and is not being buffered in
+ the memory. This might be useful for debugging.<LF> 
+ <LF>
+ Rotate Log Automatically:<LF>
+ Means that the log file will be rotated, in other words that the current file 
+ will be closed and a new will be created automatically.<LF>
+ <LF>
+ Compress Rotated Log File:<LF>
+ When a log file is rotated it is possible to have it compressed to save space.
+ The compression format used is ZIP.<LF>
+ <LF>
+ Log Rotate Size:<LF>
+ Defines at which size the log file will be rotated. The size is set either in 
+ KiB or in MiB. Smallest allowed size is 10 KiB and largest size is 100 MiB.
+ <LF>
+ <LF>
+ Log Level:<LF>
+ Specifies how detailed the logging will be. Possible alternatives are: DEBUG, 
+ INFO, WARN, ERROR and FATAL. DEBUG will generate most detailed logging and 
+ FATAL least detailed.<LF>
+ <LF>
+ Log Name:<LF>
+ The name that the log file will have.<LF>
+ <LF>
+ Log Entry Timestamp Format:<LF>
+ Specifies what the timestamp in the log file will look like.<LF>
+ <LF>
+ Log Entry Timestamp Preview:<LF>
+ Displays a preview of what a log entry timestamp will look like in the log
+ file.
  
-   configuration_updates
-   configuration_rename
-   configuration_language   
+ configuration_updates
+ 
+ Enable Application Update Check:<LF>
+ An update check will be performed at each application start to see if there 
+ exist a newer version of JavaPEG.<LF>
+ <LF>
+ Add Version Information To Update Check:<LF>
+ The version number of JavaPEG will be attached to the update check performed 
+ at application start. This information is only used for statistical purposes 
+ and is entirely anonymous. NO other information than the version number of 
+ JavaPEG is sent.
+ 
+ configuration_rename
+ 
+ Use Last Modified Date If Exif Date Is Missing:<LF>
+ If date information is missing in the Exif information, then latest changed 
+ date for the file will be used instead.<LF>
+ <LF>
+ Use Last Modified Time If Exif Time Is Missing:<LF>
+ If time information is missing in the Exif information, then latest changed 
+ time for the file will be used instead.<LF>
+ 
+ configuration_language   
     
- 
+ It is possible to either choose language manually, or to let JavaPEG select
+ language automatically.<LF>
+ <LF>
+ If the language selection mode is manually then a language is selected by 
+ clicking on the desired language in the list of available languages. If the
+ language selection mode is automatically then JavaPEG will choose the language
+ that matches the language used by the computer as system language. If the 
+ language used by the system is not available then English is selected.
