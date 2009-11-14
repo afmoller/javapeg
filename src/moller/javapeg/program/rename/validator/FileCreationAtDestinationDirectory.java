@@ -6,12 +6,14 @@ package moller.javapeg.program.rename.validator;
  *                        : 2009-03-03 by Fredrik Möller
  *                        : 2009-04-05 by Fredrik Möller
  *                        : 2009-08-21 by Fredrik Möller
+ *                        : 2009-11-14 by Fredrik Möller
  */
 
 import java.io.File;
 import java.util.Map;
 
 import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.C;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.rename.FileAndType;
@@ -27,11 +29,6 @@ public class FileCreationAtDestinationDirectory {
 	 * The static singleton instance of this class.
 	 */
 	private static FileCreationAtDestinationDirectory instance;
-	
-	/**
-	 * The system dependent file separator char
-	 */
-	private final static String FS = File.separator;
 	
 	/**
 	 * The sub directory to which the renamed JPEG files and all other non
@@ -128,7 +125,7 @@ public class FileCreationAtDestinationDirectory {
 	}
 	
 	private boolean createSubDirectory() {
-		subDirectory = new File(destinationPath + FS + subDirectoryName);
+		subDirectory = new File(destinationPath + C.FS + subDirectoryName);
 		return subDirectory.mkdir();
 	}
 	
@@ -150,7 +147,7 @@ public class FileCreationAtDestinationDirectory {
 	}
 	
 	private boolean createJPEGThumbnailsDirectory() {
-		File thumbnailDirectory = new File(destinationPath + FS + subDirectoryName + FS + thumbnailDirectoryName);
+		File thumbnailDirectory = new File(destinationPath + C.FS + subDirectoryName + C.FS + thumbnailDirectoryName);
 		return thumbnailDirectory.mkdir();
 	}
 	
