@@ -68,6 +68,7 @@ package moller.javapeg.program;
  *                        : 2009-09-13 by Fredrik Möller
  *                        : 2009-09-14 by Fredrik Möller
  *                        : 2009-09-19 by Fredrik Möller
+ *                        : 2009-11-13 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -138,6 +139,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.ImageViewer;
@@ -183,13 +185,6 @@ public class MainGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 4478711914847747931L;
-	
-	/**
-	 * This variable  contains a time stamp which is set to when the latest 
-	 * release is done. The value is the amount of milliseconds since 
-	 * 1970-01-01 with 
-	 */
-	private final static long VERSION_TIMESTAMP = 1249304521;
 	
 	private static Config config;
 	private static Logger logger;
@@ -280,9 +275,12 @@ public class MainGUI extends JFrame {
 	private JList imagesToViewList;
 		
 	public MainGUI(){
-				
-		FileSetup.check();
 		
+		if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
+			JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
+		} 		
+		ValidateFileSetup.check();
+				
 		config =  Config.getInstance();
 		logger =  Logger.getInstance();
 		lang   =  Language.getInstance();
@@ -326,14 +324,14 @@ public class MainGUI extends JFrame {
 			public void run(){
 				NewVersionChecker nvc = NewVersionChecker.getInstance();
 				
-				long latestVersion = nvc.newVersionExists(VERSION_TIMESTAMP);
-				if(latestVersion > VERSION_TIMESTAMP) {
-					Map<Long, VersionInformation> vim = nvc.getVersionInformation(VERSION_TIMESTAMP);
+				long latestVersion = nvc.newVersionExists(C.VERSION_TIMESTAMP);
+				if(latestVersion > C.VERSION_TIMESTAMP) {
+					Map<Long, VersionInformation> vim = nvc.getVersionInformation(C.VERSION_TIMESTAMP);
 					
 					if(vim != null) {
 						VersionInformation vi = vim.get(latestVersion);
 						
-						String changeLog     = nvc.getChangeLog(vim, VERSION_TIMESTAMP);
+						String changeLog     = nvc.getChangeLog(vim, C.VERSION_TIMESTAMP);
 						String downloadURL   = vi.getDownnloadURL();
 						String fileName      = vi.getFileName();
 						String versionNumber = vi.getVersionNumber();
