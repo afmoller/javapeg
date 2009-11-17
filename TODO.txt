@@ -1,11 +1,3 @@
-2.4:
-====
-- Test the new parameters: use file date and time if, the corresponding Exif meta data is missing.
-- Test all functionality.
-- Update release date in javapeg.** and in version_information.**
-- Rename the change log files on the update server from next to actual release timestamp.
-- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-
 2.5:
 ====
 - Fix layout of the Config Viewer GUI.
