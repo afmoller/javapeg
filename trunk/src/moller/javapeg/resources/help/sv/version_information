@@ -5,7 +5,7 @@ Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskape
 <LF>
 Version 2.4<LF>
 ===========<LF>
-Släppt 2009-??-?? Version 2.4 av JavaPEG har två större tillägg. Det första är en inbyggd bildvisare som visar de bilder som lagts till i bildlistan på VISA BILDER tabben. Bildvisaren har förutom navigationssupport för framåt, bakåt och till valfri bild i bildlistan också möjlighet att automatiskt anpassa bildstorleken för att passa fönsterstorleken.
+Släppt 2009-11-17 Version 2.4 av JavaPEG har två större tillägg. Det första är en inbyggd bildvisare som visar de bilder som lagts till i bildlistan på VISA BILDER tabben. Bildvisaren har förutom navigationssupport för framåt, bakåt och till valfri bild i bildlistan också möjlighet att automatiskt anpassa bildstorleken för att passa fönsterstorleken.
 <LF>
 <LF>
 Det andra större tilläget är ett grafiskt gränssnitt för inställningarna. Från och med nu är det inte nödvändingt att göra inställningsändringar manuellt i inställningsfilen. Alla inställningsändringar kan göras inifrån JavaPEG-applikationen.

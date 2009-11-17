@@ -64,6 +64,7 @@
 #                      : by Fredrik Möller 2009-09-19
 #                      : by Fredrik Möller 2009-09-20
 #                      : by Fredrik Möller 2009-10-03
+#                      : by Fredrik Möller 2009-11-17
 
 #############################################################################################################
 # M E N U                                                                                                   #
@@ -169,8 +170,8 @@ aboutDialog.Label    = Om JavaPEG 2.4
 aboutDialog.TextRowA = JavaPEG, ver: 2.4
 aboutDialog.TextRowB = Copyright © 2005 - 2009
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
-aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-08-03.
-aboutDialog.TextRowE = Version 2.4 släppt 2009-08-03.
+aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-11-17.
+aboutDialog.TextRowE = Version 2.4 släppt 2009-11-17.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________

@@ -5,7 +5,7 @@ Below is a description of what each version of JavaPEG has been able to do.
 <LF>
 Version 2.4<LF>
 ===========<LF>
-Released 2009-??-?? Version 2.4 of JavaPEG has got two major improvements. The first is an embedded Image Viewer which displays images that has been added to the image list at the VIEW IMAGES tab. The image viewer has except for navigation support of: forward backward and to any of the images in the list also the possibility to automatically adapt the image to fit the window size.
+Released 2009-11-17 Version 2.4 of JavaPEG has got two major improvements. The first is an embedded Image Viewer which displays images that has been added to the image list at the VIEW IMAGES tab. The image viewer has except for navigation support of: forward backward and to any of the images in the list also the possibility to automatically adapt the image to fit the window size.
 <LF>
 <LF>
 The second major improvement is the addition of a graphical interface for the configuration. From now on there is no need to manually change the values in the configuration file. All configuration can be done inside the JavaPEG application.
