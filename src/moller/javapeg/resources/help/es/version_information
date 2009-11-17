@@ -5,7 +5,7 @@ Lo de abajo es una descripción de lo que cada verisón de JavaPEG ha sido capaz d
 <LF>
 Versión 2.4<LF>
 ===========<LF>
-Distribuida el 2009-??-?? la versión 2.4 de JavaPEG tiene dos mejoras importantes. La primera es un visor de imágenes incrustado que muestra las imágenes que se han añadido a la lista de imágenes en la pestaña VER IMAGENES. El visor, excepto en la navegación tiene soporte para que en las imágenes anterior, posterior y cualquiera de las de la lista, adaptarlas para ajustarse al tamaño de la ventana.
+Distribuida el 2009-11-17 la versión 2.4 de JavaPEG tiene dos mejoras importantes. La primera es un visor de imágenes incrustado que muestra las imágenes que se han añadido a la lista de imágenes en la pestaña VER IMAGENES. El visor, excepto en la navegación tiene soporte para que en las imágenes anterior, posterior y cualquiera de las de la lista, adaptarlas para ajustarse al tamaño de la ventana.
 <LF>
 <LF>
 La segunda mejora es la inclusión de una interfaz gráfica para la configuración. De ahora en adelante no hay necesidad de hacer cambios manuales en el fichero de configuración. Toda la configuración se puede hacer desde la aplicación JavaPEG.
