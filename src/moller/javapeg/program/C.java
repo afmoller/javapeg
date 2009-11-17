@@ -21,5 +21,5 @@ public class C {
 	 * release is done. The value is the amount of milliseconds since 
 	 * 1970-01-01 with 
 	 */
-	public final static long VERSION_TIMESTAMP = 1249304521;
+	public final static long VERSION_TIMESTAMP = 1258486103;
 }
