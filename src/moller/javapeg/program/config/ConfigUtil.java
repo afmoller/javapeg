@@ -21,7 +21,7 @@ public class ConfigUtil {
 	public static  String [] listLanguagesFiles() {
 		Set<String> languageFiles = ApplicationContext.getInstance().getJarFileEmbeddedLanguageFiles();
 				
-		File languageFolder = new File(C.USER_HOME + C.FS + "resources" + C.FS + "lang");
+		File languageFolder = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "resources" + C.FS + "lang");
 		File [] files = languageFolder.listFiles();
 				
 		for (File file : files) {
