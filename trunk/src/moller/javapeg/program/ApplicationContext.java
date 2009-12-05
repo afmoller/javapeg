@@ -5,6 +5,7 @@ package moller.javapeg.program;
  *                        : 2009-06-02 by Fredrik Möller
  *                        : 2009-09-14 by Fredrik Möller
  *                        : 2009-09-19 by Fredrik Möller
+ *                        : 2009-12-03 by Fredrik Möller
  */
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import moller.javapeg.program.metadata.MetaData;
 
@@ -84,9 +86,15 @@ public class ApplicationContext {
 	private List<File> jpegFileLoadBuffer;
 	
 	/**
-	 * This flag indicates whether the iamgeviewer is displayed or not 
+	 * This flag indicates whether the imageviewer is displayed or not 
 	 */
 	private boolean imageViewerDisplayed;
+	
+	/**
+	 * This set will contain all paths that contains images meta data files.
+	 */
+	private Set<String> repositoryPaths;
+	
 	
 	/**
 	 * Private constructor.
@@ -99,6 +107,7 @@ public class ApplicationContext {
 		templateSubFolderName = "";
 		metaDataObjects = new ArrayList<MetaData>();
 		jarFileEmbeddedLanguageFiles = new HashSet<String>();
+		repositoryPaths = new TreeSet<String>();
 		jpegFileLoadBuffer = new ArrayList<File>();
 		imageViewerDisplayed = false;
 	}
@@ -154,6 +163,10 @@ public class ApplicationContext {
 		return jarFileEmbeddedLanguageFiles;
 	}
 	
+	public Set<String> getRepositoryPaths() {
+		return repositoryPaths;
+	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -190,6 +203,10 @@ public class ApplicationContext {
 			this.jarFileEmbeddedLanguageFiles.clear();
 		}
 		this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
+	}
+	
+	public void setRepositoryPaths(Set<String> repositoryPaths) {
+		this.repositoryPaths = repositoryPaths;
 	}
 	
 	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
