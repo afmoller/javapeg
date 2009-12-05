@@ -1,5 +1,6 @@
 2.5:
 ====
+- Fix thumbnail creation if the embedded image is broken or missing in the JPEG file.
 - Fix layout of the Config Viewer GUI.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add functionality to load latest showed image path at application start.
