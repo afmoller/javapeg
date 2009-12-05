@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -239,6 +240,32 @@ public class FileUtil {
 		BufferedWriter bw = new  BufferedWriter(new FileWriter(f, append));
 		bw.write(text);
 		bw.close();
+	}
+	
+	/**
+	 * This method writes a set of strings which are transformed into a string 
+	 * with line separator characters added between each string to a file, 
+	 * either by appending the file content or by writing the string from the
+	 * beginning of the file.
+	 * 
+	 * @param f is the file object to write to.
+	 * @param texts contains the strings that will be written to the file f 
+	 *        object
+	 * @param append decides whether the strings in the texts object will be
+	 *        appended to the file object f or put to the start of the file.
+	 *        
+	 * @throws IOException if the file does not exist or is a directory or by
+	 *         some other reason is impossible to write to.
+	 */
+	public static void writeToFile(File f, Set<String> texts, boolean append) throws IOException {
+		
+		final String ls = System.getProperty("line.separator"); 
+		StringBuilder sb = new StringBuilder();
+		
+		for(String text : texts) {
+			sb.append(text + ls);
+		}
+		writeToFile(f, sb.toString(), append); 
 	}
 		
 	/**
