@@ -8,6 +8,7 @@ package moller.javapeg.program.applicationstart;
  *                        : 2009-11-11 by Fredrik Möller
  *                        : 2009-11-13 by Fredrik Möller
  *                        : 2009-11-14 by Fredrik Möller
+ *                        : 2009-12-05 by Fredrik Möller
  */
 
 import java.io.File;
@@ -24,15 +25,17 @@ public class ValidateFileSetup {
 		
 		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
 
-		File configFile   = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
-		File logDirectory = new File(javaPEGuserHome, "logs");
-		File helpInfo     = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
-		File languageInfo = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
-		File layoutInfo   = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
-		File styleInfo    = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
+		File configFile          = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
+		File logDirectory        = new File(javaPEGuserHome, "logs");
+		File repositoryDirectory = new File(javaPEGuserHome, "repository");
+		File helpInfo            = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
+		File languageInfo        = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
+		File layoutInfo          = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
+		File styleInfo           = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
 		
 		checkFileObject(configFile);
 		checkFileObject(logDirectory);
+		checkFileObject(repositoryDirectory);
 		checkFileObject(helpInfo);
 		checkFileObject(languageInfo);
 		checkFileObject(layoutInfo);
@@ -80,7 +83,7 @@ public class ValidateFileSetup {
 					}
 				}
 			} else {
-				if (fileNameToCheck.equals("logs")) {
+				if (fileNameToCheck.equals("logs") || fileNameToCheck.equals("repository")) {
 					if(!fileToCheck.mkdir()) {
 						System.exit(1);
 					} else {
