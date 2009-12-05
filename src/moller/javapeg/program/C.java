@@ -14,7 +14,7 @@ public class C {
 	public final static String FS              = File.separator;
 	
 	public final static String USER_HOME       = System.getProperty("user.home");
-	public final static String JAVAPEG_VERSION = "2.4";
+	public final static String JAVAPEG_VERSION = "2.5";
 	
 	/**
 	 * This variable  contains a time stamp which is set to when the latest 
