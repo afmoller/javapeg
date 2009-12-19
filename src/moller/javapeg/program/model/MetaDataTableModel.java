@@ -4,6 +4,7 @@ package moller.javapeg.program.model;
 * Latest changed         : 2009-05-30 by Fredrik Möller
 *                        : 2009-06-01 by Fredrik Möller
 *                        : 2009-09-13 by Fredrik Möller
+*                        : 2009-12-17 by Fredrik Möller
 */
 
 import java.util.Vector;
@@ -18,33 +19,6 @@ public class MetaDataTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	private Language lang = Language.getInstance();
-
-	/**
-	 * The static singleton instance of this class.
-	 */
-	private static MetaDataTableModel instance;
-	
-	/**
-	 * Private constructor.
-	 */
-	private MetaDataTableModel() {		
-	}
-		
-	/**
-	 * Accessor method for this Singleton class.
-	 * 
-	 * @return the singleton instance of this class.
-	 */
-	public static MetaDataTableModel getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (MetaDataTableModel.class) {
-			if (instance == null) {
-				instance = new MetaDataTableModel();
-			}
-			return instance;
-		}
-	}
 	
 	public void setColumns() {
 		this.setColumnCount(0);

@@ -1,7 +1,7 @@
 package moller.javapeg.program.model;
 /**
 * This class was created : 2009-06-01 by Fredrik Möller
-* Latest changed         : 
+* Latest changed         : 2009-12-17 by Fredrik Möller
 */
 
 import java.util.Vector;
@@ -15,33 +15,6 @@ public class PreviewTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	private Language lang = Language.getInstance();
-
-	/**
-	 * The static singleton instance of this class.
-	 */
-	private static PreviewTableModel instance;
-	
-	/**
-	 * Private constructor.
-	 */
-	private PreviewTableModel() {	
-	}
-		
-	/**
-	 * Accessor method for this Singleton class.
-	 * 
-	 * @return the singleton instance of this class.
-	 */
-	public static PreviewTableModel getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (PreviewTableModel.class) {
-			if (instance == null) {
-				instance = new PreviewTableModel();
-			}
-			return instance;
-		}
-	}
 	
 	public void setColumns() {
 		this.setColumnCount(0);
