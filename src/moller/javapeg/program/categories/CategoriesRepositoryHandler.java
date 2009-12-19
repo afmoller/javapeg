@@ -3,11 +3,12 @@ package moller.javapeg.program.categories;
  * This class was created : 2009-12-03 by Fredrik Möller
  * Latest changed         : 2009-12-04 by Fredrik Möller
  *                        : 2009-12-05 by Fredrik Möller
+ *                        : 2009-12-18 by Fredrik Möller
  */
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 import moller.javapeg.program.C;
@@ -45,10 +46,10 @@ public class CategoriesRepositoryHandler {
 		}
 	}
 	
-	public Set<String> load() {
+	public Object [] load() {
 		if(repositoryFile.exists()) {
 			try {
-				return new TreeSet<String>(FileUtil.readFromFile(repositoryFile));
+				return new TreeSet<String>(FileUtil.readFromFile(repositoryFile)).toArray();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,7 +60,7 @@ public class CategoriesRepositoryHandler {
 		}	 
 	}
 	
-	public  void store(Set<String> repositoriesPaths) {
+	public  void store(Iterator<Object> repositoriesPaths) {
 		try {
 			FileUtil.writeToFile(repositoryFile, repositoriesPaths, false);
 		} catch (IOException e) {
