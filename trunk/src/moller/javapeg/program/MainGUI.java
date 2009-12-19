@@ -69,6 +69,8 @@ package moller.javapeg.program;
  *                        : 2009-09-14 by Fredrik Möller
  *                        : 2009-09-19 by Fredrik Möller
  *                        : 2009-11-13 by Fredrik Möller
+ *                        : 2009-12-17 by Fredrik Möller
+ *                        : 2009-12-18 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -159,7 +161,9 @@ import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
+import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.PreviewTableModel;
+import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.progress.ThumbNailLoading;
 import moller.javapeg.program.rename.RenameProcessContext;
@@ -279,7 +283,7 @@ public class MainGUI extends JFrame {
 	private ThumbNailListener thumbNailListener;
 	
 	private DefaultListModel imagesToViewListModel;
-	private DefaultListModel categoriesRepositoryListModel;
+	private SortedListModel categoriesRepositoryListModel;
 	
 	private JList imagesToViewList;
 	private JList categoriesRepositoryList;
@@ -460,8 +464,8 @@ public class MainGUI extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 
 		// Skapa tabellmodeller
-    	previewTableModel = PreviewTableModel.getInstance();
-    	metaDataTableModel = MetaDataTableModel.getInstance();
+    	previewTableModel = ModelInstanceLibrary.getInstance().getPreviewTableModel();
+    	metaDataTableModel = ModelInstanceLibrary.getInstance().getMetaDataTableModel();
     	
     	// Skapa tabellen för metadata-informatonen och sätt attribut till den
     	metaDataTable = new JTable(metaDataTableModel);
@@ -1010,10 +1014,10 @@ public class MainGUI extends JFrame {
 		buttonPanel.add(removeSelectedRepositoryPathButton, posButtonPanel);
 		buttonPanel.add(removeAllRepositoryPathsButton, posButtonPanel.nextCol());
 		
-		categoriesRepositoryListModel = new DefaultListModel();
+		categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
 		
 		categoriesRepositoryList = new JList(categoriesRepositoryListModel);
-		categoriesRepositoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		categoriesRepositoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JScrollPane spCategorizeRepository = new JScrollPane(categoriesRepositoryList);
 		
@@ -1113,6 +1117,9 @@ public class MainGUI extends JFrame {
 		moveToBottomButton.addActionListener(new MoveImageToBottomInListListener());
 		openImageViewerButton.addActionListener(new OpenImageViewerListener());
 		
+		removeSelectedRepositoryPathButton.addActionListener(new RemoveSelectedRepositoryPathsListener());
+		removeAllRepositoryPathsButton.addActionListener(new RemoveAllRepositoryPathsListener());
+		
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
 		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
@@ -1148,13 +1155,10 @@ public class MainGUI extends JFrame {
 			createThumbNailsCheckBox.setSelected(true);
 		}
 		
-		Set<String> repositoryPaths = CategoriesRepositoryHandler.getInstance().load();
+		Object [] repositoryPaths = CategoriesRepositoryHandler.getInstance().load();
 		
 		if(repositoryPaths != null) {
-			for(String path : repositoryPaths) {
-				categoriesRepositoryListModel.addElement(path);	
-			}
-			ApplicationContext.getInstance().setRepositoryPaths(repositoryPaths);
+			categoriesRepositoryListModel.addAll(repositoryPaths);
 		}
 		Update.updateAllUIs();		
 	}
@@ -1203,7 +1207,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void saveRepositoryPaths() {
-		CategoriesRepositoryHandler.getInstance().store(ApplicationContext.getInstance().getRepositoryPaths());
+		CategoriesRepositoryHandler.getInstance().store(categoriesRepositoryListModel.iterator());
 	}
 		
 	private void addThumbnail(JButton thumbNail) {
@@ -1927,15 +1931,10 @@ public class MainGUI extends JFrame {
 	
 	private class AddImagesToCategorizeList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			String sourcePath = ApplicationContext.getInstance().getSourcePath(); 
 			
-			ApplicationContext ac = ApplicationContext.getInstance();
-			
-			String sourcePath = ac.getSourcePath(); 
-			Set<String> repositoryPaths = ac.getRepositoryPaths();
-			
-			if(!repositoryPaths.contains(sourcePath)) {
-				repositoryPaths.add(sourcePath);
-				categoriesRepositoryListModel.addElement(sourcePath);	
+			if(!categoriesRepositoryListModel.contains(sourcePath)) {
+				categoriesRepositoryListModel.add(sourcePath);	
 			}
 		}
 	}
@@ -1952,6 +1951,24 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private class RemoveSelectedRepositoryPathsListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (!categoriesRepositoryList.isSelectionEmpty()) {
+				Object [] selectedValues = categoriesRepositoryList.getSelectedValues();
+								
+				for (int i = 0; i < selectedValues.length; i++) {
+					categoriesRepositoryListModel.removeElement(selectedValues[i]);
+				}
+			}
+		}
+	}
+	
+	private class RemoveAllRepositoryPathsListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			categoriesRepositoryListModel.clear();
+		}
+	}
+		
 	private class MouseButtonListener extends MouseAdapter{
 		public void mouseReleased(MouseEvent e){
 			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
