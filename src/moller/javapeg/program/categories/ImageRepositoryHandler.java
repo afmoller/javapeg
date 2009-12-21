@@ -4,6 +4,7 @@ package moller.javapeg.program.categories;
  * Latest changed         : 2009-12-04 by Fredrik Möller
  *                        : 2009-12-05 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
+ *                        : 2009-12-20 by Fredrik Möller
  */
 
 import java.io.File;
@@ -14,20 +15,20 @@ import java.util.TreeSet;
 import moller.javapeg.program.C;
 import moller.util.io.FileUtil;
 
-public class CategoriesRepositoryHandler {
+public class ImageRepositoryHandler {
 
 	/**
 	 * The static singleton instance of this class.
 	 */
-	private static CategoriesRepositoryHandler instance;
+	private static ImageRepositoryHandler instance;
 	
 	private File repositoryFile;
 	
 	/**
 	 * Private constructor.
 	 */
-	private CategoriesRepositoryHandler() {
-		repositoryFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "repository" + C.FS + "categorize.rep");
+	private ImageRepositoryHandler() {
+		repositoryFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "repository" + C.FS + "images.rep");
 	}
 
 	/**
@@ -35,12 +36,12 @@ public class CategoriesRepositoryHandler {
 	 * 
 	 * @return the singleton instance of this class.
 	 */
-	public static CategoriesRepositoryHandler getInstance() {
+	public static ImageRepositoryHandler getInstance() {
 		if (instance != null)
 			return instance;
-		synchronized (CategoriesRepositoryHandler.class) {
+		synchronized (ImageRepositoryHandler.class) {
 			if (instance == null) {
-				instance = new CategoriesRepositoryHandler();
+				instance = new ImageRepositoryHandler();
 			}
 			return instance;
 		}
