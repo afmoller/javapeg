@@ -8,6 +8,13 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
  
+ 2.5 (2010-xx-xx)
+ 
+ ! JavaPEG did crash as a result of a null pointer exception when a directory
+   without read access, for the current user, was browsed in the tree view.
+   Bug seen in Windows 7, but is probably existing in any Operating system with
+   user access control. 
+ 
  2.4 (2009-11-17)
  
  + Possible to create customized help files. Either by overriding an existing 
