@@ -2,6 +2,7 @@ package moller.util.string;
 /**
  * This class was created : 2009-04-06 by Fredrik Möller
  * Latest changed         : 2009-10-15 by Fredrik Möller
+ *                        : 2009-12-28 by Fredrik Möller
  */
 
 import java.text.DecimalFormat;
@@ -39,5 +40,16 @@ public class StringUtil {
 		s = s.replaceAll("\r", "");
 		s = s.replaceAll("\n", "");
 		return s.replaceAll("<LF>", System.getProperty("line.separator"));
+	}
+	
+	/**
+	 * This method reverses the content of a string. I.E the string: "cat" will
+	 * be returned as "tac".
+	 * 
+	 * @param s contains the string that shall be reversed.
+	 * @return the reversed order of the content in the s argument.
+	 */
+	public static String reverse(String s) {
+		return new StringBuilder(s).reverse().toString();		
 	}
 }
