@@ -3,6 +3,7 @@ package moller.util.test.unittest.io;
 import java.io.File;
 
 import moller.util.io.DirectoryUtil;
+import moller.util.io.Status;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -230,5 +231,16 @@ public class TestDirectoryUtil {
 		
 		
 //	}
-
+	
+	@Test
+	public void testGetStatus() {
+		File exists = new File(System.getProperty("user.dir"));
+		File doesNotExist = new File(System.getProperty("user.dir") + File.separator + System.currentTimeMillis());
+		File notAvailable = new File("G:\\test");
+		
+		Assert.assertEquals(Status.EXISTS, DirectoryUtil.getStatus(exists));
+		Assert.assertEquals(Status.DOES_NOT_EXIST, DirectoryUtil.getStatus(doesNotExist));
+		Assert.assertEquals(Status.NOT_AVAILABLE, DirectoryUtil.getStatus(notAvailable));
+		
+	}
 }
