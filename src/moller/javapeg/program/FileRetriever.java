@@ -93,27 +93,34 @@ public class FileRetriever {
 		
 		ApplicationContext ac = ApplicationContext.getInstance();
 
-		if(directoryPath.isDirectory()){
-			for (File file : directoryPath.listFiles()) {
-				try {
-					if(JPEGUtil.isJPEG(file)) {
-						jpegFileNameFileObjectMap.put(file.getName(), file);
-						handleNrOfJpegImages(Action.SET);
-						ac.handleJpegFileLoadBuffer(file, Action.ADD);
-					} else {
-						nonJpegFileNameFileObjectMap.put(file.getName(), file);
+		try {
+			if(directoryPath.isDirectory()){
+				for (File file : directoryPath.listFiles()) {
+					try {
+						if(JPEGUtil.isJPEG(file)) {
+							jpegFileNameFileObjectMap.put(file.getName(), file);
+							handleNrOfJpegImages(Action.SET);
+							ac.handleJpegFileLoadBuffer(file, Action.ADD);
+						} else {
+							nonJpegFileNameFileObjectMap.put(file.getName(), file);
+						}
+					} catch (FileNotFoundException fnfex) {
+						JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+						logger.logERROR("Could not find file:");
+						logger.logERROR(fnfex);
+					} catch (IOException iox) {
+						JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotReadFromFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+						logger.logERROR("Can not read from file:");
+						logger.logERROR(iox);
 					}
-				} catch (FileNotFoundException fnfex) {
-					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-					logger.logERROR("Could not find file:");
-					logger.logERROR(fnfex);
-				} catch (IOException iox) {
-					JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotReadFromFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-					logger.logERROR("Can not read from file:");
-					logger.logERROR(iox);
 				}
-			}
-  	  	}
+			} 
+		} catch (Throwable sex) {
+			logger.logERROR("Can not list files in directory: " + directoryPath);
+			logger.logERROR(sex);
+//			TODO: Hard coded string
+			JOptionPane.showMessageDialog(null, "Can not list files in directory: " + directoryPath, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	public synchronized int handleNrOfJpegImages(Action action) {
