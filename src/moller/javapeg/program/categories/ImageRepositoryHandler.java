@@ -5,6 +5,7 @@ package moller.javapeg.program.categories;
  *                        : 2009-12-05 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
  *                        : 2009-12-20 by Fredrik Möller
+ *                        : 2009-12-28 by Fredrik Möller
  */
 
 import java.io.File;
@@ -63,7 +64,7 @@ public class ImageRepositoryHandler {
 	
 	public  void store(Iterator<Object> repositoriesPaths) {
 		try {
-			FileUtil.writeToFile(repositoryFile, repositoriesPaths, false);
+			FileUtil.writeToFile(repositoryFile, repositoriesPaths, false, C.DIRECTORY_STATUS_DELIMITER, true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
