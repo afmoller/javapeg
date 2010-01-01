@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * This class was created : 2009-04-05 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2009-12-20 by Fredrik Möller
  */
 
 public class DirectoryUtil {
@@ -202,5 +202,29 @@ public class DirectoryUtil {
 			throw new Exception(directory.getName() + " is not a directory");
 		}		
 		return files;
+	}
+	
+	public static Status getStatus(String path) {
+		return getStatus(new File(path));
+	}
+	
+	/**
+	 * @param path
+	 * @return
+	 */
+	public static Status getStatus(File path) {
+		
+		if(path.exists()) {
+			return Status.EXISTS;
+		} else {
+			File parent = path.getParentFile();
+			while(parent != null) {
+				if (parent.exists()) {
+					return Status.DOES_NOT_EXIST;
+				}
+				parent = parent.getParentFile();
+			}
+			return Status.NOT_AVAILABLE;
+		}
 	}
 }
