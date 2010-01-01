@@ -8,6 +8,7 @@ package moller.util.io;
  *                        : 2009-08-10 by Fredrik Möller
  *                        : 2009-11-14 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
+ *                        : 2009-12-28 by Fredrik Möller
  */
 
 import java.awt.Point;
@@ -36,6 +37,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import moller.util.string.StringUtil;
 
 public class FileUtil {
 	
@@ -292,6 +295,48 @@ public class FileUtil {
 		
 		while(texts.hasNext()) {
 			sb.append(texts.next() + ls);
+		}
+		writeToFile(f, sb.toString(), append); 
+	}
+	
+	/**
+	 * This method writes a set of strings which are transformed into a string 
+	 * with line separator characters added between each string to a file, 
+	 * either by appending the file content or by writing the string from the
+	 * beginning of the file.
+	 * 
+	 * @param f is the file object to write to.
+	 * 
+	 * @param texts contains the strings that will be written to the file f 
+	 *        object
+	 *        
+	 * @param append decides whether the strings in the texts object will be
+	 *        appended to the file object f or put to the start of the file.
+	 *        
+	 * @param splitTextToken defines a token that will be used to split the 
+	 *        strings contained in the texts object.
+	 *        
+	 * @param useFirstPart defines whether the first or second part of the 
+	 *        strings in the texts object will be used.
+	 *        
+	 * @throws IOException if the file does not exist or is a directory or by
+	 *         some other reason is impossible to write to.
+	 */
+	public static void writeToFile(File f, Iterator<Object> texts, boolean append, String splitTextToken, boolean useFirstPart) throws IOException {
+		
+		final String ls = System.getProperty("line.separator"); 
+		StringBuilder sb = new StringBuilder();
+				
+		while(texts.hasNext()) {
+			
+			String text = texts.next().toString();
+			text = StringUtil.reverse(text);
+			
+			sb.append(StringUtil.reverse(text.split(splitTextToken, 2)[useFirstPart ? 1 : 0]));
+			
+			if(texts.hasNext()) {
+				sb.append(ls);
+			}
 		}
 		writeToFile(f, sb.toString(), append); 
 	}
