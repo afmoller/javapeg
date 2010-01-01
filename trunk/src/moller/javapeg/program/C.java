@@ -2,6 +2,7 @@ package moller.javapeg.program;
 /**
  * This class was created : 2009-11-13 by Fredrik Möller
  * Latest changed         : 2009-11-14 by Fredrik Möller
+ *                        : 2009-12-25 by Fredrik Möller
  */
 
 import java.io.File;
@@ -22,4 +23,6 @@ public class C {
 	 * 1970-01-01 with 
 	 */
 	public final static long VERSION_TIMESTAMP = 1258486103;
+	
+	public final static String DIRECTORY_STATUS_DELIMITER = "-";
 }
