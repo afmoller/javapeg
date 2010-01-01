@@ -37,7 +37,11 @@ public class FileModel implements TreeModel {
 	}
 
 	public int getChildCount (Object parent) {
-		return ((Node) parent).getChildren ().length;
+		if (((Node) parent).getChildren() != null) {
+			return ((Node) parent).getChildren().length;
+		} else {
+			return 0;
+		}
 	}
 
 	public int getIndexOfChild (Object parent, Object child) {
@@ -99,24 +103,26 @@ public class FileModel implements TreeModel {
 		}
 
 		private void setChildren (File[] files)	{
-			List<File> excluded = new ArrayList<File> (files.length);
-			for (int i = 0; i < files.length; i ++) {
-				if (fileMustBeExcluded (files[i])) {
-					excluded.add (files[i]);
+			if (files != null) {
+				List<File> excluded = new ArrayList<File> (files.length);
+				for (int i = 0; i < files.length; i ++) {
+					if (fileMustBeExcluded (files[i])) {
+						excluded.add (files[i]);
+					}
 				}
+				children = new Node[files.length - excluded.size ()];
+				for (int i = 0, j = 0; i < files.length; i ++) {
+					File file = files[i];
+					if (! excluded.contains (file))	{
+						children[j ++] = new Node (file, comparator);
+					}
+				}
+				Arrays.sort (children, new Comparator<Object> () {
+					public int compare (Object nodeA, Object nodeB)	{
+						return comparator.compare (((Node) nodeA).getFile (), ((Node) nodeB).getFile ());
+					}
+				});
 			}
-			children = new Node[files.length - excluded.size ()];
-			for (int i = 0, j = 0; i < files.length; i ++) {
-				File file = files[i];
-				if (! excluded.contains (file))	{
-					children[j ++] = new Node (file, comparator);
-				}
-			}
-			Arrays.sort (children, new Comparator () {
-				public int compare (Object nodeA, Object nodeB)	{
-					return comparator.compare (((Node) nodeA).getFile (), ((Node) nodeB).getFile ());
-				}
-			});
 		}
 
 		private boolean fileMustBeExcluded (File file) {	
