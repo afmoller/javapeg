@@ -95,6 +95,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -144,9 +145,10 @@ import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
-import moller.javapeg.program.categories.CategoriesRepositoryHandler;
+import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
+import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
@@ -179,8 +181,10 @@ import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.Update;
+import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
 import moller.util.io.JPEGUtil;
+import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
@@ -979,7 +983,7 @@ public class MainGUI extends JFrame {
 	private JPanel createCategorizeRepositoryPanel() {
 		
 //		TODO: Fix hard coded string
-		JLabel repositoryHeading = new JLabel("REPOSITORY");
+		JLabel repositoryHeading = new JLabel("IMAGE REPOSITORIES");
 		repositoryHeading.setForeground(Color.GRAY);
 		
 		removeSelectedRepositoryPathButton = new JButton();
@@ -995,13 +999,13 @@ public class MainGUI extends JFrame {
 			removeSelectedRepositoryPathImageIcon.setImage(ImageIO.read(imageStream));
 			removeSelectedRepositoryPathButton.setIcon(removeSelectedRepositoryPathImageIcon);
 //			TODO: Fix hard coded string
-			removeSelectedRepositoryPathButton.setToolTipText("Remove selected Repository Path");
+			removeSelectedRepositoryPathButton.setToolTipText("Remove selected Image Repository Path");
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
 			removeAllRepositoryPathImageIcon.setImage(ImageIO.read(imageStream));
 			removeAllRepositoryPathsButton.setIcon(removeAllRepositoryPathImageIcon);	
 //			TODO: Fix hard coded string
-			removeAllRepositoryPathsButton.setToolTipText("Remove all Repository Paths");
+			removeAllRepositoryPathsButton.setToolTipText("Remove all Image Repository Paths");
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
 		} finally {
@@ -1017,6 +1021,7 @@ public class MainGUI extends JFrame {
 		categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
 		
 		categoriesRepositoryList = new JList(categoriesRepositoryListModel);
+		categoriesRepositoryList.setCellRenderer(new CustomCellRenderer());
 //		categoriesRepositoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JScrollPane spCategorizeRepository = new JScrollPane(categoriesRepositoryList);
@@ -1155,9 +1160,13 @@ public class MainGUI extends JFrame {
 			createThumbNailsCheckBox.setSelected(true);
 		}
 		
-		Object [] repositoryPaths = CategoriesRepositoryHandler.getInstance().load();
-		
+		Object [] repositoryPaths = ImageRepositoryHandler.getInstance().load();
+				
 		if(repositoryPaths != null) {
+			for (int i=0; i<repositoryPaths.length; i++) {
+				String directoryStatus = DirectoryUtil.getStatus((String)repositoryPaths[i]).toString();
+				repositoryPaths[i] = repositoryPaths[i] + C.DIRECTORY_STATUS_DELIMITER + directoryStatus;
+			}
 			categoriesRepositoryListModel.addAll(repositoryPaths);
 		}
 		Update.updateAllUIs();		
@@ -1207,7 +1216,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void saveRepositoryPaths() {
-		CategoriesRepositoryHandler.getInstance().store(categoriesRepositoryListModel.iterator());
+		ImageRepositoryHandler.getInstance().store(categoriesRepositoryListModel.iterator());
 	}
 		
 	private void addThumbnail(JButton thumbNail) {
@@ -1519,8 +1528,15 @@ public class MainGUI extends JFrame {
 		};
 		loadFilesThread.start();
 		
-		pb = new ThumbNailLoading(0, sourcePath.listFiles().length, this);
-		pb.setVisible(true);
+		try {
+			int max = 0;
+			if (sourcePath.listFiles() != null) {
+				max = sourcePath.listFiles().length;
+			}
+			pb = new ThumbNailLoading(0, max, this);
+			pb.setVisible(max > 0);
+		} catch (Throwable th) {			
+		}
 		
 		metaDataTableModel.setColumns();
 		
@@ -1933,8 +1949,8 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String sourcePath = ApplicationContext.getInstance().getSourcePath(); 
 			
-			if(!categoriesRepositoryListModel.contains(sourcePath)) {
-				categoriesRepositoryListModel.add(sourcePath);	
+			if(!categoriesRepositoryListModel.contains(sourcePath + C.DIRECTORY_STATUS_DELIMITER + Status.EXISTS)) {
+				categoriesRepositoryListModel.add(sourcePath + C.DIRECTORY_STATUS_DELIMITER + Status.EXISTS);	
 			}
 		}
 	}
