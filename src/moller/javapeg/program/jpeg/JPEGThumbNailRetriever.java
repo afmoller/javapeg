@@ -6,6 +6,9 @@ package moller.javapeg.program.jpeg;
  *                        : 2009-02-19 by Fredrik Möller
  *                        : 2009-04-15 by Fredrik Möller
  *                        : 2009-04-16 by Fredrik Möller
+ *                        : 2010-01-02 by Fredrik Möller
+ *                        : 2010-01-03 by Fredrik Möller
+ *                        : 2010-01-04 by Fredrik Möller
  */
 
 import java.io.File;
@@ -13,8 +16,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
+import moller.util.io.JPEGUtil;
 
 public class JPEGThumbNailRetriever {
 	
@@ -22,6 +27,8 @@ public class JPEGThumbNailRetriever {
 	 * The static singleton instance of this class.
 	 */
 	private static JPEGThumbNailRetriever instance;
+	
+	private static Logger logger;
 	
 	/**
 	 * Accessor method for this Singleton class.
@@ -39,7 +46,8 @@ public class JPEGThumbNailRetriever {
 		}
 	}
 	
-	private JPEGThumbNailRetriever() {	
+	private JPEGThumbNailRetriever() {
+		logger = Logger.getInstance();
 	}
 	
 	public JPEGThumbNail retrieveThumbNailFrom(File jpegFile) {
@@ -50,9 +58,8 @@ public class JPEGThumbNailRetriever {
 		// ..request the thumbnail from cache
 		JPEGThumbNail thumbNail = jpgtnc.get(jpegFile);
 				
-		// ..and if the thumbnail was not exisitng in the cache.
+		// ..and if the thumbnail was not existing in the cache.
 		if (thumbNail == null) {
-			
 			thumbNail = new JPEGThumbNail();
 			
 			// Hämta in metadata för filen som tumnageln skall hämtas ur
@@ -64,8 +71,10 @@ public class JPEGThumbNailRetriever {
 			// Skapa plats för bilden
 			byte [] thumbNailData = new byte[thumbNailLength];
 
+			FileInputStream image = null;
+			
 			try {
-				FileInputStream image = new FileInputStream(jpegFile);
+				image = new FileInputStream(jpegFile);
 
 				try {
 					// +12 = jpgfilens header i bytes
@@ -81,14 +90,29 @@ public class JPEGThumbNailRetriever {
 					}
 					image.read(thumbNailData, 0, thumbNailLength);
 					
+					if (!JPEGUtil.isJPEG(thumbNailData)) {
+						logger.logDEBUG("Embedded thumbnail missing or corrupt in file: " + jpegFile.getAbsolutePath());
+						thumbNailData = JPEGUtil.createThumbNail(jpegFile, 160, 120).toByteArray();
+					}
+										
 					thumbNail.setThumbNailData(thumbNailData);
 					thumbNail.setThumbNailSize(thumbNailLength);
 					
 					jpgtnc.add(jpegFile, thumbNail);
 				} catch(IOException iox) {
-					System.out.println(iox);
+					logger.logERROR("Could not retrieve the thumbnail for image: " + jpegFile.getAbsolutePath());
+					logger.logERROR(iox);
+				} finally {
+					if (image != null) {
+						try {
+							image.close();
+						} catch (IOException e) {
+							logger.logERROR(e);
+						}
+					}
 				}
 			} catch(FileNotFoundException fnfex) {
+				logger.logERROR(fnfex);
 			}
 		}	
 		return thumbNail;
