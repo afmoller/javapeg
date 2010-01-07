@@ -46,4 +46,5 @@
 <entry key="imageViewerGUI.window.height">768</entry>
 <entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
 <entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
+<entry key="thumbnails.view.create-if-missing-or-corrupt">true</entry>
 </properties>
