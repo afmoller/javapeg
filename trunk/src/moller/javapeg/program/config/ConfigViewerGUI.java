@@ -11,6 +11,8 @@ package moller.javapeg.program.config;
  *                        : 2009-09-04 by Fredrik Möller
  *                        : 2009-09-05 by Fredrik Möller
  *                        : 2009-10-04 by Fredrik Möller
+ *                        : 2010-01-05 by Fredrik Möller
+ *                        : 2010-01-07 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -82,6 +84,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JPanel updatesConfigurationPanel;
 	private JPanel languageConfigurationPanel;
 	private JPanel renameConfigurationPanel;
+	private JPanel thumbnailConfigurationPanel;
 	
 	private JSplitPane splitPane;
 	
@@ -117,7 +120,6 @@ public class ConfigViewerGUI extends JFrame {
 	/**
 	 * Variables for the rename panel
 	 */
-	
 	private JCheckBox useLastModifiedDate;
 	private JCheckBox useLastModifiedTime;
 	
@@ -125,6 +127,13 @@ public class ConfigViewerGUI extends JFrame {
 			
 	private JRadioButton manualRadioButton;
 	private JRadioButton automaticRadioButton;
+	
+	/**
+	 * Variables for the thumbnail panel
+	 */
+	private JCheckBox createThumbnailIfMissingOrCorrupt;
+	private JTextField thumbnailWidth;
+	private JTextField thumbnailHeight;
 	
 	private Config   conf;
 	private Logger   logger;
@@ -145,6 +154,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean USE_LAST_MODIFIED_DATE;
 	private boolean USE_LAST_MODIFIED_TIME;
 	private boolean AUTOMATIC_LANGUAGE_SELECTION;
+	private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
 		
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
@@ -157,6 +167,7 @@ public class ConfigViewerGUI extends JFrame {
 		this.createUpdateConfigurationPanel();
 		this.createLanguageConfigurationPanel();
 		this.createRenameConfigurationPanel();
+		this.createThumbnailConfigurationPanel();
 		this.addListeners();	
 	}
 	
@@ -175,6 +186,7 @@ public class ConfigViewerGUI extends JFrame {
 		USE_LAST_MODIFIED_TIME = conf.getBooleanProperty("rename.use.lastmodified.time");
 		AUTOMATIC_LANGUAGE_SELECTION = conf.getBooleanProperty("automaticLanguageSelection");
 		GUI_LANGUAGE_ISO6391 = conf.getStringProperty("gUILanguageISO6391");
+		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt");
 	}
 	
 	private void initiateWindow() {
@@ -494,6 +506,37 @@ public class ConfigViewerGUI extends JFrame {
 			manualRadioButton.setSelected(true);
 		}
 	}
+	
+	private void createThumbnailConfigurationPanel() {
+		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
+		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		
+		GBHelper posThumbnailPanel = new GBHelper();
+
+//		TODO: Fix hard coded string
+		JLabel createThumbnailIfMissingOrCorruptLabel = new JLabel("If embedded thumbnail is missing or corrupt, create a temporary");
+		createThumbnailIfMissingOrCorrupt = new JCheckBox();
+		createThumbnailIfMissingOrCorrupt.setSelected(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+
+//		TODO: Fix hard coded string
+		JLabel thumbnailWidthLabel = new JLabel("Width of the created thumbnail");
+		thumbnailWidth = new JTextField();
+		
+//		TODO: Fix hard coded string
+		JLabel thumbnailHeightLabel = new JLabel("Height of the created thumbnail");
+		thumbnailHeight = new JTextField();
+		
+		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailPanel);
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(thumbnailWidthLabel, posThumbnailPanel.nextRow());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(thumbnailWidth, posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
+		thumbnailConfigurationPanel.add(thumbnailHeightLabel, posThumbnailPanel.nextRow());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(thumbnailHeight, posThumbnailPanel.nextCol());
+	}
 		
 	private void updateWindowLocationAndSize() {
 		conf.setIntProperty("configViewerGUI.window.location.x", this.getLocation().x);
@@ -554,6 +597,11 @@ public class ConfigViewerGUI extends JFrame {
 		 */
 		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
 		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
+		
+		/**
+		 * Update Thumbnail Configuration
+		 */
+		conf.setBooleanProperty("thumbnails.view.create-if-missing-or-corrupt", createThumbnailIfMissingOrCorrupt.isSelected());
 				
 		/**
 		 * Show configuration changes.
@@ -619,6 +667,11 @@ public class ConfigViewerGUI extends JFrame {
 		
 		if(!GUI_LANGUAGE_ISO6391.equals(ISO639.getInstance().getCode(currentLanguage.getText()))){
 			displayMessage.append(lang.get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(GUI_LANGUAGE_ISO6391) + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT != createThumbnailIfMissingOrCorrupt.isSelected()) {
+			displayMessage.append("If embedded thumbnail is missing or corrupt, create a temporary" + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
 		}
 		
 		if(displayMessage.length() > 0) {
@@ -749,6 +802,8 @@ public class ConfigViewerGUI extends JFrame {
 					backgroundsPanel.add(renameConfigurationPanel);
 				} else if (selRow == 4) {
 					backgroundsPanel.add(languageConfigurationPanel);
+				} else if (selRow == 5) {
+					backgroundsPanel.add(thumbnailConfigurationPanel);
 				}
 			}
 		}

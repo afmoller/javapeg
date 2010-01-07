@@ -2,6 +2,7 @@ package moller.javapeg.program.config;
 /**
  * This class was created : 2009-08-06 by Fredrik Möller
  * Latest changed         : 2009-09-06 by Fredrik Möller
+ *                        : 2010-01-05 by Fredrik Möller
  */
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -20,11 +21,14 @@ public static TreeNode createNodes() {
 		DefaultMutableTreeNode updates  = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.updates"));
 		DefaultMutableTreeNode rename   = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.rename"));
 		DefaultMutableTreeNode language = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.language"));
+//		TODO: Hard coded string
+		DefaultMutableTreeNode thumbnail = new DefaultMutableTreeNode("Thumbnail");
 				
 		root.add(logging);
 		root.add(updates);
 		root.add(rename);
 		root.add(language);
+		root.add(thumbnail);
 					
 		return root;	
 	}
