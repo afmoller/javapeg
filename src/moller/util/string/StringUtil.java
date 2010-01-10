@@ -3,6 +3,7 @@ package moller.util.string;
  * This class was created : 2009-04-06 by Fredrik Möller
  * Latest changed         : 2009-10-15 by Fredrik Möller
  *                        : 2009-12-28 by Fredrik Möller
+ *                        : 2010-01-10 by Fredrik Möller
  */
 
 import java.text.DecimalFormat;
@@ -51,5 +52,43 @@ public class StringUtil {
 	 */
 	public static String reverse(String s) {
 		return new StringBuilder(s).reverse().toString();		
+	}
+	
+	/**
+	 * This method tests whether the value of a string is possible to parse
+	 * as an int.
+	 *   
+	 * @param s contains the string which value will be tested if it is 
+	 *        possible to cast it to an integer.
+	 *        
+	 * @return a boolean value indicating whether the string s contains a value
+	 *         that is possible to cast to an integer.
+	 */
+	public static boolean isInt(String s) {
+		try {
+			Integer.parseInt(s);
+		} catch (NumberFormatException nfex) {
+			 return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * This method tests whether the value of a string is possible to parse
+	 * as an int.
+	 *   
+	 * @param s contains the string which value will be tested if it is 
+	 *        possible to cast it to an integer.
+	 *        
+	 * @return a boolean value indicating whether the string s contains a value
+	 *         that is possible to cast to an integer.
+	 */
+	public static boolean isInt(String s, boolean isPositive) {
+		try {
+			int number = Integer.parseInt(s);
+			return number > -1 ? true : false;
+		} catch (NumberFormatException nfex) {
+			 return false;
+		}
 	}
 }
