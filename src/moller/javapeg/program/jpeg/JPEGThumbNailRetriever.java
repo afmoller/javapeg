@@ -99,7 +99,7 @@ public class JPEGThumbNailRetriever {
 						
 						if(config.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt")) {
 							logger.logDEBUG("Creating thumbnail for image: "  + jpegFile.getAbsolutePath());
-							thumbNailData = JPEGUtil.createThumbNail(jpegFile, 160, 120).toByteArray();	
+							thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height")).toByteArray();	
 						} else {
 							logger.logDEBUG("Loading missing thumbnail image");
 //							TODO: Implement a "missing thumbnail image"
