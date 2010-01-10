@@ -13,6 +13,8 @@ package moller.javapeg.program.config;
  *                        : 2009-10-04 by Fredrik Möller
  *                        : 2010-01-05 by Fredrik Möller
  *                        : 2010-01-07 by Fredrik Möller
+ *                        : 2010-01-09 by Fredrik Möller
+ *                        : 2010-01-10 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -71,6 +73,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
+import moller.util.string.StringUtil;
 
 public class ConfigViewerGUI extends JFrame {
 	
@@ -145,6 +148,8 @@ public class ConfigViewerGUI extends JFrame {
 	private String LOG_ROTATE_SIZE;
 	private String LOG_ENTRY_TIMESTAMP_FORMAT;
 	private String GUI_LANGUAGE_ISO6391;
+	private String THUMBNAIL_WIDTH;
+	private String THUMBNAIL_HEIGHT;
 	
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
@@ -187,6 +192,8 @@ public class ConfigViewerGUI extends JFrame {
 		AUTOMATIC_LANGUAGE_SELECTION = conf.getBooleanProperty("automaticLanguageSelection");
 		GUI_LANGUAGE_ISO6391 = conf.getStringProperty("gUILanguageISO6391");
 		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt");
+		THUMBNAIL_WIDTH = conf.getStringProperty("thumbnails.view.width");
+		THUMBNAIL_HEIGHT = conf.getStringProperty("thumbnails.view.height");
 	}
 	
 	private void initiateWindow() {
@@ -255,6 +262,8 @@ public class ConfigViewerGUI extends JFrame {
 		okButton.addActionListener(new OkButtonListener());
 		applyButton.addActionListener(new ApplyButtonListener());
 		cancelButton.addActionListener(new CancelButtonListener());
+		thumbnailWidth.getDocument().addDocumentListener(new ThumbnailWidthJTextFieldListener());
+		thumbnailHeight.getDocument().addDocumentListener(new ThumbnailHeightJTextFieldListener());
 	}
 	
 	private JPanel createButtonPanel() {
@@ -520,11 +529,13 @@ public class ConfigViewerGUI extends JFrame {
 
 //		TODO: Fix hard coded string
 		JLabel thumbnailWidthLabel = new JLabel("Width of the created thumbnail");
-		thumbnailWidth = new JTextField();
+		thumbnailWidth = new JTextField(conf.getStringProperty("thumbnails.view.width"));
+		thumbnailWidth.setColumns(5);
 		
 //		TODO: Fix hard coded string
 		JLabel thumbnailHeightLabel = new JLabel("Height of the created thumbnail");
-		thumbnailHeight = new JTextField();
+		thumbnailHeight = new JTextField(conf.getStringProperty("thumbnails.view.height"));
+		thumbnailHeight.setColumns(5);
 		
 		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailPanel);
 		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
@@ -568,6 +579,14 @@ public class ConfigViewerGUI extends JFrame {
 		if(!validateLogRotateSize()) {
 			return false;
 		}
+		
+		if(!validateThumbnailSize("width")) {
+			return false;
+		}
+		
+		if(!validateThumbnailSize("height")) {
+			return false;
+		}
 				
 		/**
 		 * Update Logging Configuration
@@ -602,6 +621,8 @@ public class ConfigViewerGUI extends JFrame {
 		 * Update Thumbnail Configuration
 		 */
 		conf.setBooleanProperty("thumbnails.view.create-if-missing-or-corrupt", createThumbnailIfMissingOrCorrupt.isSelected());
+		conf.setStringProperty("thumbnails.view.width", thumbnailWidth.getText());
+		conf.setStringProperty("thumbnails.view.height", thumbnailHeight.getText());
 				
 		/**
 		 * Show configuration changes.
@@ -674,6 +695,16 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append("If embedded thumbnail is missing or corrupt, create a temporary" + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
 		}
 		
+//		TODO: Fix hard coded string
+		if(!THUMBNAIL_WIDTH.equals(thumbnailWidth.getText())) {
+			displayMessage.append("Width of the created thumbnail" + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(!THUMBNAIL_HEIGHT.equals(thumbnailHeight.getText())) {
+			displayMessage.append("Height of the created thumbnail" + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
+		}
+				
 		if(displayMessage.length() > 0) {
 			JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -720,7 +751,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return isValid;
 	}
-	
+		
 	private String calculateRotateLogSize(String size, String factor) {
 		return Long.toString(calculateRotateLogSize(Long.parseLong(size), factor));
 	}
@@ -756,6 +787,38 @@ public class ConfigViewerGUI extends JFrame {
 			rotateLogSizeFactor.setSelectedIndex(0);
 		}
 	}
+	
+	private boolean validateThumbnailSize(String validatorFor) {
+
+		String errorMessage = "";
+		
+		if (validatorFor.equals("width")) {
+			String thumbnailWidthString = thumbnailWidth.getText();
+			if(!StringUtil.isInt(thumbnailWidthString)) {
+//				TODO: Fix hard coded string
+				errorMessage = "The value of the thumbnail width must be an integer";
+			}	
+			else if(!StringUtil.isInt(thumbnailWidthString, true)) {
+//				TODO: Fix hard coded string
+				errorMessage = "The value of the thumbnail width must be an non negative integer";
+			}	
+		} else {
+			String thumbnailHeightString = thumbnailWidth.getText();
+			if(!StringUtil.isInt(thumbnailHeightString)) {
+//				TODO: Fix hard coded string
+				errorMessage = "The value of the thumbnail height must be an integer";
+			}
+			else if(!StringUtil.isInt(thumbnailHeightString, true)) {
+//				TODO: Fix hard coded string
+				errorMessage = "The value of the thumbnail height must be an non negative integer";
+			}	
+		}
+		if(errorMessage.length() > 0) {
+			JOptionPane.showMessageDialog(this, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
 		
 	private void closeWindow() {
 		updateWindowLocationAndSize();
@@ -782,6 +845,29 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 	}
+	
+	private class  ThumbnailWidthJTextFieldListener implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+		public void insertUpdate(DocumentEvent e) {
+			validateThumbnailSize("width");
+		}
+		public void removeUpdate(DocumentEvent e) {
+		}
+	}
+	
+	private class  ThumbnailHeightJTextFieldListener implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+		public void insertUpdate(DocumentEvent e) {
+			validateThumbnailSize("height");
+		}
+		public void removeUpdate(DocumentEvent e) {
+		}
+	}
+
 				
 	/**
 	 * Mouse listener
