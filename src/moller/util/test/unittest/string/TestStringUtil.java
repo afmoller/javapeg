@@ -25,4 +25,13 @@ public class TestStringUtil {
 	public void testReverse() {
 		Assert.assertEquals("tset", StringUtil.reverse("test"));		
 	}
+	
+	@Test
+	public void testIsInt() {
+		Assert.assertTrue(StringUtil.isInt("12345"));
+		Assert.assertTrue(StringUtil.isInt("012345"));
+		
+		Assert.assertFalse(StringUtil.isInt("12345a"));
+		Assert.assertFalse(StringUtil.isInt("a12345"));
+	}
 }
