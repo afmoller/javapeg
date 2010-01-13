@@ -1,10 +1,11 @@
-package moller.util.io;
+package moller.util.jpeg;
 /**
  * This class was created : 2009-03-27 by Fredrik Möller
  * Latest changed         : 2009-06-17 by Fredrik Möller
  *                        : 2010-01-02 by Fredrik Möller
  *                        : 2010-01-03 by Fredrik Möller
  *                        : 2010-01-04 by Fredrik Möller
+ *                        : 2010-01-13 by Fredrik Möller
  */
 
 import java.awt.Image;
@@ -14,8 +15,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
+import moller.util.io.FileUtil;
 
 public class JPEGUtil {
 
@@ -72,15 +76,41 @@ public class JPEGUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ByteArrayOutputStream createThumbNail(File jpegFile, int width, int height) throws IOException {
+	public static ByteArrayOutputStream createThumbNail(File jpegFile, int width, int height, JPEGScaleAlgorithm algorithm) throws IOException {
 		
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		img.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(width, height, Image.SCALE_SMOOTH),0,0,null);
+		img.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(width, height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(img, "jpg", baos);
 		
 		return baos;
+	}
+	
+	/**
+	 * @param jpegFile
+	 * @return
+	 * @throws IOException
+	 */
+	public static byte [] searchForThumbnail(File jpegFile) throws IOException {
+		byte [] content = FileUtil.getBytesFromFile(jpegFile);
+		
+		int thumbStartIndex = -1;
+		int thumbEndIndex   = -1;
+		
+		for (int i = 2; i < content.length - 3; i++) {
+			
+			if ((content[i] & 0xFF) == 255 && (content[i + 1] & 0xFF) == 216) {
+				thumbStartIndex = i;
+			} else if ((content[i] & 0xFF) == 255 && (content[i + 1] & 0xFF) == 217) {
+				thumbEndIndex = i;				
+			}
+			
+			if (thumbStartIndex > -1 && thumbEndIndex > thumbStartIndex) {
+				return Arrays.copyOfRange(content, thumbStartIndex, thumbEndIndex);
+			}
+		}
+		throw new IOException("No thumbnail found");
 	}
 	
 	/**
