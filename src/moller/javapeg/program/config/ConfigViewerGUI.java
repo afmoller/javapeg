@@ -15,6 +15,7 @@ package moller.javapeg.program.config;
  *                        : 2010-01-07 by Fredrik Möller
  *                        : 2010-01-09 by Fredrik Möller
  *                        : 2010-01-10 by Fredrik Möller
+ *                        : 2010-01-13 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -73,6 +74,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
+import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 
 public class ConfigViewerGUI extends JFrame {
@@ -137,6 +139,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox createThumbnailIfMissingOrCorrupt;
 	private JTextField thumbnailWidth;
 	private JTextField thumbnailHeight;
+	private JComboBox thumbnailCreationAlgorithm;
 	
 	private Config   conf;
 	private Logger   logger;
@@ -150,6 +153,7 @@ public class ConfigViewerGUI extends JFrame {
 	private String GUI_LANGUAGE_ISO6391;
 	private String THUMBNAIL_WIDTH;
 	private String THUMBNAIL_HEIGHT;
+	private String CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
 	
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
@@ -160,7 +164,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean USE_LAST_MODIFIED_TIME;
 	private boolean AUTOMATIC_LANGUAGE_SELECTION;
 	private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
-		
+			
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
 		logger = Logger.getInstance();
@@ -194,6 +198,7 @@ public class ConfigViewerGUI extends JFrame {
 		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt");
 		THUMBNAIL_WIDTH = conf.getStringProperty("thumbnails.view.width");
 		THUMBNAIL_HEIGHT = conf.getStringProperty("thumbnails.view.height");
+		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = conf.getStringProperty("thumbnails.view.create.algorithm");
 	}
 	
 	private void initiateWindow() {
@@ -264,6 +269,7 @@ public class ConfigViewerGUI extends JFrame {
 		cancelButton.addActionListener(new CancelButtonListener());
 		thumbnailWidth.getDocument().addDocumentListener(new ThumbnailWidthJTextFieldListener());
 		thumbnailHeight.getDocument().addDocumentListener(new ThumbnailHeightJTextFieldListener());
+		createThumbnailIfMissingOrCorrupt.addChangeListener(new CreateThumbnailCheckBoxListener());
 	}
 	
 	private JPanel createButtonPanel() {
@@ -531,15 +537,35 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel thumbnailWidthLabel = new JLabel("Width of the created thumbnail");
 		thumbnailWidth = new JTextField(conf.getStringProperty("thumbnails.view.width"));
 		thumbnailWidth.setColumns(5);
+		thumbnailWidth.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 		
 //		TODO: Fix hard coded string
 		JLabel thumbnailHeightLabel = new JLabel("Height of the created thumbnail");
 		thumbnailHeight = new JTextField(conf.getStringProperty("thumbnails.view.height"));
 		thumbnailHeight.setColumns(5);
+		thumbnailHeight.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+		
+//		TODO: Fix hard coded string
+		JLabel thumbnailCreationMode = new JLabel("Thumbnail Creation Algorithm");
+				
+		String scaleAlgorithm = conf.getStringProperty("thumbnails.view.create.algorithm");
+		int seletedIndex = 0; 
+		
+		for (JPEGScaleAlgorithm algorithm : JPEGScaleAlgorithm.values()) {
+			if(algorithm.toString().equals(scaleAlgorithm)) {
+				seletedIndex = algorithm.ordinal();
+				break;
+			}	
+		}
+		
+		thumbnailCreationAlgorithm = new JComboBox(JPEGScaleAlgorithm.values());
+		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
+		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 		
 		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailPanel);
 		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
 		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
 		thumbnailConfigurationPanel.add(thumbnailWidthLabel, posThumbnailPanel.nextRow());
 		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
 		thumbnailConfigurationPanel.add(thumbnailWidth, posThumbnailPanel.nextCol());
@@ -547,6 +573,10 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailConfigurationPanel.add(thumbnailHeightLabel, posThumbnailPanel.nextRow());
 		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
 		thumbnailConfigurationPanel.add(thumbnailHeight, posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
+		thumbnailConfigurationPanel.add(thumbnailCreationMode, posThumbnailPanel.nextRow());
+		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
+		thumbnailConfigurationPanel.add(thumbnailCreationAlgorithm, posThumbnailPanel.nextCol());
 	}
 		
 	private void updateWindowLocationAndSize() {
@@ -623,6 +653,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setBooleanProperty("thumbnails.view.create-if-missing-or-corrupt", createThumbnailIfMissingOrCorrupt.isSelected());
 		conf.setStringProperty("thumbnails.view.width", thumbnailWidth.getText());
 		conf.setStringProperty("thumbnails.view.height", thumbnailHeight.getText());
+		conf.setStringProperty("thumbnails.view.create.algorithm", thumbnailCreationAlgorithm.getSelectedItem().toString());
 				
 		/**
 		 * Show configuration changes.
@@ -703,6 +734,11 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		if(!THUMBNAIL_HEIGHT.equals(thumbnailHeight.getText())) {
 			displayMessage.append("Height of the created thumbnail" + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(!CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM.equals(thumbnailCreationAlgorithm.getSelectedItem().toString())) {
+			displayMessage.append("Thumbnail Creation Algorithm" + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
 		}
 				
 		if(displayMessage.length() > 0) {
@@ -952,6 +988,15 @@ public class ConfigViewerGUI extends JFrame {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			rotateLogSize.setEnabled(rotateLog.isSelected());
+		}
+	}
+	
+	private class CreateThumbnailCheckBoxListener implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			thumbnailWidth.setEnabled(createThumbnailIfMissingOrCorrupt.isSelected());
+			thumbnailHeight.setEnabled(createThumbnailIfMissingOrCorrupt.isSelected());
+			thumbnailCreationAlgorithm.setEnabled(createThumbnailIfMissingOrCorrupt.isSelected());
 		}
 	}
 	
