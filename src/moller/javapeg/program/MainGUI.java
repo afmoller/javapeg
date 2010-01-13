@@ -95,7 +95,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,9 +182,9 @@ import moller.util.gui.Table;
 import moller.util.gui.Update;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
-import moller.util.io.JPEGUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
+import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
 
