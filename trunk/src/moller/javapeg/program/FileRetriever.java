@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.util.io.JPEGUtil;
+import moller.util.jpeg.JPEGUtil;
 
 public class FileRetriever {
 	
