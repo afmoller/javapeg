@@ -10,6 +10,7 @@ package moller.javapeg.program.jpeg;
  *                        : 2010-01-03 by Fredrik Möller
  *                        : 2010-01-04 by Fredrik Möller
  *                        : 2010-01-07 by Fredrik Möller
+ *                        : 2010-01-13 by Fredrik Möller
  */
 
 import java.io.File;
@@ -21,7 +22,8 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
-import moller.util.io.JPEGUtil;
+import moller.util.jpeg.JPEGScaleAlgorithm;
+import moller.util.jpeg.JPEGUtil;
 
 public class JPEGThumbNailRetriever {
 	
@@ -98,8 +100,18 @@ public class JPEGThumbNailRetriever {
 						logger.logDEBUG("Embedded thumbnail missing or corrupt in file: " + jpegFile.getAbsolutePath());
 						
 						if(config.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt")) {
-							logger.logDEBUG("Creating thumbnail for image: "  + jpegFile.getAbsolutePath());
-							thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height")).toByteArray();	
+							try {
+								logger.logDEBUG("Searching for thumbnail in image: "  + jpegFile.getAbsolutePath());
+								thumbNailData = JPEGUtil.searchForThumbnail(jpegFile);
+								logger.logDEBUG("Found thumbnail in image: "  + jpegFile.getAbsolutePath());
+							} catch (IOException iox) {
+								logger.logDEBUG("Creating thumbnail for image: "  + jpegFile.getAbsolutePath());
+								
+								String algorithm = config.getStringProperty("thumbnails.view.create.algorithm");
+								logger.logDEBUG("Thumbnail creation algorithm: " + algorithm);
+								
+								thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height"), algorithm.equals("FAST") ? JPEGScaleAlgorithm.FAST : JPEGScaleAlgorithm.SMOOTH).toByteArray();
+							}
 						} else {
 							logger.logDEBUG("Loading missing thumbnail image");
 //							TODO: Implement a "missing thumbnail image"
