@@ -9,6 +9,7 @@ package moller.util.io;
  *                        : 2009-11-14 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
  *                        : 2009-12-28 by Fredrik Möller
+ *                        : 2010-01-13 by Fredrik Möller
  */
 
 import java.awt.Point;
@@ -499,4 +500,31 @@ public class FileUtil {
 			return false;
 		}
 	}
+	
+	public static byte[] getBytesFromFile(File file) throws IOException {
+        
+		InputStream is = null;
+		byte[] bytes;
+		
+		try {
+			is = new FileInputStream(file);
+
+			bytes = new byte[(int)file.length()];
+
+			int offset = 0;
+			int numRead = 0;
+			while (offset < bytes.length && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+				offset += numRead;
+			}
+
+			if (offset < bytes.length) {
+				throw new IOException("Could not completely read file "+file.getName());
+			}
+        } finally {
+        	if (is != null) {
+        		is.close();	
+        	}
+        }
+        return bytes;
+    }
 }
