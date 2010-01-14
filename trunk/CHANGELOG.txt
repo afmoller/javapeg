@@ -10,6 +10,17 @@
  
  2.5 (2010-xx-xx)
  
+ + If a JPEG file is missing an embedded thumbnail or if the exif data holds
+   corrupt information about where the thumbnail is stored and JavaPEG does not
+   find it by scanning the enrire JPEG file or if the stored thumbnail is 
+   corrupt, then it is possible to let JavaPEG create a thumbnail to be used by
+   JavaPEG. The original JPEG file will not be updated with the created 
+   thumbnail.
+   
+ + It is possible to enable and disable the thumbnail cache that JavaPEG uses
+   internally. It is also possible to set the max size (number of thumbnails to
+   cache) of the cache and to entirely clear the cache from thumbnails.   
+ 
  ! JavaPEG did crash as a result of a null pointer exception when a directory
    without read access, for the current user, was browsed in the tree view.
    Bug seen in Windows 7, but is probably existing in any Operating system with
