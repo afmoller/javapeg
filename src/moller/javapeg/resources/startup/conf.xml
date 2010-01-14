@@ -50,4 +50,6 @@
 <entry key="thumbnails.view.create.algorithm">SMOOTH</entry>
 <entry key="thumbnails.view.width">160</entry>
 <entry key="thumbnails.view.height">120</entry>
+<entry key="thumbnails.cache.enabled">true</entry>
+<entry key="thumbnails.cache.max-size">512</entry>
 </properties>

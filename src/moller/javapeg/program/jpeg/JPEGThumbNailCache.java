@@ -1,12 +1,15 @@
 package moller.javapeg.program.jpeg;
 /**
  * This class was created : 2009-02-05 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         : 2010-01-01 by Fredrik Möller
+ *                        : 2010-01-14 by Fredrik Möller
  */
 
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import moller.javapeg.program.config.Config;
 
 public class JPEGThumbNailCache {
 	
@@ -23,7 +26,7 @@ public class JPEGThumbNailCache {
 	/**
 	 * The maximum number of entries in the cache.
 	 */
-	private static final int MAX_ENTRIES = 512;
+	private static final int MAX_ENTRIES = Config.getInstance().getIntProperty("thumbnails.cache.max-size");
 		
 	/**
 	 * Private constructor. It creates an LinkedHashMap
@@ -79,12 +82,23 @@ public class JPEGThumbNailCache {
 	 *         to the parameter jpegFile, or null if there is no
 	 *         entry for the value of jpegFile.
 	 */
-	public JPEGThumbNail get (File jpegFile) {
+	public JPEGThumbNail get(File jpegFile) {
 		return thumbNailLRUCache.get(jpegFile);
 	}
-	
-	
+		
 	public boolean exists (File jpegFile) {
 		return thumbNailLRUCache.containsKey(jpegFile);
+	}
+	
+	public int getCurrentSize() {
+		return thumbNailLRUCache.size();
+	}
+	
+	public int getMaxSize() {
+		return MAX_ENTRIES;
+	}
+	
+	public void clear() {
+		thumbNailLRUCache.clear();
 	}
 }

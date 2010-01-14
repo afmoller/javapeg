@@ -67,6 +67,7 @@ import javax.swing.event.ListSelectionListener;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
+import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Level;
@@ -140,6 +141,10 @@ public class ConfigViewerGUI extends JFrame {
 	private JTextField thumbnailWidth;
 	private JTextField thumbnailHeight;
 	private JComboBox thumbnailCreationAlgorithm;
+	private JTextField maxCacheSize;
+	private JButton clearCacheJButton;
+	private JLabel cacheSizeLabel;
+	private JCheckBox enableThumbnailCache;
 	
 	private Config   conf;
 	private Logger   logger;
@@ -154,6 +159,8 @@ public class ConfigViewerGUI extends JFrame {
 	private String THUMBNAIL_WIDTH;
 	private String THUMBNAIL_HEIGHT;
 	private String CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
+	private String THUMBNAIL_MAX_CACHE_SIZE;
+	
 	
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
@@ -164,6 +171,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean USE_LAST_MODIFIED_TIME;
 	private boolean AUTOMATIC_LANGUAGE_SELECTION;
 	private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
+	private boolean ENABLE_THUMBNAIL_CACHE;
 			
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
@@ -199,6 +207,8 @@ public class ConfigViewerGUI extends JFrame {
 		THUMBNAIL_WIDTH = conf.getStringProperty("thumbnails.view.width");
 		THUMBNAIL_HEIGHT = conf.getStringProperty("thumbnails.view.height");
 		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = conf.getStringProperty("thumbnails.view.create.algorithm");
+		THUMBNAIL_MAX_CACHE_SIZE = conf.getStringProperty("thumbnails.cache.max-size");
+		ENABLE_THUMBNAIL_CACHE = conf.getBooleanProperty("thumbnails.cache.enabled");
 	}
 	
 	private void initiateWindow() {
@@ -270,6 +280,9 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailWidth.getDocument().addDocumentListener(new ThumbnailWidthJTextFieldListener());
 		thumbnailHeight.getDocument().addDocumentListener(new ThumbnailHeightJTextFieldListener());
 		createThumbnailIfMissingOrCorrupt.addChangeListener(new CreateThumbnailCheckBoxListener());
+		maxCacheSize.getDocument().addDocumentListener(new ThumbnailMaxCacheSizeJTextFieldListener());
+		clearCacheJButton.addActionListener(new ClearCacheButtonListener());
+		enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
 	}
 	
 	private JPanel createButtonPanel() {
@@ -523,11 +536,10 @@ public class ConfigViewerGUI extends JFrame {
 	}
 	
 	private void createThumbnailConfigurationPanel() {
-		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
-		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
-		GBHelper posThumbnailPanel = new GBHelper();
-
+			
+		/**
+		 * Start of Thumbnail Creation Area
+		 */
 //		TODO: Fix hard coded string
 		JLabel createThumbnailIfMissingOrCorruptLabel = new JLabel("If embedded thumbnail is missing or corrupt, create a temporary");
 		createThumbnailIfMissingOrCorrupt = new JCheckBox();
@@ -562,21 +574,87 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
 		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 		
-		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailPanel);
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(thumbnailWidthLabel, posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(thumbnailWidth, posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(thumbnailHeightLabel, posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(thumbnailHeight, posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(thumbnailCreationMode, posThumbnailPanel.nextRow());
-		thumbnailConfigurationPanel.add(new Gap(10), posThumbnailPanel.nextCol());
-		thumbnailConfigurationPanel.add(thumbnailCreationAlgorithm, posThumbnailPanel.nextCol());
+		JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());
+		thumbnailCreationPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Creation"));
+		
+		GBHelper posThumbnailCreationPanel = new GBHelper();
+		
+		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailCreationPanel);
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(thumbnailWidthLabel, posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(thumbnailWidth, posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(thumbnailHeightLabel, posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(thumbnailHeight, posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(thumbnailCreationMode, posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
+		thumbnailCreationPanel.add(thumbnailCreationAlgorithm, posThumbnailCreationPanel.nextCol());
+		
+		/**
+		 * Start of Thumbnail Cache Area
+		 */
+		
+//		TODO: Fix hard coded string
+		JLabel enableThumbnailCacheLabel = new JLabel("Enable Thumbnail cache" + ": ");
+		
+		enableThumbnailCache = new JCheckBox();
+		enableThumbnailCache.setSelected(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		
+		
+		JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
+//		TODO: Fix hard coded string
+		JLabel cacheSizeLabelHeading = new JLabel("Thumbnail cache size" + ": ");
+		
+		cacheSizeLabel = new JLabel(Integer.toString(jptc.getCurrentSize()));
+		cacheSizeLabel.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		
+//		TODO: Fix hard coded string
+		JLabel cacheMaxSizeLabel = new JLabel("Thumbnail cache size max" + ": ");
+		
+		maxCacheSize = new JTextField(6);
+		maxCacheSize.setText(Integer.toString(conf.getIntProperty("thumbnails.cache.max-size")));
+		maxCacheSize.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		
+//		TODO: Fix hard coded string
+		JLabel clearCachLabel = new JLabel("Clear Thumbnail cache:");
+		
+		clearCacheJButton = new JButton("X");
+		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+				
+		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
+		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Cache"));
+		
+		GBHelper posThumbnailCachePanel = new GBHelper();
+		
+		thumbnailCachePanel.add(enableThumbnailCacheLabel, posThumbnailCachePanel);
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(enableThumbnailCache, posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+		
+		thumbnailCachePanel.add(cacheSizeLabelHeading, posThumbnailCachePanel.nextRow());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(cacheSizeLabel, posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+		thumbnailCachePanel.add(cacheMaxSizeLabel, posThumbnailCachePanel.nextRow());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(maxCacheSize, posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+		thumbnailCachePanel.add(clearCachLabel, posThumbnailCachePanel.nextRow());
+		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(clearCacheJButton, posThumbnailCachePanel.nextCol());
+				
+		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
+		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		
+		GBHelper posThumbnailPanel = new GBHelper();
+		
+		thumbnailConfigurationPanel.add(thumbnailCreationPanel, posThumbnailPanel.expandW().expandH());
+		thumbnailConfigurationPanel.add(thumbnailCachePanel, posThumbnailPanel.nextRow().expandW().expandH());
 	}
 		
 	private void updateWindowLocationAndSize() {
@@ -617,6 +695,10 @@ public class ConfigViewerGUI extends JFrame {
 		if(!validateThumbnailSize("height")) {
 			return false;
 		}
+		
+		if(!validateThumbnailCacheMaxSize()) {
+			return false;
+		}
 				
 		/**
 		 * Update Logging Configuration
@@ -654,6 +736,8 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("thumbnails.view.width", thumbnailWidth.getText());
 		conf.setStringProperty("thumbnails.view.height", thumbnailHeight.getText());
 		conf.setStringProperty("thumbnails.view.create.algorithm", thumbnailCreationAlgorithm.getSelectedItem().toString());
+		conf.setStringProperty("thumbnails.cache.max-size", maxCacheSize.getText());
+		conf.setBooleanProperty("thumbnails.cache.enabled", enableThumbnailCache.isSelected());
 				
 		/**
 		 * Show configuration changes.
@@ -739,6 +823,16 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		if(!CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM.equals(thumbnailCreationAlgorithm.getSelectedItem().toString())) {
 			displayMessage.append("Thumbnail Creation Algorithm" + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(!THUMBNAIL_MAX_CACHE_SIZE.equals(maxCacheSize.getText())) {
+			displayMessage.append("Thumbnail cache size max" + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(!ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
+			displayMessage.append("Enable Thumbnail cache" + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
 				
 		if(displayMessage.length() > 0) {
@@ -855,7 +949,16 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return true;
 	}
-		
+	
+	private boolean validateThumbnailCacheMaxSize() {
+		if(!StringUtil.isInt(maxCacheSize.getText(), true)) {
+//			TODO: Fix hard coded string
+			JOptionPane.showMessageDialog(this, "The value of the thumbnail cache max size must be an non negative integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}	
+	
 	private void closeWindow() {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
@@ -903,7 +1006,17 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
+	
+	private class  ThumbnailMaxCacheSizeJTextFieldListener implements DocumentListener {
 
+		public void changedUpdate(DocumentEvent e) {
+		}
+		public void insertUpdate(DocumentEvent e) {
+			validateThumbnailCacheMaxSize();
+		}
+		public void removeUpdate(DocumentEvent e) {
+		}
+	}
 				
 	/**
 	 * Mouse listener
@@ -999,6 +1112,27 @@ public class ConfigViewerGUI extends JFrame {
 			thumbnailCreationAlgorithm.setEnabled(createThumbnailIfMissingOrCorrupt.isSelected());
 		}
 	}
+	
+	private class EnableThumbnailCacheCheckBoxListener implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			maxCacheSize.setEnabled(enableThumbnailCache.isSelected());
+			clearCacheJButton.setEnabled(enableThumbnailCache.isSelected());
+			cacheSizeLabel.setEnabled(enableThumbnailCache.isSelected());
+		}
+	}
+	
+	private class ClearCacheButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+//			TODO: Add security question.
+			JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
+			
+			jptc.clear();
+			cacheSizeLabel.setText(Integer.toString(jptc.getCurrentSize()));
+		}
+	}
+	
 	
 	private class OkButtonListener implements ActionListener {
 		@Override
