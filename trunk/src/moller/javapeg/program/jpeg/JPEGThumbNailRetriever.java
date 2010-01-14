@@ -11,6 +11,7 @@ package moller.javapeg.program.jpeg;
  *                        : 2010-01-04 by Fredrik Möller
  *                        : 2010-01-07 by Fredrik Möller
  *                        : 2010-01-13 by Fredrik Möller
+ *                        : 2010-01-14 by Fredrik Möller
  */
 
 import java.io.File;
@@ -57,14 +58,19 @@ public class JPEGThumbNailRetriever {
 	}
 	
 	public JPEGThumbNail retrieveThumbNailFrom(File jpegFile) {
+		
+		JPEGThumbNail thumbNail = null;
+		JPEGThumbNailCache jpgtnc = null;
+		
+		if(config.getBooleanProperty("thumbnails.cache.enabled")) {
+			// Get the thumbnail cache
+			jpgtnc = JPEGThumbNailCache.getInstance();
 					
-		// Get the thumbnail cache
-		JPEGThumbNailCache jpgtnc = JPEGThumbNailCache.getInstance();
-				
-		// ..request the thumbnail from cache
-		JPEGThumbNail thumbNail = jpgtnc.get(jpegFile);
-				
-		// ..and if the thumbnail was not existing in the cache.
+			// ..request the thumbnail from cache
+			thumbNail = jpgtnc.get(jpegFile);
+		}
+						
+		// ..and if the thumbnail was not existing in the cache or cache not enabled.
 		if (thumbNail == null) {
 			thumbNail = new JPEGThumbNail();
 			
@@ -121,7 +127,9 @@ public class JPEGThumbNailRetriever {
 					thumbNail.setThumbNailData(thumbNailData);
 					thumbNail.setThumbNailSize(thumbNailLength);
 					
-					jpgtnc.add(jpegFile, thumbNail);
+					if(jpgtnc != null && config.getBooleanProperty("thumbnails.cache.enabled")) {
+						jpgtnc.add(jpegFile, thumbNail);
+					}
 				} catch(IOException iox) {
 					logger.logERROR("Could not retrieve the thumbnail for image: " + jpegFile.getAbsolutePath());
 					logger.logERROR(iox);
