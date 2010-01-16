@@ -10,6 +10,11 @@
  
  2.5 (2010-xx-xx)
  
+ ~ The length of the Exif parameter: Camera Model was hard coded to a maximum
+   of 15 characters. That has been changed to instead being a configurable 
+   length. The configuration is made in the configuration GUI. A value of 0 
+   (zero) means unlimited length. 
+ 
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds
    corrupt information about where the thumbnail is stored and JavaPEG does not
    find it by scanning the enrire JPEG file or if the stored thumbnail is 

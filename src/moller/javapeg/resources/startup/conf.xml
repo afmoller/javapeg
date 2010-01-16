@@ -19,6 +19,7 @@
 <entry key="rename.progress.log.timestamp.format">yyyy-MM-dd' 'HH:mm:ss:SSS</entry>
 <entry key="rename.use.lastmodified.date">true</entry>
 <entry key="rename.use.lastmodified.time">true</entry>
+<entry key="rename.maximum.length.camera-model">0</entry>
 <entry key="logger.log.rotate">true</entry>
 <entry key="logger.log.rotate.size">1048576</entry>
 <entry key="logger.log.rotate.zip">true</entry>

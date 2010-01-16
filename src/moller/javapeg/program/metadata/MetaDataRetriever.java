@@ -4,6 +4,7 @@ package moller.javapeg.program.metadata;
  * Latest changed         : 2007-02-27 by Fredrik Möller
  *                        : 2007-02-28 by Fredrik Möller
  *                        : 2009-08-10 by Fredrik Möller
+ *                        : 2010-01-16 by Fredrik Möller
  */
 
 import java.io.File;
@@ -85,8 +86,12 @@ public class MetaDataRetriever {
 							try {
 								md.setExifCameraModel(tag.getDescription());
 
-								if(md.getExifCameraModel().length() > 15)
-									md.setExifCameraModel(md.getExifCameraModel().substring(0,14));
+								int maxLength = conf.getIntProperty("rename.maximum.length.camera-model"); 
+								
+								if( maxLength > 0) {
+									if(md.getExifCameraModel().length() > maxLength)
+										md.setExifCameraModel(md.getExifCameraModel().substring(0,maxLength));
+								}
 							} catch (Exception ex) {
 							}
 						}
