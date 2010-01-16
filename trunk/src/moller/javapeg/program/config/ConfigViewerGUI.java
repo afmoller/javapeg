@@ -831,7 +831,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		
 //		TODO: Fix hard coded string
-		if(!ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
+		if(ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
 			displayMessage.append("Enable Thumbnail cache" + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
 				
