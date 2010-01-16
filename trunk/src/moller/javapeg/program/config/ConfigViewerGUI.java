@@ -128,6 +128,7 @@ public class ConfigViewerGUI extends JFrame {
 	 */
 	private JCheckBox useLastModifiedDate;
 	private JCheckBox useLastModifiedTime;
+	private JTextField maximumLengthOfCameraModelValueTextField;
 	
 	private  JLabel currentLanguage;
 			
@@ -160,6 +161,7 @@ public class ConfigViewerGUI extends JFrame {
 	private String THUMBNAIL_HEIGHT;
 	private String CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
 	private String THUMBNAIL_MAX_CACHE_SIZE;
+	private String MAXIMUM_LENGTH_OF_CAMERA_MODEL;
 	
 	
 	private boolean DEVELOPER_MODE;
@@ -209,6 +211,7 @@ public class ConfigViewerGUI extends JFrame {
 		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = conf.getStringProperty("thumbnails.view.create.algorithm");
 		THUMBNAIL_MAX_CACHE_SIZE = conf.getStringProperty("thumbnails.cache.max-size");
 		ENABLE_THUMBNAIL_CACHE = conf.getBooleanProperty("thumbnails.cache.enabled");
+		MAXIMUM_LENGTH_OF_CAMERA_MODEL = conf.getStringProperty("rename.maximum.length.camera-model");
 	}
 	
 	private void initiateWindow() {
@@ -283,6 +286,7 @@ public class ConfigViewerGUI extends JFrame {
 		maxCacheSize.getDocument().addDocumentListener(new ThumbnailMaxCacheSizeJTextFieldListener());
 		clearCacheJButton.addActionListener(new ClearCacheButtonListener());
 		enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
+		maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());
 	}
 	
 	private JPanel createButtonPanel() {
@@ -452,13 +456,21 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel useLastModifiedTimeLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
 		useLastModifiedTime = new JCheckBox();
 		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
-		
+
+//		TODO: Fix hard coded string
+		JLabel cameraModelValueLengthLabel = new JLabel("Maximum Lenght of camera model value");
+		maximumLengthOfCameraModelValueTextField = new JTextField(5);
+		maximumLengthOfCameraModelValueTextField.setText(conf.getStringProperty("rename.maximum.length.camera-model"));
+				
 		renameConfigurationPanel.add(useLastModifiedDateLabel, posRenamePanel);
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
 		renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextCol());
 		renameConfigurationPanel.add(useLastModifiedTimeLabel, posRenamePanel.nextRow());
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
 		renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextCol());
+		renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel.nextRow());
+		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
+		renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol());
 	}
 	
 	private void createLanguageConfigurationPanel() {
@@ -699,7 +711,11 @@ public class ConfigViewerGUI extends JFrame {
 		if(!validateThumbnailCacheMaxSize()) {
 			return false;
 		}
-				
+		
+		if(!validateMaximumLengtOfCameraModel()) {
+			return false;
+		}
+						
 		/**
 		 * Update Logging Configuration
 		 */
@@ -728,6 +744,7 @@ public class ConfigViewerGUI extends JFrame {
 		 */
 		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
 		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
+		conf.setStringProperty("rename.maximum.length.camera-model", maximumLengthOfCameraModelValueTextField.getText());
 		
 		/**
 		 * Update Thumbnail Configuration
@@ -833,6 +850,11 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		if(ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
 			displayMessage.append("Enable Thumbnail cache" + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(maximumLengthOfCameraModelValueTextField.getText())) {
+			displayMessage.append("Maximum Lenght of camera model value" + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
 		}
 				
 		if(displayMessage.length() > 0) {
@@ -959,6 +981,15 @@ public class ConfigViewerGUI extends JFrame {
 		return true;
 	}	
 	
+	private boolean validateMaximumLengtOfCameraModel() {
+		if(!StringUtil.isInt(maximumLengthOfCameraModelValueTextField.getText(), true)) {
+//			TODO: Fix hard coded string
+			JOptionPane.showMessageDialog(this, "The value of the maximum camera model length must be an non negative integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}	
+	
 	private void closeWindow() {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
@@ -1017,7 +1048,18 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-				
+	
+	private class  MaximumLengtOfCameraModelJTextFieldListener implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+		public void insertUpdate(DocumentEvent e) {
+			validateMaximumLengtOfCameraModel();
+		}
+		public void removeUpdate(DocumentEvent e) {
+		}
+	}
+					
 	/**
 	 * Mouse listener
 	 */
