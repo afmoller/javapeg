@@ -145,6 +145,8 @@ import javax.swing.tree.TreePath;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
+import moller.javapeg.program.categories.ImageRepositoryItem;
+import moller.javapeg.program.categories.ImageRepositoryUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.CustomCellRenderer;
@@ -186,6 +188,7 @@ import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
+import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
 
 
@@ -1129,6 +1132,7 @@ public class MainGUI extends JFrame {
 		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
+		categoriesRepositoryList.addListSelectionListener(new CategoriesRepositoryListListener());
 	}
 	
 	public void createRightClickMenu(){
@@ -1252,6 +1256,7 @@ public class MainGUI extends JFrame {
 		startProcessButton.setEnabled(state);
 		startProcessJMenuItem.setEnabled(state);
 		tree.setEnabled(state);
+		categoriesRepositoryList.setEnabled(state);
 	}
 	
 	private void closeApplication(int exitValue) {
@@ -1263,7 +1268,11 @@ public class MainGUI extends JFrame {
 		logger.flush();
 		System.exit(exitValue);
 	}
-		
+	
+	private void displayErrorMessage(String errorMessage) {
+		JOptionPane.showMessageDialog(this, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
+	}
+			
 	// WindowDestroyer
 	private class WindowDestroyer extends WindowAdapter{
 		public void windowClosing (WindowEvent e){
@@ -1612,6 +1621,7 @@ public class MainGUI extends JFrame {
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
 			TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+						
 			if(selRow != -1) {
 				Object [] path = selPath.getPath();
 				String totalPath = "";
@@ -1621,8 +1631,10 @@ public class MainGUI extends JFrame {
 					} else{
 						totalPath = totalPath + path[i].toString() + "\\";
 					}
-				}	
-				loadThumbNails(new File(totalPath));
+				}
+				if(!ApplicationContext.getInstance().getSourcePath().equals(totalPath)) {
+					loadThumbNails(new File(totalPath));
+				}
 			}	
 		}
 	}
@@ -1962,6 +1974,31 @@ public class MainGUI extends JFrame {
 			if (selectedIndex > -1) {
 				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom((File)imagesToViewListModel.get(selectedIndex));
 				imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
+			}
+		}
+	}
+	
+	private class CategoriesRepositoryListListener implements ListSelectionListener {
+		
+		public void valueChanged(ListSelectionEvent e) {
+			int selectedIndex = categoriesRepositoryList.getSelectedIndex();
+						
+			if (selectedIndex > -1) {
+				String repositoryPath = (String)categoriesRepositoryListModel.getElementAt(selectedIndex);
+				
+				ImageRepositoryItem iri = ImageRepositoryUtil.parseImageRepositoryItem(repositoryPath);
+								
+				if(!ApplicationContext.getInstance().getSourcePath().equals(iri.getPath()) && iri.getPathStatus() == Status.EXISTS) {
+					loadThumbNails(new File(iri.getPath()));
+				} else {
+					if (iri.getPathStatus() == Status.NOT_AVAILABLE) {
+//						TODO: Fix hard coded string
+						displayErrorMessage("Path is not available");
+					} else if (iri.getPathStatus() == Status.DOES_NOT_EXIST) {
+//						TODO: Fix hard coded string
+						displayErrorMessage("Path does not exist");
+					}
+				}
 			}
 		}
 	}
