@@ -1,12 +1,12 @@
 package moller.javapeg.program.categories;
 /**
  * This class was created : 2010-01-21 by Fredrik Möller
- * Latest changed         
+ * Latest changed         : 2010-01-28 by Fredrik Möller
  */
 
 import moller.util.io.Status;
 
-public class ImageRepositoryItem {
+public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
 	
 	private String path;
 	private Status pathStatus;
@@ -31,5 +31,10 @@ public class ImageRepositoryItem {
 		} else if(pathStatus.equals("DOES_NOT_EXIST")) {
 			this.pathStatus = Status.DOES_NOT_EXIST;
 		} 	
+	}
+	
+	@Override
+	public int compareTo(ImageRepositoryItem iri) {
+		return this.path.compareTo(iri.getPath());
 	}
 }
