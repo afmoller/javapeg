@@ -71,6 +71,7 @@ package moller.javapeg.program;
  *                        : 2009-11-13 by Fredrik Möller
  *                        : 2009-12-17 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
+ *                        : 2010-01-28 by Fredrik Möller
  */
 
 import java.awt.BorderLayout;
@@ -146,7 +147,6 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
-import moller.javapeg.program.categories.ImageRepositoryUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.CustomCellRenderer;
@@ -188,7 +188,6 @@ import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
-import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
 
 
@@ -1167,10 +1166,14 @@ public class MainGUI extends JFrame {
 				
 		if(repositoryPaths != null) {
 			for (int i=0; i<repositoryPaths.length; i++) {
-				String directoryStatus = DirectoryUtil.getStatus((String)repositoryPaths[i]).toString();
-				repositoryPaths[i] = repositoryPaths[i] + C.DIRECTORY_STATUS_DELIMITER + directoryStatus;
+				ImageRepositoryItem iri = new ImageRepositoryItem();
+				String directory = (String)repositoryPaths[i];
+				
+				iri.setPathStatus(DirectoryUtil.getStatus(directory));
+				iri.setPath(directory);
+				
+				categoriesRepositoryListModel.add(iri);
 			}
-			categoriesRepositoryListModel.addAll(repositoryPaths);
 		}
 		Update.updateAllUIs();		
 	}
@@ -1984,19 +1987,20 @@ public class MainGUI extends JFrame {
 			int selectedIndex = categoriesRepositoryList.getSelectedIndex();
 						
 			if (selectedIndex > -1) {
-				String repositoryPath = (String)categoriesRepositoryListModel.getElementAt(selectedIndex);
-				
-				ImageRepositoryItem iri = ImageRepositoryUtil.parseImageRepositoryItem(repositoryPath);
+				ImageRepositoryItem iri = (ImageRepositoryItem)categoriesRepositoryListModel.getElementAt(selectedIndex);
 								
 				if(!ApplicationContext.getInstance().getSourcePath().equals(iri.getPath()) && iri.getPathStatus() == Status.EXISTS) {
 					loadThumbNails(new File(iri.getPath()));
 				} else {
-					if (iri.getPathStatus() == Status.NOT_AVAILABLE) {
+					switch (iri.getPathStatus()) {
+					case NOT_AVAILABLE:
 //						TODO: Fix hard coded string
 						displayErrorMessage("Path is not available");
-					} else if (iri.getPathStatus() == Status.DOES_NOT_EXIST) {
+						break;
+					case DOES_NOT_EXIST:
 //						TODO: Fix hard coded string
 						displayErrorMessage("Path does not exist");
+						break;
 					}
 				}
 			}
