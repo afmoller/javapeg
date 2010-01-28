@@ -10,6 +10,7 @@ package moller.util.io;
  *                        : 2009-12-18 by Fredrik Möller
  *                        : 2009-12-28 by Fredrik Möller
  *                        : 2010-01-13 by Fredrik Möller
+ *                        : 2010-01-28 by Fredrik Möller
  */
 
 import java.awt.Point;
@@ -42,6 +43,8 @@ import java.util.zip.ZipOutputStream;
 import moller.util.string.StringUtil;
 
 public class FileUtil {
+	
+	private static final String LS = System.getProperty("line.separator");
 	
 	/**
 	 * This method copies a file.
@@ -264,14 +267,34 @@ public class FileUtil {
 	 *         some other reason is impossible to write to.
 	 */
 	public static void writeToFile(File f, Set<String> texts, boolean append) throws IOException {
-		
-		final String ls = System.getProperty("line.separator"); 
 		StringBuilder sb = new StringBuilder();
 		
 		for(String text : texts) {
-			sb.append(text + ls);
+			sb.append(text + LS);
 		}
 		writeToFile(f, sb.toString(), append); 
+	}
+	
+	/**
+	 * This method writes a string to a file either by appending the file
+	 * content or by writing the string from the beginning of the file.
+	 * 
+	 * @param f is the file object to write to.
+	 * @param text contains the string that will be written to the file f 
+	 *        object
+	 * @param append decides whether the string in the text object will be
+	 *        appended to the file object f or put to the start of the file.
+	 *        
+	 * @throws IOException if the file does not exist or is a directory or by
+	 *         some other reason is impossible to write to.
+	 */
+	public static void writeToFile(File f, List<String> texts, boolean append) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		
+		for(String text : texts) {
+			sb.append(text + LS);
+		}
+		writeToFile(f, sb.toString(), append);
 	}
 	
 	/**
@@ -290,12 +313,10 @@ public class FileUtil {
 	 *         some other reason is impossible to write to.
 	 */
 	public static void writeToFile(File f, Iterator<Object> texts, boolean append) throws IOException {
-		
-		final String ls = System.getProperty("line.separator"); 
 		StringBuilder sb = new StringBuilder();
 		
 		while(texts.hasNext()) {
-			sb.append(texts.next() + ls);
+			sb.append(texts.next() + LS);
 		}
 		writeToFile(f, sb.toString(), append); 
 	}
@@ -324,8 +345,6 @@ public class FileUtil {
 	 *         some other reason is impossible to write to.
 	 */
 	public static void writeToFile(File f, Iterator<Object> texts, boolean append, String splitTextToken, boolean useFirstPart) throws IOException {
-		
-		final String ls = System.getProperty("line.separator"); 
 		StringBuilder sb = new StringBuilder();
 				
 		while(texts.hasNext()) {
@@ -336,7 +355,7 @@ public class FileUtil {
 			sb.append(StringUtil.reverse(text.split(splitTextToken, 2)[useFirstPart ? 1 : 0]));
 			
 			if(texts.hasNext()) {
-				sb.append(ls);
+				sb.append(LS);
 			}
 		}
 		writeToFile(f, sb.toString(), append); 
