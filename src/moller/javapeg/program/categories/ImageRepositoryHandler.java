@@ -10,7 +10,9 @@ package moller.javapeg.program.categories;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import moller.javapeg.program.C;
@@ -62,9 +64,15 @@ public class ImageRepositoryHandler {
 		}	 
 	}
 	
-	public  void store(Iterator<Object> repositoriesPaths) {
+	public  void store(Iterator<Object> imageRepositoryItems) {
 		try {
-			FileUtil.writeToFile(repositoryFile, repositoriesPaths, false, C.DIRECTORY_STATUS_DELIMITER, true);
+			List<String> directoryPaths = new ArrayList<String>();
+			
+			while(imageRepositoryItems.hasNext()) {
+				directoryPaths.add(((ImageRepositoryItem)imageRepositoryItems.next()).getPath());
+			}
+			
+			FileUtil.writeToFile(repositoryFile, directoryPaths, false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
