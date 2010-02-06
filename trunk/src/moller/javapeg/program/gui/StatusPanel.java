@@ -75,9 +75,9 @@ public class StatusPanel extends JPanel {
 	public void setStatusMessage(String message, String toolTipText, int statusNr) {
 		int nrOfChars = message.length();
 
-		if(nrOfChars == 4){message = " "   + message  + " "; }
-		if(nrOfChars == 3){message = "  "  + message  + " "; }
-		if(nrOfChars == 2){message = "  "  + message  + "  ";}
+		if(nrOfChars == 4){message = " "   + message + " "; }
+		if(nrOfChars == 3){message = "  "  + message + " "; }
+		if(nrOfChars == 2){message = "  "  + message + "  ";}
 		if(nrOfChars == 1){message = "   " + message + "  ";}
 
 		statusVector.elementAt(statusNr).setText(message);
