@@ -147,6 +147,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
+import moller.javapeg.program.categories.ImageTagHandler;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.CustomCellRenderer;
@@ -1148,6 +1149,7 @@ public class MainGUI extends JFrame {
 	public void createRightClickMenuAddToCategorize() {
 		rightClickMenuAddToCategorize = new JPopupMenu();
 		
+//		TODO: Fix hard coded string
 		popupMenuAddImagesToCategorizeList = new JMenuItem("Add directory to database");
 		
 		rightClickMenuAddToCategorize.add(popupMenuAddImagesToCategorizeList);
@@ -1290,14 +1292,11 @@ public class MainGUI extends JFrame {
 
 			if(actionCommand.equals(lang.get("menu.item.exit"))){
 				closeApplication(0);
-			} 
-			
-			else if(actionCommand.equals(lang.get("menu.item.openDestinationFileChooser"))) {
+			} else if(actionCommand.equals(lang.get("menu.item.openDestinationFileChooser"))) {
 				destinationPathButton.doClick();
 			} else if(actionCommand.equals(lang.get("menu.item.startProcess"))) {
 				startProcessButton.doClick();
 			} else if (actionCommand.equals(lang.get("menu.item.about")))	{
-
 				JOptionPane.showMessageDialog(null, lang.get("aboutDialog.TextRowA") +
                                              "\n" + lang.get("aboutDialog.TextRowB") +
                                              "\n" +
@@ -1635,7 +1634,10 @@ public class MainGUI extends JFrame {
 						totalPath = totalPath + path[i].toString() + "\\";
 					}
 				}
-				if(!ApplicationContext.getInstance().getSourcePath().equals(totalPath)) {
+				ApplicationContext ac = ApplicationContext.getInstance();
+						
+				if(!ac.getSourcePath().equals(totalPath) || ac.isInvalidImageRepositoryPathSelected()) {
+					ac.setInvalidImageRepositoryPathSelected(false);
 					loadThumbNails(new File(totalPath));
 				}
 			}	
@@ -1961,10 +1963,13 @@ public class MainGUI extends JFrame {
 	
 	private class AddImagesToCategorizeList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String sourcePath = ApplicationContext.getInstance().getSourcePath(); 
+			String sourcePath = ApplicationContext.getInstance().getSourcePath();
 			
-			if(!categoriesRepositoryListModel.contains(sourcePath + C.DIRECTORY_STATUS_DELIMITER + Status.EXISTS)) {
-				categoriesRepositoryListModel.add(sourcePath + C.DIRECTORY_STATUS_DELIMITER + Status.EXISTS);	
+			ImageRepositoryItem iri = new ImageRepositoryItem(sourcePath, Status.EXISTS);
+			
+			if(!categoriesRepositoryListModel.contains(iri)) {
+				categoriesRepositoryListModel.add(iri);
+				ImageTagHandler.createTagsFileForImages(new File(sourcePath));
 			}
 		}
 	}
@@ -1988,18 +1993,27 @@ public class MainGUI extends JFrame {
 						
 			if (selectedIndex > -1) {
 				ImageRepositoryItem iri = (ImageRepositoryItem)categoriesRepositoryListModel.getElementAt(selectedIndex);
-								
-				if(!ApplicationContext.getInstance().getSourcePath().equals(iri.getPath()) && iri.getPathStatus() == Status.EXISTS) {
-					loadThumbNails(new File(iri.getPath()));
+					
+				ApplicationContext ac = ApplicationContext.getInstance();
+				
+				if (iri.getPathStatus() == Status.EXISTS) {
+					if(!ac.getSourcePath().equals(iri.getPath()) || ac.isInvalidImageRepositoryPathSelected()) {
+						ac.setInvalidImageRepositoryPathSelected(false);
+						loadThumbNails(new File(iri.getPath()));
+					} 
 				} else {
+					ac.setInvalidImageRepositoryPathSelected(true);
+					thumbNailsPanel.removeAll();
+					thumbNailsPanel.updateUI();
+					
 					switch (iri.getPathStatus()) {
 					case NOT_AVAILABLE:
 //						TODO: Fix hard coded string
-						displayErrorMessage("Path is not available");
+						thumbNailsPanel.add(new JLabel("Image repository is not available, please select an available"));
 						break;
 					case DOES_NOT_EXIST:
 //						TODO: Fix hard coded string
-						displayErrorMessage("Path does not exist");
+						thumbNailsPanel.add(new JLabel("Image repository does not exist, please select an existing"));
 						break;
 					}
 				}
