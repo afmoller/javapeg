@@ -7,6 +7,7 @@ package moller.javapeg.program;
  *                        : 2009-09-19 by Fredrik Möller
  *                        : 2009-12-03 by Fredrik Möller
  *                        : 2009-12-18 by Fredrik Möller
+ *                        : 2010-02-05 by Fredrik Möller
  */
 
 import java.io.File;
@@ -91,6 +92,12 @@ public class ApplicationContext {
 	private boolean imageViewerDisplayed;
 	
 	/**
+	 * Indicates whether a non existing or a non available image repository 
+	 * path has been selected. 
+	 */
+	private boolean invalidImageRepositoryPathSelected;
+	
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -103,6 +110,7 @@ public class ApplicationContext {
 		jarFileEmbeddedLanguageFiles = new HashSet<String>();
 		jpegFileLoadBuffer = new ArrayList<File>();
 		imageViewerDisplayed = false;
+		invalidImageRepositoryPathSelected = false;
 	}
 
 	/**
@@ -156,6 +164,10 @@ public class ApplicationContext {
 		return jarFileEmbeddedLanguageFiles;
 	}
 	
+	public boolean isInvalidImageRepositoryPathSelected() {
+		return invalidImageRepositoryPathSelected;
+	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -196,7 +208,11 @@ public class ApplicationContext {
 	
 	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
 		this.imageViewerDisplayed = imageViewerDisplayed;
-	}	
+	}
+	
+	public void setInvalidImageRepositoryPathSelected(boolean invalidImageRepositoryPathSelected) {
+		this.invalidImageRepositoryPathSelected = invalidImageRepositoryPathSelected;
+	}
 		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
 		switch (action) {
