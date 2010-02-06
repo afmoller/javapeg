@@ -35,14 +35,17 @@ public class CustomCellRenderer	extends	JLabel implements ListCellRenderer {
 		switch (directoryStatus) {
 		case DOES_NOT_EXIST:
 			this.setBackground(new Color(255,127,127));
+//			TODO: Fix hard coded string
 			this.setToolTipText("Image Repository path does not exist.");
 			break;
 		case EXISTS:
 			this.setBackground(new Color(127,255,127));
+//			TODO: Fix hard coded string
 			this.setToolTipText("Image Repository path exists.");
 			break;
 		case NOT_AVAILABLE:
 			this.setBackground(new Color(251,231,128));
+//			TODO: Fix hard coded string
 			this.setToolTipText("Image Repository is not available.");
 			break;
 		}
