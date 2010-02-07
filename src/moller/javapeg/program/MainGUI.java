@@ -147,7 +147,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
-import moller.javapeg.program.categories.ImageTagHandler;
+import moller.javapeg.program.categories.ImageMetaDataDataBase;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.CustomCellRenderer;
@@ -640,7 +640,7 @@ public class MainGUI extends JFrame {
 		mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
 		mainTabbedPane.addTab(lang.get("tabbedpane.imageView")  , this.createViewPanel());
 //		TODO: Fix hard coded string
-		mainTabbedPane.addTab("CATEGORIZE IMAGES", this.createCategorizePanel());
+		mainTabbedPane.addTab("TAG IMAGES", this.createCategorizePanel());
 		
 		imageMetaDataPanel = new MetaDataPanel();
 		thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);			
@@ -1969,7 +1969,7 @@ public class MainGUI extends JFrame {
 			
 			if(!categoriesRepositoryListModel.contains(iri)) {
 				categoriesRepositoryListModel.add(iri);
-				ImageTagHandler.createTagsFileForImages(new File(sourcePath));
+				ImageMetaDataDataBase.create(new File(sourcePath));
 			}
 		}
 	}
