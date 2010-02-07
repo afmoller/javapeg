@@ -2,6 +2,7 @@
 ====
 - Add possibility to tag images with categories and add comments.
 - Add possibility to search for images matching criterias defined by the tagging of images.
+- Add merge functionality from several source directories. in the "rename image" mode.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
 - Fix layout of the Config Viewer GUI.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
