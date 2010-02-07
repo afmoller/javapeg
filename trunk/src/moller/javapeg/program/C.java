@@ -25,4 +25,12 @@ public class C {
 	public final static long VERSION_TIMESTAMP = 1258486103;
 	
 	public final static String DIRECTORY_STATUS_DELIMITER = "-";
+	
+	/**
+	 * The name of the file containing meta data of images in the same 
+	 * directory as this file is stored in.
+	 */
+	public final static String JAVAPEG_IMAGE_META_NAME = "javapeg-image-meta.xml";
+	
+	public final static String IMAGE_META_DATA_DATA_BASE_VERSION = "1";
 }
