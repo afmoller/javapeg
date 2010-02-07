@@ -6,6 +6,7 @@ package moller.util.jpeg;
  *                        : 2010-01-03 by Fredrik Möller
  *                        : 2010-01-04 by Fredrik Möller
  *                        : 2010-01-13 by Fredrik Möller
+ *                        : 2010-02-06 by Fredrik Möller
  */
 
 import java.awt.Image;
@@ -15,7 +16,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -119,6 +122,28 @@ public class JPEGUtil {
 	 */
 	public static boolean isJPEG(byte [] data) {
 		return startsWithFFD8(data) && endsWithFFD9(data);
+	}
+	
+	/**
+	 * This method return all JPEG files in a directory.
+	 * 
+	 * @param directory is the directory to search for JPEG files
+	 * 
+	 * @return a list containing all found JPEG files, as File objects, in the 
+	 *         directory defined by the directory parameter.
+	 *         
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static List<File> getJPEGFiles(File directory) throws FileNotFoundException, IOException {
+		List<File> jpegFiles = new ArrayList<File>();
+		
+		for(File file : directory.listFiles()) {
+			if(isJPEG(file)){
+				jpegFiles.add(file);
+			}
+		}
+		return jpegFiles;
 	}
 	
 	/**
