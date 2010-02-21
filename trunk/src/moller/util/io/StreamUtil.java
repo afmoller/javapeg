@@ -1,27 +1,32 @@
 package moller.util.io;
 /**
  * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         :
+ * Latest changed         : 2010-02-17 by Fredrik Möller
  */
 
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class StreamUtil {
 
-	public static void closeStream(InputStream in) {
-		try {
+	public static void closeStream(InputStream in) throws IOException {
+		if (in != null) {
 			in.close();
-		} catch (Exception e) {
 		}
 	}
 
-	public static void closeStream(OutputStream out) {
-		try {
+	public static void closeStream(OutputStream out) throws IOException {
+		if (out != null) {
 			out.close();
-		} catch (Exception e) {
+		}
+	}
+	
+	public static void closeStream(Closeable closeable) throws IOException {
+		if (closeable != null) {
+			closeable.close();
 		}
 	}
 	
