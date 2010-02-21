@@ -21,9 +21,9 @@ import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.util.io.XMLUtil;
 import moller.util.jpeg.JPEGUtil;
 
-public class ImageMetaDataDataBase {
+public class ImageMetaDataDataBaseHandler {
 	
-	public static boolean create(File directory) {
+	public static boolean initiate(File directory) {
 		
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 		
@@ -40,6 +40,7 @@ public class ImageMetaDataDataBase {
 					XMLStreamWriter w = factory.createXMLStreamWriter(os);
 					
 					XMLUtil.writeStartDocument("1.0", w);
+//					TODO: Write meaningfull comment
 					XMLUtil.writeComment("Test", w);
 					XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
 										
@@ -75,9 +76,11 @@ public class ImageMetaDataDataBase {
 					}
 				}
 			} catch (FileNotFoundException e) {
+			 // TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			} catch (IOException e) {
+			 // TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
