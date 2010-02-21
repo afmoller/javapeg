@@ -32,6 +32,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -249,7 +250,12 @@ public class ConfigViewerGUI extends JFrame {
 		} catch (Exception e) {
 			Logger.getInstance().logERROR("Could not open the image Help16.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setTitle(lang.get("configviewer.window.title"));
 	}
