@@ -215,8 +215,13 @@ public class NewVersionGUI extends JFrame{
 			JOptionPane.showMessageDialog(this, lang.get("updatechecker.errormessage.downloadError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			logger.logERROR(e);
 		} finally {
-			StreamUtil.closeStream(fileStream);
-			StreamUtil.closeStream(destinationFile);
+			try {
+				StreamUtil.closeStream(fileStream);
+				StreamUtil.closeStream(destinationFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}			
 	}
 

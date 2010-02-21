@@ -137,8 +137,13 @@ public class ThumbNailOverViewCreator {
 				logger.logERROR(element.toString());	
 			}
 		} finally {
-			StreamUtil.closeStream(cssSource);
-			StreamUtil.closeStream(cssDest);
+			try {
+				StreamUtil.closeStream(cssSource);
+				StreamUtil.closeStream(cssDest);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}		
 	}
 	

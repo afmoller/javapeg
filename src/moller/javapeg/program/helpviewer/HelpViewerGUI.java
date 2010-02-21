@@ -120,7 +120,12 @@ public class HelpViewerGUI extends JFrame {
 		} catch (Exception e) {
 			Logger.getInstance().logERROR("Could not open the image Help16.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		this.setTitle(lang.get("helpViewerGUI.window.title"));
