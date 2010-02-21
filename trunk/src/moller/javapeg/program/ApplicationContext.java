@@ -76,7 +76,6 @@ public class ApplicationContext {
 	 */
 	private Set<String> jarFileEmbeddedLanguageFiles;
 	
-	
 	/**
 	 * This list contains File objects and is populated when a directory is 
 	 * selected in the tree structure. When a jpeg image is found that is added
@@ -98,6 +97,13 @@ public class ApplicationContext {
 	private boolean invalidImageRepositoryPathSelected;
 	
 	/**
+	 * Indicates which image that has been selected in the grid of thumbnails
+	 * that has been populated when a directory has been selected in the tree
+	 * object.
+	 */
+	private File selectedThumbNail;
+	
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -111,6 +117,7 @@ public class ApplicationContext {
 		jpegFileLoadBuffer = new ArrayList<File>();
 		imageViewerDisplayed = false;
 		invalidImageRepositoryPathSelected = false;
+		selectedThumbNail = null;
 	}
 
 	/**
@@ -168,6 +175,10 @@ public class ApplicationContext {
 		return invalidImageRepositoryPathSelected;
 	}
 	
+	public File getSelectedThumbNail() {
+		return selectedThumbNail;
+	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -212,6 +223,10 @@ public class ApplicationContext {
 	
 	public void setInvalidImageRepositoryPathSelected(boolean invalidImageRepositoryPathSelected) {
 		this.invalidImageRepositoryPathSelected = invalidImageRepositoryPathSelected;
+	}
+	
+	public void setSelectedThumbNail(File selectedThumbNail) {
+		this.selectedThumbNail = selectedThumbNail;
 	}
 		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
