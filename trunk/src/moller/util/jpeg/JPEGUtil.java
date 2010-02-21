@@ -7,6 +7,7 @@ package moller.util.jpeg;
  *                        : 2010-01-04 by Fredrik Möller
  *                        : 2010-01-13 by Fredrik Möller
  *                        : 2010-02-06 by Fredrik Möller
+ *                        : 2010-02-13 by Fredrik Möller
  */
 
 import java.awt.Image;
@@ -23,6 +24,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import moller.util.io.FileUtil;
+import moller.util.io.StreamUtil;
 
 public class JPEGUtil {
 
@@ -79,15 +81,19 @@ public class JPEGUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ByteArrayOutputStream createThumbNail(File jpegFile, int width, int height, JPEGScaleAlgorithm algorithm) throws IOException {
+	public static byte[] createThumbNail(File jpegFile, int width, int height, JPEGScaleAlgorithm algorithm) throws IOException {
 		
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		img.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(width, height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
 		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(img, "jpg", baos);
-		
-		return baos;
+		ByteArrayOutputStream baos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			ImageIO.write(img, "jpg", baos);
+			return baos.toByteArray();
+		} finally {
+			StreamUtil.closeStream(baos);
+		}
 	}
 	
 	/**
