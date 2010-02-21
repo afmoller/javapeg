@@ -116,7 +116,7 @@ public class JPEGThumbNailRetriever {
 								String algorithm = config.getStringProperty("thumbnails.view.create.algorithm");
 								logger.logDEBUG("Thumbnail creation algorithm: " + algorithm);
 								
-								thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height"), algorithm.equals("FAST") ? JPEGScaleAlgorithm.FAST : JPEGScaleAlgorithm.SMOOTH).toByteArray();
+								thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height"), algorithm.equals("FAST") ? JPEGScaleAlgorithm.FAST : JPEGScaleAlgorithm.SMOOTH);
 							}
 						} else {
 							logger.logDEBUG("Loading missing thumbnail image");
