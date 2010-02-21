@@ -80,6 +80,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -124,6 +125,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -145,9 +147,9 @@ import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
+import moller.javapeg.program.categories.ImageMetaDataDataBase;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
-import moller.javapeg.program.categories.ImageMetaDataDataBase;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.gui.CustomCellRenderer;
@@ -183,10 +185,12 @@ import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.Update;
+import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
+import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
@@ -226,6 +230,7 @@ public class MainGUI extends JFrame {
 	private JLabel infoPanelLabel;
 	private JLabel amountOfImagesInImageListLabel;
 	private JLabel imagePreviewLabel;
+	private JLabel imageTagPreviewLabel;
 	
 	private JTextField destinationPathTextField;
 	private JTextField subFolderTextField;
@@ -250,11 +255,16 @@ public class MainGUI extends JFrame {
 	private JPopupMenu rightClickMenuAddToCategorize;
 
 	private JPanel thumbNailsPanel;
+	private JPanel imageTagPreviewPanel;
 	private JPanel infoPanel;
-	
+	private JPanel thumbNailsBackgroundsPanel;
+		
 	private JSplitPane thumbNailMetaPanelSplitPane;
 	private JSplitPane verticalSplitPane;
 	private JSplitPane mainSplitPane;
+	private JSplitPane previewAndCommentSplitPane;
+	
+	private JScrollPane imageTagPreviewScrollPane;
 	
 	private JMenuBar menuBar;
 
@@ -278,8 +288,6 @@ public class MainGUI extends JFrame {
 	
 	private ThumbNailLoading pb;
 	
-	private JPanel thumbNailsBackgroundsPanel;
-	
 	private MetaDataTableModel metaDataTableModel;
 	private PreviewTableModel previewTableModel;
 	
@@ -293,6 +301,8 @@ public class MainGUI extends JFrame {
 	
 	private JList imagesToViewList;
 	private JList categoriesRepositoryList;
+	
+	private JTextArea imageCommentTextArea;
 		
 	public MainGUI(){
 		
@@ -582,7 +592,12 @@ public class MainGUI extends JFrame {
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image javapeg.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		this.setSize(new Dimension(config.getIntProperty("mainGUI.window.width"), config.getIntProperty("mainGUI.window.height")));
@@ -712,8 +727,11 @@ public class MainGUI extends JFrame {
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(this.createCategorizeRepositoryPanel(), posBackgroundPanel.expandH());
+		
 		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandW().align(GridBagConstraints.NORTHWEST));
+		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.nextCol().expandW());
+		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandH().align(GridBagConstraints.NORTHWEST));
 		return backgroundJPanel;
 	}
 	
@@ -797,7 +815,12 @@ public class MainGUI extends JFrame {
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 				
 		imagesToViewListModel = new DefaultListModel();
@@ -909,7 +932,12 @@ public class MainGUI extends JFrame {
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image play.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 				
 		startProcessButton = new JButton(playPictureImageIcon);
@@ -927,7 +955,12 @@ public class MainGUI extends JFrame {
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image open.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		destinationPathLabel = new JLabel(lang.get("labels.destinatonPath"));
@@ -1011,7 +1044,12 @@ public class MainGUI extends JFrame {
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
 		} finally {
-			StreamUtil.closeStream(imageStream);
+			try {
+				StreamUtil.closeStream(imageStream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -1072,6 +1110,64 @@ public class MainGUI extends JFrame {
 		backgroundPanel.add(createCategoryTextField, posBackground.nextRow());
 		
 		
+		return backgroundPanel;
+	}
+	
+	private JPanel createPreviweAndCommentPanel() {
+		
+//		TODO: Fix hard coded string
+		JLabel previewHeading = new JLabel("PREVIEW");
+		previewHeading.setForeground(Color.GRAY);
+		
+		GBHelper posBackground = new GBHelper();
+		
+		imageTagPreviewLabel = new JLabel();
+				
+		imageTagPreviewPanel = new JPanel(new BorderLayout());
+		imageTagPreviewPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));			
+		imageTagPreviewPanel.add(imageTagPreviewLabel, BorderLayout.CENTER);
+		
+		imageTagPreviewScrollPane = new JScrollPane(imageTagPreviewPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		
+//		TODO: Fix hard coded string
+		JLabel commentHeading = new JLabel("COMMENT");
+		commentHeading.setForeground(Color.GRAY);
+				
+		imageCommentTextArea = new JTextArea();
+		imageCommentTextArea.setLineWrap(true);
+		imageCommentTextArea.setWrapStyleWord(true);
+				
+		JScrollPane scrollPane = new JScrollPane(imageCommentTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JPanel topPanel = new JPanel(new GridBagLayout());
+		topPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		
+		GBHelper posTop = new GBHelper();
+		
+		topPanel.add(previewHeading, posTop);
+		topPanel.add(new Gap(2), posTop.nextRow());
+		topPanel.add(imageTagPreviewScrollPane, posTop.nextRow().expandH().expandW());
+		topPanel.add(new Gap(2), posTop.nextRow());
+		
+		JPanel bottomPanel = new JPanel(new GridBagLayout());
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		
+		GBHelper posBottom = new GBHelper();
+		
+		bottomPanel.add(commentHeading, posBottom);
+		bottomPanel.add(new Gap(2), posBottom.nextRow());
+		bottomPanel.add(scrollPane, posBottom.nextRow().expandH().expandW());
+		
+		previewAndCommentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		previewAndCommentSplitPane.setDividerLocation(config.getIntProperty("previewAndCommentSplitPane.location"));
+		previewAndCommentSplitPane.setTopComponent(topPanel);
+		previewAndCommentSplitPane.setBottomComponent(bottomPanel);
+		
+		backgroundPanel.add(previewAndCommentSplitPane, posBackground.expandH().expandW());
+
 		return backgroundPanel;
 	}
 	
@@ -1206,6 +1302,7 @@ public class MainGUI extends JFrame {
 		config.setIntProperty("mainSplitPane.location", mainSplitPane.getDividerLocation());
 		config.setIntProperty("verticalSplitPane.location", verticalSplitPane.getDividerLocation());
 		config.setIntProperty("thumbNailMetaDataPanelSplitPane.location", thumbNailMetaPanelSplitPane.getDividerLocation());
+		config.setIntProperty("previewAndCommentSplitPane.location", previewAndCommentSplitPane.getDividerLocation());
 				
 		try {
 			config.saveSettings();
@@ -1695,7 +1792,23 @@ public class MainGUI extends JFrame {
 	private class ThumbNailListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			imageMetaDataPanel.setMetaData(new File(e.getActionCommand()));
+			File jpegImage = new File(e.getActionCommand());
+			
+			imageMetaDataPanel.setMetaData(jpegImage);
+			
+			if(mainTabbedPane.getSelectedIndex() == 2) {
+//				TODO: Fix -10 workaround to something generic
+				int width = imageTagPreviewScrollPane.getViewportBorderBounds().width - 10;
+				int height = imageTagPreviewScrollPane.getViewportBorderBounds().height - 10;
+				
+				try {
+					Image scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height, JPEGScaleAlgorithm.SMOOTH);
+					imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 	
