@@ -147,11 +147,12 @@ import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
-import moller.javapeg.program.categories.ImageMetaDataDataBase;
+import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
@@ -2082,7 +2083,7 @@ public class MainGUI extends JFrame {
 			
 			if(!categoriesRepositoryListModel.contains(iri)) {
 				categoriesRepositoryListModel.add(iri);
-				ImageMetaDataDataBase.create(new File(sourcePath));
+				ImageMetaDataDataBaseHandler.initiate(new File(sourcePath));
 			}
 		}
 	}
@@ -2113,6 +2114,7 @@ public class MainGUI extends JFrame {
 					if(!ac.getSourcePath().equals(iri.getPath()) || ac.isInvalidImageRepositoryPathSelected()) {
 						ac.setInvalidImageRepositoryPathSelected(false);
 						loadThumbNails(new File(iri.getPath()));
+						ImageMetaDataDataBaseHandler.initiate(new File(iri.getPath()));
 					} 
 				} else {
 					ac.setInvalidImageRepositoryPathSelected(true);

@@ -15,7 +15,7 @@ package moller.javapeg.program.rename.process;
 import java.io.File;
 import java.util.Map;
 
-import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;

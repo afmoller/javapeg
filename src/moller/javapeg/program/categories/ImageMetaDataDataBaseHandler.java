@@ -5,21 +5,36 @@ package moller.javapeg.program.categories;
  */
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.util.io.XMLUtil;
 import moller.util.jpeg.JPEGUtil;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 	
@@ -28,8 +43,12 @@ public class ImageMetaDataDataBaseHandler {
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 		
 		if(imageMetaDataDataBase.exists()) {
+			parseImageMetaDataDataBaseFile(imageMetaDataDataBase);
+			
 			
 		} else {
+			
+			
 			try {
 				List<File> jpegFiles = JPEGUtil.getJPEGFiles(directory);
 				
@@ -75,6 +94,7 @@ public class ImageMetaDataDataBaseHandler {
 						os.close();
 					}
 				}
+				parseImageMetaDataDataBaseFile(imageMetaDataDataBase);
 			} catch (FileNotFoundException e) {
 			 // TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,5 +106,90 @@ public class ImageMetaDataDataBaseHandler {
 			}
 		}
 		return true;
+	}
+	
+	private static ImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
+		ImageExifMetaData imageExifMetaData = new ImageExifMetaData();
+		
+		for (int index = 0; index < 8; index++) {
+			String nodeName  = exifMetaData.item(index).getNodeName();
+			String nodeValue = exifMetaData.item(index).getTextContent();
+			
+			if("aperture-value".equals(nodeName)) {
+				imageExifMetaData.setApertureValue(nodeValue);
+			} else if("camera-model".equals(nodeName)) {
+				imageExifMetaData.setCameraModel(nodeValue);
+			} else if("date".equals(nodeName)) {
+				imageExifMetaData.setDate(nodeValue);
+			} else if("iso-value".equals(nodeName)) {
+				imageExifMetaData.setIsoValue(nodeValue);
+			} else if("picture-height".equals(nodeName)) {
+				imageExifMetaData.setPictureHeight(nodeValue);
+			} else if("picture-width".equals(nodeName)) {
+				imageExifMetaData.setPictureWidth(nodeValue);
+			} else if("time".equals(nodeName)) {
+				imageExifMetaData.setTime(nodeValue);
+			}
+		}
+		return imageExifMetaData;
+	}
+	
+	private static void parseImageMetaDataDataBaseFile(File imageMetaDataDataBase ) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		Document doc;
+		
+		try {
+			db = dbf.newDocumentBuilder();
+			doc = db.parse(imageMetaDataDataBase);
+			doc.getDocumentElement().normalize();
+			
+			NodeList imageTags = doc.getElementsByTagName("image");
+			
+			int nrOfTags = imageTags.getLength();
+			
+			Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+			
+			for (int i = 0; i < nrOfTags; i++) {
+				Node imageTag = imageTags.item(i);
+				
+				NamedNodeMap nnm = imageTag.getAttributes();
+				Node file = nnm.getNamedItem("file");
+				
+				File image = new File(file.getNodeValue());
+				
+				NodeList content = imageTag.getChildNodes();
+				
+				ImageExifMetaData imageExifMetaData = null;
+				String comment = "";
+				int rating = 0;
+				List<Tag> tags = new ArrayList<Tag>();
+				
+				for (int j = 0; j < content.getLength(); j++) {
+					Node node = content.item(j);
+					if ("exif-meta-data".equals(node.getNodeName())) {
+						imageExifMetaData = createImageExifMetaData(node.getChildNodes());
+					} else if("comment".equals(node.getNodeName())) {
+						comment = node.getTextContent();
+					} else if("rating".equals(node.getNodeName())) {
+						rating = Integer.parseInt(node.getTextContent());
+					} else if("tags".equals(node.getNodeName())) {
+//						TODO: Fix real implementation
+					}
+				}
+				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, tags);
+				imageMetaDataDataBaseItems.put(image, iMDDBI);
+				
+				ApplicationContext ac = ApplicationContext.getInstance();
+			}
+		} catch (ParserConfigurationException pcex) {
+			// TODO Auto-generated catch block			
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
-import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 
 public class MetaDataUtil {

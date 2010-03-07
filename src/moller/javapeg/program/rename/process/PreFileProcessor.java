@@ -11,7 +11,7 @@ package moller.javapeg.program.rename.process;
  *                        : 2009-05-10 by Fredrik Möller
  */
 
-import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.ValidatorStatus;

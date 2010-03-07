@@ -8,8 +8,8 @@ package moller.javapeg.program.rename.validator;
 
 import java.io.File;
 
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.FileRetriever;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.rename.ValidatorStatus;

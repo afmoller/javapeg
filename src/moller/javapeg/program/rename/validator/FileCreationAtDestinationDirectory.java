@@ -12,8 +12,8 @@ package moller.javapeg.program.rename.validator;
 import java.io.File;
 import java.util.Map;
 
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.C;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.rename.FileAndType;
