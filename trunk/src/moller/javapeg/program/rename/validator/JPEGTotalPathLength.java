@@ -15,8 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.TemplateUtil;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;

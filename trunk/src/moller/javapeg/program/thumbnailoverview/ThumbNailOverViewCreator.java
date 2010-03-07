@@ -35,7 +35,7 @@ import java.util.TreeSet;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.ApplicationContext;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;

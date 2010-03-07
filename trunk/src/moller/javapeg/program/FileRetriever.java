@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.jpeg.JPEGUtil;

@@ -26,8 +26,8 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.logger.Logger;
 
 public class Language {

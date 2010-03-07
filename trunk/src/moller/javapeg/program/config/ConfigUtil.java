@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.C;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 

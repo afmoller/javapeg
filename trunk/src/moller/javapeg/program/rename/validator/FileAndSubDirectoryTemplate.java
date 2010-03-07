@@ -7,8 +7,8 @@ package moller.javapeg.program.rename.validator;
  *                        : 2009-05-04 by Fredrik Möller
  */
 
-import moller.javapeg.program.ApplicationContext;
 import moller.javapeg.program.TemplateUtil;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.util.io.PathUtil;
