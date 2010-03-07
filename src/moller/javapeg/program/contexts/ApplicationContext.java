@@ -1,4 +1,4 @@
-package moller.javapeg.program;
+package moller.javapeg.program.contexts;
 /**
  * This class was created : 2009-03-14 by Fredrik Möller
  * Latest changed         : 2009-03-23 by Fredrik Möller
@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import moller.javapeg.program.Action;
 import moller.javapeg.program.metadata.MetaData;
 
 /**
