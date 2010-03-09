@@ -1,14 +1,4 @@
 package moller.javapeg.program.contexts;
-/**
- * This class was created : 2009-03-14 by Fredrik Möller
- * Latest changed         : 2009-03-23 by Fredrik Möller
- *                        : 2009-06-02 by Fredrik Möller
- *                        : 2009-09-14 by Fredrik Möller
- *                        : 2009-09-19 by Fredrik Möller
- *                        : 2009-12-03 by Fredrik Möller
- *                        : 2009-12-18 by Fredrik Möller
- *                        : 2010-02-05 by Fredrik Möller
- */
 
 import java.io.File;
 import java.util.ArrayList;
