@@ -5,11 +5,9 @@ package moller.javapeg.program.categories;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +22,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
-import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.contexts.TagContext;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.util.io.XMLUtil;
@@ -44,11 +43,7 @@ public class ImageMetaDataDataBaseHandler {
 		
 		if(imageMetaDataDataBase.exists()) {
 			parseImageMetaDataDataBaseFile(imageMetaDataDataBase);
-			
-			
 		} else {
-			
-			
 			try {
 				List<File> jpegFiles = JPEGUtil.getJPEGFiles(directory);
 				
@@ -59,8 +54,9 @@ public class ImageMetaDataDataBaseHandler {
 					XMLStreamWriter w = factory.createXMLStreamWriter(os);
 					
 					XMLUtil.writeStartDocument("1.0", w);
-//					TODO: Write meaningfull comment
-					XMLUtil.writeComment("Test", w);
+					XMLUtil.writeComment("This XML file contains meta data information of all JPEG image\n" +
+							             "files that exists in the directory where this XML file is to be found.\n" + 
+							             "The content of this file is used and modified by the application JavaPEG", w);
 					XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
 										
 					for(File jpegFile : jpegFiles) {
@@ -78,8 +74,8 @@ public class ImageMetaDataDataBaseHandler {
 								XMLUtil.writeElement("shutter-speed" , md.getExifShutterSpeed() , w);
 								XMLUtil.writeElement("time"          , md.getExifTime()         , w);
 							XMLUtil.writeElementEnd(w);
-							XMLUtil.writeElement("comment", "", w);
-							XMLUtil.writeElement("rating", "", w);
+							XMLUtil.writeElement("comment", "Add Image Comment Here", w);
+							XMLUtil.writeElement("rating", "-1", w);
 							XMLUtil.writeElementStart("tags", w);
 							XMLUtil.writeElementEnd(w);
 							XMLUtil.writeElementEnd(w);
@@ -135,6 +131,8 @@ public class ImageMetaDataDataBaseHandler {
 	}
 	
 	private static void parseImageMetaDataDataBaseFile(File imageMetaDataDataBase ) {
+		Logger logger = Logger.getInstance();
+		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 		Document doc;
@@ -172,7 +170,13 @@ public class ImageMetaDataDataBaseHandler {
 					} else if("comment".equals(node.getNodeName())) {
 						comment = node.getTextContent();
 					} else if("rating".equals(node.getNodeName())) {
-						rating = Integer.parseInt(node.getTextContent());
+						try {
+							rating = Integer.parseInt(node.getTextContent());
+						} catch (NumberFormatException nfex) {
+							logger.logINFO("Could not parse rating value. Rating value is: \"" + node.getTextContent() + "\". Value set to -1");
+							logger.logINFO(nfex);
+							rating = -1;
+						}
 					} else if("tags".equals(node.getNodeName())) {
 //						TODO: Fix real implementation
 					}
@@ -180,7 +184,7 @@ public class ImageMetaDataDataBaseHandler {
 				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, tags);
 				imageMetaDataDataBaseItems.put(image, iMDDBI);
 				
-				ApplicationContext ac = ApplicationContext.getInstance();
+				TagContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
 			}
 		} catch (ParserConfigurationException pcex) {
 			// TODO Auto-generated catch block			
