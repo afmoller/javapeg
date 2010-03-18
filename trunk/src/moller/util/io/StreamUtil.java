@@ -18,9 +18,15 @@ public class StreamUtil {
 		}
 	}
 
-	public static void closeStream(OutputStream out) throws IOException {
+	public static void close(OutputStream out, boolean silent) {
 		if (out != null) {
-			out.close();
+			try {
+				out.close();
+			} catch (IOException e) {
+				if(!silent) {
+					throw new RuntimeException(e);
+				}
+			}
 		}
 	}
 	
