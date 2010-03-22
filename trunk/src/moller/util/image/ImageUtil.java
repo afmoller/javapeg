@@ -3,8 +3,10 @@ package moller.util.image;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -30,6 +32,29 @@ public class ImageUtil {
 		
 		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
 		scaledBufferedImage.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
+		
+		return scaledBufferedImage;
+	}
+	
+	/**
+	 * @param jpegFile
+	 * @param availableWidth
+	 * @param availableHeight
+	 * @param algorithm
+	 * @return
+	 * @throws IOException
+	 */
+	public static Image createThumbNailAdaptedToAvailableSpace(byte[] jpegData, int availableWidth, int availableHeight, JPEGScaleAlgorithm algorithm) throws IOException {
+		
+		InputStream in = new ByteArrayInputStream(jpegData);
+		BufferedImage img = ImageIO.read(in);
+		int imageWidth = img.getWidth();
+		int imageHeight = img.getHeight();
+		
+		Dimension scaledImage = calculateScaledImageWidthAndHeight(availableWidth, availableHeight, imageWidth, imageHeight);
+		
+		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
+		scaledBufferedImage.createGraphics().drawImage(img.getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
 		
 		return scaledBufferedImage;
 	}
