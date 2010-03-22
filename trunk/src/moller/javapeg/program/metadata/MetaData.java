@@ -1,8 +1,4 @@
 package moller.javapeg.program.metadata;
-/**
- * This class was created : 2007-02-27 by Fredrik Möller
- * Latest changed         : 2009-02-19 by Fredrik Möller
- */
 
 import java.io.File;
 
