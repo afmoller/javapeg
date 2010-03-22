@@ -120,14 +120,14 @@ public class MetaDataRetriever {
 
 						if(tag.getTagName().equals("Exif Image Width")){
 							try {
-								md.setExifPictureWidth(tag.getDescription());
+								md.setExifPictureWidth(removeNonIntegerCharacters(tag.getDescription()));
 							} catch (Exception ex) {
 							}
 						}
 
 						if(tag.getTagName().equals("Exif Image Height")){
 							try {
-								md.setExifPictureHeight(tag.getDescription());
+								md.setExifPictureHeight(removeNonIntegerCharacters(tag.getDescription()));
 							} catch (Exception ex) {
 							}
 						}
@@ -295,6 +295,26 @@ public class MetaDataRetriever {
 			}
 		}
 		return String.valueOf(stringToChar);
+	}
+	
+	private String removeNonIntegerCharacters(String stringValue) {
+		stringValue = stringValue.trim();
+		
+		StringBuilder allIntegerCharacters = new StringBuilder();
+		String subString = "";
+		
+		for (int i = 0; i < stringValue.length(); i++) {
+			subString = stringValue.substring(i, i + 1);
+			try {
+				Integer.parseInt(subString);
+				allIntegerCharacters.append(subString);
+			} catch (Exception e) {
+				if (allIntegerCharacters.length() > 0) {
+					break;
+				}
+			}
+		}
+		return allIntegerCharacters.toString();
 	}
 
 	public void debug() {
