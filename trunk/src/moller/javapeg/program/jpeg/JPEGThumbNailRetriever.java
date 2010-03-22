@@ -1,18 +1,4 @@
 package moller.javapeg.program.jpeg;
-/**
- * This class was created : 2007-01-17 by Fredrik Möller
- * Latest changed         : 2007-01-18 by Fredrik Möller
- *                        : 2009-02-05 by Fredrik möller
- *                        : 2009-02-19 by Fredrik Möller
- *                        : 2009-04-15 by Fredrik Möller
- *                        : 2009-04-16 by Fredrik Möller
- *                        : 2010-01-02 by Fredrik Möller
- *                        : 2010-01-03 by Fredrik Möller
- *                        : 2010-01-04 by Fredrik Möller
- *                        : 2010-01-07 by Fredrik Möller
- *                        : 2010-01-13 by Fredrik Möller
- *                        : 2010-01-14 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.FileInputStream;
