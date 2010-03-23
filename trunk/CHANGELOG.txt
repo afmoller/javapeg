@@ -10,6 +10,11 @@
  
  2.5 (2010-xx-xx)
  
+ ~ The value of the Exif Picture Width and Exif Picture Height was stripped 
+   from any occurences of non integer characters. In for instance some of the
+   Canon cameras the value of any of the above was: "2592 pixels". From now on
+   the value is only "2592" 
+ 
  ~ The length of the Exif parameter: Camera Model was hard coded to a maximum
    of 15 characters. That has been changed to instead being a configurable 
    length. The configuration is made in the configuration GUI. A value of 0 
@@ -17,7 +22,7 @@
  
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds
    corrupt information about where the thumbnail is stored and JavaPEG does not
-   find it by scanning the enrire JPEG file or if the stored thumbnail is 
+   find it by scanning the entire JPEG file or if the stored thumbnail is 
    corrupt, then it is possible to let JavaPEG create a thumbnail to be used by
    JavaPEG. The original JPEG file will not be updated with the created 
    thumbnail.
