@@ -1,8 +1,4 @@
 package moller.javapeg.program.categories;
-/**
- * This class was created : 2010-02-06 by Fredrik Möller
- * Latest changed         : 2010-02-07 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,10 +18,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
-import moller.javapeg.program.contexts.TagContext;
+import moller.javapeg.program.contexts.ImageRepositoryContext;
 import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.metadata.MetaData;
-import moller.javapeg.program.metadata.MetaDataRetriever;
+import moller.util.io.StreamUtil;
 import moller.util.io.XMLUtil;
 import moller.util.jpeg.JPEGUtil;
 
@@ -37,100 +32,96 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 	
-	public static boolean initiate(File directory) {
-		
+	public static boolean initiateDataBase(File directory) {
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
-		
-		if(imageMetaDataDataBase.exists()) {
-			parseImageMetaDataDataBaseFile(imageMetaDataDataBase);
-		} else {
-			try {
-				List<File> jpegFiles = JPEGUtil.getJPEGFiles(directory);
-				
-				OutputStream os = null;
-				try {
-					os = new FileOutputStream(imageMetaDataDataBase);
-					XMLOutputFactory factory = XMLOutputFactory.newInstance();
-					XMLStreamWriter w = factory.createXMLStreamWriter(os);
-					
-					XMLUtil.writeStartDocument("1.0", w);
-					XMLUtil.writeComment("This XML file contains meta data information of all JPEG image\n" +
-							             "files that exists in the directory where this XML file is to be found.\n" + 
-							             "The content of this file is used and modified by the application JavaPEG", w);
-					XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
-										
-					for(File jpegFile : jpegFiles) {
-						MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
-						MetaData md = mdr.getMetaData();
-						
-						XMLUtil.writeElementStart("image", "file", jpegFile.getAbsolutePath(), w);
-							XMLUtil.writeElementStart("exif-meta-data", w);
-								XMLUtil.writeElement("aperture-value", md.getExifApertureValue(), w);
-								XMLUtil.writeElement("camera-model"  , md.getExifCameraModel()  , w);
-								XMLUtil.writeElement("date"          , md.getExifDate()         , w);
-								XMLUtil.writeElement("iso-value"     , md.getExifISOValue()     , w);
-								XMLUtil.writeElement("picture-height", md.getExifPictureHeight(), w);
-								XMLUtil.writeElement("picture-width" , md.getExifPictureWidth() , w);
-								XMLUtil.writeElement("shutter-speed" , md.getExifShutterSpeed() , w);
-								XMLUtil.writeElement("time"          , md.getExifTime()         , w);
-							XMLUtil.writeElementEnd(w);
-							XMLUtil.writeElement("comment", "Add Image Comment Here", w);
-							XMLUtil.writeElement("rating", "-1", w);
-							XMLUtil.writeElementStart("tags", w);
-							XMLUtil.writeElementEnd(w);
-							XMLUtil.writeElementEnd(w);
-					}
-					XMLUtil.writeElementEnd(w);
-					w.flush();
-				} catch (XMLStreamException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					if(os != null) {
-						os.close();
-					}
-				}
-				parseImageMetaDataDataBaseFile(imageMetaDataDataBase);
-			} catch (FileNotFoundException e) {
-			 // TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			} catch (IOException e) {
-			 // TODO Auto-generated catch block
-				e.printStackTrace();
+	
+		if(!imageMetaDataDataBase.exists()) {
+			if(!createImageMetaDataDataBaseFile(directory, imageMetaDataDataBase)) {
 				return false;
 			}
+		} 
+		return deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase);
+	}
+	
+	private static boolean createImageMetaDataDataBaseFile(File imageRepository, File destination) {
+		try {
+			List<File> jpegFiles = JPEGUtil.getJPEGFiles(imageRepository);
+			
+			Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+			
+			for (File jpegFile : jpegFiles) {
+				ImageMetaDataDataBaseItem imddbi = new ImageMetaDataDataBaseItem();
+				
+				imddbi.setImage(jpegFile);
+				imddbi.setImageExifMetaData(new ImageExifMetaData(jpegFile));
+				imddbi.setComment("Add Comment Here");
+				imddbi.setRating(-1);
+				imddbi.setTags(new ArrayList<Tag>());
+				
+				imageMetaDataDataBaseItems.put(jpegFile, imddbi);
+			}
+			updateDataBaseFile(imageMetaDataDataBaseItems, destination);
+		} catch (FileNotFoundException e) {
+		 // TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+		 // TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+		
+	public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination) {
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(destination);
+			XMLOutputFactory factory = XMLOutputFactory.newInstance();
+			XMLStreamWriter w = factory.createXMLStreamWriter(os);
+			
+			XMLUtil.writeStartDocument("1.0", w);
+			XMLUtil.writeComment("This XML file contains meta data information of all JPEG image\n" +
+					             "files that exists in the directory where this XML file is to be found.\n" + 
+					             "The content of this file is used and modified by the application JavaPEG", w);
+			XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
+								
+			for(File image : imageMetaDataDataBaseItems.keySet()) {
+				ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+				ImageExifMetaData iemd = imddbi.getImageExifMetaData();
+				
+				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getAbsolutePath(), w);
+				XMLUtil.writeElementStart("exif-meta-data", w);
+					XMLUtil.writeElement("aperture-value", iemd.getApertureValue(), w);
+					XMLUtil.writeElement("camera-model"  , iemd.getCameraModel()  , w);
+					XMLUtil.writeElement("date"          , iemd.getDate()         , w);
+					XMLUtil.writeElement("iso-value"     , iemd.getIsoValue()     , w);
+					XMLUtil.writeElement("picture-height", iemd.getPictureHeight(), w);
+					XMLUtil.writeElement("picture-width" , iemd.getPictureWidth() , w);
+					XMLUtil.writeElement("shutter-speed" , iemd.getShutterSpeed() , w);
+					XMLUtil.writeElement("time"          , iemd.getTime()         , w);
+				XMLUtil.writeElementEnd(w);
+				XMLUtil.writeElement("comment", imddbi.getComment(), w);
+				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
+				XMLUtil.writeElementStart("tags", w);
+				XMLUtil.writeElementEnd(w);
+				XMLUtil.writeElementEnd(w);
+			}
+			XMLUtil.writeElementEnd(w);
+			w.flush();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			return false;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			return false;
+		} finally {
+			StreamUtil.close(os, true);
 		}
 		return true;
 	}
 	
-	private static ImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
-		ImageExifMetaData imageExifMetaData = new ImageExifMetaData();
-		
-		for (int index = 0; index < 8; index++) {
-			String nodeName  = exifMetaData.item(index).getNodeName();
-			String nodeValue = exifMetaData.item(index).getTextContent();
-			
-			if("aperture-value".equals(nodeName)) {
-				imageExifMetaData.setApertureValue(nodeValue);
-			} else if("camera-model".equals(nodeName)) {
-				imageExifMetaData.setCameraModel(nodeValue);
-			} else if("date".equals(nodeName)) {
-				imageExifMetaData.setDate(nodeValue);
-			} else if("iso-value".equals(nodeName)) {
-				imageExifMetaData.setIsoValue(nodeValue);
-			} else if("picture-height".equals(nodeName)) {
-				imageExifMetaData.setPictureHeight(nodeValue);
-			} else if("picture-width".equals(nodeName)) {
-				imageExifMetaData.setPictureWidth(nodeValue);
-			} else if("time".equals(nodeName)) {
-				imageExifMetaData.setTime(nodeValue);
-			}
-		}
-		return imageExifMetaData;
-	}
-	
-	private static void parseImageMetaDataDataBaseFile(File imageMetaDataDataBase ) {
+	private static boolean deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase ) {
 		Logger logger = Logger.getInstance();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -184,16 +175,46 @@ public class ImageMetaDataDataBaseHandler {
 				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, tags);
 				imageMetaDataDataBaseItems.put(image, iMDDBI);
 				
-				TagContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
+				ImageRepositoryContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
 			}
 		} catch (ParserConfigurationException pcex) {
-			// TODO Auto-generated catch block			
+			// TODO Auto-generated catch block
+			return false;
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
+		return true;
+	}
+	
+	private static ImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
+		ImageExifMetaData imageExifMetaData = new ImageExifMetaData();
+		
+		for (int index = 0; index < 8; index++) {
+			String nodeName  = exifMetaData.item(index).getNodeName();
+			String nodeValue = exifMetaData.item(index).getTextContent();
+			
+			if("aperture-value".equals(nodeName)) {
+				imageExifMetaData.setApertureValue(nodeValue);
+			} else if("camera-model".equals(nodeName)) {
+				imageExifMetaData.setCameraModel(nodeValue);
+			} else if("date".equals(nodeName)) {
+				imageExifMetaData.setDate(nodeValue);
+			} else if("iso-value".equals(nodeName)) {
+				imageExifMetaData.setIsoValue(nodeValue);
+			} else if("picture-height".equals(nodeName)) {
+				imageExifMetaData.setPictureHeight(nodeValue);
+			} else if("picture-width".equals(nodeName)) {
+				imageExifMetaData.setPictureWidth(nodeValue);
+			} else if("time".equals(nodeName)) {
+				imageExifMetaData.setTime(nodeValue);
+			}
+		}
+		return imageExifMetaData;
 	}
 }
