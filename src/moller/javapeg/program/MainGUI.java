@@ -1,78 +1,4 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2009-02-25 by Fredrik Möller
- * Latest changed         : 2009-02-26 by Fredrik Möller
- *                        : 2009-03-01 by Fredrik Möller
- *                        : 2009-03-02 by Fredrik Möller
- *                        : 2009-03-03 by Fredrik Möller
- *                        : 2009-03-04 by Fredrik Möller
- *                        : 2009-03-05 by Fredrik Möller
- *                        : 2009-03-09 by Fredrik Möller
- *                        : 2009-03-10 by Fredrik Möller
- *                        : 2009-03-11 by Fredrik Möller
- *                        : 2009-03-18 by Fredrik Möller
- *                        : 2009-03-25 by Fredrik Möller
- *                        : 2009-03-26 by Fredrik Möller
- *                        : 2009-04-04 by Fredrik Möller
- *                        : 2009-04-05 by Fredrik Möller
- *                        : 2009-04-06 by Fredrik Möller
- *                        : 2009-04-12 by Fredrik Möller
- *                        : 2009-04-13 by Fredrik Möller
- *                        : 2009-04-15 by Fredrik Möller
- *                        : 2009-04-23 by Fredrik Möller
- *                        : 2009-04-29 by Fredrik Möller
- *                        : 2009-05-04 by Fredrik Möller
- *                        : 2009-05-13 by Fredrik Möller
- *                        : 2009-05-14 by Fredrik Möller
- *                        : 2009-05-15 by Fredrik Möller
- *                        : 2009-05-16 by Fredrik Möller
- *                        : 2009-05-19 by Fredrik Möller
- *                        : 2009-05-20 by Fredrik Möller
- *                        : 2009-05-21 by Fredrik Möller
- *                        : 2009-05-25 by Fredrik Möller
- *                        : 2009-05-26 by Fredrik Möller
- *                        : 2009-05-28 by Fredrik Möller
- *                        : 2009-05-30 by Fredrik Möller
- *                        : 2009-06-01 by Fredrik Möller
- *                        : 2009-06-02 by Fredrik Möller
- *                        : 2009-06-04 by Fredrik Möller
- *                        : 2009-06-06 by Fredrik Möller
- *                        : 2009-06-10 by Fredrik Möller
- *                        : 2009-06-12 by Fredrik Möller
- *                        : 2009-06-15 by Fredrik Möller
- *                        : 2009-06-16 by Fredrik Möller
- *                        : 2009-06-17 by Fredrik Möller
- *                        : 2009-07-02 by Fredrik Möller
- *                        : 2009-07-03 by Fredrik Möller
- *                        : 2009-07-04 by Fredrik Möller
- *                        : 2009-07-13 by Fredrik Möller
- *                        : 2009-07-15 by Fredrik Möller
- *                        : 2009-07-18 by Fredrik Möller
- *                        : 2009-07-19 by Fredrik Möller
- *                        : 2009-07-20 by Fredrik Möller
- *                        : 2009-07-23 by Fredrik Möller
- *                        : 2009-07-24 by Fredrik Möller
- *                        : 2009-08-02 by Fredrik Möller
- *                        : 2009-08-03 by Fredrik Möller
- *                        : 2009-08-09 by Fredrik Möller
- *                        : 2009-08-11 by Fredrik Möller
- *                        : 2009-08-16 by Fredrik Möller
- *                        : 2009-08-19 by Fredrik Möller
- *                        : 2009-08-20 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- *                        : 2009-08-23 by Fredrik Möller
- *                        : 2009-08-30 by Fredrik Möller
- *                        : 2009-09-05 by Fredrik Möller
- *                        : 2009-09-06 by Fredrik Möller
- *                        : 2009-09-08 by Fredrik Möller
- *                        : 2009-09-13 by Fredrik Möller
- *                        : 2009-09-14 by Fredrik Möller
- *                        : 2009-09-19 by Fredrik Möller
- *                        : 2009-11-13 by Fredrik Möller
- *                        : 2009-12-17 by Fredrik Möller
- *                        : 2009-12-18 by Fredrik Möller
- *                        : 2010-01-28 by Fredrik Möller
- */
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -106,6 +32,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -143,16 +70,17 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreePath;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
+import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
 import moller.javapeg.program.categories.ImageRepositoryItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.contexts.ImageRepositoryContext;
 import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
@@ -161,6 +89,7 @@ import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
+import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -1229,7 +1158,7 @@ public class MainGUI extends JFrame {
 		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
-		categoriesRepositoryList.addListSelectionListener(new CategoriesRepositoryListListener());
+		categoriesRepositoryList.addListSelectionListener(new ImageRepositoryListListener());
 	}
 	
 	public void createRightClickMenu(){
@@ -1366,6 +1295,7 @@ public class MainGUI extends JFrame {
 		if(exitValue == 0) {
 			saveSettings();
 			saveRepositoryPaths();
+			flushImageMetaDataBaseToDisk();
 		}
 		logger.logDEBUG("JavePEG was shut down");
 		logger.flush();
@@ -1720,10 +1650,10 @@ public class MainGUI extends JFrame {
 	private class Mouselistener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
-			TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 						
 			if(selRow != -1) {
-				Object [] path = selPath.getPath();
+				
+				Object [] path = tree.getPathForLocation(e.getX(), e.getY()).getPath();
 				String totalPath = "";
 				for(int i=0; i<path.length; i++){
 					if(i==0 || i==1 || i==path.length-1){
@@ -1732,9 +1662,11 @@ public class MainGUI extends JFrame {
 						totalPath = totalPath + path[i].toString() + "\\";
 					}
 				}
+				
 				ApplicationContext ac = ApplicationContext.getInstance();
-						
 				if(!ac.getSourcePath().equals(totalPath) || ac.isInvalidImageRepositoryPathSelected()) {
+					flushImageMetaDataBaseToDisk();
+					clearTagTab();
 					ac.setInvalidImageRepositoryPathSelected(false);
 					loadThumbNails(new File(totalPath));
 				}
@@ -1774,6 +1706,12 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private void updateSelectedImageMetaDataDataBaseItem(ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
+		imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
+		
+		ImageRepositoryContext.getInstance().setImageMetaDataBaseItem(imageMetaDataDataBaseItem.getImage(), imageMetaDataDataBaseItem);
+	}
+	
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -1801,10 +1739,43 @@ public class MainGUI extends JFrame {
 //				TODO: Fix -10 workaround to something generic
 				int width = imageTagPreviewScrollPane.getViewportBorderBounds().width - 10;
 				int height = imageTagPreviewScrollPane.getViewportBorderBounds().height - 10;
-				
+								
 				try {
-					Image scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height, JPEGScaleAlgorithm.SMOOTH);
-					imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+					Image scaledImage = null;
+					JPEGThumbNail thumbnail = null;
+					
+					if(config.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail")) {
+						JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
+						thumbnail = jtc.get(jpegImage);
+					} 
+					
+					if (thumbnail != null) {
+						Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
+						
+						if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
+							thumbNailIcon = null;
+							
+							scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height, JPEGScaleAlgorithm.SMOOTH);
+							imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+						} else {
+							imageTagPreviewLabel.setIcon(new ImageIcon(thumbnail.getThumbNailData()));
+						}
+							
+					} else {
+						scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height, JPEGScaleAlgorithm.SMOOTH);
+						imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+					}
+					
+					ImageRepositoryContext irc = ImageRepositoryContext.getInstance();
+					ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
+					
+					if (imageMetaDataDataBaseItem != null) {
+						if(irc.getSelectedImageMetaDataDataBaseItem() != null) {
+							updateSelectedImageMetaDataDataBaseItem(irc.getSelectedImageMetaDataDataBaseItem());
+						}
+						irc.setSelectedImageMetaDataDataBaseItem(jpegImage);
+						imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
+					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -2083,7 +2054,7 @@ public class MainGUI extends JFrame {
 			
 			if(!categoriesRepositoryListModel.contains(iri)) {
 				categoriesRepositoryListModel.add(iri);
-				ImageMetaDataDataBaseHandler.initiate(new File(sourcePath));
+				ImageMetaDataDataBaseHandler.initiateDataBase(new File(sourcePath));
 			}
 		}
 	}
@@ -2100,21 +2071,49 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
-	private class CategoriesRepositoryListListener implements ListSelectionListener {
+	/**
+	 * This method flushes out all changes to the currently loaded set of
+	 * {@link ImageMetaDataDataBaseItem} objects to disk.
+	 */
+	private void flushImageMetaDataBaseToDisk() {
+		ApplicationContext ac = ApplicationContext.getInstance();
+		
+		ImageRepositoryContext irc = ImageRepositoryContext.getInstance();
+		ImageMetaDataDataBaseItem imddbi = irc.getSelectedImageMetaDataDataBaseItem();
+		if (imddbi != null) {
+			updateSelectedImageMetaDataDataBaseItem(imddbi);
+			ImageMetaDataDataBaseHandler.updateDataBaseFile(irc.getImageMetaDataBaseItems(), new File(ac.getSourcePath(), C.JAVAPEG_IMAGE_META_NAME));
+		}
+	}
+	
+	/**
+	 * This method resets the state of the Image Tag tab to the initial state;
+	 * with no preview image and no comment.
+	 */
+	private void clearTagTab() {
+		imageCommentTextArea.setText("");
+		imageTagPreviewLabel.setIcon(null);
+	}
+	
+	private class ImageRepositoryListListener implements ListSelectionListener {
 		
 		public void valueChanged(ListSelectionEvent e) {
 			int selectedIndex = categoriesRepositoryList.getSelectedIndex();
 						
 			if (selectedIndex > -1) {
-				ImageRepositoryItem iri = (ImageRepositoryItem)categoriesRepositoryListModel.getElementAt(selectedIndex);
-					
+				
+				flushImageMetaDataBaseToDisk();
+				clearTagTab();
+				
 				ApplicationContext ac = ApplicationContext.getInstance();
+				
+				ImageRepositoryItem iri = (ImageRepositoryItem)categoriesRepositoryListModel.getElementAt(selectedIndex);
 				
 				if (iri.getPathStatus() == Status.EXISTS) {
 					if(!ac.getSourcePath().equals(iri.getPath()) || ac.isInvalidImageRepositoryPathSelected()) {
 						ac.setInvalidImageRepositoryPathSelected(false);
 						loadThumbNails(new File(iri.getPath()));
-						ImageMetaDataDataBaseHandler.initiate(new File(iri.getPath()));
+						ImageMetaDataDataBaseHandler.initiateDataBase(new File(iri.getPath()));
 					} 
 				} else {
 					ac.setInvalidImageRepositoryPathSelected(true);
