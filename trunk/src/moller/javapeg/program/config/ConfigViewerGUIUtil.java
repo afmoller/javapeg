@@ -23,12 +23,16 @@ public static TreeNode createNodes() {
 		DefaultMutableTreeNode language = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.language"));
 //		TODO: Hard coded string
 		DefaultMutableTreeNode thumbnail = new DefaultMutableTreeNode("Thumbnail");
+//		TODO: Hard coded string
+		DefaultMutableTreeNode tag = new DefaultMutableTreeNode("Tag");
+		
 				
 		root.add(logging);
 		root.add(updates);
 		root.add(rename);
 		root.add(language);
 		root.add(thumbnail);
+		root.add(tag);
 					
 		return root;	
 	}
