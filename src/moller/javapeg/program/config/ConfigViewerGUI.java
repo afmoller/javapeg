@@ -1,22 +1,4 @@
 package moller.javapeg.program.config;
-/**
- * This class was created : 2009-08-05 by Fredrik Möller
- * Latest changed         : 2009-08-06 by Fredrik Möller
- *                        : 2009-08-09 by Fredrik Möller
- *                        : 2009-08-10 by Fredrik Möller
- *                        : 2009-08-12 by Fredrik Möller
- *                        : 2009-08-13 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- *                        : 2009-08-23 by Fredrik Möller
- *                        : 2009-09-04 by Fredrik Möller
- *                        : 2009-09-05 by Fredrik Möller
- *                        : 2009-10-04 by Fredrik Möller
- *                        : 2010-01-05 by Fredrik Möller
- *                        : 2010-01-07 by Fredrik Möller
- *                        : 2010-01-09 by Fredrik Möller
- *                        : 2010-01-10 by Fredrik Möller
- *                        : 2010-01-13 by Fredrik Möller
- */
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -92,6 +74,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JPanel languageConfigurationPanel;
 	private JPanel renameConfigurationPanel;
 	private JPanel thumbnailConfigurationPanel;
+	private JPanel tagConfigurationPanel;
 	
 	private JSplitPane splitPane;
 	
@@ -148,6 +131,12 @@ public class ConfigViewerGUI extends JFrame {
 	private JLabel cacheSizeLabel;
 	private JCheckBox enableThumbnailCache;
 	
+	/**
+	 * Variables for the tag panel
+	 */
+	private JRadioButton useEmbeddedThumbnail;
+	private JRadioButton useScaledThumbnail; 
+	
 	private Config   conf;
 	private Logger   logger;
 	private Language lang;
@@ -175,6 +164,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean AUTOMATIC_LANGUAGE_SELECTION;
 	private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
 	private boolean ENABLE_THUMBNAIL_CACHE;
+	private boolean USE_EMBEDDED_THUMBNAIL;
 			
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
@@ -188,6 +178,7 @@ public class ConfigViewerGUI extends JFrame {
 		this.createLanguageConfigurationPanel();
 		this.createRenameConfigurationPanel();
 		this.createThumbnailConfigurationPanel();
+		this.createTagConfigurationPanel();
 		this.addListeners();	
 	}
 	
@@ -213,6 +204,7 @@ public class ConfigViewerGUI extends JFrame {
 		THUMBNAIL_MAX_CACHE_SIZE = conf.getStringProperty("thumbnails.cache.max-size");
 		ENABLE_THUMBNAIL_CACHE = conf.getBooleanProperty("thumbnails.cache.enabled");
 		MAXIMUM_LENGTH_OF_CAMERA_MODEL = conf.getStringProperty("rename.maximum.length.camera-model");
+		USE_EMBEDDED_THUMBNAIL = conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail");
 	}
 	
 	private void initiateWindow() {
@@ -590,6 +582,7 @@ public class ConfigViewerGUI extends JFrame {
 		
 		thumbnailCreationAlgorithm = new JComboBox(JPEGScaleAlgorithm.values());
 		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
+		thumbnailCreationAlgorithm.invalidate();
 		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 		
 		JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());
@@ -673,6 +666,48 @@ public class ConfigViewerGUI extends JFrame {
 		
 		thumbnailConfigurationPanel.add(thumbnailCreationPanel, posThumbnailPanel.expandW().expandH());
 		thumbnailConfigurationPanel.add(thumbnailCachePanel, posThumbnailPanel.nextRow().expandW().expandH());
+	}
+	
+	private void createTagConfigurationPanel() {
+		
+		/**
+		 * Start of Preview Image Area
+		 */
+//		TODO: Fix hard coded string
+		JLabel useEmbeddedThumbnailLabel = new JLabel("Use embedded thumbnail as Preview Image (Fast)");
+		useEmbeddedThumbnail = new JRadioButton();
+		useEmbeddedThumbnail.setSelected(conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
+
+//		TODO: Fix hard coded string
+		JLabel useScaledThumbnailLabel = new JLabel("Use scaled thumbnail as Preview Image (Slow)");
+		useScaledThumbnail = new JRadioButton();
+		useScaledThumbnail.setSelected(!conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(useEmbeddedThumbnail);
+		group.add(useScaledThumbnail);
+		
+
+		JPanel previewImagePanel = new JPanel(new GridBagLayout());
+		previewImagePanel.setBorder(BorderFactory.createTitledBorder("Preview Image"));
+		
+		GBHelper posPreviewImagePanel = new GBHelper();
+		
+		previewImagePanel.add(useEmbeddedThumbnailLabel, posPreviewImagePanel);
+		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
+		previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.nextCol());
+		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
+		previewImagePanel.add(useScaledThumbnailLabel, posPreviewImagePanel.nextRow());
+		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
+		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextCol());
+		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
+				
+		tagConfigurationPanel = new JPanel(new GridBagLayout());
+		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		
+		GBHelper posTagPanel = new GBHelper();
+		
+		tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
 	}
 		
 	private void updateWindowLocationAndSize() {
@@ -761,6 +796,11 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("thumbnails.view.create.algorithm", thumbnailCreationAlgorithm.getSelectedItem().toString());
 		conf.setStringProperty("thumbnails.cache.max-size", maxCacheSize.getText());
 		conf.setBooleanProperty("thumbnails.cache.enabled", enableThumbnailCache.isSelected());
+		
+		/**
+		 * Update Tag Configuration
+		 */
+		conf.setBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail", useEmbeddedThumbnail.isSelected());
 				
 		/**
 		 * Show configuration changes.
@@ -861,6 +901,15 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(maximumLengthOfCameraModelValueTextField.getText())) {
 			displayMessage.append("Maximum Lenght of camera model value" + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
+		}
+
+//		TODO: Fix hard coded string
+		if(USE_EMBEDDED_THUMBNAIL != useEmbeddedThumbnail.isSelected()) {
+			if (USE_EMBEDDED_THUMBNAIL) {
+				displayMessage.append("Use scaled thumbnail as Preview Image (Slow) (Use embedded thumbnail as Preview Image (Fast))\n");
+			} else {
+				displayMessage.append("Use embedded thumbnail as Preview Image (Fast) (Use scaled thumbnail as Preview Image (Slow))\n");
+			}
 		}
 				
 		if(displayMessage.length() > 0) {
@@ -1087,6 +1136,8 @@ public class ConfigViewerGUI extends JFrame {
 					backgroundsPanel.add(languageConfigurationPanel);
 				} else if (selRow == 5) {
 					backgroundsPanel.add(thumbnailConfigurationPanel);
+				} else if (selRow == 6) {
+					backgroundsPanel.add(tagConfigurationPanel);
 				}
 			}
 		}
