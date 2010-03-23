@@ -17,7 +17,14 @@ public class ImageMetaDataDataBaseItem {
         this.comment = comment;
         this.rating = rating;
         this.tags = tags;
-        
+    }
+    
+    public ImageMetaDataDataBaseItem() {
+        this.image = null;
+        this.imageExifMetaData = null;
+        this.comment = null;
+        this.rating = -1;
+        this.tags = null;
     }
 
     public File getImage() {
