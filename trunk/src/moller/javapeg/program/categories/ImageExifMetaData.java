@@ -1,5 +1,10 @@
 package moller.javapeg.program.categories;
 
+import java.io.File;
+
+import moller.javapeg.program.metadata.MetaData;
+import moller.javapeg.program.metadata.MetaDataRetriever;
+
 public class ImageExifMetaData {
     
     private String apertureValue;
@@ -20,6 +25,20 @@ public class ImageExifMetaData {
         pictureWidth = "";
         shutterSpeed = "";
         time = "";
+    }
+    
+    public ImageExifMetaData(File jpegFile) {
+        MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
+        MetaData md = mdr.getMetaData();
+    	
+    	apertureValue = md.getExifApertureValue();
+        cameraModel   = md.getExifCameraModel();
+        date          = md.getExifDate();
+        isoValue      = md.getExifISOValue();
+        pictureHeight = md.getExifPictureHeight();
+        pictureWidth  = md.getExifPictureWidth();
+        shutterSpeed  = md.getExifShutterSpeed();
+        time          = md.getExifTime();
     }
     
     public String getApertureValue() {
