@@ -15,11 +15,14 @@ public class ImageRepositoryContext {
 	
 	private Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems;
 	
+	private ImageMetaDataDataBaseItem imageMetaDataDataBaseItem;
+	
 	/**
 	 * Private constructor.
 	 */
 	private ImageRepositoryContext() {
 		imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+		imageMetaDataDataBaseItem = null;
 	}
 
 	/**
@@ -55,5 +58,33 @@ public class ImageRepositoryContext {
 	 */
 	public ImageMetaDataDataBaseItem getImageMetaDataBaseItem(File jpegImage) {
 		return imageMetaDataDataBaseItems.get(jpegImage);
+	}
+	
+	/**
+	 * This method will return a Map<{@link File}, 
+	 * {@link ImageMetaDataDataBaseItem}> with all 
+	 * {@link ImageMetaDataDataBaseItem} objects that exists in the currently
+	 * selected image repository.
+	 *        
+	 * @return a Map<{@link File}, {@link ImageMetaDataDataBaseItem}>
+	 */
+	public Map<File, ImageMetaDataDataBaseItem> getImageMetaDataBaseItems() {
+		return imageMetaDataDataBaseItems;
+	}
+	
+	public ImageMetaDataDataBaseItem getSelectedImageMetaDataDataBaseItem() {
+		return imageMetaDataDataBaseItem;
+	}
+	
+	/**
+	 * @param jpegFile
+	 * @param imageMetaDataDataBaseItem
+	 */
+	public void setImageMetaDataBaseItem(File jpegImage, ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
+		imageMetaDataDataBaseItems.put(jpegImage, imageMetaDataDataBaseItem);
+	}
+	
+	public void setSelectedImageMetaDataDataBaseItem(File jpegImage) {
+		imageMetaDataDataBaseItem = getImageMetaDataBaseItem(jpegImage);
 	}
 }
