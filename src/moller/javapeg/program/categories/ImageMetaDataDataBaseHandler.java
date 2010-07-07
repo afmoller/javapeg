@@ -18,7 +18,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
-import moller.javapeg.program.contexts.ImageRepositoryContext;
+import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
 import moller.util.io.XMLUtil;
@@ -36,14 +36,14 @@ public class ImageMetaDataDataBaseHandler {
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 	
 		if(!imageMetaDataDataBase.exists()) {
-			if(!createImageMetaDataDataBaseFile(directory, imageMetaDataDataBase)) {
+			if(!createImageMetaDataDataBaseFile(directory)) {
 				return false;
 			}
 		} 
 		return deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase);
 	}
 	
-	private static boolean createImageMetaDataDataBaseFile(File imageRepository, File destination) {
+	private static boolean createImageMetaDataDataBaseFile(File imageRepository) {
 		try {
 			List<File> jpegFiles = JPEGUtil.getJPEGFiles(imageRepository);
 			
@@ -60,7 +60,7 @@ public class ImageMetaDataDataBaseHandler {
 				
 				imageMetaDataDataBaseItems.put(jpegFile, imddbi);
 			}
-			updateDataBaseFile(imageMetaDataDataBaseItems, destination);
+			updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository);
 		} catch (FileNotFoundException e) {
 		 // TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class ImageMetaDataDataBaseHandler {
 	public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination) {
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(destination);
+			os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
 			XMLOutputFactory factory = XMLOutputFactory.newInstance();
 			XMLStreamWriter w = factory.createXMLStreamWriter(os);
 			
@@ -174,9 +174,8 @@ public class ImageMetaDataDataBaseHandler {
 				}
 				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, tags);
 				imageMetaDataDataBaseItems.put(image, iMDDBI);
-				
-				ImageRepositoryContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
 			}
+			ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
 		} catch (ParserConfigurationException pcex) {
 			// TODO Auto-generated catch block
 			return false;

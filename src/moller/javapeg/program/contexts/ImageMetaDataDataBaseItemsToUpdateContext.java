@@ -6,23 +6,24 @@ import java.util.Map;
 
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 
-public class ImageRepositoryContext {
+public class ImageMetaDataDataBaseItemsToUpdateContext {
 	
 	/**
 	 * The static singleton instance of this class.
 	 */
-	private static ImageRepositoryContext instance;
+	private static ImageMetaDataDataBaseItemsToUpdateContext instance;
 	
 	private Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems;
 	
-	private ImageMetaDataDataBaseItem imageMetaDataDataBaseItem;
+	private File repositoryPath;
+	private File currentlySelectedImage;
 	
 	/**
 	 * Private constructor.
 	 */
-	private ImageRepositoryContext() {
+	private ImageMetaDataDataBaseItemsToUpdateContext() {
 		imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
-		imageMetaDataDataBaseItem = null;
+		repositoryPath = null;
 	}
 
 	/**
@@ -30,22 +31,47 @@ public class ImageRepositoryContext {
 	 * 
 	 * @return the singleton instance of this class.
 	 */
-	public static ImageRepositoryContext getInstance() {
+	public static ImageMetaDataDataBaseItemsToUpdateContext getInstance() {
 		if (instance != null)
 			return instance;
-		synchronized (ImageRepositoryContext.class) {
+		synchronized (ImageMetaDataDataBaseItemsToUpdateContext.class) {
 			if (instance == null) {
-				instance = new ImageRepositoryContext();
+				instance = new ImageMetaDataDataBaseItemsToUpdateContext();
 			}
 			return instance;
 		}
 	}
-
-	public void setImageMetaDataBaseItems(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems) {
-		this.imageMetaDataDataBaseItems.clear();
-		this.imageMetaDataDataBaseItems.putAll(imageMetaDataDataBaseItems);
+	
+	public void reInit() {
+		imageMetaDataDataBaseItems.clear();
+		currentlySelectedImage = null;
+		repositoryPath = null;
+	}
+	
+	public void setCurrentlySelectedImage(File currentlySelectedImage) {
+		this.currentlySelectedImage = currentlySelectedImage;
+	}
+	
+	public File getCurrentlySelectedImage() {
+		return currentlySelectedImage;
+	}
+	
+	public void setRepositoryPath(File repositoryPath) {
+		this.repositoryPath = repositoryPath;
+	}
+	
+	public File getLoadedRepositoryPath() {
+		return repositoryPath;
 	}
 
+	public void setImageMetaDataBaseItems(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems) {
+		this.imageMetaDataDataBaseItems = imageMetaDataDataBaseItems;
+	}
+
+	public Map<File, ImageMetaDataDataBaseItem> getImageMetaDataBaseItems() {
+		return imageMetaDataDataBaseItems;
+	}
+	
 	/**
 	 * This method will return an {@link ImageMetaDataDataBaseItem} or null if 
 	 * the requested jpegImage does not exist in the collection of 
@@ -61,30 +87,10 @@ public class ImageRepositoryContext {
 	}
 	
 	/**
-	 * This method will return a Map<{@link File}, 
-	 * {@link ImageMetaDataDataBaseItem}> with all 
-	 * {@link ImageMetaDataDataBaseItem} objects that exists in the currently
-	 * selected image repository.
-	 *        
-	 * @return a Map<{@link File}, {@link ImageMetaDataDataBaseItem}>
-	 */
-	public Map<File, ImageMetaDataDataBaseItem> getImageMetaDataBaseItems() {
-		return imageMetaDataDataBaseItems;
-	}
-	
-	public ImageMetaDataDataBaseItem getSelectedImageMetaDataDataBaseItem() {
-		return imageMetaDataDataBaseItem;
-	}
-	
-	/**
 	 * @param jpegFile
 	 * @param imageMetaDataDataBaseItem
 	 */
-	public void setImageMetaDataBaseItem(File jpegImage, ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
+	public void setImageMetaDatadataBaseItem(File jpegImage, ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
 		imageMetaDataDataBaseItems.put(jpegImage, imageMetaDataDataBaseItem);
-	}
-	
-	public void setSelectedImageMetaDataDataBaseItem(File jpegImage) {
-		imageMetaDataDataBaseItem = getImageMetaDataBaseItem(jpegImage);
 	}
 }
