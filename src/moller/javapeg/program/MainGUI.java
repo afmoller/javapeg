@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -80,8 +81,7 @@ import moller.javapeg.program.categories.ImageRepositoryItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.contexts.ImageRepositoryContext;
-import moller.javapeg.program.gui.CustomCellRenderer;
+import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
@@ -149,9 +149,7 @@ public class MainGUI extends JFrame {
 	private JButton openImageViewerButton;
 	private JButton moveToTopButton;
 	private JButton moveToBottomButton;
-	
-	private JButton removeSelectedRepositoryPathButton;
-	private JButton removeAllRepositoryPathsButton;
+	private JButton copyImageListdButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -177,12 +175,17 @@ public class MainGUI extends JFrame {
 	private JMenuItem startProcessJMenuItem;
 	private JMenuItem helpJMenuItem;
 	private JMenuItem aboutJMenuItem;
+//	TODO: Fix hard coded string
+	private JMenuItem popupMenuCopyImageToClipBoardRename;
+	private JMenuItem popupMenuCopyImageToClipBoardView;
+	private JMenuItem popupMenuCopyImageToClipBoardTag;
 	private JMenuItem popupMenuAddImageToViewList;
 	private JMenuItem popupMenuAddAllImagesToViewList;
 	private JMenuItem popupMenuAddImagesToCategorizeList;	
 		
-	private JPopupMenu rightClickMenu;
-	private JPopupMenu rightClickMenuAddToCategorize;
+	private JPopupMenu rightClickMenuRename;
+	private JPopupMenu rightClickMenuView;
+	private JPopupMenu rightClickMenuTag;
 
 	private JPanel thumbNailsPanel;
 	private JPanel imageTagPreviewPanel;
@@ -227,10 +230,9 @@ public class MainGUI extends JFrame {
 	private ThumbNailListener thumbNailListener;
 	
 	private DefaultListModel imagesToViewListModel;
-	private SortedListModel categoriesRepositoryListModel;
+	private SortedListModel categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
 	
 	private JList imagesToViewList;
-	private JList categoriesRepositoryList;
 	
 	private JTextArea imageCommentTextArea;
 		
@@ -261,8 +263,9 @@ public class MainGUI extends JFrame {
 		this.createMenuBar();
 		logger.logDEBUG("Creation of Menu Bar Finished");
 		this.createToolBar();
-		this.createRightClickMenu();
-		this.createRightClickMenuAddToCategorize();
+		this.createRightClickMenuRename();
+		this.createRightClickMenuView();
+		this.createRightClickMenuTag();
 		logger.logDEBUG("Adding of Event Listeners Started");
 		this.addListeners();
 		logger.logDEBUG("Adding of Event Listeners Finished");
@@ -656,10 +659,7 @@ public class MainGUI extends JFrame {
 		
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-		backgroundJPanel.add(this.createCategorizeRepositoryPanel(), posBackgroundPanel.expandH());
-		
-		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.nextCol().expandW());
+		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.expandW());
 		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandH().align(GridBagConstraints.NORTHWEST));
 		return backgroundJPanel;
@@ -667,16 +667,17 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createViewPanelListSection () {
 		
-		removeSelectedImagesButton = new JButton();
-		removeAllImagesButton      = new JButton();
-		openImageListButton        = new JButton();
-		saveImageListButton        = new JButton();
-		exportImageListButton      = new JButton();
-		moveUpButton               = new JButton();
-		moveDownButton             = new JButton();
-		openImageViewerButton      = new JButton();
-		moveToTopButton            = new JButton();
-		moveToBottomButton         = new JButton();
+		removeSelectedImagesButton     = new JButton();
+		removeAllImagesButton          = new JButton();
+		openImageListButton            = new JButton();
+		saveImageListButton            = new JButton();
+		exportImageListButton          = new JButton();
+		moveUpButton                   = new JButton();
+		moveDownButton                 = new JButton();
+		openImageViewerButton          = new JButton();
+		moveToTopButton                = new JButton();
+		moveToBottomButton             = new JButton();
+		copyImageListdButton = new JButton();
 		
 		InputStream imageStream = null;
 		
@@ -690,6 +691,7 @@ public class MainGUI extends JFrame {
 		ImageIcon viewImagesImageIcon = new ImageIcon();
 		ImageIcon moveToTopImageIcon = new ImageIcon();
 		ImageIcon moveToBottomImageIcon = new ImageIcon();
+		ImageIcon copyImageListToClipBoardImageIcon = new ImageIcon();
 		
 		try {		
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
@@ -741,7 +743,12 @@ public class MainGUI extends JFrame {
 			moveToBottomImageIcon.setImage(ImageIO.read(imageStream));
 			moveToBottomButton.setIcon(moveToBottomImageIcon);
 			moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
-
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/copy.gif");
+			copyImageListToClipBoardImageIcon.setImage(ImageIO.read(imageStream));
+			copyImageListdButton.setIcon(copyImageListToClipBoardImageIcon);
+			copyImageListdButton.setToolTipText("Copy Images in List to System Clipboard");
+		
 		} catch (Exception e) {
 			logger.logERROR("Could not open the image add.gif");
 		} finally {
@@ -780,7 +787,8 @@ public class MainGUI extends JFrame {
 		horisontalButtonPanel.add(saveImageListButton, posHorisontalButtonPanel.nextCol());
 		horisontalButtonPanel.add(exportImageListButton, posHorisontalButtonPanel.nextCol());
 		horisontalButtonPanel.add(openImageViewerButton, posHorisontalButtonPanel.nextCol());
-				
+		horisontalButtonPanel.add(copyImageListdButton, posHorisontalButtonPanel.nextCol());
+		
 		GBHelper posBackgroundPanel = new GBHelper();
 
 		JScrollPane spImageList = new JScrollPane(imagesToViewList);
@@ -944,70 +952,7 @@ public class MainGUI extends JFrame {
 						
 		return backgroundPanel; 
 	}
-	
-	private JPanel createCategorizeRepositoryPanel() {
-		
-//		TODO: Fix hard coded string
-		JLabel repositoryHeading = new JLabel("IMAGE REPOSITORIES");
-		repositoryHeading.setForeground(Color.GRAY);
-		
-		removeSelectedRepositoryPathButton = new JButton();
-		removeAllRepositoryPathsButton     = new JButton();
-		
-		InputStream imageStream = null;
-		
-		ImageIcon removeSelectedRepositoryPathImageIcon = new ImageIcon();
-		ImageIcon removeAllRepositoryPathImageIcon      = new ImageIcon();
-		
-		try {		
-			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
-			removeSelectedRepositoryPathImageIcon.setImage(ImageIO.read(imageStream));
-			removeSelectedRepositoryPathButton.setIcon(removeSelectedRepositoryPathImageIcon);
-//			TODO: Fix hard coded string
-			removeSelectedRepositoryPathButton.setToolTipText("Remove selected Image Repository Path");
-			
-			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
-			removeAllRepositoryPathImageIcon.setImage(ImageIO.read(imageStream));
-			removeAllRepositoryPathsButton.setIcon(removeAllRepositoryPathImageIcon);	
-//			TODO: Fix hard coded string
-			removeAllRepositoryPathsButton.setToolTipText("Remove all Image Repository Paths");
-		} catch (Exception e) {
-			logger.logERROR("Could not open the image add.gif");
-		} finally {
-			try {
-				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		JPanel buttonPanel = new JPanel(new GridBagLayout());
-		GBHelper posButtonPanel = new GBHelper();
-		
-		buttonPanel.add(removeSelectedRepositoryPathButton, posButtonPanel);
-		buttonPanel.add(removeAllRepositoryPathsButton, posButtonPanel.nextCol());
-		
-		categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
-		
-		categoriesRepositoryList = new JList(categoriesRepositoryListModel);
-		categoriesRepositoryList.setCellRenderer(new CustomCellRenderer());
-//		categoriesRepositoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		JScrollPane spCategorizeRepository = new JScrollPane(categoriesRepositoryList);
-		
-		GBHelper posBackground = new GBHelper();
-		
-		JPanel backgroundPanel = new JPanel(new GridBagLayout());
-		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
-		
-		backgroundPanel.add(repositoryHeading, posBackground);
-		backgroundPanel.add(spCategorizeRepository, posBackground.nextRow().expandH());
-		backgroundPanel.add(buttonPanel, posBackground.nextRow().align(GridBagConstraints.WEST));
-				
-		return backgroundPanel;
-	}
-	
+
 	private JPanel createCategorizeInputPanel() {
 		
 //		TODO: Fix hard coded string
@@ -1024,10 +969,6 @@ public class MainGUI extends JFrame {
 		createCategoryLabel.setForeground(Color.GRAY);
 		
 		JTextField createCategoryTextField = new JTextField();
-		
-		
-		
-		
 		
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1149,36 +1090,52 @@ public class MainGUI extends JFrame {
 		moveToTopButton.addActionListener(new MoveImageToTopInListListener());
 		moveToBottomButton.addActionListener(new MoveImageToBottomInListListener());
 		openImageViewerButton.addActionListener(new OpenImageViewerListener());
+		copyImageListdButton.addActionListener(new CopyImageListListener());
 		
-		removeSelectedRepositoryPathButton.addActionListener(new RemoveSelectedRepositoryPathsListener());
-		removeAllRepositoryPathsButton.addActionListener(new RemoveAllRepositoryPathsListener());
-		
+		popupMenuCopyImageToClipBoardRename.addActionListener(new CopyImageToSystemClipBoard());
+		popupMenuCopyImageToClipBoardView.addActionListener(new CopyImageToSystemClipBoard());
+		popupMenuCopyImageToClipBoardTag.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
 		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
-		categoriesRepositoryList.addListSelectionListener(new ImageRepositoryListListener());
 	}
 	
-	public void createRightClickMenu(){
+	public void createRightClickMenuRename() {
 		
-		rightClickMenu = new JPopupMenu();
+		popupMenuCopyImageToClipBoardRename = new JMenuItem("Copy to System Clipboard");
+		
+		rightClickMenuRename = new JPopupMenu();
+		rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
+	}
+		
+	public void createRightClickMenuView(){
+		
+		rightClickMenuView = new JPopupMenu();
 
+//		TODO: Fix hard coded string
+		popupMenuCopyImageToClipBoardView = new JMenuItem("Copy to System Clipboard");
 		popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
 		popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
 		
-		rightClickMenu.add(popupMenuAddImageToViewList);
-		rightClickMenu.add(popupMenuAddAllImagesToViewList);
+		rightClickMenuView.add(popupMenuCopyImageToClipBoardView);
+		rightClickMenuView.addSeparator();
+		rightClickMenuView.add(popupMenuAddImageToViewList);
+		rightClickMenuView.add(popupMenuAddAllImagesToViewList);
 	}
 	
-	public void createRightClickMenuAddToCategorize() {
-		rightClickMenuAddToCategorize = new JPopupMenu();
+	public void createRightClickMenuTag() {
+		rightClickMenuTag = new JPopupMenu();
 		
+//		TODO: Fix hard coded string
+		popupMenuCopyImageToClipBoardTag = new JMenuItem("Copy to System Clipboard");
 //		TODO: Fix hard coded string
 		popupMenuAddImagesToCategorizeList = new JMenuItem("Add directory to database");
 		
-		rightClickMenuAddToCategorize.add(popupMenuAddImagesToCategorizeList);
+		rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
+		rightClickMenuTag.addSeparator();
+		rightClickMenuTag.add(popupMenuAddImagesToCategorizeList);
 	}
 
 	public void initiateProgram(){
@@ -1288,7 +1245,6 @@ public class MainGUI extends JFrame {
 		startProcessButton.setEnabled(state);
 		startProcessJMenuItem.setEnabled(state);
 		tree.setEnabled(state);
-		categoriesRepositoryList.setEnabled(state);
 	}
 	
 	private void closeApplication(int exitValue) {
@@ -1664,10 +1620,21 @@ public class MainGUI extends JFrame {
 				}
 				
 				ApplicationContext ac = ApplicationContext.getInstance();
-				if(!ac.getSourcePath().equals(totalPath) || ac.isInvalidImageRepositoryPathSelected()) {
-					flushImageMetaDataBaseToDisk();
-					clearTagTab();
-					ac.setInvalidImageRepositoryPathSelected(false);
+				if(!ac.getSourcePath().equals(totalPath)) {
+					ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+					if(imddbituc.getLoadedRepositoryPath() != null) {
+						storeCurrentlySelectedImageData();
+						flushImageMetaDataBaseToDisk();
+						clearTagTab();
+					}
+					
+					File repositoryPath = new File(totalPath);
+					
+					ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath);
+					imddbituc.setRepositoryPath(repositoryPath);
+					
+					// Load thumb nails for all JPEG images that exists in the 
+					// selected path.
 					loadThumbNails(new File(totalPath));
 				}
 			}	
@@ -1709,7 +1676,7 @@ public class MainGUI extends JFrame {
 	private void updateSelectedImageMetaDataDataBaseItem(ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
 		imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
 		
-		ImageRepositoryContext.getInstance().setImageMetaDataBaseItem(imageMetaDataDataBaseItem.getImage(), imageMetaDataDataBaseItem);
+//		ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItem(imageMetaDataDataBaseItem.getImage(), imageMetaDataDataBaseItem);
 	}
 	
 	private class ComponentListener extends ComponentAdapter {
@@ -1766,21 +1733,35 @@ public class MainGUI extends JFrame {
 						imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
 					}
 					
-					ImageRepositoryContext irc = ImageRepositoryContext.getInstance();
+					storeCurrentlySelectedImageData();
+					
+					ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+					
+					// Load the selected image
+					irc.setCurrentlySelectedImage(jpegImage);
 					ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
 					
-					if (imageMetaDataDataBaseItem != null) {
-						if(irc.getSelectedImageMetaDataDataBaseItem() != null) {
-							updateSelectedImageMetaDataDataBaseItem(irc.getSelectedImageMetaDataDataBaseItem());
-						}
-						irc.setSelectedImageMetaDataDataBaseItem(jpegImage);
-						imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
-					}
+					imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	private void storeCurrentlySelectedImageData() {
+		ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+		File currentlySelectedImage = irc.getCurrentlySelectedImage();
+		
+		// Store changes to the currently loaded image.
+		if(currentlySelectedImage != null) {
+			ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = null;
+			
+			imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(currentlySelectedImage);
+			imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
+			
+			irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
 		}
 	}
 	
@@ -1982,6 +1963,20 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
+	
+	private class CopyImageListListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(!imagesToViewListModel.isEmpty()) {
+				List<File> imagesToSetToSystemClipBoard = new ArrayList<File>();
+
+				for (int i = 0; i < imagesToViewListModel.size(); i++) {
+					imagesToSetToSystemClipBoard.add((File)imagesToViewListModel.get(i));
+				}
+				FileSelection fileSelection = new FileSelection(imagesToSetToSystemClipBoard);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+			}
+		}
+	}
 		
 	private class ExportImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -2019,6 +2014,16 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			imagesToViewListModel.addElement(new File(e.getActionCommand()));
 			setNrOfImagesLabels();
+		}
+	}
+	
+	private class CopyImageToSystemClipBoard implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			List<File> selecteFiles = new ArrayList<File>();
+			selecteFiles.add(new File(e.getActionCommand()));
+
+			FileSelection fileSelection = new FileSelection(selecteFiles);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
 		}
 	}
 	
@@ -2076,14 +2081,9 @@ public class MainGUI extends JFrame {
 	 * {@link ImageMetaDataDataBaseItem} objects to disk.
 	 */
 	private void flushImageMetaDataBaseToDisk() {
-		ApplicationContext ac = ApplicationContext.getInstance();
-		
-		ImageRepositoryContext irc = ImageRepositoryContext.getInstance();
-		ImageMetaDataDataBaseItem imddbi = irc.getSelectedImageMetaDataDataBaseItem();
-		if (imddbi != null) {
-			updateSelectedImageMetaDataDataBaseItem(imddbi);
-			ImageMetaDataDataBaseHandler.updateDataBaseFile(irc.getImageMetaDataBaseItems(), new File(ac.getSourcePath(), C.JAVAPEG_IMAGE_META_NAME));
-		}
+		ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+		ImageMetaDataDataBaseHandler.updateDataBaseFile(imddbituc.getImageMetaDataBaseItems(), imddbituc.getLoadedRepositoryPath());
+		imddbituc.reInit();
 	}
 	
 	/**
@@ -2095,71 +2095,18 @@ public class MainGUI extends JFrame {
 		imageTagPreviewLabel.setIcon(null);
 	}
 	
-	private class ImageRepositoryListListener implements ListSelectionListener {
-		
-		public void valueChanged(ListSelectionEvent e) {
-			int selectedIndex = categoriesRepositoryList.getSelectedIndex();
-						
-			if (selectedIndex > -1) {
-				
-				flushImageMetaDataBaseToDisk();
-				clearTagTab();
-				
-				ApplicationContext ac = ApplicationContext.getInstance();
-				
-				ImageRepositoryItem iri = (ImageRepositoryItem)categoriesRepositoryListModel.getElementAt(selectedIndex);
-				
-				if (iri.getPathStatus() == Status.EXISTS) {
-					if(!ac.getSourcePath().equals(iri.getPath()) || ac.isInvalidImageRepositoryPathSelected()) {
-						ac.setInvalidImageRepositoryPathSelected(false);
-						loadThumbNails(new File(iri.getPath()));
-						ImageMetaDataDataBaseHandler.initiateDataBase(new File(iri.getPath()));
-					} 
-				} else {
-					ac.setInvalidImageRepositoryPathSelected(true);
-					thumbNailsPanel.removeAll();
-					thumbNailsPanel.updateUI();
-					
-					switch (iri.getPathStatus()) {
-					case NOT_AVAILABLE:
-//						TODO: Fix hard coded string
-						thumbNailsPanel.add(new JLabel("Image repository is not available, please select an available"));
-						break;
-					case DOES_NOT_EXIST:
-//						TODO: Fix hard coded string
-						thumbNailsPanel.add(new JLabel("Image repository does not exist, please select an existing"));
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	private class RemoveSelectedRepositoryPathsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (!categoriesRepositoryList.isSelectionEmpty()) {
-				Object [] selectedValues = categoriesRepositoryList.getSelectedValues();
-								
-				for (int i = 0; i < selectedValues.length; i++) {
-					categoriesRepositoryListModel.removeElement(selectedValues[i]);
-				}
-			}
-		}
-	}
-	
-	private class RemoveAllRepositoryPathsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			categoriesRepositoryListModel.clear();
-		}
-	}
-		
 	private class MouseButtonListener extends MouseAdapter{
 		public void mouseReleased(MouseEvent e){
-			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
-				rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
+			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 0)) {
+				rightClickMenuRename.show(e.getComponent(),e.getX(), e.getY());
+				popupMenuCopyImageToClipBoardRename.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
+				rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
 				popupMenuAddImageToViewList.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+				popupMenuCopyImageToClipBoardView.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
-				rightClickMenuAddToCategorize.show(e.getComponent(), e.getX(), e.getY());
+				rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
+				popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 			}
 		}
 	}
