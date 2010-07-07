@@ -64,7 +64,7 @@ public class ImageRepositoryHandler {
 		}	 
 	}
 	
-	public  void store(Iterator<Object> imageRepositoryItems) {
+	public void store(Iterator<Object> imageRepositoryItems) {
 		try {
 			List<String> directoryPaths = new ArrayList<String>();
 			

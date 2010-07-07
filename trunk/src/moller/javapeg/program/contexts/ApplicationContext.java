@@ -82,12 +82,6 @@ public class ApplicationContext {
 	private boolean imageViewerDisplayed;
 	
 	/**
-	 * Indicates whether a non existing or a non available image repository 
-	 * path has been selected. 
-	 */
-	private boolean invalidImageRepositoryPathSelected;
-	
-	/**
 	 * Indicates which image that has been selected in the grid of thumbnails
 	 * that has been populated when a directory has been selected in the tree
 	 * object.
@@ -107,7 +101,6 @@ public class ApplicationContext {
 		jarFileEmbeddedLanguageFiles = new HashSet<String>();
 		jpegFileLoadBuffer = new ArrayList<File>();
 		imageViewerDisplayed = false;
-		invalidImageRepositoryPathSelected = false;
 		selectedThumbNail = null;
 	}
 
@@ -162,10 +155,6 @@ public class ApplicationContext {
 		return jarFileEmbeddedLanguageFiles;
 	}
 	
-	public boolean isInvalidImageRepositoryPathSelected() {
-		return invalidImageRepositoryPathSelected;
-	}
-	
 	public File getSelectedThumbNail() {
 		return selectedThumbNail;
 	}
@@ -210,10 +199,6 @@ public class ApplicationContext {
 	
 	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
 		this.imageViewerDisplayed = imageViewerDisplayed;
-	}
-	
-	public void setInvalidImageRepositoryPathSelected(boolean invalidImageRepositoryPathSelected) {
-		this.invalidImageRepositoryPathSelected = invalidImageRepositoryPathSelected;
 	}
 	
 	public void setSelectedThumbNail(File selectedThumbNail) {
