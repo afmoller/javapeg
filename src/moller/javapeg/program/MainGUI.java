@@ -32,6 +32,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -48,6 +49,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -58,6 +60,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -235,6 +238,7 @@ public class MainGUI extends JFrame {
 	private JList imagesToViewList;
 	
 	private JTextArea imageCommentTextArea;
+	private JRadioButton [] ratingRadioButtons;
 		
 	public MainGUI(){
 		
@@ -965,10 +969,15 @@ public class MainGUI extends JFrame {
 		
 		JComboBox availableCategories = new JComboBox(categories);
 		
+//		TODO: Fix hard coded string
 		JLabel createCategoryLabel = new JLabel("CREATE CATEGORY");
 		createCategoryLabel.setForeground(Color.GRAY);
 		
 		JTextField createCategoryTextField = new JTextField();
+
+//		TODO: Fix hard coded string
+		JLabel ratingLabel = new JLabel("RATING");
+		ratingLabel.setForeground(Color.GRAY);
 		
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -977,9 +986,35 @@ public class MainGUI extends JFrame {
 		backgroundPanel.add(categorizeHeading, posBackground);
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(availableCategories, posBackground.nextRow());
+		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(createCategoryLabel, posBackground.nextRow());
+		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(createCategoryTextField, posBackground.nextRow());
+		backgroundPanel.add(new Gap(2), posBackground.nextRow());
+		backgroundPanel.add(ratingLabel,posBackground.nextRow().nextRow());
 		
+		ratingRadioButtons = new JRadioButton[6];
+		ButtonGroup ratingButtonGroup = new ButtonGroup();
+		
+		
+		JPanel ratingButtonPanel = new JPanel();
+		
+		
+		for (int i = 0; i < ratingRadioButtons.length; i++) {
+			JRadioButton jrb = new JRadioButton();
+			ratingButtonGroup.add(jrb);
+			if (i > 0) {
+				jrb.setHorizontalTextPosition(SwingConstants.LEFT);
+				jrb.setText(Integer.toString(i));
+				ratingButtonPanel.add(jrb);
+			} else {
+				// set the "hidden" button to selected as default.
+				jrb.setSelected(true);
+			}
+			ratingRadioButtons[i] = jrb;
+		}
+		
+		backgroundPanel.add(ratingButtonPanel, posBackground.nextRow());
 		
 		return backgroundPanel;
 	}
@@ -1742,12 +1777,45 @@ public class MainGUI extends JFrame {
 					ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
 					
 					imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
+					setRatingValue(imageMetaDataDataBaseItem.getRating());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		}
+	}
+	
+	/**
+	 * This method set the correct JRadioButton to selected according to the
+	 * integer ratingValue parameter. If the ratingValue parameter has an 
+	 * invalid value then no JRadioButton will be selected. This can happen if
+	 * no rating has been set or if the current set ratingValue is incorrect.
+	 *  
+	 * @param ratingValue points out which JRadioButton in the Array of 
+	 *        JRadioButtons to select.
+	 */
+	private void setRatingValue(int ratingValue) {
+		// if value of ratingValue is valid, then select the correct JRadioButton
+		if (ratingValue < ratingRadioButtons.length) {
+			ratingRadioButtons[ratingValue].setSelected(true);
+		} else {
+			ratingRadioButtons[0].setSelected(true);
+		}
+	}
+	
+	/**
+	 * Get the currently set ratingValue or 0 if no rating value has been set.
+	 * 
+	 * @return the currently set rating value or 0.
+	 */
+	private int getRatingValue() {
+		for (int i = 0; i < ratingRadioButtons.length; i++) {
+			if (ratingRadioButtons[i].isSelected()) {
+				return i;
+			}
+		}
+		return 0;
 	}
 	
 	private void storeCurrentlySelectedImageData() {
@@ -1760,6 +1828,7 @@ public class MainGUI extends JFrame {
 			
 			imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(currentlySelectedImage);
 			imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
+			imageMetaDataDataBaseItem.setRating(getRatingValue());
 			
 			irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
 		}
@@ -2093,6 +2162,7 @@ public class MainGUI extends JFrame {
 	private void clearTagTab() {
 		imageCommentTextArea.setText("");
 		imageTagPreviewLabel.setIcon(null);
+		setRatingValue(0);
 	}
 	
 	private class MouseButtonListener extends MouseAdapter{
