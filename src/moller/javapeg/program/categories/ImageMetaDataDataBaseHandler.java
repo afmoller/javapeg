@@ -55,12 +55,12 @@ public class ImageMetaDataDataBaseHandler {
 				imddbi.setImage(jpegFile);
 				imddbi.setImageExifMetaData(new ImageExifMetaData(jpegFile));
 				imddbi.setComment("Add Comment Here");
-				imddbi.setRating(-1);
+				imddbi.setRating(0);
 				imddbi.setTags(new ArrayList<Tag>());
 				
 				imageMetaDataDataBaseItems.put(jpegFile, imddbi);
 			}
-			updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository);
+			return updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository);
 		} catch (FileNotFoundException e) {
 		 // TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,7 +70,6 @@ public class ImageMetaDataDataBaseHandler {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 		
 	public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination) {
@@ -92,14 +91,14 @@ public class ImageMetaDataDataBaseHandler {
 				
 				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getAbsolutePath(), w);
 				XMLUtil.writeElementStart("exif-meta-data", w);
-					XMLUtil.writeElement("aperture-value", iemd.getApertureValue(), w);
-					XMLUtil.writeElement("camera-model"  , iemd.getCameraModel()  , w);
-					XMLUtil.writeElement("date"          , iemd.getDate()         , w);
-					XMLUtil.writeElement("iso-value"     , iemd.getIsoValue()     , w);
-					XMLUtil.writeElement("picture-height", iemd.getPictureHeight(), w);
-					XMLUtil.writeElement("picture-width" , iemd.getPictureWidth() , w);
-					XMLUtil.writeElement("shutter-speed" , iemd.getShutterSpeed() , w);
-					XMLUtil.writeElement("time"          , iemd.getTime()         , w);
+				XMLUtil.writeElement("aperture-value", iemd.getApertureValue(), w);
+				XMLUtil.writeElement("camera-model"  , iemd.getCameraModel()  , w);
+				XMLUtil.writeElement("date"          , iemd.getDate()         , w);
+				XMLUtil.writeElement("iso-value"     , iemd.getIsoValue()     , w);
+				XMLUtil.writeElement("picture-height", iemd.getPictureHeight(), w);
+				XMLUtil.writeElement("picture-width" , iemd.getPictureWidth() , w);
+				XMLUtil.writeElement("shutter-speed" , iemd.getShutterSpeed() , w);
+				XMLUtil.writeElement("time"          , iemd.getTime()         , w);
 				XMLUtil.writeElementEnd(w);
 				XMLUtil.writeElement("comment", imddbi.getComment(), w);
 				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
@@ -164,9 +163,9 @@ public class ImageMetaDataDataBaseHandler {
 						try {
 							rating = Integer.parseInt(node.getTextContent());
 						} catch (NumberFormatException nfex) {
-							logger.logINFO("Could not parse rating value. Rating value is: \"" + node.getTextContent() + "\". Value set to -1");
+							logger.logINFO("Could not parse rating value. Rating value is: \"" + node.getTextContent() + "\". Value set to 0 (zero)");
 							logger.logINFO(nfex);
-							rating = -1;
+							rating = 0;
 						}
 					} else if("tags".equals(node.getNodeName())) {
 //						TODO: Fix real implementation
