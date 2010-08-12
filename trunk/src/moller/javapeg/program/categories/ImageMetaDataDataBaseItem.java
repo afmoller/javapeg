@@ -23,7 +23,7 @@ public class ImageMetaDataDataBaseItem {
         this.image = null;
         this.imageExifMetaData = null;
         this.comment = null;
-        this.rating = -1;
+        this.rating = 0;
         this.tags = null;
     }
 
