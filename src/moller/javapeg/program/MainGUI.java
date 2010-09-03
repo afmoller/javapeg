@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -38,7 +37,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -74,9 +72,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
+import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.categories.ImageRepositoryHandler;
@@ -89,6 +91,7 @@ import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
+import moller.javapeg.program.gui.checktree.CheckTreeManager;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
@@ -103,6 +106,8 @@ import moller.javapeg.program.model.MetaDataTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.PreviewTableModel;
 import moller.javapeg.program.model.SortedListModel;
+import moller.javapeg.program.model.XMLTreeModel;
+import moller.javapeg.program.model.XMLTreeNode;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.progress.ThumbNailLoading;
 import moller.javapeg.program.rename.RenameProcessContext;
@@ -127,6 +132,9 @@ import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.version.containers.VersionInformation;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 
 public class MainGUI extends JFrame {
@@ -178,14 +186,17 @@ public class MainGUI extends JFrame {
 	private JMenuItem startProcessJMenuItem;
 	private JMenuItem helpJMenuItem;
 	private JMenuItem aboutJMenuItem;
-//	TODO: Fix hard coded string
 	private JMenuItem popupMenuCopyImageToClipBoardRename;
 	private JMenuItem popupMenuCopyImageToClipBoardView;
 	private JMenuItem popupMenuCopyImageToClipBoardTag;
 	private JMenuItem popupMenuAddImageToViewList;
 	private JMenuItem popupMenuAddAllImagesToViewList;
-	private JMenuItem popupMenuAddImagesToCategorizeList;	
+	private JMenuItem popupMenuAddImagesToCategorizeList;
+	private JMenuItem popupMenuAddCategory;
+	private JMenuItem popupMenuRenameCategory;
+	private JMenuItem popupMenuRemoveCategory;
 		
+	private JPopupMenu rightClickMenuCategories;
 	private JPopupMenu rightClickMenuRename;
 	private JPopupMenu rightClickMenuView;
 	private JPopupMenu rightClickMenuTag;
@@ -216,6 +227,7 @@ public class MainGUI extends JFrame {
 	
 	private Mouselistener mouseListener;
 	private MouseButtonListener mouseRightClickButtonListener;
+	private CategoriesMouseButtonListener categoriesMouseButtonListener;
 	
 	private int iconWidth = 160;
 	private int columnMargin = 0;
@@ -239,6 +251,8 @@ public class MainGUI extends JFrame {
 	
 	private JTextArea imageCommentTextArea;
 	private JRadioButton [] ratingRadioButtons;
+	
+	private CheckTreeManager checkTreeManager;
 		
 	public MainGUI(){
 		
@@ -255,6 +269,7 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Language File Loading Started");
 		this.readLanguageFile();
 		logger.logDEBUG("Language File Loading Finished");
+		this.overrideSwingUIProperties();
 		if(config.getBooleanProperty("updatechecker.enabled")) {
 			logger.logDEBUG("Application Update Check Started");
 			this.checkApplicationUpdates();
@@ -267,6 +282,7 @@ public class MainGUI extends JFrame {
 		this.createMenuBar();
 		logger.logDEBUG("Creation of Menu Bar Finished");
 		this.createToolBar();
+		this.createRightClickMenuCategories();
 		this.createRightClickMenuRename();
 		this.createRightClickMenuView();
 		this.createRightClickMenuTag();
@@ -331,6 +347,14 @@ public class MainGUI extends JFrame {
 		lang.loadLanguageFile();
 	}
 
+	private void overrideSwingUIProperties() {
+//		TODO: fix hard coded strings
+		UIManager.put("OptionPane.okButtonText", "Ok");
+//		TODO: fix hard coded strings
+		UIManager.put("OptionPane.cancelButtonText", "Cancel");
+
+	}
+	
 	private void createMenuBar(){
 
 		// Skapa menyrader i arkiv-menyn
@@ -566,6 +590,7 @@ public class MainGUI extends JFrame {
 		
 		thumbNailListener = new ThumbNailListener();
 		mouseRightClickButtonListener = new MouseButtonListener();
+		categoriesMouseButtonListener = new CategoriesMouseButtonListener();
 
 		mainSplitPane = new JSplitPane();
 		mainSplitPane.setDividerLocation(config.getIntProperty("mainSplitPane.location"));
@@ -665,7 +690,7 @@ public class MainGUI extends JFrame {
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.expandW());
 		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandH().align(GridBagConstraints.NORTHWEST));
+		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandH());
 		return backgroundJPanel;
 	}
 	
@@ -960,20 +985,39 @@ public class MainGUI extends JFrame {
 	private JPanel createCategorizeInputPanel() {
 		
 //		TODO: Fix hard coded string
-		JLabel categorizeHeading = new JLabel("AVAILABLE CATEGORIES");
+		JLabel categorizeHeading = new JLabel("CATEGORIES");
 		categorizeHeading.setForeground(Color.GRAY);
 		
-		Vector<String> categories = new Vector<String>();
-		categories.add("Ella");
-		categories.add("Sylvia");
+		JTree categoriesTree = new JTree();
+		categoriesTree.addMouseListener(categoriesMouseButtonListener);
 		
-		JComboBox availableCategories = new JComboBox(categories);
+		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 		
-//		TODO: Fix hard coded string
-		JLabel createCategoryLabel = new JLabel("CREATE CATEGORY");
-		createCategoryLabel.setForeground(Color.GRAY);
+		Document document = null;
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = dbFactory.newDocumentBuilder();
+			document = builder.parse(javaPEGuserHome);
+			document.normalize();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
-		JTextField createCategoryTextField = new JTextField();
+		XMLTreeModel model = new XMLTreeModel();
+		
+		model.setDocument(document);
+		
+		categoriesTree.setModel(model);
+		categoriesTree.setShowsRootHandles(true);
+		categoriesTree.setRootVisible(false);
+		
+		// makes your tree as CheckTree
+		checkTreeManager = new CheckTreeManager(categoriesTree, false, null); 
+			
+		JScrollPane categoriesScrollPane = new JScrollPane();
+		categoriesScrollPane.getViewport().add(categoriesTree);
 
 //		TODO: Fix hard coded string
 		JLabel ratingLabel = new JLabel("RATING");
@@ -983,22 +1027,18 @@ public class MainGUI extends JFrame {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 		
+		posBackground.fill = GridBagConstraints.BOTH;
+		
 		backgroundPanel.add(categorizeHeading, posBackground);
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
-		backgroundPanel.add(availableCategories, posBackground.nextRow());
-		backgroundPanel.add(new Gap(2), posBackground.nextRow());
-		backgroundPanel.add(createCategoryLabel, posBackground.nextRow());
-		backgroundPanel.add(new Gap(2), posBackground.nextRow());
-		backgroundPanel.add(createCategoryTextField, posBackground.nextRow());
+		backgroundPanel.add(categoriesScrollPane, posBackground.nextRow().expandH());
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(ratingLabel,posBackground.nextRow().nextRow());
 		
 		ratingRadioButtons = new JRadioButton[6];
 		ButtonGroup ratingButtonGroup = new ButtonGroup();
 		
-		
 		JPanel ratingButtonPanel = new JPanel();
-		
 		
 		for (int i = 0; i < ratingRadioButtons.length; i++) {
 			JRadioButton jrb = new JRadioButton();
@@ -1006,6 +1046,17 @@ public class MainGUI extends JFrame {
 			if (i > 0) {
 				jrb.setHorizontalTextPosition(SwingConstants.LEFT);
 				jrb.setText(Integer.toString(i));
+				
+				switch (i) {
+				case 1:
+//					TODO: Fix hard coded string
+					jrb.setToolTipText("Bad");					
+					break;
+				case 5:
+//					TODO: Fix hard coded string
+					jrb.setToolTipText("Good");
+					break;
+				}
 				ratingButtonPanel.add(jrb);
 			} else {
 				// set the "hidden" button to selected as default.
@@ -1133,12 +1184,23 @@ public class MainGUI extends JFrame {
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
 		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
+		popupMenuAddCategory.addActionListener(new AddCategory());
+		popupMenuRenameCategory.addActionListener(new RenameCategory());
+		popupMenuRemoveCategory.addActionListener(new RemoveCategory());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
 	}
 	
+	public void createRightClickMenuCategories() {
+		rightClickMenuCategories = new JPopupMenu();
+		rightClickMenuCategories.add(popupMenuAddCategory = new JMenuItem());
+		rightClickMenuCategories.add(popupMenuRenameCategory = new JMenuItem());
+		rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
+	}
+	
 	public void createRightClickMenuRename() {
-		
+
+//		TODO: Fix hard coded string
 		popupMenuCopyImageToClipBoardRename = new JMenuItem("Copy to System Clipboard");
 		
 		rightClickMenuRename = new JPopupMenu();
@@ -1240,6 +1302,18 @@ public class MainGUI extends JFrame {
 				logger.logFATAL(element.toString());	
 			}
 		}
+		
+		// to get the paths that were checked
+		TreePath checkedPaths[] = checkTreeManager.getSelectionModel().getSelectionPaths();
+		
+		for (TreePath checkedPath : checkedPaths) {
+			System.out.println(checkedPath.toString());
+			
+			Object[] xmlTreeNodes = checkedPath.getPath();
+			for (Object xmlTreeNode : xmlTreeNodes) {
+				System.out.println(((XMLTreeNode)xmlTreeNode).getElement().getAttribute("id"));
+			}
+		}
 	}
 	
 	private void saveRepositoryPaths() {
@@ -1295,6 +1369,10 @@ public class MainGUI extends JFrame {
 	
 	private void displayErrorMessage(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
+	}
+	
+	public String displayInputDialog(String title, String lable) {
+		return JOptionPane.showInputDialog(this, lable, title, JOptionPane.QUESTION_MESSAGE);
 	}
 			
 	// WindowDestroyer
@@ -1706,12 +1784,6 @@ public class MainGUI extends JFrame {
 			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfRows"), 2);
 			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
 		}
-	}
-	
-	private void updateSelectedImageMetaDataDataBaseItem(ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
-		imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
-		
-//		ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItem(imageMetaDataDataBaseItem.getImage(), imageMetaDataDataBaseItem);
 	}
 	
 	private class ComponentListener extends ComponentAdapter {
@@ -2133,6 +2205,88 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private class AddCategory implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
+			Document document = ((XMLTreeModel)checkTreeManager.getCheckedJtree().getModel()).getDocument();
+			boolean isTopLevelCategory = false;
+			
+			String categoryName = null;
+			XMLTreeNode xmlTreeNode = null;
+			
+			// Should the category be added at the top level...
+			if (selectedPath == null) {
+//				TODO: fix hard coded string
+				categoryName = displayInputDialog("Add new root category", "Please enter a name for the new category");
+				isTopLevelCategory = true;
+            // ... or as a sub category of an existing category
+			} else {
+				xmlTreeNode = ((XMLTreeNode)selectedPath.getLastPathComponent());
+				String value = xmlTreeNode.getAttribute("value");
+				
+//				TODO: fix hard coded string
+				categoryName = displayInputDialog("Add new sub category to category: " + value, "Please enter a name for the sub category");
+			}
+			
+			if (categoryName != null) {
+				if (!CategoryUtil.isValid(categoryName)) {
+					displayErrorMessage("The category name can not start with a white space: " + "\"" + categoryName + "\"");	
+				} else if(CategoryUtil.alreadyExists(document, selectedPath, categoryName)) {
+					displayErrorMessage("\"" + categoryName + "\"" + " already exists as a category in the selected scope, please choose another name");
+				} else {
+					Element newCategory = document.createElement("category");
+					
+					newCategory.setAttribute("id", Integer.toString(CategoryUtil.getHighestID(document) + 1));
+					newCategory.setAttribute("value", categoryName);
+					
+					if (isTopLevelCategory) {
+						document.getElementsByTagName("categories").item(0).appendChild(newCategory);
+					} else {
+						xmlTreeNode.getElement().appendChild(newCategory);	
+					}
+					Update.updateAllUIs();
+				}
+			}
+		}
+	}
+	
+	private class RenameCategory implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
+			
+			XMLTreeNode xmlTreeNode = ((XMLTreeNode)selectedPath.getLastPathComponent());
+			String value = xmlTreeNode.getAttribute("value");
+			
+			
+			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value);
+			
+			if (newName != null) {
+				Document document = ((XMLTreeModel)checkTreeManager.getCheckedJtree().getModel()).getDocument();
+				if (!CategoryUtil.isValid(newName)) {
+					displayErrorMessage("The category name can not start with a white space: " + "\"" + newName + "\"");	
+				} else if(CategoryUtil.alreadyExists(document, selectedPath.getParentPath(), newName)) {
+					displayErrorMessage("\"" + newName + "\"" + " already exists as a category in the selected scope, please choose another name");
+				} else {
+					xmlTreeNode.setAttribute("value", newName);
+					Update.updateAllUIs();
+				}
+			}
+		}
+	}
+
+	private class RemoveCategory implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Remove Categorie");
+		}
+	}
+	
 	private class ImagesToViewListListener implements ListSelectionListener {
 		
 		public void valueChanged(ListSelectionEvent e) {
@@ -2177,6 +2331,56 @@ public class MainGUI extends JFrame {
 			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
 				rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
 				popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+			}
+		}
+	}
+	
+	private class CategoriesMouseButtonListener extends MouseAdapter{
+		
+		public void mouseReleased(MouseEvent e){
+			TreePath selectedPath = checkTreeManager.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
+			
+			if(e.isPopupTrigger()) {
+				String addCategory = "";
+				String renameCategory = "";
+				String removeCategory = "";
+				
+				XMLTreeNode xmlTreeNode = null;
+				
+				// Should the category be added at the top level...
+				if (selectedPath == null) {
+//					TODO: Fix hard coded string
+					addCategory = "Add new Top Level Category";
+	            // ... or as a sub category of an existing category
+				} else {
+					xmlTreeNode = ((XMLTreeNode)selectedPath.getLastPathComponent());
+					String value = xmlTreeNode.getAttribute("value");
+//					TODO: Fix hard coded string
+					addCategory = "Add new sub category to Category: " + value;	
+//					TODO: Fix hard coded string
+					renameCategory = "Rename selected Category: " + value;
+//					TODO: Fix hard coded string
+					removeCategory = "Remove selected Category: " + value;
+				}					
+				
+				popupMenuAddCategory.setText(addCategory);
+				popupMenuRenameCategory.setText(renameCategory);
+				popupMenuRemoveCategory.setText(removeCategory);
+				
+				if (selectedPath == null) {
+					rightClickMenuCategories.remove(popupMenuRenameCategory);
+					rightClickMenuCategories.remove(popupMenuRemoveCategory);
+				} else {
+					if (rightClickMenuCategories.getComponentIndex(popupMenuRenameCategory) == -1) {
+						rightClickMenuCategories.add(popupMenuRenameCategory);
+					}
+					if (rightClickMenuCategories.getComponentIndex(popupMenuRemoveCategory) == -1) {
+						rightClickMenuCategories.add(popupMenuRemoveCategory);
+					}
+				}
+				ApplicationContext.getInstance().setSelectedCategoryPath(selectedPath);
+				
+				rightClickMenuCategories.show(e.getComponent(),e.getX(), e.getY());
 			}
 		}
 	}
