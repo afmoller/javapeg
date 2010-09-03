@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.tree.TreePath;
+
 import moller.javapeg.program.Action;
 import moller.javapeg.program.metadata.MetaData;
 
@@ -89,6 +91,13 @@ public class ApplicationContext {
 	private File selectedThumbNail;
 	
 	/**
+	 * This contains the currently selected TreePath in the category tree 
+	 * structure. It can contain a null value, if no path is currently
+	 * selected.
+	 */
+	private TreePath selectedCategoryPath;
+	
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -102,6 +111,7 @@ public class ApplicationContext {
 		jpegFileLoadBuffer = new ArrayList<File>();
 		imageViewerDisplayed = false;
 		selectedThumbNail = null;
+		selectedCategoryPath = null;
 	}
 
 	/**
@@ -159,6 +169,10 @@ public class ApplicationContext {
 		return selectedThumbNail;
 	}
 	
+	public TreePath getSelectedCategoryPath() {
+		return selectedCategoryPath;
+	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -203,6 +217,10 @@ public class ApplicationContext {
 	
 	public void setSelectedThumbNail(File selectedThumbNail) {
 		this.selectedThumbNail = selectedThumbNail;
+	}
+	
+	public void setSelectedCategoryPath(TreePath selectedCategoryPath) {
+		this.selectedCategoryPath = selectedCategoryPath;
 	}
 		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
