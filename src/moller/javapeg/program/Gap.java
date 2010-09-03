@@ -4,10 +4,6 @@
 // Author : Fred Swartz - January 30, 2007 - Placed in public domain.
 
 package moller.javapeg.program;
-/**
- * This class was created : 2009-05-02 by Fredrik Möller
- * Latest changed         : 
- */
 
 import java.awt.Dimension;
 
@@ -15,6 +11,8 @@ import javax.swing.JComponent;
 
 public class Gap extends JComponent {
 	
+	private static final long serialVersionUID = 1L;
+
 	//============================================================== constructor
     /* Creates filler with minimum size, but expandable infinitely. */
     public Gap() {
