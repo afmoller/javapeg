@@ -1,7 +1,5 @@
 package moller.util.test.unittest.os;
 
-import static org.junit.Assert.*;
-
 import moller.util.os.OsUtil;
 
 import org.junit.Test;
