@@ -1,4 +1,4 @@
-package moller.util.io;
+package moller.util.xml;
 /**
  * This class was created : 2010-02-07 by Fredrik Möller
  * Latest changed         : 
@@ -17,7 +17,7 @@ public class XMLUtil {
 	public static void writeStartDocument(String version, XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeStartDocument(version);
 	}
-
+	
 	/**
 	 * @param element
 	 * @param value
@@ -25,8 +25,27 @@ public class XMLUtil {
 	 * @throws XMLStreamException
 	 */
 	public static void writeElement(String element, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
+		writeElement(element, value, null, xmlsw);
+	}
+	
+	/**
+	 * @param element
+	 * @param value
+	 * @param xmlAttributes
+	 * @param xmlsw
+	 * @throws XMLStreamException
+	 */
+	public static void writeElement(String element, String value, XMLAttribute[] xmlAttributes, XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeStartElement(element);
-		xmlsw.writeCharacters(value);
+		if (value != null) {
+			xmlsw.writeCharacters(value);	
+		}
+		
+		if (xmlAttributes != null) {
+			for (XMLAttribute xmlAttribute : xmlAttributes) {
+				xmlsw.writeAttribute(xmlAttribute.getName(), xmlAttribute.getValue());	
+			}
+		}
 		xmlsw.writeEndElement();
 	}
 
@@ -49,6 +68,19 @@ public class XMLUtil {
 	public static void writeElementStart(String element, String attributeName, String attributeValue, XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeStartElement(element);
 		xmlsw.writeAttribute(attributeName, attributeValue);
+	}
+	
+	/**
+	 * @param element
+	 * @param xmlAttributes
+	 * @param xmlsw
+	 * @throws XMLStreamException
+	 */
+	public static void writeElementStart(String element, XMLAttribute[] xmlAttributes, XMLStreamWriter xmlsw) throws XMLStreamException {
+		xmlsw.writeStartElement(element);
+		for (XMLAttribute xmlAttribute : xmlAttributes) {
+			xmlsw.writeAttribute(xmlAttribute.getName(), xmlAttribute.getValue());
+		}
 	}
 
 	/**
