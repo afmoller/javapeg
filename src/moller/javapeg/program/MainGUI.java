@@ -69,12 +69,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
@@ -135,6 +137,7 @@ import moller.util.version.containers.VersionInformation;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 
 public class MainGUI extends JFrame {
@@ -690,7 +693,7 @@ public class MainGUI extends JFrame {
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.expandW());
 		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundJPanel.add(this.createCategorizeInputPanel(), posBackgroundPanel.nextCol().expandH());
+		backgroundJPanel.add(this.createCategoryAndRatingPanel(), posBackgroundPanel.nextCol().expandH());
 		return backgroundJPanel;
 	}
 	
@@ -982,7 +985,7 @@ public class MainGUI extends JFrame {
 		return backgroundPanel; 
 	}
 
-	private JPanel createCategorizeInputPanel() {
+	private JPanel createCategoryAndRatingPanel() {
 		
 //		TODO: Fix hard coded string
 		JLabel categorizeHeading = new JLabel("CATEGORIES");
@@ -991,23 +994,34 @@ public class MainGUI extends JFrame {
 		JTree categoriesTree = new JTree();
 		categoriesTree.addMouseListener(categoriesMouseButtonListener);
 		
-		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+		File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 		
 		Document document = null;
+		boolean parseSuccess = false;
+		
 		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = dbFactory.newDocumentBuilder();
-			document = builder.parse(javaPEGuserHome);
-			document.normalize();
+			document = CategoryUtil.parse(categoriesFile);
+			parseSuccess = true;
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
+		
+		if (!parseSuccess) {
+			System.exit(1);	
 		}
 		
 		XMLTreeModel model = new XMLTreeModel();
 		
 		model.setDocument(document);
+//		model.addTreeModelListener(new MyTreeModelListener());
 		
 		categoriesTree.setModel(model);
 		categoriesTree.setShowsRootHandles(true);
@@ -2238,7 +2252,7 @@ public class MainGUI extends JFrame {
 				} else {
 					Element newCategory = document.createElement("category");
 					
-					newCategory.setAttribute("id", Integer.toString(CategoryUtil.getHighestID(document) + 1));
+					newCategory.setAttribute("id", Integer.toString(CategoryUtil.getNextIdToUse(document)));
 					newCategory.setAttribute("value", categoryName);
 					
 					if (isTopLevelCategory) {
@@ -2246,6 +2260,10 @@ public class MainGUI extends JFrame {
 					} else {
 						xmlTreeNode.getElement().appendChild(newCategory);	
 					}
+					
+					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+					CategoryUtil.store(categoriesFile, document);
+					
 					Update.updateAllUIs();
 				}
 			}
@@ -2262,7 +2280,6 @@ public class MainGUI extends JFrame {
 			XMLTreeNode xmlTreeNode = ((XMLTreeNode)selectedPath.getLastPathComponent());
 			String value = xmlTreeNode.getAttribute("value");
 			
-			
 			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value);
 			
 			if (newName != null) {
@@ -2273,6 +2290,9 @@ public class MainGUI extends JFrame {
 					displayErrorMessage("\"" + newName + "\"" + " already exists as a category in the selected scope, please choose another name");
 				} else {
 					xmlTreeNode.setAttribute("value", newName);
+					
+					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+					CategoryUtil.store(categoriesFile, document);
 					Update.updateAllUIs();
 				}
 			}
@@ -2280,10 +2300,15 @@ public class MainGUI extends JFrame {
 	}
 
 	private class RemoveCategory implements ActionListener {
-
-		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Remove Categorie");
+			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
+			
+			((XMLTreeNode)selectedPath.getLastPathComponent()).remove();
+			
+			File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+			Document document = ((XMLTreeModel)checkTreeManager.getCheckedJtree().getModel()).getDocument();
+			CategoryUtil.store(categoriesFile, document);
+			Update.updateAllUIs();
 		}
 	}
 	
@@ -2384,4 +2409,31 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
+	
+	private  class MyTreeModelListener implements TreeModelListener {
+        public void treeNodesChanged(TreeModelEvent e) {
+            DefaultMutableTreeNode node;
+            node = (DefaultMutableTreeNode)(e.getTreePath().getLastPathComponent());
+
+            /*
+             * If the event lists children, then the changed
+             * node is the child of the node we've already
+             * gotten.  Otherwise, the changed node and the
+             * specified node are the same.
+             */
+
+                int index = e.getChildIndices()[0];
+                node = (DefaultMutableTreeNode)(node.getChildAt(index));
+
+            System.out.println("The user has finished editing the node.");
+            System.out.println("New value: " + node.getUserObject());
+        }
+        public void treeNodesInserted(TreeModelEvent e) {
+        }
+        public void treeNodesRemoved(TreeModelEvent e) {
+        }
+        public void treeStructureChanged(TreeModelEvent e) {
+        }
+    }
+
 }
