@@ -1,9 +1,4 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2009-11-13 by Fredrik Möller
- * Latest changed         : 2009-11-14 by Fredrik Möller
- *                        : 2009-12-25 by Fredrik Möller
- */
 
 import java.io.File;
 
@@ -13,6 +8,11 @@ public class C {
 	 * The system dependent file separator char
 	 */
 	public final static String FS              = File.separator;
+	
+	/**
+	 * The system dependent line separator
+	 */
+	public final static String LS              = System.getProperty("line.separator");
 	
 	public final static String USER_HOME       = System.getProperty("user.home");
 	public final static String JAVAPEG_VERSION = "2.5";
