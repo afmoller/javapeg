@@ -21,8 +21,8 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
-import moller.util.io.XMLUtil;
 import moller.util.jpeg.JPEGUtil;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -77,11 +77,11 @@ public class ImageMetaDataDataBaseHandler {
 		try {
 			os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
 			XMLOutputFactory factory = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = factory.createXMLStreamWriter(os);
+			XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
 			
 			XMLUtil.writeStartDocument("1.0", w);
-			XMLUtil.writeComment("This XML file contains meta data information of all JPEG image\n" +
-					             "files that exists in the directory where this XML file is to be found.\n" + 
+			XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
+					             "files that exists in the directory where this XML file is to be found." + C.LS + 
 					             "The content of this file is used and modified by the application JavaPEG", w);
 			XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
 								
