@@ -1,14 +1,31 @@
 package moller.javapeg.program.categories;
 
-import javax.swing.tree.TreePath;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
+import javax.swing.tree.TreePath;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import moller.javapeg.program.C;
 import moller.javapeg.program.model.XMLTreeNode;
+import moller.util.io.StreamUtil;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class CategoryUtil {
 	
@@ -96,19 +113,113 @@ public class CategoryUtil {
 	 * @param document
 	 * @return
 	 */
-	public static int getHighestID(Document document) {
-		int highest = -1;
+	public static int getNextIdToUse(Document document) {
+		NodeList categories = document.getElementsByTagName("categories");
 		
-		NodeList allCategories = document.getElementsByTagName("category");
-		
-		for (int i = 0; i < allCategories.getLength(); i++) {
-			Element category = (Element)allCategories.item(i);
+		if (categories.getLength() != 1) {
+			throw new RuntimeException("Invalid xml");
+//			TODO: Add error message and logging
+		} else {
+			Element categoriesNode = (Element)categories.item(0);
 			
-			int current = Integer.parseInt(category.getAttribute("id")); 
-			if (current > highest) {
-				highest = current;
-			}
+			int idNext = Integer.parseInt(categoriesNode.getAttribute("highest-used-id")) + 1;
+			categoriesNode.setAttribute("highest-used-id", Integer.toString(idNext));
+			
+			return idNext;
 		}
-		return highest;
+	}
+	
+	/**
+	 * @param categories
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public static Document parse(File categories) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = dbFactory.newDocumentBuilder();
+		Document document = builder.parse(categories);
+		document.normalize();
+
+		return document;
+	}
+	
+	/**
+	 * @param categoriesFile
+	 * @param document
+	 */
+	public static void store (File categoriesFile, Document document) {
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(categoriesFile);
+			XMLOutputFactory factory = XMLOutputFactory.newInstance();
+			XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
+			
+			XMLUtil.writeStartDocument("1.0", w);
+			XMLUtil.writeComment("This XML file contains the available categories and the logical structure" + C.LS +
+					             "of the categories. The content of this file is used and modified by the" + C.LS +
+					             "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
+					             "overwritten by the JavaPEG application or corrupt the file if the change is invalid" + C.LS, w);
+			
+			NodeList categories = document.getElementsByTagName("categories");
+			Element categoriesElement = (Element)categories.item(0);
+			
+			if (categoriesElement == null) {
+//				TODO: Display error message and log error
+			} else {
+				XMLUtil.writeElementStart("categories", "highest-used-id", categoriesElement.getAttribute("highest-used-id"), w);
+				
+				NodeList children = categoriesElement.getChildNodes();
+				
+				for (int i = 0; i < children.getLength(); i++) {
+					if (children.item(i).getNodeName().equals("category")) {
+						Element child = (Element)children.item(i);
+						storeChild(child, w);	
+					}
+				}
+				
+				XMLUtil.writeElementEnd(w);
+			}
+			w.flush();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			
+		} finally {
+			StreamUtil.close(os, true);
+		}
+	}
+	
+	/**
+	 * @param child
+	 * @param w
+	 * @throws XMLStreamException
+	 */
+	private static void storeChild(Element child, XMLStreamWriter w) throws XMLStreamException {
+		XMLAttribute[] xmlAttributes = new XMLAttribute[2];
+		
+		if (child.hasChildNodes()) {
+			
+			xmlAttributes[0] = new XMLAttribute("id", child.getAttribute("id"));
+			xmlAttributes[1] = new XMLAttribute("value", child.getAttribute("value"));
+			XMLUtil.writeElementStart("category", xmlAttributes, w);
+			
+			NodeList childNodes = child.getChildNodes();
+			for (int i = 0 ; i < childNodes.getLength(); i++) {
+				if (childNodes.item(i).getNodeName().equals("category")) {
+					storeChild((Element)childNodes.item(i), w);
+				}
+			}
+	
+			XMLUtil.writeElementEnd(w);
+		} else {
+			xmlAttributes[0] = new XMLAttribute("id", child.getAttribute("id"));
+			xmlAttributes[1] = new XMLAttribute("value", child.getAttribute("value"));
+			
+			XMLUtil.writeElement("category", null, xmlAttributes, w);
+		}
 	}
 }
