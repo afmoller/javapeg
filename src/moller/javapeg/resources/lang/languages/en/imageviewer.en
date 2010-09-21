@@ -19,10 +19,8 @@
 ##############################################################################################################
 # I M A G E  V I E W E R                                                                                     #
 ##############################################################################################################
-imageviewer.button.back.toolTip                         = Previous (Alt + Z) 
-imageviewer.button.back.mnemonic                        = Z
-imageviewer.button.forward.toolTip                      = Next (Alt + X) 
-imageviewer.button.forward.mnemonic                     = X
+imageviewer.button.back.toolTip                         = Previous (Left Arrow) 
+imageviewer.button.forward.toolTip                      = Next (Right Arrow) 
 imageviewer.button.automaticAdjustToWindowSize.toolTip  = Automatically adjust to window size (Alt + C) 
 imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
 imageviewer.button.adjustToWindowSize.toolTip           = Adjust to window size (Alt + A) 
