@@ -19,10 +19,8 @@
 ##############################################################################################################
 # I M A G E  V I E W E R                                                                                     #
 ##############################################################################################################
-imageviewer.button.back.toolTip                         = Föregående (Alt + Z) 
-imageviewer.button.back.mnemonic                        = Z
-imageviewer.button.forward.toolTip                      = Nästa (Alt + X) 
-imageviewer.button.forward.mnemonic                     = X
+imageviewer.button.back.toolTip                         = Föregående (Vänsterpil) 
+imageviewer.button.forward.toolTip                      = Nästa (Högerpil) 
 imageviewer.button.automaticAdjustToWindowSize.toolTip  = Automatisk anpassning till fönsterstorlek (Alt + C) 
 imageviewer.button.automaticAdjustToWindowSize.mnemonic = C
 imageviewer.button.adjustToWindowSize.toolTip           = Anpassa till fönsterstorlek (Alt + A) 

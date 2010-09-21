@@ -1,34 +1,4 @@
 package moller.javapeg.program.gui;
-/**
-* This class was created : 2003-10-17 by Fredrik Möller
-* Latest changed         : 2003-10-19 by Fredrik Möller
-*                        : 2003-10-21 by Fredrik Möller
-*                        : 2003-11-04 by Fredrik Möller
-*                        : 2003-11-05 by Fredrik Möller
-*                        : 2003-11-07 by Fredrik Möller
-*                        : 2003-11-08 by Fredrik Möller
-*                        : 2003-11-15 by Fredrik Möller
-*                        : 2003-12-27 by Fredrik Möller
-*                        : 2003-12-28 by Fredrik Möller
-*                        : 2004-03-13 by Fredrik Möller
-*                        : 2004-04-23 by Fredrik Möller
-*                        : 2009-06-08 by Fredrik Möller
-*                        : 2009-06-16 by Fredrik Möller
-*                        : 2009-06-20 by Fredrik Möller
-*                        : 2009-07-03 by Fredrik Möller
-*                        : 2009-07-04 by Fredrik Möller
-*                        : 2009-07-05 by Fredrik Möller
-*                        : 2009-07-06 by Fredrik Möller
-*                        : 2009-07-07 by Fredrik Möller
-*                        : 2009-08-16 by Fredrik Möller
-*                        : 2009-08-17 by Fredrik Möller
-*                        : 2009-08-18 by Fredrik Möller
-*                        : 2009-08-19 by Fredrik Möller
-*                        : 2009-08-20 by Fredrik Möller
-*                        : 2009-08-21 by Fredrik Möller
-*                        : 2009-08-30 by Fredrik Möller
-*                        : 2009-09-19 by Fredrik Möller
-*/
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -36,11 +6,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -171,6 +144,9 @@ public class ImageViewer extends JFrame {
 			logger.logERROR("Could not set desired Look And Feel for Main GUI");
 			logger.logERROR(e);
 		}
+		
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+	    manager.addKeyEventDispatcher(new CustomKeyEventDispatcher());
 
 		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Open16.gif");
 				
@@ -320,13 +296,11 @@ public class ImageViewer extends JFrame {
 			previousImageIcon.setImage(ImageIO.read(imageStream));
 			previousJButton.setIcon(previousImageIcon);
 			previousJButton.setToolTipText(lang.get("imageviewer.button.back.toolTip"));
-			previousJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.back.mnemonic").charAt(0)));
 						
 			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
 			nextImageIcon.setImage(ImageIO.read(imageStream));
 			nextJButton.setIcon(nextImageIcon);
 			nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
-			nextJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.forward.mnemonic").charAt(0)));
 			
 			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "AutoAdjustToWindowSize16.gif");
 			automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
@@ -455,11 +429,75 @@ public class ImageViewer extends JFrame {
 		
 		metaDataPanel.setMetaData(imageFile);	
 	}
+	
+	private void loadAndViewPreviousImage() {
+		if (imageToViewListIndex == 0) {
+			imageToViewListIndex = imagesToViewListSize - 1;
+		} else {
+			imageToViewListIndex -= 1;
+		}			
+		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+	}
+	
+	private void loadAndViewNextImage() {
+		if (imageToViewListIndex == imagesToViewListSize - 1) {
+			imageToViewListIndex = 0;
+		} else {
+			imageToViewListIndex += 1;
+		}			
+		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+	}
+	
+	private Image resizeImage(Image image, double backgroundWidth, double backgroundHeight, int imageWidth, int imageHeight) {
+		
+		if((imageWidth > backgroundWidth) && (imageHeight <= backgroundHeight)) {
+			image = image.getScaledInstance((int)backgroundWidth, (int)(imageHeight/(imageWidth/backgroundWidth)), Image.SCALE_FAST);
+		} else if((imageWidth <= backgroundWidth)&&(imageHeight>backgroundHeight)) {
+			image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)), (int)backgroundHeight, Image.SCALE_FAST);
+		} else if((imageWidth>backgroundWidth)&&(imageHeight>backgroundHeight)) {
+			
+			int scrollBarPaddingHeight = 0;
+			int scrollBarPaddingWidth = 0;
+						
+			if(hSB.isVisible()) {
+				scrollBarPaddingHeight = hSB.getHeight();
+			}
+			if(vSB.isVisible()) {
+				scrollBarPaddingWidth= vSB.getWidth();
+			}
+						
+			if((imageWidth/backgroundWidth)>(imageHeight/backgroundHeight)) {
+				image = image.getScaledInstance((int)backgroundWidth + scrollBarPaddingWidth, (int)(imageHeight/(imageWidth/backgroundWidth)) + scrollBarPaddingWidth, Image.SCALE_FAST);
+			} else {
+				image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)) + scrollBarPaddingHeight, (int)backgroundHeight + scrollBarPaddingHeight, Image.SCALE_FAST);
+			}
+		}
+		return image;
+	}
 
 	private class WindowDestroyer extends WindowAdapter {
 		public void windowClosing (WindowEvent e) {
 			disposeFrame();
 		}
+	}
+	
+	private class CustomKeyEventDispatcher implements KeyEventDispatcher {
+	    @Override
+	    public boolean dispatchKeyEvent(KeyEvent e) {
+	        if (e.getID() == KeyEvent.KEY_PRESSED) {
+	        	if (KeyEvent.VK_LEFT == e.getKeyCode()) {
+	        		loadAndViewPreviousImage();
+	        		return true;
+	        	}
+				if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
+					loadAndViewNextImage();
+					return true;
+				}
+	        } 
+	        return false;
+	    }
 	}
 
 	private class MouseButtonListener extends MouseAdapter{
@@ -490,25 +528,13 @@ public class ImageViewer extends JFrame {
 		
 	private class ToolBarButtonPrevious implements ActionListener {
 		public void actionPerformed(ActionEvent e) {	
-			if (imageToViewListIndex == 0) {
-				imageToViewListIndex = imagesToViewListSize - 1;
-			} else {
-				imageToViewListIndex -= 1;
-			}			
-			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
-			logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+			loadAndViewPreviousImage();
 		}	
 	}
 	
 	private class ToolBarButtonNext implements ActionListener {
 		public void actionPerformed(ActionEvent e) {				
-			if (imageToViewListIndex == imagesToViewListSize - 1) {
-				imageToViewListIndex = 0;
-			} else {
-				imageToViewListIndex += 1;
-			}			
-			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
-			logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+			loadAndViewNextImage();
 		}
 	}
 	
@@ -530,33 +556,6 @@ public class ImageViewer extends JFrame {
 				}
 			}
 		}
-	}
-	
-	private Image resizeImage(Image image, double backgroundWidth, double backgroundHeight, int imageWidth, int imageHeight) {
-						
-		if((imageWidth > backgroundWidth) && (imageHeight <= backgroundHeight)) {
-			image = image.getScaledInstance((int)backgroundWidth, (int)(imageHeight/(imageWidth/backgroundWidth)), Image.SCALE_FAST);
-		} else if((imageWidth <= backgroundWidth)&&(imageHeight>backgroundHeight)) {
-			image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)), (int)backgroundHeight, Image.SCALE_FAST);
-		} else if((imageWidth>backgroundWidth)&&(imageHeight>backgroundHeight)) {
-			
-			int scrollBarPaddingHeight = 0;
-			int scrollBarPaddingWidth = 0;
-						
-			if(hSB.isVisible()) {
-				scrollBarPaddingHeight = hSB.getHeight();
-			}
-			if(vSB.isVisible()) {
-				scrollBarPaddingWidth= vSB.getWidth();
-			}
-						
-			if((imageWidth/backgroundWidth)>(imageHeight/backgroundHeight)) {
-				image = image.getScaledInstance((int)backgroundWidth + scrollBarPaddingWidth, (int)(imageHeight/(imageWidth/backgroundWidth)) + scrollBarPaddingWidth, Image.SCALE_FAST);
-			} else {
-				image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)) + scrollBarPaddingHeight, (int)backgroundHeight + scrollBarPaddingHeight, Image.SCALE_FAST);
-			}
-		}
-		return image;
 	}
 	
 	private class ToolBarButtonAdjustToWindowSize implements ActionListener {
