@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class ImageMetaDataDataBaseHandler {
 				imddbi.setImageExifMetaData(new ImageExifMetaData(jpegFile));
 				imddbi.setComment("Add Comment Here");
 				imddbi.setRating(0);
-				imddbi.setTags(new ArrayList<Tag>());
+				imddbi.setCategories(new Categories());
 				
 				imageMetaDataDataBaseItems.put(jpegFile, imddbi);
 			}
@@ -102,8 +101,8 @@ public class ImageMetaDataDataBaseHandler {
 				XMLUtil.writeElementEnd(w);
 				XMLUtil.writeElement("comment", imddbi.getComment(), w);
 				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
-				XMLUtil.writeElementStart("tags", w);
-				XMLUtil.writeElementEnd(w);
+				XMLUtil.writeElement("categories", imddbi.getCategories().toString(), w);
+				
 				XMLUtil.writeElementEnd(w);
 			}
 			XMLUtil.writeElementEnd(w);
@@ -151,7 +150,7 @@ public class ImageMetaDataDataBaseHandler {
 				ImageExifMetaData imageExifMetaData = null;
 				String comment = "";
 				int rating = 0;
-				List<Tag> tags = new ArrayList<Tag>();
+				Categories categories = new Categories();
 				
 				for (int j = 0; j < content.getLength(); j++) {
 					Node node = content.item(j);
@@ -167,11 +166,15 @@ public class ImageMetaDataDataBaseHandler {
 							logger.logINFO(nfex);
 							rating = 0;
 						}
-					} else if("tags".equals(node.getNodeName())) {
-//						TODO: Fix real implementation
+					} else if("categories".equals(node.getNodeName())) {
+						String categoriesString = node.getTextContent();
+						
+						if (categoriesString != null && categoriesString.length() > 0) {
+							categories.addCategories(categoriesString);
+						}
 					}
 				}
-				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, tags);
+				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, categories);
 				imageMetaDataDataBaseItems.put(image, iMDDBI);
 			}
 			ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);

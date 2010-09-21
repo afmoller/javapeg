@@ -1,7 +1,6 @@
 package moller.javapeg.program.categories;
 
 import java.io.File;
-import java.util.List;
 
 public class ImageMetaDataDataBaseItem {
     
@@ -9,14 +8,14 @@ public class ImageMetaDataDataBaseItem {
     private ImageExifMetaData imageExifMetaData;
     private String comment;
     private int rating;
-    private List<Tag> tags;
+    private Categories categories;
     
-    public ImageMetaDataDataBaseItem(File image, ImageExifMetaData imageExifMetaData, String comment,int rating, List<Tag> tags) {
+    public ImageMetaDataDataBaseItem(File image, ImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
         this.image = image;
         this.imageExifMetaData = imageExifMetaData;
         this.comment = comment;
         this.rating = rating;
-        this.tags = tags;
+        this.categories = categories;
     }
     
     public ImageMetaDataDataBaseItem() {
@@ -24,7 +23,7 @@ public class ImageMetaDataDataBaseItem {
         this.imageExifMetaData = null;
         this.comment = null;
         this.rating = 0;
-        this.tags = null;
+        this.categories = null;
     }
 
     public File getImage() {
@@ -43,8 +42,11 @@ public class ImageMetaDataDataBaseItem {
         return rating;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    /**
+     * @return
+     */
+    public Categories getCategories() {
+    	return categories;
     }
 
     public void setImage(File image) {
@@ -63,7 +65,7 @@ public class ImageMetaDataDataBaseItem {
         this.rating = rating;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setCategories(Categories categories) {
+        this.categories = categories;
     }
 }
