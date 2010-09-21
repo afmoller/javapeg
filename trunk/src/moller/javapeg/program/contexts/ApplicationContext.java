@@ -98,6 +98,11 @@ public class ApplicationContext {
 	private TreePath selectedCategoryPath;
 	
 	/**
+	 * This integer holds the value of the highest used category ID.
+	 */
+	private int highestUsedCategoryID;
+	
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -112,6 +117,7 @@ public class ApplicationContext {
 		imageViewerDisplayed = false;
 		selectedThumbNail = null;
 		selectedCategoryPath = null;
+		highestUsedCategoryID = -1;
 	}
 
 	/**
@@ -173,6 +179,15 @@ public class ApplicationContext {
 		return selectedCategoryPath;
 	}
 	
+	public int getHighestUsedCategoryID() {
+		return highestUsedCategoryID;
+	}
+	
+	public int getNextIDToUse() {
+		setHighestUsedCategoryID(highestUsedCategoryID + 1);
+		return getHighestUsedCategoryID();
+	}
+
 	/**
 	 * SET  - methods
 	 */
@@ -222,6 +237,10 @@ public class ApplicationContext {
 	public void setSelectedCategoryPath(TreePath selectedCategoryPath) {
 		this.selectedCategoryPath = selectedCategoryPath;
 	}
+	
+	public void setHighestUsedCategoryID(int highestUsedCategoryID) {
+		this.highestUsedCategoryID = highestUsedCategoryID;
+	}
 		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
 		switch (action) {
@@ -236,7 +255,6 @@ public class ApplicationContext {
 			}
 		default:
 			return image; 
-
 		}
 	}
 }

@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Enumeration;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,14 +17,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
-import moller.javapeg.program.model.XMLTreeNode;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.util.io.StreamUtil;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -35,7 +36,7 @@ public class CategoryUtil {
 	 * level. In other words the same category name may exist several times but
 	 * not in the same scope.
 	 *  
-	 * @param document is the content to search for potential matches of an 
+	 * @param root is the content to search for potential matches of an 
 	 *                 already existing category.
 	 *                 
 	 * @param selectedPath if a sub category is selected, then that is 
@@ -49,51 +50,26 @@ public class CategoryUtil {
 	 *         the specified category name in the parameter categoryName is 
 	 *         found in the scope specified by the parameter selectedPath.
 	 */
-	public static boolean alreadyExists(Document document, TreePath selectedPath, String categoryName) {
+	public static boolean alreadyExists(DefaultMutableTreeNode root, TreePath selectedPath, String categoryName) {
 		
 		// If the top level categories is to be examined ...
 		if (selectedPath == null || selectedPath.getPathCount() == 1) {
-			Node categoriesNode = document.getElementsByTagName("categories").item(0);
-			
-			NodeList children = categoriesNode.getChildNodes();
-			
-			if (existsIn(categoryName, children)) {
-				return true;
-			}
+			return existsInNode(categoryName, root);
 		} 
 		// ... or the categories of a sub category
 		else {
-			XMLTreeNode xmlTreeNode = ((XMLTreeNode)selectedPath.getLastPathComponent());
-			String searchForID = xmlTreeNode.getAttribute("id");
-			
-			NodeList allCategories = document.getElementsByTagName("category");
-			
-			for (int i = 0; i < allCategories.getLength(); i++) {
-				Element category = (Element)allCategories.item(i);
-				
-				if (category.getAttribute("id").equals(searchForID)) {
-					if (existsIn(categoryName, category.getChildNodes())) {
-						return true;
-					}
-				}
-			}
+			return existsInNode(categoryName, (DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 		}
-		return false;
 	}
 	
-	/**
-	 * @param value
-	 * @param nodes
-	 * @return
-	 */
-	private static boolean existsIn(String value, NodeList nodes) {
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node child = nodes.item(i);
-			if (child.getNodeName().equals("category")) {
-				NamedNodeMap attributes = child.getAttributes();
-				Node valueAttribute = attributes.getNamedItem("value");
+	private static boolean existsInNode(String categoryName, DefaultMutableTreeNode node) {
+		int numberOfChildren = node.getChildCount();
+		
+		if (numberOfChildren > 0) {
+			for (int i = 0; i < numberOfChildren; i++) {
+				DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode)node.getChildAt(i);
 				
-				if (valueAttribute.getTextContent().equals(value)) {
+				if (categoryName.equals(((CategoryUserObject)dmtn.getUserObject()).getName())) {
 					return true;
 				}
 			}
@@ -110,10 +86,18 @@ public class CategoryUtil {
 	}
 	
 	/**
-	 * @param document
+	 * @param categoriesFile
 	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
 	 */
-	public static int getNextIdToUse(Document document) {
+	public static Document parse(File categoriesFile) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = dbFactory.newDocumentBuilder();
+		Document document = builder.parse(categoriesFile);
+		document.normalize();
+		
 		NodeList categories = document.getElementsByTagName("categories");
 		
 		if (categories.getLength() != 1) {
@@ -122,34 +106,63 @@ public class CategoryUtil {
 		} else {
 			Element categoriesNode = (Element)categories.item(0);
 			
-			int idNext = Integer.parseInt(categoriesNode.getAttribute("highest-used-id")) + 1;
-			categoriesNode.setAttribute("highest-used-id", Integer.toString(idNext));
-			
-			return idNext;
+			int id = Integer.parseInt(categoriesNode.getAttribute("highest-used-id"));
+			ApplicationContext.getInstance().setHighestUsedCategoryID(id);
 		}
+		return document;
 	}
 	
-	/**
-	 * @param categories
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 */
-	public static Document parse(File categories) throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = dbFactory.newDocumentBuilder();
-		Document document = builder.parse(categories);
-		document.normalize();
+	public static void populateTreeModel(Document document, DefaultMutableTreeNode root) {
+		
+		NodeList categoriesElementAsNodeList = document.getElementsByTagName("categories");
 
-		return document;
+		if (categoriesElementAsNodeList.getLength() != 1) {
+			//			TODO: Throw new runtime exception 
+		} else {
+			Node categoriesElement = categoriesElementAsNodeList.item(0);
+
+			NodeList categoryElements = categoriesElement.getChildNodes();
+
+			if (categoryElements.getLength() > 0) {
+				for (int i = 0; i < categoryElements.getLength(); i++) {
+					Element category = (Element)categoryElements.item(i);
+
+					populateNodeBranch(root, category);
+				}
+			}
+		}
+	}
+		
+	private static void populateNodeBranch(DefaultMutableTreeNode node, Element category ) {
+
+		String displayString = category.getAttribute("name");
+		String identityString = category.getAttribute("id");
+
+		CategoryUserObject cuo = new CategoryUserObject(displayString, identityString);
+
+		DefaultMutableTreeNode mtn = new DefaultMutableTreeNode(cuo);
+
+		node.add(mtn);
+
+		if (category.hasChildNodes()) {
+			NodeList categoryChildren = category.getChildNodes();
+
+			if (categoryChildren.getLength() > 0) {
+				for (int i = 0; i < categoryChildren.getLength(); i++) {
+					Element child = (Element)categoryChildren.item(i);
+
+					populateNodeBranch(mtn, child);
+				}
+			}
+		}
 	}
 	
 	/**
 	 * @param categoriesFile
 	 * @param document
 	 */
-	public static void store (File categoriesFile, Document document) {
+	@SuppressWarnings("unchecked")
+	public static void store (File categoriesFile, DefaultMutableTreeNode root) {
 		OutputStream os = null;
 		try {
 			os = new FileOutputStream(categoriesFile);
@@ -161,26 +174,16 @@ public class CategoryUtil {
 					             "of the categories. The content of this file is used and modified by the" + C.LS +
 					             "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
 					             "overwritten by the JavaPEG application or corrupt the file if the change is invalid" + C.LS, w);
+						
+			XMLUtil.writeElementStart("categories", "highest-used-id", Integer.toString(ApplicationContext.getInstance().getHighestUsedCategoryID()), w);
 			
-			NodeList categories = document.getElementsByTagName("categories");
-			Element categoriesElement = (Element)categories.item(0);
+			Enumeration<DefaultMutableTreeNode> children = root.children();
 			
-			if (categoriesElement == null) {
-//				TODO: Display error message and log error
-			} else {
-				XMLUtil.writeElementStart("categories", "highest-used-id", categoriesElement.getAttribute("highest-used-id"), w);
-				
-				NodeList children = categoriesElement.getChildNodes();
-				
-				for (int i = 0; i < children.getLength(); i++) {
-					if (children.item(i).getNodeName().equals("category")) {
-						Element child = (Element)children.item(i);
-						storeChild(child, w);	
-					}
-				}
-				
-				XMLUtil.writeElementEnd(w);
+			while (children.hasMoreElements()) {
+				storeChild(children.nextElement(), w);
 			}
+			
+			XMLUtil.writeElementEnd(w);
 			w.flush();
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
@@ -198,27 +201,29 @@ public class CategoryUtil {
 	 * @param w
 	 * @throws XMLStreamException
 	 */
-	private static void storeChild(Element child, XMLStreamWriter w) throws XMLStreamException {
+	@SuppressWarnings("unchecked")
+	private static void storeChild(DefaultMutableTreeNode node, XMLStreamWriter w) throws XMLStreamException {
 		XMLAttribute[] xmlAttributes = new XMLAttribute[2];
 		
-		if (child.hasChildNodes()) {
+		if (node.getChildCount() > 0) {
+			CategoryUserObject cuo = (CategoryUserObject)node.getUserObject();
 			
-			xmlAttributes[0] = new XMLAttribute("id", child.getAttribute("id"));
-			xmlAttributes[1] = new XMLAttribute("value", child.getAttribute("value"));
+			xmlAttributes[0] = new XMLAttribute("id", cuo.getIdentity());
+			xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
 			XMLUtil.writeElementStart("category", xmlAttributes, w);
 			
-			NodeList childNodes = child.getChildNodes();
-			for (int i = 0 ; i < childNodes.getLength(); i++) {
-				if (childNodes.item(i).getNodeName().equals("category")) {
-					storeChild((Element)childNodes.item(i), w);
-				}
+			Enumeration<DefaultMutableTreeNode> children = node.children();
+			
+			while (children.hasMoreElements()) {
+				storeChild(children.nextElement(), w);
 			}
-	
+			
 			XMLUtil.writeElementEnd(w);
 		} else {
-			xmlAttributes[0] = new XMLAttribute("id", child.getAttribute("id"));
-			xmlAttributes[1] = new XMLAttribute("value", child.getAttribute("value"));
+			CategoryUserObject cuo = (CategoryUserObject)node.getUserObject();
 			
+			xmlAttributes[0] = new XMLAttribute("id", cuo.getIdentity());
+			xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
 			XMLUtil.writeElement("category", null, xmlAttributes, w);
 		}
 	}
