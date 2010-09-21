@@ -15,8 +15,18 @@
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 - Test all functionality.
 
+Translations:
+-------------------------------
+imageviewer.button.back.toolTip                         = Anterior (Alt + Z) 
+imageviewer.button.forward.toolTip                      = Siguiente (Alt + X) 
+
+imageviewer.button.back.toolTip                         = Previous (Left Arrow) 
+imageviewer.button.forward.toolTip                      = Next (Right Arrow)
+-------------------------------
+
 2.x:
 ====
+- Add backup functionality of image repositories.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
   properties implementation does.
