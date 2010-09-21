@@ -91,4 +91,17 @@ public class StringUtil {
 			 return false;
 		}
 	}
+	
+	/**
+	 * This method removes the last character in a String.
+	 * 
+	 * @param s contains the string in which the last character will be 
+	 *        removed.
+	 *        
+	 * @return the string contained in the parameter s except for the last 
+	 *         character.
+	 */
+	public static String removeLastCharacter(String s) {
+		return s.substring(0, s.length() - 1);
+	}
 }
