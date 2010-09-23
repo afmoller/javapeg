@@ -124,6 +124,7 @@ import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
+import moller.util.gui.TreeUtil;
 import moller.util.gui.Update;
 import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
@@ -198,6 +199,8 @@ public class MainGUI extends JFrame {
 	private JMenuItem popupMenuAddCategory;
 	private JMenuItem popupMenuRenameCategory;
 	private JMenuItem popupMenuRemoveCategory;
+	private JMenuItem popupMenuExpandCategoriesTreeStructure;
+	private JMenuItem popupMenuCollapseCategoriesTreeStructure;
 		
 	private JPopupMenu rightClickMenuCategories;
 	private JPopupMenu rightClickMenuRename;
@@ -213,6 +216,7 @@ public class MainGUI extends JFrame {
 	private JSplitPane verticalSplitPane;
 	private JSplitPane mainSplitPane;
 	private JSplitPane previewAndCommentSplitPane;
+	private JSplitPane previewCommentCategoriesRatingSplitpane;
 	
 	private JScrollPane imageTagPreviewScrollPane;
 	
@@ -687,13 +691,18 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createCategorizePanel() {
 		
-		GBHelper posBackgroundPanel = new GBHelper();
+		previewCommentCategoriesRatingSplitpane = new JSplitPane();
 		
+		previewCommentCategoriesRatingSplitpane.setLeftComponent(this.createPreviweAndCommentPanel());
+		previewCommentCategoriesRatingSplitpane.setRightComponent(this.createCategoryAndRatingPanel());
+		previewCommentCategoriesRatingSplitpane.setDividerLocation(config.getIntProperty("previewCommentCategoriesRatingSplitpane.location"));
+		
+		GBHelper posBackgroundPanel = new GBHelper();
+
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-		backgroundJPanel.add(this.createPreviweAndCommentPanel(), posBackgroundPanel.expandW());
-		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundJPanel.add(this.createCategoryAndRatingPanel(), posBackgroundPanel.nextCol().expandH());
+		backgroundJPanel.add(previewCommentCategoriesRatingSplitpane, posBackgroundPanel.expandH().expandW());
+
 		return backgroundJPanel;
 	}
 	
@@ -1217,12 +1226,17 @@ public class MainGUI extends JFrame {
 		popupMenuAddCategory.addActionListener(new AddCategory());
 		popupMenuRenameCategory.addActionListener(new RenameCategory());
 		popupMenuRemoveCategory.addActionListener(new RemoveCategory());
+		popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
+		popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
 	}
 	
 	public void createRightClickMenuCategories() {
 		rightClickMenuCategories = new JPopupMenu();
+		rightClickMenuCategories.add(popupMenuCollapseCategoriesTreeStructure = new JMenuItem());
+		rightClickMenuCategories.add(popupMenuExpandCategoriesTreeStructure = new JMenuItem());
+		rightClickMenuCategories.addSeparator();
 		rightClickMenuCategories.add(popupMenuAddCategory = new JMenuItem());
 		rightClickMenuCategories.add(popupMenuRenameCategory = new JMenuItem());
 		rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
@@ -1317,6 +1331,7 @@ public class MainGUI extends JFrame {
 		config.setIntProperty("verticalSplitPane.location", verticalSplitPane.getDividerLocation());
 		config.setIntProperty("thumbNailMetaDataPanelSplitPane.location", thumbNailMetaPanelSplitPane.getDividerLocation());
 		config.setIntProperty("previewAndCommentSplitPane.location", previewAndCommentSplitPane.getDividerLocation());
+		config.setIntProperty("previewCommentCategoriesRatingSplitpane.location", previewCommentCategoriesRatingSplitpane.getDividerLocation());
 				
 		try {
 			config.saveSettings();
@@ -1950,15 +1965,12 @@ public class MainGUI extends JFrame {
 		
 		if (checkedPaths != null  && checkedPaths.length > 0 ) {
 			for (TreePath checkedPath : checkedPaths) {
-				System.out.println(checkedPath.toString());
-				
 				Object[] defaultMutableTreeNodes = checkedPath.getPath();
 				for (Object defaultMutableTreeNode : defaultMutableTreeNodes) {
 					if (defaultMutableTreeNode instanceof DefaultMutableTreeNode) {
 						String id = ((CategoryUserObject)((DefaultMutableTreeNode)defaultMutableTreeNode).getUserObject()).getIdentity();
 						if (StringUtil.isInt(id)) {
 							selectedId.addCategory(id);
-							System.out.println(id);
 						}
 					}
 				}
@@ -2374,6 +2386,38 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
+	private class CollapseCategoryTreeStructure implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
+			
+			JTree tree  = checkTreeManager.getCheckedJtree();
+			
+			if (selectedPath == null) {
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+				TreeUtil.collapseEntireTree(tree, root, false);
+			} else {
+				TreeUtil.collapseEntireTree(tree, (DefaultMutableTreeNode)selectedPath.getLastPathComponent(), true);
+			}
+		}
+	}
+	
+	private class ExpandCategoryTreeStructure implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
+			
+			JTree tree  = checkTreeManager.getCheckedJtree();
+			
+			if (selectedPath == null) {
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+				TreeUtil.expandEntireTree(tree, root, false);
+			} else {
+				TreeUtil.expandEntireTree(tree, (DefaultMutableTreeNode)selectedPath.getLastPathComponent(), true);
+			}
+		}
+	}
+		
 	private class ImagesToViewListListener implements ListSelectionListener {
 		
 		public void valueChanged(ListSelectionEvent e) {
@@ -2429,6 +2473,8 @@ public class MainGUI extends JFrame {
 			TreePath selectedPath = checkTreeManager.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
 			
 			if(e.isPopupTrigger()) {
+				String collapseCategory = "";
+				String expandCategory = "";
 				String addCategory = "";
 				String renameCategory = "";
 				String removeCategory = "";
@@ -2439,10 +2485,18 @@ public class MainGUI extends JFrame {
 				if (selectedPath == null) {
 //					TODO: Fix hard coded string
 					addCategory = "Add new Top Level Category";
-	            // ... or as a sub category of an existing category
+//					TODO: Fix hard coded string					
+					collapseCategory = "Collapse Top Level Categories";
+//					TODO: Fix hard coded string					
+					expandCategory = "Expand Top Level Categories";
+		        // ... or as a sub category of an existing category
 				} else {
 					treeNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 					String value = ((CategoryUserObject)treeNode.getUserObject()).getName();
+//					TODO: Fix hard coded string					
+					collapseCategory = "Collapse Category: " + value;
+//					TODO: Fix hard coded string					
+					expandCategory = "Expand  Category: " + value;
 //					TODO: Fix hard coded string
 					addCategory = "Add new sub category to Category: " + value;	
 //					TODO: Fix hard coded string
@@ -2454,6 +2508,9 @@ public class MainGUI extends JFrame {
 				popupMenuAddCategory.setText(addCategory);
 				popupMenuRenameCategory.setText(renameCategory);
 				popupMenuRemoveCategory.setText(removeCategory);
+				
+				popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
+				popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 				
 				if (selectedPath == null) {
 					rightClickMenuCategories.remove(popupMenuRenameCategory);
