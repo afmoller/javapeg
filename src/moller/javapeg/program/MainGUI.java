@@ -2332,9 +2332,9 @@ public class MainGUI extends JFrame {
 					DefaultMutableTreeNode newCategory = new DefaultMutableTreeNode(cuo);
 										
 					if (isTopLevelCategory) {
-						model.insertNodeInto(newCategory, (DefaultMutableTreeNode)model.getRoot(), 0);
+						TreeUtil.insertNodeInAlphabeticalOrder(newCategory, (DefaultMutableTreeNode)model.getRoot(), model);
 					} else {
-						model.insertNodeInto(newCategory, selectedNode, 0);	
+						TreeUtil.insertNodeInAlphabeticalOrder(newCategory, selectedNode, model);
 					}
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
@@ -2365,7 +2365,11 @@ public class MainGUI extends JFrame {
 				} else {
 					((CategoryUserObject)nodeToRename.getUserObject()).setName(newName);
 					model.nodeChanged(nodeToRename);
-					
+
+					DefaultMutableTreeNode parent = (DefaultMutableTreeNode)nodeToRename.getParent();
+
+					TreeUtil.sortNodesAlphabetically(parent, model);
+
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
 				}
