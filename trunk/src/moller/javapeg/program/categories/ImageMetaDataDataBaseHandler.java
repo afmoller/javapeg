@@ -19,6 +19,7 @@ import javax.xml.stream.XMLStreamWriter;
 import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.logger.Logger;
+import moller.util.hash.MD5;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.xml.XMLUtil;
@@ -89,6 +90,7 @@ public class ImageMetaDataDataBaseHandler {
 				ImageExifMetaData iemd = imddbi.getImageExifMetaData();
 				
 				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getAbsolutePath(), w);
+				XMLUtil.writeElement("md5", MD5.calculate(image), w);
 				XMLUtil.writeElementStart("exif-meta-data", w);
 				XMLUtil.writeElement("aperture-value", iemd.getApertureValue(), w);
 				XMLUtil.writeElement("camera-model"  , iemd.getCameraModel()  , w);
@@ -149,12 +151,15 @@ public class ImageMetaDataDataBaseHandler {
 				
 				ImageExifMetaData imageExifMetaData = null;
 				String comment = "";
+				String md5 = "";
 				int rating = 0;
 				Categories categories = new Categories();
 				
 				for (int j = 0; j < content.getLength(); j++) {
 					Node node = content.item(j);
-					if ("exif-meta-data".equals(node.getNodeName())) {
+					if ("md5".equals(node.getNodeName())) {
+						md5 = node.getTextContent();
+					} else if ("exif-meta-data".equals(node.getNodeName())) {
 						imageExifMetaData = createImageExifMetaData(node.getChildNodes());
 					} else if("comment".equals(node.getNodeName())) {
 						comment = node.getTextContent();
@@ -174,7 +179,7 @@ public class ImageMetaDataDataBaseHandler {
 						}
 					}
 				}
-				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, categories);
+				ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, md5, imageExifMetaData, comment, rating, categories);
 				imageMetaDataDataBaseItems.put(image, iMDDBI);
 			}
 			ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
