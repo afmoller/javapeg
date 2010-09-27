@@ -15,12 +15,16 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.*;
-import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JCheckBox;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  * @author Santhosh Kumar T
@@ -51,25 +55,55 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     public TreePathSelectable getSelectable(TreePathSelectable selectable){
         return selectable;
     }
+    
+    private void removeSelectionPaths(DefaultMutableTreeNode node) {
+    	selectionModel.removeSelectionPath(new TreePath(node.getPath()));
+    	
+    	int nrOfChildren = node.getChildCount(); 
+    	
+    	if (nrOfChildren > 0) {
+    		for (int i = 0; i < nrOfChildren; i++) {
+    			removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
+    		}
+    	}
+    }
+    
+    private void addSelectionPaths(DefaultMutableTreeNode node) {
+    	TreePath nodeTreePath = new TreePath(node.getPath());
+    	
+    	selectionModel.addSelectionPath(nodeTreePath);
+    	TreePath parentPath = nodeTreePath.getParentPath();
+    	
+    	while (parentPath != null) {
+    		selectionModel.addSelectionPath(parentPath);
+    		parentPath = parentPath.getParentPath();
+    	}
+    }
 
     public void mouseClicked(MouseEvent me){
         TreePath path = tree.getPathForLocation(me.getX(), me.getY());
-        if(path==null)
+        if(path==null) {
             return;
-        if(me.getX()>tree.getPathBounds(path).x+hotspot)
+        }
+        if(me.getX()>tree.getPathBounds(path).x+hotspot) {
             return;
+        }
 
-        if(selectable!=null && !selectable.isSelectable(path))
+        if(selectable!=null && !selectable.isSelectable(path)) {
             return;
+        }
 
         boolean selected = selectionModel.isPathSelected(path, selectionModel.isDigged());
         selectionModel.removeTreeSelectionListener(this);
 
         try{
-            if(selected)
-                selectionModel.removeSelectionPath(path);
-            else
-                selectionModel.addSelectionPath(path);
+        	DefaultMutableTreeNode clickedPath = (DefaultMutableTreeNode)path.getLastPathComponent();
+        	
+            if(selected) {
+            	removeSelectionPaths(clickedPath);
+            } else {
+            	addSelectionPaths(clickedPath);
+            }
         } finally{
             selectionModel.addTreeSelectionListener(this);
             tree.treeDidChange();
@@ -86,5 +120,9 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     
     public JTree getCheckedJtree() {
     	return tree;
+    }
+    
+    public TreeModel getTreeModel() {
+    	return tree.getModel();
     }
 }
