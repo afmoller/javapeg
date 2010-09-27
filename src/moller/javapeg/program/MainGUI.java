@@ -122,6 +122,7 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
+import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.TreeUtil;
@@ -1027,22 +1028,7 @@ public class MainGUI extends JFrame {
 			System.exit(1);	
 		}
 		
-//		XMLTreeModel model = new XMLTreeModel();
-//		
-//		model.setDocument(document);
-//		model.addTreeModelListener(new MyTreeModelListener());
-		
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
-		
-//		DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("node1");
-//		DefaultMutableTreeNode node2 = new DefaultMutableTreeNode("node2");
-//		DefaultMutableTreeNode node3 = new DefaultMutableTreeNode("node3");
-//		DefaultMutableTreeNode node4 = new DefaultMutableTreeNode("node4");;
-//		
-//		root.add(node1);
-//		root.add(node2);
-//		root.add(node3);
-//		root.add(node4);
 		
 		CategoryUtil.populateTreeModel(document, root);
 		
@@ -1070,14 +1056,14 @@ public class MainGUI extends JFrame {
 		
 		backgroundPanel.add(categorizeHeading, posBackground);
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
-		backgroundPanel.add(categoriesScrollPane, posBackground.nextRow().expandH());
+		backgroundPanel.add(categoriesScrollPane, posBackground.nextRow().expandH().expandW());
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(ratingLabel,posBackground.nextRow().nextRow());
 		
 		ratingRadioButtons = new JRadioButton[6];
 		ButtonGroup ratingButtonGroup = new ButtonGroup();
 		
-		JPanel ratingButtonPanel = new JPanel();
+		JPanel ratingButtonPanel = new JPanel(new GridLayout(1,6));
 		
 		for (int i = 0; i < ratingRadioButtons.length; i++) {
 			JRadioButton jrb = new JRadioButton();
@@ -1393,6 +1379,7 @@ public class MainGUI extends JFrame {
 		if(exitValue == 0) {
 			saveSettings();
 			saveRepositoryPaths();
+			storeCurrentlySelectedImageData();
 			flushImageMetaDataBaseToDisk();
 		}
 		logger.logDEBUG("JavePEG was shut down");
@@ -1400,12 +1387,16 @@ public class MainGUI extends JFrame {
 		System.exit(exitValue);
 	}
 	
+	private int displayConfirmDialog(String message, String label, int type) {
+		return JOptionPane.showConfirmDialog(this, message, label, type);
+	}
+	
 	private void displayErrorMessage(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
 	}
 	
-	public String displayInputDialog(String title, String lable) {
-		return JOptionPane.showInputDialog(this, lable, title, JOptionPane.QUESTION_MESSAGE);
+	public String displayInputDialog(String title, String label, String initialValue) {
+		return CustomJOptionPane.showInputDialog(this, label, title, initialValue);
 	}
 			
 	// WindowDestroyer
@@ -1933,7 +1924,7 @@ public class MainGUI extends JFrame {
 		checkTreeManager.getSelectionModel().clearSelection();
 		
 		if (categories.size() > 0) {
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 			Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 			
 			List<TreePath> treePaths = new ArrayList<TreePath>();
@@ -1969,7 +1960,7 @@ public class MainGUI extends JFrame {
 				for (Object defaultMutableTreeNode : defaultMutableTreeNodes) {
 					if (defaultMutableTreeNode instanceof DefaultMutableTreeNode) {
 						String id = ((CategoryUserObject)((DefaultMutableTreeNode)defaultMutableTreeNode).getUserObject()).getIdentity();
-						if (StringUtil.isInt(id)) {
+						if (StringUtil.isInt(id) && Integer.parseInt(id) > -1) {
 							selectedId.addCategory(id);
 						}
 					}
@@ -2303,12 +2294,12 @@ public class MainGUI extends JFrame {
 			String categoryName = null;
 			boolean isTopLevelCategory = false;
 			DefaultMutableTreeNode selectedNode = null;
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 			
 			// Should the category be added at the top level...
 			if (selectedPath == null) {
 //				TODO: fix hard coded string
-				categoryName = displayInputDialog("Add new root category", "Please enter a name for the new category");
+				categoryName = displayInputDialog("Add new root category", "Please enter a name for the new category", "");
 				isTopLevelCategory = true;
             // ... or as a sub category of an existing category
 			} else {
@@ -2316,7 +2307,7 @@ public class MainGUI extends JFrame {
 				String value = ((CategoryUserObject)selectedNode.getUserObject()).getName();
 				
 //				TODO: fix hard coded string
-				categoryName = displayInputDialog("Add new sub category to category: " + value, "Please enter a name for the sub category");
+				categoryName = displayInputDialog("Add new sub category to category: " + value, "Please enter a name for the sub category", "");
 			}
 			
 			if (categoryName != null) {
@@ -2350,14 +2341,14 @@ public class MainGUI extends JFrame {
 			
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 			
 			DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 			String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
 			
-			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value);
+			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value, value);
 			
-			if (newName != null) {
+			if (newName != null && !newName.equals(value)) {
 				if (!CategoryUtil.isValid(newName)) {
 					displayErrorMessage("The category name can not start with a white space: " + "\"" + newName + "\"");	
 				} else if(CategoryUtil.alreadyExists((DefaultMutableTreeNode)model.getRoot(), selectedPath.getParentPath(), newName)) {
@@ -2381,12 +2372,23 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 			
-			model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+			DefaultMutableTreeNode nodeToRemove = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
 			
-			File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
-			CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
+			int result = 0;
+			
+			if (nodeToRemove.getChildCount() > 0) {
+//				TODO: Fix hard coded string
+				String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " and all sub categories?";
+				result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
+			}
+			if (result == 0) {
+				model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+				
+				File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+				CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
+			}
 		}
 	}
 	
@@ -2397,7 +2399,7 @@ public class MainGUI extends JFrame {
 			JTree tree  = checkTreeManager.getCheckedJtree();
 			
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.collapseEntireTree(tree, root, false);
 			} else {
@@ -2413,7 +2415,7 @@ public class MainGUI extends JFrame {
 			JTree tree  = checkTreeManager.getCheckedJtree();
 			
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getCheckedJtree().getModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.expandEntireTree(tree, root, false);
 			} else {
@@ -2516,21 +2518,136 @@ public class MainGUI extends JFrame {
 				popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
 				popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 				
+				JTree categoryTree = checkTreeManager.getCheckedJtree();
+				
+				/**
+				 * If no category has been selected.
+				 */
 				if (selectedPath == null) {
-					rightClickMenuCategories.remove(popupMenuRenameCategory);
-					rightClickMenuCategories.remove(popupMenuRemoveCategory);
-				} else {
-					if (rightClickMenuCategories.getComponentIndex(popupMenuRenameCategory) == -1) {
-						rightClickMenuCategories.add(popupMenuRenameCategory);
+					DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManager.getTreeModel().getRoot();
+					
+					int nrOfChildren = root.getChildCount();
+					boolean someChildIsExpanded = false;
+					boolean someChildCanBeExpanded = false;
+					
+					if (nrOfChildren > 0) {
+						for (int i = 0; i < nrOfChildren; i++) {
+							DefaultMutableTreeNode child = (DefaultMutableTreeNode)root.getChildAt(i);
+							
+							boolean currentChildIsExpanded = categoryTree.isExpanded(new TreePath(child.getPath()));
+							
+							if (!someChildIsExpanded) {
+								someChildIsExpanded = currentChildIsExpanded;
+							}
+							if (!someChildCanBeExpanded && child.getChildCount() > 0 && !currentChildIsExpanded) {
+								someChildCanBeExpanded = true;
+							}
+						}
+						
+						if (someChildCanBeExpanded && someChildIsExpanded ) {
+							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE);
+						} else if (someChildCanBeExpanded && !someChildIsExpanded) {
+							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_COLLAPSE);
+						} else if (!someChildCanBeExpanded && !someChildIsExpanded) {
+							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
+						} else if (!someChildCanBeExpanded && someChildIsExpanded) {
+							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND);
+						}
+					} else {
+						this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
 					}
-					if (rightClickMenuCategories.getComponentIndex(popupMenuRemoveCategory) == -1) {
-						rightClickMenuCategories.add(popupMenuRemoveCategory);
+				} 
+				/**
+				 * If a category has been selected
+				 */
+				else {
+					if (treeNode.getChildCount() > 0) {
+						if (categoryTree.isExpanded(selectedPath)) {
+							this.createMenu(CategoryMenyType.NO_EXPAND);
+						} else {
+							this.createMenu(CategoryMenyType.NO_COLLAPSE);
+						}
+					} else {
+						this.createMenu(CategoryMenyType.NO_EXPAND_COLLAPSE);
 					}
 				}
+
 				ApplicationContext.getInstance().setSelectedCategoryPath(selectedPath);
 				
 				rightClickMenuCategories.show(e.getComponent(),e.getX(), e.getY());
 			}
 		}
+		
+		private void createMenu(CategoryMenyType categoryMenyType) {
+			
+			rightClickMenuCategories.removeAll();	
+			
+			switch (categoryMenyType) {
+			case ALL:
+				rightClickMenuCategories.add(popupMenuCollapseCategoriesTreeStructure);
+				rightClickMenuCategories.add(popupMenuExpandCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				rightClickMenuCategories.add(popupMenuRenameCategory);
+				rightClickMenuCategories.add(popupMenuRemoveCategory);
+				break;
+				
+			case NO_COLLAPSE:
+				rightClickMenuCategories.add(popupMenuExpandCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				rightClickMenuCategories.add(popupMenuRenameCategory);
+				rightClickMenuCategories.add(popupMenuRemoveCategory);
+				break;
+				
+			case NO_EXPAND:
+				rightClickMenuCategories.add(popupMenuCollapseCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				rightClickMenuCategories.add(popupMenuRenameCategory);
+				rightClickMenuCategories.add(popupMenuRemoveCategory);
+				break;
+				
+			case NO_EXPAND_COLLAPSE:
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				rightClickMenuCategories.add(popupMenuRenameCategory);
+				rightClickMenuCategories.add(popupMenuRemoveCategory);
+				break;
+				
+			case NO_RENAME_REMOVE:
+				rightClickMenuCategories.add(popupMenuCollapseCategoriesTreeStructure);
+				rightClickMenuCategories.add(popupMenuExpandCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				break;
+				
+			case NO_RENAME_REMOVE_COLLAPSE:
+				rightClickMenuCategories.add(popupMenuExpandCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				break;
+				
+			case NO_RENAME_REMOVE_EXPAND:
+				rightClickMenuCategories.add(popupMenuCollapseCategoriesTreeStructure);
+				rightClickMenuCategories.addSeparator();
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				break;
+				
+			case NO_RENAME_REMOVE_EXPAND_COLLAPSE:
+				rightClickMenuCategories.add(popupMenuAddCategory);
+				break;
+			}
+		}
+	}
+	
+	private enum CategoryMenyType {
+		ALL,
+		NO_COLLAPSE,
+		NO_EXPAND,
+		NO_EXPAND_COLLAPSE,
+		NO_RENAME_REMOVE,
+		NO_RENAME_REMOVE_COLLAPSE,
+		NO_RENAME_REMOVE_EXPAND_COLLAPSE,
+		NO_RENAME_REMOVE_EXPAND;
 	}
 }
