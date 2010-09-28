@@ -89,7 +89,7 @@ public class ImageMetaDataDataBaseHandler {
 				ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
 				ImageExifMetaData iemd = imddbi.getImageExifMetaData();
 				
-				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getAbsolutePath(), w);
+				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
 				XMLUtil.writeElement("md5", MD5.calculate(image), w);
 				XMLUtil.writeElementStart("exif-meta-data", w);
 				XMLUtil.writeElement("aperture-value", iemd.getApertureValue(), w);
@@ -145,7 +145,7 @@ public class ImageMetaDataDataBaseHandler {
 				NamedNodeMap nnm = imageTag.getAttributes();
 				Node file = nnm.getNamedItem("file");
 				
-				File image = new File(file.getNodeValue());
+				File image = new File(imageMetaDataDataBase.getParentFile(), file.getNodeValue());
 				
 				NodeList content = imageTag.getChildNodes();
 				
