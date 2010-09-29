@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import moller.javapeg.program.categories.ImageRepositoryItem;
+import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.util.io.Status;
 
 public class CustomCellRenderer	extends	JLabel implements ListCellRenderer {
