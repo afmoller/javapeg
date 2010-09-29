@@ -85,8 +85,6 @@ import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
-import moller.javapeg.program.categories.ImageRepositoryHandler;
-import moller.javapeg.program.categories.ImageRepositoryItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
@@ -98,6 +96,8 @@ import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
+import moller.javapeg.program.imagerepository.ImageRepositoryHandler;
+import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -141,12 +141,8 @@ import moller.util.version.containers.VersionInformation;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-
 public class MainGUI extends JFrame {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 4478711914847747931L;
 	
 	private static Config config;
@@ -196,7 +192,6 @@ public class MainGUI extends JFrame {
 	private JMenuItem popupMenuCopyImageToClipBoardTag;
 	private JMenuItem popupMenuAddImageToViewList;
 	private JMenuItem popupMenuAddAllImagesToViewList;
-	private JMenuItem popupMenuAddImagesToCategorizeList;
 	private JMenuItem popupMenuAddCategory;
 	private JMenuItem popupMenuRenameCategory;
 	private JMenuItem popupMenuRemoveCategory;
@@ -1208,7 +1203,6 @@ public class MainGUI extends JFrame {
 		popupMenuCopyImageToClipBoardTag.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
-		popupMenuAddImagesToCategorizeList.addActionListener(new AddImagesToCategorizeList());
 		popupMenuAddCategory.addActionListener(new AddCategory());
 		popupMenuRenameCategory.addActionListener(new RenameCategory());
 		popupMenuRemoveCategory.addActionListener(new RemoveCategory());
@@ -1257,12 +1251,8 @@ public class MainGUI extends JFrame {
 		
 //		TODO: Fix hard coded string
 		popupMenuCopyImageToClipBoardTag = new JMenuItem("Copy to System Clipboard");
-//		TODO: Fix hard coded string
-		popupMenuAddImagesToCategorizeList = new JMenuItem("Add directory to database");
 		
 		rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
-		rightClickMenuTag.addSeparator();
-		rightClickMenuTag.add(popupMenuAddImagesToCategorizeList);
 	}
 
 	public void initiateProgram(){
@@ -1767,12 +1757,36 @@ public class MainGUI extends JFrame {
 					
 					File repositoryPath = new File(totalPath);
 					
-					ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath);
-					imddbituc.setRepositoryPath(repositoryPath);
+					int nrOfJPEGFilesInRepositoryPath = -1;
 					
-					// Load thumb nails for all JPEG images that exists in the 
-					// selected path.
-					loadThumbNails(new File(totalPath));
+					try {
+						nrOfJPEGFilesInRepositoryPath = JPEGUtil.getJPEGFiles(repositoryPath).size();
+					} catch (FileNotFoundException fnfex) {
+						nrOfJPEGFilesInRepositoryPath = 0;
+						logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
+						logger.logDEBUG(fnfex);
+					} catch (IOException ioex) {
+						nrOfJPEGFilesInRepositoryPath = 0;
+						logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
+						logger.logDEBUG(ioex);
+					}
+					
+					if (nrOfJPEGFilesInRepositoryPath > 0) {
+						ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath);
+						imddbituc.setRepositoryPath(repositoryPath);
+						
+						// Load thumb nails for all JPEG images that exists in the 
+						// selected path.
+						loadThumbNails(new File(totalPath));
+						
+						// Populate the image repository model with any 
+						// unpopulated paths.
+						ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
+						
+						if(!categoriesRepositoryListModel.contains(iri)) {
+							categoriesRepositoryListModel.add(iri);
+						}
+					}
 				}
 			}	
 		}
@@ -2272,20 +2286,7 @@ public class MainGUI extends JFrame {
 			setNrOfImagesLabels();
 		}		
 	}
-	
-	private class AddImagesToCategorizeList implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String sourcePath = ApplicationContext.getInstance().getSourcePath();
-			
-			ImageRepositoryItem iri = new ImageRepositoryItem(sourcePath, Status.EXISTS);
-			
-			if(!categoriesRepositoryListModel.contains(iri)) {
-				categoriesRepositoryListModel.add(iri);
-				ImageMetaDataDataBaseHandler.initiateDataBase(new File(sourcePath));
-			}
-		}
-	}
-	
+
 	private class AddCategory implements ActionListener {
 
 		@Override
