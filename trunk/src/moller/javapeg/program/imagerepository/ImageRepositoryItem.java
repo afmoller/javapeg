@@ -1,4 +1,4 @@
-package moller.javapeg.program.categories;
+package moller.javapeg.program.imagerepository;
 /**
  * This class was created : 2010-01-21 by Fredrik Möller
  * Latest changed         : 2010-01-28 by Fredrik Möller
