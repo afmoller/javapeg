@@ -18,19 +18,18 @@ public class MetaDataUtil {
 		
 		Language lang = Language.getInstance();
 		
-		MetaDataRetriever mdr = new MetaDataRetriever(jpgFile);
-		MetaData md = mdr.getMetaData();
+		MetaData md = MetaDataRetriever.getMetaData(jpgFile);
 
 		return "<html>" +
 		         "<table>" +
 		           createTableRow("Filnamn", jpgFile.getName()) +
-		           createTableRow(lang.get("variable.pictureDate"), md.getExifDate()) +
-		           createTableRow(lang.get("variable.pictureTime"), md.getExifTime()) +
+		           createTableRow(lang.get("variable.pictureDate"), md.getExifDateAsString()) +
+		           createTableRow(lang.get("variable.pictureTime"), md.getExifTimeAsString()) +
 		           createTableRow(lang.get("variable.cameraModel"), md.getExifCameraModel()) +
-		           createTableRow(lang.get("variable.shutterSpeed"), md.getExifShutterSpeed()) +
-		           createTableRow(lang.get("variable.isoValue"), md.getExifISOValue()) +
-		           createTableRow(lang.get("variable.pictureWidth"), md.getExifPictureWidth()) +
-		           createTableRow(lang.get("variable.pictureHeight"), md.getExifPictureHeight()) +
+		           createTableRow(lang.get("variable.shutterSpeed"), md.getExifShutterSpeed().toString()) +
+		           createTableRow(lang.get("variable.isoValue"), Integer.toString(md.getExifISOValue())) +
+		           createTableRow(lang.get("variable.pictureWidth"), Integer.toString(md.getExifPictureWidth())) +
+		           createTableRow(lang.get("variable.pictureHeight"), Integer.toString(md.getExifPictureHeight())) +
 		           createTableRow(lang.get("variable.apertureValue"), md.getExifApertureValue()) +
 		         "</table>" +
 			   "</html>";
@@ -53,22 +52,17 @@ public class MetaDataUtil {
 			Vector<String> temp= new Vector<String>();
 			
 			temp.addElement(metaData.getFileName());
-			temp.addElement(metaData.getExifDate());
-			temp.addElement(metaData.getExifTime());
+			temp.addElement(metaData.getExifDateAsString());
+			temp.addElement(metaData.getExifTimeAsString());
 			temp.addElement(metaData.getExifCameraModel());
-			temp.addElement(metaData.getExifShutterSpeed());
-			temp.addElement(metaData.getExifISOValue());
-			temp.addElement(metaData.getExifPictureWidth());
-			temp.addElement(metaData.getExifPictureHeight());
+			temp.addElement(metaData.getExifShutterSpeed().toString());
+			temp.addElement(Integer.toString(metaData.getExifISOValue()));
+			temp.addElement(Integer.toString(metaData.getExifPictureWidth()));
+			temp.addElement(Integer.toString(metaData.getExifPictureHeight()));
 			temp.addElement(metaData.getExifApertureValue());
 
 			metaDataVector.addElement(temp);
 		}
 		return metaDataVector;
-	}
-	
-	public static MetaData getMetaData(File jpegFile) {
-		MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
-		return mdr.getMetaData();
 	}
 }
