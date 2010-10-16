@@ -2,6 +2,10 @@
 ====
 - Add possibility to tag images with categories and add comments.
 - Add possibility to search for images matching criterias defined by the tagging of images.
+- Make it possible to configure the level of warnings in the categories tree.
+- Make it possible to remove paths from the image repository paths collections.
+- Make it possible to configure the level of tooltiptext for the thumbnails in the image viewer.
+- Make it possilbe to configure the sort order of the source directory tree structure, alphabetical or latest modified.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
 - Fix layout of the Config Viewer GUI.
 - Update version numbers in language files
@@ -23,6 +27,7 @@ imageviewer.button.forward.toolTip                      = Next (Right Arrow)
 
 2.6:
 ====
+- Add functionality for keeping the source directory tree up to date by searching for attached or detached volumes, such as attached USB-disks and so on, and update the 
 - Add slide show functionality to Image Viewer.
 - Add rotate image functionality to Image Viewer.
 - Add automatic rotate functionality according to Exif position.
@@ -31,10 +36,9 @@ imageviewer.button.forward.toolTip                      = Next (Right Arrow)
 
 2.x:
 ====
-
+- Add backup functionality of image repositories.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add functionality to load latest showed image path at application start.
-- Add backup functionality of image repositories.
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
   properties implementation does.
