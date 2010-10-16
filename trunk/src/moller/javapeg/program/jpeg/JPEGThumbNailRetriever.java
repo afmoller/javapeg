@@ -61,8 +61,7 @@ public class JPEGThumbNailRetriever {
 			thumbNail = new JPEGThumbNail();
 			
 			// Hämta in metadata för filen som tumnageln skall hämtas ur
-			MetaDataRetriever mdr = new MetaDataRetriever(jpegFile);
-			MetaData md = mdr.getMetaData();
+			MetaData md = MetaDataRetriever.getMetaData(jpegFile);
 
 			int thumbNailLength = md.getThumbNailLength();
 						
