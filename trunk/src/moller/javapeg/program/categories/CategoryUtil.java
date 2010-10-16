@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
 
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -226,5 +228,46 @@ public class CategoryUtil {
 			xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
 			XMLUtil.writeElement("category", null, xmlAttributes, w);
 		}
+	}
+	
+	public static JTree createCategoriesTree() {
+		
+		JTree categoriesTree = new JTree();
+		
+		File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+		
+		Document document = null;
+		boolean parseSuccess = false;
+		
+		try {
+			document = CategoryUtil.parse(categoriesFile);
+			parseSuccess = true;
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		if (!parseSuccess) {
+			System.exit(1);	
+		}
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
+		
+		CategoryUtil.populateTreeModel(document, root);
+		
+		DefaultTreeModel model = new DefaultTreeModel(root);
+		
+		categoriesTree.setModel(model);
+		categoriesTree.setShowsRootHandles(true);
+		categoriesTree.setRootVisible(false);
+		
+		return categoriesTree;
 	}
 }
