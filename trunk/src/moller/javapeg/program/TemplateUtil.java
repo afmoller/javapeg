@@ -20,12 +20,12 @@ public class TemplateUtil {
 		Language lang = Language.getInstance();
 		
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureDateVariable") + "%") > -1){
-			String date = theMetaData.getExifDate();
+			String date = theMetaData.getExifDateAsString();
 			date = date.replaceAll(":", "-");
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureDateVariable") + "%", date);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureTimeVariable") + "%") > -1){
-			String time = theMetaData.getExifTime();
+			String time = theMetaData.getExifTimeAsString();
 			time = time.replaceAll(":", "-");
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureTimeVariable") + "%", time);
 		}
@@ -34,17 +34,17 @@ public class TemplateUtil {
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.shutterSpeedVariable") + "%") > -1){
 			String shutterSpeed = "";
-			shutterSpeed = theMetaData.getExifShutterSpeed().replaceAll("/", "_");
+			shutterSpeed = theMetaData.getExifShutterSpeed().toString().replaceAll("/", "_");
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.shutterSpeedVariable") + "%", shutterSpeed);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.isoValueVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.isoValueVariable") + "%", theMetaData.getExifISOValue());
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.isoValueVariable") + "%", Integer.toString(theMetaData.getExifISOValue()));
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureWidthVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureWidthVariable") + "%", theMetaData.getExifPictureWidth());
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureWidthVariable") + "%", Integer.toString(theMetaData.getExifPictureWidth()));
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureHeightVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureHeightVariable") + "%", theMetaData.getExifPictureHeight());
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureHeightVariable") + "%", Integer.toString(theMetaData.getExifPictureHeight()));
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.apertureValueVariable") + "%") > -1){
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", theMetaData.getExifApertureValue());
