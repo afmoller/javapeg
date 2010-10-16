@@ -64,6 +64,7 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -76,7 +77,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import javax.xml.parsers.ParserConfigurationException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
@@ -88,9 +88,13 @@ import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.contexts.Context;
+import moller.javapeg.program.contexts.ImageMetaDataContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
+import moller.javapeg.program.gui.MetaDataValueSelector;
+import moller.javapeg.program.gui.MetaDataValueSelectorComplex;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
@@ -104,6 +108,7 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
+import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
@@ -137,9 +142,6 @@ import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class MainGUI extends JFrame {
 	
@@ -278,6 +280,9 @@ public class MainGUI extends JFrame {
 			this.checkApplicationUpdates();
 			logger.logDEBUG("Application Update Check Finished");
 		}
+		logger.logDEBUG("Image Meta Data Context initialization Started");
+		this.initiateImageMetaDataContext();
+		logger.logDEBUG("Image Meta Data Context initialization Finished");
 		logger.logDEBUG("Creation of Main Frame Started");
 		this.createMainFrame();
 		logger.logDEBUG("Creation of Main Frame Finished");
@@ -679,8 +684,9 @@ public class MainGUI extends JFrame {
 				
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		backgroundJPanel.add(this.createFindImageSection(), posBackgroundPanel.expandH().expandW());
+		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.expandH());
-		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol().expandW());
 						
 		return backgroundJPanel;
 	}
@@ -870,6 +876,203 @@ public class MainGUI extends JFrame {
 		return backgroundPanel;
 	}
 	
+	private JPanel createFindImageSection() {
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		
+		GBHelper posBackgroundPanel = new GBHelper();
+
+//		TODO: fix hard coded string
+		JLabel findInCategoriesLabel = new JLabel("CATEGORIES");
+		findInCategoriesLabel.setForeground(Color.GRAY);
+		
+//		TODO: fix hard coded string
+		JLabel findInMetaDataLabel = new JLabel("IMAGE META DATA");
+		findInMetaDataLabel.setForeground(Color.GRAY);
+		
+//		TODO: fix hard coded string
+		JLabel findInRatingLabel = new JLabel("RATING");
+		findInRatingLabel.setForeground(Color.GRAY);
+		
+		backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(findInMetaDataLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(findInRatingLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW());
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createImageMeteDataPanel(), posBackgroundPanel.nextCol());
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createRatingCommentAndButtonPanel(), posBackgroundPanel.nextCol());
+		
+		return backgroundPanel;
+	}
+	
+	private JPanel createCategoriesPanel() {
+		
+		JTree categoriesTree = CategoryUtil.createCategoriesTree();
+			
+		// makes your tree as CheckTree
+//		checkTreeManager = new CheckTreeManager(categoriesTree, false, null); 
+			
+		JScrollPane categoriesScrollPane = new JScrollPane();
+		categoriesScrollPane.getViewport().add(categoriesTree);
+
+//		TODO: Fix hard coded string
+		JLabel ratingLabel = new JLabel("RATING");
+		ratingLabel.setForeground(Color.GRAY);
+		
+		GBHelper posBackground = new GBHelper();
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+		
+		posBackground.fill = GridBagConstraints.BOTH;
+		
+		backgroundPanel.add(categoriesScrollPane, posBackground.expandH().expandW());
+		
+		return backgroundPanel;
+	}
+	
+	
+	private JPanel createImageMeteDataPanel() {
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+		
+		GBHelper posBackgroundPanel = new GBHelper();
+		
+		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelector cameraModel = new MetaDataValueSelector("CAMERA MODEL", false);
+		cameraModel.setStringValues(imdc.getCameraModels());
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelectorComplex date = new MetaDataValueSelectorComplex("YEAR", "MONTH", "DAY", true);
+		date.setFirstValues(imdc.getYears());
+		date.setSecondValues(date.initiateContinuousSet(1, 12));
+		date.setThirdValues(date.initiateContinuousSet(1, 31));
+		
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelectorComplex time = new MetaDataValueSelectorComplex("HOUR", "MINUTE", "SECOND", true);
+		time.setFirstValues(time.initiateContinuousSet(0, 23));
+		time.setSecondValues(time.initiateContinuousSet(0, 59));
+		time.setThirdValues(time.initiateContinuousSet(0, 59));
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelector imageSize = new MetaDataValueSelector("IMAGE SIZE", true);
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelector iso = new MetaDataValueSelector("ISO", true);
+		iso.setIntegerValues(imdc.getIsoValues());
+				
+//		TODO: fix hard coded string
+		MetaDataValueSelector shutterSpeed = new MetaDataValueSelector("SHUTTER SPEED", true);
+		shutterSpeed.setShutterSpeedValues(imdc.getShutterSpeedValues());
+		
+//		TODO: fix hard coded string
+		MetaDataValueSelector aperture = new MetaDataValueSelector("APERTURE VALUE", true);
+		aperture.setStringValues(imdc.getApertureValues());
+						
+		backgroundPanel.add(cameraModel.getMainPanel(), posBackgroundPanel.nextRow());
+		if (cameraModel.hasOperators()) {
+			backgroundPanel.add(cameraModel.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(date.getMainPanel(), posBackgroundPanel.nextRow());
+		if (date.hasOperators()) {
+			backgroundPanel.add(date.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(time.getMainPanel(), posBackgroundPanel.nextRow());
+		if (time.hasOperators()) {
+			backgroundPanel.add(time.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(imageSize.getMainPanel(), posBackgroundPanel.nextRow());
+		if (imageSize.hasOperators()) {
+			backgroundPanel.add(imageSize.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(iso.getMainPanel(), posBackgroundPanel.nextRow());
+		if (iso.hasOperators()) {
+			backgroundPanel.add(iso.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(shutterSpeed.getMainPanel(), posBackgroundPanel.nextRow());
+		if (shutterSpeed.hasOperators()) {
+			backgroundPanel.add(shutterSpeed.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(aperture.getMainPanel(), posBackgroundPanel.nextRow());
+		if (aperture.hasOperators()) {
+			backgroundPanel.add(aperture.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		return backgroundPanel;
+	}
+	
+	private JPanel createRatingCommentAndButtonPanel() {
+		
+		GBHelper posRatingPanel = new GBHelper();
+		JPanel ratingPanel = new JPanel(new GridBagLayout());
+		ratingPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+		
+		JCheckBox [] checkBoxes = new JCheckBox[6];
+		
+		for (int i = 0; i < checkBoxes.length; i++) {
+			if (i == 0) {
+				ratingPanel.add(checkBoxes[i] = new JCheckBox("UNRATED"), posRatingPanel);
+			} else {
+				ratingPanel.add(checkBoxes[i] = new JCheckBox(Integer.toString(i)), posRatingPanel.nextCol());
+			}
+		}
+
+//		TODO: Fix hard coded string
+		JLabel commentLabel = new JLabel("COMMENT");
+		commentLabel.setForeground(Color.GRAY);
+		
+		GBHelper posCommentPanel = new GBHelper();
+		JPanel commentPanel = new JPanel(new GridBagLayout());
+		commentPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+
+//		TODO: Fix hard coded string
+		JRadioButton containsText = new JRadioButton("Comment contains...");
+//		TODO: Fix hard coded string
+		JRadioButton isExactText = new JRadioButton("Comment is exactly...");
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(containsText);
+		group.add(isExactText);
+		
+		JTextArea commentArea = new JTextArea();
+		commentArea.setLineWrap(true);
+		commentArea.setWrapStyleWord(true);
+				
+		JScrollPane scrollPane = new JScrollPane(commentArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		commentPanel.add(containsText, posCommentPanel);
+		commentPanel.add(isExactText, posCommentPanel.nextRow());
+		commentPanel.add(scrollPane, posCommentPanel.nextRow().expandH().expandW());
+		
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		
+//		TODO: Fix hard coded string
+		JButton findButton = new JButton("FIND IMAGES");
+		
+		buttonPanel.add(findButton, BorderLayout.EAST);
+		
+		GBHelper posBackground = new GBHelper();
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+				
+		backgroundPanel.add(ratingPanel, posBackground);
+		backgroundPanel.add(commentLabel, posBackground.nextRow());
+		backgroundPanel.add(commentPanel, posBackground.nextRow().expandH());
+		backgroundPanel.add(buttonPanel, posBackground.nextRow());
+		
+		return backgroundPanel;
+	}
+	
 	private boolean setStartProcessButtonState() {
 		
 		ApplicationContext ac = ApplicationContext.getInstance();
@@ -996,42 +1199,8 @@ public class MainGUI extends JFrame {
 		JLabel categorizeHeading = new JLabel("CATEGORIES");
 		categorizeHeading.setForeground(Color.GRAY);
 		
-		JTree categoriesTree = new JTree();
+		JTree categoriesTree = CategoryUtil.createCategoriesTree();
 		categoriesTree.addMouseListener(categoriesMouseButtonListener);
-		
-		File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
-		
-		Document document = null;
-		boolean parseSuccess = false;
-		
-		try {
-			document = CategoryUtil.parse(categoriesFile);
-			parseSuccess = true;
-		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			
-		} catch (SAXException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		if (!parseSuccess) {
-			System.exit(1);	
-		}
-		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
-		
-		CategoryUtil.populateTreeModel(document, root);
-		
-		DefaultTreeModel model = new DefaultTreeModel(root);
-		
-		categoriesTree.setModel(model);
-		categoriesTree.setShowsRootHandles(true);
-		categoriesTree.setRootVisible(false);
 		
 		// makes your tree as CheckTree
 		checkTreeManager = new CheckTreeManager(categoriesTree, false, null); 
@@ -1263,9 +1432,12 @@ public class MainGUI extends JFrame {
 		if(config.getBooleanProperty("createThumbNailsCheckBox")) {
 			createThumbNailsCheckBox.setSelected(true);
 		}
-		
+		Update.updateAllUIs();		
+	}
+	
+	public void initiateImageMetaDataContext() {
 		Object [] repositoryPaths = ImageRepositoryHandler.getInstance().load();
-				
+		
 		if(repositoryPaths != null) {
 			for (int i=0; i<repositoryPaths.length; i++) {
 				ImageRepositoryItem iri = new ImageRepositoryItem();
@@ -1274,10 +1446,25 @@ public class MainGUI extends JFrame {
 				iri.setPathStatus(DirectoryUtil.getStatus(directory));
 				iri.setPath(directory);
 				
+				switch (iri.getPathStatus()) {
+				case EXISTS:
+					File imageMetaDataDataBaseFile = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
+					if (imageMetaDataDataBaseFile.exists()) {
+						ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);	
+					}
+					break;
+				case NOT_AVAILABLE:
+					
+					break;
+
+				case DOES_NOT_EXIST:
+//					TODO: If configured, remove the directory path automatically
+					break;
+				}
+				
 				categoriesRepositoryListModel.add(iri);
 			}
 		}
-		Update.updateAllUIs();		
 	}
 	
 	public void initiateApplicationContext() {
@@ -1693,7 +1880,7 @@ public class MainGUI extends JFrame {
 		
 						addThumbnail(thumbContainer);
 						
-						MetaData metaData = MetaDataUtil.getMetaData(jpegFile);
+						MetaData metaData = MetaDataRetriever.getMetaData(jpegFile);
 						
 						metaDataTableModel.addTableRow(metaData);
 						ApplicationContext.getInstance().addMetaDataObject(metaData);
