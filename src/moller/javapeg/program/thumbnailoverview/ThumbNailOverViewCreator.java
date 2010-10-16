@@ -252,7 +252,7 @@ public class ThumbNailOverViewCreator {
 			return md.getExifCameraModel();
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.DATE.toString())) {
-			return md.getExifDate();
+			return md.getExifDateAsString();
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.FILENAME.toString())) {
 			return jpgName;
@@ -261,19 +261,19 @@ public class ThumbNailOverViewCreator {
 			return StringUtil.formatBytes(md.getFileObject().length(), "0.00");
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.ISOVALUE.toString())) {
-			return md.getExifISOValue();
+			return Integer.toString(md.getExifISOValue());
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.PICTUREHEIGHT.toString())) {
-			return md.getExifPictureHeight();
+			return Integer.toString(md.getExifPictureHeight());
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.PICTUREWIDTH.toString())) {
-			return md.getExifPictureWidth();
+			return Integer.toString(md.getExifPictureWidth());
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.SHUTTERSPEED.toString())) {
-			return md.getExifShutterSpeed();
+			return md.getExifShutterSpeed().toString();
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.TIME.toString())) {
-			return md.getExifTime();
+			return md.getExifTimeAsString();
 		}
 		return "n/a";
 	}
