@@ -1,18 +1,21 @@
 package moller.javapeg.program.metadata;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class MetaData{
+import moller.util.datatype.ShutterSpeed;
+
+public class MetaData {
 
 	// Instansvariabler
 	private String fileName;
-	private String exifDate;
-	private String exifTime;
+	private Date exifDateTime;
 	private String exifCameraModel;
-	private String exifShutterSpeed;
-	private String exifISOValue;
-	private String exifPictureWidth;
-	private String exifPictureHeight;
+	private ShutterSpeed exifShutterSpeed;
+	private int exifISOValue;
+	private int exifPictureWidth;
+	private int exifPictureHeight;
 	private String exifApertureValue;
 	private int thumbNailOffset;
 	private int thumbNailLength;
@@ -20,50 +23,63 @@ public class MetaData{
 
 	// Konstruktor
 	public MetaData() {
-
-		fileName = "";
-		exifDate = "";
-		exifTime = "";
-		exifCameraModel = "";
-		exifShutterSpeed = "";
-		exifISOValue = "";
-		exifPictureWidth = "";
-		exifPictureHeight = "";
-		exifApertureValue = "";
-		thumbNailOffset = 0;
-		thumbNailLength = 0;
+		super();
+		fileName = null;
+		exifDateTime = null;
+		exifCameraModel = null;
+		exifShutterSpeed = null;
+		exifISOValue = -1;
+		exifPictureWidth = -1;
+		exifPictureHeight = -1;
+		exifApertureValue = null;
+		thumbNailOffset = -1;
+		thumbNailLength = -1;
 	}
 
 	// GET-metoder
 	public String getFileName() {
 		return fileName;
 	}
-
-	public String getExifDate() {
-		return exifDate;
+	
+	public Date getExifTime() {
+		return exifDateTime;
 	}
 
-	public String getExifTime() {
-		return exifTime;
+	public Date getExifDate() {
+		return exifDateTime;
+	}
+	
+	public Date getExifDateTime() {
+		return exifDateTime;
+	}
+	
+	public String getExifDateAsString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
+		return sdf.format(exifDateTime);
+	}
+
+	public String getExifTimeAsString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		return sdf.format(exifDateTime);
 	}
 
 	public String getExifCameraModel() {
 		return exifCameraModel;
 	}
 
-	public String getExifShutterSpeed() {
+	public ShutterSpeed getExifShutterSpeed() {
 		return exifShutterSpeed;
 	}
 
-	public String getExifISOValue() {
+	public int getExifISOValue() {
 		return exifISOValue;
 	}
 
-	public String getExifPictureWidth() {
+	public int getExifPictureWidth() {
 		return exifPictureWidth;
 	}
 
-	public String getExifPictureHeight() {
+	public int getExifPictureHeight() {
 		return exifPictureHeight;
 	}
 
@@ -88,31 +104,27 @@ public class MetaData{
 		this.fileName = fileName;
 	}
 
-	public void setExifDate(String exifDate) {
-		this.exifDate = exifDate;
-	}
-
-	public void setExifTime(String exifTime) {
-		this.exifTime = exifTime;
+	public void setExifDateTime(Date exifDateTime) {
+		this.exifDateTime = exifDateTime;
 	}
 
 	public void setExifCameraModel(String exifCameraModel) {
 		this.exifCameraModel = exifCameraModel;
 	}
 
-	public void setExifShutterSpeed(String exifShutterSpeed) {
+	public void setExifShutterSpeed(ShutterSpeed exifShutterSpeed) {
 		this.exifShutterSpeed = exifShutterSpeed;
 	}
 
-	public void setExifISOValue(String exifISOValue) {
+	public void setExifISOValue(int exifISOValue) {
 		this.exifISOValue = exifISOValue;
 	}
 
-	public void setExifPictureWidth(String exifPictureWidth) {
+	public void setExifPictureWidth(int exifPictureWidth) {
 		this.exifPictureWidth = exifPictureWidth;
 	}
 
-	public void setExifPictureHeight(String exifPictureHeight) {
+	public void setExifPictureHeight(int exifPictureHeight) {
 		this.exifPictureHeight = exifPictureHeight;
 	}
 
