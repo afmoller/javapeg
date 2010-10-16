@@ -6,12 +6,12 @@ public class ImageMetaDataDataBaseItem {
     
     private File image;
     private String md5;
-    private ImageExifMetaData imageExifMetaData;
+    private CategoryImageExifMetaData imageExifMetaData;
     private String comment;
     private int rating;
     private Categories categories;
     
-    public ImageMetaDataDataBaseItem(File image, String md5, ImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
+    public ImageMetaDataDataBaseItem(File image, String md5, CategoryImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
         this.image = image;
         this.md5 = md5;
         this.imageExifMetaData = imageExifMetaData;
@@ -37,7 +37,7 @@ public class ImageMetaDataDataBaseItem {
 		return md5;
 	}
 
-    public ImageExifMetaData getImageExifMetaData() {
+    public CategoryImageExifMetaData getImageExifMetaData() {
         return imageExifMetaData;
     }
 
@@ -64,7 +64,7 @@ public class ImageMetaDataDataBaseItem {
 		this.md5 = md5;
 	}
 
-    public void setImageExifMetaData(ImageExifMetaData imageExifMetaData) {
+    public void setImageExifMetaData(CategoryImageExifMetaData imageExifMetaData) {
         this.imageExifMetaData = imageExifMetaData;
     }
 
