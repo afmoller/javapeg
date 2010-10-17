@@ -23,7 +23,6 @@ public class MetaData {
 
 	// Konstruktor
 	public MetaData() {
-		super();
 		fileName = null;
 		exifDateTime = null;
 		exifCameraModel = null;
@@ -34,6 +33,7 @@ public class MetaData {
 		exifApertureValue = null;
 		thumbNailOffset = -1;
 		thumbNailLength = -1;
+		fileObject = null;
 	}
 
 	// GET-metoder
