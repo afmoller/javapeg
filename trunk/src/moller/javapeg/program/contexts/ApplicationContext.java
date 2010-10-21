@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.swing.tree.TreePath;
 
-import moller.javapeg.program.Action;
+import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.metadata.MetaData;
 
 /**
