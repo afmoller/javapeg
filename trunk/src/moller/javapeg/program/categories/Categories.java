@@ -31,8 +31,7 @@ public class Categories {
 	}
 	
 	public void addCategory(String category) {
-		this.
-		categories.add(category);
+		this.categories.add(category);
 	}
 	
 	public Set<String> getCategories() {
