@@ -2,6 +2,8 @@ package moller.javapeg.program.rename;
 
 import java.io.File;
 
+import moller.javapeg.program.enumerations.Type;
+
 public class FileAndType {
 	
 	private File file;

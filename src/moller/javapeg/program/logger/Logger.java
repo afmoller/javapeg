@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.enumerations.Level;
 import moller.util.io.FileUtil;
 
 public class Logger {
