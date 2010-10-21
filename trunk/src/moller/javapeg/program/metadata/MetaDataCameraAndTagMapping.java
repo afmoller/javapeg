@@ -3,6 +3,8 @@ package moller.javapeg.program.metadata;
 import java.util.HashMap;
 import java.util.Map;
 
+import moller.javapeg.program.enumerations.FieldName;
+
 public class MetaDataCameraAndTagMapping {
 	
 	private Map<String, Map<FieldName, String>> makeModelAndTagMappings;
