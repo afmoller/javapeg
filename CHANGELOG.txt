@@ -26,6 +26,9 @@
    internally. It is also possible to set the max size (number of thumbnails to
    cache) of the cache and to entirely clear the cache from thumbnails.   
  
+ ! If time and, or date was missing in the Exif data the time and, or date was
+   not used from file time stamp even if the configuration was set to do that.
+  
  ! JavaPEG did crash as a result of a null pointer exception when a directory
    without read access, for the current user, was browsed in the tree view.
    Bug seen in Windows 7, but is probably existing in any Operating system with
