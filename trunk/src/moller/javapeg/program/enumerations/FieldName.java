@@ -1,4 +1,4 @@
-package moller.javapeg.program.metadata;
+package moller.javapeg.program.enumerations;
 
 public enum FieldName {
 	APERTURE_VALUE,

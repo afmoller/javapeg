@@ -1,4 +1,4 @@
-package moller.javapeg.program.contexts;
+package moller.javapeg.program.contexts.imagemetadata;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,28 +26,28 @@ public class ImageMetaDataContext {
 	/**
 	 * Image Exif Meta Data
 	 */
-	private Map<String, Set<String>> cameraModels;
-	private Map<String, Set<String>> dateTimeValues;
+	private Map<String, Set<Integer>> cameraModels;
+	private Map<String, Set<Integer>> dateTimeValues;
 	
-	private Map<Integer, Set<String>> yearValues;
-	private Map<Integer, Set<String>> monthValues;
-	private Map<Integer, Set<String>> dateValues;
-	private Map<Integer, Set<String>> hourValues;
-	private Map<Integer, Set<String>> minuteValues;
-	private Map<Integer, Set<String>> secondValues;
+	private Map<Integer, Set<Integer>> yearValues;
+	private Map<Integer, Set<Integer>> monthValues;
+	private Map<Integer, Set<Integer>> dateValues;
+	private Map<Integer, Set<Integer>> hourValues;
+	private Map<Integer, Set<Integer>> minuteValues;
+	private Map<Integer, Set<Integer>> secondValues;
 	
-	private Map<Integer, Set<String>> isoValues;
-	private Map<String, Set<String>> shutterSpeedValues;
-	private Map<String, Set<String>> apertureValues;
+	private Map<Integer, Set<Integer>> isoValues;
+	private Map<String, Set<Integer>> shutterSpeedValues;
+	private Map<String, Set<Integer>> apertureValues;
 	
-	private List<Set<String>> ratings; 
-	private Map<String, Set<String>> categories;
-	private Map<String, Set<String>> comments;
+	private List<Set<Integer>> ratings; 
+	private Map<String, Set<Integer>> categories;
+	private Map<String, Set<Integer>> comments;
 	
 	SimpleDateFormat sdf;
-
 	
-	
+	Map<String, Integer> imagePathAndIndex;
+	int imagePathIndex;
 	
 	/**
 	 * Private constructor.
@@ -56,28 +56,31 @@ public class ImageMetaDataContext {
 		
 		shutterSpeedStringShutterSpeedMappings = new HashMap<String, ShutterSpeed>();
 		
-		cameraModels = new HashMap<String, Set<String>>();
-		dateTimeValues = new HashMap<String, Set<String>>();
-		yearValues = new HashMap<Integer, Set<String>>();
-		monthValues = new HashMap<Integer, Set<String>>();
-		dateValues = new HashMap<Integer, Set<String>>();
-		hourValues = new HashMap<Integer, Set<String>>();
-		minuteValues = new HashMap<Integer, Set<String>>();
-		secondValues = new HashMap<Integer, Set<String>>();
-		isoValues = new HashMap<Integer, Set<String>>();
-		shutterSpeedValues = new HashMap<String, Set<String>>();
-		apertureValues = new HashMap<String, Set<String>>();
+		cameraModels = new HashMap<String, Set<Integer>>();
+		dateTimeValues = new HashMap<String, Set<Integer>>();
+		yearValues = new HashMap<Integer, Set<Integer>>();
+		monthValues = new HashMap<Integer, Set<Integer>>();
+		dateValues = new HashMap<Integer, Set<Integer>>();
+		hourValues = new HashMap<Integer, Set<Integer>>();
+		minuteValues = new HashMap<Integer, Set<Integer>>();
+		secondValues = new HashMap<Integer, Set<Integer>>();
+		isoValues = new HashMap<Integer, Set<Integer>>();
+		shutterSpeedValues = new HashMap<String, Set<Integer>>();
+		apertureValues = new HashMap<String, Set<Integer>>();
 		
-		ratings = new ArrayList<Set<String>>(5);
+		ratings = new ArrayList<Set<Integer>>(5);
 		
 		for (int i = 0; i < ratings.size(); i++) {
-			ratings.add(new HashSet<String>());
+			ratings.add(new HashSet<Integer>());
 		}
 		
-		categories = new HashMap<String, Set<String>>();
-		comments = new HashMap<String, Set<String>>();
+		categories = new HashMap<String, Set<Integer>>();
+		comments = new HashMap<String, Set<Integer>>();
 		
 		sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		
+		imagePathAndIndex = new HashMap<String, Integer>();
+		imagePathIndex = 0;
 	}
 
 	/**
@@ -96,11 +99,26 @@ public class ImageMetaDataContext {
 		}
 	}
 	
+	private Integer getIndexForImagePath(String imagePath) {
+		Integer index = imagePathAndIndex.get(imagePath);
+		
+		if (null == index) {
+			imagePathIndex++;
+			index = new Integer(imagePathIndex);
+			imagePathAndIndex.put(imagePath, index);
+		} 
+		return index;
+	}
+	
+	public Set<String> getImagePaths() {
+		return imagePathAndIndex.keySet();
+	}
+	
 	public void addCameraModel(String cameraModel, String imagePath) {
 		if (!cameraModels.containsKey(cameraModel)) {
-			cameraModels.put(cameraModel, new HashSet<String>());
+			cameraModels.put(cameraModel, new HashSet<Integer>());
 		}
-		cameraModels.get(cameraModel).add(imagePath);
+		cameraModels.get(cameraModel).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addDateTime(Date dateTime, String imagePath) {
@@ -113,88 +131,86 @@ public class ImageMetaDataContext {
 		
 		String dateTimeString = sdf.format(dateTime); 
 		if (!dateTimeValues.containsKey(dateTimeString)) {
-			dateTimeValues.put(dateTimeString, new HashSet<String>());
+			dateTimeValues.put(dateTimeString, new HashSet<Integer>());
 		}
-		dateTimeValues.get(dateTimeString).add(imagePath);
+		dateTimeValues.get(dateTimeString).add(getIndexForImagePath(imagePath));
 		
 		Integer year = Integer.parseInt(getYear.format(dateTime));
 		if (!yearValues.containsKey(year)) {
-			yearValues.put(year, new HashSet<String>());
+			yearValues.put(year, new HashSet<Integer>());
 		}
-		yearValues.get(year).add(imagePath);
+		yearValues.get(year).add(getIndexForImagePath(imagePath));
 		
 		Integer month = Integer.parseInt(getMonth.format(dateTime));
 		if (!monthValues.containsKey(month)) {
-			monthValues.put(month, new HashSet<String>());
+			monthValues.put(month, new HashSet<Integer>());
 		}
-		monthValues.get(month).add(imagePath);
+		monthValues.get(month).add(getIndexForImagePath(imagePath));
 		
 		Integer date = Integer.parseInt(getDate.format(dateTime));
 		if (!dateValues.containsKey(date)) {
-			dateValues.put(date, new HashSet<String>());
+			dateValues.put(date, new HashSet<Integer>());
 		}
-		dateValues.get(date).add(imagePath);
+		dateValues.get(date).add(getIndexForImagePath(imagePath));
 		
 		Integer hour = Integer.parseInt(getHour.format(dateTime));
 		if (!hourValues.containsKey(hour)) {
-			hourValues.put(hour, new HashSet<String>());
+			hourValues.put(hour, new HashSet<Integer>());
 		}
-		hourValues.get(hour).add(imagePath);
+		hourValues.get(hour).add(getIndexForImagePath(imagePath));
 		
 		Integer minute = Integer.parseInt(getMinute.format(dateTime));
 		if (!minuteValues.containsKey(minute)) {
-			minuteValues.put(minute, new HashSet<String>());
+			minuteValues.put(minute, new HashSet<Integer>());
 		}
-		minuteValues.get(minute).add(imagePath);
+		minuteValues.get(minute).add(getIndexForImagePath(imagePath));
 		
 		Integer second = Integer.parseInt(getSecond.format(dateTime));
 		if (!secondValues.containsKey(second)) {
-			secondValues.put(second, new HashSet<String>());
+			secondValues.put(second, new HashSet<Integer>());
 		}
-		secondValues.get(second).add(imagePath);
-		
-		
+		secondValues.get(second).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addIso(Integer iso, String imagePath) {
 		if (!isoValues.containsKey(iso)) {
-			isoValues.put(iso, new HashSet<String>());
+			isoValues.put(iso, new HashSet<Integer>());
 		}
-		isoValues.get(iso).add(imagePath);
+		isoValues.get(iso).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addShutterSpeed(ShutterSpeed shutterSpeed, String imagePath) {
 		if (!shutterSpeedValues.containsKey(shutterSpeed.toString())) {
-			shutterSpeedValues.put(shutterSpeed.toString(), new HashSet<String>());
+			shutterSpeedValues.put(shutterSpeed.toString(), new HashSet<Integer>());
 			shutterSpeedStringShutterSpeedMappings.put(shutterSpeed.toString(), shutterSpeed);
 		}
-		shutterSpeedValues.get(shutterSpeed.toString()).add(imagePath);
+		shutterSpeedValues.get(shutterSpeed.toString()).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addAperture(String aperture, String imagePath) {
 		if (!apertureValues.containsKey(aperture)) {
-			apertureValues.put(aperture, new HashSet<String>());
+			apertureValues.put(aperture, new HashSet<Integer>());
 		}
-		apertureValues.get(aperture).add(imagePath);
+		apertureValues.get(aperture).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addRating(int rating, String imagePath) {
 		if (rating > 0 && rating <= ratings.size())
-		ratings.get(rating - 1).add(imagePath);
+		ratings.get(rating - 1).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addCategory(String categoryId, String imagePath) {
 		if (!categories.containsKey(categoryId)) {
-			categories.put(categoryId, new HashSet<String>());
+			categories.put(categoryId, new HashSet<Integer>());
 		}
-		categories.get(categoryId).add(imagePath);
+		categories.get(categoryId).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addComment(String comment, String imagePath) {
 		if (!comments.containsKey(comment)) {
-			comments.put(comment, new HashSet<String>());
+			comments.put(comment, new HashSet<Integer>());
 		}
-		comments.get(comment).add(imagePath);
+		comments.get(comment).add(getIndexForImagePath(imagePath));
 	}
 	
 	public Set<String> getCameraModels() {

@@ -1,10 +1,4 @@
-package moller.javapeg.program.logger;
-
-/**
- * This class was created : 2009-03-02 by Fredrik Möller
- * Latest changed         : 2009-03-03 by Fredrik Möller
- *                        : 2009-03-13 by Fredrik Möller
- */
+package moller.javapeg.program.enumerations;
 
 /**
  * This enumeration is a collection of different log levels, severity levels, 
