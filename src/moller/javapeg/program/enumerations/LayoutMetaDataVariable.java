@@ -1,4 +1,4 @@
-package moller.javapeg.program.thumbnailoverview;
+package moller.javapeg.program.enumerations;
 /**
  * This class was created : 2009-03-20 by Fredrik Möller
  * Latest changed         : 2009-03-22 by Fredrik Möller

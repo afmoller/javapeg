@@ -1,4 +1,4 @@
-package moller.javapeg.program.contexts;
+package moller.javapeg.program.enumerations;
 
 public enum Context {
 	IMAGE_META_DATA_CONTEXT,
