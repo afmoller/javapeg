@@ -101,7 +101,7 @@ public class ApplicationContext {
 	 * This integer holds the value of the highest used category ID.
 	 */
 	private int highestUsedCategoryID;
-	
+		
 	/**
 	 * Private constructor.
 	 */
@@ -187,7 +187,7 @@ public class ApplicationContext {
 		setHighestUsedCategoryID(highestUsedCategoryID + 1);
 		return getHighestUsedCategoryID();
 	}
-
+	
 	/**
 	 * SET  - methods
 	 */
@@ -240,6 +240,10 @@ public class ApplicationContext {
 	
 	public void setHighestUsedCategoryID(int highestUsedCategoryID) {
 		this.highestUsedCategoryID = highestUsedCategoryID;
+	}
+		
+	public void clearJpegFileLoadBuffer() {
+		jpegFileLoadBuffer.clear();
 	}
 		
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
