@@ -14,6 +14,7 @@ public class ModelInstanceLibrary {
 	private MetaDataTableModel metaDataTableModel;
 	private PreviewTableModel  previewTableModel;
 	private SortedListModel    sortedListModel;
+	private ImagesToViewModel  imagesToViewModel;
 	
 	/**
 	 * Private constructor.
@@ -22,6 +23,7 @@ public class ModelInstanceLibrary {
 		metaDataTableModel = new MetaDataTableModel();
 		previewTableModel  = new PreviewTableModel();
 		sortedListModel    = new SortedListModel();
+		imagesToViewModel  = new ImagesToViewModel();
 	}
 		
 	/**
@@ -50,5 +52,9 @@ public class ModelInstanceLibrary {
 	
 	public SortedListModel getSortedListModel() {
 		return sortedListModel;
+	}
+	
+	public ImagesToViewModel getImagesToViewModel() {
+		return imagesToViewModel;
 	}
 }
