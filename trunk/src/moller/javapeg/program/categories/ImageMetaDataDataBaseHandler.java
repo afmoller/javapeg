@@ -19,9 +19,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
-import moller.javapeg.program.contexts.Context;
-import moller.javapeg.program.contexts.ImageMetaDataContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
+import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
+import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.logger.Logger;
 import moller.util.datatype.ShutterSpeed;
 import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
