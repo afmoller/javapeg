@@ -90,6 +90,16 @@ public class StatusPanel extends JPanel {
 
 		statusNrSetArray[statusNr] = statusNr;
 	}
+	
+	public void clear () {
+		for (int i=0; i < this.getNrOfStatusMessages(); i++) {
+			this.setStatusMessage(" ", "", i);	
+		}
+	}
+	
+	public int getNrOfStatusMessages() {
+		return statusVector.size();
+	}
 
 	// Lyssnare till ovan skapade timer.
 	// Den rensar fälten
