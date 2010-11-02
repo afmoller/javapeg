@@ -1,11 +1,4 @@
 package moller.javapeg.program.model;
-/**
-* This class was created : 2009-05-27 by Fredrik Möller
-* Latest changed         : 2009-05-30 by Fredrik Möller
-*                        : 2009-06-01 by Fredrik Möller
-*                        : 2009-09-13 by Fredrik Möller
-*                        : 2009-12-17 by Fredrik Möller
-*/
 
 import java.util.Vector;
 
@@ -13,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
+import moller.javapeg.program.metadata.MetaDataUtil;
 
 public class MetaDataTableModel extends DefaultTableModel {
 	
@@ -43,17 +37,20 @@ public class MetaDataTableModel extends DefaultTableModel {
 	
 	public void addTableRow(MetaData metaData) {
 		
-		Object [] meta = new Object[9];
+//		TODO: Fix hard coded string
+		String noValue = "no value";
 		
-		meta[0] = metaData.getFileName();
-		meta[1] = metaData.getExifDate();
-		meta[2] = metaData.getExifTime();
-		meta[3] = metaData.getExifCameraModel();
-		meta[4] = metaData.getExifShutterSpeed();
-		meta[5] = metaData.getExifISOValue();
-		meta[6] = metaData.getExifPictureWidth();
-		meta[7] = metaData.getExifPictureHeight();
-		meta[8] = metaData.getExifApertureValue();
+		Object[] meta = new Object[9];
+		
+		meta[0] = MetaDataUtil.hasValue(metaData.getFileName()) ? metaData.getFileName() : noValue;
+		meta[1] = MetaDataUtil.hasValue(metaData.getExifDateAsString()) ? metaData.getExifDateAsString() : noValue;
+		meta[2] = MetaDataUtil.hasValue(metaData.getExifTimeAsString()) ? metaData.getExifTimeAsString() : noValue;
+		meta[3] = MetaDataUtil.hasValue(metaData.getExifCameraModel()) ? metaData.getExifCameraModel() : noValue;
+		meta[4] = MetaDataUtil.hasValue(metaData.getExifShutterSpeed()) ? metaData.getExifShutterSpeed() : noValue;
+		meta[5] = MetaDataUtil.hasValue(metaData.getExifISOValue()) ? metaData.getExifISOValue() : noValue;
+		meta[6] = MetaDataUtil.hasValue(metaData.getExifPictureWidth()) ? metaData.getExifPictureWidth() : noValue;
+		meta[7] = MetaDataUtil.hasValue(metaData.getExifPictureHeight()) ? metaData.getExifPictureHeight() : noValue;
+		meta[8] = MetaDataUtil.hasValue(metaData.getExifApertureValue()) ? metaData.getExifApertureValue() : noValue;
 				
 		this.addRow(meta);
 	}
