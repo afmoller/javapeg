@@ -47,6 +47,10 @@
 <entry key="imageViewerGUI.window.height">768</entry>
 <entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
 <entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
+<entry key="imageSearchResultViewerGUI.window.location.y">10</entry>
+<entry key="imageSearchResultViewerGUI.window.location.x">10</entry>
+<entry key="imageSearchResultViewerGUI.window.width">1024</entry>
+<entry key="imageSearchResultViewerGUI.window.height">768</entry>
 <entry key="thumbnails.view.create-if-missing-or-corrupt">true</entry>
 <entry key="thumbnails.view.create.algorithm">SMOOTH</entry>
 <entry key="thumbnails.view.width">160</entry>
