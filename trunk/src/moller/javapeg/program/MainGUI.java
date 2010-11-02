@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
@@ -88,9 +89,14 @@ import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.contexts.Context;
-import moller.javapeg.program.contexts.ImageMetaDataContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
+import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
+import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchParameters;
+import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
+import moller.javapeg.program.enumerations.Action;
+import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.MetaDataValueSelector;
@@ -164,6 +170,7 @@ public class MainGUI extends JFrame {
 	private JButton moveToTopButton;
 	private JButton moveToBottomButton;
 	private JButton copyImageListdButton;
+	private JButton searchImagesButton;
 	
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -249,7 +256,7 @@ public class MainGUI extends JFrame {
 	
 	private ThumbNailListener thumbNailListener;
 	
-	private DefaultListModel imagesToViewListModel;
+	private DefaultListModel imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 	private SortedListModel categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
 	
 	private JList imagesToViewList;
@@ -257,7 +264,10 @@ public class MainGUI extends JFrame {
 	private JTextArea imageCommentTextArea;
 	private JRadioButton [] ratingRadioButtons;
 	
-	private CheckTreeManager checkTreeManager;
+	private CheckTreeManager checkTreeManagerForAssignCategroiesCategoryTree;
+	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
+	
+	private Thread loadFilesThread;
 		
 	public MainGUI(){
 		
@@ -623,9 +633,10 @@ public class MainGUI extends JFrame {
 		
 		mainTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
-		mainTabbedPane.addTab(lang.get("tabbedpane.imageView")  , this.createViewPanel());
 //		TODO: Fix hard coded string
 		mainTabbedPane.addTab("TAG IMAGES", this.createCategorizePanel());
+//		TODO: Fix hard coded string
+		mainTabbedPane.addTab("SEARCH / " + lang.get("tabbedpane.imageView")  , this.createViewPanel());
 		
 		imageMetaDataPanel = new MetaDataPanel();
 		thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);			
@@ -669,6 +680,7 @@ public class MainGUI extends JFrame {
 		GBHelper posBackgroundPanel = new GBHelper();
 		
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
+		backgroundJPanel.setName(MainTabbedPaneComponent.RENAME.toString());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		
 		backgroundJPanel.add(this.createRenameInputPanel(), posBackgroundPanel.nextCol());
@@ -683,6 +695,7 @@ public class MainGUI extends JFrame {
 		GBHelper posBackgroundPanel = new GBHelper();
 				
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
+		backgroundJPanel.setName(MainTabbedPaneComponent.VIEW.toString());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(this.createFindImageSection(), posBackgroundPanel.expandH().expandW());
 		backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
@@ -702,6 +715,7 @@ public class MainGUI extends JFrame {
 		GBHelper posBackgroundPanel = new GBHelper();
 
 		JPanel backgroundJPanel = new JPanel(new GridBagLayout());
+		backgroundJPanel.setName(MainTabbedPaneComponent.CATEGORIZE.toString());
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(previewCommentCategoriesRatingSplitpane, posBackgroundPanel.expandH().expandW());
 
@@ -802,8 +816,6 @@ public class MainGUI extends JFrame {
 				e.printStackTrace();
 			}
 		}
-				
-		imagesToViewListModel = new DefaultListModel();
 		
 		imagesToViewList = new JList(imagesToViewListModel);
 		imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -911,9 +923,8 @@ public class MainGUI extends JFrame {
 	private JPanel createCategoriesPanel() {
 		
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
-			
-		// makes your tree as CheckTree
-//		checkTreeManager = new CheckTreeManager(categoriesTree, false, null); 
+		
+		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null); 
 			
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -947,14 +958,14 @@ public class MainGUI extends JFrame {
 		cameraModel.setStringValues(imdc.getCameraModels());
 		
 //		TODO: fix hard coded string
-		MetaDataValueSelectorComplex date = new MetaDataValueSelectorComplex("YEAR", "MONTH", "DAY", true);
+		MetaDataValueSelectorComplex date = new MetaDataValueSelectorComplex("YEAR", "MONTH", "DAY", true, "");
 		date.setFirstValues(imdc.getYears());
 		date.setSecondValues(date.initiateContinuousSet(1, 12));
 		date.setThirdValues(date.initiateContinuousSet(1, 31));
 		
 		
 //		TODO: fix hard coded string
-		MetaDataValueSelectorComplex time = new MetaDataValueSelectorComplex("HOUR", "MINUTE", "SECOND", true);
+		MetaDataValueSelectorComplex time = new MetaDataValueSelectorComplex("HOUR", "MINUTE", "SECOND", true, "");
 		time.setFirstValues(time.initiateContinuousSet(0, 23));
 		time.setSecondValues(time.initiateContinuousSet(0, 59));
 		time.setThirdValues(time.initiateContinuousSet(0, 59));
@@ -1034,7 +1045,7 @@ public class MainGUI extends JFrame {
 		
 		GBHelper posCommentPanel = new GBHelper();
 		JPanel commentPanel = new JPanel(new GridBagLayout());
-		commentPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+		commentPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
 //		TODO: Fix hard coded string
 		JRadioButton containsText = new JRadioButton("Comment contains...");
@@ -1058,9 +1069,9 @@ public class MainGUI extends JFrame {
 		JPanel buttonPanel = new JPanel(new BorderLayout());
 		
 //		TODO: Fix hard coded string
-		JButton findButton = new JButton("FIND IMAGES");
+		searchImagesButton = new JButton("SEARCH IMAGES");
 		
-		buttonPanel.add(findButton, BorderLayout.EAST);
+		buttonPanel.add(searchImagesButton, BorderLayout.EAST);
 		
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1203,7 +1214,7 @@ public class MainGUI extends JFrame {
 		categoriesTree.addMouseListener(categoriesMouseButtonListener);
 		
 		// makes your tree as CheckTree
-		checkTreeManager = new CheckTreeManager(categoriesTree, false, null); 
+		checkTreeManagerForAssignCategroiesCategoryTree = new CheckTreeManager(categoriesTree, false, null); 
 			
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -1366,6 +1377,7 @@ public class MainGUI extends JFrame {
 		moveToBottomButton.addActionListener(new MoveImageToBottomInListListener());
 		openImageViewerButton.addActionListener(new OpenImageViewerListener());
 		copyImageListdButton.addActionListener(new CopyImageListListener());
+		searchImagesButton.addActionListener(new SearchImagesListener());
 		
 		popupMenuCopyImageToClipBoardRename.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuCopyImageToClipBoardView.addActionListener(new CopyImageToSystemClipBoard());
@@ -1379,6 +1391,7 @@ public class MainGUI extends JFrame {
 		popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
+//		mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
 	}
 	
 	public void createRightClickMenuCategories() {
@@ -1566,6 +1579,11 @@ public class MainGUI extends JFrame {
 	
 	private int displayConfirmDialog(String message, String label, int type) {
 		return JOptionPane.showConfirmDialog(this, message, label, type);
+	}
+	
+	private void displayInformationMessage(String informationMessage) {
+//		TODO: fix hard coded string
+		JOptionPane.showMessageDialog(this, informationMessage, "Information", JOptionPane.INFORMATION_MESSAGE);	
 	}
 	
 	private void displayErrorMessage(String errorMessage) {
@@ -1800,11 +1818,12 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
-	private void loadThumbNails(final File sourcePath) {
+	private void prepareLoadThumbnailsProcess() {
 		this.removeMouseListener();
-		setInputsEnabled(false);
+		this.setInputsEnabled(false);
 		
 		ApplicationContext ac = ApplicationContext.getInstance();
+		ac.clearMetaDataObjects();
 		
 		thumbNailsPanel.removeAll();
 		thumbNailsPanel.updateUI();
@@ -1820,38 +1839,12 @@ public class MainGUI extends JFrame {
 		
 		metaDataTableModel.setColumnCount(0);
 		metaDataTableModel.setRowCount(0);
-		
-		String sourcePathString = sourcePath.getAbsolutePath();
-		
-		ac.setSourcePath(sourcePathString);
-		ac.clearMetaDataObjects();
-		
-		config.setStringProperty("sourcePath", sourcePathString);
-		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
-				
-		final Thread loadFilesThread = new Thread() {
-			public void run() {
-				FileRetriever.getInstance().loadFilesFromDisk(sourcePath);
-			}
-		};
-		loadFilesThread.start();
-		
-		try {
-			int max = 0;
-			if (sourcePath.listFiles() != null) {
-				max = sourcePath.listFiles().length;
-			}
-			pb = new ThumbNailLoading(0, max, this);
-			pb.setVisible(max > 0);
-		} catch (Throwable th) {			
-		}
-		
-		metaDataTableModel.setColumns();
-		
+	}
+	
+	private void executeLoadThumbnailsProcess() {
 		Thread thumbNailsFetcher = new Thread() {
 			
 			public void run(){
-		
 				boolean bufferContainsImages = true;
 				while (loadFilesThread.isAlive() || bufferContainsImages) {
 					
@@ -1881,7 +1874,7 @@ public class MainGUI extends JFrame {
 						addThumbnail(thumbContainer);
 						
 						MetaData metaData = MetaDataRetriever.getMetaData(jpegFile);
-						
+
 						metaDataTableModel.addTableRow(metaData);
 						ApplicationContext.getInstance().addMetaDataObject(metaData);
 						setStatusMessages();
@@ -1900,15 +1893,56 @@ public class MainGUI extends JFrame {
 				}
 				pb.dispose();
 				addMouseListener();
+				setInputsEnabled(true);
 				startProcessButton.setEnabled(setStartProcessButtonState());
 				startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
-				Table.packColumns(metaDataTable, 6);
-				setInputsEnabled(true);
+				Table.packColumns(metaDataTable, 6);	
 			}
 		};
 		thumbNailsFetcher.start();
 		setStatusMessages();
+	}
+	
+	private void loadThumbNails(final File sourcePath) {
+		this.prepareLoadThumbnailsProcess();
+		
+		String sourcePathString = sourcePath.getAbsolutePath();
+		
+		ApplicationContext.getInstance().setSourcePath(sourcePathString);
+		
+		config.setStringProperty("sourcePath", sourcePathString);
+		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
+				
+		loadFilesThread = new Thread() {
+			public void run() {
+				if(sourcePath.isDirectory()) {
+					try {
+						FileRetriever.getInstance().loadFilesFromDisk(Arrays.asList(sourcePath.listFiles()));
+					} catch (Throwable sex) {
+						logger.logERROR("Can not list files in directory: " + sourcePath.getAbsolutePath());
+						logger.logERROR(sex);
+//						TODO: Hard coded string
+						JOptionPane.showMessageDialog(null, "Can not list files in directory: " + sourcePath.getAbsolutePath(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+					}	
+				}
+			}
+		};
+		loadFilesThread.start();
+		
+		try {
+			int max = 0;
+			if (sourcePath.listFiles() != null) {
+				max = sourcePath.listFiles().length;
+			}
+			pb = new ThumbNailLoading(0, max, this);
+			pb.setVisible(max > 0);
+		} catch (Throwable th) {			
+		}
+		
+		metaDataTableModel.setColumns();
+		
+		this.executeLoadThumbnailsProcess();
 				
 		// Byta till metadata-tabben ifall tabben skulle stå i annat läge.
 		tabbedPane.setSelectedIndex(0);	
@@ -1965,7 +1999,7 @@ public class MainGUI extends JFrame {
 						// Load thumb nails for all JPEG images that exists in the 
 						// selected path.
 						loadThumbNails(new File(totalPath));
-						
+												
 						// Populate the image repository model with any 
 						// unpopulated paths.
 						ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
@@ -2010,7 +2044,7 @@ public class MainGUI extends JFrame {
 			statusBar.setStatusMessage("0", lang.get("statusbar.message.amountOfImagesInDirectory"), 3);
 		}
 	}
-	
+		
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -2034,7 +2068,9 @@ public class MainGUI extends JFrame {
 			
 			imageMetaDataPanel.setMetaData(jpegImage);
 			
-			if(mainTabbedPane.getSelectedIndex() == 2) {
+			MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
+			
+			if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE) {
 //				TODO: Fix -10 workaround to something generic
 				int width = imageTagPreviewScrollPane.getViewportBorderBounds().width - 10;
 				int height = imageTagPreviewScrollPane.getViewportBorderBounds().height - 10;
@@ -2122,10 +2158,10 @@ public class MainGUI extends JFrame {
 	@SuppressWarnings("unchecked")
 	private void setCategories(Categories categories) {
 		
-		checkTreeManager.getSelectionModel().clearSelection();
+		checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().clearSelection();
 		
 		if (categories.size() > 0) {
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 			Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 			
 			List<TreePath> treePaths = new ArrayList<TreePath>();
@@ -2141,7 +2177,7 @@ public class MainGUI extends JFrame {
 				}
 			}
 			if (treePaths.size() > 0) {
-				checkTreeManager.getSelectionModel().setSelectionPaths(treePaths.toArray(new TreePath[treePaths.size()]));	
+				checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().setSelectionPaths(treePaths.toArray(new TreePath[treePaths.size()]));	
 			}
 		}
 	}
@@ -2149,7 +2185,7 @@ public class MainGUI extends JFrame {
 	/**
 	 * @return
 	 */
-	private Categories getSelectedCategoriesFromTreeModel() {
+	private Categories getSelectedCategoriesFromTreeModel(CheckTreeManager checkTreeManager) {
 		Categories selectedId = new Categories();;
 		
 		// to get the paths that were checked
@@ -2182,7 +2218,7 @@ public class MainGUI extends JFrame {
 			imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(currentlySelectedImage);
 			imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
 			imageMetaDataDataBaseItem.setRating(getRatingValue());
-			imageMetaDataDataBaseItem.setCategories(getSelectedCategoriesFromTreeModel());
+			imageMetaDataDataBaseItem.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategroiesCategoryTree));
 			
 			irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
 		}
@@ -2400,7 +2436,23 @@ public class MainGUI extends JFrame {
 			}
 		}
 	}
-		
+	
+	private class SearchImagesListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
+			
+			List<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
+			
+			if (foundImages.size() > 0) {
+				ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImages);
+				imagesearchResultViewer.setVisible(true);
+			} else {
+//				TODO: fix hard coded string
+				displayInformationMessage("No images found");
+			}
+		}
+	}
+			
 	private class ExportImageListListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
@@ -2442,10 +2494,10 @@ public class MainGUI extends JFrame {
 	
 	private class CopyImageToSystemClipBoard implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			List<File> selecteFiles = new ArrayList<File>();
-			selecteFiles.add(new File(e.getActionCommand()));
+			List<File> selectedFiles = new ArrayList<File>();
+			selectedFiles.add(new File(e.getActionCommand()));
 
-			FileSelection fileSelection = new FileSelection(selecteFiles);
+			FileSelection fileSelection = new FileSelection(selectedFiles);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
 		}
 	}
@@ -2482,7 +2534,7 @@ public class MainGUI extends JFrame {
 			String categoryName = null;
 			boolean isTopLevelCategory = false;
 			DefaultMutableTreeNode selectedNode = null;
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 			
 			// Should the category be added at the top level...
 			if (selectedPath == null) {
@@ -2529,7 +2581,7 @@ public class MainGUI extends JFrame {
 			
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 			
 			DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 			String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
@@ -2560,7 +2612,7 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 			
 			DefaultMutableTreeNode nodeToRemove = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
 			
@@ -2584,10 +2636,10 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			JTree tree  = checkTreeManager.getCheckedJtree();
+			JTree tree  = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
 			
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.collapseEntireTree(tree, root, false);
 			} else {
@@ -2600,10 +2652,10 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 			
-			JTree tree  = checkTreeManager.getCheckedJtree();
+			JTree tree  = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
 			
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManager.getTreeModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.expandEntireTree(tree, root, false);
 			} else {
@@ -2634,6 +2686,14 @@ public class MainGUI extends JFrame {
 		imddbituc.reInit();
 	}
 	
+	private ImageMetaDataContextSearchParameters collectSearchParameters() {
+		
+		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
+		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
+		
+		return imdcsp;
+	}
+
 	/**
 	 * This method resets the state of the Image Tag tab to the initial state;
 	 * with no preview image and no comment.
@@ -2642,7 +2702,7 @@ public class MainGUI extends JFrame {
 		imageCommentTextArea.setText("");
 		imageTagPreviewLabel.setIcon(null);
 		setRatingValue(0);
-		checkTreeManager.getSelectionModel().clearSelection();
+		checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().clearSelection();
 	}
 	
 	private class MouseButtonListener extends MouseAdapter{
@@ -2650,21 +2710,60 @@ public class MainGUI extends JFrame {
 			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 0)) {
 				rightClickMenuRename.show(e.getComponent(),e.getX(), e.getY());
 				popupMenuCopyImageToClipBoardRename.setActionCommand(((JButton)e.getComponent()).getActionCommand());
-			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
+			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
 				rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
 				popupMenuAddImageToViewList.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 				popupMenuCopyImageToClipBoardView.setActionCommand(((JButton)e.getComponent()).getActionCommand());
-			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
+			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
 				rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
 				popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 			}
 		}
 	}
 	
+//	private class MainTabbedPaneListener implements ChangeListener {
+//		public void stateChanged(ChangeEvent e) {
+//			JPanel selectedComponent = (JPanel)((JTabbedPane)e.getSource()).getSelectedComponent();
+//			
+//			MainTabbedPaneComponent mainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(selectedComponent.getName());
+//			
+//			ApplicationContext ac = ApplicationContext.getInstance();
+//			String sourcePath = ac.getSourcePath(); 
+//			
+//			switch (mainTabbedPaneComponent) {
+//			case RENAME:
+//			case CATEGORIZE:
+////				if (!sourcePath.equals("")) {
+////					loadThumbNails(new File(sourcePath));
+////				} else {
+//					thumbNailsPanel.removeAll();
+//					thumbNailsPanel.updateUI();
+//					
+//					statusBar.clear();
+////				}
+//				break;
+//			case VIEW:
+////				if (ac.imageSearchResultExists()) {
+////					loadThumbNailsFromImageSearchResult(ac.getImageSearchResult());
+////				} else {
+////					if (!sourcePath.equals("")) {
+////						loadThumbNails(new File(sourcePath));
+////					} else {
+//						thumbNailsPanel.removeAll();
+//						thumbNailsPanel.updateUI();
+//						
+//						statusBar.clear();
+////					}
+////				}
+//				break;
+//			}
+//		}
+//	}
+	
 	private class CategoriesMouseButtonListener extends MouseAdapter{
 		
 		public void mouseReleased(MouseEvent e){
-			TreePath selectedPath = checkTreeManager.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
+			TreePath selectedPath = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
 			
 			if(e.isPopupTrigger()) {
 				String collapseCategory = "";
@@ -2706,13 +2805,13 @@ public class MainGUI extends JFrame {
 				popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
 				popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 				
-				JTree categoryTree = checkTreeManager.getCheckedJtree();
+				JTree categoryTree = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
 				
 				/**
 				 * If no category has been selected.
 				 */
 				if (selectedPath == null) {
-					DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManager.getTreeModel().getRoot();
+					DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel().getRoot();
 					
 					int nrOfChildren = root.getChildCount();
 					boolean someChildIsExpanded = false;
