@@ -26,9 +26,9 @@ public class MetaDataValueSelectorComplex {
 	private JComboBox secondValues = null;
 	private JComboBox thirdValues = null;
 	
-	public MetaDataValueSelectorComplex(String firstTitle, String secondTitle, String thirdTitle, boolean hasOperators) {
+	public MetaDataValueSelectorComplex(String firstTitle, String secondTitle, String thirdTitle, boolean hasOperators, String delimiter) {
 		
-		this.cretaMainPane(firstTitle, secondTitle, thirdTitle);
+		this.cretaMainPane(firstTitle, secondTitle, thirdTitle, delimiter);
 		
 		if (hasOperators) {
 			this.createOperatorsPanel();
@@ -37,7 +37,7 @@ public class MetaDataValueSelectorComplex {
 		this.hasOperators = hasOperators;
 	}
 	
-	private void cretaMainPane(String firstTitle, String secondTitle, String thirdTitle) {
+	private void cretaMainPane(String firstTitle, String secondTitle, String thirdTitle, String delimiter) {
 		GBHelper positionMainPanel = new GBHelper();
 		mainPanel = new JPanel(new GridBagLayout());
 		
@@ -54,9 +54,13 @@ public class MetaDataValueSelectorComplex {
 		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
 		mainPanel.add(thirdLabel, positionMainPanel.nextCol());
 		mainPanel.add(firstValues, positionMainPanel.nextRow());
-		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
+//		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
+		mainPanel.add(new JLabel(delimiter), positionMainPanel.nextCol());
+//		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
 		mainPanel.add(secondValues, positionMainPanel.nextCol());
-		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
+//		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
+		mainPanel.add(new JLabel(delimiter), positionMainPanel.nextCol());
+//		mainPanel.add(new Gap(2), positionMainPanel.nextCol());
 		mainPanel.add(thirdValues, positionMainPanel.nextCol().expandW());
 	}
 	
