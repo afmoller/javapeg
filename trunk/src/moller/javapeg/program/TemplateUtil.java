@@ -1,53 +1,111 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2007-02-28 by Fredrik Möller
- * Latest changed         : 2007-03-05 by Fredrik Möller
- *                        : 2007-03-07 by Fredrik Möller
- *                        : 2009-02-22 by Fredrik Möller
- *                        : 2009-03-21 by Fredrik Möller
- */
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
+import moller.javapeg.program.metadata.MetaDataUtil;
+import moller.util.io.FileUtil;
 
 public class TemplateUtil {
 
 	public static String convertTemplateToString(String stringToConvert, MetaData theMetaData){
 
 		Language lang = Language.getInstance();
+		Config conf = Config.getInstance();
 		
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureDateVariable") + "%") > -1){
-			String date = theMetaData.getExifDateAsString();
-			date = date.replaceAll(":", "-");
+			String date = "";
+			if (MetaDataUtil.hasValue(theMetaData.getExifDateAsString())) {
+				date = theMetaData.getExifDateAsString();
+				date = date.replaceAll(":", "-");
+			} else {
+				if(conf.getBooleanProperty("rename.use.lastmodified.date")) {
+					date = FileUtil.getLatestModifiedDate(theMetaData.getFileObject());
+				} else {
+					date = "no value";	
+				}
+			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureDateVariable") + "%", date);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureTimeVariable") + "%") > -1){
-			String time = theMetaData.getExifTimeAsString();
-			time = time.replaceAll(":", "-");
+			String time = "";
+			if (MetaDataUtil.hasValue(theMetaData.getExifTimeAsString())) {
+				time = theMetaData.getExifTimeAsString();
+				time = time.replaceAll(":", "-");
+			} else {
+				if(conf.getBooleanProperty("rename.use.lastmodified.time")) {
+					time = FileUtil.getLatestModifiedTime(theMetaData.getFileObject());
+				} else {
+					time = "no value";
+				}
+			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureTimeVariable") + "%", time);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.cameraModelVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.cameraModelVariable") + "%", theMetaData.getExifCameraModel());
+			String cameraModel = theMetaData.getExifCameraModel();
+			if (!MetaDataUtil.hasValue(cameraModel)) {
+				cameraModel = "no value";
+			}
+			
+			// Limit the length of the Camera Model String according to a 
+			// configurable parameter.
+			int maxLength = Config.getInstance().getIntProperty("rename.maximum.length.camera-model"); 
+			
+			if( maxLength > 0) {
+				if(cameraModel.length() > maxLength)
+					cameraModel = cameraModel.substring(0,maxLength);
+			}
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.cameraModelVariable") + "%", cameraModel);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.shutterSpeedVariable") + "%") > -1){
 			String shutterSpeed = "";
-			shutterSpeed = theMetaData.getExifShutterSpeed().toString().replaceAll("/", "_");
+			if (MetaDataUtil.hasValue(theMetaData.getExifShutterSpeed().toString())) {
+				shutterSpeed = theMetaData.getExifShutterSpeed().toString();
+				shutterSpeed = shutterSpeed.replaceAll("/", "_");
+			} else {
+				shutterSpeed = "no value";
+			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.shutterSpeedVariable") + "%", shutterSpeed);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.isoValueVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.isoValueVariable") + "%", Integer.toString(theMetaData.getExifISOValue()));
+			String isoString = "";
+			int iso = theMetaData.getExifISOValue();
+			if (!MetaDataUtil.hasValue(iso)) {
+				isoString = "no value";
+			} else {
+				isoString = Integer.toString(iso);
+			}
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.isoValueVariable") + "%", isoString);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureWidthVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureWidthVariable") + "%", Integer.toString(theMetaData.getExifPictureWidth()));
+			String pictureWidthString = "";
+			int pictureWidth = theMetaData.getExifPictureWidth();
+			if (!MetaDataUtil.hasValue(pictureWidth)) {
+				pictureWidthString = "no value";
+			} else {
+				pictureWidthString = Integer.toString(pictureWidth);
+			}
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureWidthVariable") + "%", pictureWidthString);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureHeightVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureHeightVariable") + "%", Integer.toString(theMetaData.getExifPictureHeight()));
+			String pictureHeightString = "";
+			int pictureHeight = theMetaData.getExifPictureHeight();
+			if (!MetaDataUtil.hasValue(pictureHeight)) {
+				pictureHeightString = "no value";
+			} else {
+				pictureHeightString = Integer.toString(pictureHeight);
+			}
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureHeightVariable") + "%", pictureHeightString);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.apertureValueVariable") + "%") > -1){
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", theMetaData.getExifApertureValue());
+			String apertureValue = theMetaData.getExifApertureValue();
+			if (!MetaDataUtil.hasValue(apertureValue)) {
+				apertureValue = "no value";
+			} 
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", apertureValue);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.dateOftodayVariable") + "%") > -1){
 			Calendar cal = new GregorianCalendar();
@@ -81,10 +139,10 @@ public class TemplateUtil {
 			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.sourceNameVariable") + "%", fileName);
 		}
-
-		return stringToConvert;
+		
+		return filterString(stringToConvert);
 	}
-
+	
 	/***
 	 * Metod för att kontrollera så att undermappsnamner endast innehåller tillåtna variabler.
 	 **/
@@ -107,5 +165,48 @@ public class TemplateUtil {
 			return false;
 
 		return true;
+	}
+	
+	/****
+	 * Metod för att rensa en sträng från otillåtna tecken.
+	 * De tecken som rensas bort är de som inte är tillåtna
+	 * i en sökväg till en fil..
+	 **/
+	private static String filterString(String theStringToFilter){
+
+		char [] stringToChar = theStringToFilter.toCharArray();
+
+		for(int i = 0; i < stringToChar.length; i++) {
+			switch (stringToChar[i]) {
+				case 47: // "/"
+					stringToChar[i] = ' ';
+					break;
+				case 92: // "\"
+					stringToChar[i] = ' ';
+					break;
+				case 58: // ":"
+					stringToChar[i] = ' ';
+					break;
+				case 60: // "<"
+					stringToChar[i] = ' ';
+					break;
+				case 62: // ">"
+					stringToChar[i] = ' ';
+					break;
+				case 124: // "|"
+					stringToChar[i] = ' ';
+					break;
+				case 42: // "*"
+					stringToChar[i] = ' ';
+					break;
+				case 63: // "?"
+					stringToChar[i] = ' ';
+					break;
+				case 34: // """
+					stringToChar[i] = ' ';
+					break;
+			}
+		}
+		return String.valueOf(stringToChar);
 	}
 }
