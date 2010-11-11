@@ -77,6 +77,26 @@ public class MetaDataValueSelector {
 		return hasOperators;
 	}
 	
+	public String getSelectedIntegerValue() {
+		if (this.values.getSelectedItem() instanceof Integer) {
+			return Integer.toString((Integer)(this.values.getSelectedItem()));			
+		}  else {
+			return "";
+		}
+	}
+	
+	public String getSelectedShutterSpeedValue() {
+		if (this.values.getSelectedItem() instanceof ShutterSpeed) {
+			return ((ShutterSpeed)this.values.getSelectedItem()).toString();			
+		}  else {
+			return "";
+		}
+	}
+	
+	public String getSelectedStringValue() {
+		return (String)this.values.getSelectedItem();
+	}
+	
 	public void setIntegerValues(Set<Integer> values) {
 		this.values.addItem("");
 		for (Integer value : values) {
