@@ -46,7 +46,11 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 				this.partsOfSecond = new Rational(shutterSpeed.substring(0, delimiterIndex), shutterSpeed.substring(delimiterIndex + 1, shutterSpeed.length()));
 			}
 		} else {
-			this.seconds = Integer.parseInt(shutterSpeed.trim());
+			try {
+				this.seconds = Integer.parseInt(shutterSpeed.trim());
+			} catch (NumberFormatException nfex) {
+				throw new ShutterSpeedException("Invalid format of ShutterSpeed: " + shutterSpeed);
+			}
 		}
 	}
 
@@ -98,16 +102,23 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 		
 		int index = -1;
 		
-		for (int i = stringValue.length(); i >= 0 ; i--) {
-			subString = stringValue.substring(i - 1, i);
-			try {
-				Integer.parseInt(subString);
-				index = i;
-				break;
-			} catch (Exception e) {
-			}
+		if (stringValue.length() > 0) {
+			for (int i = stringValue.length(); i >= 0 ; i--) {
+				subString = stringValue.substring(i - 1, i);
+				try {
+					Integer.parseInt(subString);
+					index = i;
+					break;
+				} catch (Exception e) {
+				}
+			}	
 		}
-		return stringValue.substring(0, index);
+		
+		if (index > -1) {
+			return stringValue.substring(0, index);	
+		} else {
+			return stringValue;
+		}
 	}
 	
 	public class ShutterSpeedException extends Exception {
