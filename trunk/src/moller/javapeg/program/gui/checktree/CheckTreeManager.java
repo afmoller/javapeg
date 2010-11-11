@@ -33,13 +33,15 @@ import javax.swing.tree.TreePath;
 public class CheckTreeManager extends MouseAdapter implements TreeSelectionListener{
     private CheckTreeSelectionModel selectionModel;
     private TreePathSelectable selectable;
+    private boolean smartSelection;
     protected JTree tree = new JTree();
     int hotspot = new JCheckBox().getPreferredSize().width;
 
-    public CheckTreeManager(JTree tree, boolean dig, TreePathSelectable selectable){
+    public CheckTreeManager(JTree tree, boolean dig, TreePathSelectable selectable, boolean smartSelection){
         this.tree = tree;
         selectionModel = new CheckTreeSelectionModel(tree.getModel(), dig);
         this.selectable = selectable;
+        this.smartSelection = smartSelection;
 
         // note: if largemodel is not set
         // then treenodes are getting truncated.
@@ -59,12 +61,14 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     private void removeSelectionPaths(DefaultMutableTreeNode node) {
     	selectionModel.removeSelectionPath(new TreePath(node.getPath()));
     	
-    	int nrOfChildren = node.getChildCount(); 
-    	
-    	if (nrOfChildren > 0) {
-    		for (int i = 0; i < nrOfChildren; i++) {
-    			removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
-    		}
+    	if (smartSelection) {
+    		int nrOfChildren = node.getChildCount(); 
+        	
+        	if (nrOfChildren > 0) {
+        		for (int i = 0; i < nrOfChildren; i++) {
+        			removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
+        		}
+        	}	
     	}
     }
     
@@ -72,11 +76,14 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     	TreePath nodeTreePath = new TreePath(node.getPath());
     	
     	selectionModel.addSelectionPath(nodeTreePath);
-    	TreePath parentPath = nodeTreePath.getParentPath();
     	
-    	while (parentPath != null) {
-    		selectionModel.addSelectionPath(parentPath);
-    		parentPath = parentPath.getParentPath();
+    	if (smartSelection) {
+    		TreePath parentPath = nodeTreePath.getParentPath();
+    	
+    		while (parentPath != null) {
+    			selectionModel.addSelectionPath(parentPath);
+    			parentPath = parentPath.getParentPath();
+    		}
     	}
     }
 
