@@ -1,5 +1,6 @@
 package moller.javapeg.program.contexts.imagemetadata;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import moller.javapeg.program.categories.Categories;
 import moller.util.datatype.ShutterSpeed;
 
 
@@ -44,10 +46,7 @@ public class ImageMetaDataContext {
 	private Map<String, Set<Integer>> categories;
 	private Map<String, Set<Integer>> comments;
 	
-	SimpleDateFormat sdf;
-	
-	Map<String, Integer> imagePathAndIndex;
-	int imagePathIndex;
+	private SimpleDateFormat sdf;
 	
 	/**
 	 * Private constructor.
@@ -68,9 +67,9 @@ public class ImageMetaDataContext {
 		shutterSpeedValues = new HashMap<String, Set<Integer>>();
 		apertureValues = new HashMap<String, Set<Integer>>();
 		
-		ratings = new ArrayList<Set<Integer>>(5);
+		ratings = new ArrayList<Set<Integer>>();
 		
-		for (int i = 0; i < ratings.size(); i++) {
+		for (int i = 0; i <= 5; i++) {
 			ratings.add(new HashSet<Integer>());
 		}
 		
@@ -78,9 +77,6 @@ public class ImageMetaDataContext {
 		comments = new HashMap<String, Set<Integer>>();
 		
 		sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-		
-		imagePathAndIndex = new HashMap<String, Integer>();
-		imagePathIndex = 0;
 	}
 
 	/**
@@ -99,26 +95,11 @@ public class ImageMetaDataContext {
 		}
 	}
 	
-	private Integer getIndexForImagePath(String imagePath) {
-		Integer index = imagePathAndIndex.get(imagePath);
-		
-		if (null == index) {
-			imagePathIndex++;
-			index = new Integer(imagePathIndex);
-			imagePathAndIndex.put(imagePath, index);
-		} 
-		return index;
-	}
-	
-	public Set<String> getImagePaths() {
-		return imagePathAndIndex.keySet();
-	}
-	
 	public void addCameraModel(String cameraModel, String imagePath) {
 		if (!cameraModels.containsKey(cameraModel)) {
 			cameraModels.put(cameraModel, new HashSet<Integer>());
 		}
-		cameraModels.get(cameraModel).add(getIndexForImagePath(imagePath));
+		cameraModels.get(cameraModel).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addDateTime(Date dateTime, String imagePath) {
@@ -133,50 +114,52 @@ public class ImageMetaDataContext {
 		if (!dateTimeValues.containsKey(dateTimeString)) {
 			dateTimeValues.put(dateTimeString, new HashSet<Integer>());
 		}
-		dateTimeValues.get(dateTimeString).add(getIndexForImagePath(imagePath));
+		dateTimeValues.get(dateTimeString).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer year = Integer.parseInt(getYear.format(dateTime));
 		if (!yearValues.containsKey(year)) {
 			yearValues.put(year, new HashSet<Integer>());
 		}
-		yearValues.get(year).add(getIndexForImagePath(imagePath));
+		yearValues.get(year).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer month = Integer.parseInt(getMonth.format(dateTime));
 		if (!monthValues.containsKey(month)) {
 			monthValues.put(month, new HashSet<Integer>());
 		}
-		monthValues.get(month).add(getIndexForImagePath(imagePath));
+		monthValues.get(month).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer date = Integer.parseInt(getDate.format(dateTime));
 		if (!dateValues.containsKey(date)) {
 			dateValues.put(date, new HashSet<Integer>());
 		}
-		dateValues.get(date).add(getIndexForImagePath(imagePath));
+		dateValues.get(date).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer hour = Integer.parseInt(getHour.format(dateTime));
 		if (!hourValues.containsKey(hour)) {
 			hourValues.put(hour, new HashSet<Integer>());
 		}
-		hourValues.get(hour).add(getIndexForImagePath(imagePath));
+		hourValues.get(hour).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer minute = Integer.parseInt(getMinute.format(dateTime));
 		if (!minuteValues.containsKey(minute)) {
 			minuteValues.put(minute, new HashSet<Integer>());
 		}
-		minuteValues.get(minute).add(getIndexForImagePath(imagePath));
+		minuteValues.get(minute).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 		
 		Integer second = Integer.parseInt(getSecond.format(dateTime));
 		if (!secondValues.containsKey(second)) {
 			secondValues.put(second, new HashSet<Integer>());
 		}
-		secondValues.get(second).add(getIndexForImagePath(imagePath));
+		secondValues.get(second).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addIso(Integer iso, String imagePath) {
-		if (!isoValues.containsKey(iso)) {
-			isoValues.put(iso, new HashSet<Integer>());
+		if (iso != -1) {
+			if (!isoValues.containsKey(iso)) {
+				isoValues.put(iso, new HashSet<Integer>());
+			}
+			isoValues.get(iso).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));	
 		}
-		isoValues.get(iso).add(getIndexForImagePath(imagePath));
 	}
 	
 	public void addShutterSpeed(ShutterSpeed shutterSpeed, String imagePath) {
@@ -184,33 +167,34 @@ public class ImageMetaDataContext {
 			shutterSpeedValues.put(shutterSpeed.toString(), new HashSet<Integer>());
 			shutterSpeedStringShutterSpeedMappings.put(shutterSpeed.toString(), shutterSpeed);
 		}
-		shutterSpeedValues.get(shutterSpeed.toString()).add(getIndexForImagePath(imagePath));
+		shutterSpeedValues.get(shutterSpeed.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addAperture(String aperture, String imagePath) {
 		if (!apertureValues.containsKey(aperture)) {
 			apertureValues.put(aperture, new HashSet<Integer>());
 		}
-		apertureValues.get(aperture).add(getIndexForImagePath(imagePath));
+		apertureValues.get(aperture).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addRating(int rating, String imagePath) {
-		if (rating > 0 && rating <= ratings.size())
-		ratings.get(rating - 1).add(getIndexForImagePath(imagePath));
+		if (rating < ratings.size()) {
+			ratings.get(rating).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
+		}
 	}
 	
 	public void addCategory(String categoryId, String imagePath) {
 		if (!categories.containsKey(categoryId)) {
 			categories.put(categoryId, new HashSet<Integer>());
 		}
-		categories.get(categoryId).add(getIndexForImagePath(imagePath));
+		categories.get(categoryId).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addComment(String comment, String imagePath) {
 		if (!comments.containsKey(comment)) {
 			comments.put(comment, new HashSet<Integer>());
 		}
-		comments.get(comment).add(getIndexForImagePath(imagePath));
+		comments.get(comment).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public Set<String> getCameraModels() {
@@ -242,5 +226,70 @@ public class ImageMetaDataContext {
 	
 	public Set<String> getApertureValues() {
 		return new TreeSet<String>(apertureValues.keySet());
+	}
+	
+	public Set<File> findImagesByCameraModel(String cameraModel) {
+		Set<File> imagePaths = new HashSet<File>();
+		Set<Integer> indexForImagePaths = cameraModels.get(cameraModel);
+		
+		populateImagePathsSet(indexForImagePaths, imagePaths);
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByComment(String commentToSearchFor) {
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (String comment : comments.keySet()) {
+			if (comment.toLowerCase().contains(commentToSearchFor.toLowerCase())) {
+				Set<Integer> indexForImagePaths = comments.get(comment);
+				populateImagePathsSet(indexForImagePaths, imagePaths);		
+			}
+		}
+		return imagePaths;	}
+	
+	public Set<File> findImagesByCategory(Categories c) {
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (String categroyId : c.getCategories()) {
+			Set<Integer> indexForImagePaths = categories.get(categroyId);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}
+		return imagePaths;
+	}
+
+	public Set<File> findImagesByIso(int iso) {
+		Set<File> imagePaths = new HashSet<File>();
+		Set<Integer> indexForImagePaths = isoValues.get(iso);
+		
+		populateImagePathsSet(indexForImagePaths, imagePaths);
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByRating(boolean[] ratingSelection) {
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (int i = 0; i < ratingSelection.length; i++) {
+			if (ratingSelection[i] == true) {
+				Set<Integer> indexForImagePaths = ratings.get(i);
+				populateImagePathsSet(indexForImagePaths, imagePaths);		
+			}
+		}
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByShutterSpeed(ShutterSpeed shutterSpeed) {
+		Set<File> imagePaths = new HashSet<File>();
+		Set<Integer> indexForImagePaths = shutterSpeedValues.get(shutterSpeed.toString());
+		
+		populateImagePathsSet(indexForImagePaths, imagePaths);
+		return imagePaths;
+	}
+	
+	private void  populateImagePathsSet(Set<Integer> indexForImagePaths, Set<File> imagePaths) {
+		if (indexForImagePaths != null) {
+			for(Integer indexForImagePath : indexForImagePaths) {
+				imagePaths.add(new File(ImagePathAndIndex.getInstance().getImagePathForIndex(indexForImagePath)));
+			}	
+		}
 	}
 }
