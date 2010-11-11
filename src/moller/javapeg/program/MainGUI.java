@@ -133,6 +133,8 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
+import moller.util.datatype.ShutterSpeed;
+import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -222,6 +224,13 @@ public class MainGUI extends JFrame {
 	private JSplitPane mainSplitPane;
 	private JSplitPane previewAndCommentSplitPane;
 	private JSplitPane previewCommentCategoriesRatingSplitpane;
+	
+	private MetaDataValueSelector cameraModel;
+	private MetaDataValueSelector iso;
+	private MetaDataValueSelector shutterSpeed;
+	
+	private JCheckBox[] ratingCheckBoxes;
+	private JTextArea commentTextArea;
 	
 	private JScrollPane imageTagPreviewScrollPane;
 	
@@ -924,7 +933,7 @@ public class MainGUI extends JFrame {
 		
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
 		
-		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null); 
+		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false); 
 			
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -954,7 +963,7 @@ public class MainGUI extends JFrame {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 		
 //		TODO: fix hard coded string
-		MetaDataValueSelector cameraModel = new MetaDataValueSelector("CAMERA MODEL", false);
+		cameraModel = new MetaDataValueSelector("CAMERA MODEL", false);
 		cameraModel.setStringValues(imdc.getCameraModels());
 		
 //		TODO: fix hard coded string
@@ -974,11 +983,11 @@ public class MainGUI extends JFrame {
 		MetaDataValueSelector imageSize = new MetaDataValueSelector("IMAGE SIZE", true);
 		
 //		TODO: fix hard coded string
-		MetaDataValueSelector iso = new MetaDataValueSelector("ISO", true);
+		iso = new MetaDataValueSelector("ISO", true);
 		iso.setIntegerValues(imdc.getIsoValues());
 				
 //		TODO: fix hard coded string
-		MetaDataValueSelector shutterSpeed = new MetaDataValueSelector("SHUTTER SPEED", true);
+		shutterSpeed = new MetaDataValueSelector("SHUTTER SPEED", true);
 		shutterSpeed.setShutterSpeedValues(imdc.getShutterSpeedValues());
 		
 //		TODO: fix hard coded string
@@ -1029,13 +1038,13 @@ public class MainGUI extends JFrame {
 		JPanel ratingPanel = new JPanel(new GridBagLayout());
 		ratingPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 		
-		JCheckBox [] checkBoxes = new JCheckBox[6];
+		ratingCheckBoxes = new JCheckBox[6];
 		
-		for (int i = 0; i < checkBoxes.length; i++) {
+		for (int i = 0; i < ratingCheckBoxes.length; i++) {
 			if (i == 0) {
-				ratingPanel.add(checkBoxes[i] = new JCheckBox("UNRATED"), posRatingPanel);
+				ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox("UNRATED"), posRatingPanel);
 			} else {
-				ratingPanel.add(checkBoxes[i] = new JCheckBox(Integer.toString(i)), posRatingPanel.nextCol());
+				ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(Integer.toString(i)), posRatingPanel.nextCol());
 			}
 		}
 
@@ -1046,24 +1055,12 @@ public class MainGUI extends JFrame {
 		GBHelper posCommentPanel = new GBHelper();
 		JPanel commentPanel = new JPanel(new GridBagLayout());
 		commentPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
-
-//		TODO: Fix hard coded string
-		JRadioButton containsText = new JRadioButton("Comment contains...");
-//		TODO: Fix hard coded string
-		JRadioButton isExactText = new JRadioButton("Comment is exactly...");
 		
-		ButtonGroup group = new ButtonGroup();
-		group.add(containsText);
-		group.add(isExactText);
-		
-		JTextArea commentArea = new JTextArea();
-		commentArea.setLineWrap(true);
-		commentArea.setWrapStyleWord(true);
+		commentTextArea = new JTextArea();
+		commentTextArea.setLineWrap(true);
+		commentTextArea.setWrapStyleWord(true);
 				
-		JScrollPane scrollPane = new JScrollPane(commentArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		
-		commentPanel.add(containsText, posCommentPanel);
-		commentPanel.add(isExactText, posCommentPanel.nextRow());
+		JScrollPane scrollPane = new JScrollPane(commentTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		commentPanel.add(scrollPane, posCommentPanel.nextRow().expandH().expandW());
 		
 		JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -1214,7 +1211,7 @@ public class MainGUI extends JFrame {
 		categoriesTree.addMouseListener(categoriesMouseButtonListener);
 		
 		// makes your tree as CheckTree
-		checkTreeManagerForAssignCategroiesCategoryTree = new CheckTreeManager(categoriesTree, false, null); 
+		checkTreeManagerForAssignCategroiesCategoryTree = new CheckTreeManager(categoriesTree, false, null, true); 
 			
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -2193,13 +2190,14 @@ public class MainGUI extends JFrame {
 		
 		if (checkedPaths != null  && checkedPaths.length > 0 ) {
 			for (TreePath checkedPath : checkedPaths) {
+
 				Object[] defaultMutableTreeNodes = checkedPath.getPath();
-				for (Object defaultMutableTreeNode : defaultMutableTreeNodes) {
-					if (defaultMutableTreeNode instanceof DefaultMutableTreeNode) {
-						String id = ((CategoryUserObject)((DefaultMutableTreeNode)defaultMutableTreeNode).getUserObject()).getIdentity();
-						if (StringUtil.isInt(id) && Integer.parseInt(id) > -1) {
-							selectedId.addCategory(id);
-						}
+				Object leafNode = defaultMutableTreeNodes[defaultMutableTreeNodes.length-1];
+				
+				if (leafNode instanceof DefaultMutableTreeNode) {
+					String id = ((CategoryUserObject)((DefaultMutableTreeNode)leafNode).getUserObject()).getIdentity();
+					if (StringUtil.isInt(id) && Integer.parseInt(id) > -1) {
+						selectedId.addCategory(id);
 					}
 				}
 			}	
@@ -2441,7 +2439,7 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
 			
-			List<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
+			Set<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
 			
 			if (foundImages.size() > 0) {
 				ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImages);
@@ -2569,6 +2567,9 @@ public class MainGUI extends JFrame {
 					}
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
+					
+					// Update the Categories tree model structure in the the find images tree 
+					checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 				}
 			}
 		}
@@ -2603,6 +2604,9 @@ public class MainGUI extends JFrame {
 
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
+					
+					// Update the Categories tree model structure in the the find images tree 
+					checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 				}
 			}
 		}
@@ -2628,6 +2632,9 @@ public class MainGUI extends JFrame {
 				
 				File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 				CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
+				
+				// Update the Categories tree model structure in the the find images tree 
+				checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 			}
 		}
 	}
@@ -2690,10 +2697,41 @@ public class MainGUI extends JFrame {
 		
 		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
+		imdcsp.setCameraModel(cameraModel.getSelectedStringValue());
+		imdcsp.setComment(commentTextArea.getText());
+		imdcsp.setIso(iso.getSelectedIntegerValue());
+		try {
+			imdcsp.setShutterSpeed(new ShutterSpeed(shutterSpeed.getSelectedShutterSpeedValue()));
+		} catch (ShutterSpeedException e) {
+			imdcsp.setShutterSpeed(null);
+		}
+		imdcsp.setRating(getSelectedRatings());
 		
 		return imdcsp;
 	}
-
+	
+	private boolean[] getSelectedRatings() {
+		boolean[] selectedRatings = null;
+		boolean allDeSelected = true;
+		
+		for (JCheckBox ratingCheckBox : ratingCheckBoxes) {
+			if (ratingCheckBox.isSelected()) {
+				allDeSelected = false;	
+			}
+		}
+		
+		if (allDeSelected) {
+			return selectedRatings;	
+		} else {
+			selectedRatings = new boolean[6];
+			
+			for (int i = 0; i < ratingCheckBoxes.length; i++) {
+				selectedRatings[i] = ratingCheckBoxes[i].isSelected();	
+			}
+			return selectedRatings;
+		}
+	}
+	
 	/**
 	 * This method resets the state of the Image Tag tab to the initial state;
 	 * with no preview image and no comment.
