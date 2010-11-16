@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.util.datatype.ShutterSpeed;
 
 
@@ -23,6 +24,7 @@ public class ImageMetaDataContext {
 	 */
 	private static ImageMetaDataContext instance;
 	
+	private Map<String, ImageSize> imageSizeStringImageSizeMappings;
 	private Map<String, ShutterSpeed> shutterSpeedStringShutterSpeedMappings;
 	
 	/**
@@ -39,6 +41,7 @@ public class ImageMetaDataContext {
 	private Map<Integer, Set<Integer>> secondValues;
 	
 	private Map<Integer, Set<Integer>> isoValues;
+	private Map<String, Set<Integer>> imageSizeValues;
 	private Map<String, Set<Integer>> shutterSpeedValues;
 	private Map<String, Set<Integer>> apertureValues;
 	
@@ -54,6 +57,7 @@ public class ImageMetaDataContext {
 	private ImageMetaDataContext() {
 		
 		shutterSpeedStringShutterSpeedMappings = new HashMap<String, ShutterSpeed>();
+		imageSizeStringImageSizeMappings = new HashMap<String, ImageSize>();
 		
 		cameraModels = new HashMap<String, Set<Integer>>();
 		dateTimeValues = new HashMap<String, Set<Integer>>();
@@ -64,6 +68,7 @@ public class ImageMetaDataContext {
 		minuteValues = new HashMap<Integer, Set<Integer>>();
 		secondValues = new HashMap<Integer, Set<Integer>>();
 		isoValues = new HashMap<Integer, Set<Integer>>();
+		imageSizeValues = new HashMap<String, Set<Integer>>();
 		shutterSpeedValues = new HashMap<String, Set<Integer>>();
 		apertureValues = new HashMap<String, Set<Integer>>();
 		
@@ -170,6 +175,14 @@ public class ImageMetaDataContext {
 		shutterSpeedValues.get(shutterSpeed.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
+	public void addImageSize(ImageSize imageSize, String imagePath) {
+		if (!imageSizeValues.containsKey(imageSize.toString())) {
+			imageSizeValues.put(imageSize.toString(), new HashSet<Integer>());
+			imageSizeStringImageSizeMappings.put(imageSize.toString(), imageSize);
+		}
+		imageSizeValues.get(imageSize.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
+	}
+	
 	public void addAperture(String aperture, String imagePath) {
 		if (!apertureValues.containsKey(aperture)) {
 			apertureValues.put(aperture, new HashSet<Integer>());
@@ -224,6 +237,15 @@ public class ImageMetaDataContext {
 		return shutterSpeedObjects;
 	}
 	
+	public Set<ImageSize> getImageSizeValues() {
+		Set<ImageSize> imageSizeObjects = new TreeSet<ImageSize>();
+		
+		for (String imageSizeValue : imageSizeValues.keySet()) {
+			imageSizeObjects.add(imageSizeStringImageSizeMappings.get(imageSizeValue));
+		}
+		return imageSizeObjects;
+	}
+	
 	public Set<String> getApertureValues() {
 		return new TreeSet<String>(apertureValues.keySet());
 	}
@@ -247,13 +269,33 @@ public class ImageMetaDataContext {
 		}
 		return imagePaths;	}
 	
-	public Set<File> findImagesByCategory(Categories c) {
+	public Set<File> findImagesByCategory(Categories c, boolean isAndCategoriesSearch) {
 		Set<File> imagePaths = new HashSet<File>();
 		
-		for (String categroyId : c.getCategories()) {
-			Set<Integer> indexForImagePaths = categories.get(categroyId);
-			populateImagePathsSet(indexForImagePaths, imagePaths);
+		if (isAndCategoriesSearch) {
+			List<Set<File>> searchResults = new ArrayList<Set<File>>();
+			
+			for (String categoryId : c.getCategories()) {
+				searchResults.add(findImagesByCategory(new Categories(new String[] {categoryId}), false));
+			}
+			
+			imagePaths = ImageMetaDataContextUtil.compileSearchResult(searchResults);
+		} else {
+			for (String categroyId : c.getCategories()) {
+				Set<Integer> indexForImagePaths = categories.get(categroyId);
+				populateImagePathsSet(indexForImagePaths, imagePaths);
+			}	
 		}
+		
+		
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByImageSize(ImageSize imageSize) {
+		Set<File> imagePaths = new HashSet<File>();
+		Set<Integer> indexForImagePaths = imageSizeValues.get(imageSize.toString());
+		
+		populateImagePathsSet(indexForImagePaths, imagePaths);
 		return imagePaths;
 	}
 

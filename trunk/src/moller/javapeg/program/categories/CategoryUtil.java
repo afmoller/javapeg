@@ -9,7 +9,7 @@ import java.util.Enumeration;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +20,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.io.StreamUtil;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
@@ -231,8 +232,16 @@ public class CategoryUtil {
 	}
 	
 	public static JTree createCategoriesTree() {
-		
 		JTree categoriesTree = new JTree();
+		
+		categoriesTree.setModel(ModelInstanceLibrary.getInstance().getCategoriesModel());
+		categoriesTree.setShowsRootHandles(true);
+		categoriesTree.setRootVisible(false);
+		
+		return categoriesTree;
+	}
+	
+	public static TreeNode createCategoriesModel() {
 		
 		File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 		
@@ -262,12 +271,6 @@ public class CategoryUtil {
 		
 		CategoryUtil.populateTreeModel(document, root);
 		
-		DefaultTreeModel model = new DefaultTreeModel(root);
-		
-		categoriesTree.setModel(model);
-		categoriesTree.setShowsRootHandles(true);
-		categoriesTree.setRootVisible(false);
-		
-		return categoriesTree;
+		return root;
 	}
 }

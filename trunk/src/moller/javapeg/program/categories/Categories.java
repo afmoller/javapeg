@@ -20,6 +20,15 @@ public class Categories {
 		super();
 		this.categories = new TreeSet<String>();
 	}
+	
+	public Categories(String[] categories) {
+		super();
+		this.categories = new TreeSet<String>();
+		for (String category : categories) {
+			addCategory(category);
+		}
+	}
+
 
 	public void addCategories(String categoriesString) {
 		String[] categories = categoriesString.split(",");

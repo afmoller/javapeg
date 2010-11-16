@@ -21,6 +21,7 @@ import javax.xml.stream.XMLStreamWriter;
 import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.logger.Logger;
 import moller.util.datatype.ShutterSpeed;
@@ -226,6 +227,7 @@ public class ImageMetaDataDataBaseHandler {
 		imdc.addCameraModel(imageExifMetaData.getCameraModel(), image.getAbsolutePath());
 		imdc.addDateTime(imageExifMetaData.getDate(), image.getAbsolutePath());
 		imdc.addIso(imageExifMetaData.getIsoValue(), image.getAbsolutePath());
+		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), image.getAbsolutePath());
 		imdc.addShutterSpeed(imageExifMetaData.getShutterSpeed(), image.getAbsolutePath());
 		imdc.addAperture(imageExifMetaData.getApertureValue(), image.getAbsolutePath());
 		imdc.addComment(comment, image.getAbsolutePath());
@@ -234,7 +236,6 @@ public class ImageMetaDataDataBaseHandler {
 		for (String category : categories.getCategories()) {
 			imdc.addCategory(category, image.getAbsolutePath());	
 		}
-		
 	}
 
 	private static CategoryImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {

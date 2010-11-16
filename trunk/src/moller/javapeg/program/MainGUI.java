@@ -3,6 +3,7 @@ package moller.javapeg.program;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -93,6 +94,7 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchParameters;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
@@ -226,6 +228,7 @@ public class MainGUI extends JFrame {
 	private JSplitPane previewCommentCategoriesRatingSplitpane;
 	
 	private MetaDataValueSelector cameraModel;
+	private MetaDataValueSelector imageSize;
 	private MetaDataValueSelector iso;
 	private MetaDataValueSelector shutterSpeed;
 	
@@ -271,7 +274,10 @@ public class MainGUI extends JFrame {
 	private JList imagesToViewList;
 	
 	private JTextArea imageCommentTextArea;
+	
 	private JRadioButton [] ratingRadioButtons;
+	private JRadioButton andRadioButton;
+	private JRadioButton orRadioButton;
 	
 	private CheckTreeManager checkTreeManagerForAssignCategroiesCategoryTree;
 	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
@@ -931,16 +937,34 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createCategoriesPanel() {
 		
+//		TODO: Fix hard coded string
+		andRadioButton = new JRadioButton("AND");
+//		TODO: Fix hard coded string
+		andRadioButton.setToolTipText("<html>An image must have all the selected categories<br/>assigned to be added to the search result.</html>");
+//		TODO: Fix hard coded string
+		orRadioButton = new JRadioButton("OR");
+//		TODO: Fix hard coded string
+		orRadioButton.setToolTipText("<html>An image may have any combination of the selected<br/>categories assigned to be added to the search result.</html>");
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		group.add(andRadioButton);
+		group.add(orRadioButton);
+		
+//		TODO: Make configurable
+		orRadioButton.setSelected(true);
+		
+		JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		
+		selectionModePanel.add(andRadioButton);
+		selectionModePanel.add(orRadioButton);
+		
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
 		
 		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false); 
 			
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
-
-//		TODO: Fix hard coded string
-		JLabel ratingLabel = new JLabel("RATING");
-		ratingLabel.setForeground(Color.GRAY);
 		
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -949,6 +973,7 @@ public class MainGUI extends JFrame {
 		posBackground.fill = GridBagConstraints.BOTH;
 		
 		backgroundPanel.add(categoriesScrollPane, posBackground.expandH().expandW());
+		backgroundPanel.add(selectionModePanel, posBackground.nextRow());
 		
 		return backgroundPanel;
 	}
@@ -980,7 +1005,8 @@ public class MainGUI extends JFrame {
 		time.setThirdValues(time.initiateContinuousSet(0, 59));
 		
 //		TODO: fix hard coded string
-		MetaDataValueSelector imageSize = new MetaDataValueSelector("IMAGE SIZE", true);
+		imageSize = new MetaDataValueSelector("IMAGE SIZE", true);
+		imageSize.setImageSizeValues(imdc.getImageSizeValues());
 		
 //		TODO: fix hard coded string
 		iso = new MetaDataValueSelector("ISO", true);
@@ -993,11 +1019,6 @@ public class MainGUI extends JFrame {
 //		TODO: fix hard coded string
 		MetaDataValueSelector aperture = new MetaDataValueSelector("APERTURE VALUE", true);
 		aperture.setStringValues(imdc.getApertureValues());
-						
-		backgroundPanel.add(cameraModel.getMainPanel(), posBackgroundPanel.nextRow());
-		if (cameraModel.hasOperators()) {
-			backgroundPanel.add(cameraModel.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
 		
 		backgroundPanel.add(date.getMainPanel(), posBackgroundPanel.nextRow());
 		if (date.hasOperators()) {
@@ -1027,6 +1048,11 @@ public class MainGUI extends JFrame {
 		backgroundPanel.add(aperture.getMainPanel(), posBackgroundPanel.nextRow());
 		if (aperture.hasOperators()) {
 			backgroundPanel.add(aperture.getOperatorsPanel(), posBackgroundPanel.nextCol());	
+		}
+		
+		backgroundPanel.add(cameraModel.getMainPanel(), posBackgroundPanel.nextRow());
+		if (cameraModel.hasOperators()) {
+			backgroundPanel.add(cameraModel.getOperatorsPanel(), posBackgroundPanel.nextCol());	
 		}
 		
 		return backgroundPanel;
@@ -1854,7 +1880,9 @@ public class MainGUI extends JFrame {
 						JButton thumbContainer = new JButton();
 						thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
 						thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-						thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
+						if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));	
+						}
 						thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
 						thumbContainer.addActionListener(thumbNailListener);
 						thumbContainer.addMouseListener(mouseRightClickButtonListener);
@@ -2567,9 +2595,6 @@ public class MainGUI extends JFrame {
 					}
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
-					
-					// Update the Categories tree model structure in the the find images tree 
-					checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 				}
 			}
 		}
@@ -2604,9 +2629,6 @@ public class MainGUI extends JFrame {
 
 					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
-					
-					// Update the Categories tree model structure in the the find images tree 
-					checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 				}
 			}
 		}
@@ -2632,9 +2654,6 @@ public class MainGUI extends JFrame {
 				
 				File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
 				CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
-				
-				// Update the Categories tree model structure in the the find images tree 
-				checkTreeManagerForFindImagesCategoryTree.getCheckedJtree().setModel(model);
 			}
 		}
 	}
@@ -2697,8 +2716,14 @@ public class MainGUI extends JFrame {
 		
 		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
+		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
 		imdcsp.setCameraModel(cameraModel.getSelectedStringValue());
 		imdcsp.setComment(commentTextArea.getText());
+		if (!imageSize.getSelectedImageSizeValue().equals("")) {
+			imdcsp.setImageSize(new ImageSize(imageSize.getSelectedImageSizeValue()));
+		} else {
+			imdcsp.setImageSize(null);
+		}
 		imdcsp.setIso(iso.getSelectedIntegerValue());
 		try {
 			imdcsp.setShutterSpeed(new ShutterSpeed(shutterSpeed.getSelectedShutterSpeedValue()));

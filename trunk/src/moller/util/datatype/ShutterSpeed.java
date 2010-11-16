@@ -131,7 +131,6 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 
 	@Override
 	public int compareTo(ShutterSpeed o) {
-		// TODO Auto-generated method stub
 		if (this.comparableValue() < o.comparableValue()) {
 			return -1;
 		} else if (this.comparableValue() == o.comparableValue()) {
