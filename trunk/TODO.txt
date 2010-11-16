@@ -4,7 +4,6 @@
 - Add possibility to search for images matching criterias defined by the tagging of images.
 - Make it possible to configure the level of warnings in the categories tree.
 - Make it possible to remove paths from the image repository paths collections.
-- Make it possible to configure the level of tooltiptext for the thumbnails in the image viewer.
 - Make it possilbe to configure the sort order of the source directory tree structure, alphabetical or latest modified.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
 - Fix layout of the Config Viewer GUI.
