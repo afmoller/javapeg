@@ -383,7 +383,9 @@ public class ImageSearchResultViewer extends JFrame {
 			JToggleButton thumbContainer = new JToggleButton();
 			thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
 			thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-			thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image));
+			if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+				thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image));	
+			}
 			thumbContainer.setActionCommand(image.getAbsolutePath());
 			thumbContainer.setName("deselected");
 			thumbContainer.addActionListener(thumbNailListener);

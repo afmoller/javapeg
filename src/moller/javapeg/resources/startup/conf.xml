@@ -57,6 +57,7 @@
 <entry key="thumbnails.view.height">120</entry>
 <entry key="thumbnails.cache.enabled">true</entry>
 <entry key="thumbnails.cache.max-size">512</entry>
+<entry key="thumbnails.tooltip.state">enabled</entry>
 <entry key="previewAndCommentSplitPane.location">300</entry>
 <entry key="tab.tagImage.previewImage.useEmbeddedThumbnail">false</entry>
 <entry key="previewCommentCategoriesRatingSplitpane.location">500</entry>

@@ -257,7 +257,9 @@ public class ImageViewer extends JFrame {
 			JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData())); 
 			
 			imageButton.setActionCommand(Integer.toString(i));
-			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));
+			if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+				imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));	
+			}
 			imageButton.addActionListener(overviewButtonListener);
 			
 			imageOverViewPanel.add(imageButton);
