@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.util.datatype.ShutterSpeed;
 
 public class MetaDataValueSelector {
@@ -21,7 +22,8 @@ public class MetaDataValueSelector {
 	
 	private boolean hasOperators;
 	
-	private JComboBox values = null;
+	private JComboBox fromValues = null;
+	private JComboBox toValues = null;
 	
 	public MetaDataValueSelector(String title, boolean hasOperators) {
 		
@@ -39,10 +41,16 @@ public class MetaDataValueSelector {
 		mainPanel = new JPanel(new GridBagLayout());
 		
 		JLabel titleLabel = new JLabel(title);
-		values = new JComboBox();
+		JLabel fromLabel = new JLabel("From");
+		JLabel toLabel = new JLabel("To");
+		fromValues = new JComboBox();
+		toValues = new JComboBox();
 		
 		mainPanel.add(titleLabel, positionMainPanel);
-		mainPanel.add(values, positionMainPanel.nextRow().expandW());
+		mainPanel.add(fromLabel, positionMainPanel.nextRow());
+		mainPanel.add(fromValues, positionMainPanel.nextCol().expandW());
+		mainPanel.add(toLabel, positionMainPanel.nextRow());
+		mainPanel.add(toValues, positionMainPanel.nextCol().expandW());
 	}
 	
 	private void createOperatorsPanel() {
@@ -78,43 +86,66 @@ public class MetaDataValueSelector {
 	}
 	
 	public String getSelectedIntegerValue() {
-		if (this.values.getSelectedItem() instanceof Integer) {
-			return Integer.toString((Integer)(this.values.getSelectedItem()));			
+		if (this.fromValues.getSelectedItem() instanceof Integer) {
+			return Integer.toString((Integer)(this.fromValues.getSelectedItem()));			
 		}  else {
 			return "";
 		}
 	}
 	
 	public String getSelectedShutterSpeedValue() {
-		if (this.values.getSelectedItem() instanceof ShutterSpeed) {
-			return ((ShutterSpeed)this.values.getSelectedItem()).toString();			
+		if (this.fromValues.getSelectedItem() instanceof ShutterSpeed) {
+			return ((ShutterSpeed)this.fromValues.getSelectedItem()).toString();			
+		}  else {
+			return "";
+		}
+	}
+	
+	public String getSelectedImageSizeValue() {
+		if (this.fromValues.getSelectedItem() instanceof ImageSize) {
+			return ((ImageSize)this.fromValues.getSelectedItem()).toString();			
 		}  else {
 			return "";
 		}
 	}
 	
 	public String getSelectedStringValue() {
-		return (String)this.values.getSelectedItem();
+		return (String)this.fromValues.getSelectedItem();
 	}
 	
 	public void setIntegerValues(Set<Integer> values) {
-		this.values.addItem("");
+		this.fromValues.addItem("");
+		this.toValues.addItem("");
 		for (Integer value : values) {
-			this.values.addItem(value);	
+			this.fromValues.addItem(value);
+			this.toValues.addItem(value);
 		}
 	}
 	
 	public void setStringValues(Set<String> values) {
-		this.values.addItem("");
+		this.fromValues.addItem("");
+		this.toValues.addItem("");
 		for (String value : values) {
-			this.values.addItem(value);	
+			this.fromValues.addItem(value);	
+			this.toValues.addItem(value);
 		}
 	}
 
 	public void setShutterSpeedValues(Set<ShutterSpeed> values) {
-		this.values.addItem("");
+		this.fromValues.addItem("");
+		this.toValues.addItem("");
 		for (ShutterSpeed value : values) {
-			this.values.addItem(value);	
+			this.fromValues.addItem(value);	
+			this.toValues.addItem(value);
+		}
+	}
+	
+	public void setImageSizeValues(Set<ImageSize> values) {
+		this.fromValues.addItem("");
+		this.toValues.addItem("");
+		for (ImageSize value : values) {
+			this.fromValues.addItem(value);	
+			this.toValues.addItem(value);
 		}
 	}
 }
