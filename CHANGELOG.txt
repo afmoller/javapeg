@@ -10,6 +10,12 @@
  
  2.5 (2010-xx-xx)
  
+ + It is possible to set the detail level of the thumbnail tooltips. Three 
+   levels exists: Disabled, Enabled and Extended, where Disabled; means no
+   tooltips at all, Enabled; the file name of the image is shown and Extended;
+   is the file name and some other meta data of the image (the same as it was
+   in the tooltip in earlier versions of JavaPEG.
+ 
  + Added the possibility to copy image(s) to system clipboard. It is either
    possible to copy one image to clipboard via popup menu or to copy a list of
    images at one, by populating an image list in the VIEW IMAGES tab and click
@@ -35,7 +41,7 @@
    user access control. 
    
  ~ The value of the Exif Picture Width and Exif Picture Height was stripped 
-   from any occurences of non integer characters. In for instance some of the
+   from any occurrences of non integer characters. In for instance some of the
    Canon cameras the value of any of the above was: "2592 pixels". From now on
    the value is only "2592" 
  
