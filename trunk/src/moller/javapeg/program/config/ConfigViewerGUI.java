@@ -131,6 +131,10 @@ public class ConfigViewerGUI extends JFrame {
 	private JLabel cacheSizeLabel;
 	private JCheckBox enableThumbnailCache;
 	
+	private JRadioButton toolTipDisabled;
+	private JRadioButton toolTipEnabled;
+	private JRadioButton toolTipExtended;
+	
 	/**
 	 * Variables for the tag panel
 	 */
@@ -152,6 +156,7 @@ public class ConfigViewerGUI extends JFrame {
 	private String CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
 	private String THUMBNAIL_MAX_CACHE_SIZE;
 	private String MAXIMUM_LENGTH_OF_CAMERA_MODEL;
+	private String THUMBNAIL_TOOLTIP_STATE;
 	
 	
 	private boolean DEVELOPER_MODE;
@@ -205,6 +210,7 @@ public class ConfigViewerGUI extends JFrame {
 		ENABLE_THUMBNAIL_CACHE = conf.getBooleanProperty("thumbnails.cache.enabled");
 		MAXIMUM_LENGTH_OF_CAMERA_MODEL = conf.getStringProperty("rename.maximum.length.camera-model");
 		USE_EMBEDDED_THUMBNAIL = conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail");
+		THUMBNAIL_TOOLTIP_STATE = conf.getStringProperty("thumbnails.tooltip.state");
 	}
 	
 	private void initiateWindow() {
@@ -638,6 +644,7 @@ public class ConfigViewerGUI extends JFrame {
 		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
 				
 		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
+//		TODO: Fix hard coded string
 		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Cache"));
 		
 		GBHelper posThumbnailCachePanel = new GBHelper();
@@ -658,7 +665,62 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailCachePanel.add(clearCachLabel, posThumbnailCachePanel.nextRow());
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
 		thumbnailCachePanel.add(clearCacheJButton, posThumbnailCachePanel.nextCol());
-				
+		
+		/**
+		 * Start of Thumbnail ToolTip Area
+		 */
+		
+//		TODO: Fix hard coded string
+		JLabel toolTipDisabledLabel = new JLabel("Disabled:");
+//		TODO: Fix hard coded string
+		JLabel toolTipEnabledLabel  = new JLabel("Enabled:");
+//		TODO: Fix hard coded string
+		JLabel toolTipExtendedLabel = new JLabel("Extended:");
+		
+		toolTipDisabled = new JRadioButton();
+//		TODO: Fix hard coded string
+		toolTipDisabled.setName("0");
+		toolTipEnabled = new JRadioButton();
+//		TODO: Fix hard coded string
+		toolTipEnabled.setName("1");
+		toolTipExtended = new JRadioButton();
+//		TODO: Fix hard coded string
+		toolTipExtended.setName("2");
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		group.add(toolTipDisabled);
+		group.add(toolTipEnabled);
+		group.add(toolTipExtended);
+		
+		String toolTipState = conf.getStringProperty("thumbnails.tooltip.state");
+		
+		if (toolTipState.equalsIgnoreCase(toolTipDisabled.getName())) {
+			toolTipDisabled.setSelected(true);
+		} else if (toolTipState.equalsIgnoreCase(toolTipExtended.getName())) {
+			toolTipExtended.setSelected(true);
+		} else {
+			toolTipEnabled.setSelected(true);
+		}
+ 		
+		JPanel thumbnailToolTipPanel = new JPanel(new GridBagLayout());
+//		TODO: Fix hard coded string
+		thumbnailToolTipPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Tooltips"));
+		
+		GBHelper posThumbnailToolTipPanel = new GBHelper();
+		
+		thumbnailToolTipPanel.add(toolTipDisabledLabel, posThumbnailToolTipPanel);
+		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+		thumbnailToolTipPanel.add(toolTipEnabledLabel, posThumbnailToolTipPanel.nextRow());
+		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+		thumbnailToolTipPanel.add(toolTipExtendedLabel, posThumbnailToolTipPanel.nextRow());
+		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextCol());
+		
 		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
 		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
@@ -666,6 +728,7 @@ public class ConfigViewerGUI extends JFrame {
 		
 		thumbnailConfigurationPanel.add(thumbnailCreationPanel, posThumbnailPanel.expandW().expandH());
 		thumbnailConfigurationPanel.add(thumbnailCachePanel, posThumbnailPanel.nextRow().expandW().expandH());
+		thumbnailConfigurationPanel.add(thumbnailToolTipPanel, posThumbnailPanel.nextRow().expandW().expandH());
 	}
 	
 	private void createTagConfigurationPanel() {
@@ -796,6 +859,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("thumbnails.view.create.algorithm", thumbnailCreationAlgorithm.getSelectedItem().toString());
 		conf.setStringProperty("thumbnails.cache.max-size", maxCacheSize.getText());
 		conf.setBooleanProperty("thumbnails.cache.enabled", enableThumbnailCache.isSelected());
+		conf.setStringProperty("thumbnails.tooltip.state", getToolTipState());
 		
 		/**
 		 * Update Tag Configuration
@@ -810,6 +874,16 @@ public class ConfigViewerGUI extends JFrame {
 		return true;
 	}
 	
+	private String getToolTipState() {
+		if (toolTipDisabled.isSelected()) {
+			return toolTipDisabled.getName();
+		} else if (toolTipEnabled.isSelected()) {
+			return toolTipEnabled.getName();
+		} else {
+			return toolTipExtended.getName();
+		}
+	}
+
 	private void displayChangedConfigurationMessage() {
 
 		String preMessage = lang.get("configviewer.changed.configuration.start");
@@ -910,6 +984,52 @@ public class ConfigViewerGUI extends JFrame {
 			} else {
 				displayMessage.append("Use embedded thumbnail as Preview Image (Fast) (Use scaled thumbnail as Preview Image (Slow))\n");
 			}
+		}
+
+		if(!THUMBNAIL_TOOLTIP_STATE.equals(getToolTipState())) {
+			int previousThumbNailToolTipState = -1;
+			String previous = "";
+			
+			try {
+				previousThumbNailToolTipState = Integer.parseInt(THUMBNAIL_TOOLTIP_STATE);
+			} catch (NumberFormatException nfex) {
+				previousThumbNailToolTipState = 1;
+			}
+			
+			switch (previousThumbNailToolTipState) {
+			case 0:
+//				TODO: Fix hard coded string				
+				previous = "Disabled";
+				break;
+			case 1:
+//				TODO: Fix hard coded string
+				previous = "Enabled";
+				break;
+			case 2:
+//				TODO: Fix hard coded string
+				previous = "Extended";
+				break;
+			}
+			
+			int currentThumbNailToolTipState = Integer.parseInt(getToolTipState());
+			String current = "";
+			
+			switch (currentThumbNailToolTipState) {
+			case 0:
+//				TODO: Fix hard coded string				
+				current = "Disabled";
+				break;
+			case 1:
+//				TODO: Fix hard coded string
+				current = "Enabled";
+				break;
+			case 2:
+//				TODO: Fix hard coded string
+				current = "Extended";
+				break;
+			}
+			
+			displayMessage.append("Thumbnail Tooltips" + ": " + current + " (" + previous + ")\n");
 		}
 				
 		if(displayMessage.length() > 0) {
