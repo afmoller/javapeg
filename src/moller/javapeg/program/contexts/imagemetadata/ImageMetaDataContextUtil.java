@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.util.datatype.ShutterSpeed;
 
 public class ImageMetaDataContextUtil {
@@ -41,7 +42,12 @@ public class ImageMetaDataContextUtil {
 		
 		Categories categories = imageMetaDataContextSearchParameters.getCategories();
 		if(categories != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCategory(categories));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCategory(categories, imageMetaDataContextSearchParameters.isAndCategoriesSearch()));
+		}
+		
+		ImageSize imageSize = imageMetaDataContextSearchParameters.getImageSize();
+		if(imageSize != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByImageSize(imageSize));
 		}
 		
 		int iso = imageMetaDataContextSearchParameters.getIso();
@@ -61,7 +67,7 @@ public class ImageMetaDataContextUtil {
 		return compileSearchResult(searchResults); 
 	}
 
-	private static Set<File> compileSearchResult(List<Set<File>> searchResults) {
+	public static Set<File> compileSearchResult(List<Set<File>> searchResults) {
 
 		if (searchResults.size() > 1) {
 			Set<File> result = new HashSet<File>();
@@ -128,6 +134,9 @@ public class ImageMetaDataContextUtil {
 			containSearchParameter = true;
 		}
 		if (imageMetaDataContextSearchParameters.getCategories() != null) {
+			containSearchParameter = true;
+		}
+		if (imageMetaDataContextSearchParameters.getImageSize() != null) {
 			containSearchParameter = true;
 		}
 		if (imageMetaDataContextSearchParameters.getIso() > -1) {

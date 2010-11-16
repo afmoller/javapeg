@@ -1,8 +1,6 @@
 package moller.javapeg.program.model;
-/**
- * This class was created : 2009-12-17 by Fredrik Möller
- * Latest changed         : 
- */
+
+import moller.javapeg.program.categories.CategoryUtil;
 
 public class ModelInstanceLibrary {
 	
@@ -15,6 +13,7 @@ public class ModelInstanceLibrary {
 	private PreviewTableModel  previewTableModel;
 	private SortedListModel    sortedListModel;
 	private ImagesToViewModel  imagesToViewModel;
+	private CategoriesModel    categoriesModel;
 	
 	/**
 	 * Private constructor.
@@ -24,6 +23,7 @@ public class ModelInstanceLibrary {
 		previewTableModel  = new PreviewTableModel();
 		sortedListModel    = new SortedListModel();
 		imagesToViewModel  = new ImagesToViewModel();
+		categoriesModel    = new CategoriesModel(CategoryUtil.createCategoriesModel());
 	}
 		
 	/**
@@ -56,5 +56,9 @@ public class ModelInstanceLibrary {
 	
 	public ImagesToViewModel getImagesToViewModel() {
 		return imagesToViewModel;
+	}
+	
+	public CategoriesModel getCategoriesModel() {
+		return categoriesModel;
 	}
 }
