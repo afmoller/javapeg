@@ -1,12 +1,7 @@
 package moller.javapeg.program.model;
-/**
- * This class was created : 2009-12-17 by Fredrik Möller
- * Latest changed         : 
- */
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,6 +15,12 @@ public class SortedListModel extends AbstractListModel {
 
 	public SortedListModel() {
 		model = new TreeSet<Object>();
+	}
+	
+	public SortedListModel(Set<Object> values) {
+		model = new TreeSet<Object>();
+		model.addAll(values);
+		fireContentsChanged(this, 0, getSize());
 	}
 
 	public int getSize() {
@@ -36,9 +37,8 @@ public class SortedListModel extends AbstractListModel {
 		}
 	}
 
-	public void addAll(Object elements[]) {
-		Collection<Object> c = Arrays.asList(elements);
-		model.addAll(c);
+	public void addAll(Set<Object> elements) {
+		model.addAll(elements);
 		fireContentsChanged(this, 0, getSize());
 	}
 
