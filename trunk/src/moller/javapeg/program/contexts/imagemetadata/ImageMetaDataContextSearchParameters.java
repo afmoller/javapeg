@@ -1,20 +1,15 @@
 package moller.javapeg.program.contexts.imagemetadata;
 
 import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.logger.Logger;
-import moller.util.datatype.ShutterSpeed;
 
 public class ImageMetaDataContextSearchParameters {
-	
-	private static Logger logger = Logger.getInstance();
 	
 	private String cameraModel;
 	private String comment;
 	private Categories categories;
-	private int iso;
-	private ShutterSpeed shutterSpeed;
-	private ImageSize imageSize;
+	private String iso;
+	private String shutterSpeed;
+	private String imageSize;
 	private boolean[] ratings;
 	
 	/**
@@ -30,7 +25,7 @@ public class ImageMetaDataContextSearchParameters {
 		this.cameraModel = null;
 		this.comment = null;
 		this.categories = null;
-		this.iso = -1;
+		this.iso = null;
 		this.shutterSpeed = null;
 		this.imageSize = null;
 		this.ratings = null;
@@ -53,11 +48,11 @@ public class ImageMetaDataContextSearchParameters {
 		return categories;
 	}
 	
-	public ImageSize getImageSize() {
+	public String getImageSize() {
 		return imageSize;
 	}
 	
-	public int getIso() {
+	public String getIso() {
 		return iso;
 	}
 	
@@ -65,7 +60,7 @@ public class ImageMetaDataContextSearchParameters {
 		return ratings;
 	}
 	
-	public ShutterSpeed getShutterSpeed() {
+	public String getShutterSpeed() {
 		return shutterSpeed;
 	}
 	
@@ -91,19 +86,15 @@ public class ImageMetaDataContextSearchParameters {
 		}
 	}
 	
-	public void setImageSize(ImageSize imageSize) {
-		this.imageSize = imageSize;
+	public void setImageSize(String imageSize) {
+		if (!imageSize.equals("")) {
+			this.imageSize  = imageSize;
+		}
 	}
 	
 	public void setIso(String iso) {
 		if (!iso.equals("")) {
-			try {
-				this.iso = Integer.parseInt(iso);	
-			} catch (NumberFormatException nfex) {
-				logger.logERROR("Could not parse String " + iso + " to an integer, see stacktrace below for details");
-				logger.logERROR(nfex);
-				this.iso  = -1;
-			}
+			this.iso  = iso;
 		}
 	}
 	
@@ -111,7 +102,9 @@ public class ImageMetaDataContextSearchParameters {
 		this.ratings = ratings;
 	}
 	
-	public void setShutterSpeed(ShutterSpeed shutterSpeed) {
-		this.shutterSpeed = shutterSpeed;
+	public void setShutterSpeed(String shutterSpeed) {
+		if (!shutterSpeed.equals("")) {
+			this.shutterSpeed  = shutterSpeed;
+		}
 	}	
 }
