@@ -251,14 +251,6 @@ public class ImageMetaDataContext {
 		return new TreeSet<String>(apertureValues.keySet());
 	}
 	
-	public Set<File> findImagesByCameraModel(String cameraModel) {
-		Set<File> imagePaths = new HashSet<File>();
-		Set<Integer> indexForImagePaths = cameraModels.get(cameraModel);
-		
-		populateImagePathsSet(indexForImagePaths, imagePaths);
-		return imagePaths;
-	}
-	
 	public Set<File> findImagesByComment(String commentToSearchFor) {
 		Set<File> imagePaths = new HashSet<File>();
 		
@@ -287,6 +279,26 @@ public class ImageMetaDataContext {
 				populateImagePathsSet(indexForImagePaths, imagePaths);
 			}	
 		}
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByCameraModel(String cameraModel) {
+		
+		Set<String> cameraModelKeys = new TreeSet<String>(cameraModels.keySet());
+		Iterator<String> iterator = cameraModelKeys.iterator();
+		
+		List<String> cameraModelsToGet = new ArrayList<String>(); 
+			
+		FindBy.cameraModel(cameraModel, iterator, cameraModelsToGet);
+				
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (String cameraModelString : cameraModelsToGet) {
+			Set<Integer> indexForImagePaths = cameraModels.get(cameraModelString);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
+		
+		
 		return imagePaths;
 	}
 	

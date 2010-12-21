@@ -2746,29 +2746,12 @@ public class MainGUI extends JFrame {
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
 		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
 		
-//		imdcsp.setCameraModel(cameraModel.getSelectedStringValue());
-//		imdcsp.setComment(commentTextArea.getText());
-//		if (!imageSize.getSelectedImageSizeValue().equals("")) {
-//			imdcsp.setImageSize(new ImageSize(imageSize.getSelectedImageSizeValue()));
-//		} else {
-//			imdcsp.setImageSize(null);
-//		}
-//		imdcsp.setIso(iso.getSelectedIntegerValue());
-//		try {
-//			imdcsp.setShutterSpeed(new ShutterSpeed(shutterSpeed.getSelectedShutterSpeedValue()));
-//		} catch (ShutterSpeedException e) {
-//			imdcsp.setShutterSpeed(null);
-//		}
-		
-//		MetaDataValue imagesSizeMetaDataValue;
-//		MetaDataValue isoMetaDataValue;
-//		MetaDataValue shutterSpeedMetaDataValue;
 //		MetaDataValue apertureValueMetaDataValue;
-//		MetaDataValue cameraModelMetaDataValue;
 		
+		imdcsp.setCameraModel(cameraModelMetaDataValue.getValue());
+		imdcsp.setComment(commentTextArea.getText());
 		imdcsp.setImageSize(imagesSizeMetaDataValue.getValue());
 		imdcsp.setIso(isoMetaDataValue.getValue());
-		
 		imdcsp.setRating(getSelectedRatings());
 		imdcsp.setShutterSpeed(shutterSpeedMetaDataValue.getValue());
 		

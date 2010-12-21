@@ -46,6 +46,10 @@ public class FindBy {
 		}
 	}
 	
+	public static void cameraModel(String cameraModelString, Iterator<String> iterator, List<String> cameraModelsToGet) {
+		stringType(MetaDataValueFieldName.CAMERA_MODEL, cameraModelString, iterator, cameraModelsToGet);
+	}	
+	
 	public static void imageSize(String imageSizeString, Iterator<String> iterator, List<String> imageSizeValuesToGet) {
 		stringType(MetaDataValueFieldName.IMAGE_SIZE, imageSizeString, iterator, imageSizeValuesToGet);
 	}
