@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.FieldName;
-import moller.util.datatype.ShutterSpeed;
-import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;

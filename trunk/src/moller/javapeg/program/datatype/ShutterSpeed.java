@@ -1,4 +1,6 @@
-package moller.util.datatype;
+package moller.javapeg.program.datatype;
+
+import moller.util.datatype.Rational;
 
 public class ShutterSpeed implements Comparable<ShutterSpeed> {
 

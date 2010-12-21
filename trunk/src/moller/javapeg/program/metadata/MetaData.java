@@ -4,7 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import moller.util.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ShutterSpeed;
 
 public class MetaData {
 

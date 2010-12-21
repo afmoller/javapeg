@@ -5,10 +5,10 @@ import java.util.List;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.datatype.ImageSize;
+import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.enumerations.Operator;
-import moller.util.datatype.ShutterSpeed;
-import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.util.string.StringUtil;
 
 public class FindBy {

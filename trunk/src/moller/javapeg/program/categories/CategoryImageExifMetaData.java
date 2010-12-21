@@ -4,9 +4,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
-import moller.util.datatype.ShutterSpeed;
 
 public class CategoryImageExifMetaData {
     
