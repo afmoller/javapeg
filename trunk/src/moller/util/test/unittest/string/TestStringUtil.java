@@ -1,8 +1,4 @@
 package moller.util.test.unittest.string;
-/**
- * This class was created : 2009-12-28 by Fredrik Möller
- * Latest changed         : 
- */
 
 import junit.framework.Assert;
 import moller.util.string.StringUtil;
@@ -33,5 +29,27 @@ public class TestStringUtil {
 		
 		Assert.assertFalse(StringUtil.isInt("12345a"));
 		Assert.assertFalse(StringUtil.isInt("a12345"));
+	}
+	
+	@Test
+	public void testRemoveFirstCharacter() {
+		Assert.assertTrue(StringUtil.removeFirstCharacter("String").equals("tring"));
+	}
+	
+	@Test
+	public void testRemoveLastCharacter() {
+		Assert.assertTrue(StringUtil.removeLastCharacter("String").equals("Strin"));
+	}
+	
+	@Test
+	public void testGetFirstCharacter() {
+		Assert.assertTrue(StringUtil.getFirstCharacter("String").equals("S"));
+	}
+	
+	@Test
+	public void testRemoveStringFromEnd() {
+		Assert.assertTrue(StringUtil.removeStringFromEnd("String", "ng").equals("Stri"));
+		Assert.assertTrue(StringUtil.removeStringFromEnd("String||", "||").equals("String"));
+		Assert.assertTrue(StringUtil.removeStringFromEnd("String||", "**").equals("String||"));
 	}
 }
