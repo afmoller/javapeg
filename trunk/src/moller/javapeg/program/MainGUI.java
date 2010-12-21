@@ -102,13 +102,15 @@ import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
-import moller.javapeg.program.gui.MetaDataValue;
 import moller.javapeg.program.gui.MetaDataPanel;
-import moller.javapeg.program.gui.MetaDataValueSelectorComplex;
-import moller.javapeg.program.gui.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
+import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
+import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
+import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
+import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
+import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectorComplex;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagerepository.ImageRepositoryHandler;
@@ -1063,19 +1065,19 @@ public class MainGUI extends JFrame {
 			
 			switch (mdtf) {
 			case APERTURE_VALUE:
-				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
 				break;
 			case CAMERA_MODEL:
-				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogEqual(mdtf.toString(), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
 				break;
 			case IMAGE_SIZE:
-				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getImageSizeValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getImageSizeValues()), value, e.getLocationOnScreen());
 				break;
 			case ISO:
-				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
 				break;
 			case SHUTTER_SPEED:
-				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
 				break;
 			}
 			mdvsd.collectSelectedValues();

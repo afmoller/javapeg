@@ -1,4 +1,4 @@
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.metadata.impl;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -33,10 +33,11 @@ import javax.swing.event.ListSelectionListener;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
+import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.model.SortedListModel;
 import moller.util.string.StringUtil;
 
-public class MetaDataValueSelectionDialog extends JDialog {
+public class MetaDataValueSelectionDialogLessEqualGreater extends JDialog implements MetaDataValueSelectionDialog {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -54,7 +55,7 @@ public class MetaDataValueSelectionDialog extends JDialog {
 	private JRadioButton equal;
 	private JRadioButton greater;
 
-	public MetaDataValueSelectionDialog(String title, Set<Object> values, String oldValue, Point position) {
+	public MetaDataValueSelectionDialogLessEqualGreater(String title, Set<Object> values, String oldValue, Point position) {
 
 		this.value = "";
 		this.oldValue = oldValue;

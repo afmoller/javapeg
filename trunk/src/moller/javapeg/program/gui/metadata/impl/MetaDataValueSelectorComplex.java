@@ -1,4 +1,4 @@
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.metadata.impl;
 
 import java.awt.GridBagLayout;
 import java.util.LinkedHashSet;
