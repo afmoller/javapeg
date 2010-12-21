@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -286,26 +287,46 @@ public class ImageMetaDataContext {
 				populateImagePathsSet(indexForImagePaths, imagePaths);
 			}	
 		}
-		
-		
 		return imagePaths;
 	}
 	
-	public Set<File> findImagesByImageSize(ImageSize imageSize) {
-		Set<File> imagePaths = new HashSet<File>();
-		Set<Integer> indexForImagePaths = imageSizeValues.get(imageSize.toString());
+	public Set<File> findImagesByImageSize(String imageSize) {
 		
-		populateImagePathsSet(indexForImagePaths, imagePaths);
+		Set<String> imageSizeValuesKeys = new TreeSet<String>(imageSizeValues.keySet());
+		Iterator<String> iterator = imageSizeValuesKeys.iterator();
+		
+		List<String> imageSizeValuesToGet = new ArrayList<String>(); 
+			
+		FindBy.imageSize(imageSize, iterator, imageSizeValuesToGet);
+				
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (String imageSizeValue : imageSizeValuesToGet) {
+			Set<Integer> indexForImagePaths = imageSizeValues.get(imageSizeValue);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
 		return imagePaths;
 	}
 
-	public Set<File> findImagesByIso(int iso) {
-		Set<File> imagePaths = new HashSet<File>();
-		Set<Integer> indexForImagePaths = isoValues.get(iso);
+	public Set<File> findImagesByIso(String iso) {
 		
-		populateImagePathsSet(indexForImagePaths, imagePaths);
+		Set<Integer> isoValuesKeys = new TreeSet<Integer>(isoValues.keySet());
+		Iterator<Integer> iterator = isoValuesKeys.iterator();
+		
+		List<Integer> isoValuesToGet = new ArrayList<Integer>(); 
+			
+		FindBy.iso(iso, iterator, isoValuesToGet);
+				
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (Integer isoValue : isoValuesToGet) {
+			Set<Integer> indexForImagePaths = isoValues.get(isoValue);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
 		return imagePaths;
 	}
+		
+	
 	
 	public Set<File> findImagesByRating(boolean[] ratingSelection) {
 		Set<File> imagePaths = new HashSet<File>();
@@ -319,11 +340,21 @@ public class ImageMetaDataContext {
 		return imagePaths;
 	}
 	
-	public Set<File> findImagesByShutterSpeed(ShutterSpeed shutterSpeed) {
-		Set<File> imagePaths = new HashSet<File>();
-		Set<Integer> indexForImagePaths = shutterSpeedValues.get(shutterSpeed.toString());
+	public Set<File> findImagesByShutterSpeed(String shutterSpeed) {
 		
-		populateImagePathsSet(indexForImagePaths, imagePaths);
+		Set<String> shutterSpeedValuesKeys = new TreeSet<String>(shutterSpeedValues.keySet());
+		Iterator<String> iterator = shutterSpeedValuesKeys.iterator();
+		
+		List<String> shutterSpeedValuesToGet = new ArrayList<String>(); 
+			
+		FindBy.shutterSpeed(shutterSpeed, iterator, shutterSpeedValuesToGet);
+				
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (String shutterSpeedValue : shutterSpeedValuesToGet) {
+			Set<Integer> indexForImagePaths = shutterSpeedValues.get(shutterSpeedValue);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
 		return imagePaths;
 	}
 	

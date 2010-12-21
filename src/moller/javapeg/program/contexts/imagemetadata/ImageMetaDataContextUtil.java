@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.datatype.ImageSize;
-import moller.util.datatype.ShutterSpeed;
 
 public class ImageMetaDataContextUtil {
 	
@@ -45,13 +43,13 @@ public class ImageMetaDataContextUtil {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCategory(categories, imageMetaDataContextSearchParameters.isAndCategoriesSearch()));
 		}
 		
-		ImageSize imageSize = imageMetaDataContextSearchParameters.getImageSize();
+		String imageSize = imageMetaDataContextSearchParameters.getImageSize();
 		if(imageSize != null) {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByImageSize(imageSize));
 		}
 		
-		int iso = imageMetaDataContextSearchParameters.getIso();
-		if(iso > -1) {
+		String iso = imageMetaDataContextSearchParameters.getIso();
+		if(iso != null) {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByIso(iso));
 		}
 		
@@ -60,7 +58,7 @@ public class ImageMetaDataContextUtil {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByRating(ratings));
 		}
 		
-		ShutterSpeed shutterSpeed = imageMetaDataContextSearchParameters.getShutterSpeed();
+		String shutterSpeed = imageMetaDataContextSearchParameters.getShutterSpeed();
 		if(shutterSpeed != null) {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByShutterSpeed(shutterSpeed));
 		}
@@ -139,7 +137,7 @@ public class ImageMetaDataContextUtil {
 		if (imageMetaDataContextSearchParameters.getImageSize() != null) {
 			containSearchParameter = true;
 		}
-		if (imageMetaDataContextSearchParameters.getIso() > -1) {
+		if (imageMetaDataContextSearchParameters.getIso() != null) {
 			containSearchParameter = true;
 		}
 		if (imageMetaDataContextSearchParameters.getRatings() != null) {

@@ -33,4 +33,8 @@ public class C {
 	public final static String JAVAPEG_IMAGE_META_NAME = "javapeg-image-meta.xml";
 	
 	public final static String IMAGE_META_DATA_DATA_BASE_VERSION = "1";
+	
+	public static final String META_DATA_PARAMETER_VALUES_DELIMITER = " || ";
+	
+	public final static String META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP = "\\s\\|\\|\\s";
 }

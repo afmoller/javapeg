@@ -2,6 +2,7 @@ package moller.javapeg.program;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,15 +96,16 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchParameters;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
-import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
+import moller.javapeg.program.gui.MetaDataValue;
 import moller.javapeg.program.gui.MetaDataPanel;
-import moller.javapeg.program.gui.MetaDataValueSelector;
 import moller.javapeg.program.gui.MetaDataValueSelectorComplex;
+import moller.javapeg.program.gui.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
@@ -135,8 +138,6 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
-import moller.util.datatype.ShutterSpeed;
-import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -227,10 +228,16 @@ public class MainGUI extends JFrame {
 	private JSplitPane previewAndCommentSplitPane;
 	private JSplitPane previewCommentCategoriesRatingSplitpane;
 	
-	private MetaDataValueSelector cameraModel;
-	private MetaDataValueSelector imageSize;
-	private MetaDataValueSelector iso;
-	private MetaDataValueSelector shutterSpeed;
+//	private MetaDataValueSelector cameraModel;
+//	private MetaDataValueSelector imageSize;
+//	private MetaDataValueSelector iso;
+//	private MetaDataValueSelector shutterSpeed;
+	
+	MetaDataValue imagesSizeMetaDataValue;
+	MetaDataValue isoMetaDataValue;
+	MetaDataValue shutterSpeedMetaDataValue;
+	MetaDataValue apertureValueMetaDataValue;
+	MetaDataValue cameraModelMetaDataValue;
 	
 	private JCheckBox[] ratingCheckBoxes;
 	private JTextArea commentTextArea;
@@ -981,15 +988,12 @@ public class MainGUI extends JFrame {
 	
 	private JPanel createImageMeteDataPanel() {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 		
 		GBHelper posBackgroundPanel = new GBHelper();
 		
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
-		
-//		TODO: fix hard coded string
-		cameraModel = new MetaDataValueSelector("CAMERA MODEL", false);
-		cameraModel.setStringValues(imdc.getCameraModels());
 		
 //		TODO: fix hard coded string
 		MetaDataValueSelectorComplex date = new MetaDataValueSelectorComplex("YEAR", "MONTH", "DAY", true, "");
@@ -1005,20 +1009,23 @@ public class MainGUI extends JFrame {
 		time.setThirdValues(time.initiateContinuousSet(0, 59));
 		
 //		TODO: fix hard coded string
-		imageSize = new MetaDataValueSelector("IMAGE SIZE", true);
-		imageSize.setImageSizeValues(imdc.getImageSizeValues());
+		JLabel imageSizeLabel = new JLabel("IMAGE SIZE");
+//		TODO: fix hard coded string
+		JLabel isoLabel = new JLabel("ISO");
+//		TODO: fix hard coded string
+		JLabel cameraModelLabel = new JLabel("CAMERA MODEL");
+//		TODO: fix hard coded string
+		JLabel shutterSpeedLabel = new JLabel("SHUTTER SPEED");
+//		TODO: fix hard coded string
+		JLabel apertureValueLabel = new JLabel("APERTURE VALUE");
 		
-//		TODO: fix hard coded string
-		iso = new MetaDataValueSelector("ISO", true);
-		iso.setIntegerValues(imdc.getIsoValues());
-				
-//		TODO: fix hard coded string
-		shutterSpeed = new MetaDataValueSelector("SHUTTER SPEED", true);
-		shutterSpeed.setShutterSpeedValues(imdc.getShutterSpeedValues());
+		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 		
-//		TODO: fix hard coded string
-		MetaDataValueSelector aperture = new MetaDataValueSelector("APERTURE VALUE", true);
-		aperture.setStringValues(imdc.getApertureValues());
+		imagesSizeMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.IMAGE_SIZE.toString());
+		isoMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.ISO.toString());
+		shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SHUTTER_SPEED.toString());
+		apertureValueMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.APERTURE_VALUE.toString());
+		cameraModelMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.CAMERA_MODEL.toString());
 		
 		backgroundPanel.add(date.getMainPanel(), posBackgroundPanel.nextRow());
 		if (date.hasOperators()) {
@@ -1030,32 +1037,51 @@ public class MainGUI extends JFrame {
 			backgroundPanel.add(time.getOperatorsPanel(), posBackgroundPanel.nextCol());	
 		}
 		
-		backgroundPanel.add(imageSize.getMainPanel(), posBackgroundPanel.nextRow());
-		if (imageSize.hasOperators()) {
-			backgroundPanel.add(imageSize.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(iso.getMainPanel(), posBackgroundPanel.nextRow());
-		if (iso.hasOperators()) {
-			backgroundPanel.add(iso.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(shutterSpeed.getMainPanel(), posBackgroundPanel.nextRow());
-		if (shutterSpeed.hasOperators()) {
-			backgroundPanel.add(shutterSpeed.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(aperture.getMainPanel(), posBackgroundPanel.nextRow());
-		if (aperture.hasOperators()) {
-			backgroundPanel.add(aperture.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(cameraModel.getMainPanel(), posBackgroundPanel.nextRow());
-		if (cameraModel.hasOperators()) {
-			backgroundPanel.add(cameraModel.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
+		backgroundPanel.add(imageSizeLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(imagesSizeMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(isoLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(isoMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(shutterSpeedLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(shutterSpeedMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(apertureValueLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(apertureValueMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(cameraModelLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(cameraModelMetaDataValue, posBackgroundPanel.nextRow());
 		
 		return backgroundPanel;
+	}
+	
+	private class MetaDataTextfieldListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			MetaDataValueSelectionDialog mdvsd = null;
+			
+			ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+			String value = ((JTextField)e.getSource()).getText();
+	
+			MetaDataValueFieldName mdtf = MetaDataValueFieldName.valueOf(((Component)e.getSource()).getName());
+			
+			switch (mdtf) {
+			case APERTURE_VALUE:
+				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
+				break;
+			case CAMERA_MODEL:
+				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
+				break;
+			case IMAGE_SIZE:
+				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getImageSizeValues()), value, e.getLocationOnScreen());
+				break;
+			case ISO:
+				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
+				break;
+			case SHUTTER_SPEED:
+				mdvsd = new MetaDataValueSelectionDialog(mdtf.toString(), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
+				break;
+			}
+			mdvsd.collectSelectedValues();
+			
+			((JTextField)e.getSource()).setText(mdvsd.getResult());
+		}
 	}
 	
 	private JPanel createRatingCommentAndButtonPanel() {
@@ -2717,20 +2743,32 @@ public class MainGUI extends JFrame {
 		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
 		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
-		imdcsp.setCameraModel(cameraModel.getSelectedStringValue());
-		imdcsp.setComment(commentTextArea.getText());
-		if (!imageSize.getSelectedImageSizeValue().equals("")) {
-			imdcsp.setImageSize(new ImageSize(imageSize.getSelectedImageSizeValue()));
-		} else {
-			imdcsp.setImageSize(null);
-		}
-		imdcsp.setIso(iso.getSelectedIntegerValue());
-		try {
-			imdcsp.setShutterSpeed(new ShutterSpeed(shutterSpeed.getSelectedShutterSpeedValue()));
-		} catch (ShutterSpeedException e) {
-			imdcsp.setShutterSpeed(null);
-		}
+		
+//		imdcsp.setCameraModel(cameraModel.getSelectedStringValue());
+//		imdcsp.setComment(commentTextArea.getText());
+//		if (!imageSize.getSelectedImageSizeValue().equals("")) {
+//			imdcsp.setImageSize(new ImageSize(imageSize.getSelectedImageSizeValue()));
+//		} else {
+//			imdcsp.setImageSize(null);
+//		}
+//		imdcsp.setIso(iso.getSelectedIntegerValue());
+//		try {
+//			imdcsp.setShutterSpeed(new ShutterSpeed(shutterSpeed.getSelectedShutterSpeedValue()));
+//		} catch (ShutterSpeedException e) {
+//			imdcsp.setShutterSpeed(null);
+//		}
+		
+//		MetaDataValue imagesSizeMetaDataValue;
+//		MetaDataValue isoMetaDataValue;
+//		MetaDataValue shutterSpeedMetaDataValue;
+//		MetaDataValue apertureValueMetaDataValue;
+//		MetaDataValue cameraModelMetaDataValue;
+		
+		imdcsp.setImageSize(imagesSizeMetaDataValue.getValue());
+		imdcsp.setIso(isoMetaDataValue.getValue());
+		
 		imdcsp.setRating(getSelectedRatings());
+		imdcsp.setShutterSpeed(shutterSpeedMetaDataValue.getValue());
 		
 		return imdcsp;
 	}
