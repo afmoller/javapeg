@@ -1,10 +1,4 @@
 package moller.util.string;
-/**
- * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         : 2009-10-15 by Fredrik Möller
- *                        : 2009-12-28 by Fredrik Möller
- *                        : 2010-01-10 by Fredrik Möller
- */
 
 import java.text.DecimalFormat;
 
@@ -91,6 +85,19 @@ public class StringUtil {
 			 return false;
 		}
 	}
+
+	/**
+	 * This method removes the first character in a String.
+	 * 
+	 * @param s contains the string in which the first character will be 
+	 *        removed.
+	 *        
+	 * @return the string contained in the parameter s except for the first 
+	 *         character.
+	 */
+	public static String removeFirstCharacter(String s) {
+		return s.substring(1);
+	}
 	
 	/**
 	 * This method removes the last character in a String.
@@ -103,5 +110,32 @@ public class StringUtil {
 	 */
 	public static String removeLastCharacter(String s) {
 		return s.substring(0, s.length() - 1);
+	}
+	
+	
+	/**
+	 * This method returns the first character in a String.
+	 * 
+	 * @param s contains the string in which the first character will be 
+	 *        returned.
+	 *        
+	 * @return the first character in the string contained in the parameter
+	 *         s.
+	 */
+	public static String getFirstCharacter(String s) {
+		return s.substring(0,1);
+	}
+
+	/**
+	 * @param string
+	 * @param stringToRemove
+	 * @return
+	 */
+	public static String removeStringFromEnd(String string, String stringToRemove) {
+		if (string.endsWith(stringToRemove)) {
+			return string.substring(0,string.length() - stringToRemove.length());	
+		} else {
+			return string;
+		}
 	}
 }
