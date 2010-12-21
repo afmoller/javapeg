@@ -1,9 +1,9 @@
-package moller.util.test.unittest.datatype;
+package moller.javapeg.test.unittest;
 
 import junit.framework.Assert;
+import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.util.datatype.Rational;
-import moller.util.datatype.ShutterSpeed;
-import moller.util.datatype.ShutterSpeed.ShutterSpeedException;
 
 import org.junit.Test;
 

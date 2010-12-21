@@ -15,7 +15,7 @@ import java.util.TreeSet;
 
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.util.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ShutterSpeed;
 
 
 public class ImageMetaDataContext {
