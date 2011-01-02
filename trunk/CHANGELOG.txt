@@ -10,6 +10,14 @@
  
  2.5 (2010-xx-xx)
  
+ + It is possible to have the images automatically rotated in the ImageViewer.
+   The rotation is done according to the stored orientation meta data in each
+   image. If there is no such information stored in the image, the image can
+   not be rotated automatically.
+ 
+ + It is possible to rotate the images in the ImageViewer, counterwise or 
+   clockwise in steps of 90 degrees.
+ 
  + It is possible to set the detail level of the thumbnail tooltips. Three 
    levels exists: Disabled, Enabled and Extended, where Disabled; means no
    tooltips at all, Enabled; the file name of the image is shown and Extended;
@@ -18,7 +26,7 @@
  
  + Added the possibility to copy image(s) to system clipboard. It is either
    possible to copy one image to clipboard via popup menu or to copy a list of
-   images at one, by populating an image list in the VIEW IMAGES tab and click
+   images at once, by populating an image list in the VIEW IMAGES tab and click
    on the copy image list to system clipboard button. 
  
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds
