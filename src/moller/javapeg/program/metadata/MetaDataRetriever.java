@@ -4,20 +4,11 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.FieldName;
-
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
-import com.drew.metadata.Tag;
 
 // Klassdefinition
 public class MetaDataRetriever {
@@ -27,7 +18,7 @@ public class MetaDataRetriever {
 		md.setFileName(imageFile.getName());
 		md.setFileObject(imageFile);
 		
-		Map<String, String> tagAndValueMappings = parseImageFile(imageFile);
+		Map<String, String> tagAndValueMappings = MetaDataUtil.parseImageFile(imageFile);
 		
 		populateMetaData(md, tagAndValueMappings);
 		
@@ -91,45 +82,6 @@ public class MetaDataRetriever {
 				return null;
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Map<String, String> parseImageFile(File imageFile) {
-		Map<String, String> tagsMap = new HashMap<String, String>();
-		
-		try{
-			Metadata metadata = JpegMetadataReader.readMetadata(imageFile);
-			Iterator directories = metadata.getDirectoryIterator();
-
-			while (directories.hasNext()) {
-				Directory directory = (Directory)directories.next();
-				Iterator tags = directory.getTagIterator();
-
-				while (tags.hasNext()) {
-					Tag tag = (Tag)tags.next();
-					
-					if(tag.toString().indexOf("Unknown tag") == -1){
-						try {
-							tagsMap.put(tag.getTagTypeHex(), tag.getDescription());
-						} catch (MetadataException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-				if (directory.hasErrors()) {
-					Iterator errors = directory.getErrors();
-					while (errors.hasNext()) {
-//						TODO: Add logging
-						System.out.println("ERROR: " + errors.next());
-					}
-				}
-			}
-		} catch (JpegProcessingException jpe) {
-			System.err.println("error 1a");
-			jpe.printStackTrace();
-		}
-		return tagsMap;
 	}
 
 	private static String removeNonIntegerCharacters(String stringValue) {
