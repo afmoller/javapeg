@@ -52,6 +52,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Screen;
 import moller.util.gui.Update;
+import moller.util.image.ImageUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 
@@ -79,6 +80,8 @@ public class ImageViewer extends JFrame {
 	private JButton previousJButton;
 	private JButton nextJButton;
 	private JButton adjustToWindowSizeJButton;
+	private JButton rotateLeftButton;
+	private JButton rotateRightButton;
 	
 	private JButton maximizeButton;
 	private JButton minimizeButton;
@@ -94,6 +97,7 @@ public class ImageViewer extends JFrame {
 	private MetaDataPanel metaDataPanel;
 	
 	private JToggleButton automaticAdjustToWindowSizeJToggleButton;
+	private JToggleButton automaticRotateToggleButton;
 	private File thePicture;
 
 	private String ICONFILEPATH = "resources/images/imageviewer/";
@@ -102,6 +106,8 @@ public class ImageViewer extends JFrame {
 	
 	private int imageToViewListIndex;
 	private int imagesToViewListSize;
+	
+	private CustomKeyEventDispatcher customKeyEventDispatcher;
 		
 	public ImageViewer(List<File> imagesToView) {
 		
@@ -146,7 +152,8 @@ public class ImageViewer extends JFrame {
 		}
 		
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-	    manager.addKeyEventDispatcher(new CustomKeyEventDispatcher());
+		customKeyEventDispatcher = new CustomKeyEventDispatcher();
+		manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
 		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Open16.gif");
 				
@@ -276,15 +283,17 @@ public class ImageViewer extends JFrame {
 	}
 	
 	// Create ToolBar
-	public void createToolBar()
-	{
+	public void createToolBar()	{
 		toolBar = new JToolBar();
 		toolBar.setRollover(true);
 		
 		previousJButton = new JButton();
 		nextJButton = new JButton();
 		automaticAdjustToWindowSizeJToggleButton = new JToggleButton();
+		automaticRotateToggleButton = new JToggleButton();
 		adjustToWindowSizeJButton = new JButton();
+		rotateLeftButton = new JButton();
+		rotateRightButton = new JButton();
 		
 		InputStream imageStream = null;
 		
@@ -292,6 +301,9 @@ public class ImageViewer extends JFrame {
 		ImageIcon nextImageIcon = new ImageIcon();
 		ImageIcon automaticAdjustToWindowSizeImageIcon = new ImageIcon();
 		ImageIcon adjustToWindowSizeImageIcon = new ImageIcon();
+		ImageIcon rotateLeftImageIcon = new ImageIcon();
+		ImageIcon rotateRightImageIcon = new ImageIcon();
+		ImageIcon automaticRotateImageIcon = new ImageIcon();
 				
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Back16.gif");
@@ -315,6 +327,31 @@ public class ImageViewer extends JFrame {
 			adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
 			adjustToWindowSizeJButton.setToolTipText(lang.get("imageviewer.button.adjustToWindowSize.toolTip"));
 			adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateLeft16.gif");
+			rotateLeftImageIcon.setImage(ImageIO.read(imageStream));
+			rotateLeftButton.setIcon(rotateLeftImageIcon);
+//			TODO: Fix hard coded string
+			rotateLeftButton.setToolTipText("Rotate image left");
+//			rotateLeftButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+			
+			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateRight16.gif");
+			rotateRightImageIcon.setImage(ImageIO.read(imageStream));
+			rotateRightButton.setIcon(rotateRightImageIcon);
+//		TODO: Fix hard coded string
+			rotateRightButton.setToolTipText("Rotate image right");
+//			rotateRightButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+		
+//			TODO: Fix other icon image
+			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateAutomatic16.gif");
+			automaticRotateImageIcon.setImage(ImageIO.read(imageStream));
+			automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
+//		TODO: Fix hard coded string
+			automaticRotateToggleButton.setToolTipText("Automatically rotate image");
+//			automaticRotateToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+		
+			
+		
 		} catch (IOException e) {
 			logger.logERROR("Could not load image. See Stack Trace below for details");
 			logger.logERROR(e);
@@ -325,6 +362,10 @@ public class ImageViewer extends JFrame {
 		toolBar.addSeparator();
 		toolBar.add(automaticAdjustToWindowSizeJToggleButton);
 		toolBar.add(adjustToWindowSizeJButton);
+		toolBar.addSeparator();
+		toolBar.add(rotateLeftButton);
+		toolBar.add(rotateRightButton);
+		toolBar.add(automaticRotateToggleButton);
 
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 	}
@@ -361,6 +402,9 @@ public class ImageViewer extends JFrame {
 		popupMenuAdjustToWindowSize.addActionListener(new RightClickMenuListenerAdjustToWindowSize());
 		maximizeButton.addActionListener(new OverviewMaximizeButton());
 		minimizeButton.addActionListener(new OverviewMinimizeButton());
+		rotateLeftButton.addActionListener(new ToolBarButtonRotateLeft());
+		rotateRightButton.addActionListener(new ToolBarButtonRotateRight());
+		automaticRotateToggleButton.addActionListener(new ToolBarButtonAutomaticRotate());
 	}
 	
 	private void saveSettings() {
@@ -372,6 +416,11 @@ public class ImageViewer extends JFrame {
 		config.setIntProperty("imageViewerGUI.splitpane.width.image-metadata", imageMetaDataSplitPane.getDividerSize());	
 	}
 	
+	private void removeCustomKeyEventDispatcher() {
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		manager.removeKeyEventDispatcher(customKeyEventDispatcher);
+	}
+	
 	private void setStatusMessages (String imagePath, long fileSize,  int imageWidht, int imageHeight) {
 		statuspanel.setStatusMessage(" " + imagePath, lang.get("imageviewer.statusbar.pathToPicture"), 0);
 		statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.sizeLabel") + " " + StringUtil.formatBytes(fileSize, "0.00") + " ", lang.get("imageviewer.statusbar.sizeLabelImage") + " byte", 1);
@@ -381,6 +430,7 @@ public class ImageViewer extends JFrame {
 		
 	private void disposeFrame() {
 		this.saveSettings();
+		this.removeCustomKeyEventDispatcher();
 		this.setVisible(false);
 		this.dispose();
 		ApplicationContext.getInstance().setImageViewerDisplayed(false);
@@ -390,7 +440,8 @@ public class ImageViewer extends JFrame {
 		
 		logger.logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
 		logger.logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
-				
+			
+		// Load image from disk
 		Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
 			
 		while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
@@ -399,11 +450,24 @@ public class ImageViewer extends JFrame {
 		    } catch(InterruptedException ie) {
 		    }
 		}
+		
+		thePicture = new File(imagePath);
+		
+		
+		// Rotate image if necessary and automatic rotation is selected.
+		if(automaticRotateToggleButton.isSelected()) {
+			img = rotateAccordingToExif(thePicture, img);
+		}
 			
+		
 		int imageWidth  = img.getWidth(null);
 		int imageHeight = img.getHeight(null);
 		
-		// Om knappen justera storlek automatiskt är intryckt
+		setStatusMessages(imagePath, thePicture.length(), imageWidth, imageHeight);
+		
+		metaDataPanel.setMetaData(thePicture);	
+		
+		// Resize the image if necessary and automatic resizing is selected
 		if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {	
 			Rectangle visibleImageBackgroundRectangle = imageBackground.getVisibleRect();
 
@@ -415,6 +479,7 @@ public class ImageViewer extends JFrame {
 			}
 		}
 		
+		// Display the loaded and possibly rotated and resized image.
 		ImageIcon icon = new ImageIcon();
 		icon.setImage(img);
 		
@@ -424,12 +489,47 @@ public class ImageViewer extends JFrame {
 		imageBackground.removeAll();
 		imageBackground.updateUI();
 		imageBackground.add(picture, BorderLayout.CENTER);
-		
-		File imageFile = new File(imagePath);
-		
-		setStatusMessages(imagePath, imageFile.length(), imageWidth, imageHeight);
-		
-		metaDataPanel.setMetaData(imageFile);	
+	}
+	
+	/**
+	 * According to the Exif Version 2.2 standard:
+	 * 
+	 * 1 = The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
+     * 2 = The 0th row is at the visual top of the image, and the 0th column is the visual right-hand side.
+     * 3 = The 0th row is at the visual bottom of the image, and the 0th column is the visual right-hand side.
+     * 4 = The 0th row is at the visual bottom of the image, and the 0th column is the visual left-hand side.
+     * 5 = The 0th row is the visual left-hand side of the image, and the 0th column is the visual top.
+     * 6 = The 0th row is the visual right-hand side of the image, and the 0th column is the visual top.
+     * 7 = The 0th row is the visual right-hand side of the image, and the 0th column is the visual bottom.
+     * 8 = The 0th row is the visual left-hand side of the image, and the 0th column is the visual bottom.
+     * Other = reserved
+     * 
+	 * @param imageFile
+	 * @param img
+	 * @return
+	 */
+	private Image rotateAccordingToExif(File imageFile, Image img) {
+		switch (MetaDataUtil.getOrientationTag(imageFile)) {
+		case 1:
+			// Do nothing. Image already rotated correctly.
+			return img;
+		case 2:
+			return img;
+		case 3:
+			return rotateImage(img, 180);
+		case 4:
+			return img;
+		case 5:
+			return img;
+		case 6:
+			return rotateImage(img, 90);
+		case 7:
+			return img;
+		case 8:
+			return rotateImage(img, -90);
+		default:
+			return img;
+		}
 	}
 	
 	private void loadAndViewPreviousImage() {
@@ -537,6 +637,59 @@ public class ImageViewer extends JFrame {
 	private class ToolBarButtonNext implements ActionListener {
 		public void actionPerformed(ActionEvent e) {				
 			loadAndViewNextImage();
+		}
+	}
+	
+	private Image rotateImage(Image image, double angle) {
+		return ImageUtil.rotateImage(image, angle);
+	}
+	
+	private class ToolBarButtonRotateLeft implements ActionListener {
+		public void actionPerformed(ActionEvent e) {	
+			ImageIcon icon = (ImageIcon)picture.getIcon();
+			
+			icon.setImage(rotateImage(icon.getImage(), -90));
+			
+			picture.setIcon(null);
+			picture.setIcon(icon);
+			
+			imageBackground.removeAll();
+			imageBackground.updateUI();
+			imageBackground.add(picture, BorderLayout.CENTER);
+		}
+	}
+	
+	private class ToolBarButtonRotateRight implements ActionListener {
+		public void actionPerformed(ActionEvent e) {				
+			ImageIcon icon = (ImageIcon)picture.getIcon();
+			
+			icon.setImage(rotateImage(icon.getImage(), 90));
+			
+			picture.setIcon(null);
+			picture.setIcon(icon);
+			
+			imageBackground.removeAll();
+			imageBackground.updateUI();
+			imageBackground.add(picture, BorderLayout.CENTER);
+		}
+	}
+	
+	private class ToolBarButtonAutomaticRotate implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(automaticRotateToggleButton.isSelected()) {
+				ImageIcon icon = (ImageIcon)picture.getIcon();
+				
+				Image img = rotateAccordingToExif(thePicture, icon.getImage());
+				
+				icon.setImage(img);
+				
+				picture.setIcon(null);
+				picture.setIcon(icon);
+				
+				imageBackground.removeAll();
+				imageBackground.updateUI();
+				imageBackground.add(picture, BorderLayout.CENTER);
+			}
 		}
 	}
 	
