@@ -11,7 +11,7 @@ import org.junit.Test;
 public class TestDirectoryUtil {
 
 	private static final String FS = File.separator;
-	private static final String DELETE = FS + "src" + FS + "moller" + FS + "util" + FS + "test"+ FS + "unittest" + FS + "io" + FS + "input" + FS + "delete";
+//	private static final String DELETE = FS + "src" + FS + "moller" + FS + "util" + FS + "test"+ FS + "unittest" + FS + "io" + FS + "input" + FS + "delete";
 	private static final String SIZE   = FS + "src" + FS + "moller" + FS + "util" + FS + "test"+ FS + "unittest" + FS + "io" + FS + "input" + FS + "size";
 	private static final String PATHLENGTH   = FS + "src" + FS + "moller" + FS + "util" + FS + "test"+ FS + "unittest" + FS + "io" + FS + "input" + FS + "pathlength";
 	
