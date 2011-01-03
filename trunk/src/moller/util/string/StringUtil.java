@@ -138,4 +138,64 @@ public class StringUtil {
 			return string;
 		}
 	}
+	
+	/**
+	 * @param stringValue
+	 * @return
+	 */
+	public static String removeAnyTrailingNonIntegerCharacters(String stringValue) {
+		stringValue = stringValue.trim();
+		
+		String subString = "";
+		
+		int index = -1;
+		
+		if (stringValue.length() > 0) {
+			for (int i = stringValue.length(); i >= 0 ; i--) {
+				subString = stringValue.substring(i - 1, i);
+				try {
+					Integer.parseInt(subString);
+					index = i;
+					break;
+				} catch (Exception e) {
+				}
+			}	
+		}
+		
+		if (index > -1) {
+			return stringValue.substring(0, index);	
+		} else {
+			return stringValue;
+		}
+	}
+		
+	/**
+	 * @param stringValue
+	 * @return
+	 */
+	public static String removeAnyPreceedingNonIntegerCharacters(String stringValue) {
+		stringValue = stringValue.trim();
+		
+		String subString = "";
+		
+		int index = -1;
+		
+		if (stringValue.length() > 0) {
+			for (int i = 0; i < stringValue.length(); i++) {
+				subString = stringValue.substring(i, i + 1);
+				try {
+					Integer.parseInt(subString);
+					index = i;
+					break;
+				} catch (Exception e) {
+				}
+			}	
+		}
+		
+		if (index > -1) {
+			return stringValue.substring(index);	
+		} else {
+			return stringValue;
+		}
+	}
 }
