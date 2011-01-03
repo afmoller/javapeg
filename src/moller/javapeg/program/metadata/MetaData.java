@@ -16,7 +16,7 @@ public class MetaData {
 	private int exifISOValue;
 	private int exifPictureWidth;
 	private int exifPictureHeight;
-	private String exifApertureValue;
+	private double exifApertureValue;
 	private int thumbNailOffset;
 	private int thumbNailLength;
 	private File fileObject;
@@ -30,7 +30,7 @@ public class MetaData {
 		exifISOValue = -1;
 		exifPictureWidth = -1;
 		exifPictureHeight = -1;
-		exifApertureValue = null;
+		exifApertureValue = -1;
 		thumbNailOffset = -1;
 		thumbNailLength = -1;
 		fileObject = null;
@@ -83,7 +83,7 @@ public class MetaData {
 		return exifPictureHeight;
 	}
 
-	public String getExifApertureValue() {
+	public double getExifApertureValue() {
 		return exifApertureValue;
 	}
 
@@ -128,7 +128,7 @@ public class MetaData {
 		this.exifPictureHeight = exifPictureHeight;
 	}
 
-	public void setExifApertureValue(String exifApertureValue) {
+	public void setExifApertureValue(double exifApertureValue) {
 		this.exifApertureValue = exifApertureValue;
 	}
 

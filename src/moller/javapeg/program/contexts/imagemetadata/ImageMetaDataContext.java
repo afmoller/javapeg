@@ -44,7 +44,7 @@ public class ImageMetaDataContext {
 	private Map<Integer, Set<Integer>> isoValues;
 	private Map<String, Set<Integer>> imageSizeValues;
 	private Map<String, Set<Integer>> shutterSpeedValues;
-	private Map<String, Set<Integer>> apertureValues;
+	private Map<Double, Set<Integer>> apertureValues;
 	
 	private List<Set<Integer>> ratings; 
 	private Map<String, Set<Integer>> categories;
@@ -71,7 +71,7 @@ public class ImageMetaDataContext {
 		isoValues = new HashMap<Integer, Set<Integer>>();
 		imageSizeValues = new HashMap<String, Set<Integer>>();
 		shutterSpeedValues = new HashMap<String, Set<Integer>>();
-		apertureValues = new HashMap<String, Set<Integer>>();
+		apertureValues = new HashMap<Double, Set<Integer>>();
 		
 		ratings = new ArrayList<Set<Integer>>();
 		
@@ -184,11 +184,11 @@ public class ImageMetaDataContext {
 		imageSizeValues.get(imageSize.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
-	public void addAperture(String aperture, String imagePath) {
-		if (!apertureValues.containsKey(aperture)) {
-			apertureValues.put(aperture, new HashSet<Integer>());
+	public void addAperture(double apertureValue, String imagePath) {
+		if (!apertureValues.containsKey(apertureValue)) {
+			apertureValues.put(apertureValue, new HashSet<Integer>());
 		}
-		apertureValues.get(aperture).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
+		apertureValues.get(apertureValue).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addRating(int rating, String imagePath) {
@@ -229,6 +229,10 @@ public class ImageMetaDataContext {
 		return new TreeSet<Integer>(isoValues.keySet());
 	}
 	
+	public Set<Double> getApertureValues() {
+		return new TreeSet<Double>(apertureValues.keySet());
+	}
+	
 	public Set<ShutterSpeed> getShutterSpeedValues() {
 		Set<ShutterSpeed> shutterSpeedObjects = new TreeSet<ShutterSpeed>();
 		
@@ -245,10 +249,6 @@ public class ImageMetaDataContext {
 			imageSizeObjects.add(imageSizeStringImageSizeMappings.get(imageSizeValue));
 		}
 		return imageSizeObjects;
-	}
-	
-	public Set<String> getApertureValues() {
-		return new TreeSet<String>(apertureValues.keySet());
 	}
 	
 	public Set<File> findImagesByComment(String commentToSearchFor) {
@@ -279,6 +279,23 @@ public class ImageMetaDataContext {
 				populateImagePathsSet(indexForImagePaths, imagePaths);
 			}	
 		}
+		return imagePaths;
+	}
+	
+	public Set<File> findImagesByApertureValue(String apertureValue) {
+		Set<Double> apertureValueValuesKeys = new TreeSet<Double>(apertureValues.keySet());
+		Iterator<Double> iterator = apertureValueValuesKeys.iterator();
+		
+		List<Double> apertureValueValuesToGet = new ArrayList<Double>(); 
+			
+		FindBy.apertureValue(apertureValue, iterator, apertureValueValuesToGet);
+				
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (Double apertureValueValue : apertureValueValuesToGet) {
+			Set<Integer> indexForImagePaths = apertureValues.get(apertureValueValue);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
 		return imagePaths;
 	}
 	

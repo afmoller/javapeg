@@ -99,7 +99,7 @@ public class ImageMetaDataDataBaseHandler {
 				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
 				XMLUtil.writeElement("md5", MD5.calculate(image), w);
 				XMLUtil.writeElementStart("exif-meta-data", w);
-				XMLUtil.writeElement("aperture-value", ciemd.getApertureValue(), w);
+				XMLUtil.writeElement("aperture-value", Double.toString(ciemd.getApertureValue()), w);
 				XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
 				XMLUtil.writeElement("date"          , ciemd.getDateAsString()         , w);
 				XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
@@ -246,7 +246,7 @@ public class ImageMetaDataDataBaseHandler {
 			String nodeValue = exifMetaData.item(index).getTextContent();
 			
 			if("aperture-value".equals(nodeName)) {
-				imageExifMetaData.setApertureValue(nodeValue);
+				imageExifMetaData.setApertureValue(Double.parseDouble(nodeValue));
 			} else if("camera-model".equals(nodeName)) {
 				imageExifMetaData.setCameraModel(nodeValue);
 			} else if("date".equals(nodeName)) {

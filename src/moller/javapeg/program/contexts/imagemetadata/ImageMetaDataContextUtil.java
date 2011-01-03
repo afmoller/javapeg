@@ -28,6 +28,11 @@ public class ImageMetaDataContextUtil {
 				
 		List<Set<File>> searchResults = new ArrayList<Set<File>>(); 
 		
+		String apertureValue = imageMetaDataContextSearchParameters.getApertureValue();
+		if(apertureValue != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByApertureValue(apertureValue));
+		}
+		
 		String cameraModel = imageMetaDataContextSearchParameters.getCameraModel();
 		if(cameraModel != null) {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCameraModel(cameraModel));
@@ -125,6 +130,9 @@ public class ImageMetaDataContextUtil {
 	private static boolean containSearchParameters(ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters) {
 		boolean containSearchParameter = false;
 		
+		if (imageMetaDataContextSearchParameters.getApertureValue() != null) {
+			containSearchParameter = true;
+		}
 		if (imageMetaDataContextSearchParameters.getCameraModel() != null) {
 			containSearchParameter = true;
 		}

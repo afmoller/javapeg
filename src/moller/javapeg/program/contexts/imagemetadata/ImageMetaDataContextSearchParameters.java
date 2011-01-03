@@ -4,6 +4,7 @@ import moller.javapeg.program.categories.Categories;
 
 public class ImageMetaDataContextSearchParameters {
 	
+	private String apertureValue;
 	private String cameraModel;
 	private String comment;
 	private Categories categories;
@@ -22,6 +23,7 @@ public class ImageMetaDataContextSearchParameters {
 	
 	public ImageMetaDataContextSearchParameters() {
 		super();
+		this.apertureValue = null;
 		this.cameraModel = null;
 		this.comment = null;
 		this.categories = null;
@@ -34,6 +36,10 @@ public class ImageMetaDataContextSearchParameters {
 	
 	public boolean isAndCategoriesSearch() {
 		return andCategoriesSearch;
+	}
+	
+	public String getApertureValue() {
+		return apertureValue;
 	}
 
 	public String getCameraModel() {
@@ -67,6 +73,12 @@ public class ImageMetaDataContextSearchParameters {
 	public void setAndCategoriesSearch(boolean andCategoriesSearch) {
 		this.andCategoriesSearch = andCategoriesSearch;
 	}
+	
+	public void setApertureValue(String apertureValue) {
+		if (!apertureValue.equals("")) {
+			this.apertureValue = apertureValue;	
+		}
+	}	
 
 	public void setCameraModel(String cameraModel) {
 		if (!cameraModel.equals("")) {
@@ -106,5 +118,7 @@ public class ImageMetaDataContextSearchParameters {
 		if (!shutterSpeed.equals("")) {
 			this.shutterSpeed  = shutterSpeed;
 		}
-	}	
+	}
+
+	
 }

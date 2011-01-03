@@ -2746,8 +2746,7 @@ public class MainGUI extends JFrame {
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
 		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
 		
-//		MetaDataValue apertureValueMetaDataValue;
-		
+		imdcsp.setApertureValue(apertureValueMetaDataValue.getValue());
 		imdcsp.setCameraModel(cameraModelMetaDataValue.getValue());
 		imdcsp.setComment(commentTextArea.getText());
 		imdcsp.setImageSize(imagesSizeMetaDataValue.getValue());
