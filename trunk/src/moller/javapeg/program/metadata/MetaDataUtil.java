@@ -38,7 +38,7 @@ public class MetaDataUtil {
 	           createTableRow(lang.get("variable.isoValue"), MetaDataUtil.hasValue(md.getExifISOValue()) ? Integer.toString(md.getExifISOValue()) : noValue) +
 	           createTableRow(lang.get("variable.pictureWidth"), MetaDataUtil.hasValue(md.getExifPictureWidth()) ? Integer.toString(md.getExifPictureWidth()) : noValue) +
 	           createTableRow(lang.get("variable.pictureHeight"), MetaDataUtil.hasValue(md.getExifPictureHeight()) ? Integer.toString(md.getExifPictureHeight()) : noValue) +
-	           createTableRow(lang.get("variable.apertureValue"), MetaDataUtil.hasValue(md.getExifApertureValue()) ? md.getExifApertureValue() : noValue) +
+	           createTableRow(lang.get("variable.apertureValue"), MetaDataUtil.hasValue(md.getExifApertureValue()) ? Double.toString(md.getExifApertureValue()) : noValue) +
 	         "</table>" +
 		   "</html>";
 		} else {

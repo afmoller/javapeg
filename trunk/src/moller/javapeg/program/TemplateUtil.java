@@ -101,11 +101,14 @@ public class TemplateUtil {
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureHeightVariable") + "%", pictureHeightString);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.apertureValueVariable") + "%") > -1){
-			String apertureValue = theMetaData.getExifApertureValue();
+			String apertureString = "";
+			double apertureValue = theMetaData.getExifApertureValue();
 			if (!MetaDataUtil.hasValue(apertureValue)) {
-				apertureValue = "no value";
-			} 
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", apertureValue);
+				apertureString = "no value";
+			} else {
+				apertureString = Double.toString(apertureValue);
+			}
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", apertureString);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.dateOftodayVariable") + "%") > -1){
 			Calendar cal = new GregorianCalendar();

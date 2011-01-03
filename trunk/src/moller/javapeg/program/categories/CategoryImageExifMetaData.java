@@ -10,7 +10,7 @@ import moller.javapeg.program.metadata.MetaDataRetriever;
 
 public class CategoryImageExifMetaData {
     
-    private String apertureValue;
+    private double apertureValue;
     private String cameraModel;
     private Date date;
     private int isoValue;
@@ -20,7 +20,7 @@ public class CategoryImageExifMetaData {
     private Date time;
     
     public CategoryImageExifMetaData() {
-        apertureValue = "";
+        apertureValue = -1;;
         cameraModel = "";
         date = null;
         isoValue = -1;
@@ -43,7 +43,7 @@ public class CategoryImageExifMetaData {
         time          = md.getExifTime();
     }
     
-    public String getApertureValue() {
+    public double getApertureValue() {
         return apertureValue;
     }
     public String getCameraModel() {
@@ -67,7 +67,7 @@ public class CategoryImageExifMetaData {
     public Date getTime() {
         return time;
     }
-    public void setApertureValue(String apertureValue) {
+    public void setApertureValue(double apertureValue) {
         this.apertureValue = apertureValue;
     }
     public void setCameraModel(String cameraModel) {

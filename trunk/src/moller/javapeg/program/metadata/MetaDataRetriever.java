@@ -1,6 +1,7 @@
 package moller.javapeg.program.metadata;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +10,8 @@ import java.util.Map;
 import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.FieldName;
+import moller.javapeg.program.logger.Logger;
+import moller.util.string.StringUtil;
 
 // Klassdefinition
 public class MetaDataRetriever {
@@ -42,7 +45,7 @@ public class MetaDataRetriever {
 		String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
 		String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
 		
-		metaData.setExifApertureValue(tagAndValueMappings.get(apertureValueTag));
+		metaData.setExifApertureValue(getDoubleTagValue(tagAndValueMappings, apertureValueTag));
 		metaData.setExifCameraModel(cameraModel);
 		metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
 		metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));
@@ -58,6 +61,25 @@ public class MetaDataRetriever {
 			return -1;
 		} else {
 			return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
+		}
+	}
+	
+	private static double getDoubleTagValue(Map<String, String> tagAndValueMappings, String tag) {
+		if (tagAndValueMappings.get(tag) == null) {
+			return -1;
+		} else {
+			NumberFormat fmt = NumberFormat.getInstance();
+			Number number;
+			try {
+				number = fmt.parse(StringUtil.removeAnyPreceedingNonIntegerCharacters(tagAndValueMappings.get(tag)));
+			} catch (ParseException e) {
+				Logger logger = Logger.getInstance();
+				logger.logERROR("Could not parse String: " + StringUtil.removeAnyPreceedingNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a double value");
+				logger.logERROR(e);
+				
+				return -1;
+			}
+			return number.doubleValue();
 		}
 	}
 	

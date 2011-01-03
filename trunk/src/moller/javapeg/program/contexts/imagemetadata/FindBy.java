@@ -46,6 +46,39 @@ public class FindBy {
 		}
 	}
 	
+	public static void apertureValue(String apertureValue, Iterator<Double> iterator, List<Double> apertureValueValuesToGet) {
+		
+		Operator operator = getOperator(apertureValue);
+		
+		String[] apertureValueAsStrings = getValues(apertureValue);
+		
+		switch (operator) {
+		case LESS:
+			while (iterator.hasNext()) {
+				Double doubleValue = iterator.next();
+				
+				if (doubleValue < Double.parseDouble(apertureValueAsStrings[0])) {
+					apertureValueValuesToGet.add(doubleValue);
+				}
+			}
+			break;
+		case EQUAL:
+			for (String apertureValueAsString : apertureValueAsStrings) {
+				apertureValueValuesToGet.add(Double.parseDouble(apertureValueAsString));
+			}
+			break;
+		case GREATER:
+			while (iterator.hasNext()) {
+				Double integer = iterator.next();
+				
+				if (integer > Double.parseDouble(apertureValueAsStrings[0])) {
+					apertureValueValuesToGet.add(integer);
+				}
+			}
+			break;
+		}
+	}
+	
 	public static void cameraModel(String cameraModelString, Iterator<String> iterator, List<String> cameraModelsToGet) {
 		stringType(MetaDataValueFieldName.CAMERA_MODEL, cameraModelString, iterator, cameraModelsToGet);
 	}	
