@@ -71,10 +71,10 @@ public class MetaDataRetriever {
 			NumberFormat fmt = NumberFormat.getInstance();
 			Number number;
 			try {
-				number = fmt.parse(StringUtil.removeAnyPreceedingNonIntegerCharacters(tagAndValueMappings.get(tag)));
+				number = fmt.parse(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(tagAndValueMappings.get(tag)));
 			} catch (ParseException e) {
 				Logger logger = Logger.getInstance();
-				logger.logERROR("Could not parse String: " + StringUtil.removeAnyPreceedingNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a double value");
+				logger.logERROR("Could not parse String: " + StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a double value");
 				logger.logERROR(e);
 				
 				return -1;
