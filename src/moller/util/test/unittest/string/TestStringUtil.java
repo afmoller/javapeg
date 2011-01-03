@@ -55,12 +55,12 @@ public class TestStringUtil {
 	
 	@Test
 	public void testRemoveAnyPreceedingNonIntegerCharacters() {
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters("a123").equals("123"));
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters("a 123").equals("123"));
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters("a-123").equals("123"));
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters("a- 123").equals("123"));
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters("123").equals("123"));
-		Assert.assertTrue(StringUtil.removeAnyPreceedingNonIntegerCharacters(" 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("a123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("a 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("a-123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("a- 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters(" 123").equals("123"));
 	}
 	
 	@Test
@@ -71,5 +71,27 @@ public class TestStringUtil {
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123 -a").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123 ").equals("123"));
+	}
+	
+	@Test
+	public void testRemoveAnyPreceedingAndTrailingNonIntegerCharacters() {
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a-123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a- 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(" 123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123 a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123-a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123 -a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123 ").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a123a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a 123 a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a-123-a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a- 123 -a").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123").equals("123"));
+		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(" 123 ").equals("123"));
 	}
 }

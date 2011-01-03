@@ -173,7 +173,7 @@ public class StringUtil {
 	 * @param stringValue
 	 * @return
 	 */
-	public static String removeAnyPreceedingNonIntegerCharacters(String stringValue) {
+	public static String removeAnyPrecedingNonIntegerCharacters(String stringValue) {
 		stringValue = stringValue.trim();
 		
 		String subString = "";
@@ -197,5 +197,9 @@ public class StringUtil {
 		} else {
 			return stringValue;
 		}
+	}
+	
+	public static String removeAnyPrecedingAndTrailingNonIntegerCharacters(String stringValue) {
+		return removeAnyTrailingNonIntegerCharacters(removeAnyPrecedingNonIntegerCharacters(stringValue));
 	}
 }
