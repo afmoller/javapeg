@@ -1,6 +1,7 @@
 package moller.javapeg.program.datatype;
 
 import moller.util.datatype.Rational;
+import moller.util.string.StringUtil;
 
 public class ShutterSpeed implements Comparable<ShutterSpeed> {
 
@@ -23,7 +24,7 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 	}
 	
 	public ShutterSpeed(String shutterSpeed) throws ShutterSpeedException {
-		shutterSpeed = removeAnyTrailingNonIntegerCharacters(shutterSpeed);
+		shutterSpeed = StringUtil.removeAnyTrailingNonIntegerCharacters(shutterSpeed);
 		
 		if (shutterSpeed.contains(Rational.DELIMITER)) {
 			shutterSpeed = shutterSpeed.trim();
@@ -95,32 +96,6 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 			result += (float)partsOfSecond.getNumerator() / (float)partsOfSecond.getDenominator();
 		} 
 		return result;
-	}
-	
-	private String removeAnyTrailingNonIntegerCharacters(String stringValue) {
-		stringValue = stringValue.trim();
-		
-		String subString = "";
-		
-		int index = -1;
-		
-		if (stringValue.length() > 0) {
-			for (int i = stringValue.length(); i >= 0 ; i--) {
-				subString = stringValue.substring(i - 1, i);
-				try {
-					Integer.parseInt(subString);
-					index = i;
-					break;
-				} catch (Exception e) {
-				}
-			}	
-		}
-		
-		if (index > -1) {
-			return stringValue.substring(0, index);	
-		} else {
-			return stringValue;
-		}
 	}
 	
 	public class ShutterSpeedException extends Exception {
