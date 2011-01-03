@@ -24,7 +24,7 @@ public class ShutterSpeed implements Comparable<ShutterSpeed> {
 	}
 	
 	public ShutterSpeed(String shutterSpeed) throws ShutterSpeedException {
-		shutterSpeed = StringUtil.removeAnyTrailingNonIntegerCharacters(shutterSpeed);
+		shutterSpeed = StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(shutterSpeed);
 		
 		if (shutterSpeed.contains(Rational.DELIMITER)) {
 			shutterSpeed = shutterSpeed.trim();
