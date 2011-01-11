@@ -13,37 +13,32 @@ import moller.util.string.StringUtil;
 
 public class FindBy {
 	
+	public static void year(String year, Iterator<Integer> iterator, List<Integer> yearValuesToGet) {
+		integerType(MetaDataValueFieldName.YEAR, year, iterator, yearValuesToGet);
+	}
+	
+	public static void month(String month, Iterator<Integer> iterator, List<Integer> monthValuesToGet) {
+		integerType(MetaDataValueFieldName.MONTH, month, iterator, monthValuesToGet);
+	}
+	
+	public static void day(String day, Iterator<Integer> iterator, List<Integer> dateValuesToGet) {
+		integerType(MetaDataValueFieldName.DAY, day, iterator, dateValuesToGet);
+	}
+	
+	public static void hour(String hour, Iterator<Integer> iterator, List<Integer> hourValuesToGet) {
+		integerType(MetaDataValueFieldName.HOUR, hour, iterator, hourValuesToGet);
+	}
+	
+	public static void minute(String minute, Iterator<Integer> iterator, List<Integer> minuteValuesToGet) {
+		integerType(MetaDataValueFieldName.MINUTE, minute, iterator, minuteValuesToGet);		
+	}
+
+	public static void second(String second, Iterator<Integer> iterator, List<Integer> secondValuesToGet) {
+		integerType(MetaDataValueFieldName.SECOND, second, iterator, secondValuesToGet);
+	}
+	
 	public static void iso(String iso, Iterator<Integer> iterator, List<Integer> isoValuesToGet) {
-		
-		Operator operator = getOperator(iso);
-		
-		String[] isoValuesAsStrings = getValues(iso);
-		
-		switch (operator) {
-		case LESS:
-			while (iterator.hasNext()) {
-				Integer integer = iterator.next();
-				
-				if (integer < Integer.parseInt(isoValuesAsStrings[0])) {
-					isoValuesToGet.add(integer);
-				}
-			}
-			break;
-		case EQUAL:
-			for (String isoValueAsString : isoValuesAsStrings) {
-				isoValuesToGet.add(Integer.parseInt(isoValueAsString));
-			}
-			break;
-		case GREATER:
-			while (iterator.hasNext()) {
-				Integer integer = iterator.next();
-				
-				if (integer > Integer.parseInt(isoValuesAsStrings[0])) {
-					isoValuesToGet.add(integer);
-				}
-			}
-			break;
-		}
+		integerType(MetaDataValueFieldName.ISO, iso, iterator, isoValuesToGet);
 	}
 	
 	public static void apertureValue(String apertureValue, Iterator<Double> iterator, List<Double> apertureValueValuesToGet) {
@@ -89,6 +84,57 @@ public class FindBy {
 	
 	public static void shutterSpeed(String shutterSpeedString, Iterator<String> iterator, List<String> shutterSpeedValuesToGet) {
 		stringType(MetaDataValueFieldName.SHUTTER_SPEED, shutterSpeedString, iterator, shutterSpeedValuesToGet);
+	}
+	
+	private static void integerType(MetaDataValueFieldName metaDataValueFieldName, String valueString, Iterator<Integer> iterator, List<Integer> valuesToGet) {
+		
+		Operator operator = getOperator(valueString);
+		
+		String[] valuesAsStrings = getValues(valueString);
+		
+		switch (operator) {
+		case LESS:
+			while (iterator.hasNext()) {
+				switch (metaDataValueFieldName) {
+				case YEAR:
+				case MONTH:
+				case DAY:
+				case HOUR:
+				case MINUTE:
+				case SECOND:
+				case ISO:
+					Integer integer = iterator.next();
+					
+					if (integer < Integer.parseInt(valuesAsStrings[0])) {
+						valuesToGet.add(integer);
+					}
+				}
+			}
+			break;
+		case EQUAL:
+			for (String isoValueAsString : valuesAsStrings) {
+				valuesToGet.add(Integer.parseInt(isoValueAsString));
+			}
+			break;
+		case GREATER:
+			while (iterator.hasNext()) {
+				switch (metaDataValueFieldName) {
+				case YEAR:
+				case MONTH:
+				case DAY:
+				case HOUR:
+				case MINUTE:
+				case SECOND:
+				case ISO:
+					Integer integer = iterator.next();
+
+					if (integer > Integer.parseInt(valuesAsStrings[0])) {
+						valuesToGet.add(integer);
+					}
+				}
+			}
+			break;
+		}
 	}
 	
 	private static void stringType(MetaDataValueFieldName metaDataValueFieldName, String valueString, Iterator<String> iterator, List<String> valuesToGet) {
@@ -168,5 +214,5 @@ public class FindBy {
 	
 	private static String[] getValues(String parameterString) {
 		return StringUtil.removeFirstCharacter(parameterString).split(C.META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP);
-	}	
+	}
 }

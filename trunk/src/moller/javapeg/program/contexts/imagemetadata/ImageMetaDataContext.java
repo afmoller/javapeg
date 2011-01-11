@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,7 @@ import java.util.TreeSet;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 
 
 public class ImageMetaDataContext {
@@ -215,14 +215,28 @@ public class ImageMetaDataContext {
 		return new TreeSet<String>(cameraModels.keySet());
 	}
 	
-	public Set<String> getYears() {
-		Set<Integer> orderedIntegerYears = new TreeSet<Integer>(yearValues.keySet());
-		Set<String>  orderedIntegerStrings = new LinkedHashSet<String>();
-		
-		for (Integer year : orderedIntegerYears) {
-			orderedIntegerStrings.add(Integer.toString(year));
-		}
-		return orderedIntegerStrings;
+	public Set<Integer> getYears() {
+		return new TreeSet<Integer>(yearValues.keySet());
+	}
+	
+	public Set<Integer> getMonths() {
+		return new TreeSet<Integer>(monthValues.keySet());
+	}
+	
+	public Set<Integer> getDates() {
+		return new TreeSet<Integer>(dateValues.keySet());
+	}
+	
+	public Set<Integer> getHours() {
+		return new TreeSet<Integer>(hourValues.keySet());
+	}
+	
+	public Set<Integer> getMinutes() {
+		return new TreeSet<Integer>(minuteValues.keySet());
+	}
+	
+	public Set<Integer> getSeconds() {
+		return new TreeSet<Integer>(secondValues.keySet());
 	}
 	
 	public Set<Integer> getIsoValues() {
@@ -282,6 +296,66 @@ public class ImageMetaDataContext {
 		return imagePaths;
 	}
 	
+	public Set<File> findImagesByYear(String year) {
+		return findImagesByInteger(year, yearValues, MetaDataValueFieldName.YEAR);
+	}
+
+	public Set<File> findImagesByMonth(String month) {
+		return findImagesByInteger(month, monthValues, MetaDataValueFieldName.MONTH);
+	}
+
+	public Set<File> findImagesByDay(String day) {
+		return findImagesByInteger(day, dateValues, MetaDataValueFieldName.DAY);
+	}
+	
+	public Set<File> findImagesByHour(String hour) {
+		return findImagesByInteger(hour, hourValues, MetaDataValueFieldName.HOUR);
+	}
+
+	public Set<File> findImagesByMinute(String minute) {
+		return findImagesByInteger(minute, minuteValues, MetaDataValueFieldName.MINUTE);
+	}
+
+	public Set<File> findImagesBySecond(String second) {
+		return findImagesByInteger(second, secondValues, MetaDataValueFieldName.SECOND);
+	}
+	
+	private Set<File> findImagesByInteger(String valueString, Map<Integer, Set<Integer>> values, MetaDataValueFieldName mdvfn) {
+		Set<Integer> valuesKeys = new TreeSet<Integer>(values.keySet());
+		Iterator<Integer> iterator = valuesKeys.iterator();
+		
+		List<Integer> valuesToGet = new ArrayList<Integer>(); 
+			
+		switch (mdvfn) {
+		case YEAR:
+			FindBy.year(valueString, iterator, valuesToGet);
+			break;
+		case MONTH:
+			FindBy.month(valueString, iterator, valuesToGet);
+			break;
+		case DAY:
+			FindBy.day(valueString, iterator, valuesToGet);
+			break;
+		case HOUR:
+			FindBy.hour(valueString, iterator, valuesToGet);
+			break;
+		case MINUTE:
+			FindBy.minute(valueString, iterator, valuesToGet);
+			break;
+		case SECOND:
+			FindBy.second(valueString, iterator, valuesToGet);
+			break;
+		}
+								
+		Set<File> imagePaths = new HashSet<File>();
+		
+		for (Integer value : valuesToGet) {
+			Set<Integer> indexForImagePaths = values.get(value);
+			populateImagePathsSet(indexForImagePaths, imagePaths);
+		}	
+		return imagePaths;
+	}	
+	
 	public Set<File> findImagesByApertureValue(String apertureValue) {
 		Set<Double> apertureValueValuesKeys = new TreeSet<Double>(apertureValues.keySet());
 		Iterator<Double> iterator = apertureValueValuesKeys.iterator();
@@ -313,9 +387,7 @@ public class ImageMetaDataContext {
 		for (String cameraModelString : cameraModelsToGet) {
 			Set<Integer> indexForImagePaths = cameraModels.get(cameraModelString);
 			populateImagePathsSet(indexForImagePaths, imagePaths);
-		}	
-		
-		
+		}		
 		return imagePaths;
 	}
 	
@@ -354,9 +426,7 @@ public class ImageMetaDataContext {
 		}	
 		return imagePaths;
 	}
-		
-	
-	
+			
 	public Set<File> findImagesByRating(boolean[] ratingSelection) {
 		Set<File> imagePaths = new HashSet<File>();
 		

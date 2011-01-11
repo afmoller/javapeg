@@ -110,7 +110,6 @@ import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
-import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectorComplex;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagerepository.ImageRepositoryHandler;
@@ -140,6 +139,7 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
+import moller.util.datatype.SetUtil;
 import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -229,17 +229,19 @@ public class MainGUI extends JFrame {
 	private JSplitPane mainSplitPane;
 	private JSplitPane previewAndCommentSplitPane;
 	private JSplitPane previewCommentCategoriesRatingSplitpane;
+		
+	private MetaDataValue yearMetaDataValue;
+	private MetaDataValue monthMetaDataValue;
+	private MetaDataValue dayMetaDataValue;
+	private MetaDataValue hourMetaDataValue;
+	private MetaDataValue minuteMetaDataValue;
+	private MetaDataValue secondMetaDataValue;
 	
-//	private MetaDataValueSelector cameraModel;
-//	private MetaDataValueSelector imageSize;
-//	private MetaDataValueSelector iso;
-//	private MetaDataValueSelector shutterSpeed;
-	
-	MetaDataValue imagesSizeMetaDataValue;
-	MetaDataValue isoMetaDataValue;
-	MetaDataValue shutterSpeedMetaDataValue;
-	MetaDataValue apertureValueMetaDataValue;
-	MetaDataValue cameraModelMetaDataValue;
+	private MetaDataValue imagesSizeMetaDataValue;
+	private MetaDataValue isoMetaDataValue;
+	private MetaDataValue shutterSpeedMetaDataValue;
+	private MetaDataValue apertureValueMetaDataValue;
+	private MetaDataValue cameraModelMetaDataValue;
 	
 	private JCheckBox[] ratingCheckBoxes;
 	private JTextArea commentTextArea;
@@ -923,8 +925,12 @@ public class MainGUI extends JFrame {
 		findInCategoriesLabel.setForeground(Color.GRAY);
 		
 //		TODO: fix hard coded string
-		JLabel findInMetaDataLabel = new JLabel("IMAGE META DATA");
-		findInMetaDataLabel.setForeground(Color.GRAY);
+		JLabel findInMetaDataDateAndTimeLabel = new JLabel("DATE & TIME");
+		findInMetaDataDateAndTimeLabel.setForeground(Color.GRAY);
+				
+//		TODO: fix hard coded string
+		JLabel findInMetaDataExifLabel = new JLabel("IMAGE META DATA");
+		findInMetaDataExifLabel.setForeground(Color.GRAY);
 		
 //		TODO: fix hard coded string
 		JLabel findInRatingLabel = new JLabel("RATING");
@@ -932,15 +938,19 @@ public class MainGUI extends JFrame {
 		
 		backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(findInMetaDataLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(findInMetaDataDateAndTimeLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(findInMetaDataExifLabel, posBackgroundPanel.nextCol());
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundPanel.add(findInRatingLabel, posBackgroundPanel.nextCol());
 		backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW());
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(this.createImageMeteDataPanel(), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createImageMeteDataPanelDateAndTime(), posBackgroundPanel.nextCol());
+		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createImageMeteDataPanelExif(), posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundPanel.add(this.createRatingCommentAndButtonPanel(), posBackgroundPanel.nextCol());
-		
+				
 		return backgroundPanel;
 	}
 	
@@ -988,27 +998,59 @@ public class MainGUI extends JFrame {
 	}
 	
 	
-	private JPanel createImageMeteDataPanel() {
+	private JPanel createImageMeteDataPanelDateAndTime() {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 		
 		GBHelper posBackgroundPanel = new GBHelper();
 		
-		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
-		
 //		TODO: fix hard coded string
-		MetaDataValueSelectorComplex date = new MetaDataValueSelectorComplex("YEAR", "MONTH", "DAY", true, "");
-		date.setFirstValues(imdc.getYears());
-		date.setSecondValues(date.initiateContinuousSet(1, 12));
-		date.setThirdValues(date.initiateContinuousSet(1, 31));
-		
-		
+		JLabel yearLabel = new JLabel("YEAR");
 //		TODO: fix hard coded string
-		MetaDataValueSelectorComplex time = new MetaDataValueSelectorComplex("HOUR", "MINUTE", "SECOND", true, "");
-		time.setFirstValues(time.initiateContinuousSet(0, 23));
-		time.setSecondValues(time.initiateContinuousSet(0, 59));
-		time.setThirdValues(time.initiateContinuousSet(0, 59));
+		JLabel monthLabel = new JLabel("MONTH");
+//		TODO: fix hard coded string
+		JLabel dayLabel = new JLabel("DAY");
+//		TODO: fix hard coded string
+		JLabel hourLabel = new JLabel("HOUR");
+//		TODO: fix hard coded string
+		JLabel minuteLabel = new JLabel("MINUTE");
+//		TODO: fix hard coded string		
+		JLabel secondLabel = new JLabel("SECOND");
+		
+		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
+		
+		yearMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.YEAR.toString());
+		monthMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MONTH.toString());
+		dayMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.DAY.toString());
+		hourMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.HOUR.toString());
+		minuteMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MINUTE.toString());
+		secondMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SECOND.toString());
+		
+		
+		
+		backgroundPanel.add(yearLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(yearMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(monthLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(monthMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(dayLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(dayMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(hourLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(hourMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(minuteLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(minuteMetaDataValue, posBackgroundPanel.nextRow());
+		backgroundPanel.add(secondLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(secondMetaDataValue, posBackgroundPanel.nextRow());
+		
+		return backgroundPanel;
+	}
+	
+	private JPanel createImageMeteDataPanelExif() {
+		JPanel backgroundPanel = new JPanel(new GridBagLayout());
+		
+		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+		
+		GBHelper posBackgroundPanel = new GBHelper();
 		
 //		TODO: fix hard coded string
 		JLabel imageSizeLabel = new JLabel("IMAGE SIZE");
@@ -1028,18 +1070,8 @@ public class MainGUI extends JFrame {
 		shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SHUTTER_SPEED.toString());
 		apertureValueMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.APERTURE_VALUE.toString());
 		cameraModelMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.CAMERA_MODEL.toString());
-		
-		backgroundPanel.add(date.getMainPanel(), posBackgroundPanel.nextRow());
-		if (date.hasOperators()) {
-			backgroundPanel.add(date.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(time.getMainPanel(), posBackgroundPanel.nextRow());
-		if (time.hasOperators()) {
-			backgroundPanel.add(time.getOperatorsPanel(), posBackgroundPanel.nextCol());	
-		}
-		
-		backgroundPanel.add(imageSizeLabel, posBackgroundPanel.nextRow());
+				
+		backgroundPanel.add(imageSizeLabel, posBackgroundPanel);
 		backgroundPanel.add(imagesSizeMetaDataValue, posBackgroundPanel.nextRow());
 		backgroundPanel.add(isoLabel, posBackgroundPanel.nextRow());
 		backgroundPanel.add(isoMetaDataValue, posBackgroundPanel.nextRow());
@@ -1064,6 +1096,24 @@ public class MainGUI extends JFrame {
 			MetaDataValueFieldName mdtf = MetaDataValueFieldName.valueOf(((Component)e.getSource()).getName());
 			
 			switch (mdtf) {
+			case YEAR:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getYears()), value, e.getLocationOnScreen());
+				break;
+			case MONTH:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(1, 12)), value, e.getLocationOnScreen());
+				break;
+			case DAY:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(1, 31)), value, e.getLocationOnScreen());
+				break;
+			case HOUR:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 23)), value, e.getLocationOnScreen());
+				break;
+			case MINUTE:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 59)), value, e.getLocationOnScreen());
+				break;
+			case SECOND:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 59)), value, e.getLocationOnScreen());
+				break;
 			case APERTURE_VALUE:
 				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
 				break;
@@ -1082,7 +1132,10 @@ public class MainGUI extends JFrame {
 			}
 			mdvsd.collectSelectedValues();
 			
-			((JTextField)e.getSource()).setText(mdvsd.getResult());
+			JTextField textField = (JTextField)e.getSource();
+			
+			textField.setText(mdvsd.getResult());
+			textField.setToolTipText(mdvsd.getResult());
 		}
 	}
 	
@@ -2746,6 +2799,12 @@ public class MainGUI extends JFrame {
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
 		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
 		
+		imdcsp.setYear(yearMetaDataValue.getValue());
+		imdcsp.setMonth(monthMetaDataValue.getValue());
+		imdcsp.setDay(dayMetaDataValue.getValue());
+		imdcsp.setHour(hourMetaDataValue.getValue());
+		imdcsp.setMinute(minuteMetaDataValue.getValue());
+		imdcsp.setSecond(secondMetaDataValue.getValue());
 		imdcsp.setApertureValue(apertureValueMetaDataValue.getValue());
 		imdcsp.setCameraModel(cameraModelMetaDataValue.getValue());
 		imdcsp.setComment(commentTextArea.getText());
