@@ -12,22 +12,20 @@ public class CategoryImageExifMetaData {
     
     private double apertureValue;
     private String cameraModel;
-    private Date date;
+    private Date dateTime;
     private int isoValue;
     private int pictureHeight;
     private int pictureWidth;
     private ShutterSpeed shutterSpeed;
-    private Date time;
     
     public CategoryImageExifMetaData() {
         apertureValue = -1;;
         cameraModel = "";
-        date = null;
+        dateTime = null;
         isoValue = -1;
         pictureHeight = -1;
         pictureWidth = -1;
         shutterSpeed = null;
-        time = null;
     }
     
     public CategoryImageExifMetaData(File jpegFile) {
@@ -35,12 +33,11 @@ public class CategoryImageExifMetaData {
     	
     	apertureValue = md.getExifApertureValue();
         cameraModel   = md.getExifCameraModel();
-        date          = md.getExifDate();
+        dateTime      = md.getExifDateTime();
         isoValue      = md.getExifISOValue();
         pictureHeight = md.getExifPictureHeight();
         pictureWidth  = md.getExifPictureWidth();
         shutterSpeed  = md.getExifShutterSpeed();
-        time          = md.getExifTime();
     }
     
     public double getApertureValue() {
@@ -49,8 +46,8 @@ public class CategoryImageExifMetaData {
     public String getCameraModel() {
         return cameraModel;
     }
-    public Date getDate() {
-        return date;
+    public Date getDateTime() {
+        return dateTime;
     }
     public int getIsoValue() {
         return isoValue;
@@ -64,17 +61,15 @@ public class CategoryImageExifMetaData {
     public ShutterSpeed getShutterSpeed() {
         return shutterSpeed;
     }
-    public Date getTime() {
-        return time;
-    }
+    
     public void setApertureValue(double apertureValue) {
         this.apertureValue = apertureValue;
     }
     public void setCameraModel(String cameraModel) {
         this.cameraModel = cameraModel;
     }
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
     public void setIsoValue(int isoValue) {
         this.isoValue = isoValue;
@@ -85,20 +80,13 @@ public class CategoryImageExifMetaData {
     public void setPictureWidth(int pictureWidth) {
         this.pictureWidth = pictureWidth;
     }
+    
     public void setShutterSpeed(ShutterSpeed shutterSpeed) {
         this.shutterSpeed = shutterSpeed;
     }
-    public void setTime(Date time) {
-        this.time = time;
-    }
     
-    public String getDateAsString() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
-		return sdf.format(date);
-    }
-    
-    public String getTimeAsString() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		return sdf.format(time);
+    public String getDateTimeAsString() {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		return sdf.format(dateTime);
     }
 }
