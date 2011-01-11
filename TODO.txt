@@ -4,7 +4,7 @@
 - Add possibility to search for images matching criterias defined by the tagging of images.
 - Make it possible to configure the level of warnings in the categories tree.
 - Make it possible to remove paths from the image repository paths collections.
-- Make it possilbe to configure the sort order of the source directory tree structure, alphabetical or latest modified.
+- Make it possible to configure the sort order of the source directory tree structure, alphabetical or latest modified.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
 - Fix layout of the Config Viewer GUI.
 - Update version numbers in language files
@@ -28,8 +28,6 @@ imageviewer.button.forward.toolTip                      = Next (Right Arrow)
 ====
 - Add functionality for keeping the source directory tree up to date by searching for attached or detached volumes, such as attached USB-disks and so on, and update the 
 - Add slide show functionality to Image Viewer.
-- Add rotate image functionality to Image Viewer.
-- Add automatic rotate functionality according to Exif position.
 - Add possibility to save multiple rename templates
 - Add merge functionality from several source directories. in the "rename image" mode.
 
