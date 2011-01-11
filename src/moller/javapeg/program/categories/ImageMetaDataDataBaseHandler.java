@@ -101,12 +101,11 @@ public class ImageMetaDataDataBaseHandler {
 				XMLUtil.writeElementStart("exif-meta-data", w);
 				XMLUtil.writeElement("aperture-value", Double.toString(ciemd.getApertureValue()), w);
 				XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
-				XMLUtil.writeElement("date"          , ciemd.getDateAsString()         , w);
+				XMLUtil.writeElement("date-time"     , ciemd.getDateTimeAsString()         , w);
 				XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
 				XMLUtil.writeElement("picture-height", Integer.toString(ciemd.getPictureHeight()), w);
 				XMLUtil.writeElement("picture-width" , Integer.toString(ciemd.getPictureWidth()) , w);
 				XMLUtil.writeElement("shutter-speed" , ciemd.getShutterSpeed().toString() , w);
-				XMLUtil.writeElement("time"          , ciemd.getTimeAsString()         , w);
 				XMLUtil.writeElementEnd(w);
 				XMLUtil.writeElement("comment", imddbi.getComment(), w);
 				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
@@ -225,7 +224,7 @@ public class ImageMetaDataDataBaseHandler {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 		
 		imdc.addCameraModel(imageExifMetaData.getCameraModel(), image.getAbsolutePath());
-		imdc.addDateTime(imageExifMetaData.getDate(), image.getAbsolutePath());
+		imdc.addDateTime(imageExifMetaData.getDateTime(), image.getAbsolutePath());
 		imdc.addIso(imageExifMetaData.getIsoValue(), image.getAbsolutePath());
 		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), image.getAbsolutePath());
 		imdc.addShutterSpeed(imageExifMetaData.getShutterSpeed(), image.getAbsolutePath());
@@ -241,7 +240,9 @@ public class ImageMetaDataDataBaseHandler {
 	private static CategoryImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
 		CategoryImageExifMetaData imageExifMetaData = new CategoryImageExifMetaData();
 		
-		for (int index = 0; index < 8; index++) {
+		int listLength = exifMetaData.getLength();
+		
+		for (int index = 0; index < listLength; index++) {
 			String nodeName  = exifMetaData.item(index).getNodeName();
 			String nodeValue = exifMetaData.item(index).getTextContent();
 			
@@ -249,12 +250,12 @@ public class ImageMetaDataDataBaseHandler {
 				imageExifMetaData.setApertureValue(Double.parseDouble(nodeValue));
 			} else if("camera-model".equals(nodeName)) {
 				imageExifMetaData.setCameraModel(nodeValue);
-			} else if("date".equals(nodeName)) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
+			} else if("date-time".equals(nodeName)) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 				try {
-					imageExifMetaData.setDate(sdf.parse(nodeValue));
+					imageExifMetaData.setDateTime(sdf.parse(nodeValue));
 				} catch (ParseException e) {
-					imageExifMetaData.setDate(null);
+					imageExifMetaData.setDateTime(null);
 //					TODO: Add logging about impossible to create a Date
 				}
 			} else if("iso-value".equals(nodeName)) {
@@ -270,15 +271,7 @@ public class ImageMetaDataDataBaseHandler {
 					imageExifMetaData.setShutterSpeed(null);
 //					TODO: Add logging about impossible to create a ShutterSpeed
 				}
-			} else if("time".equals(nodeName)) {
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				try {
-					imageExifMetaData.setTime(sdf.parse(nodeValue));
-				} catch (ParseException e) {
-					imageExifMetaData.setTime(null);
-//					TODO: Add logging about impossible to create a Date				
-				}
-			}
+			} 
 		}
 		return imageExifMetaData;
 	}
