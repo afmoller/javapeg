@@ -4,6 +4,12 @@ import moller.javapeg.program.categories.Categories;
 
 public class ImageMetaDataContextSearchParameters {
 	
+	private String year;
+	private String month;
+	private String day;
+	private String hour;
+	private String minute;
+	private String second;
 	private String apertureValue;
 	private String cameraModel;
 	private String comment;
@@ -23,6 +29,12 @@ public class ImageMetaDataContextSearchParameters {
 	
 	public ImageMetaDataContextSearchParameters() {
 		super();
+		this.year = null;
+		this.month = null;
+		this.day = null;
+		this.hour = null;
+		this.minute = null;
+		this.second = null;
 		this.apertureValue = null;
 		this.cameraModel = null;
 		this.comment = null;
@@ -36,6 +48,30 @@ public class ImageMetaDataContextSearchParameters {
 	
 	public boolean isAndCategoriesSearch() {
 		return andCategoriesSearch;
+	}
+	
+	public String getYear() {
+		return year;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public String getHour() {
+		return hour;
+	}
+
+	public String getMinute() {
+		return minute;
+	}
+
+	public String getSecond() {
+		return second;
 	}
 	
 	public String getApertureValue() {
@@ -72,6 +108,42 @@ public class ImageMetaDataContextSearchParameters {
 	
 	public void setAndCategoriesSearch(boolean andCategoriesSearch) {
 		this.andCategoriesSearch = andCategoriesSearch;
+	}
+	
+	public void setYear(String year) {
+		if (!year.equals("")) {
+			this.year = year;	
+		}
+	}
+
+	public void setMonth(String month) {
+		if (!month.equals("")) {
+			this.month = month;	
+		}
+	}
+
+	public void setDay(String day) {
+		if (!day.equals("")) {
+			this.day = day;	
+		}
+	}
+
+	public void setHour(String hour) {
+		if (!hour.equals("")) {
+			this.hour = hour;	
+		}
+	}
+
+	public void setMinute(String minute) {
+		if (!minute.equals("")) {
+			this.minute = minute;	
+		}
+	}
+
+	public void setSecond(String second) {
+		if (!second.equals("")) {
+			this.second = second;	
+		}
 	}
 	
 	public void setApertureValue(String apertureValue) {
@@ -119,6 +191,4 @@ public class ImageMetaDataContextSearchParameters {
 			this.shutterSpeed  = shutterSpeed;
 		}
 	}
-
-	
 }

@@ -28,6 +28,36 @@ public class ImageMetaDataContextUtil {
 				
 		List<Set<File>> searchResults = new ArrayList<Set<File>>(); 
 		
+		String year = imageMetaDataContextSearchParameters.getYear();
+		if(year != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByYear(year));
+		}
+		
+		String month = imageMetaDataContextSearchParameters.getMonth();
+		if(month != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMonth(month));
+		}
+		
+		String day = imageMetaDataContextSearchParameters.getDay();
+		if(day != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByDay(day));
+		}
+		
+		String hour = imageMetaDataContextSearchParameters.getHour();
+		if(hour != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByHour(hour));
+		}
+		
+		String minute = imageMetaDataContextSearchParameters.getMinute();
+		if(minute != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMinute(minute));
+		}
+		
+		String second = imageMetaDataContextSearchParameters.getSecond();
+		if(second != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesBySecond(second));
+		}
+		
 		String apertureValue = imageMetaDataContextSearchParameters.getApertureValue();
 		if(apertureValue != null) {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByApertureValue(apertureValue));
@@ -128,32 +158,49 @@ public class ImageMetaDataContextUtil {
 	}
 
 	private static boolean containSearchParameters(ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters) {
-		boolean containSearchParameter = false;
 		
+		if (imageMetaDataContextSearchParameters.getYear() != null) {
+			return true;
+		}
+		if (imageMetaDataContextSearchParameters.getMonth() != null) {
+			return true;
+		}
+		if (imageMetaDataContextSearchParameters.getDay() != null) {
+			return true;
+		}
+		if (imageMetaDataContextSearchParameters.getHour() != null) {
+			return true;
+		}
+		if (imageMetaDataContextSearchParameters.getMinute() != null) {
+			return true;
+		}
+		if (imageMetaDataContextSearchParameters.getSecond() != null) {
+			return true;
+		}
 		if (imageMetaDataContextSearchParameters.getApertureValue() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getCameraModel() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getComment() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getCategories() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getImageSize() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getIso() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getRatings() != null) {
-			containSearchParameter = true;
+			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getShutterSpeed() != null) {
-			containSearchParameter = true;
+			return true;
 		}
-		return containSearchParameter;
+		return false;
 	}
 }
