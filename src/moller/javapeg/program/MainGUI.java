@@ -648,7 +648,7 @@ public class MainGUI extends JFrame {
 		thumbNailMetaPanelSplitPane.setDividerLocation(config.getIntProperty("thumbNailMetaDataPanelSplitPane.location"));
 		thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
 		thumbNailMetaPanelSplitPane.setDividerSize(10);
-
+		
 		JLabel thumbNailsTitleLable = new JLabel(lang.get("picture.panel.pictureLabel"));
 		thumbNailsTitleLable.setForeground(Color.GRAY);
 		
@@ -923,10 +923,6 @@ public class MainGUI extends JFrame {
 //		TODO: fix hard coded string
 		JLabel findInCategoriesLabel = new JLabel("CATEGORIES");
 		findInCategoriesLabel.setForeground(Color.GRAY);
-		
-//		TODO: fix hard coded string
-		JLabel findInMetaDataDateAndTimeLabel = new JLabel("DATE & TIME");
-		findInMetaDataDateAndTimeLabel.setForeground(Color.GRAY);
 				
 //		TODO: fix hard coded string
 		JLabel findInMetaDataExifLabel = new JLabel("IMAGE META DATA");
@@ -938,18 +934,14 @@ public class MainGUI extends JFrame {
 		
 		backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(findInMetaDataDateAndTimeLabel, posBackgroundPanel.nextCol());
-		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundPanel.add(findInMetaDataExifLabel, posBackgroundPanel.nextCol());
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
 		backgroundPanel.add(findInRatingLabel, posBackgroundPanel.nextCol());
-		backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW());
+		backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW().expandH());
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(this.createImageMeteDataPanelDateAndTime(), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createImageExifMeteDataPanel(), posBackgroundPanel.nextCol().expandH());
 		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(this.createImageMeteDataPanelExif(), posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-		backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
-		backgroundPanel.add(this.createRatingCommentAndButtonPanel(), posBackgroundPanel.nextCol());
+		backgroundPanel.add(this.createRatingCommentAndButtonPanel(), posBackgroundPanel.nextCol().expandH());
 				
 		return backgroundPanel;
 	}
@@ -998,7 +990,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	
-	private JPanel createImageMeteDataPanelDateAndTime() {
+	private JPanel createImageExifMeteDataPanel() {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
@@ -1017,41 +1009,6 @@ public class MainGUI extends JFrame {
 		JLabel minuteLabel = new JLabel("MINUTE");
 //		TODO: fix hard coded string		
 		JLabel secondLabel = new JLabel("SECOND");
-		
-		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
-		
-		yearMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.YEAR.toString());
-		monthMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MONTH.toString());
-		dayMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.DAY.toString());
-		hourMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.HOUR.toString());
-		minuteMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MINUTE.toString());
-		secondMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SECOND.toString());
-		
-		
-		
-		backgroundPanel.add(yearLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(yearMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(monthLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(monthMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(dayLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(dayMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(hourLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(hourMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(minuteLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(minuteMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(secondLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(secondMetaDataValue, posBackgroundPanel.nextRow());
-		
-		return backgroundPanel;
-	}
-	
-	private JPanel createImageMeteDataPanelExif() {
-		JPanel backgroundPanel = new JPanel(new GridBagLayout());
-		
-		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
-		
-		GBHelper posBackgroundPanel = new GBHelper();
-		
 //		TODO: fix hard coded string
 		JLabel imageSizeLabel = new JLabel("IMAGE SIZE");
 //		TODO: fix hard coded string
@@ -1065,22 +1022,52 @@ public class MainGUI extends JFrame {
 		
 		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 		
+		yearMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.YEAR.toString());
+		monthMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MONTH.toString());
+		dayMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.DAY.toString());
+		hourMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.HOUR.toString());
+		minuteMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MINUTE.toString());
+		secondMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SECOND.toString());
 		imagesSizeMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.IMAGE_SIZE.toString());
 		isoMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.ISO.toString());
 		shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SHUTTER_SPEED.toString());
 		apertureValueMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.APERTURE_VALUE.toString());
 		cameraModelMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.CAMERA_MODEL.toString());
-				
-		backgroundPanel.add(imageSizeLabel, posBackgroundPanel);
-		backgroundPanel.add(imagesSizeMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(isoLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(isoMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(shutterSpeedLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(shutterSpeedMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(apertureValueLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(apertureValueMetaDataValue, posBackgroundPanel.nextRow());
-		backgroundPanel.add(cameraModelLabel, posBackgroundPanel.nextRow());
-		backgroundPanel.add(cameraModelMetaDataValue, posBackgroundPanel.nextRow());
+		
+		final int size = 5;
+		
+		backgroundPanel.add(yearLabel, posBackgroundPanel);
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(imageSizeLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(yearMetaDataValue, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(imagesSizeMetaDataValue, posBackgroundPanel.nextCol());
+		backgroundPanel.add(monthLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(isoLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(monthMetaDataValue, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(isoMetaDataValue, posBackgroundPanel.nextCol());
+		backgroundPanel.add(dayLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(shutterSpeedLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(dayMetaDataValue, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(shutterSpeedMetaDataValue, posBackgroundPanel.nextCol());
+		backgroundPanel.add(hourLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(apertureValueLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(hourMetaDataValue, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(apertureValueMetaDataValue, posBackgroundPanel.nextCol());
+		backgroundPanel.add(minuteLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(cameraModelLabel, posBackgroundPanel.nextCol());
+		backgroundPanel.add(minuteMetaDataValue, posBackgroundPanel.nextRow().expandH());
+		backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+		backgroundPanel.add(cameraModelMetaDataValue, posBackgroundPanel.nextCol());
+		backgroundPanel.add(secondLabel, posBackgroundPanel.nextRow());
+		backgroundPanel.add(secondMetaDataValue, posBackgroundPanel.nextRow().expandH());
 		
 		return backgroundPanel;
 	}
