@@ -37,4 +37,6 @@ public class C {
 	public static final String META_DATA_PARAMETER_VALUES_DELIMITER = " || ";
 	
 	public final static String META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP = "\\s\\|\\|\\s";
+	
+	public final static String ICONFILEPATH_IMAGEVIEWER = "resources/images/imageviewer/";
 }

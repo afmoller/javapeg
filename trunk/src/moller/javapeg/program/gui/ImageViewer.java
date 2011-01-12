@@ -43,6 +43,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ApplicationContext;
@@ -99,8 +100,6 @@ public class ImageViewer extends JFrame {
 	private JToggleButton automaticAdjustToWindowSizeJToggleButton;
 	private JToggleButton automaticRotateToggleButton;
 	private File thePicture;
-
-	private String ICONFILEPATH = "resources/images/imageviewer/";
 	
 	private List<File> imagesToView;
 	
@@ -155,7 +154,7 @@ public class ImageViewer extends JFrame {
 		customKeyEventDispatcher = new CustomKeyEventDispatcher();
 		manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
-		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Open16.gif");
+		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Open16.gif");
 				
 		ImageIcon image = new ImageIcon();
 		try {
@@ -222,13 +221,13 @@ public class ImageViewer extends JFrame {
 		ImageIcon minimizeIcon = new ImageIcon();
 				
 		try {
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
 			maximizeImageIcon.setImage(ImageIO.read(imageStream));
 			maximizeButton.setIcon(maximizeImageIcon);
 			maximizeButton.setPreferredSize(buttonSize);
 			maximizeButton.setMinimumSize(buttonSize);
 			
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Back16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
 			minimizeIcon.setImage(ImageIO.read(imageStream));
 			minimizeButton.setIcon(minimizeIcon);
 			minimizeButton.setPreferredSize(buttonSize);
@@ -306,36 +305,36 @@ public class ImageViewer extends JFrame {
 		ImageIcon automaticRotateImageIcon = new ImageIcon();
 				
 		try {
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Back16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
 			previousImageIcon.setImage(ImageIO.read(imageStream));
 			previousJButton.setIcon(previousImageIcon);
 			previousJButton.setToolTipText(lang.get("imageviewer.button.back.toolTip"));
 						
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER+ "Forward16.gif");
 			nextImageIcon.setImage(ImageIO.read(imageStream));
 			nextJButton.setIcon(nextImageIcon);
 			nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
 			
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "AutoAdjustToWindowSize16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "AutoAdjustToWindowSize16.gif");
 			automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
 			automaticAdjustToWindowSizeJToggleButton.setIcon(automaticAdjustToWindowSizeImageIcon);
 			automaticAdjustToWindowSizeJToggleButton.setToolTipText(lang.get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
 			automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
 	
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Zoom16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Zoom16.gif");
 			adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
 			adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
 			adjustToWindowSizeJButton.setToolTipText(lang.get("imageviewer.button.adjustToWindowSize.toolTip"));
 			adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 			
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateLeft16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateLeft16.gif");
 			rotateLeftImageIcon.setImage(ImageIO.read(imageStream));
 			rotateLeftButton.setIcon(rotateLeftImageIcon);
 //			TODO: Fix hard coded string
 			rotateLeftButton.setToolTipText("Rotate image left");
 //			rotateLeftButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 			
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateRight16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateRight16.gif");
 			rotateRightImageIcon.setImage(ImageIO.read(imageStream));
 			rotateRightButton.setIcon(rotateRightImageIcon);
 //		TODO: Fix hard coded string
@@ -343,7 +342,7 @@ public class ImageViewer extends JFrame {
 //			rotateRightButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 		
 //			TODO: Fix other icon image
-			imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "RotateAutomatic16.gif");
+			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateAutomatic16.gif");
 			automaticRotateImageIcon.setImage(ImageIO.read(imageStream));
 			automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
 //		TODO: Fix hard coded string
