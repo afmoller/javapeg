@@ -1,6 +1,5 @@
 package moller.javapeg.program.gui.metadata.impl;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -48,17 +47,12 @@ public class MetaDataValue extends JPanel {
             }
         });
 		
-//		this.setLayout(new BorderLayout());
-		
 		this.setLayout(new GridBagLayout());
 		
 		GBHelper posBackground = new GBHelper();
 		
 		this.add(textField, posBackground.expandW());
 		this.add(clearTextFieldButton, posBackground.nextCol());
-		
-//		this.add(textField, BorderLayout.CENTER);
-//		this.add(clearTextFieldButton, BorderLayout.EAST);
 	}
 	
 	public String getValue() {
