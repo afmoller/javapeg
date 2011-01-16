@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.tree.TreePath;
 
 import moller.javapeg.program.enumerations.Action;
+import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.metadata.MetaData;
 
 /**
@@ -103,6 +104,13 @@ public class ApplicationContext {
 	private int highestUsedCategoryID;
 		
 	/**
+	 * This {@link MainTabbedPaneComponent} variable keeps track of the 
+	 * currently selected tab in the "Main tabbed pane", the one with the 
+	 * Rename, Tag and Search / View.
+	 */
+	private MainTabbedPaneComponent mainTabbedPaneComponent;
+		
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -118,6 +126,7 @@ public class ApplicationContext {
 		selectedThumbNail = null;
 		selectedCategoryPath = null;
 		highestUsedCategoryID = -1;
+		mainTabbedPaneComponent = null;
 	}
 
 	/**
@@ -188,6 +197,10 @@ public class ApplicationContext {
 		return getHighestUsedCategoryID();
 	}
 	
+	public MainTabbedPaneComponent getMainTabbedPaneComponent() {
+		return mainTabbedPaneComponent;
+	}
+	
 	/**
 	 * SET  - methods
 	 */
@@ -240,6 +253,11 @@ public class ApplicationContext {
 	
 	public void setHighestUsedCategoryID(int highestUsedCategoryID) {
 		this.highestUsedCategoryID = highestUsedCategoryID;
+	}
+	
+	public void setMainTabbedPaneComponent(
+			MainTabbedPaneComponent mainTabbedPaneComponent) {
+		this.mainTabbedPaneComponent = mainTabbedPaneComponent;
 	}
 		
 	public void clearJpegFileLoadBuffer() {

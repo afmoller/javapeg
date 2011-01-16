@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,10 +23,12 @@ import javax.xml.stream.XMLStreamWriter;
 import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
+import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.logger.Logger;
 import moller.util.hash.MD5;
 import moller.util.io.StreamUtil;
@@ -67,7 +71,7 @@ public class ImageMetaDataDataBaseHandler {
 				
 				imageMetaDataDataBaseItems.put(jpegFile, imddbi);
 			}
-			return updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository);
+			return updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository, ImageMetaDataContextAction.ADD);
 		} catch (FileNotFoundException e) {
 		 // TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +83,7 @@ public class ImageMetaDataDataBaseHandler {
 		}
 	}
 		
-	public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination) {
+	public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination, ImageMetaDataContextAction imageMetaDataContextAction) {
 		OutputStream os = null;
 		try {
 			os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
@@ -115,6 +119,22 @@ public class ImageMetaDataDataBaseHandler {
 			}
 			XMLUtil.writeElementEnd(w);
 			w.flush();
+			
+			switch (imageMetaDataContextAction) {
+			case ADD:
+				for(File image : imageMetaDataDataBaseItems.keySet()) {
+					ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+					CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
+					populateImageMetaDataContext(image, ciemd, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+				}
+				break;
+			case UPDATE:
+				for(File image : imageMetaDataDataBaseItems.keySet()) {
+					ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+					updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+				}
+				break;
+			}
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
 			return false;
@@ -126,7 +146,7 @@ public class ImageMetaDataDataBaseHandler {
 		}
 		return true;
 	}
-	
+
 	public static boolean deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase, Context context) {
 		Logger logger = Logger.getInstance();
 		
@@ -222,18 +242,134 @@ public class ImageMetaDataDataBaseHandler {
 	
 	private static void populateImageMetaDataContext(File image, CategoryImageExifMetaData imageExifMetaData, String comment, int rating, Categories categories) {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+		final String imagePath = image.getAbsolutePath();
 		
-		imdc.addCameraModel(imageExifMetaData.getCameraModel(), image.getAbsolutePath());
-		imdc.addDateTime(imageExifMetaData.getDateTime(), image.getAbsolutePath());
-		imdc.addIso(imageExifMetaData.getIsoValue(), image.getAbsolutePath());
-		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), image.getAbsolutePath());
-		imdc.addShutterSpeed(imageExifMetaData.getShutterSpeed(), image.getAbsolutePath());
-		imdc.addAperture(imageExifMetaData.getApertureValue(), image.getAbsolutePath());
-		imdc.addComment(comment, image.getAbsolutePath());
-		imdc.addRating(rating, image.getAbsolutePath());
+		imdc.addCameraModel(imageExifMetaData.getCameraModel(), imagePath);
+		imdc.addDateTime(imageExifMetaData.getDateTime(), imagePath);
+		imdc.addIso(imageExifMetaData.getIsoValue(), imagePath);
+		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
+		imdc.addShutterSpeed(imageExifMetaData.getShutterSpeed(), imagePath);
+		imdc.addAperture(imageExifMetaData.getApertureValue(), imagePath);
+		imdc.addComment(comment, imagePath);
+		imdc.addRating(rating, imagePath);
 		
 		for (String category : categories.getCategories()) {
-			imdc.addCategory(category, image.getAbsolutePath());	
+			imdc.addCategory(category, imagePath);	
+		}
+	}
+	
+	public static void updateImageMetaDataContext(File image, String newComment, int rating, Categories categories) {
+		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+		ImagePathAndIndex ipai = ImagePathAndIndex.getInstance();
+		
+		updateImageComment(image, newComment, imdc, ipai);
+		updateImageRating(image, rating, imdc, ipai);
+		updateImageCategories(image, categories, imdc, ipai);
+	}
+	
+	private static void updateImageComment(File image, String newComment, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
+		Map<String, Set<Integer>> comments = imdc.getComments();
+		
+		search:
+		for (String comment : comments.keySet()) {
+			Set<Integer> indices = comments.get(comment);
+			
+			for (Integer index : indices) {
+				if (image.getAbsolutePath().equals(ipai.getImagePathForIndex(index))) {
+					/**
+					 *  Comment changed, deletion of old necessary
+					 *  and adding the new comment
+					 */
+					if (!newComment.equals(comment)) {
+						indices.remove(index);
+						if(indices.size() == 0) {
+							comments.remove(comment);
+						}
+						imdc.addComment(newComment, image.getAbsolutePath());
+						break search;
+					} 
+					/**
+					 * Comment not changed, skip the rest of the search.
+					 */
+					else {
+						break search;
+					}
+				}
+			}
+		}
+	}
+	
+	private static void updateImageRating(File image, int rating, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
+		List<Set<Integer>> ratings = imdc.getRatings();
+		
+		int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
+		
+		/**
+		 *  Initial test to see whether the rating has changed or not. If no 
+		 *  change do not do anything, otherwise search thru the entire list of
+		 *  ratings.
+		 */
+		if (!ratings.get(rating).contains(imageIndex)) {
+			search:
+			for (int index = 0; index < ratings.size(); index++) {
+				/**
+				 * Do not search in the already searched index set
+				 */
+				if (index != rating) {
+					/**
+					 * If a match is found remove that the imageIndex for that 
+					 * rating and add the new rating value to the 
+					 * ImageMetaDataContext.
+					 */
+					if (ratings.get(index).contains(imageIndex)) {
+						ratings.get(index).remove(imageIndex);
+						imdc.addRating(rating, image.getAbsolutePath());
+						break search;
+					}	
+				}
+			}
+		}
+	}
+	
+	private static void updateImageCategories(File image, Categories categories, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
+		Map<String, Set<Integer>> categoriesMap = imdc.getCategories();
+		
+		int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
+		
+		List<String> categoriesToRemove = new ArrayList<String>();
+		
+		/**
+		 * Remove any unselected categories from the ImageMetaDataContext
+		 */
+		for (String category : categoriesMap.keySet()) {
+			Set<Integer> indices = categoriesMap.get(category);
+			
+			if (indices.contains(imageIndex)) {
+				if (!categories.getCategories().contains(category)) {
+					indices.remove(imageIndex);
+					if(indices.size() == 0) {
+						categoriesToRemove.add(category);
+					}
+				}
+			}
+		}
+		
+		/**
+		 *  Remove any empty categories.
+		 */
+		for (String categoryToRemove : categoriesToRemove) {
+			categoriesMap.remove(categoryToRemove);
+		}
+		
+		/**
+		 * Add any newly selected categories to the ImageMetaDataContext
+		 */
+		for (String category : categories.getCategories()) {
+			Set<Integer> indices = categoriesMap.get(category);
+			
+			if (indices == null || !indices.contains(imageIndex)) {
+				imdc.addCategory(category, image.getAbsolutePath());
+			}
 		}
 	}
 
