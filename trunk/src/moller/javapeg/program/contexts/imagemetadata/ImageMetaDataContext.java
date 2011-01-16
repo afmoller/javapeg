@@ -211,6 +211,19 @@ public class ImageMetaDataContext {
 		comments.get(comment).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
+	
+	public Map<String, Set<Integer>> getComments() {
+		return comments;
+	}
+	
+	public List<Set<Integer>> getRatings() {
+		return ratings;
+	}
+	
+	public Map<String, Set<Integer>> getCategories() {
+		return categories;
+	}
+	
 	public Set<String> getCameraModels() {
 		return new TreeSet<String>(cameraModels.keySet());
 	}

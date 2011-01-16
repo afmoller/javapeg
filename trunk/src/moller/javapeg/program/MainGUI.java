@@ -98,6 +98,7 @@ import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchP
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
 import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
@@ -139,7 +140,6 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
-import moller.util.datatype.SetUtil;
 import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -1087,19 +1087,19 @@ public class MainGUI extends JFrame {
 				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getYears()), value, e.getLocationOnScreen());
 				break;
 			case MONTH:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(1, 12)), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getMonths()), value, e.getLocationOnScreen());
 				break;
 			case DAY:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(1, 31)), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getDates()), value, e.getLocationOnScreen());
 				break;
 			case HOUR:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 23)), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getHours()), value, e.getLocationOnScreen());
 				break;
 			case MINUTE:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 59)), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getMinutes()), value, e.getLocationOnScreen());
 				break;
 			case SECOND:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(SetUtil.getContinuousSet(0, 59)), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getSeconds()), value, e.getLocationOnScreen());
 				break;
 			case APERTURE_VALUE:
 				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
@@ -1482,7 +1482,7 @@ public class MainGUI extends JFrame {
 		popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
 				
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
-//		mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
+		mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
 	}
 	
 	public void createRightClickMenuCategories() {
@@ -1578,6 +1578,7 @@ public class MainGUI extends JFrame {
 		ac.setTemplateFileName(config.getStringProperty("fileNameTemplate"));
 		ac.setTemplateSubFolderName(config.getStringProperty("subFolderName"));
 		ac.setCreateThumbNailsCheckBoxSelected(config.getBooleanProperty("createThumbNailsCheckBox"));
+		ac.setMainTabbedPaneComponent(MainTabbedPaneComponent.valueOf(mainTabbedPane.getSelectedComponent().getName()));
 	}
 
 	private void saveSettings(){
@@ -2776,7 +2777,7 @@ public class MainGUI extends JFrame {
 	 */
 	private void flushImageMetaDataBaseToDisk() {
 		ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
-		ImageMetaDataDataBaseHandler.updateDataBaseFile(imddbituc.getImageMetaDataBaseItems(), imddbituc.getLoadedRepositoryPath());
+		ImageMetaDataDataBaseHandler.updateDataBaseFile(imddbituc.getImageMetaDataBaseItems(), imddbituc.getLoadedRepositoryPath(), ImageMetaDataContextAction.UPDATE);
 		imddbituc.reInit();
 	}
 	
@@ -2852,44 +2853,44 @@ public class MainGUI extends JFrame {
 		}
 	}
 	
-//	private class MainTabbedPaneListener implements ChangeListener {
-//		public void stateChanged(ChangeEvent e) {
-//			JPanel selectedComponent = (JPanel)((JTabbedPane)e.getSource()).getSelectedComponent();
-//			
-//			MainTabbedPaneComponent mainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(selectedComponent.getName());
-//			
-//			ApplicationContext ac = ApplicationContext.getInstance();
-//			String sourcePath = ac.getSourcePath(); 
-//			
-//			switch (mainTabbedPaneComponent) {
-//			case RENAME:
-//			case CATEGORIZE:
-////				if (!sourcePath.equals("")) {
-////					loadThumbNails(new File(sourcePath));
-////				} else {
-//					thumbNailsPanel.removeAll();
-//					thumbNailsPanel.updateUI();
-//					
-//					statusBar.clear();
-////				}
-//				break;
-//			case VIEW:
-////				if (ac.imageSearchResultExists()) {
-////					loadThumbNailsFromImageSearchResult(ac.getImageSearchResult());
-////				} else {
-////					if (!sourcePath.equals("")) {
-////						loadThumbNails(new File(sourcePath));
-////					} else {
-//						thumbNailsPanel.removeAll();
-//						thumbNailsPanel.updateUI();
-//						
-//						statusBar.clear();
-////					}
-////				}
-//				break;
-//			}
-//		}
-//	}
+	private class MainTabbedPaneListener implements ChangeListener {
+		public void stateChanged(ChangeEvent e) {
+			JPanel selectedComponent = (JPanel)((JTabbedPane)e.getSource()).getSelectedComponent();
+			
+			MainTabbedPaneComponent mainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(selectedComponent.getName());
+			
+			ApplicationContext ac = ApplicationContext.getInstance();
+			
+			switch (mainTabbedPaneComponent) {
+			case RENAME:
+			case VIEW:
+				if (ac.getMainTabbedPaneComponent() == MainTabbedPaneComponent.CATEGORIZE) {
+					storeCurrentlySelectedImageData();
+					
+					ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+					
+					Map<File, ImageMetaDataDataBaseItem> imageMetaDataBaseItems = imddbituc.getImageMetaDataBaseItems();
+					
+					for (File image : imageMetaDataBaseItems.keySet()) {
+						ImageMetaDataDataBaseItem imddbi = imageMetaDataBaseItems.get(image);
+						ImageMetaDataDataBaseHandler.updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());	
+					}
+				}
+				ac.setMainTabbedPaneComponent(mainTabbedPaneComponent);
+				break;
+			case CATEGORIZE:
+				/**
+				 * Since the only thing to do is to update the 
+				 * ImageMetaDataContext there is nothing to do here, except
+				 * from updating the ApplicationContext with the currently 
+				 * selected tab since the selected tab is the only one that can
+				 * have unsaved meta data.
+				 */
+				ac.setMainTabbedPaneComponent(MainTabbedPaneComponent.CATEGORIZE);
+				break;
+			}
+		}
+	}
 	
 	private class CategoriesMouseButtonListener extends MouseAdapter{
 		
