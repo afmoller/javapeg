@@ -10,6 +10,15 @@
  
  2.5 (2010-xx-xx)
  
+ + An image tagging functionality has been implemented. It is possible to tag
+   an image with an unlimited amount of categories, set an image rating between
+   1 and 5 and to enter a comment. This meta data and additional image specific
+   data, such as ISO rating, exposure data and time, shutterspeed... is 
+   persistently stored in xml files.
+      
+ + A search engine that searches in an in memory database compiled by all 
+   existing xml meta data files mentioned in the section above.   
+ 
  + It is possible to have the images automatically rotated in the ImageViewer.
    The rotation is done according to the stored orientation meta data in each
    image. If there is no such information stored in the image, the image can
