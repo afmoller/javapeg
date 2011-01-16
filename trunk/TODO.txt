@@ -1,7 +1,6 @@
 2.5:
 ====
-- Add possibility to tag images with categories and add comments.
-- Add possibility to search for images matching criterias defined by the tagging of images.
+- Fix the image names in javapeg-image-meta.xml files if such exists in a directory with images that shall be renamed. 
 - Make it possible to configure the level of warnings in the categories tree.
 - Make it possible to remove paths from the image repository paths collections.
 - Make it possible to configure the sort order of the source directory tree structure, alphabetical or latest modified.
