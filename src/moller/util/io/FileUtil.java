@@ -280,7 +280,7 @@ public class FileUtil {
 	 * content or by writing the string from the beginning of the file.
 	 * 
 	 * @param f is the file object to write to.
-	 * @param text contains the string that will be written to the file f 
+	 * @param texts contains the strings that will be written to the file f 
 	 *        object
 	 * @param append decides whether the string in the text object will be
 	 *        appended to the file object f or put to the start of the file.
