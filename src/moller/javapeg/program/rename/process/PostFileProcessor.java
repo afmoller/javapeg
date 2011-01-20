@@ -1,20 +1,17 @@
 package moller.javapeg.program.rename.process;
-/**
-* This class was created : 2009-04-13 by Fredrik Möller
-* Latest changed         : 2009-04-14 by Fredrik Möller
-*                        : 2009-05-20 by Fredrik Möller
-*                        : 2009-08-21 by Fredrik Möller
-*/
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
+import moller.javapeg.program.C;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.hash.MD5;
+import moller.util.io.FileUtil;
 
 public class PostFileProcessor {
 
@@ -60,30 +57,40 @@ public class PostFileProcessor {
 		for (File sourceFile : allNonJPEGFileNameMappings.keySet()) {
 			FileAndType fat = allNonJPEGFileNameMappings.get(sourceFile);
 			File destFile = fat.getFile();
-						
-			if(notEqual(sourceFile, destFile)) {
-				copySucess = false;
+				
+			if (sourceFile.getName().equals(C.JAVAPEG_IMAGE_META_NAME)) {
+				if (notJavaPegImageMetaFileEqual(destFile)) {
+					copySucess = false;
+				} 
+			} else {
+				if (notEqual(sourceFile, destFile)) {
+					copySucess = false;
+				}	
+			}
+			
+			if (copySucess) {
+				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.copiedOK") + " " + destFile.getAbsolutePath());
+			} else {
 				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.copiedWithError") + " " + destFile.getAbsolutePath());
 			}
-			rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.copiedOK") + " " + destFile.getAbsolutePath());
 		}
 		
 		Map<File, File> allJPEGFileNameMappings =  rpc.getAllJPEGFileNameMappings();
 		
 		for (File sourceFile : allJPEGFileNameMappings.keySet()) {
 			File destFile = allJPEGFileNameMappings.get(sourceFile);
-									
-			if(notEqual(sourceFile, destFile)) {
+			
+			if (notEqual(sourceFile, destFile)) {
 				copySucess = false;
 				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.renamedWithError") + " " + destFile.getName());
+			} else {
+				rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.renamedOK") + " " + destFile.getName());	
 			}
-			rp.setLogMessage(lang.get("rename.PostFileProcessor.renameFromLabel") + " " + sourceFile.getName() + " " + lang.get("rename.PostFileProcessor.renamedOK") + " " + destFile.getName());
 		}
 		return copySucess;
 	}
-	
+
 	private boolean notEqual(File sourceFile, File destFile) {
-		
 		Logger logger = Logger.getInstance();
 		
 		String sourceHash = MD5.calculate(sourceFile);
@@ -91,12 +98,22 @@ public class PostFileProcessor {
 		
 		logger.logDEBUG(sourceHash + " = Hash value for file: " + sourceFile.getAbsolutePath());
 		logger.logDEBUG(destHash + " = Hash value for file: " + destFile.getAbsolutePath());
-		
-		
+				
 		if(!destHash.equals(sourceHash)) {
 			Logger.getInstance().logERROR("File: " + sourceFile.getAbsolutePath() + " was not correctly copied to: " + destFile.getAbsolutePath());				
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean notJavaPegImageMetaFileEqual(File destFile) {
+		try {
+			return !FileUtil.readFromFile(destFile).equals(RenameProcessContext.getInstance().getJavaPegImageMetaFileContent());
+		} catch (IOException iox) {
+			Logger logger = Logger.getInstance();
+			logger.logERROR("Could not read from file: " + destFile.getAbsolutePath() + " see stacktrace below for details");
+			logger.logERROR(iox);
+			return false;
+		}
 	}
 }

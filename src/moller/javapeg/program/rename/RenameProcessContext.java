@@ -1,11 +1,9 @@
 package moller.javapeg.program.rename;
-/**
- * This class was created : 2009-02-18 by Fredrik Möller
- * Latest changed         : 2009-02-19 by Fredrik Möller
- */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RenameProcessContext {
@@ -49,12 +47,22 @@ public class RenameProcessContext {
 	private static final String THUMBNAIL_DIRECTORY_NAME = "thm"; 
 	
 	/**
+	 * This list contains the content of the image meta data XML file, if there
+	 * exist such a file in the directory with images that shall be renamed.
+	 * The list contains the content that it will have when it is copied to the
+	 * destination (all file attributes in the image tag has values which 
+	 * matches the new image names).
+	 */
+	private List<String> javaPegImageMetaFileContent;
+		
+	/**
 	 * Private constructor.
 	 */
 	private RenameProcessContext() {
 		jPEGOriginalFilePathConvertedFileObjectMapping      = new HashMap<File, File>(128);
 		jPEGOriginalFilePathThumbNailFileObjectMapping      = new HashMap<File, File>(128);
 		nonJPEGOriginalFilePathDestinationFileObjectMapping = new HashMap<File, FileAndType>(128);
+		javaPegImageMetaFileContent = new ArrayList<String>();
 	}
 
 	/**
@@ -126,6 +134,14 @@ public class RenameProcessContext {
 		this.subDirectoryName = subDirectoryName;
 	}
 	
+	public List<String> getJavaPegImageMetaFileContent() {
+		return javaPegImageMetaFileContent;
+	}
+
+	public void setJavaPegImageMetaFileContent(List<String> javaPegImageMetaFileContent) {
+		this.javaPegImageMetaFileContent = javaPegImageMetaFileContent;
+	}
+		
 	public void clearAllMappingMaps() {
 		jPEGOriginalFilePathConvertedFileObjectMapping.clear();
 		jPEGOriginalFilePathThumbNailFileObjectMapping.clear();
