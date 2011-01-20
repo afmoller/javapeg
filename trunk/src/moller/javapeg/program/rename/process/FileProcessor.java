@@ -13,8 +13,11 @@ package moller.javapeg.program.rename.process;
 */
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.Type;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
@@ -32,11 +35,6 @@ public class FileProcessor {
 	 */
 	private static FileProcessor instance;
 	
-	/**
-	 * The system dependent file separator char
-	 */
-	private final static String FS = File.separator;
-
 	/**
 	 * Private constructor.
 	 */
@@ -77,7 +75,7 @@ public class FileProcessor {
 		 */
 		rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createSubDirectory"));
 				
-		File subDirectory = new File(destinationPath + FS + subDirectoryName);
+		File subDirectory = new File(destinationPath + C.FS + subDirectoryName);
 		subDirectory.mkdir();
 		
 		rp.incProcessProgress();
@@ -88,7 +86,7 @@ public class FileProcessor {
 			 * Create thumb nails directory.
 			 */
 			rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createThumbNailsDirectory"));
-			File thumbNailDirectory = new File(destinationPath + FS + subDirectoryName + FS + rpc.getTHUMBNAIL_DIRECTORY_NAME());
+			File thumbNailDirectory = new File(destinationPath + C.FS + subDirectoryName + C.FS + rpc.getTHUMBNAIL_DIRECTORY_NAME());
 			thumbNailDirectory.mkdir();
 			rp.incProcessProgress();
 			
@@ -133,7 +131,7 @@ public class FileProcessor {
 		 */
 		rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createAndTransferContentOfNonJPEGFiles"));
 		
-		Map<File, FileAndType> allNonJPEGFileNameMappings = RenameProcessContext.getInstance().getAllNonJPEGFileNameMappings();
+		Map<File, FileAndType> allNonJPEGFileNameMappings = rpc.getAllNonJPEGFileNameMappings();
 		
 		for (FileAndType fileAndType : allNonJPEGFileNameMappings.values()) {
 			
@@ -174,9 +172,45 @@ public class FileProcessor {
 			
 			if (type.equals(Type.FILE)) {
 				if (destinationFile.exists()) {
-					FileUtil.copyFile(sourceFile, destinationFile);
-					rp.setLogMessage(sourceFile.getAbsolutePath());
-					logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
+					if (sourceFile.getName().equals(C.JAVAPEG_IMAGE_META_NAME)) {
+						try {
+							/**
+							 * Get content of the meta data file
+							 */
+							List<String> fileRows = FileUtil.readFromFile(sourceFile);
+							/**
+							 * Modify the content of the meta data file (change 
+							 * file names so they will match the new names of 
+							 * the JPEG image files).
+							 */
+							for (File originalName : allJPEGFileNameMappings.keySet()) {
+								String originalNameString = originalName.getName();
+								
+								for (int i = 0; i < fileRows.size(); i++) {
+									if (fileRows.get(i).contains(originalNameString)) {
+										fileRows.set(i, fileRows.get(i).replace(originalNameString, allJPEGFileNameMappings.get(originalName).getName()));
+										break;
+									}
+								}
+							}
+							rpc.setJavaPegImageMetaFileContent(fileRows);
+							
+							/**
+							 * Store the modified content to new destination 
+							 * file.
+							 */
+							FileUtil.writeToFile(destinationFile, fileRows, false);
+							
+							rp.setLogMessage(sourceFile.getAbsolutePath());
+							logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath() + " with file names changed");	
+						} catch (IOException iox) {
+							logger.logERROR("Could not change the file names in the file: " + sourceFile.getAbsolutePath() + " the file is copied unchanged. See stacktrace below for details");
+							logger.logERROR(iox);
+							this.copyFileAndSetLogMessage(sourceFile, destinationFile, rp, logger);
+						}
+					} else {
+						this.copyFileAndSetLogMessage(sourceFile, destinationFile, rp, logger);
+					}
 				} else {
 					logger.logERROR("Could not copy content of source file: " + sourceFile.getAbsolutePath() + " to destination file : " + destinationFile.getAbsolutePath() + " since destination file does not exist.");					
 					return false;
@@ -185,5 +219,11 @@ public class FileProcessor {
 		}
 		rp.incProcessProgress();
 		return true;
+	}
+	
+	private void copyFileAndSetLogMessage (File sourceFile, File destinationFile, RenameProcess rp, Logger logger) {
+		FileUtil.copyFile(sourceFile, destinationFile);
+		rp.setLogMessage(sourceFile.getAbsolutePath());
+		logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());	
 	}
 }
