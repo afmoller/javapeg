@@ -280,7 +280,7 @@ public class MainGUI extends JFrame {
 	private ThumbNailListener thumbNailListener;
 	
 	private DefaultListModel imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
-	private SortedListModel categoriesRepositoryListModel = ModelInstanceLibrary.getInstance().getSortedListModel();
+	private SortedListModel imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 	
 	private JList imagesToViewList;
 	
@@ -1565,8 +1565,7 @@ public class MainGUI extends JFrame {
 //					TODO: If configured, remove the directory path automatically
 					break;
 				}
-				
-				categoriesRepositoryListModel.add(iri);
+				imageRepositoryListModel.add(iri);
 			}
 		}
 	}
@@ -1618,7 +1617,7 @@ public class MainGUI extends JFrame {
 	}
 	
 	private void saveRepositoryPaths() {
-		ImageRepositoryHandler.getInstance().store(categoriesRepositoryListModel.iterator());
+		ImageRepositoryHandler.getInstance().store(imageRepositoryListModel.iterator());
 	}
 		
 	private void addThumbnail(JButton thumbNail) {
@@ -2098,8 +2097,8 @@ public class MainGUI extends JFrame {
 						// unpopulated paths.
 						ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
 						
-						if(!categoriesRepositoryListModel.contains(iri)) {
-							categoriesRepositoryListModel.add(iri);
+						if(!imageRepositoryListModel.contains(iri)) {
+							imageRepositoryListModel.add(iri);
 						}
 					}
 				}
@@ -2713,10 +2712,20 @@ public class MainGUI extends JFrame {
 			
 			int result = 0;
 			
+			Config config = Config.getInstance();
+			
 			if (nodeToRemove.getChildCount() > 0) {
-//				TODO: Fix hard coded string
-				String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " and all sub categories?";
-				result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
+				if (config.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories")) {
+//					TODO: Fix hard coded string
+					String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " and all sub categories?";
+					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
+				}
+			} else {
+				if (config.getBooleanProperty("categories.warnWhenRemoveCategory")) {
+//					TODO: Fix hard coded string
+					String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " ?";
+					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
+				}
 			}
 			if (result == 0) {
 				model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());

@@ -11,7 +11,7 @@ public class ModelInstanceLibrary {
 	
 	private MetaDataTableModel metaDataTableModel;
 	private PreviewTableModel  previewTableModel;
-	private SortedListModel    sortedListModel;
+	private SortedListModel    imageRepositoryListModel;
 	private ImagesToViewModel  imagesToViewModel;
 	private CategoriesModel    categoriesModel;
 	
@@ -19,11 +19,11 @@ public class ModelInstanceLibrary {
 	 * Private constructor.
 	 */
 	private ModelInstanceLibrary() {
-		metaDataTableModel = new MetaDataTableModel();
-		previewTableModel  = new PreviewTableModel();
-		sortedListModel    = new SortedListModel();
-		imagesToViewModel  = new ImagesToViewModel();
-		categoriesModel    = new CategoriesModel(CategoryUtil.createCategoriesModel());
+		metaDataTableModel       = new MetaDataTableModel();
+		previewTableModel        = new PreviewTableModel();
+		imageRepositoryListModel = new SortedListModel();
+		imagesToViewModel        = new ImagesToViewModel();
+		categoriesModel          = new CategoriesModel(CategoryUtil.createCategoriesModel());
 	}
 		
 	/**
@@ -50,8 +50,8 @@ public class ModelInstanceLibrary {
 		return previewTableModel;
 	}
 	
-	public SortedListModel getSortedListModel() {
-		return sortedListModel;
+	public SortedListModel getImageRepositoryListModel() {
+		return imageRepositoryListModel;
 	}
 	
 	public ImagesToViewModel getImagesToViewModel() {

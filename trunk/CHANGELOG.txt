@@ -49,6 +49,10 @@
    internally. It is also possible to set the max size (number of thumbnails to
    cache) of the cache and to entirely clear the cache from thumbnails.   
  
+ ! If a file was copied incorrect when it was renamed the, rename process log 
+   window did incorrectly state that the file was both copied correct and with
+   failure.
+ 
  ! If time and, or date was missing in the Exif data the time and, or date was
    not used from file time stamp even if the configuration was set to do that.
   
@@ -56,6 +60,10 @@
    without read access, for the current user, was browsed in the tree view.
    Bug seen in Windows 7, but is probably existing in any Operating system with
    user access control. 
+   
+ ~ The error message that is displayed if the configuration file is missing or
+   corrupt has been improved by not only saying that the file is missing it 
+   also says that the file might be corrupt.  
    
  ~ The value of the Exif Picture Width and Exif Picture Height was stripped 
    from any occurrences of non integer characters. In for instance some of the

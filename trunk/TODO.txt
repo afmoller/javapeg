@@ -1,7 +1,5 @@
 2.5:
 ====
-- Fix the image names in javapeg-image-meta.xml files if such exists in a directory with images that shall be renamed. 
-- Make it possible to configure the level of warnings in the categories tree.
 - Make it possible to remove paths from the image repository paths collections.
 - Make it possible to configure the sort order of the source directory tree structure, alphabetical or latest modified.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
