@@ -61,4 +61,6 @@
 <entry key="previewAndCommentSplitPane.location">300</entry>
 <entry key="tab.tagImage.previewImage.useEmbeddedThumbnail">false</entry>
 <entry key="previewCommentCategoriesRatingSplitpane.location">500</entry>
+<entry key="categories.warnWhenRemoveCategory">true</entry>
+<entry key="categories.warnWhenRemoveCategoryWithSubCategories">true</entry>
 </properties>

@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
@@ -51,10 +52,12 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.enumerations.Level;
+import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.gui.Screen;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
@@ -139,7 +142,10 @@ public class ConfigViewerGUI extends JFrame {
 	 * Variables for the tag panel
 	 */
 	private JRadioButton useEmbeddedThumbnail;
-	private JRadioButton useScaledThumbnail; 
+	private JRadioButton useScaledThumbnail;
+	
+	private JCheckBox warnWhenRemoveCategory;
+	private JCheckBox warnWhenRemoveCategoryWithSubCategories;
 	
 	private Config   conf;
 	private Logger   logger;
@@ -170,6 +176,8 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
 	private boolean ENABLE_THUMBNAIL_CACHE;
 	private boolean USE_EMBEDDED_THUMBNAIL;
+	private boolean WARN_WHEN_REMOVE_CATEGORY;
+	private boolean WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES;
 			
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
@@ -211,6 +219,8 @@ public class ConfigViewerGUI extends JFrame {
 		MAXIMUM_LENGTH_OF_CAMERA_MODEL = conf.getStringProperty("rename.maximum.length.camera-model");
 		USE_EMBEDDED_THUMBNAIL = conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail");
 		THUMBNAIL_TOOLTIP_STATE = conf.getStringProperty("thumbnails.tooltip.state");
+		WARN_WHEN_REMOVE_CATEGORY = conf.getBooleanProperty("categories.warnWhenRemoveCategory");
+		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories");
 	}
 	
 	private void initiateWindow() {
@@ -750,8 +760,8 @@ public class ConfigViewerGUI extends JFrame {
 		group.add(useEmbeddedThumbnail);
 		group.add(useScaledThumbnail);
 		
-
 		JPanel previewImagePanel = new JPanel(new GridBagLayout());
+//		TODO: Fix hard coded string
 		previewImagePanel.setBorder(BorderFactory.createTitledBorder("Preview Image"));
 		
 		GBHelper posPreviewImagePanel = new GBHelper();
@@ -764,13 +774,54 @@ public class ConfigViewerGUI extends JFrame {
 		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
 		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextCol());
 		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
-				
+		
+		/**
+		 * Start of Categories Area
+		 */
+//		TODO: Fix hard coded string
+		warnWhenRemoveCategory = new JCheckBox("Warn when removing category");
+		warnWhenRemoveCategory.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategory"));
+//		TODO: Fix hard coded string
+		warnWhenRemoveCategoryWithSubCategories = new JCheckBox("Warn when removing category with sub categories");
+		warnWhenRemoveCategoryWithSubCategories.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories"));
+		
+		JPanel categoriesPanel = new JPanel(new GridBagLayout());
+//		TODO: Fix hard coded string
+		categoriesPanel.setBorder(BorderFactory.createTitledBorder("Categories"));
+		
+		GBHelper posCategoriesPanel = new GBHelper();
+		
+		categoriesPanel.add(warnWhenRemoveCategory, posCategoriesPanel);
+		categoriesPanel.add(new Gap(10), posCategoriesPanel.nextRow());
+		categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow());
+		
+		/**
+		 * Start of Image Repositories Area
+		 */
+		JList imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
+		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
+		
+		JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
+		imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		JPanel imageRepositoriesPanel = new JPanel(new GridBagLayout());
+//		TODO: Fix hard coded string
+		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder("Image Repositories"));
+		
+		GBHelper posImageRepositories = new GBHelper();
+		
+		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.expandW().expandH());
+		
+		
+		
 		tagConfigurationPanel = new JPanel(new GridBagLayout());
 		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
 		GBHelper posTagPanel = new GBHelper();
 		
 		tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
+		tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW().expandH());
+		tagConfigurationPanel.add(imageRepositoriesPanel, posTagPanel.nextRow().expandW().expandH());
 	}
 		
 	private void updateWindowLocationAndSize() {
@@ -865,6 +916,8 @@ public class ConfigViewerGUI extends JFrame {
 		 * Update Tag Configuration
 		 */
 		conf.setBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail", useEmbeddedThumbnail.isSelected());
+		conf.setBooleanProperty("categories.warnWhenRemoveCategory", warnWhenRemoveCategory.isSelected());
+		conf.setBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories", warnWhenRemoveCategoryWithSubCategories.isSelected());
 				
 		/**
 		 * Show configuration changes.
@@ -1030,6 +1083,16 @@ public class ConfigViewerGUI extends JFrame {
 			}
 			
 			displayMessage.append("Thumbnail Tooltips" + ": " + current + " (" + previous + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {
+			displayMessage.append("Warn when removing category" + ": " + warnWhenRemoveCategory.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY + ")\n");
+		}
+		
+//		TODO: Fix hard coded string
+		if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
+			displayMessage.append("Warn when removing category with sub categories" + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
 		}
 				
 		if(displayMessage.length() > 0) {
