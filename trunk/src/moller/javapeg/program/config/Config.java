@@ -95,7 +95,7 @@ public class Config {
 	}
 	
 	private void logFatalError(Exception e) {
-		JOptionPane.showMessageDialog(null,"Configuration file: " + PATH_TO_CONF_FILE + " can not be found", "FATAL ERROR", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null,"Configuration file: " + PATH_TO_CONF_FILE + " can not be found, or is invalid\n\n" + e, "FATAL ERROR", JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 }
