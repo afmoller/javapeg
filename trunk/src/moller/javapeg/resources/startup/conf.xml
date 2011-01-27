@@ -63,4 +63,5 @@
 <entry key="previewCommentCategoriesRatingSplitpane.location">500</entry>
 <entry key="categories.warnWhenRemoveCategory">true</entry>
 <entry key="categories.warnWhenRemoveCategoryWithSubCategories">true</entry>
+<entry key="imageRepository.automaticallyRemoveNonExistingImagePaths">false</entry>
 </properties>

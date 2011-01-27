@@ -10,6 +10,11 @@
  
  2.5 (2010-xx-xx)
  
+ + If an image thumbnail is double clicked when JavaPEG is in 
+   SEARCH / VIEW IMAGE mode the image will be added to the end of the image 
+   list. If the Image Viewer is displayed the image the image will also be 
+   added to the collection of viewable images in the Image Viewer.   
+ 
  + An image tagging functionality has been implemented. It is possible to tag
    an image with an unlimited amount of categories, set an image rating between
    1 and 5 and to enter a comment. This meta data and additional image specific

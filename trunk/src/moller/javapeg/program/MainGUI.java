@@ -294,6 +294,8 @@ public class MainGUI extends JFrame {
 	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
 	
 	private Thread loadFilesThread;
+	
+	private ImageViewer imageViewer;
 		
 	public MainGUI(){
 		
@@ -1555,17 +1557,22 @@ public class MainGUI extends JFrame {
 					File imageMetaDataDataBaseFile = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 					if (imageMetaDataDataBaseFile.exists()) {
 						ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);	
+						imageRepositoryListModel.add(iri);
+					} else {
+						if (!config.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths")) {
+							imageRepositoryListModel.add(iri);
+						}
 					}
 					break;
 				case NOT_AVAILABLE:
-					
+					imageRepositoryListModel.add(iri);
 					break;
-
 				case DOES_NOT_EXIST:
-//					TODO: If configured, remove the directory path automatically
+					if (!config.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths")) {
+						imageRepositoryListModel.add(iri);
+					}
 					break;
 				}
-				imageRepositoryListModel.add(iri);
 			}
 		}
 	}
@@ -1954,7 +1961,7 @@ public class MainGUI extends JFrame {
 						thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
 						thumbContainer.addActionListener(thumbNailListener);
 						thumbContainer.addMouseListener(mouseRightClickButtonListener);
-		
+						
 						columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
 						columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
 		
@@ -2509,7 +2516,7 @@ public class MainGUI extends JFrame {
 						imagesToView.add((File)imagesToViewListModel.get(i));
 					}
 
-					ImageViewer imageViewer = new ImageViewer(imagesToView);
+					imageViewer = new ImageViewer(imagesToView);
 					imageViewer.setVisible(true);
 					ac.setImageViewerDisplayed(true);
 				}
@@ -2581,8 +2588,15 @@ public class MainGUI extends JFrame {
 	
 	private class AddImageToViewList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			imagesToViewListModel.addElement(new File(e.getActionCommand()));
+			
+			File image = new File(e.getActionCommand());
+			
+			imagesToViewListModel.addElement(image);
 			setNrOfImagesLabels();
+			
+			if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
+				imageViewer.addImage(image);	
+			}
 		}
 	}
 	
@@ -2858,6 +2872,14 @@ public class MainGUI extends JFrame {
 			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
 				rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
 				popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+			} else if ((!e.isPopupTrigger()) && (e.getClickCount() == 2) && (mainTabbedPane.getSelectedIndex() == 2)) {
+				File image = new File(((JButton)e.getComponent()).getActionCommand());
+				
+				imagesToViewListModel.addElement(image);
+				setNrOfImagesLabels();
+				if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
+					imageViewer.addImage(image);	
+				}
 			}
 		}
 	}
