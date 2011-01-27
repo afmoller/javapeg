@@ -1,9 +1,4 @@
 package moller.util.io;
-/**
- * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         : 2010-02-17 by Fredrik Möller
- */
-
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -22,6 +17,18 @@ public class StreamUtil {
 		if (out != null) {
 			try {
 				out.close();
+			} catch (IOException e) {
+				if(!silent) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+	}
+	
+	public static void close(InputStream in, boolean silent) {
+		if (in != null) {
+			try {
+				in.close();
 			} catch (IOException e) {
 				if(!silent) {
 					throw new RuntimeException(e);
