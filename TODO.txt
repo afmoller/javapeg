@@ -1,6 +1,6 @@
 2.5:
 ====
-- Make it possible to remove paths from the image repository paths collections.
+- Double click on an image the search result window will add the image to the image list and view the image viewer and display the double clicked image.
 - Make it possible to configure the sort order of the source directory tree structure, alphabetical or latest modified.
 - Change the thumbnail progress bar from being a separate window to be integrated in the main window instead.
 - Fix layout of the Config Viewer GUI.
@@ -27,6 +27,7 @@ imageviewer.button.forward.toolTip                      = Next (Right Arrow)
 - Add slide show functionality to Image Viewer.
 - Add possibility to save multiple rename templates
 - Add merge functionality from several source directories. in the "rename image" mode.
+- Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 
 2.x:
 ====

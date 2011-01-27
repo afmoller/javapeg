@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -49,15 +50,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomCellRenderer;
+import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+import moller.javapeg.program.model.SortedListModel;
 import moller.util.gui.Screen;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
@@ -147,6 +151,11 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox warnWhenRemoveCategory;
 	private JCheckBox warnWhenRemoveCategoryWithSubCategories;
 	
+	private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
+	private JButton removeSelectedImagePathsButton;
+	
+	private JList imageRepositoriesList;
+	
 	private Config   conf;
 	private Logger   logger;
 	private Language lang;
@@ -178,6 +187,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean USE_EMBEDDED_THUMBNAIL;
 	private boolean WARN_WHEN_REMOVE_CATEGORY;
 	private boolean WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES;
+	private boolean AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX;
 			
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
@@ -221,6 +231,7 @@ public class ConfigViewerGUI extends JFrame {
 		THUMBNAIL_TOOLTIP_STATE = conf.getStringProperty("thumbnails.tooltip.state");
 		WARN_WHEN_REMOVE_CATEGORY = conf.getBooleanProperty("categories.warnWhenRemoveCategory");
 		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories");
+		AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths");
 	}
 	
 	private void initiateWindow() {
@@ -301,6 +312,7 @@ public class ConfigViewerGUI extends JFrame {
 		clearCacheJButton.addActionListener(new ClearCacheButtonListener());
 		enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
 		maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());
+		removeSelectedImagePathsButton.addActionListener(new RemoveSelectedImagePathsButtonListener());
 	}
 	
 	private JPanel createButtonPanel() {
@@ -798,7 +810,7 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Image Repositories Area
 		 */
-		JList imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
+		imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
 		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
 		
 		JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
@@ -808,11 +820,41 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder("Image Repositories"));
 		
+		
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		
+//		TODO: Fix hard coded string
+		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox("Remove non existing paths");
+		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
+//		TODO: Fix hard coded string
+		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText("Automatically remove paths from the image repository that does not exist");
+		
+		removeSelectedImagePathsButton = new JButton();
+		
+		InputStream imageStream = null;
+		try {
+			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
+			removeSelectedImagePathsButton.setIcon(new ImageIcon(ImageIO.read(imageStream)));
+		} catch (IOException iox) {
+			removeSelectedImagePathsButton.setText("X");
+			logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the remove selected image paths button. See stacktrace below for details");
+			logger.logERROR(iox);
+		} finally {
+			StreamUtil.close(imageStream, true);
+		}
+		
+		removeSelectedImagePathsButton.setToolTipText("Remove selected path(s) from the image repository");
+		
+		GBHelper posButtonPanel = new GBHelper();
+		
+		buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel);
+		buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.nextCol());
+		
 		GBHelper posImageRepositories = new GBHelper();
 		
 		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.expandW().expandH());
-		
-		
+		imageRepositoriesPanel.add(new Gap(2), posImageRepositories.nextRow());
+		imageRepositoriesPanel.add(buttonPanel, posImageRepositories.nextRow());
 		
 		tagConfigurationPanel = new JPanel(new GridBagLayout());
 		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -918,6 +960,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail", useEmbeddedThumbnail.isSelected());
 		conf.setBooleanProperty("categories.warnWhenRemoveCategory", warnWhenRemoveCategory.isSelected());
 		conf.setBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories", warnWhenRemoveCategoryWithSubCategories.isSelected());
+		conf.setBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths", automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
 				
 		/**
 		 * Show configuration changes.
@@ -1094,6 +1137,11 @@ public class ConfigViewerGUI extends JFrame {
 		if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
 			displayMessage.append("Warn when removing category with sub categories" + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
 		}
+		
+//		TODO: Fix hard coded string
+		if(AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX != automaticallyRemoveNonExistingImagePathsCheckBox.isSelected()) {
+			displayMessage.append("Remove non existing paths" + ": " + automaticallyRemoveNonExistingImagePathsCheckBox.isSelected() + " (" + AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX + ")\n");
+		}
 				
 		if(displayMessage.length() > 0) {
 			JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
@@ -1232,6 +1280,10 @@ public class ConfigViewerGUI extends JFrame {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
 		this.dispose();
+	}
+	
+	private int displayConfirmDialog(String message, String label, int type) {
+		return JOptionPane.showConfirmDialog(this, message, label, type);
 	}
 	
 	private class RotateLogSizeJTextFieldListener implements DocumentListener {
@@ -1415,6 +1467,47 @@ public class ConfigViewerGUI extends JFrame {
 		}
 	}
 	
+	private class RemoveSelectedImagePathsButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			SortedListModel imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
+			
+			Object[] selectedValues = imageRepositoriesList.getSelectedValues();
+			
+			StringBuilder paths = new StringBuilder();
+			
+			for (Object selectedValue : selectedValues) {
+				ImageRepositoryItem iri = (ImageRepositoryItem)selectedValue;
+				
+				String status = "";
+				
+				switch (iri.getPathStatus()) {
+				case EXISTS:
+//					TODO: Fix hard coded string
+					status = "Exists";					
+					break;
+				case NOT_AVAILABLE:
+//					TODO: Fix hard coded string
+					status = "Not Available";
+					break;
+				case DOES_NOT_EXIST:
+//					TODO: Fix hard coded string
+					status = "Does not exist";
+					break;
+				}
+				paths.append(iri.getPath() + " (" + status + ")");
+				paths.append(C.LS);
+			}
+			
+			int result = displayConfirmDialog("The following path(s) will be removed from the image repository:" + C.LS + C.LS + paths.toString(), "Confirmation", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (result == 0) {
+				for (Object selectedValue : selectedValues) {
+					imageRepositroyListModel.removeElement(selectedValue);	
+				}	
+			}
+		}
+	}
 	
 	private class OkButtonListener implements ActionListener {
 		@Override

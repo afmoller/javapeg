@@ -73,6 +73,7 @@ public class ImageViewer extends JFrame {
 	
 	private JPanel imageBackground;
 	private JPanel overViewBackgroundPanel;
+	private JPanel imageOverViewPanel;
 	
 	private JMenuItem popupMenuPrevious;
 	private JMenuItem popupMenuNext;
@@ -107,6 +108,8 @@ public class ImageViewer extends JFrame {
 	private int imagesToViewListSize;
 	
 	private CustomKeyEventDispatcher customKeyEventDispatcher;
+	
+	private OverviewButtonListener overviewButtonListener;
 		
 	public ImageViewer(List<File> imagesToView) {
 		
@@ -252,23 +255,13 @@ public class ImageViewer extends JFrame {
 		overViewScrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		overViewScrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 				
-		JPanel imageOverViewPanel = new JPanel(new GridLayout(0, 1));	
+		imageOverViewPanel = new JPanel(new GridLayout(0, 1));	
 		imageOverViewPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 		
-		OverviewButtonListener overviewButtonListener = new OverviewButtonListener();
+		overviewButtonListener = new OverviewButtonListener();
 		
 		for(int i = 0; i < imagesToView.size(); i++) {	
-			File jpegImage = imagesToView.get(i);
-			
-			JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData())); 
-			
-			imageButton.setActionCommand(Integer.toString(i));
-			if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
-				imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));	
-			}
-			imageButton.addActionListener(overviewButtonListener);
-			
-			imageOverViewPanel.add(imageButton);
+			this.addImageToOverViewPanel(imagesToView.get(i), overviewButtonListener, i);
 		}
 		
 		overViewScrollpane.getViewport().add(imageOverViewPanel);
@@ -279,6 +272,20 @@ public class ImageViewer extends JFrame {
 		backgroundPanel.add(buttonBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH).expandH());
 				
 		return backgroundPanel;
+	}
+	
+	private void addImageToOverViewPanel(File jpegImage, OverviewButtonListener overviewButtonListener, int index) {
+		JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData())); 
+		
+		imageButton.setActionCommand(Integer.toString(index));
+		if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));	
+		}
+		imageButton.addActionListener(overviewButtonListener);
+		
+		imageOverViewPanel.add(imageButton);
+		Update.updateAllUIs();
+		
 	}
 	
 	// Create ToolBar
@@ -387,6 +394,12 @@ public class ImageViewer extends JFrame {
 		boolean [] timerStatus = {false,false,false,false};
 		statuspanel = new StatusPanel(timerStatus);
 		this.getContentPane().add(statuspanel, BorderLayout.SOUTH);
+	}
+	
+	public void addImage(File image) {
+		imagesToView.add(image);
+		imagesToViewListSize++;
+		this.addImageToOverViewPanel(image, overviewButtonListener, imagesToView.size() - 1);
 	}
 
 	private void addListeners() {
