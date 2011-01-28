@@ -69,12 +69,12 @@ public class ImageSearchResultViewer extends JFrame {
 	private JMenuItem popupMenuCopyImageToSystemClipBoard;
 	private JMenuItem popupMenuCopyAllImagesToSystemClipBoard;
 
-	private String ICONFILEPATH = "resources/images/imageviewer/";
+	private final String ICONFILEPATH = "resources/images/imageviewer/";
 
 	private int columnMargin;
 	private int iconWidth;
-	private int nrOfImagesToView;
-	
+	private final int nrOfImagesToView;
+
 	private GridLayout thumbNailGridLayout;
 
 	private JPanel thumbNailsPanel;
@@ -91,7 +91,7 @@ public class ImageSearchResultViewer extends JFrame {
 		this.createStatusPanel();
 		this.addListeners();
 		this.executeLoadThumbnailsProcess(imagesToView);
-		
+
 		nrOfImagesToView = imagesToView.size();
 	}
 
@@ -133,9 +133,9 @@ public class ImageSearchResultViewer extends JFrame {
 		this.setTitle("Search Result");
 		this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
 	}
-	
+
 	private JScrollPane createThumbNailsBackgroundPanel(){
-		
+
 		thumbNailGridLayout = new GridLayout(0, 6);
 		thumbNailsPanel = new JPanel(thumbNailGridLayout);
 
@@ -148,13 +148,13 @@ public class ImageSearchResultViewer extends JFrame {
 		JScrollPane scrollpane = new JScrollPane(thumbNailsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.setHorizontalScrollBar(hSB);
 		scrollpane.setVerticalScrollBar(vSB);
-		
+
 		return scrollpane;
 	}
 
 	// Create ToolBar
 	public void createToolBar()	{
-		
+
 		toolBar = new JToolBar();
 		toolBar.setRollover(true);
 
@@ -216,11 +216,11 @@ public class ImageSearchResultViewer extends JFrame {
 		popupMenuDeSelectAll = new JMenuItem("Deselect all selected images");
 //		TODO: Fix hard coded string
 		popupMenuSetSelectedToViewList = new JMenuItem("Add selected image(s) to view list");
-//		TODO: Fix hard coded string		
-		popupMenuCopyImageToSystemClipBoard = new JMenuItem("Copy selected image to system clip board"); 
+//		TODO: Fix hard coded string
+		popupMenuCopyImageToSystemClipBoard = new JMenuItem("Copy selected image to system clip board");
 //		TODO: Fix hard coded string
 		popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem("Copy all images to system clip board");
-		
+
 		rightClickMenu.add(popupMenuSelectAll);
 		rightClickMenu.add(popupMenuDeSelectAll);
 		rightClickMenu.addSeparator();
@@ -245,7 +245,7 @@ public class ImageSearchResultViewer extends JFrame {
 		popupMenuDeSelectAll.addActionListener(new RightClickMenuListenerDeSelectAll());
 		popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
 		popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
-		
+
 	}
 
 	private void saveSettings() {
@@ -257,11 +257,11 @@ public class ImageSearchResultViewer extends JFrame {
 
 	private void setStatusMessages () {
 			int nrOfColumns = thumbNailGridLayout.getColumns();
-			
+
 			statuspanel.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
-			
+
 			int extraRow = nrOfImagesToView % nrOfColumns == 0 ? 0 : 1;
-			int rowsInGridLayout = (nrOfImagesToView / nrOfColumns) + extraRow; 
+			int rowsInGridLayout = (nrOfImagesToView / nrOfColumns) + extraRow;
 
 			statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
 //			TODO: Fix hard coded string
@@ -275,12 +275,14 @@ public class ImageSearchResultViewer extends JFrame {
 	}
 
 	private class WindowDestroyer extends WindowAdapter {
+		@Override
 		public void windowClosing (WindowEvent e) {
 			disposeFrame();
 		}
 	}
 
 	private class MouseButtonListener extends MouseAdapter{
+		@Override
 		public void mouseReleased(MouseEvent e){
 			if(e.isPopupTrigger()) {
 				rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
@@ -292,7 +294,7 @@ public class ImageSearchResultViewer extends JFrame {
 	private class RightClickMenuListenerSetSelectedToViewList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			ImagesToViewModel imagesToViewModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
-			
+
 			for (JToggleButton jToggleButton : getJToggleButtons()) {
 				if (jToggleButton.isSelected()) {
 					imagesToViewModel.addElement(new File(jToggleButton.getActionCommand()));
@@ -307,11 +309,11 @@ public class ImageSearchResultViewer extends JFrame {
 				if (jToggleButton.getName().equals("deselected")) {
 					setSelectedThumbNailImage(jToggleButton);
 					jToggleButton.setSelected(true);
-				}	
+				}
 			}
 		}
 	}
-	
+
 	private class RightClickMenuListenerDeSelectAll implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			for (JToggleButton jToggleButton : getJToggleButtons()) {
@@ -322,7 +324,7 @@ public class ImageSearchResultViewer extends JFrame {
 			}
 		}
 	}
-	
+
 	private class RightClickMenuListenerCopyImageToSystemClipBoard implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			List<File> selectedFiles = new ArrayList<File>();
@@ -332,11 +334,11 @@ public class ImageSearchResultViewer extends JFrame {
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
 		}
 	}
-	
+
 	private class RightClickMenuListenerCopyAllImagesToSystemClipBoard implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			List<File> selectedFiles = new ArrayList<File>();
-			
+
 			for (JToggleButton jToggleButton : getJToggleButtons()) {
 				selectedFiles.add(new File(jToggleButton.getActionCommand()));
 			}
@@ -344,12 +346,12 @@ public class ImageSearchResultViewer extends JFrame {
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
 		}
 	}
-	
+
 	private List<JToggleButton> getJToggleButtons() {
 		List<JToggleButton> jToggleButtons = new ArrayList<JToggleButton>();
-		
+
 		Component[] components = thumbNailsPanel.getComponents();
-		
+
 		for (Component component : components) {
 			if (component instanceof JToggleButton) {
 				jToggleButtons.add((JToggleButton)component);
@@ -357,26 +359,26 @@ public class ImageSearchResultViewer extends JFrame {
 		}
 		return jToggleButtons;
 	}
-	
+
 	private void setSelectedThumbNailImage(JToggleButton toggleButton) {
 		GrayFilter filter = new GrayFilter(true, 35);
 		ImageProducer prod = new FilteredImageSource(((ImageIcon)toggleButton.getIcon()).getImage().getSource(), filter);
 		Image disabledImage = Toolkit.getDefaultToolkit().createImage(prod);
-		
+
 		toggleButton.setIcon(new ImageIcon(disabledImage));
 		toggleButton.setName("selected");
 	}
-	
+
 	private void setDeSelectedThumbNailImage(JToggleButton toggleButton) {
-		toggleButton.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(new File(toggleButton.getActionCommand())).getThumbNailData()));	
+		toggleButton.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(new File(toggleButton.getActionCommand())).getThumbNailData()));
 		toggleButton.setName("deselected");
 	}
 
 	private void executeLoadThumbnailsProcess(Set<File> images) {
-		
+
 		ThumbNailListener thumbNailListener = new ThumbNailListener();
 		MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
-		
+
 		for (File image : images) {
 			JPEGThumbNail tn =	JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
 
@@ -384,7 +386,7 @@ public class ImageSearchResultViewer extends JFrame {
 			thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
 			thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 			if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
-				thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image));	
+				thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image));
 			}
 			thumbContainer.setActionCommand(image.getAbsolutePath());
 			thumbContainer.setName("deselected");
@@ -405,28 +407,28 @@ public class ImageSearchResultViewer extends JFrame {
 		}
 		setStatusMessages();
 	}
-	
+
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
 			if (((thumbNailsPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
-				
+
 				int columns = (thumbNailsPanel.getVisibleRect().width - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
-				
+
 				thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
 				thumbNailsPanel.invalidate();
 				thumbNailsPanel.repaint();
 				thumbNailsPanel.updateUI();
 				setStatusMessages();
-			}				
+			}
 		}
 	}
-	
+
 	private class ThumbNailListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JToggleButton toggleButton = (JToggleButton)e.getSource();
-			
+
 			if (toggleButton.getName().equals("deselected")) {
 				setSelectedThumbNailImage(toggleButton);
 			} else {
