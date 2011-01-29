@@ -52,6 +52,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -129,7 +130,6 @@ import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.PreviewTableModel;
 import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.RenameProcess;
-import moller.javapeg.program.progress.ThumbNailLoading;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.javapeg.program.rename.process.FileProcessor;
@@ -269,8 +269,6 @@ public class MainGUI extends JFrame {
 
 	private GridLayout thumbNailGridLayout;
 
-	private ThumbNailLoading pb;
-
 	private MetaDataTableModel metaDataTableModel;
 	private PreviewTableModel previewTableModel;
 
@@ -296,6 +294,8 @@ public class MainGUI extends JFrame {
 	private Thread loadFilesThread;
 
 	private ImageViewer imageViewer;
+
+	private JProgressBar thumbnailLoadingProgressBar;
 
 	public MainGUI(){
 
@@ -655,10 +655,14 @@ public class MainGUI extends JFrame {
 		JLabel thumbNailsTitleLable = new JLabel(lang.get("picture.panel.pictureLabel"));
 		thumbNailsTitleLable.setForeground(Color.GRAY);
 
+		thumbnailLoadingProgressBar = new JProgressBar();
+		thumbnailLoadingProgressBar.setStringPainted(true);
+
 		thumbNailsBackgroundsPanel = new JPanel(new BorderLayout());
 		thumbNailsBackgroundsPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 		thumbNailsBackgroundsPanel.add(thumbNailsTitleLable, BorderLayout.NORTH);
 		thumbNailsBackgroundsPanel.add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
+		thumbNailsBackgroundsPanel.add(thumbnailLoadingProgressBar, BorderLayout.SOUTH);
 
 		mainTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
@@ -1950,7 +1954,9 @@ public class MainGUI extends JFrame {
 				boolean bufferContainsImages = true;
 				while (loadFilesThread.isAlive() || bufferContainsImages) {
 
-					final File jpegFile = ApplicationContext.getInstance().handleJpegFileLoadBuffer(null, Action.RETRIEVE);
+					ApplicationContext ac = ApplicationContext.getInstance();
+
+					final File jpegFile = ac.handleJpegFileLoadBuffer(null, Action.RETRIEVE);
 
 					if(jpegFile != null) {
 
@@ -1983,7 +1989,8 @@ public class MainGUI extends JFrame {
 						ApplicationContext.getInstance().addMetaDataObject(metaData);
 						setStatusMessages();
 						updateGUI();
-						pb.updateProgressBar();
+						thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath() - FileRetriever.getInstance().getNonJPEGFiles().size());
+						thumbnailLoadingProgressBar.setValue(thumbnailLoadingProgressBar.getValue() + 1);
 					} else if (!loadFilesThread.isAlive()){
 						bufferContainsImages = false;
 					}
@@ -1995,7 +2002,7 @@ public class MainGUI extends JFrame {
 					} catch (InterruptedException e1) {
 					}
 				}
-				pb.dispose();
+//				thumbnailLoadingProgressBar.setValue(0);
 				addMouseListener();
 				setInputsEnabled(true);
 				startProcessButton.setEnabled(setStartProcessButtonState());
@@ -2013,7 +2020,10 @@ public class MainGUI extends JFrame {
 
 		String sourcePathString = sourcePath.getAbsolutePath();
 
-		ApplicationContext.getInstance().setSourcePath(sourcePathString);
+		ApplicationContext ac = ApplicationContext.getInstance();
+
+		ac.setSourcePath(sourcePathString);
+		ac.setNrOfFilesInSourcePath(sourcePath.listFiles().length);
 
 		config.setStringProperty("sourcePath", sourcePathString);
 		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
@@ -2035,15 +2045,8 @@ public class MainGUI extends JFrame {
 		};
 		loadFilesThread.start();
 
-		try {
-			int max = 0;
-			if (sourcePath.listFiles() != null) {
-				max = sourcePath.listFiles().length;
-			}
-			pb = new ThumbNailLoading(0, max, this);
-			pb.setVisible(max > 0);
-		} catch (Throwable th) {
-		}
+		thumbnailLoadingProgressBar.setMinimum(0);
+		thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath());
 
 		metaDataTableModel.setColumns();
 

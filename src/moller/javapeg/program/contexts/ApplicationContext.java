@@ -16,7 +16,7 @@ import moller.javapeg.program.metadata.MetaData;
  * This is a class that holds non persistent runtime specific
  * information which different components of the application
  * will need to be able to do it´s tasks.
- *  
+ *
  * @author Fredrik
  *
  */
@@ -26,90 +26,92 @@ public class ApplicationContext {
 	 * The static singleton instance of this class.
 	 */
 	private static ApplicationContext instance;
-	
+
 	/**
 	 * This variable contains the path to the selected folder
-	 *  containing JPEG images. 
+	 *  containing JPEG images.
 	 */
 	private String sourcePath;
-	
+
+	private int nrOfFilesInSourcePath;
+
 	/**
 	 * This variable contains the path to the selected destination
 	 * folder, the folder to where the renamed copies of the source
-	 *  folder will end up. 
+	 *  folder will end up.
 	 */
 	private String destinationPath;
-	
+
 	/**
-	 * This variable will contain the value that is entered in the 
+	 * This variable will contain the value that is entered in the
 	 * template JTextField for file in the GUI part of this application.
 	 */
 	private String templateFileName;
-	
+
 	/**
-	 * This variable will contain the value that is entered in the 
+	 * This variable will contain the value that is entered in the
 	 * template JTextField for sub folder in the GUI part of this application.
 	 */
 	private String templateSubFolderName;
-		
+
 	/**
 	 * This variable indicates whether the check box for creating thumb nails has
-	 * been clicked in the GUI. 
+	 * been clicked in the GUI.
 	 */
 	private boolean createThumbNailsCheckBoxSelected;
-	
+
 	/**
-	 * This List contains MetaData objects of all JPEG files in the folder 
+	 * This List contains MetaData objects of all JPEG files in the folder
 	 * that has been selected in the file chooser GUI.
 	 */
-	private List <MetaData>metaDataObjects;
-	
+	private final List <MetaData>metaDataObjects;
+
 	/**
-	 * This List contains the name of each language file that is embedded into 
+	 * This List contains the name of each language file that is embedded into
 	 * the application JAR file.
 	 */
 	private Set<String> jarFileEmbeddedLanguageFiles;
-	
+
 	/**
-	 * This list contains File objects and is populated when a directory is 
+	 * This list contains File objects and is populated when a directory is
 	 * selected in the tree structure. When a jpeg image is found that is added
 	 * to this buffer list. At the same time there is another task populating
 	 * the grid with image thumbnails and that task get it´s images from this
-	 * buffer list. 
+	 * buffer list.
 	 */
-	private List<File> jpegFileLoadBuffer;
-	
+	private final List<File> jpegFileLoadBuffer;
+
 	/**
-	 * This flag indicates whether the imageviewer is displayed or not 
+	 * This flag indicates whether the imageviewer is displayed or not
 	 */
 	private boolean imageViewerDisplayed;
-	
+
 	/**
 	 * Indicates which image that has been selected in the grid of thumbnails
 	 * that has been populated when a directory has been selected in the tree
 	 * object.
 	 */
 	private File selectedThumbNail;
-	
+
 	/**
-	 * This contains the currently selected TreePath in the category tree 
+	 * This contains the currently selected TreePath in the category tree
 	 * structure. It can contain a null value, if no path is currently
 	 * selected.
 	 */
 	private TreePath selectedCategoryPath;
-	
+
 	/**
 	 * This integer holds the value of the highest used category ID.
 	 */
 	private int highestUsedCategoryID;
-		
+
 	/**
-	 * This {@link MainTabbedPaneComponent} variable keeps track of the 
-	 * currently selected tab in the "Main tabbed pane", the one with the 
+	 * This {@link MainTabbedPaneComponent} variable keeps track of the
+	 * currently selected tab in the "Main tabbed pane", the one with the
 	 * Rename, Tag and Search / View.
 	 */
 	private MainTabbedPaneComponent mainTabbedPaneComponent;
-		
+
 	/**
 	 * Private constructor.
 	 */
@@ -131,7 +133,7 @@ public class ApplicationContext {
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static ApplicationContext getInstance() {
@@ -155,11 +157,11 @@ public class ApplicationContext {
 	public String getDestinationPath() {
 		return destinationPath;
 	}
-	
+
 	public List<MetaData> getMetaDataObjects() {
 		return metaDataObjects;
 	}
-	
+
 	public String getTemplateFileName() {
 		return templateFileName;
 	}
@@ -167,40 +169,44 @@ public class ApplicationContext {
 	public String getTemplateSubFolderName() {
 		return templateSubFolderName;
 	}
-	
+
 	public boolean isCreateThumbNailsCheckBoxSelected() {
 		return createThumbNailsCheckBoxSelected;
 	}
-	
+
 	public boolean isImageViewerDisplayed() {
 		return imageViewerDisplayed;
 	}
-	
+
 	public Set<String> getJarFileEmbeddedLanguageFiles() {
 		return jarFileEmbeddedLanguageFiles;
 	}
-	
+
 	public File getSelectedThumbNail() {
 		return selectedThumbNail;
 	}
-	
+
 	public TreePath getSelectedCategoryPath() {
 		return selectedCategoryPath;
 	}
-	
+
 	public int getHighestUsedCategoryID() {
 		return highestUsedCategoryID;
 	}
-	
+
 	public int getNextIDToUse() {
 		setHighestUsedCategoryID(highestUsedCategoryID + 1);
 		return getHighestUsedCategoryID();
 	}
-	
+
 	public MainTabbedPaneComponent getMainTabbedPaneComponent() {
 		return mainTabbedPaneComponent;
 	}
-	
+
+	public int getNrOfFilesInSourcePath() {
+		return nrOfFilesInSourcePath;
+	}
+
 	/**
 	 * SET  - methods
 	 */
@@ -211,15 +217,15 @@ public class ApplicationContext {
 	public void setDestinationPath(String destinationPath) {
 		this.destinationPath = destinationPath;
 	}
-	
+
 	public void clearMetaDataObjects () {
 		this.metaDataObjects.clear();
 	}
-	
+
 	public void addMetaDataObject(MetaData metaData) {
 		this.metaDataObjects.add(metaData);
 	}
-	
+
 	public void setTemplateFileName(String templateFileName) {
 		this.templateFileName = templateFileName;
 	}
@@ -238,45 +244,48 @@ public class ApplicationContext {
 		}
 		this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
 	}
-	
+
 	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
 		this.imageViewerDisplayed = imageViewerDisplayed;
 	}
-	
+
 	public void setSelectedThumbNail(File selectedThumbNail) {
 		this.selectedThumbNail = selectedThumbNail;
 	}
-	
+
 	public void setSelectedCategoryPath(TreePath selectedCategoryPath) {
 		this.selectedCategoryPath = selectedCategoryPath;
 	}
-	
+
 	public void setHighestUsedCategoryID(int highestUsedCategoryID) {
 		this.highestUsedCategoryID = highestUsedCategoryID;
 	}
-	
-	public void setMainTabbedPaneComponent(
-			MainTabbedPaneComponent mainTabbedPaneComponent) {
+
+	public void setMainTabbedPaneComponent(MainTabbedPaneComponent mainTabbedPaneComponent) {
 		this.mainTabbedPaneComponent = mainTabbedPaneComponent;
 	}
-		
+
+	public void setNrOfFilesInSourcePath(int nrOfFilesInSourcePath) {
+		this.nrOfFilesInSourcePath = nrOfFilesInSourcePath;
+	}
+
 	public void clearJpegFileLoadBuffer() {
 		jpegFileLoadBuffer.clear();
 	}
-		
+
 	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
 		switch (action) {
 		case ADD:
 			jpegFileLoadBuffer.add(image);
-			return image;	
+			return image;
 		case RETRIEVE:
 			if (jpegFileLoadBuffer.size() > 0) {
-				return jpegFileLoadBuffer.remove(0);	
+				return jpegFileLoadBuffer.remove(0);
 			} else {
 				return image;
 			}
 		default:
-			return image; 
+			return image;
 		}
 	}
 }

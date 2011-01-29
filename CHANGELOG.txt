@@ -66,6 +66,9 @@
    Bug seen in Windows 7, but is probably existing in any Operating system with
    user access control. 
    
+ ~ The progress bar displayed when loading images has been changed from being a
+   separate window to be integrated in the thumbnail display area. 
+   
  ~ The error message that is displayed if the configuration file is missing or
    corrupt has been improved by not only saying that the file is missing it 
    also says that the file might be corrupt.  
