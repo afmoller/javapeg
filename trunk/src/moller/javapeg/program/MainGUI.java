@@ -2049,6 +2049,7 @@ public class MainGUI extends JFrame {
 
 		thumbnailLoadingProgressBar.setMinimum(0);
 		thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath());
+		thumbnailLoadingProgressBar.setValue(0);
 		thumbnailLoadingProgressBar.setVisible(true);
 
 		metaDataTableModel.setColumns();
