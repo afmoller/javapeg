@@ -69,26 +69,26 @@ import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 
 public class ConfigViewerGUI extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JTree tree;
 
 	private JPanel backgroundsPanel;
-	
+
 	private JPanel loggingConfigurationPanel;
 	private JPanel updatesConfigurationPanel;
 	private JPanel languageConfigurationPanel;
 	private JPanel renameConfigurationPanel;
 	private JPanel thumbnailConfigurationPanel;
 	private JPanel tagConfigurationPanel;
-	
+
 	private JSplitPane splitPane;
-	
+
 	private JButton okButton;
 	private JButton applyButton;
 	private JButton cancelButton;
-		
+
 	/**
 	 * Variables for the logging panel
 	 */
@@ -98,34 +98,34 @@ public class ConfigViewerGUI extends JFrame {
 	private JComboBox rotateLogSizeFactor;
 	private JComboBox logLevels;
 	private JComboBox logEntryTimeStampFormats;
-		
+
 	private JTextField rotateLogSize;
 	private JTextField logName;
 	private JTextField logEntryTimeStampPreview;
-	
+
 	/**
 	 * Variables for the updates panel
 	 */
 	private JCheckBox updatesEnabled;
 	private JCheckBox sendVersionInformationEnabled;
-	
+
 	/**
 	 * Variables for the language panel
 	 */
 	private JList languageList;
-	
+
 	/**
 	 * Variables for the rename panel
 	 */
 	private JCheckBox useLastModifiedDate;
 	private JCheckBox useLastModifiedTime;
 	private JTextField maximumLengthOfCameraModelValueTextField;
-	
+
 	private  JLabel currentLanguage;
-			
+
 	private JRadioButton manualRadioButton;
 	private JRadioButton automaticRadioButton;
-	
+
 	/**
 	 * Variables for the thumbnail panel
 	 */
@@ -137,29 +137,29 @@ public class ConfigViewerGUI extends JFrame {
 	private JButton clearCacheJButton;
 	private JLabel cacheSizeLabel;
 	private JCheckBox enableThumbnailCache;
-	
+
 	private JRadioButton toolTipDisabled;
 	private JRadioButton toolTipEnabled;
 	private JRadioButton toolTipExtended;
-	
+
 	/**
 	 * Variables for the tag panel
 	 */
 	private JRadioButton useEmbeddedThumbnail;
 	private JRadioButton useScaledThumbnail;
-	
+
 	private JCheckBox warnWhenRemoveCategory;
 	private JCheckBox warnWhenRemoveCategoryWithSubCategories;
-	
+
 	private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
 	private JButton removeSelectedImagePathsButton;
-	
+
 	private JList imageRepositoriesList;
-	
-	private Config   conf;
-	private Logger   logger;
-	private Language lang;
-	
+
+	private final Config   conf;
+	private final Logger   logger;
+	private final Language lang;
+
 	// Configuration values read from configuration.
 	private String LOG_LEVEL;
 	private String LOG_NAME;
@@ -172,8 +172,8 @@ public class ConfigViewerGUI extends JFrame {
 	private String THUMBNAIL_MAX_CACHE_SIZE;
 	private String MAXIMUM_LENGTH_OF_CAMERA_MODEL;
 	private String THUMBNAIL_TOOLTIP_STATE;
-	
-	
+
+
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
 	private boolean LOG_ROTATE_ZIP;
@@ -188,12 +188,12 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean WARN_WHEN_REMOVE_CATEGORY;
 	private boolean WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES;
 	private boolean AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX;
-			
+
 	public ConfigViewerGUI() {
 		conf   = Config.getInstance();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
-			
+
 		this.setStartupConfig();
 		this.initiateWindow();
 		this.createLoggingConfigurationPanel();
@@ -202,11 +202,11 @@ public class ConfigViewerGUI extends JFrame {
 		this.createRenameConfigurationPanel();
 		this.createThumbnailConfigurationPanel();
 		this.createTagConfigurationPanel();
-		this.addListeners();	
+		this.addListeners();
 	}
-	
+
 	private void setStartupConfig() {
-		 
+
 		LOG_LEVEL = conf.getStringProperty("logger.log.level");
 		DEVELOPER_MODE = conf.getBooleanProperty("logger.developerMode");
 		LOG_ROTATE = conf.getBooleanProperty("logger.log.rotate");
@@ -233,13 +233,13 @@ public class ConfigViewerGUI extends JFrame {
 		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories");
 		AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths");
 	}
-	
+
 	private void initiateWindow() {
-								
+
 		this.setSize(new Dimension(conf.getIntProperty("configViewerGUI.window.width"),conf.getIntProperty("configViewerGUI.window.height")));
-				
+
 		Point xyFromConfig = new Point(conf.getIntProperty("configViewerGUI.window.location.x"),conf.getIntProperty("configViewerGUI.window.location.y"));
-				
+
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
 		} else {
@@ -248,20 +248,20 @@ public class ConfigViewerGUI extends JFrame {
 			logger.logERROR("Could not set location of Config Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
 		}
 		this.setLayout(new BorderLayout());
-		
+
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e){
 			logger.logERROR("Could not set desired Look And Feel for Config Viewer GUI");
 			logger.logERROR("Below is the generated StackTrace");
-			
+
 			for(StackTraceElement element : e.getStackTrace()) {
-				logger.logERROR(element.toString());	
+				logger.logERROR(element.toString());
 			}
 		}
 		this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
 		this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
-		
+
 		InputStream imageStream = null;
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/configuration.gif");
@@ -278,19 +278,19 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		this.setTitle(lang.get("configviewer.window.title"));
 	}
-	
-	private JSplitPane initiateSplitPane() {	
+
+	private JSplitPane initiateSplitPane() {
 		backgroundsPanel = new JPanel(new BorderLayout());
-				
+
 		splitPane = new JSplitPane();
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(200);
 		splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
 		splitPane.add(backgroundsPanel, JSplitPane.RIGHT);
-				
+
 		return splitPane;
 	}
-	
+
 	private void addListeners(){
 		this.addWindowListener(new WindowEventHandler());
 		rotateLogSize.getDocument().addDocumentListener(new RotateLogSizeJTextFieldListener());
@@ -314,40 +314,40 @@ public class ConfigViewerGUI extends JFrame {
 		maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());
 		removeSelectedImagePathsButton.addActionListener(new RemoveSelectedImagePathsButtonListener());
 	}
-	
+
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 
 		okButton     = new JButton(lang.get("common.button.ok.label"));
 		applyButton  = new JButton(lang.get("common.button.apply.label"));
 		cancelButton = new JButton(lang.get("common.button.cancel.label"));
-		
+
 		buttonPanel.add(okButton);
 		buttonPanel.add(applyButton);
 		buttonPanel.add(cancelButton);
-		
+
 		return buttonPanel;
 	}
-	
+
 	private void createLoggingConfigurationPanel() {
 		loggingConfigurationPanel = new JPanel(new GridBagLayout());
-		loggingConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
+		loggingConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.logging"))));
+
 		GBHelper posLoggingPanel = new GBHelper();
-						
+
 		String logLevel = conf.getStringProperty("logger.log.level");
-		int seletedIndex = 0; 
-		
+		int seletedIndex = 0;
+
 		for (Level level : Level.values()) {
 			if(level.toString().equals(logLevel)) {
 				seletedIndex = level.ordinal();
 				break;
-			}	
+			}
 		}
 		JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
-		logLevels = new JComboBox(Level.values());				
+		logLevels = new JComboBox(Level.values());
 		logLevels.setSelectedIndex(seletedIndex);
-		
+
 		JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
 		developerMode = new JCheckBox();
 		developerMode.setSelected(conf.getBooleanProperty("logger.developerMode"));
@@ -361,31 +361,31 @@ public class ConfigViewerGUI extends JFrame {
 		zipLog.setSelected(conf.getBooleanProperty("logger.log.rotate.zip"));
 
 		JLabel rotateLogSizeLabel = new JLabel(lang.get("configviewer.logging.label.rotateLogSize.text"));
-	
+
 		JPanel logSizePanel = new JPanel(new GridBagLayout());
 		GBHelper posLogSizePanel = new GBHelper();
-				
+
 		rotateLogSize = new JTextField();
 		rotateLogSize.setEnabled(conf.getBooleanProperty("logger.log.rotate"));
-		
+
 		long logSize = 0;
-		
+
 		try {
 			logSize = Long.parseLong(conf.getStringProperty("logger.log.rotate.size"));
 		} catch (NumberFormatException nfex) {
 			logSize = 1024000;
 		}
-						
+
 		String [] factors = {"KiB", "MiB"};
-				
+
 		rotateLogSizeFactor = new JComboBox(factors);
 
 		/**
 		 * Set values to the rotate log size JTextField and rotate log size
 		 * factor JComboBox
-		 */ 
+		 */
 		longToHuman(logSize);
-		
+
 		logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
 		logSizePanel.add(new Gap(10), posLogSizePanel.nextCol());
 		logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
@@ -395,9 +395,9 @@ public class ConfigViewerGUI extends JFrame {
 		logName.setText(conf.getStringProperty("logger.log.name"));
 
 		JLabel logEntryTimeStampFormatLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text"));
-	
+
 		Set<String> formats = new LinkedHashSet<String>();
-		
+
 		formats.add(conf.getStringProperty("logger.log.entry.timestamp.format"));
 		formats.add("yyyy-MM-dd'T'HH:mm:ss:SSSZ");
 		formats.add("yyyyMMdd'T'HHmmssSSSZ");
@@ -405,14 +405,14 @@ public class ConfigViewerGUI extends JFrame {
 		formats.add("yyyyD'T'HHmmssSSSZ");
 		formats.add("MM/dd/yyyy:HH:mm:ss:SSS");
 		formats.add("dd/MM/yyyy:HH:mm:ss:SSS");
-				
+
 		logEntryTimeStampFormats = new JComboBox(formats.toArray());
 
 		JLabel logEntryTimeStampPreviewLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampPreview.text"));
 		logEntryTimeStampPreview = new JTextField();
 		logEntryTimeStampPreview.setEditable(false);
 		this.updatePreviewTimestamp();
-				
+
 		loggingConfigurationPanel.add(developerModeLabel, posLoggingPanel);
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(developerMode, posLoggingPanel.nextCol());
@@ -445,11 +445,11 @@ public class ConfigViewerGUI extends JFrame {
 		loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
 		loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol());
 	}
-		
+
 	private void createUpdateConfigurationPanel() {
 		updatesConfigurationPanel = new JPanel(new GridBagLayout());
-		updatesConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
+		updatesConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.updates"))));
+
 		GBHelper posUpdatesPanel = new GBHelper();
 
 		JLabel updatesEnabledLabel = new JLabel(lang.get("configviewer.update.label.updateEnabled.text"));
@@ -460,7 +460,7 @@ public class ConfigViewerGUI extends JFrame {
 		sendVersionInformationEnabled = new JCheckBox();
 		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
 		sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
-		
+
 		updatesConfigurationPanel.add(updatesEnabledLabel, posUpdatesPanel);
 		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
 		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.nextCol());
@@ -468,11 +468,11 @@ public class ConfigViewerGUI extends JFrame {
 		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
 		updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextCol());
 	}
-	
+
 	private void createRenameConfigurationPanel() {
 		renameConfigurationPanel = new JPanel(new GridBagLayout());
-		renameConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
+		renameConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.rename"))));
+
 		GBHelper posRenamePanel = new GBHelper();
 
 		JLabel useLastModifiedDateLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
@@ -487,7 +487,7 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel cameraModelValueLengthLabel = new JLabel("Maximum Lenght of camera model value");
 		maximumLengthOfCameraModelValueTextField = new JTextField(5);
 		maximumLengthOfCameraModelValueTextField.setText(conf.getStringProperty("rename.maximum.length.camera-model"));
-				
+
 		renameConfigurationPanel.add(useLastModifiedDateLabel, posRenamePanel);
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
 		renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextCol());
@@ -498,12 +498,11 @@ public class ConfigViewerGUI extends JFrame {
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
 		renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol());
 	}
-	
+
 	private void createLanguageConfigurationPanel() {
-		
 		languageConfigurationPanel = new JPanel(new GridBagLayout());
-		languageConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-						
+		languageConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.language"))));
+
 		JPanel leftPanel = new JPanel(new GridBagLayout());
 		JPanel rightPanel = new JPanel(new GridBagLayout());
 
@@ -512,24 +511,24 @@ public class ConfigViewerGUI extends JFrame {
 
 		manualRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.manual"));
 		automaticRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.automatic"));
-				
+
 		ButtonGroup languageSelectionMode = new ButtonGroup();
 		languageSelectionMode.add(manualRadioButton);
 		languageSelectionMode.add(automaticRadioButton);
 
 		JLabel currentLanguageLabel = new JLabel(lang.get("configviewer.language.label.currentLanguage"));
 		currentLanguageLabel.setForeground(Color.GRAY);
-				
+
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			if(!conf.getStringProperty("gUILanguageISO6391").equals(System.getProperty("user.language"))) {
 				conf.setStringProperty("gUILanguageISO6391", System.getProperty("user.language"));
-			}	
+			}
 		}
-				
+
 		currentLanguage = new JLabel(ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")));
-		
+
 		GBHelper posLeft = new GBHelper();
-		
+
 		leftPanel.add(selectionModeJLabel, posLeft);
 		leftPanel.add(new Gap(2), posLeft.nextRow());
 		leftPanel.add(manualRadioButton, posLeft.nextRow());
@@ -541,13 +540,13 @@ public class ConfigViewerGUI extends JFrame {
 
 		JLabel availableLanguages = new JLabel(lang.get("configviewer.language.label.availableLanguages"));
 		availableLanguages.setForeground(Color.GRAY);
-		
+
 		languageList = new JList(ConfigUtil.listLanguagesFiles());
-		
+
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			languageList.setEnabled(false);
 		}
-		
+
 		JScrollPane sp = new JScrollPane(languageList);
 
 		GBHelper posRight = new GBHelper();
@@ -555,9 +554,9 @@ public class ConfigViewerGUI extends JFrame {
 		rightPanel.add(availableLanguages, posRight);
 		rightPanel.add(new Gap(2), posRight.nextRow());
 		rightPanel.add(sp, posRight.nextRow());
-			
+
 		GBHelper posLanguagePanel = new GBHelper();
-		
+
 		languageConfigurationPanel.add(new Gap(5), posLanguagePanel);
 		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextRow());
 		languageConfigurationPanel.add(leftPanel, posLanguagePanel.nextCol().align(GridBagConstraints.NORTH));
@@ -565,16 +564,16 @@ public class ConfigViewerGUI extends JFrame {
 		languageConfigurationPanel.add(rightPanel, posLanguagePanel.nextCol());
 		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextCol());
 		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextRow());
-		
+
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			automaticRadioButton.setSelected(true);
 		} else {
 			manualRadioButton.setSelected(true);
 		}
 	}
-	
+
 	private void createThumbnailConfigurationPanel() {
-			
+
 		/**
 		 * Start of Thumbnail Creation Area
 		 */
@@ -588,36 +587,36 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailWidth = new JTextField(conf.getStringProperty("thumbnails.view.width"));
 		thumbnailWidth.setColumns(5);
 		thumbnailWidth.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
-		
+
 //		TODO: Fix hard coded string
 		JLabel thumbnailHeightLabel = new JLabel("Height of the created thumbnail");
 		thumbnailHeight = new JTextField(conf.getStringProperty("thumbnails.view.height"));
 		thumbnailHeight.setColumns(5);
 		thumbnailHeight.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
-		
+
 //		TODO: Fix hard coded string
 		JLabel thumbnailCreationMode = new JLabel("Thumbnail Creation Algorithm");
-				
+
 		String scaleAlgorithm = conf.getStringProperty("thumbnails.view.create.algorithm");
-		int seletedIndex = 0; 
-		
+		int seletedIndex = 0;
+
 		for (JPEGScaleAlgorithm algorithm : JPEGScaleAlgorithm.values()) {
 			if(algorithm.toString().equals(scaleAlgorithm)) {
 				seletedIndex = algorithm.ordinal();
 				break;
-			}	
+			}
 		}
-		
+
 		thumbnailCreationAlgorithm = new JComboBox(JPEGScaleAlgorithm.values());
 		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
 		thumbnailCreationAlgorithm.invalidate();
 		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
-		
+
 		JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());
 		thumbnailCreationPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Creation"));
-		
+
 		GBHelper posThumbnailCreationPanel = new GBHelper();
-		
+
 		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailCreationPanel);
 		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
 		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.nextCol());
@@ -633,49 +632,49 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailCreationPanel.add(thumbnailCreationMode, posThumbnailCreationPanel.nextRow());
 		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
 		thumbnailCreationPanel.add(thumbnailCreationAlgorithm, posThumbnailCreationPanel.nextCol());
-		
+
 		/**
 		 * Start of Thumbnail Cache Area
 		 */
-		
+
 //		TODO: Fix hard coded string
 		JLabel enableThumbnailCacheLabel = new JLabel("Enable Thumbnail cache" + ": ");
-		
+
 		enableThumbnailCache = new JCheckBox();
 		enableThumbnailCache.setSelected(conf.getBooleanProperty("thumbnails.cache.enabled"));
-		
-		
+
+
 		JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
 //		TODO: Fix hard coded string
 		JLabel cacheSizeLabelHeading = new JLabel("Thumbnail cache size" + ": ");
-		
+
 		cacheSizeLabel = new JLabel(Integer.toString(jptc.getCurrentSize()));
 		cacheSizeLabel.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
-		
+
 //		TODO: Fix hard coded string
 		JLabel cacheMaxSizeLabel = new JLabel("Thumbnail cache size max" + ": ");
-		
+
 		maxCacheSize = new JTextField(6);
 		maxCacheSize.setText(Integer.toString(conf.getIntProperty("thumbnails.cache.max-size")));
 		maxCacheSize.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
-		
+
 //		TODO: Fix hard coded string
 		JLabel clearCachLabel = new JLabel("Clear Thumbnail cache:");
-		
+
 		clearCacheJButton = new JButton("X");
 		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
-				
+
 		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
 //		TODO: Fix hard coded string
 		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Cache"));
-		
+
 		GBHelper posThumbnailCachePanel = new GBHelper();
-		
+
 		thumbnailCachePanel.add(enableThumbnailCacheLabel, posThumbnailCachePanel);
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
 		thumbnailCachePanel.add(enableThumbnailCache, posThumbnailCachePanel.nextCol());
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
-		
+
 		thumbnailCachePanel.add(cacheSizeLabelHeading, posThumbnailCachePanel.nextRow());
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
 		thumbnailCachePanel.add(cacheSizeLabel, posThumbnailCachePanel.nextCol());
@@ -687,18 +686,18 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailCachePanel.add(clearCachLabel, posThumbnailCachePanel.nextRow());
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
 		thumbnailCachePanel.add(clearCacheJButton, posThumbnailCachePanel.nextCol());
-		
+
 		/**
 		 * Start of Thumbnail ToolTip Area
 		 */
-		
+
 //		TODO: Fix hard coded string
 		JLabel toolTipDisabledLabel = new JLabel("Disabled:");
 //		TODO: Fix hard coded string
 		JLabel toolTipEnabledLabel  = new JLabel("Enabled:");
 //		TODO: Fix hard coded string
 		JLabel toolTipExtendedLabel = new JLabel("Extended:");
-		
+
 		toolTipDisabled = new JRadioButton();
 //		TODO: Fix hard coded string
 		toolTipDisabled.setName("0");
@@ -708,15 +707,15 @@ public class ConfigViewerGUI extends JFrame {
 		toolTipExtended = new JRadioButton();
 //		TODO: Fix hard coded string
 		toolTipExtended.setName("2");
-		
+
 		ButtonGroup group = new ButtonGroup();
-		
+
 		group.add(toolTipDisabled);
 		group.add(toolTipEnabled);
 		group.add(toolTipExtended);
-		
+
 		String toolTipState = conf.getStringProperty("thumbnails.tooltip.state");
-		
+
 		if (toolTipState.equalsIgnoreCase(toolTipDisabled.getName())) {
 			toolTipDisabled.setSelected(true);
 		} else if (toolTipState.equalsIgnoreCase(toolTipExtended.getName())) {
@@ -724,13 +723,13 @@ public class ConfigViewerGUI extends JFrame {
 		} else {
 			toolTipEnabled.setSelected(true);
 		}
- 		
+
 		JPanel thumbnailToolTipPanel = new JPanel(new GridBagLayout());
 //		TODO: Fix hard coded string
 		thumbnailToolTipPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Tooltips"));
-		
+
 		GBHelper posThumbnailToolTipPanel = new GBHelper();
-		
+
 		thumbnailToolTipPanel.add(toolTipDisabledLabel, posThumbnailToolTipPanel);
 		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
 		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.nextCol());
@@ -742,19 +741,19 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailToolTipPanel.add(toolTipExtendedLabel, posThumbnailToolTipPanel.nextRow());
 		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
 		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextCol());
-		
+
 		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
 		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
+
 		GBHelper posThumbnailPanel = new GBHelper();
-		
+
 		thumbnailConfigurationPanel.add(thumbnailCreationPanel, posThumbnailPanel.expandW().expandH());
 		thumbnailConfigurationPanel.add(thumbnailCachePanel, posThumbnailPanel.nextRow().expandW().expandH());
 		thumbnailConfigurationPanel.add(thumbnailToolTipPanel, posThumbnailPanel.nextRow().expandW().expandH());
 	}
-	
+
 	private void createTagConfigurationPanel() {
-		
+
 		/**
 		 * Start of Preview Image Area
 		 */
@@ -767,17 +766,17 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel useScaledThumbnailLabel = new JLabel("Use scaled thumbnail as Preview Image (Slow)");
 		useScaledThumbnail = new JRadioButton();
 		useScaledThumbnail.setSelected(!conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
-		
+
 		ButtonGroup group = new ButtonGroup();
 		group.add(useEmbeddedThumbnail);
 		group.add(useScaledThumbnail);
-		
+
 		JPanel previewImagePanel = new JPanel(new GridBagLayout());
 //		TODO: Fix hard coded string
 		previewImagePanel.setBorder(BorderFactory.createTitledBorder("Preview Image"));
-		
+
 		GBHelper posPreviewImagePanel = new GBHelper();
-		
+
 		previewImagePanel.add(useEmbeddedThumbnailLabel, posPreviewImagePanel);
 		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
 		previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.nextCol());
@@ -786,7 +785,7 @@ public class ConfigViewerGUI extends JFrame {
 		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
 		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextCol());
 		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
-		
+
 		/**
 		 * Start of Categories Area
 		 */
@@ -796,41 +795,40 @@ public class ConfigViewerGUI extends JFrame {
 //		TODO: Fix hard coded string
 		warnWhenRemoveCategoryWithSubCategories = new JCheckBox("Warn when removing category with sub categories");
 		warnWhenRemoveCategoryWithSubCategories.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories"));
-		
+
 		JPanel categoriesPanel = new JPanel(new GridBagLayout());
 //		TODO: Fix hard coded string
 		categoriesPanel.setBorder(BorderFactory.createTitledBorder("Categories"));
-		
+
 		GBHelper posCategoriesPanel = new GBHelper();
-		
+
 		categoriesPanel.add(warnWhenRemoveCategory, posCategoriesPanel);
 		categoriesPanel.add(new Gap(10), posCategoriesPanel.nextRow());
 		categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow());
-		
+
 		/**
 		 * Start of Image Repositories Area
 		 */
 		imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
 		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
-		
+
 		JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
 		imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		JPanel imageRepositoriesPanel = new JPanel(new GridBagLayout());
 //		TODO: Fix hard coded string
 		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder("Image Repositories"));
-		
-		
+
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
-		
+
 //		TODO: Fix hard coded string
 		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox("Remove non existing paths");
 		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
 //		TODO: Fix hard coded string
 		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText("Automatically remove paths from the image repository that does not exist");
-		
+
 		removeSelectedImagePathsButton = new JButton();
-		
+
 		InputStream imageStream = null;
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
@@ -842,77 +840,77 @@ public class ConfigViewerGUI extends JFrame {
 		} finally {
 			StreamUtil.close(imageStream, true);
 		}
-		
+
 		removeSelectedImagePathsButton.setToolTipText("Remove selected path(s) from the image repository");
-		
+
 		GBHelper posButtonPanel = new GBHelper();
-		
+
 		buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel);
 		buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.nextCol());
-		
+
 		GBHelper posImageRepositories = new GBHelper();
-		
+
 		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.expandW().expandH());
 		imageRepositoriesPanel.add(new Gap(2), posImageRepositories.nextRow());
 		imageRepositoriesPanel.add(buttonPanel, posImageRepositories.nextRow());
-		
+
 		tagConfigurationPanel = new JPanel(new GridBagLayout());
 		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		
+
 		GBHelper posTagPanel = new GBHelper();
-		
+
 		tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
 		tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW().expandH());
 		tagConfigurationPanel.add(imageRepositoriesPanel, posTagPanel.nextRow().expandW().expandH());
 	}
-		
+
 	private void updateWindowLocationAndSize() {
 		conf.setIntProperty("configViewerGUI.window.location.x", this.getLocation().x);
 		conf.setIntProperty("configViewerGUI.window.location.y", this.getLocation().y);
 		conf.setIntProperty("configViewerGUI.window.width", this.getSize().width);
-		conf.setIntProperty("configViewerGUI.window.height", this.getSize().height);	
+		conf.setIntProperty("configViewerGUI.window.height", this.getSize().height);
 	}
-		
-	private JScrollPane initiateJTree() {		
+
+	private JScrollPane initiateJTree() {
 		tree = new JTree(ConfigViewerGUIUtil.createNodes());
 		tree.setShowsRootHandles (true);
 		tree.addMouseListener(new Mouselistener());
-		
+
 		return new JScrollPane(tree);
 	}
-		
+
 	private void updatePreviewTimestamp() {
 		Date date = new Date();
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat(logEntryTimeStampFormats.getSelectedItem().toString());
 		logEntryTimeStampPreview.setText(sdf.format(date));
 	}
-	
+
 	private boolean updateConfiguration() {
-				
+
 		if(!validateLogName(logName.getText())) {
 			return  false;
 		}
 		if(!validateLogRotateSize()) {
 			return false;
 		}
-		
+
 		if(!validateThumbnailSize("width")) {
 			return false;
 		}
-		
+
 		if(!validateThumbnailSize("height")) {
 			return false;
 		}
-		
+
 		if(!validateThumbnailCacheMaxSize()) {
 			return false;
 		}
-		
+
 		if(!validateMaximumLengtOfCameraModel()) {
 			return false;
 		}
-						
+
 		/**
 		 * Update Logging Configuration
 		 */
@@ -923,26 +921,26 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("logger.log.rotate.size", Long.toString(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString())));
 		conf.setStringProperty("logger.log.name", logName.getText().trim());
 		conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());
-		
+
 		/**
 		 * Update Updates Configuration
 		 */
 		conf.setBooleanProperty("updatechecker.enabled", updatesEnabled.isSelected());
 		conf.setBooleanProperty("updatechecker.attachVersionInformation", sendVersionInformationEnabled.isSelected());
-		
+
 		/**
 		 * Update Language Configuration
 		 */
 		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
 		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
-		
+
 		/**
 		 * Update Rename Configuration
 		 */
 		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
 		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
 		conf.setStringProperty("rename.maximum.length.camera-model", maximumLengthOfCameraModelValueTextField.getText());
-		
+
 		/**
 		 * Update Thumbnail Configuration
 		 */
@@ -953,7 +951,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setStringProperty("thumbnails.cache.max-size", maxCacheSize.getText());
 		conf.setBooleanProperty("thumbnails.cache.enabled", enableThumbnailCache.isSelected());
 		conf.setStringProperty("thumbnails.tooltip.state", getToolTipState());
-		
+
 		/**
 		 * Update Tag Configuration
 		 */
@@ -961,15 +959,15 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setBooleanProperty("categories.warnWhenRemoveCategory", warnWhenRemoveCategory.isSelected());
 		conf.setBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories", warnWhenRemoveCategoryWithSubCategories.isSelected());
 		conf.setBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths", automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
-				
+
 		/**
 		 * Show configuration changes.
 		 */
 		this.displayChangedConfigurationMessage();
-		
+
 		return true;
 	}
-	
+
 	private String getToolTipState() {
 		if (toolTipDisabled.isSelected()) {
 			return toolTipDisabled.getName();
@@ -989,7 +987,7 @@ public class ConfigViewerGUI extends JFrame {
 		if(DEVELOPER_MODE != developerMode.isSelected()){
 			displayMessage.append(lang.get("configviewer.logging.label.developerMode.text") + ": " + developerMode.isSelected() + " (" + DEVELOPER_MODE + ")\n");
 		}
-		
+
 		if(LOG_ROTATE != rotateLog.isSelected()){
 			displayMessage.append(lang.get("configviewer.logging.label.rotateLog.text") + ": " + rotateLog.isSelected() + " (" + LOG_ROTATE + ")\n");
 		}
@@ -1001,11 +999,11 @@ public class ConfigViewerGUI extends JFrame {
 		if(!LOG_ROTATE_SIZE.equals(calculateRotateLogSize(rotateLogSize.getText(), rotateLogSizeFactor.getSelectedItem().toString()))){
 			displayMessage.append(lang.get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(LOG_ROTATE_SIZE, rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
 		}
-		
+
 		if(!LOG_LEVEL.equals(logLevels.getSelectedItem().toString())) {
 			displayMessage.append(lang.get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + LOG_LEVEL + ")\n");
 		}
-		
+
 		if(!LOG_NAME.equals(logName.getText())){
 			displayMessage.append(lang.get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + LOG_NAME + ")\n");
 		}
@@ -1021,7 +1019,7 @@ public class ConfigViewerGUI extends JFrame {
 		if(UPDATE_CHECK_ATTACH_VERSION != sendVersionInformationEnabled.isSelected()){
 			displayMessage.append(lang.get("configviewer.update.label.attachVersionInformation.text") + ": " + sendVersionInformationEnabled.isSelected() + " (" + UPDATE_CHECK_ATTACH_VERSION + ")\n");
 		}
-				
+
 		if(USE_LAST_MODIFIED_DATE != useLastModifiedDate.isSelected()){
 			displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedDate.text") + ": " + useLastModifiedDate.isSelected() + " (" + USE_LAST_MODIFIED_DATE + ")\n");
 		}
@@ -1029,45 +1027,45 @@ public class ConfigViewerGUI extends JFrame {
 		if(USE_LAST_MODIFIED_TIME != useLastModifiedTime.isSelected()){
 			displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedTime.text") + ": " + useLastModifiedTime.isSelected() + " (" + USE_LAST_MODIFIED_TIME + ")\n");
 		}
-		
+
 		if(AUTOMATIC_LANGUAGE_SELECTION != automaticRadioButton.isSelected()){
 			displayMessage.append(lang.get("configviewer.language.radiobutton.automatic") + ": " + automaticRadioButton.isSelected() + " (" + AUTOMATIC_LANGUAGE_SELECTION + ")\n");
 		}
-		
+
 		if(!GUI_LANGUAGE_ISO6391.equals(ISO639.getInstance().getCode(currentLanguage.getText()))){
 			displayMessage.append(lang.get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(GUI_LANGUAGE_ISO6391) + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT != createThumbnailIfMissingOrCorrupt.isSelected()) {
 			displayMessage.append("If embedded thumbnail is missing or corrupt, create a temporary" + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(!THUMBNAIL_WIDTH.equals(thumbnailWidth.getText())) {
 			displayMessage.append("Width of the created thumbnail" + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(!THUMBNAIL_HEIGHT.equals(thumbnailHeight.getText())) {
 			displayMessage.append("Height of the created thumbnail" + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(!CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM.equals(thumbnailCreationAlgorithm.getSelectedItem().toString())) {
 			displayMessage.append("Thumbnail Creation Algorithm" + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(!THUMBNAIL_MAX_CACHE_SIZE.equals(maxCacheSize.getText())) {
 			displayMessage.append("Thumbnail cache size max" + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
 			displayMessage.append("Enable Thumbnail cache" + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(maximumLengthOfCameraModelValueTextField.getText())) {
 			displayMessage.append("Maximum Lenght of camera model value" + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
@@ -1085,16 +1083,16 @@ public class ConfigViewerGUI extends JFrame {
 		if(!THUMBNAIL_TOOLTIP_STATE.equals(getToolTipState())) {
 			int previousThumbNailToolTipState = -1;
 			String previous = "";
-			
+
 			try {
 				previousThumbNailToolTipState = Integer.parseInt(THUMBNAIL_TOOLTIP_STATE);
 			} catch (NumberFormatException nfex) {
 				previousThumbNailToolTipState = 1;
 			}
-			
+
 			switch (previousThumbNailToolTipState) {
 			case 0:
-//				TODO: Fix hard coded string				
+//				TODO: Fix hard coded string
 				previous = "Disabled";
 				break;
 			case 1:
@@ -1106,13 +1104,13 @@ public class ConfigViewerGUI extends JFrame {
 				previous = "Extended";
 				break;
 			}
-			
+
 			int currentThumbNailToolTipState = Integer.parseInt(getToolTipState());
 			String current = "";
-			
+
 			switch (currentThumbNailToolTipState) {
 			case 0:
-//				TODO: Fix hard coded string				
+//				TODO: Fix hard coded string
 				current = "Disabled";
 				break;
 			case 1:
@@ -1124,64 +1122,64 @@ public class ConfigViewerGUI extends JFrame {
 				current = "Extended";
 				break;
 			}
-			
+
 			displayMessage.append("Thumbnail Tooltips" + ": " + current + " (" + previous + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {
 			displayMessage.append("Warn when removing category" + ": " + warnWhenRemoveCategory.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
 			displayMessage.append("Warn when removing category with sub categories" + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
 		}
-		
+
 //		TODO: Fix hard coded string
 		if(AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX != automaticallyRemoveNonExistingImagePathsCheckBox.isSelected()) {
 			displayMessage.append("Remove non existing paths" + ": " + automaticallyRemoveNonExistingImagePathsCheckBox.isSelected() + " (" + AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX + ")\n");
 		}
-				
+
 		if(displayMessage.length() > 0) {
 			JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-		
+
 	private boolean validateLogName(String logName) {
     	boolean isValid = true;
-    	
+
 		int result = PathUtil.validateString(logName, false);
-    	
+
     	if (result > -1) {
     		isValid = false;
     		JOptionPane.showMessageDialog(this, lang.get("common.message.error.invalidFileName") + " " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
     	}
     	return isValid;
     }
-	    	
+
 	private boolean validateLogRotateSize() {
 		boolean isValid = true;
-		
-		try {			
+
+		try {
 			Long size = Long.parseLong(rotateLogSize.getText());
-			
+
 			String factor = rotateLogSizeFactor.getSelectedItem().toString();
-			
+
 			size = calculateRotateLogSize(size, factor);
-			
+
 			if(size > 100 * 1024 * 1024) {
 				isValid = false;
 
 				if(factor.equals("KiB")) {
-					JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeKiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);	
+					JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeKiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeMiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			
+
 			if(size < 10 * 1024) {
-				JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToSmall"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);					
+				JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToSmall"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (NumberFormatException nfex) {
 			isValid = false;
@@ -1189,24 +1187,24 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return isValid;
 	}
-		
+
 	private String calculateRotateLogSize(String size, String factor) {
 		return Long.toString(calculateRotateLogSize(Long.parseLong(size), factor));
 	}
-	
+
 	private String parseRotateLongSize(String size, String factor) {
-		
+
 		long longSize = Long.parseLong(size);
-		
+
 		if (factor.equals("KiB")) {
 			longSize /= 1024;
 		} else {
 			longSize /= 1024 * 1024;
 		}
 		return Long.toString(longSize);
-		
+
 	}
-	
+
 	private long calculateRotateLogSize(Long size, String factor) {
 		if (factor.equals("KiB")) {
 			size *= 1024;
@@ -1215,7 +1213,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return size;
 	}
-	
+
 	private void longToHuman (Long logSize) {
 		if (logSize / (1024 * 1024) > 1) {
 			rotateLogSize.setText(Long.toString(logSize / (1024 * 1024)));
@@ -1225,21 +1223,21 @@ public class ConfigViewerGUI extends JFrame {
 			rotateLogSizeFactor.setSelectedIndex(0);
 		}
 	}
-	
+
 	private boolean validateThumbnailSize(String validatorFor) {
 
 		String errorMessage = "";
-		
+
 		if (validatorFor.equals("width")) {
 			String thumbnailWidthString = thumbnailWidth.getText();
 			if(!StringUtil.isInt(thumbnailWidthString)) {
 //				TODO: Fix hard coded string
 				errorMessage = "The value of the thumbnail width must be an integer";
-			}	
+			}
 			else if(!StringUtil.isInt(thumbnailWidthString, true)) {
 //				TODO: Fix hard coded string
 				errorMessage = "The value of the thumbnail width must be an non negative integer";
-			}	
+			}
 		} else {
 			String thumbnailHeightString = thumbnailWidth.getText();
 			if(!StringUtil.isInt(thumbnailHeightString)) {
@@ -1249,7 +1247,7 @@ public class ConfigViewerGUI extends JFrame {
 			else if(!StringUtil.isInt(thumbnailHeightString, true)) {
 //				TODO: Fix hard coded string
 				errorMessage = "The value of the thumbnail height must be an non negative integer";
-			}	
+			}
 		}
 		if(errorMessage.length() > 0) {
 			JOptionPane.showMessageDialog(this, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
@@ -1257,7 +1255,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 		return true;
 	}
-	
+
 	private boolean validateThumbnailCacheMaxSize() {
 		if(!StringUtil.isInt(maxCacheSize.getText(), true)) {
 //			TODO: Fix hard coded string
@@ -1265,8 +1263,8 @@ public class ConfigViewerGUI extends JFrame {
 			return false;
 		}
 		return true;
-	}	
-	
+	}
+
 	private boolean validateMaximumLengtOfCameraModel() {
 		if(!StringUtil.isInt(maximumLengthOfCameraModelValueTextField.getText(), true)) {
 //			TODO: Fix hard coded string
@@ -1274,18 +1272,18 @@ public class ConfigViewerGUI extends JFrame {
 			return false;
 		}
 		return true;
-	}	
-	
+	}
+
 	private void closeWindow() {
 		updateWindowLocationAndSize();
 		this.setVisible(false);
 		this.dispose();
 	}
-	
+
 	private int displayConfirmDialog(String message, String label, int type) {
 		return JOptionPane.showConfirmDialog(this, message, label, type);
 	}
-	
+
 	private class RotateLogSizeJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
@@ -1296,7 +1294,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-	
+
 	private class RotateLogSizeFactorJComboBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
@@ -1305,7 +1303,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 	}
-	
+
 	private class  ThumbnailWidthJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
@@ -1316,7 +1314,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-	
+
 	private class  ThumbnailHeightJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
@@ -1327,7 +1325,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-	
+
 	private class  ThumbnailMaxCacheSizeJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
@@ -1338,7 +1336,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-	
+
 	private class  MaximumLengtOfCameraModelJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
@@ -1349,18 +1347,19 @@ public class ConfigViewerGUI extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 		}
 	}
-					
+
 	/**
 	 * Mouse listener
 	 */
 	private class Mouselistener extends MouseAdapter{
+		@Override
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
 			if(selRow > -1) {
-							
+
 				backgroundsPanel.removeAll();
 				backgroundsPanel.updateUI();
-				
+
 				if (selRow == 1) {
 					backgroundsPanel.add(loggingConfigurationPanel);
 				} else if (selRow == 2) {
@@ -1377,7 +1376,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 	}
-	
+
 	private class LogEntryTimestampFormatsJComboBoxListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
@@ -1386,7 +1385,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 	}
-			
+
 	private class LogNameJTextFieldListener implements DocumentListener {
 
 	    public void insertUpdate(DocumentEvent e) {
@@ -1395,49 +1394,49 @@ public class ConfigViewerGUI extends JFrame {
 	    public void removeUpdate(DocumentEvent e) {
 	    }
 	    public void changedUpdate(DocumentEvent e) {
-	    }   
+	    }
 	}
-				
+
 	private class ManualRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			languageList.setEnabled(true);
 		}
 	}
-	
+
 	private class AutomaticRadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			languageList.setEnabled(false);
-			
+
 			String userLanguage = System.getProperty("user.language");
-			
+
 			if(!conf.getStringProperty("gUILanguageISO6391").equals(userLanguage)) {
 				currentLanguage.setText(ConfigUtil.resolveCodeToLanguageName(userLanguage));
-			}	
+			}
 		}
 	}
-	
+
 	private class LanguageListListener implements ListSelectionListener {
-		public void valueChanged(ListSelectionEvent lse) {	
+		public void valueChanged(ListSelectionEvent lse) {
 			if(languageList.getSelectedIndex() > -1) {
 				currentLanguage.setText((String)languageList.getSelectedValue());
 			}
 		}
 	}
-	
+
 	private class UpdatesEnabledCheckBoxListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
 		}
 	}
-	
+
 	private class RotateLogCheckBoxListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			rotateLogSize.setEnabled(rotateLog.isSelected());
 		}
 	}
-	
+
 	private class CreateThumbnailCheckBoxListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -1446,7 +1445,7 @@ public class ConfigViewerGUI extends JFrame {
 			thumbnailCreationAlgorithm.setEnabled(createThumbnailIfMissingOrCorrupt.isSelected());
 		}
 	}
-	
+
 	private class EnableThumbnailCacheCheckBoxListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -1455,36 +1454,36 @@ public class ConfigViewerGUI extends JFrame {
 			cacheSizeLabel.setEnabled(enableThumbnailCache.isSelected());
 		}
 	}
-	
+
 	private class ClearCacheButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 //			TODO: Add security question.
 			JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
-			
+
 			jptc.clear();
 			cacheSizeLabel.setText(Integer.toString(jptc.getCurrentSize()));
 		}
 	}
-	
+
 	private class RemoveSelectedImagePathsButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			SortedListModel imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
-			
+
 			Object[] selectedValues = imageRepositoriesList.getSelectedValues();
-			
+
 			StringBuilder paths = new StringBuilder();
-			
+
 			for (Object selectedValue : selectedValues) {
 				ImageRepositoryItem iri = (ImageRepositoryItem)selectedValue;
-				
+
 				String status = "";
-				
+
 				switch (iri.getPathStatus()) {
 				case EXISTS:
 //					TODO: Fix hard coded string
-					status = "Exists";					
+					status = "Exists";
 					break;
 				case NOT_AVAILABLE:
 //					TODO: Fix hard coded string
@@ -1498,23 +1497,23 @@ public class ConfigViewerGUI extends JFrame {
 				paths.append(iri.getPath() + " (" + status + ")");
 				paths.append(C.LS);
 			}
-			
+
 			int result = displayConfirmDialog("The following path(s) will be removed from the image repository:" + C.LS + C.LS + paths.toString(), "Confirmation", JOptionPane.OK_CANCEL_OPTION);
-			
+
 			if (result == 0) {
 				for (Object selectedValue : selectedValues) {
-					imageRepositroyListModel.removeElement(selectedValue);	
-				}	
+					imageRepositroyListModel.removeElement(selectedValue);
+				}
 			}
 		}
 	}
-	
+
 	private class OkButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (updateConfiguration()) {
-				closeWindow();	
-			}	
+				closeWindow();
+			}
 		}
 	}
 
@@ -1523,7 +1522,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			updateConfiguration();
 			setStartupConfig();
-		}	
+		}
 	}
 
 	private class CancelButtonListener implements ActionListener {
@@ -1532,8 +1531,9 @@ public class ConfigViewerGUI extends JFrame {
 			closeWindow();
 		}
 	}
-	
+
 	private class WindowEventHandler extends WindowAdapter {
+		@Override
 		public void windowClosing(WindowEvent e) {
 			updateWindowLocationAndSize();
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

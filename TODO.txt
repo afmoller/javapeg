@@ -1,13 +1,14 @@
 2.5:
 ====
-- Fix layout of the Config Viewer GUI.
+- Fix all TODO items.
+- Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-- Test all functionality.
+
 
 Translations:
 -------------------------------
@@ -26,6 +27,14 @@ imageviewer.button.forward.toolTip                      = Next (Right Arrow)
 - Add possibility to save multiple rename templates
 - Add merge functionality from several source directories. in the "rename image" mode.
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
+- Test all functionality.
+- Update version numbers in language files
+- Update version information files (Program help (version_information))
+- Update info files in the internal resources directory.
+- Enter values to the change log.
+- Enter change log entries to the change log files on the update server.
+- Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
+
 
 2.x:
 ====

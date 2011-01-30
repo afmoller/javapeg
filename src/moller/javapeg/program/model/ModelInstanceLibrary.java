@@ -3,18 +3,18 @@ package moller.javapeg.program.model;
 import moller.javapeg.program.categories.CategoryUtil;
 
 public class ModelInstanceLibrary {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static ModelInstanceLibrary instance;
-	
-	private MetaDataTableModel metaDataTableModel;
-	private PreviewTableModel  previewTableModel;
-	private SortedListModel    imageRepositoryListModel;
-	private ImagesToViewModel  imagesToViewModel;
-	private CategoriesModel    categoriesModel;
-	
+
+	private final MetaDataTableModel metaDataTableModel;
+	private final PreviewTableModel  previewTableModel;
+	private final SortedListModel    imageRepositoryListModel;
+	private final ImagesToViewModel  imagesToViewModel;
+	private CategoriesModel    categoriesModel = null;
+
 	/**
 	 * Private constructor.
 	 */
@@ -23,12 +23,11 @@ public class ModelInstanceLibrary {
 		previewTableModel        = new PreviewTableModel();
 		imageRepositoryListModel = new SortedListModel();
 		imagesToViewModel        = new ImagesToViewModel();
-		categoriesModel          = new CategoriesModel(CategoryUtil.createCategoriesModel());
 	}
-		
+
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static ModelInstanceLibrary getInstance() {
@@ -41,7 +40,7 @@ public class ModelInstanceLibrary {
 			return instance;
 		}
 	}
-	
+
 	public MetaDataTableModel getMetaDataTableModel() {
 		return metaDataTableModel;
 	}
@@ -49,16 +48,19 @@ public class ModelInstanceLibrary {
 	public PreviewTableModel getPreviewTableModel() {
 		return previewTableModel;
 	}
-	
+
 	public SortedListModel getImageRepositoryListModel() {
 		return imageRepositoryListModel;
 	}
-	
+
 	public ImagesToViewModel getImagesToViewModel() {
 		return imagesToViewModel;
 	}
-	
+
 	public CategoriesModel getCategoriesModel() {
+		if (null == categoriesModel) {
+			categoriesModel = new CategoriesModel(CategoryUtil.createCategoriesModel());
+		}
 		return categoriesModel;
 	}
 }
