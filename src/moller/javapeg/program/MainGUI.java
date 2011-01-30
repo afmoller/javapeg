@@ -657,6 +657,7 @@ public class MainGUI extends JFrame {
 
 		thumbnailLoadingProgressBar = new JProgressBar();
 		thumbnailLoadingProgressBar.setStringPainted(true);
+		thumbnailLoadingProgressBar.setVisible(false);
 
 		thumbNailsBackgroundsPanel = new JPanel(new BorderLayout());
 		thumbNailsBackgroundsPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
@@ -2002,7 +2003,8 @@ public class MainGUI extends JFrame {
 					} catch (InterruptedException e1) {
 					}
 				}
-//				thumbnailLoadingProgressBar.setValue(0);
+				thumbnailLoadingProgressBar.setValue(0);
+				thumbnailLoadingProgressBar.setVisible(false);
 				addMouseListener();
 				setInputsEnabled(true);
 				startProcessButton.setEnabled(setStartProcessButtonState());
@@ -2047,6 +2049,7 @@ public class MainGUI extends JFrame {
 
 		thumbnailLoadingProgressBar.setMinimum(0);
 		thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath());
+		thumbnailLoadingProgressBar.setVisible(true);
 
 		metaDataTableModel.setColumns();
 
