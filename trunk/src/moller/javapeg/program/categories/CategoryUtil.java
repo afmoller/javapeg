@@ -212,6 +212,7 @@ public class CategoryUtil {
 			if (displayErrorMessage) {
 				Language lang = Language.getInstance();
 				displayErrorMessage(lang.get("category.categoriesModel.store.error"), lang.get("errormessage.maingui.errorMessageLabel"));
+				System.exit(1);
 			}
 		}
 	}
