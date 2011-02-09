@@ -44,8 +44,9 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Använd Senast Ändraddatum Om Exif-datum Saknas
-configviewer.rename.label.useLastModifiedTime.text = Använd Senast Ändradtid Om Exif-tid Saknas
+configviewer.rename.label.useLastModifiedDate.text      = Använd Senast Ändraddatum Om Exif-datum Saknas
+configviewer.rename.label.useLastModifiedTime.text      = Använd Senast Ändradtid Om Exif-tid Saknas
+configviewer.rename.label.maximumCameraModelValueLength = Maximum Length of camera model value
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
@@ -58,6 +59,25 @@ configviewer.language.label.availableLanguages   = TILLGÄNGLIGA SPRÅK
 configviewer.language.languageNameNotFound       = namn på språk ej funnet
 configviewer.language.information.windowlabel    = Information
 configviewer.language.information.restartMessage = Valt språk kommer inte användas innan JavaPEG startats om
+
+##############################################################################################################
+# T H U M B N A I L                                                                                          #
+##############################################################################################################
+configviewer.thumbnail.creation.label.missingOrCorrupt = Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär
+configviewer.thumbnail.creation.label.thumbnail.width  = Bredd på den skapade tumnageln
+configviewer.thumbnail.creation.label.thumbnail.height = Height of the created thumbnail
+configviewer.thumbnail.creation.label.algorithm        = Tumnagelskaparalgoritm
+configviewer.thumbnail.creation.label                  = Tumnagelskapande
+configviewer.thumbnail.cache.label.enable              = Aktivera tumnagel cache
+configviewer.thumbnail.cache.label.size                = Tumnagel cachestorlek
+configviewer.thumbnail.cache.label.size.max            = Tumnagel max cachestorlek
+configviewer.thumbnail.cache.label.clear               = Rensa tumnagelcache
+configviewer.thumbnail.cache.label                     = Tumnagel Cache
+configviewer.thumbnail.tooltip.label.disabled          = Avaktiverad:
+configviewer.thumbnail.tooltip.label.enabled           = Aktiverad:
+configviewer.thumbnail.tooltip.label.extended          = Utökad:
+configviewer.thumbnail.tooltip.label                   = Tumnagel Tooltips
+
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

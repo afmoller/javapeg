@@ -483,8 +483,7 @@ public class ConfigViewerGUI extends JFrame {
 		useLastModifiedTime = new JCheckBox();
 		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
 
-//		TODO: Fix hard coded string
-		JLabel cameraModelValueLengthLabel = new JLabel("Maximum Lenght of camera model value");
+		JLabel cameraModelValueLengthLabel = new JLabel(lang.get("configviewer.rename.label.maximumCameraModelValueLength"));
 		maximumLengthOfCameraModelValueTextField = new JTextField(5);
 		maximumLengthOfCameraModelValueTextField.setText(conf.getStringProperty("rename.maximum.length.camera-model"));
 
@@ -577,25 +576,21 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Thumbnail Creation Area
 		 */
-//		TODO: Fix hard coded string
-		JLabel createThumbnailIfMissingOrCorruptLabel = new JLabel("If embedded thumbnail is missing or corrupt, create a temporary");
+		JLabel createThumbnailIfMissingOrCorruptLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt"));
 		createThumbnailIfMissingOrCorrupt = new JCheckBox();
 		createThumbnailIfMissingOrCorrupt.setSelected(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 
-//		TODO: Fix hard coded string
-		JLabel thumbnailWidthLabel = new JLabel("Width of the created thumbnail");
+		JLabel thumbnailWidthLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.thumbnail.width"));
 		thumbnailWidth = new JTextField(conf.getStringProperty("thumbnails.view.width"));
 		thumbnailWidth.setColumns(5);
 		thumbnailWidth.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 
-//		TODO: Fix hard coded string
-		JLabel thumbnailHeightLabel = new JLabel("Height of the created thumbnail");
+		JLabel thumbnailHeightLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.thumbnail.height"));
 		thumbnailHeight = new JTextField(conf.getStringProperty("thumbnails.view.height"));
 		thumbnailHeight.setColumns(5);
 		thumbnailHeight.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 
-//		TODO: Fix hard coded string
-		JLabel thumbnailCreationMode = new JLabel("Thumbnail Creation Algorithm");
+		JLabel thumbnailCreationMode = new JLabel(lang.get("configviewer.thumbnail.creation.label.algorithm"));
 
 		String scaleAlgorithm = conf.getStringProperty("thumbnails.view.create.algorithm");
 		int seletedIndex = 0;
@@ -613,7 +608,7 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 
 		JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());
-		thumbnailCreationPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Creation"));
+		thumbnailCreationPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.creation.label")));
 
 		GBHelper posThumbnailCreationPanel = new GBHelper();
 
@@ -637,36 +632,31 @@ public class ConfigViewerGUI extends JFrame {
 		 * Start of Thumbnail Cache Area
 		 */
 
-//		TODO: Fix hard coded string
-		JLabel enableThumbnailCacheLabel = new JLabel("Enable Thumbnail cache" + ": ");
+		JLabel enableThumbnailCacheLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.enable") + ": ");
 
 		enableThumbnailCache = new JCheckBox();
 		enableThumbnailCache.setSelected(conf.getBooleanProperty("thumbnails.cache.enabled"));
 
 
 		JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
-//		TODO: Fix hard coded string
-		JLabel cacheSizeLabelHeading = new JLabel("Thumbnail cache size" + ": ");
+		JLabel cacheSizeLabelHeading = new JLabel(lang.get("configviewer.thumbnail.cache.label.size") + ": ");
 
 		cacheSizeLabel = new JLabel(Integer.toString(jptc.getCurrentSize()));
 		cacheSizeLabel.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
 
-//		TODO: Fix hard coded string
-		JLabel cacheMaxSizeLabel = new JLabel("Thumbnail cache size max" + ": ");
+		JLabel cacheMaxSizeLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.size.max") + ": ");
 
 		maxCacheSize = new JTextField(6);
 		maxCacheSize.setText(Integer.toString(conf.getIntProperty("thumbnails.cache.max-size")));
 		maxCacheSize.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
 
-//		TODO: Fix hard coded string
-		JLabel clearCachLabel = new JLabel("Clear Thumbnail cache:");
+		JLabel clearCachLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.clear"));
 
 		clearCacheJButton = new JButton("X");
 		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
 
 		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
-//		TODO: Fix hard coded string
-		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Cache"));
+		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.cache.label")));
 
 		GBHelper posThumbnailCachePanel = new GBHelper();
 
@@ -691,12 +681,9 @@ public class ConfigViewerGUI extends JFrame {
 		 * Start of Thumbnail ToolTip Area
 		 */
 
-//		TODO: Fix hard coded string
-		JLabel toolTipDisabledLabel = new JLabel("Disabled:");
-//		TODO: Fix hard coded string
-		JLabel toolTipEnabledLabel  = new JLabel("Enabled:");
-//		TODO: Fix hard coded string
-		JLabel toolTipExtendedLabel = new JLabel("Extended:");
+		JLabel toolTipDisabledLabel = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.disabled"));
+		JLabel toolTipEnabledLabel  = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.enabled"));
+		JLabel toolTipExtendedLabel = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.extended"));
 
 		toolTipDisabled = new JRadioButton();
 //		TODO: Fix hard coded string
@@ -725,8 +712,7 @@ public class ConfigViewerGUI extends JFrame {
 		}
 
 		JPanel thumbnailToolTipPanel = new JPanel(new GridBagLayout());
-//		TODO: Fix hard coded string
-		thumbnailToolTipPanel.setBorder(BorderFactory.createTitledBorder("Thumbnail Tooltips"));
+		thumbnailToolTipPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.tooltip.label")));
 
 		GBHelper posThumbnailToolTipPanel = new GBHelper();
 
