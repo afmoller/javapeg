@@ -46,8 +46,9 @@ configviewer.update.label.attachVersionInformation.text = Añadir Información de 
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text = Usar la última fecha de modificación si la fecha Exif no existe
-configviewer.rename.label.useLastModifiedTime.text = Usar la última hora de modificación si la hora Exif no existe
+configviewer.rename.label.useLastModifiedDate.text      = Usar la última fecha de modificación si la fecha Exif no existe
+configviewer.rename.label.useLastModifiedTime.text      = Usar la última hora de modificación si la hora Exif no existe
+configviewer.rename.label.maximumCameraModelValueLength = Maximum Length of camera model value
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
@@ -60,6 +61,24 @@ configviewer.language.label.availableLanguages   = IDIOMAS DISPONIBLES
 configviewer.language.languageNameNotFound       = nombre de idioma no encontrado
 configviewer.language.information.windowlabel    = Información
 configviewer.language.information.restartMessage = El idioma seleccionado no se usará hasta que JavaPEG se reinicie
+
+##############################################################################################################
+# T H U M B N A I L                                                                                          #
+##############################################################################################################
+configviewer.thumbnail.creation.label.missingOrCorrupt = If embedded thumbnail is missing or corrupt, create a temporary
+configviewer.thumbnail.creation.label.thumbnail.width  = Width of the created thumbnail
+configviewer.thumbnail.creation.label.thumbnail.height = Height of the created thumbnail
+configviewer.thumbnail.creation.label.algorithm        = Thumbnail Creation Algorithm
+configviewer.thumbnail.creation.label                  = Thumbnail Creation
+configviewer.thumbnail.cache.label.enable              = Enable Thumbnail cache
+configviewer.thumbnail.cache.label.size                = Thumbnail cache size
+configviewer.thumbnail.cache.label.size.max            = Thumbnail cache size max
+configviewer.thumbnail.cache.label.clear               = Clear Thumbnail cache:
+configviewer.thumbnail.cache.label                     = Thumbnail Cache
+configviewer.thumbnail.tooltip.label.disabled          = Disabled:
+configviewer.thumbnail.tooltip.label.enabled           = Enabled:
+configviewer.thumbnail.tooltip.label.extended          = Extended:
+configviewer.thumbnail.tooltip.label                   = Thumbnail Tooltips
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
