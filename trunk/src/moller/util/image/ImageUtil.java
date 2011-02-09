@@ -18,12 +18,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 
 public class ImageUtil {
-	
+
 	/**
 	 * @param jpegFile
 	 * @param availableWidth
@@ -33,19 +35,19 @@ public class ImageUtil {
 	 * @throws IOException
 	 */
 	public static Image createThumbNailAdaptedToAvailableSpace(File jpegFile, int availableWidth, int availableHeight, JPEGScaleAlgorithm algorithm) throws IOException {
-		
+
 		BufferedImage img = ImageIO.read(jpegFile);
 		int imageWidth = img.getWidth();
 		int imageHeight = img.getHeight();
-		
+
 		Dimension scaledImage = calculateScaledImageWidthAndHeight(availableWidth, availableHeight, imageWidth, imageHeight);
-		
+
 		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
 		scaledBufferedImage.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
-		
+
 		return scaledBufferedImage;
 	}
-	
+
 	/**
 	 * @param jpegFile
 	 * @param availableWidth
@@ -55,20 +57,20 @@ public class ImageUtil {
 	 * @throws IOException
 	 */
 	public static Image createThumbNailAdaptedToAvailableSpace(byte[] jpegData, int availableWidth, int availableHeight, JPEGScaleAlgorithm algorithm) throws IOException {
-		
+
 		InputStream in = new ByteArrayInputStream(jpegData);
 		BufferedImage img = ImageIO.read(in);
 		int imageWidth = img.getWidth();
 		int imageHeight = img.getHeight();
-		
+
 		Dimension scaledImage = calculateScaledImageWidthAndHeight(availableWidth, availableHeight, imageWidth, imageHeight);
-		
+
 		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
 		scaledBufferedImage.createGraphics().drawImage(img.getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
-		
+
 		return scaledBufferedImage;
 	}
-	
+
 	/**
 	 * @param availableWidth
 	 * @param availableHeight
@@ -79,21 +81,21 @@ public class ImageUtil {
 	public static Dimension calculateScaledImageWidthAndHeight(int availableWidth, int availableHeight, int imageWidth, int imageHeight) {
 		float ratioWidth  = (float)imageWidth  / (float)availableWidth;
 		float ratioHeight = (float)imageHeight / (float)availableHeight;
-		
+
 		if (ratioHeight >= ratioWidth) {
 			return calculateWidthAndHeight(imageWidth, imageHeight, ratioHeight);
 		} else {
 			return calculateWidthAndHeight(imageWidth, imageHeight, ratioWidth);
 		}
 	}
-		
+
 	private static Dimension calculateWidthAndHeight(float imageWidth, float imageHeight, float ratio) {
 		int scaledImageWidth  = (int)(imageWidth  / ratio);
 		int scaledImageHeight = (int)(imageHeight / ratio);
-		
+
 		return new Dimension(scaledImageWidth, scaledImageHeight);
 	}
-		
+
 	public static Image rotateImage(Image img,double degree){
 		BufferedImage bufImg = toBufferedImage(img);
 		double angle = Math.toRadians(degree);
@@ -104,13 +106,13 @@ public class ImageUtil {
 	public static BufferedImage tilt(BufferedImage image, double angle) {
 		double sin = Math.abs(Math.sin(angle));
 		double cos = Math.abs(Math.cos(angle));
-		
+
 		int w = image.getWidth();
 		int h = image.getHeight();
-		
+
 		int neww = (int)Math.floor(w*cos+h*sin);
 		int newh = (int)Math.floor(h*cos+w*sin);
-		
+
 		GraphicsConfiguration gc = getDefaultConfiguration();
 		BufferedImage result = gc.createCompatibleImage(neww, newh, Transparency.TRANSLUCENT);
 		Graphics2D g = result.createGraphics();
@@ -202,5 +204,27 @@ public class ImageUtil {
 		// Get the image's color model
 		ColorModel cm = pg.getColorModel();
 		return cm.hasAlpha();
+	}
+
+	/**
+	 * This method returns an Icon from an InputStream.
+	 *
+	 * @param imageStream is the resource to create the Icon from.
+	 * @param silent is a flag indicating whether this method should propagate
+	 *        exceptions that might occur when the InputStream is closed.
+	 *
+	 * @return an Icon with the content specified by the supplied InputStream
+	 *
+	 * @throws IOException is thrown if an error occurs during reading.
+	 */
+	public static Icon getIcon(InputStream imageStream, boolean silent) throws IOException {
+		ImageIcon imageIcon = new ImageIcon();
+
+		try {
+			imageIcon.setImage(ImageIO.read(imageStream));
+		}  finally {
+			StreamUtil.close(imageStream, true);
+		}
+		return imageIcon;
 	}
 }
