@@ -178,6 +178,8 @@ public class MainGUI extends JFrame {
 	private JButton moveToBottomButton;
 	private JButton copyImageListdButton;
 	private JButton searchImagesButton;
+	private JButton clearCategoriesSelectionButton;
+	private JButton clearAllMetaDataParameters;
 
 	private JLabel destinationPathLabel;
 	private JLabel subFolderLabel;
@@ -973,10 +975,24 @@ public class MainGUI extends JFrame {
 //		TODO: Make configurable
 		orRadioButton.setSelected(true);
 
-		JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		clearCategoriesSelectionButton = new JButton();
+//		TODO: fix hard coded string
+		clearCategoriesSelectionButton.setToolTipText("Clear selected categories");
+
+		try {
+			clearCategoriesSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
+		} catch (IOException iox) {
+			clearCategoriesSelectionButton.setText("x");
+			Logger logger = Logger.getInstance();
+			logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear categories button. See stacktrace below for details");
+			logger.logERROR(iox);
+		}
+
+		JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
 		selectionModePanel.add(andRadioButton);
 		selectionModePanel.add(orRadioButton);
+		selectionModePanel.add(clearCategoriesSelectionButton);
 
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
 
@@ -992,6 +1008,7 @@ public class MainGUI extends JFrame {
 		posBackground.fill = GridBagConstraints.BOTH;
 
 		backgroundPanel.add(categoriesScrollPane, posBackground.expandH().expandW());
+		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(selectionModePanel, posBackground.nextRow());
 
 		return backgroundPanel;
@@ -1165,12 +1182,38 @@ public class MainGUI extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(commentTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		commentPanel.add(scrollPane, posCommentPanel.nextRow().expandH().expandW());
 
-		JPanel buttonPanel = new JPanel(new BorderLayout());
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-//		TODO: Fix hard coded string
-		searchImagesButton = new JButton("SEARCH IMAGES");
 
-		buttonPanel.add(searchImagesButton, BorderLayout.EAST);
+		clearAllMetaDataParameters = new JButton();
+//		TODO: fix hard coded string
+		clearAllMetaDataParameters.setToolTipText("Clear all selected meta data parameters");
+
+		try {
+			clearAllMetaDataParameters.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
+		} catch (IOException iox) {
+			clearAllMetaDataParameters.setText("x");
+			Logger logger = Logger.getInstance();
+			logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear meta data button. See stacktrace below for details");
+			logger.logERROR(iox);
+		}
+
+		searchImagesButton = new JButton();
+//		TODO: fix hard coded string
+		searchImagesButton.setToolTipText("Search for images");
+
+		try {
+			searchImagesButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif"), true));
+		} catch (IOException iox) {
+			searchImagesButton.setText("SEARCH IMAGES");
+			Logger logger = Logger.getInstance();
+			logger.logERROR("Could not set image: resources/images/Find16.gif as icon for the search images button. See stacktrace below for details");
+			logger.logERROR(iox);
+		}
+
+		buttonPanel.add(searchImagesButton);
+		buttonPanel.add(clearAllMetaDataParameters);
 
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1477,6 +1520,8 @@ public class MainGUI extends JFrame {
 		openImageViewerButton.addActionListener(new OpenImageViewerListener());
 		copyImageListdButton.addActionListener(new CopyImageListListener());
 		searchImagesButton.addActionListener(new SearchImagesListener());
+		clearCategoriesSelectionButton.addActionListener(new ClearCategoriesSelectionListener());
+		clearAllMetaDataParameters.addActionListener(new ClearAllMetaDataParametersListener());
 
 		popupMenuCopyImageToClipBoardRename.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuCopyImageToClipBoardView.addActionListener(new CopyImageToSystemClipBoard());
@@ -2564,6 +2609,36 @@ public class MainGUI extends JFrame {
 //				TODO: fix hard coded string
 				displayInformationMessage("No images found");
 			}
+		}
+	}
+
+	private class ClearCategoriesSelectionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
+		}
+	}
+
+	private class ClearAllMetaDataParametersListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
+
+			yearMetaDataValue.clearValue();
+			monthMetaDataValue.clearValue();
+			dayMetaDataValue.clearValue();
+			hourMetaDataValue.clearValue();
+			minuteMetaDataValue.clearValue();
+			secondMetaDataValue.clearValue();
+			imagesSizeMetaDataValue.clearValue();
+			isoMetaDataValue.clearValue();
+			shutterSpeedMetaDataValue.clearValue();
+			apertureValueMetaDataValue.clearValue();
+			cameraModelMetaDataValue.clearValue();
+
+			for (JCheckBox ratingCheckBox : ratingCheckBoxes) {
+				ratingCheckBox.setSelected(false);
+			}
+
+			commentTextArea.setText("");
 		}
 	}
 
