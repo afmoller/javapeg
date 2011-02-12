@@ -743,13 +743,11 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Preview Image Area
 		 */
-//		TODO: Fix hard coded string
-		JLabel useEmbeddedThumbnailLabel = new JLabel("Use embedded thumbnail as Preview Image (Fast)");
+		JLabel useEmbeddedThumbnailLabel = new JLabel(lang.get("configviewer.tag.previewimage.label.embeddedthumbnail"));
 		useEmbeddedThumbnail = new JRadioButton();
 		useEmbeddedThumbnail.setSelected(conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
 
-//		TODO: Fix hard coded string
-		JLabel useScaledThumbnailLabel = new JLabel("Use scaled thumbnail as Preview Image (Slow)");
+		JLabel useScaledThumbnailLabel = new JLabel(lang.get("configviewer.tag.previewimage.label.scaledthumbnail"));
 		useScaledThumbnail = new JRadioButton();
 		useScaledThumbnail.setSelected(!conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
 
@@ -758,8 +756,7 @@ public class ConfigViewerGUI extends JFrame {
 		group.add(useScaledThumbnail);
 
 		JPanel previewImagePanel = new JPanel(new GridBagLayout());
-//		TODO: Fix hard coded string
-		previewImagePanel.setBorder(BorderFactory.createTitledBorder("Preview Image"));
+		previewImagePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.previewimage.label")));
 
 		GBHelper posPreviewImagePanel = new GBHelper();
 
@@ -775,16 +772,13 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Categories Area
 		 */
-//		TODO: Fix hard coded string
-		warnWhenRemoveCategory = new JCheckBox("Warn when removing category");
+		warnWhenRemoveCategory = new JCheckBox(lang.get("configviewer.tag.categories.warnWhenRemove"));
 		warnWhenRemoveCategory.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategory"));
-//		TODO: Fix hard coded string
-		warnWhenRemoveCategoryWithSubCategories = new JCheckBox("Warn when removing category with sub categories");
+		warnWhenRemoveCategoryWithSubCategories = new JCheckBox(lang.get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories"));
 		warnWhenRemoveCategoryWithSubCategories.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories"));
 
 		JPanel categoriesPanel = new JPanel(new GridBagLayout());
-//		TODO: Fix hard coded string
-		categoriesPanel.setBorder(BorderFactory.createTitledBorder("Categories"));
+		categoriesPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.categories.label")));
 
 		GBHelper posCategoriesPanel = new GBHelper();
 
@@ -802,16 +796,13 @@ public class ConfigViewerGUI extends JFrame {
 		imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JPanel imageRepositoriesPanel = new JPanel(new GridBagLayout());
-//		TODO: Fix hard coded string
-		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder("Image Repositories"));
+		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositories.label")));
 
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 
-//		TODO: Fix hard coded string
-		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox("Remove non existing paths");
+		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths"));
 		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
-//		TODO: Fix hard coded string
-		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText("Automatically remove paths from the image repository that does not exist");
+		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip"));
 
 		removeSelectedImagePathsButton = new JButton();
 
@@ -1022,34 +1013,28 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(GUI_LANGUAGE_ISO6391) + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT != createThumbnailIfMissingOrCorrupt.isSelected()) {
-			displayMessage.append("If embedded thumbnail is missing or corrupt, create a temporary" + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt") + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(!THUMBNAIL_WIDTH.equals(thumbnailWidth.getText())) {
-			displayMessage.append("Width of the created thumbnail" + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.thumbnail.width") + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(!THUMBNAIL_HEIGHT.equals(thumbnailHeight.getText())) {
-			displayMessage.append("Height of the created thumbnail" + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.thumbnail.height") + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(!CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM.equals(thumbnailCreationAlgorithm.getSelectedItem().toString())) {
-			displayMessage.append("Thumbnail Creation Algorithm" + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.algorithm") + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(!THUMBNAIL_MAX_CACHE_SIZE.equals(maxCacheSize.getText())) {
-			displayMessage.append("Thumbnail cache size max" + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.cache.label.size.max") + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
-			displayMessage.append("Enable Thumbnail cache" + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
 
 //		TODO: Fix hard coded string
@@ -1057,12 +1042,11 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append("Maximum Lenght of camera model value" + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(USE_EMBEDDED_THUMBNAIL != useEmbeddedThumbnail.isSelected()) {
 			if (USE_EMBEDDED_THUMBNAIL) {
-				displayMessage.append("Use scaled thumbnail as Preview Image (Slow) (Use embedded thumbnail as Preview Image (Fast))\n");
+				displayMessage.append(lang.get("configviewer.tag.previewimage.label.scaledthumbnail")+ " (" + lang.get("configviewer.tag.previewimage.label.embeddedthumbnail") + ")\n");
 			} else {
-				displayMessage.append("Use embedded thumbnail as Preview Image (Fast) (Use scaled thumbnail as Preview Image (Slow))\n");
+				displayMessage.append(lang.get("configviewer.tag.previewimage.label.embeddedthumbnail")+ " (" + lang.get("configviewer.tag.previewimage.label.scaledthumbnail") + ")\n");
 			}
 		}
 
@@ -1078,16 +1062,13 @@ public class ConfigViewerGUI extends JFrame {
 
 			switch (previousThumbNailToolTipState) {
 			case 0:
-//				TODO: Fix hard coded string
-				previous = "Disabled";
+				previous = lang.get("configviewer.thumbnail.tooltip.label.disabled");
 				break;
 			case 1:
-//				TODO: Fix hard coded string
-				previous = "Enabled";
+				previous = lang.get("configviewer.thumbnail.tooltip.label.enabled");
 				break;
 			case 2:
-//				TODO: Fix hard coded string
-				previous = "Extended";
+				previous = lang.get("configviewer.thumbnail.tooltip.label.extended");
 				break;
 			}
 
@@ -1096,35 +1077,29 @@ public class ConfigViewerGUI extends JFrame {
 
 			switch (currentThumbNailToolTipState) {
 			case 0:
-//				TODO: Fix hard coded string
-				current = "Disabled";
+				current = lang.get("configviewer.thumbnail.tooltip.label.disabled");
 				break;
 			case 1:
-//				TODO: Fix hard coded string
-				current = "Enabled";
+				current = lang.get("configviewer.thumbnail.tooltip.label.enabled");
 				break;
 			case 2:
-//				TODO: Fix hard coded string
-				current = "Extended";
+				current = lang.get("configviewer.thumbnail.tooltip.label.extended");
 				break;
 			}
 
 			displayMessage.append("Thumbnail Tooltips" + ": " + current + " (" + previous + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {
-			displayMessage.append("Warn when removing category" + ": " + warnWhenRemoveCategory.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY + ")\n");
+			displayMessage.append(lang.get("configviewer.tag.categories.warnWhenRemove") + ": " + warnWhenRemoveCategory.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
-			displayMessage.append("Warn when removing category with sub categories" + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
+			displayMessage.append(lang.get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories") + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX != automaticallyRemoveNonExistingImagePathsCheckBox.isSelected()) {
-			displayMessage.append("Remove non existing paths" + ": " + automaticallyRemoveNonExistingImagePathsCheckBox.isSelected() + " (" + AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX + ")\n");
+			displayMessage.append(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths") + ": " + automaticallyRemoveNonExistingImagePathsCheckBox.isSelected() + " (" + AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX + ")\n");
 		}
 
 		if(displayMessage.length() > 0) {
