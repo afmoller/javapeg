@@ -79,6 +79,19 @@ configviewer.thumbnail.tooltip.label.extended          = Extended:
 configviewer.thumbnail.tooltip.label                   = Thumbnail Tooltips
 
 ##############################################################################################################
+# T A G                                                                                                      #
+##############################################################################################################
+configviewer.tag.previewimage.label.embeddedthumbnail = Use embedded thumbnail as Preview Image (Fast)
+configviewer.tag.previewimage.label.scaledthumbnail   = Use scaled thumbnail as Preview Image (Slow)
+configviewer.tag.previewimage.label                   = Preview Image
+configviewer.tag.categories.warnWhenRemove                          = Warn when removing category
+configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Warn when removing category with sub categories
+configviewer.tag.categories.label                                   = Categories
+configviewer.tag.imageRepositories.label                                = Image Repository
+configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Remove non existing paths
+configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automatically remove paths from the image repository that does not exist
+
+##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
 configviewer.errormessage.rotateLogSizeToLargeKiB   = The log rotate size is to large: Maximum allowed is 100000 KiB 

@@ -78,6 +78,18 @@ configviewer.thumbnail.tooltip.label.enabled           = Aktiverad:
 configviewer.thumbnail.tooltip.label.extended          = Utökad:
 configviewer.thumbnail.tooltip.label                   = Tumnagel Tooltips
 
+##############################################################################################################
+# T A G                                                                                                      #
+##############################################################################################################
+configviewer.tag.previewimage.label.embeddedthumbnail = Använd inbäddad tumnagel som förhandsgranskningsbild (Snabbt)
+configviewer.tag.previewimage.label.scaledthumbnail   = Använd skaladtumnagel som förhandsgranskningsbild (Långsamt)
+configviewer.tag.previewimage.label                   = Förhandsgranskningsbild
+configviewer.tag.categories.warnWhenRemove                          = Varna vid borttagning av kategori
+configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Varna vid borttagning av kategori med underkategorier
+configviewer.tag.categories.label                                   = Kategorier
+configviewer.tag.imageRepositories.label                                = Bilddatabas
+configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sökvägar
+configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sökvägar som inte finns från bilddatabasen
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
