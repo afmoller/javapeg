@@ -65,16 +65,21 @@ configviewer.language.information.restartMessage = El idioma seleccionado no se 
 ##############################################################################################################
 # T H U M B N A I L                                                                                          #
 ##############################################################################################################
-configviewer.thumbnail.creation.label.missingOrCorrupt = If embedded thumbnail is missing or corrupt, create a temporary
-configviewer.thumbnail.creation.label.thumbnail.width  = Width of the created thumbnail
-configviewer.thumbnail.creation.label.thumbnail.height = Height of the created thumbnail
-configviewer.thumbnail.creation.label.algorithm        = Thumbnail Creation Algorithm
-configviewer.thumbnail.creation.label                  = Thumbnail Creation
+configviewer.thumbnail.creation.label.missingOrCorrupt               = If embedded thumbnail is missing or corrupt, create a temporary
+configviewer.thumbnail.creation.label.thumbnail.width                = Width of the created thumbnail
+configviewer.thumbnail.creation.label.thumbnail.height               = Height of the created thumbnail
+configviewer.thumbnail.creation.label.algorithm                      = Thumbnail Creation Algorithm
+configviewer.thumbnail.creation.label                                = Thumbnail Creation
+configviewer.thumbnail.creation.validation.width.integer             = The value of the thumbnail width must be an integer
+configviewer.thumbnail.creation.validation.width.integerNonNegative  = The value of the thumbnail width must be a non negative integer
+configviewer.thumbnail.creation.validation.height.integer            = The value of the thumbnail height must be an integer
+configviewer.thumbnail.creation.validation.height.integerNonNegative = The value of the thumbnail height must be an non negative integer
 configviewer.thumbnail.cache.label.enable              = Enable Thumbnail cache
 configviewer.thumbnail.cache.label.size                = Thumbnail cache size
 configviewer.thumbnail.cache.label.size.max            = Thumbnail cache size max
 configviewer.thumbnail.cache.label.clear               = Clear Thumbnail cache:
 configviewer.thumbnail.cache.label                     = Thumbnail Cache
+configviewer.thumbnail.cache.validation.size.max       = The value of the thumbnail cache max size must be an non negative integer
 configviewer.thumbnail.tooltip.label.disabled          = Disabled:
 configviewer.thumbnail.tooltip.label.enabled           = Enabled:
 configviewer.thumbnail.tooltip.label.extended          = Extended:
@@ -92,6 +97,9 @@ configviewer.tag.categories.label                                   = Categories
 configviewer.tag.imageRepositories.label                                = Image Repository
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Remove non existing paths
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automatically remove paths from the image repository that does not exist
+configviewer.tag.imageRepositories.label.exists                         = Exists
+configviewer.tag.imageRepositories.label.notAvailable                   = Not Available
+configviewer.tag.imageRepositories.label.doesNotExist                   = Does not exist
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
