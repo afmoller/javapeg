@@ -1192,22 +1192,18 @@ public class ConfigViewerGUI extends JFrame {
 		if (validatorFor.equals("width")) {
 			String thumbnailWidthString = thumbnailWidth.getText();
 			if(!StringUtil.isInt(thumbnailWidthString)) {
-//				TODO: Fix hard coded string
-				errorMessage = "The value of the thumbnail width must be an integer";
+				errorMessage = lang.get("configviewer.thumbnail.creation.validation.width.integer");
 			}
 			else if(!StringUtil.isInt(thumbnailWidthString, true)) {
-//				TODO: Fix hard coded string
-				errorMessage = "The value of the thumbnail width must be an non negative integer";
+				errorMessage = lang.get("configviewer.thumbnail.creation.validation.width.integerNonNegative");
 			}
 		} else {
-			String thumbnailHeightString = thumbnailWidth.getText();
+			String thumbnailHeightString = thumbnailHeight.getText();
 			if(!StringUtil.isInt(thumbnailHeightString)) {
-//				TODO: Fix hard coded string
-				errorMessage = "The value of the thumbnail height must be an integer";
+				errorMessage = lang.get("configviewer.thumbnail.creation.validation.height.integer");
 			}
 			else if(!StringUtil.isInt(thumbnailHeightString, true)) {
-//				TODO: Fix hard coded string
-				errorMessage = "The value of the thumbnail height must be an non negative integer";
+				errorMessage = lang.get("configviewer.thumbnail.creation.validation.height.integerNonNegative");
 			}
 		}
 		if(errorMessage.length() > 0) {
@@ -1219,8 +1215,7 @@ public class ConfigViewerGUI extends JFrame {
 
 	private boolean validateThumbnailCacheMaxSize() {
 		if(!StringUtil.isInt(maxCacheSize.getText(), true)) {
-//			TODO: Fix hard coded string
-			JOptionPane.showMessageDialog(this, "The value of the thumbnail cache max size must be an non negative integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, lang.get("configviewer.thumbnail.cache.validation.size.max"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;
@@ -1443,16 +1438,13 @@ public class ConfigViewerGUI extends JFrame {
 
 				switch (iri.getPathStatus()) {
 				case EXISTS:
-//					TODO: Fix hard coded string
-					status = "Exists";
+					status = lang.get("configviewer.tag.imageRepositories.label.exists");
 					break;
 				case NOT_AVAILABLE:
-//					TODO: Fix hard coded string
-					status = "Not Available";
+					status = lang.get("configviewer.tag.imageRepositories.label.notAvailable");
 					break;
 				case DOES_NOT_EXIST:
-//					TODO: Fix hard coded string
-					status = "Does not exist";
+					status = lang.get("configviewer.tag.imageRepositories.label.doesNotExist");
 					break;
 				}
 				paths.append(iri.getPath() + " (" + status + ")");

@@ -63,16 +63,21 @@ configviewer.language.information.restartMessage = Valt språk kommer inte använd
 ##############################################################################################################
 # T H U M B N A I L                                                                                          #
 ##############################################################################################################
-configviewer.thumbnail.creation.label.missingOrCorrupt = Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär
-configviewer.thumbnail.creation.label.thumbnail.width  = Bredd på den skapade tumnageln
-configviewer.thumbnail.creation.label.thumbnail.height = Height of the created thumbnail
-configviewer.thumbnail.creation.label.algorithm        = Tumnagelskaparalgoritm
-configviewer.thumbnail.creation.label                  = Tumnagelskapande
+configviewer.thumbnail.creation.label.missingOrCorrupt               = Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär
+configviewer.thumbnail.creation.label.thumbnail.width                = Bredd på den skapade tumnageln
+configviewer.thumbnail.creation.label.thumbnail.height               = Höjd på den skapade tumnageln
+configviewer.thumbnail.creation.label.algorithm                      = Tumnagelskaparalgoritm
+configviewer.thumbnail.creation.label                                = Tumnagelskapande
+configviewer.thumbnail.creation.validation.width.integer             = Värdet på tumnagelbredd måste var ett heltal
+configviewer.thumbnail.creation.validation.width.integerNonNegative  = Värdet på tumnagelbredd måste var ett icke negativt heltal
+configviewer.thumbnail.creation.validation.height.integer            = Värdet på tumnagelhöjd måste var ett heltal
+configviewer.thumbnail.creation.validation.height.integerNonNegative = Värdet på tumnagelhöjd måste var ett icke negativt heltal
 configviewer.thumbnail.cache.label.enable              = Aktivera tumnagel cache
 configviewer.thumbnail.cache.label.size                = Tumnagel cachestorlek
 configviewer.thumbnail.cache.label.size.max            = Tumnagel max cachestorlek
 configviewer.thumbnail.cache.label.clear               = Rensa tumnagelcache
 configviewer.thumbnail.cache.label                     = Tumnagel Cache
+configviewer.thumbnail.cache.validation.size.max       = Värdet på maximal tumnagelcache får inte vara ett negativt heltal
 configviewer.thumbnail.tooltip.label.disabled          = Avaktiverad:
 configviewer.thumbnail.tooltip.label.enabled           = Aktiverad:
 configviewer.thumbnail.tooltip.label.extended          = Utökad:
@@ -90,6 +95,9 @@ configviewer.tag.categories.label                                   = Kategorier
 configviewer.tag.imageRepositories.label                                = Bilddatabas
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sökvägar
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sökvägar som inte finns från bilddatabasen
+configviewer.tag.imageRepositories.label.exists                         = Existerar
+configviewer.tag.imageRepositories.label.notAvailable                   = Inte Tillgänglig
+configviewer.tag.imageRepositories.label.doesNotExist                   = Existerar inte
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
