@@ -118,17 +118,6 @@ public class ImageSearchResultViewer extends JFrame {
 			logger.logERROR(e);
 		}
 
-//		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Open16.gif");
-//
-//		ImageIcon image = new ImageIcon();
-//		try {
-//			image.setImage(ImageIO.read(imageStream));
-//			this.setIconImage(image.getImage());
-//		} catch (IOException e) {
-//			logger.logERROR("Could not load icon: Open16.gif");
-//			logger.logERROR(e);
-//		}
-
 //		TODO: Fix hard coded string
 		this.setTitle("Search Result");
 		this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);

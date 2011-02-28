@@ -1,17 +1,17 @@
 package moller.util.mnemonic;
 /**
  * This class was created : 2009-03-24 by Fredrik Möller
- * Latest changed         : 
+ * Latest changed         :
  */
 
 import java.awt.event.KeyEvent;
 
 public class MnemonicConverter {
-	
+
 	public static int convertAtoZCharToKeyEvent(char c) {
-		
+
 		c = Character.toLowerCase(c);
-		
+
 		switch (c) {
 		case 'a':
 			return KeyEvent.VK_A;

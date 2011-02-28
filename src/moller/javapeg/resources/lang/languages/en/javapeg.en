@@ -455,6 +455,7 @@ statusbar.message.selectedPath              = Selected Path:
 ##############################################################################################################
 tabbedpane.imageRename = RENAME IMAGES
 tabbedpane.imageView   = VIEW IMAGES
+tabbedpane.imageTag    = TAG IMAGES
 
 ##############################################################################################################
 # F I L E  R E T R I E V E R                                                                                 #

@@ -27,6 +27,9 @@ imageviewer.button.adjustToWindowSize.toolTip           = Ajustar al tamaño de v
 imageviewer.button.adjustToWindowSize.mnemonic          = A
 imageviewer.button.help.toolTip                         = Ayuda (Alt + H) 
 imageviewer.button.help.mnemonic                        = H
+imageviewer.button.rotateLeft.toolTip                   = Rotate image left (Alt + Left Arrow)
+imageviewer.button.rotateRight.toolTip                  = Rotate image right (Alt + Right Arrow)
+imageviewer.button.rotateAutomatic                      = Automatically rotate image (Alt + Up Arrow)
 
 imageviewer.popupmenu.back.text               = (Alt-Z) Anterior
 imageviewer.popupmenu.forward.text            = (Alt-X) Siguiente

@@ -456,7 +456,8 @@ statusbar.message.selectedPath              = Vald sökväg:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
-tabbedpane.imageView   = VISA BILDER
+tabbedpane.imageView   = SÖK / VISA BILDER
+tabbedpane.imageTag    = TAGGA BILDER
 
 ##############################################################################################################
 # F I L E  R E T R I E V E R                                                                                 #
