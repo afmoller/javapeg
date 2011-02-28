@@ -46,9 +46,10 @@ configviewer.update.label.attachVersionInformation.text = Añadir Información de 
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text      = Usar la última fecha de modificación si la fecha Exif no existe
-configviewer.rename.label.useLastModifiedTime.text      = Usar la última hora de modificación si la hora Exif no existe
-configviewer.rename.label.maximumCameraModelValueLength = Maximum Length of camera model value
+configviewer.rename.label.useLastModifiedDate.text                 = Usar la última fecha de modificación si la fecha Exif no existe
+configviewer.rename.label.useLastModifiedTime.text                 = Usar la última hora de modificación si la hora Exif no existe
+configviewer.rename.label.maximumCameraModelValueLength            = Maximum Length of camera model value
+configviewer.rename.label.maximumCameraModelValueLengthNotNegative = The value of the maximum camera model length must be an non negative integer
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
@@ -100,6 +101,7 @@ configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automa
 configviewer.tag.imageRepositories.label.exists                         = Exists
 configviewer.tag.imageRepositories.label.notAvailable                   = Not Available
 configviewer.tag.imageRepositories.label.doesNotExist                   = Does not exist
+configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = The following path(s) will be removed from the image repository:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
@@ -112,11 +114,13 @@ configviewer.errormessage.rotateLogSizeNotAnInteger = El tamaño de rotación para
 ##############################################################################################################
 # T R E E  N O D E S                                                                                         #
 ##############################################################################################################
-configviewer.tree.root          = Configuración
-configviewer.tree.node.logging  = Logging
-configviewer.tree.node.updates  = Actualizaciones
-configviewer.tree.node.rename   = Renombrar
-configviewer.tree.node.language = Idioma
+configviewer.tree.root           = Configuración
+configviewer.tree.node.logging   = Logging
+configviewer.tree.node.updates   = Actualizaciones
+configviewer.tree.node.rename    = Renombrar
+configviewer.tree.node.language  = Idioma
+configviewer.tree.node.thumbnail = Thumbnail
+configviewer.tree.node.tag       = Tag
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #

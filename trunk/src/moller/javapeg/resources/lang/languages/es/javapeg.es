@@ -425,6 +425,7 @@ statusbar.message.selectedPath              = Ruta seleccionada:
 ##############################################################################################################
 tabbedpane.imageRename = RENOMBRAR IMAGENES
 tabbedpane.imageView   = VER IMAGENES
+tabbedpane.imageTag    = TAG IMAGES
 
 ##############################################################################################################
 # O B T E N E R  F I C H E R O S                                                                             #

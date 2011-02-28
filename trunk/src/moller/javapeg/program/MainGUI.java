@@ -669,10 +669,8 @@ public class MainGUI extends JFrame {
 
 		mainTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
-//		TODO: Fix hard coded string
-		mainTabbedPane.addTab("TAG IMAGES", this.createCategorizePanel());
-//		TODO: Fix hard coded string
-		mainTabbedPane.addTab("SEARCH / " + lang.get("tabbedpane.imageView")  , this.createViewPanel());
+		mainTabbedPane.addTab(lang.get("tabbedpane.imageTag"), this.createCategorizePanel());
+		mainTabbedPane.addTab(lang.get("tabbedpane.imageView")  , this.createViewPanel());
 
 		imageMetaDataPanel = new MetaDataPanel();
 		thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);

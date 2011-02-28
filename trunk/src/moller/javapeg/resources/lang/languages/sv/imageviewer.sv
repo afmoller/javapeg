@@ -27,6 +27,9 @@ imageviewer.button.adjustToWindowSize.toolTip           = Anpassa till fönsterst
 imageviewer.button.adjustToWindowSize.mnemonic          = A
 imageviewer.button.help.toolTip                         = Hjälp (Alt + H) 
 imageviewer.button.help.mnemonic                        = H
+imageviewer.button.rotateLeft.toolTip                   = Rotera bild vänster (Alt + Vänsterpil)
+imageviewer.button.rotateRight.toolTip                  = Rotera bild höger (Alt + Högerpil)
+imageviewer.button.rotateAutomatic                      = Rotera bild automatiskt (Alt + Pil Upp)
 
 imageviewer.popupmenu.back.text               = (Alt-Z) Föregående
 imageviewer.popupmenu.forward.text            = (Alt-X) Nästa

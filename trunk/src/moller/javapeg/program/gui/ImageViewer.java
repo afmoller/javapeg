@@ -337,27 +337,20 @@ public class ImageViewer extends JFrame {
 			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateLeft16.gif");
 			rotateLeftImageIcon.setImage(ImageIO.read(imageStream));
 			rotateLeftButton.setIcon(rotateLeftImageIcon);
-//			TODO: Fix hard coded string
-			rotateLeftButton.setToolTipText("Rotate image left");
-//			rotateLeftButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+			rotateLeftButton.setToolTipText(lang.get("imageviewer.button.rotateLeft.toolTip"));
+			rotateLeftButton.setMnemonic(KeyEvent.VK_LEFT);
 
 			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateRight16.gif");
 			rotateRightImageIcon.setImage(ImageIO.read(imageStream));
 			rotateRightButton.setIcon(rotateRightImageIcon);
-//		TODO: Fix hard coded string
-			rotateRightButton.setToolTipText("Rotate image right");
-//			rotateRightButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+			rotateRightButton.setToolTipText(lang.get("imageviewer.button.rotateRight.toolTip"));
+			rotateRightButton.setMnemonic(KeyEvent.VK_RIGHT);
 
-//			TODO: Fix other icon image
 			imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateAutomatic16.gif");
 			automaticRotateImageIcon.setImage(ImageIO.read(imageStream));
 			automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
-//		TODO: Fix hard coded string
-			automaticRotateToggleButton.setToolTipText("Automatically rotate image");
-//			automaticRotateToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
-
-
-
+			automaticRotateToggleButton.setToolTipText(lang.get("imageviewer.button.rotateAutomatic"));
+			automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
 		} catch (IOException e) {
 			logger.logERROR("Could not load image. See Stack Trace below for details");
 			logger.logERROR(e);
@@ -601,7 +594,7 @@ public class ImageViewer extends JFrame {
 	private class CustomKeyEventDispatcher implements KeyEventDispatcher {
 	    @Override
 	    public boolean dispatchKeyEvent(KeyEvent e) {
-	        if (e.getID() == KeyEvent.KEY_PRESSED) {
+	        if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
 	        	if (KeyEvent.VK_LEFT == e.getKeyCode()) {
 	        		loadAndViewPreviousImage();
 	        		return true;

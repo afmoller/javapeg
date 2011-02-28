@@ -686,13 +686,10 @@ public class ConfigViewerGUI extends JFrame {
 		JLabel toolTipExtendedLabel = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.extended"));
 
 		toolTipDisabled = new JRadioButton();
-//		TODO: Fix hard coded string
 		toolTipDisabled.setName("0");
 		toolTipEnabled = new JRadioButton();
-//		TODO: Fix hard coded string
 		toolTipEnabled.setName("1");
 		toolTipExtended = new JRadioButton();
-//		TODO: Fix hard coded string
 		toolTipExtended.setName("2");
 
 		ButtonGroup group = new ButtonGroup();
@@ -1037,9 +1034,8 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
 
-//		TODO: Fix hard coded string
 		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(maximumLengthOfCameraModelValueTextField.getText())) {
-			displayMessage.append("Maximum Lenght of camera model value" + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
+			displayMessage.append(lang.get("configviewer.rename.label.maximumCameraModelValueLength") + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
 		}
 
 		if(USE_EMBEDDED_THUMBNAIL != useEmbeddedThumbnail.isSelected()) {
@@ -1223,8 +1219,7 @@ public class ConfigViewerGUI extends JFrame {
 
 	private boolean validateMaximumLengtOfCameraModel() {
 		if(!StringUtil.isInt(maximumLengthOfCameraModelValueTextField.getText(), true)) {
-//			TODO: Fix hard coded string
-			JOptionPane.showMessageDialog(this, "The value of the maximum camera model length must be an non negative integer", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, lang.get("configviewer.rename.label.maximumCameraModelValueLengthNotNegative"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;
@@ -1451,7 +1446,7 @@ public class ConfigViewerGUI extends JFrame {
 				paths.append(C.LS);
 			}
 
-			int result = displayConfirmDialog("The following path(s) will be removed from the image repository:" + C.LS + C.LS + paths.toString(), "Confirmation", JOptionPane.OK_CANCEL_OPTION);
+			int result = displayConfirmDialog(lang.get("configviewer.tag.imageRepositories.label.pathsWillBeRemoved") + C.LS + C.LS + paths.toString(), lang.get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
 
 			if (result == 0) {
 				for (Object selectedValue : selectedValues) {

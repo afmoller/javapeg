@@ -44,9 +44,10 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text      = Använd Senast Ändraddatum Om Exif-datum Saknas
-configviewer.rename.label.useLastModifiedTime.text      = Använd Senast Ändradtid Om Exif-tid Saknas
-configviewer.rename.label.maximumCameraModelValueLength = Maximum Length of camera model value
+configviewer.rename.label.useLastModifiedDate.text                 = Använd Senast Ändraddatum Om Exif-datum Saknas
+configviewer.rename.label.useLastModifiedTime.text                 = Använd Senast Ändradtid Om Exif-tid Saknas
+configviewer.rename.label.maximumCameraModelValueLength            = Maximal längd för värdet av  kameramodell
+configviewer.rename.label.maximumCameraModelValueLengthNotNegative = Värdet för maximal kameramdodelllängd kan inte vara ett negativt heltal
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
@@ -98,6 +99,7 @@ configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta aut
 configviewer.tag.imageRepositories.label.exists                         = Existerar
 configviewer.tag.imageRepositories.label.notAvailable                   = Inte Tillgänglig
 configviewer.tag.imageRepositories.label.doesNotExist                   = Existerar inte
+configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = Följande sökväg(ar) kommer att tas bort från bilddatabasen:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
@@ -110,11 +112,13 @@ configviewer.errormessage.rotateLogSizeNotAnInteger = Logroteringsstorleken måst
 ##############################################################################################################
 # T R E E  N O D E S                                                                                         #
 ##############################################################################################################
-configviewer.tree.root          = Inställningar
-configviewer.tree.node.logging  = Loggning
-configviewer.tree.node.updates  = Uppdateringar
-configviewer.tree.node.rename   = Namnbyte
-configviewer.tree.node.language = Språk
+configviewer.tree.root           = Inställningar
+configviewer.tree.node.logging   = Loggning
+configviewer.tree.node.updates   = Uppdateringar
+configviewer.tree.node.rename    = Namnbyte
+configviewer.tree.node.language  = Språk
+configviewer.tree.node.thumbnail = Tumnagel
+configviewer.tree.node.tag       = Taggar
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
