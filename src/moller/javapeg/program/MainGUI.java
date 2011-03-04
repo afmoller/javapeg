@@ -397,11 +397,8 @@ public class MainGUI extends JFrame {
 	}
 
 	private void overrideSwingUIProperties() {
-//		TODO: fix hard coded strings
-		UIManager.put("OptionPane.okButtonText", "Ok");
-//		TODO: fix hard coded strings
-		UIManager.put("OptionPane.cancelButtonText", "Cancel");
-
+		UIManager.put("OptionPane.okButtonText", lang.get("common.button.ok.label"));
+		UIManager.put("OptionPane.cancelButtonText", lang.get("common.button.cancel.label"));
 	}
 
 	private void createMenuBar(){
@@ -1020,28 +1017,17 @@ public class MainGUI extends JFrame {
 
 		GBHelper posBackgroundPanel = new GBHelper();
 
-//		TODO: fix hard coded string
-		JLabel yearLabel = new JLabel("YEAR");
-//		TODO: fix hard coded string
-		JLabel monthLabel = new JLabel("MONTH");
-//		TODO: fix hard coded string
-		JLabel dayLabel = new JLabel("DAY");
-//		TODO: fix hard coded string
-		JLabel hourLabel = new JLabel("HOUR");
-//		TODO: fix hard coded string
-		JLabel minuteLabel = new JLabel("MINUTE");
-//		TODO: fix hard coded string
-		JLabel secondLabel = new JLabel("SECOND");
-//		TODO: fix hard coded string
-		JLabel imageSizeLabel = new JLabel("IMAGE SIZE");
-//		TODO: fix hard coded string
-		JLabel isoLabel = new JLabel("ISO");
-//		TODO: fix hard coded string
-		JLabel cameraModelLabel = new JLabel("CAMERA MODEL");
-//		TODO: fix hard coded string
-		JLabel shutterSpeedLabel = new JLabel("SHUTTER SPEED");
-//		TODO: fix hard coded string
-		JLabel apertureValueLabel = new JLabel("APERTURE VALUE");
+		JLabel yearLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.YEAR.toString()));
+		JLabel monthLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.MONTH.toString()));
+		JLabel dayLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.DAY.toString()));
+		JLabel hourLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.HOUR.toString()));
+		JLabel minuteLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.MINUTE.toString()));
+		JLabel secondLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.SECOND.toString()));
+		JLabel imageSizeLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.IMAGE_SIZE.toString()));
+		JLabel isoLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.ISO.toString()));
+		JLabel cameraModelLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.CAMERA_MODEL.toString()));
+		JLabel shutterSpeedLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.SHUTTER_SPEED.toString()));
+		JLabel apertureValueLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.APERTURE_VALUE.toString()));
 
 		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 
@@ -1105,39 +1091,41 @@ public class MainGUI extends JFrame {
 
 			MetaDataValueFieldName mdtf = MetaDataValueFieldName.valueOf(((Component)e.getSource()).getName());
 
+			String prefix = "metadata.field.name.";
+
 			switch (mdtf) {
 			case YEAR:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getYears()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getYears()), value, e.getLocationOnScreen());
 				break;
 			case MONTH:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getMonths()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getMonths()), value, e.getLocationOnScreen());
 				break;
 			case DAY:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getDates()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getDates()), value, e.getLocationOnScreen());
 				break;
 			case HOUR:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getHours()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getHours()), value, e.getLocationOnScreen());
 				break;
 			case MINUTE:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getMinutes()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getMinutes()), value, e.getLocationOnScreen());
 				break;
 			case SECOND:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getSeconds()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getSeconds()), value, e.getLocationOnScreen());
 				break;
 			case APERTURE_VALUE:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
 				break;
 			case CAMERA_MODEL:
-				mdvsd = new MetaDataValueSelectionDialogEqual(mdtf.toString(), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogEqual(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
 				break;
 			case IMAGE_SIZE:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getImageSizeValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getImageSizeValues()), value, e.getLocationOnScreen());
 				break;
 			case ISO:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
 				break;
 			case SHUTTER_SPEED:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(mdtf.toString(), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
 				break;
 			}
 			mdvsd.collectSelectedValues();
