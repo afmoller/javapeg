@@ -601,9 +601,9 @@ public class MainGUI extends JFrame {
 		} finally {
 			try {
 				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException iox) {
+				logger.logERROR("Could not close InputStream for image: \"resources/images/javapeg.gif\"");
+				logger.logERROR(iox);
 			}
 		}
 
@@ -837,14 +837,15 @@ public class MainGUI extends JFrame {
 			copyImageListdButton.setIcon(copyImageListToClipBoardImageIcon);
 			copyImageListdButton.setToolTipText("Copy Images in List to System Clipboard");
 
-		} catch (Exception e) {
-			logger.logERROR("Could not open the image add.gif");
+		} catch (IOException iox) {
+			logger.logERROR("Could not open the image");
+			logger.logERROR(iox);
 		} finally {
 			try {
 				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException iox) {
+				logger.logERROR("Could not close InputStream for image");
+				logger.logERROR(iox);
 			}
 		}
 
@@ -1246,14 +1247,15 @@ public class MainGUI extends JFrame {
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/play.gif");
 			playPictureImageIcon.setImage(ImageIO.read(imageStream));
-		} catch (Exception e) {
+		} catch (IOException iox) {
 			logger.logERROR("Could not open the image play.gif");
+			logger.logERROR(iox);
 		} finally {
 			try {
 				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException iox) {
+				logger.logERROR("Could not close InputStream for image: \"resources/images/play.gif\"");
+				logger.logERROR(iox);
 			}
 		}
 
@@ -1269,14 +1271,15 @@ public class MainGUI extends JFrame {
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif");
 			openPictureImageIcon.setImage(ImageIO.read(imageStream));
-		} catch (Exception e) {
+		} catch (IOException iox) {
 			logger.logERROR("Could not open the image open.gif");
+			logger.logERROR(iox);
 		} finally {
 			try {
 				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException iox) {
+				logger.logERROR("Could not close InputStream for image: \"resources/images/open.gif\"");
+				logger.logERROR(iox);
 			}
 		}
 
@@ -2256,9 +2259,9 @@ public class MainGUI extends JFrame {
 					imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
 					setRatingValue(imageMetaDataDataBaseItem.getRating());
 					setCategories(imageMetaDataDataBaseItem.getCategories());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (IOException iox) {
+					logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
+					logger.logERROR(iox);
 				}
 			}
 		}
