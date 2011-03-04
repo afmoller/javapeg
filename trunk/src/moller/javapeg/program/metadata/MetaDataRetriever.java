@@ -13,18 +13,17 @@ import moller.javapeg.program.enumerations.FieldName;
 import moller.javapeg.program.logger.Logger;
 import moller.util.string.StringUtil;
 
-// Klassdefinition
 public class MetaDataRetriever {
-	
+
 	public static MetaData getMetaData(File imageFile) {
 		MetaData md = new MetaData();
 		md.setFileName(imageFile.getName());
 		md.setFileObject(imageFile);
-		
+
 		Map<String, String> tagAndValueMappings = MetaDataUtil.parseImageFile(imageFile);
-		
+
 		populateMetaData(md, tagAndValueMappings);
-		
+
 		return md;
 	}
 
@@ -32,19 +31,19 @@ public class MetaDataRetriever {
 
 		String cameraMake = tagAndValueMappings.get("0x010f");
 		String cameraModel = tagAndValueMappings.get("0x0110");
-		
+
 		MetaDataCameraAndTagMapping mdcatm = MetaDataCameraAndTagMapping.getInstance();
-		
+
 		String apertureValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.APERTURE_VALUE);
 		String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.DATE_TIME_ORIGINAL);
 		String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
 		String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
 		String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_Y_DIMENSION);
 		String shutterSpeedValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.SHUTTER_SPEED_VALUE);
-		
+
 		String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
 		String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
-		
+
 		metaData.setExifApertureValue(getDoubleTagValue(tagAndValueMappings, apertureValueTag));
 		metaData.setExifCameraModel(cameraModel);
 		metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
@@ -55,7 +54,7 @@ public class MetaDataRetriever {
 		metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
 		metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
 	}
-	
+
 	private static int getIntegerTagValue(Map<String, String> tagAndValueMappings, String tag) {
 		if (tagAndValueMappings.get(tag) == null) {
 			return -1;
@@ -63,7 +62,7 @@ public class MetaDataRetriever {
 			return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
 		}
 	}
-	
+
 	private static double getDoubleTagValue(Map<String, String> tagAndValueMappings, String tag) {
 		if (tagAndValueMappings.get(tag) == null) {
 			return -1;
@@ -76,13 +75,12 @@ public class MetaDataRetriever {
 				Logger logger = Logger.getInstance();
 				logger.logERROR("Could not parse String: " + StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a double value");
 				logger.logERROR(e);
-				
 				return -1;
 			}
 			return number.doubleValue();
 		}
 	}
-	
+
 	private static ShutterSpeed getShutterSpeedTagValue(Map<String, String> tagAndValueMappings, String tag) {
 		try {
 			 return new ShutterSpeed(tagAndValueMappings.get(tag));
@@ -90,7 +88,7 @@ public class MetaDataRetriever {
 			return null;
 		}
 	}
-	
+
 	private static Date getDateTimeOriginalTagValue(Map<String, String> tagAndValueMappings, String tag) {
 		String dateString = tagAndValueMappings.get(tag);
 		if (dateString == null) {
@@ -99,8 +97,10 @@ public class MetaDataRetriever {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 			try {
 				return sdf.parse(dateString);
-			} catch (ParseException e) {
-//				TODO: Add logging
+			} catch (ParseException pex) {
+				Logger logger = Logger.getInstance();
+				logger.logERROR("Could not parse date string: \"" + dateString + "\" with SimpleDateFormat = \"" + sdf.toPattern() + "\"");
+				logger.logERROR(pex);
 				return null;
 			}
 		}
@@ -108,10 +108,10 @@ public class MetaDataRetriever {
 
 	private static String removeNonIntegerCharacters(String stringValue) {
 		stringValue = stringValue.trim();
-		
+
 		StringBuilder allIntegerCharacters = new StringBuilder();
 		String subString = "";
-		
+
 		for (int i = 0; i < stringValue.length(); i++) {
 			subString = stringValue.substring(i, i + 1);
 			try {
