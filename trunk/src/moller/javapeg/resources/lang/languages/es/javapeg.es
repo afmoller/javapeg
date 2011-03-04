@@ -432,3 +432,15 @@ tabbedpane.imageTag    = TAG IMAGES
 ##############################################################################################################
 fileretriever.canNotFindFile     = No se pudo encontrar el fichero, revise el log para más detalles.
 fileretriever.canNotReadFromFile = No se puede leer el fichero, puede que otra aplicación tenga el fichero bloqueado. Revise el log para más detalles.
+
+metadata.field.name.APERTURE_VALUE = APERTURE VALUE
+metadata.field.name.CAMERA_MODEL = CAMERA MODEL
+metadata.field.name.IMAGE_SIZE = IMAGE SIZE 
+metadata.field.name.ISO = ISO
+metadata.field.name.SHUTTER_SPEED = SHUTTER SPEED
+metadata.field.name.YEAR = YEAR
+metadata.field.name.MONTH = MONTH
+metadata.field.name.DAY = DAY
+metadata.field.name.HOUR = HOUR
+metadata.field.name.MINUTE - MINUTE
+metadata.field.name.SECOND = SECOND

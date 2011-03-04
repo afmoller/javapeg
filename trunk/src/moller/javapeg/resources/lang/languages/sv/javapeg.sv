@@ -464,3 +464,15 @@ tabbedpane.imageTag    = TAGGA BILDER
 ##############################################################################################################
 fileretriever.canNotFindFile     = Kan inte hitta filen. Se loggfil för detaljer.
 fileretriever.canNotReadFromFile = Kan inte läsa från filen. Det kan vara ett annat program som låst filen. Se loggfil för detaljer.
+
+metadata.field.name.APERTURE_VALUE = BLÄNDARVÄRDE
+metadata.field.name.CAMERA_MODEL = KAMERAMODELL
+metadata.field.name.IMAGE_SIZE = BILDSTORLEK 
+metadata.field.name.ISO = ISO
+metadata.field.name.SHUTTER_SPEED = SLUTARTID
+metadata.field.name.YEAR = ÅR
+metadata.field.name.MONTH = MÅNAD
+metadata.field.name.DAY = DAG
+metadata.field.name.HOUR = TIMME
+metadata.field.name.MINUTE = MINUT
+metadata.field.name.SECOND = SEKUND
