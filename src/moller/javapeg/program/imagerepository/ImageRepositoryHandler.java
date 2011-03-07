@@ -1,12 +1,4 @@
 package moller.javapeg.program.imagerepository;
-/**
- * This class was created : 2009-12-03 by Fredrik Möller
- * Latest changed         : 2009-12-04 by Fredrik Möller
- *                        : 2009-12-05 by Fredrik Möller
- *                        : 2009-12-18 by Fredrik Möller
- *                        : 2009-12-20 by Fredrik Möller
- *                        : 2009-12-28 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +8,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
 
 public class ImageRepositoryHandler {
@@ -24,9 +17,9 @@ public class ImageRepositoryHandler {
 	 * The static singleton instance of this class.
 	 */
 	private static ImageRepositoryHandler instance;
-	
-	private File repositoryFile;
-	
+
+	private final File repositoryFile;
+
 	/**
 	 * Private constructor.
 	 */
@@ -36,7 +29,7 @@ public class ImageRepositoryHandler {
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static ImageRepositoryHandler getInstance() {
@@ -49,33 +42,35 @@ public class ImageRepositoryHandler {
 			return instance;
 		}
 	}
-	
+
 	public Object [] load() {
+		Logger logger = Logger.getInstance();
 		if(repositoryFile.exists()) {
 			try {
 				return new TreeSet<String>(FileUtil.readFromFile(repositoryFile)).toArray();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException iox) {
+				logger.logERROR("Can not read from file: " + repositoryFile.getAbsolutePath());
+				logger.logERROR(iox);
 				return null;
-			}	
+			}
 		} else{
 			return null;
-		}	 
+		}
 	}
-	
+
 	public void store(Iterator<Object> imageRepositoryItems) {
+		Logger logger = Logger.getInstance();
 		try {
 			List<String> directoryPaths = new ArrayList<String>();
-			
+
 			while(imageRepositoryItems.hasNext()) {
 				directoryPaths.add(((ImageRepositoryItem)imageRepositoryItems.next()).getPath());
 			}
-			
+
 			FileUtil.writeToFile(repositoryFile, directoryPaths, false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException iox) {
+			logger.logERROR("Can not write to file: " + repositoryFile.getAbsolutePath());
+			logger.logERROR(iox);
 		}
 	}
 }
