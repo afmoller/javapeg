@@ -269,12 +269,7 @@ public class ConfigViewerGUI extends JFrame {
 		} catch (Exception e) {
 			Logger.getInstance().logERROR("Could not open the image Help16.gif");
 		} finally {
-			try {
-				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			StreamUtil.close(imageStream, true);
 		}
 		this.setTitle(lang.get("configviewer.window.title"));
 	}
