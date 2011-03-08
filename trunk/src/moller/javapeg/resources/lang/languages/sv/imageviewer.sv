@@ -50,3 +50,14 @@ metadatapanel.titleDefaultText     = METADATA FÖR BILD:
 metadatapanel.tableheader.type     = TYP
 metadatapanel.tableheader.property = EGENSKAP
 metadatapanel.tableheader.value    = VÄRDE
+
+##############################################################################################################
+# I M A G E  S E A R C H  R E S U L T  V I E W E R                                                                                     #
+##############################################################################################################
+imagesearchresultviewer.title = Sökresultat
+imagesearchresultviewer.menuitem.selectAll = Markera alla bilder
+imagesearchresultviewer.menuitem.deSelectAll = Avmarkera alla markerade bilder
+imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Lägg valda bilder till bildlistan
+imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Kopiera valda bilder till systemets urklippshanterare
+imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Kopiera alla bilder till systemets urklippshanterare
+imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Antal bilder i sökresultatet

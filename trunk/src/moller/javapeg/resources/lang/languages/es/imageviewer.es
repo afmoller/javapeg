@@ -50,3 +50,14 @@ metadatapanel.titleDefaultText     = META DATOS PARA LA IMAGEN:
 metadatapanel.tableheader.type     = TIPO
 metadatapanel.tableheader.property = PROPIEDAD
 metadatapanel.tableheader.value    = VALOR
+
+##############################################################################################################
+# I M A G E  S E A R C H  R E S U L T  V I E W E R                                                                                     #
+##############################################################################################################
+imagesearchresultviewer.title = Search Result 
+imagesearchresultviewer.menuitem.selectAll = Select all images
+imagesearchresultviewer.menuitem.deSelectAll = Deselect all selected images
+imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Add selected image(s) to view list
+imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Copy selected image to system clip board
+imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Copy all images to system clip board
+imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Amount of images in search result
