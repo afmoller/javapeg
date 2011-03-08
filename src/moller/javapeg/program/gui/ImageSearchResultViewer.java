@@ -118,8 +118,7 @@ public class ImageSearchResultViewer extends JFrame {
 			logger.logERROR(e);
 		}
 
-//		TODO: Fix hard coded string
-		this.setTitle("Search Result");
+		this.setTitle(lang.get("imagesearchresultviewer.title"));
 		this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
 	}
 
@@ -199,16 +198,11 @@ public class ImageSearchResultViewer extends JFrame {
 
 		rightClickMenu = new JPopupMenu();
 
-//		TODO: Fix hard coded string
-		popupMenuSelectAll = new JMenuItem("Select all images");
-//		TODO: Fix hard coded string
-		popupMenuDeSelectAll = new JMenuItem("Deselect all selected images");
-//		TODO: Fix hard coded string
-		popupMenuSetSelectedToViewList = new JMenuItem("Add selected image(s) to view list");
-//		TODO: Fix hard coded string
-		popupMenuCopyImageToSystemClipBoard = new JMenuItem("Copy selected image to system clip board");
-//		TODO: Fix hard coded string
-		popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem("Copy all images to system clip board");
+		popupMenuSelectAll = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.selectAll"));
+		popupMenuDeSelectAll = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.deSelectAll"));
+		popupMenuSetSelectedToViewList = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.addSelectedImagesToViewList"));
+		popupMenuCopyImageToSystemClipBoard = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard"));
+		popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard"));
 
 		rightClickMenu.add(popupMenuSelectAll);
 		rightClickMenu.add(popupMenuDeSelectAll);
@@ -245,16 +239,15 @@ public class ImageSearchResultViewer extends JFrame {
 	}
 
 	private void setStatusMessages () {
-			int nrOfColumns = thumbNailGridLayout.getColumns();
+		int nrOfColumns = thumbNailGridLayout.getColumns();
 
-			statuspanel.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
+		statuspanel.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
 
-			int extraRow = nrOfImagesToView % nrOfColumns == 0 ? 0 : 1;
-			int rowsInGridLayout = (nrOfImagesToView / nrOfColumns) + extraRow;
+		int extraRow = nrOfImagesToView % nrOfColumns == 0 ? 0 : 1;
+		int rowsInGridLayout = (nrOfImagesToView / nrOfColumns) + extraRow;
 
-			statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
-//			TODO: Fix hard coded string
-			statuspanel.setStatusMessage(Integer.toString(nrOfImagesToView), "Amount of images in search result", 3);
+		statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
+		statuspanel.setStatusMessage(Integer.toString(nrOfImagesToView), lang.get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
 	}
 
 	private void disposeFrame() {
