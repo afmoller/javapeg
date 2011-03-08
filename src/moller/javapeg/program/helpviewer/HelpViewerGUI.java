@@ -50,48 +50,48 @@ import moller.util.io.StreamUtil;
 import moller.util.string.StringUtil;
 
 public class HelpViewerGUI extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JTree tree;
-	
+
 	private JPanel contentJPanel;
 	private JPanel backgroundsPanel;
-	
+
 	private JSplitPane splitPane;
-			
-	private Config   conf;
-	private Logger   logger;
-	private Language lang;
-		
+
+	private final Config   conf;
+	private final Logger   logger;
+	private final Language lang;
+
 	private String content = "";
-	
+
 	/**
 	 * The system dependent file separator char
 	 */
 	private final static String FS = File.separator;
-	
+
 	/**
 	 * The base path to the language files including the common "language" part
 	 * of the file name.
 	 */
 	private final static String HELP_FILE_BASE = System.getProperty("user.dir") + FS + "resources" + FS + "help";
-		
+
 	public HelpViewerGUI() {
 		conf   = Config.getInstance();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
-				
+
 		this.initiateWindow();
 		this.addListeners();
 	}
-	
+
 	private void initiateWindow() {
-								
+
 		this.setSize(new Dimension(conf.getIntProperty("helpViewerGUI.window.width"),conf.getIntProperty("helpViewerGUI.window.height")));
-				
+
 		Point xyFromConfig = new Point(conf.getIntProperty("helpViewerGUI.window.location.x"),conf.getIntProperty("helpViewerGUI.window.location.y"));
-				
+
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
 		} else {
@@ -100,19 +100,19 @@ public class HelpViewerGUI extends JFrame {
 			logger.logERROR("Could not set location of Help Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
 		}
 		this.setLayout(new BorderLayout());
-		
+
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e){
 			logger.logERROR("Could not set desired Look And Feel for Help Viewer GUI");
 			logger.logERROR("Below is the generated StackTrace");
-			
+
 			for(StackTraceElement element : e.getStackTrace()) {
-				logger.logERROR(element.toString());	
+				logger.logERROR(element.toString());
 			}
 		}
-		this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);	
-		
+		this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
+
 		InputStream imageStream = null;
 		try {
 			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Help16.gif");
@@ -120,76 +120,72 @@ public class HelpViewerGUI extends JFrame {
 		} catch (Exception e) {
 			Logger.getInstance().logERROR("Could not open the image Help16.gif");
 		} finally {
-			try {
-				StreamUtil.closeStream(imageStream);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			StreamUtil.close(imageStream, true);
 		}
-		
+
 		this.setTitle(lang.get("helpViewerGUI.window.title"));
 	}
-	
-	private JSplitPane initiateSplitPane() {	
+
+	private JSplitPane initiateSplitPane() {
 		backgroundsPanel = new JPanel(new BorderLayout());
 		backgroundsPanel.add(this.initiateContentPanel(), BorderLayout.CENTER);
-		
+
 		splitPane = new JSplitPane();
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(200);
 		splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
 		splitPane.add(backgroundsPanel, JSplitPane.RIGHT);
-				
+
 		return splitPane;
 	}
-	
+
 	private void addListeners(){
 		this.addWindowListener(new WindowEventHandler());
 		backgroundsPanel.addComponentListener(new WindowComponentListener());
 	}
-	
+
 	private class WindowEventHandler extends WindowAdapter {
+		@Override
 		public void windowClosing(WindowEvent e) {
 			updateWindowLocationAndSize();
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		}
 	}
-	
+
 	private void updateWindowLocationAndSize() {
 		conf.setIntProperty("helpViewerGUI.window.location.x", this.getLocation().x);
 		conf.setIntProperty("helpViewerGUI.window.location.y", this.getLocation().y);
 		conf.setIntProperty("helpViewerGUI.window.width", this.getSize().width);
-		conf.setIntProperty("helpViewerGUI.window.height", this.getSize().height);	
+		conf.setIntProperty("helpViewerGUI.window.height", this.getSize().height);
 	}
-		
-	private JScrollPane initiateJTree() {		
+
+	private JScrollPane initiateJTree() {
 		tree = new JTree(HelpViewerGUIUtil.createNodes());
 		tree.setShowsRootHandles(true);
 		tree.addMouseListener(new Mouselistener());
 		return new JScrollPane(tree);
 	}
-	
+
 	private CustomizedJScrollPane initiateContentPanel() {
 		contentJPanel = new JPanel(new BorderLayout());
 		return new CustomizedJScrollPane(contentJPanel);
 	}
-		
+
 	private JTextArea getContent(String identityString) {
 		if (content.equals("") && identityString != null) {
 			String confLang = conf.getStringProperty("gUILanguageISO6391");
-			
+
 			InputStream helpFile = null;
-							
+
 			try {
 				helpFile = new FileInputStream(HELP_FILE_BASE + FS + confLang + FS + identityString);
 				content = StreamUtil.getString(helpFile);
 			} catch (IOException e) {
 				logger.logDEBUG("Could not find help file: \"" + identityString + "\" in directroy: " + HELP_FILE_BASE + FS + confLang + FS);
-				logger.logDEBUG("Try to load help file: " + identityString + " from JAR file instead");				
-				
-				helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString); 
-								
+				logger.logDEBUG("Try to load help file: " + identityString + " from JAR file instead");
+
+				helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
+
 				if(helpFile == null) {
 					logger.logDEBUG("Could not find help file: \"" + identityString + "\" in JAR file either.");
 					try {
@@ -209,27 +205,28 @@ public class HelpViewerGUI extends JFrame {
 				}
 			}
 		}
-		
+
 		JTextArea textarea = new JTextArea();
 		textarea.setLineWrap(true);
 		textarea.setWrapStyleWord(true);
 		textarea.setEditable(false);
 		textarea.setText(StringUtil.formatString(content));
 		textarea.setCaretPosition(0);
-		
+
 		return textarea;
 	}
-				
+
 	/**
 	 * Mouse listener
 	 */
 	private class Mouselistener extends MouseAdapter{
+		@Override
 		public void mousePressed(MouseEvent e){
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
-						
+
 			if(selRow > -1) {
 				String identity = ((UserObject)((DefaultMutableTreeNode)tree.getLastSelectedPathComponent()).getUserObject()).getIdentityString();
-								
+
 				content = "";
 				contentJPanel.removeAll();
 				contentJPanel.updateUI();
@@ -237,13 +234,13 @@ public class HelpViewerGUI extends JFrame {
 			}
 		}
 	}
-		
+
 	private class WindowComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
 			contentJPanel.removeAll();
 			contentJPanel.updateUI();
 			contentJPanel.add(getContent(null), BorderLayout.CENTER);
-		}		
+		}
 	}
 }
