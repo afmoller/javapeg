@@ -30,8 +30,7 @@ public class MetaDataUtil {
 		if (Config.getInstance().getStringProperty("thumbnails.tooltip.state").equals("2")) {
 			return "<html>" +
 	         "<table>" +
-//	         TODO: Fix this bug
-	           createTableRow("Filnamn", jpgFile.getName()) +
+	           createTableRow(lang.get("variable.comment.fileName"), jpgFile.getName()) +
 	           createTableRow(lang.get("variable.pictureDate"), MetaDataUtil.hasValue(md.getExifDateAsString()) ? md.getExifDateAsString() : noValue) +
 	           createTableRow(lang.get("variable.pictureTime"), MetaDataUtil.hasValue(md.getExifTimeAsString()) ? md.getExifTimeAsString() : noValue) +
 	           createTableRow(lang.get("variable.cameraModel"), MetaDataUtil.hasValue(md.getExifCameraModel()) ? md.getExifCameraModel() : noValue) +
@@ -43,8 +42,7 @@ public class MetaDataUtil {
 	         "</table>" +
 		   "</html>";
 		} else {
-//			TODO: Fix hard coded string
-			return "File name: " + jpgFile.getName();
+			return lang.get("variable.comment.fileName") + ": " + jpgFile.getName();
 		}
 	}
 
