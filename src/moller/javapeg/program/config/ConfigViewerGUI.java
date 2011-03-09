@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -63,6 +64,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.SortedListModel;
 import moller.util.gui.Screen;
+import moller.util.image.ImageUtil;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
@@ -647,8 +649,16 @@ public class ConfigViewerGUI extends JFrame {
 
 		JLabel clearCachLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.clear"));
 
-		clearCacheJButton = new JButton("X");
-		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		try {
+			Icon cleanThumbNailCacheImageIcon = ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true);
+			clearCacheJButton = new JButton(cleanThumbNailCacheImageIcon);
+		} catch (IOException iox) {
+			clearCacheJButton = new JButton("X");
+			logger.logERROR("Could not set image resources/images/viewtab/remove.gif to clean thumbnail cache button." );
+			logger.logERROR(iox);
+		}
+
+		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled") && (jptc.getCurrentSize() > 0));
 
 		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
 		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.cache.label")));
@@ -1404,11 +1414,15 @@ public class ConfigViewerGUI extends JFrame {
 	private class ClearCacheButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			TODO: Add security question.
 			JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
 
-			jptc.clear();
-			cacheSizeLabel.setText(Integer.toString(jptc.getCurrentSize()));
+			int result = displayConfirmDialog(lang.get("configviewer.thumbnail.cache.label.clear.question") + " (" + jptc.getCurrentSize() + ")", lang.get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
+
+			if (result == 0) {
+				jptc.clear();
+				cacheSizeLabel.setText(Integer.toString(jptc.getCurrentSize()));
+				clearCacheJButton.setEnabled(false);
+			}
 		}
 	}
 
