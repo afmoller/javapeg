@@ -77,6 +77,7 @@ configviewer.thumbnail.cache.label.enable              = Aktivera tumnagel cache
 configviewer.thumbnail.cache.label.size                = Tumnagel cachestorlek
 configviewer.thumbnail.cache.label.size.max            = Tumnagel max cachestorlek
 configviewer.thumbnail.cache.label.clear               = Rensa tumnagelcache
+configviewer.thumbnail.cache.label.clear.question      = Alla minnescacheade tumnaglar kommer att rensas bort.
 configviewer.thumbnail.cache.label                     = Tumnagel Cache
 configviewer.thumbnail.cache.validation.size.max       = Värdet på maximal tumnagelcache får inte vara ett negativt heltal
 configviewer.thumbnail.tooltip.label.disabled          = Avaktiverad:

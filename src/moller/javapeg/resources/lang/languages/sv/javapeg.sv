@@ -13,59 +13,6 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# This file was created: by Fredrik Möller 2005-xx-xx
-# This file was updated: by Fredrik Möller 2005-11-08
-#                      : by Fredrik Möller 2006-11-09
-#                      : by fredrik Möller 2006-11-16
-#                      : by Fredrik Möller 2006-11-27
-#                      : by Fredrik Möller 2007-02-02
-#                      : by Fredrik Möller 2007-03-10
-#                      : by Fredrik Möller 2009-02-19
-#                      : by Fredrik Möller 2009-02-24
-#                      : by Fredrik Möller 2009-02-27
-#                      : by Fredrik Möller 2009-03-04
-#                      : by Fredrik Möller 2009-03-05
-#                      : by Fredrik Möller 2009-03-06
-#                      : by Fredrik Möller 2009-03-11
-#                      : by Fredrik Möller 2009-03-14
-#                      : by Fredrik Möller 2009-03-23
-#                      : by Fredrik Möller 2009-03-26
-#                      : by Fredrik Möller 2009-03-27
-#                      : by Fredrik Möller 2009-04-14
-#                      : by Fredrik Möller 2009-04-15
-#                      : by Fredrik Möller 2009-04-19
-#                      : by Fredrik Möller 2009-04-20
-#                      : by Fredrik Möller 2009-04-27
-#                      : by Fredrik Möller 2009-04-28
-#                      : by Fredrik Möller 2009-05-04
-#                      : by Fredrik Möller 2009-05-05
-#                      : by Fredrik Möller 2009-05-10
-#                      : by Fredrik Möller 2009-05-11
-#                      : by Fredrik Möller 2009-05-13
-#                      : by Fredrik Möller 2009-05-16
-#                      : by Fredrik Möller 2009-05-20
-#                      : by Fredrik Möller 2009-05-21
-#                      : by Fredrik Möller 2009-06-02
-#                      : by Fredrik Möller 2009-06-06
-#                      : by Fredrik Möller 2009-07-13
-#                      : by Fredrik Möller 2009-07-19
-#                      : by Fredrik Möller 2009-07-20
-#                      : by Fredrik Möller 2009-07-22
-#                      : by Fredrik Möller 2009-07-29
-#                      : by Fredrik Möller 2009-08-02
-#                      : by Fredrik Möller 2009-08-09
-#                      : by Fredrik Möller 2009-08-11
-#                      : by Fredrik Möller 2009-08-20
-#                      : by Fredrik Möller 2009-09-05
-#                      : by Fredrik Möller 2009-09-06
-#                      : by Fredrik Möller 2009-09-08
-#                      : by Fredrik Möller 2009-09-09
-#                      : by Fredrik Möller 2009-09-14
-#                      : by Fredrik Möller 2009-09-19
-#                      : by Fredrik Möller 2009-09-20
-#                      : by Fredrik Möller 2009-10-03
-#                      : by Fredrik Möller 2009-11-17
-
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
@@ -138,6 +85,7 @@ variable.sourceName            = Ursprungligt filnamn
 ##############################################################################################################
 variable.comment.infoLabelA = * = Dessa variabler kan användas
 variable.comment.infoLabelB = vid namngivning av undermapp
+variable.comment.fileName   = Filnamn
 
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
