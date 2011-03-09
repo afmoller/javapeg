@@ -79,6 +79,7 @@ configviewer.thumbnail.cache.label.enable              = Enable Thumbnail cache
 configviewer.thumbnail.cache.label.size                = Thumbnail cache size
 configviewer.thumbnail.cache.label.size.max            = Thumbnail cache size max
 configviewer.thumbnail.cache.label.clear               = Clear Thumbnail cache:
+configviewer.thumbnail.cache.label.clear.question      = This will discard all memory cached thumbnails.
 configviewer.thumbnail.cache.label                     = Thumbnail Cache
 configviewer.thumbnail.cache.validation.size.max       = The value of the thumbnail cache max size must be an non negative integer
 configviewer.thumbnail.tooltip.label.disabled          = Disabled:

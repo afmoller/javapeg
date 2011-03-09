@@ -13,28 +13,6 @@
 # Para más información acerca de las reglas de la sintáxis de este fichero , por favor, visita:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# Este fichero fue creado     : por Fredrik Möller 2005-xx-xx
-# Este fichero fue actualizado: por Angel Bueno    2009-07-25
-#                             : por Fredrik Möller 2009-07-26
-#                             : por Fredrik Möller 2009-07-28
-#                             : por Fredrik Möller 2009-07-29
-#                             : por Fredrik Möller 2009-07-31
-#                             : por Angel Bueno    2009-07-31
-#                             : por Fredrik Möller 2009-08-02
-#                             : por Fredrik Möller 2009-08-09
-#                             : por Fredrik Möller 2009-08-11
-#                             : por Fredrik Möller 2009-08-20
-#                             : por Fredrik Möller 2009-09-05
-#                             : por Fredrik Möller 2009-09-06
-#                             : por Fredrik Möller 2009-09-08
-#                             : por Fredrik Möller 2009-09-09
-#                             : por Fredrik Möller 2009-09-14
-#                             : por Fredrik Möller 2009-09-16
-#                             : por Fredrik Möller 2009-09-19
-#                             : por Fredrik Möller 2009-10-03
-#                             : por Fredrik Möller 2009-10-05
-#                             : por Fredrik Möller 2009-11-17
-
 #############################################################################################################
 # M E N U                                                                                                   #
 #############################################################################################################
@@ -107,6 +85,7 @@ variable.sourceName            = Nombre del fichero original
 ##############################################################################################################
 variable.comment.infoLabelA = * = Estas variables se pueden usar
 variable.comment.infoLabelB = para nombrar los subdirectorios
+variable.comment.fileName   = File name
 
 ##############################################################################################################
 # C A S I L L A S  P A R A  M A R C A R                                                                      #

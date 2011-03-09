@@ -65,6 +65,9 @@
    without read access, for the current user, was browsed in the tree view.
    Bug seen in Windows 7, but is probably existing in any Operating system with
    user access control. 
+ 
+ ! In the thumbnail tooltips the swedish string "Filnamn", (File name) was hard 
+   coded.
    
  ~ The progress bar displayed when loading images has been changed from being a
    separate window to be integrated in the thumbnail display area. 
@@ -81,8 +84,8 @@
  ~ The length of the Exif parameter: Camera Model was hard coded to a maximum
    of 15 characters. That has been changed to instead being a configurable 
    length. The configuration is made in the configuration GUI. A value of 0 
-   (zero) means unlimited length. 
- 
+   (zero) means unlimited length.
+    
  2.4 (2009-11-17)
  
  + Possible to create customized help files. Either by overriding an existing 
