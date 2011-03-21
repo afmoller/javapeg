@@ -29,6 +29,7 @@ import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
+import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.hash.MD5;
 import moller.util.io.StreamUtil;
@@ -67,8 +68,7 @@ public class ImageMetaDataDataBaseHandler {
 
 				imddbi.setImage(jpegFile);
 				imddbi.setImageExifMetaData(new CategoryImageExifMetaData(jpegFile));
-//				TODO: fix hard coded string
-				imddbi.setComment("Add Comment Here");
+				imddbi.setComment(Language.getInstance().get("findimage.comment.defaultCommentText"));
 				imddbi.setRating(0);
 				imddbi.setCategories(new Categories());
 

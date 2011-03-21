@@ -424,3 +424,33 @@ metadata.field.name.DAY = DAG
 metadata.field.name.HOUR = TIMME
 metadata.field.name.MINUTE = MINUT
 metadata.field.name.SECOND = SEKUND
+
+##############################################################################################################
+# F I N D  I M A G E  S E C T I O N                                                                          #
+##############################################################################################################
+findimage.categories.label                                = KATEGORIER
+findimage.categories.andRadioButton.label                 = OCH
+findimage.categories.andRadioButton.tooltip               = <html>En bild måste ha alla valda kategorier<br/>tilldelade för att adderas till sökresultateta.</html>
+findimage.categories.orRadioButton.label                  = ELLER
+findimage.categories.orRadioButton.tooltip                = <html>En bild kan ha valfri kombination av valda<br/>katergorier tilldelad för att adderas till sökresultatet.</html>
+findimage.categories.clearCategoriesSelectionButton.label = Rensa valda kategorier
+findimage.categories.removeAllCategoriesAndSubCategories1 = Ta bort kategori:
+findimage.categories.removeAllCategoriesAndSubCategories2 = och alla underkategorier?
+findimage.categories.removeAllCategoriesAndSubCategories3 = ?
+findimage.categories.addNewTopLevelCategory               = Lägg till ny Toppnivåkategori
+findimage.categories.collapseTopLevelCategories           = Fäll ihop Toppnivå Kategorier
+findimage.categories.expandTopLevelCategories             = Expandera Toppnivå Kategorier
+findimage.categories.collapseCategory                     = Fäll ihop kategori:
+findimage.categories.expandCategory                       = Expandera Kategori:
+findimage.categories.addNewSubCategoryToCategory          = Lägg till ny underkategori till Kategori:
+findimage.categories.renameSelectedCategory               = Byt namn på vald Kategori:
+findimage.categories.removeSelectedCategory               = Ta bort vald Kategori:
+findimage.imagemetadata.label = BILDMETADATA
+findimage.rating.label        = KLASSIFICERING
+findimage.rating.tooltip.bad  = Dålig
+findimage.rating.tooltip.good = Bra
+findimage.comment.label              = KOMMENTAR
+findimage.comment.defaultCommentText = Skriv kommentar här
+findimage.preview.label = FÖRHANDSGRANSKNING
+findimage.clearAllMetaDataParameters.tooltip = Rensa alla valda metadataparametrar
+findimage.searchImages.tooltip = Sök bilder
