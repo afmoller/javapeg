@@ -13,14 +13,11 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: by Fredrik Möller 2009-09-17
-#                      : by Fredrik Möller 2009-09-19
-
 common.button.ok.label = Ok
 common.button.apply.label = Aplicar
 common.button.cancel.label = Cancelar
 
 common.confirmation = Confirmation
+common.information = Information
 
 common.message.error.invalidFileName = El nombre del fichero no puede contener el carácter:

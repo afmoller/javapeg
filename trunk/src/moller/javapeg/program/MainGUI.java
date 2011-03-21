@@ -926,16 +926,13 @@ public class MainGUI extends JFrame {
 
 		GBHelper posBackgroundPanel = new GBHelper();
 
-//		TODO: fix hard coded string
-		JLabel findInCategoriesLabel = new JLabel("CATEGORIES");
+		JLabel findInCategoriesLabel = new JLabel(lang.get("findimage.categories.label"));
 		findInCategoriesLabel.setForeground(Color.GRAY);
 
-//		TODO: fix hard coded string
-		JLabel findInMetaDataExifLabel = new JLabel("IMAGE META DATA");
+		JLabel findInMetaDataExifLabel = new JLabel(lang.get("findimage.imagemetadata.label"));
 		findInMetaDataExifLabel.setForeground(Color.GRAY);
 
-//		TODO: fix hard coded string
-		JLabel findInRatingLabel = new JLabel("RATING");
+		JLabel findInRatingLabel = new JLabel(lang.get("findimage.rating.label"));
 		findInRatingLabel.setForeground(Color.GRAY);
 
 		backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
@@ -954,14 +951,10 @@ public class MainGUI extends JFrame {
 
 	private JPanel createCategoriesPanel() {
 
-//		TODO: Fix hard coded string
-		andRadioButton = new JRadioButton("AND");
-//		TODO: Fix hard coded string
-		andRadioButton.setToolTipText("<html>An image must have all the selected categories<br/>assigned to be added to the search result.</html>");
-//		TODO: Fix hard coded string
-		orRadioButton = new JRadioButton("OR");
-//		TODO: Fix hard coded string
-		orRadioButton.setToolTipText("<html>An image may have any combination of the selected<br/>categories assigned to be added to the search result.</html>");
+		andRadioButton = new JRadioButton(lang.get("findimage.categories.andRadioButton.label"));
+		andRadioButton.setToolTipText(lang.get("findimage.categories.andRadioButton.tooltip"));
+		orRadioButton = new JRadioButton(lang.get("findimage.categories.orRadioButton.label"));
+		orRadioButton.setToolTipText(lang.get("findimage.categories.orRadioButton.tooltip"));
 
 		ButtonGroup group = new ButtonGroup();
 
@@ -972,8 +965,7 @@ public class MainGUI extends JFrame {
 		orRadioButton.setSelected(true);
 
 		clearCategoriesSelectionButton = new JButton();
-//		TODO: fix hard coded string
-		clearCategoriesSelectionButton.setToolTipText("Clear selected categories");
+		clearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
 
 		try {
 			clearCategoriesSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
@@ -1154,8 +1146,7 @@ public class MainGUI extends JFrame {
 			}
 		}
 
-//		TODO: Fix hard coded string
-		JLabel commentLabel = new JLabel("COMMENT");
+		JLabel commentLabel = new JLabel(lang.get("findimage.comment.label"));
 		commentLabel.setForeground(Color.GRAY);
 
 		GBHelper posCommentPanel = new GBHelper();
@@ -1174,8 +1165,7 @@ public class MainGUI extends JFrame {
 
 
 		clearAllMetaDataParameters = new JButton();
-//		TODO: fix hard coded string
-		clearAllMetaDataParameters.setToolTipText("Clear all selected meta data parameters");
+		clearAllMetaDataParameters.setToolTipText(lang.get("findimage.clearAllMetaDataParameters.tooltip"));
 
 		try {
 			clearAllMetaDataParameters.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
@@ -1187,8 +1177,7 @@ public class MainGUI extends JFrame {
 		}
 
 		searchImagesButton = new JButton();
-//		TODO: fix hard coded string
-		searchImagesButton.setToolTipText("Search for images");
+		searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
 
 		try {
 			searchImagesButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif"), true));
@@ -1337,8 +1326,7 @@ public class MainGUI extends JFrame {
 
 	private JPanel createCategoryAndRatingPanel() {
 
-//		TODO: Fix hard coded string
-		JLabel categorizeHeading = new JLabel("CATEGORIES");
+		JLabel categorizeHeading = new JLabel(lang.get("findimage.categories.label"));
 		categorizeHeading.setForeground(Color.GRAY);
 
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
@@ -1350,8 +1338,7 @@ public class MainGUI extends JFrame {
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
 
-//		TODO: Fix hard coded string
-		JLabel ratingLabel = new JLabel("RATING");
+		JLabel ratingLabel = new JLabel(lang.get("findimage.rating.label"));
 		ratingLabel.setForeground(Color.GRAY);
 
 		GBHelper posBackground = new GBHelper();
@@ -1380,12 +1367,10 @@ public class MainGUI extends JFrame {
 
 				switch (i) {
 				case 1:
-//					TODO: Fix hard coded string
-					jrb.setToolTipText("Bad");
+					jrb.setToolTipText(lang.get("findimage.rating.tooltip.bad"));
 					break;
 				case 5:
-//					TODO: Fix hard coded string
-					jrb.setToolTipText("Good");
+					jrb.setToolTipText(lang.get("findimage.rating.tooltip.good"));
 					break;
 				}
 				ratingButtonPanel.add(jrb);
@@ -1403,8 +1388,7 @@ public class MainGUI extends JFrame {
 
 	private JPanel createPreviweAndCommentPanel() {
 
-//		TODO: Fix hard coded string
-		JLabel previewHeading = new JLabel("PREVIEW");
+		JLabel previewHeading = new JLabel(lang.get("findimage.preview.label"));
 		previewHeading.setForeground(Color.GRAY);
 
 		GBHelper posBackground = new GBHelper();
@@ -1420,8 +1404,7 @@ public class MainGUI extends JFrame {
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
 		backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 
-//		TODO: Fix hard coded string
-		JLabel commentHeading = new JLabel("COMMENT");
+		JLabel commentHeading = new JLabel(lang.get("findimage.comment.label"));
 		commentHeading.setForeground(Color.GRAY);
 
 		imageCommentTextArea = new JTextArea();
@@ -1720,8 +1703,7 @@ public class MainGUI extends JFrame {
 	}
 
 	private void displayInformationMessage(String informationMessage) {
-//		TODO: fix hard coded string
-		JOptionPane.showMessageDialog(this, informationMessage, "Information", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, informationMessage, lang.get("common.information"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void displayErrorMessage(String errorMessage) {
@@ -2807,14 +2789,12 @@ public class MainGUI extends JFrame {
 
 			if (nodeToRemove.getChildCount() > 0) {
 				if (config.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories")) {
-//					TODO: Fix hard coded string
-					String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " and all sub categories?";
+					String message = lang.get("findimage.categories.removeAllCategoriesAndSubCategories1") + " " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " " + lang.get("findimage.categories.removeAllCategoriesAndSubCategories2");
 					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
 				}
 			} else {
 				if (config.getBooleanProperty("categories.warnWhenRemoveCategory")) {
-//					TODO: Fix hard coded string
-					String message ="Remove category: " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " ?";
+					String message = lang.get("findimage.categories.removeAllCategoriesAndSubCategories1") + " " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " " + lang.get("findimage.categories.removeAllCategoriesAndSubCategories3");
 					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
 				}
 			}
@@ -3018,26 +2998,18 @@ public class MainGUI extends JFrame {
 
 				// Should the category be added at the top level...
 				if (selectedPath == null) {
-//					TODO: Fix hard coded string
-					addCategory = "Add new Top Level Category";
-//					TODO: Fix hard coded string
-					collapseCategory = "Collapse Top Level Categories";
-//					TODO: Fix hard coded string
-					expandCategory = "Expand Top Level Categories";
+					addCategory = lang.get("findimage.categories.addNewTopLevelCategory");
+					collapseCategory = lang.get("findimage.categories.collapseTopLevelCategories");
+					expandCategory = lang.get("findimage.categories.expandTopLevelCategories");
 		        // ... or as a sub category of an existing category
 				} else {
 					treeNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 					String value = ((CategoryUserObject)treeNode.getUserObject()).getName();
-//					TODO: Fix hard coded string
-					collapseCategory = "Collapse Category: " + value;
-//					TODO: Fix hard coded string
-					expandCategory = "Expand  Category: " + value;
-//					TODO: Fix hard coded string
-					addCategory = "Add new sub category to Category: " + value;
-//					TODO: Fix hard coded string
-					renameCategory = "Rename selected Category: " + value;
-//					TODO: Fix hard coded string
-					removeCategory = "Remove selected Category: " + value;
+					collapseCategory = lang.get("findimage.categories.collapseCategory") + " " + value;
+					expandCategory = lang.get("findimage.categories.expandCategory") + " " + value;
+					addCategory = lang.get("findimage.categories.addNewSubCategoryToCategory") + " " + value;
+					renameCategory = lang.get("findimage.categories.renameSelectedCategory") + " " + value;
+					removeCategory = lang.get("findimage.categories.removeSelectedCategory") + " " + value;
 				}
 
 				popupMenuAddCategory.setText(addCategory);
