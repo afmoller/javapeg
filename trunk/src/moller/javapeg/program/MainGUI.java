@@ -2056,8 +2056,7 @@ public class MainGUI extends JFrame {
 					} catch (Throwable sex) {
 						logger.logERROR("Can not list files in directory: " + sourcePath.getAbsolutePath());
 						logger.logERROR(sex);
-//						TODO: Hard coded string
-						JOptionPane.showMessageDialog(null, "Can not list files in directory: " + sourcePath.getAbsolutePath(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, lang.get("common.message.error.canNotListFilesInDirectory")+ " " + sourcePath.getAbsolutePath(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -2578,8 +2577,7 @@ public class MainGUI extends JFrame {
 				ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImages);
 				imagesearchResultViewer.setVisible(true);
 			} else {
-//				TODO: fix hard coded string
-				displayInformationMessage("No images found");
+				displayInformationMessage(lang.get("findimage.searchImages.result"));
 			}
 		}
 	}
@@ -2750,8 +2748,7 @@ public class MainGUI extends JFrame {
 			DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 			String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
 
-//			TODO: Fix hard coded string
-			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value, value);
+			String newName = displayInputDialog(lang.get("categrory.rename"), lang.get("category.enterNewNameForCategory")+ " " + value, value);
 
 			if (newName != null && !newName.equals(value)) {
 				if (!CategoryUtil.isValid(newName)) {

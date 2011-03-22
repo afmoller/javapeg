@@ -20,6 +20,7 @@ common.button.cancel.label = Avbryt
 common.confirmation = Bekräftelse
 common.information = Information
 
-common.message.error.invalidFileName = Filnamnet kan inte innehålla tecknet:
+common.message.error.invalidFileName            = Filnamnet kan inte innehålla tecknet:
+common.message.error.canNotListFilesInDirectory = Kan inte lista filer i katalog:
 
 common.missing.value = inget värde

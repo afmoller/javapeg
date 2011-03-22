@@ -454,3 +454,4 @@ findimage.comment.defaultCommentText = Add Comment Here
 findimage.preview.label = PREVIEW
 findimage.clearAllMetaDataParameters.tooltip = Clear all selected meta data parameters
 findimage.searchImages.tooltip = Search for images
+findimage.searchImages.result = No images found

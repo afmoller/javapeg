@@ -20,6 +20,7 @@ common.button.cancel.label = Cancelar
 common.confirmation = Confirmation
 common.information = Information
 
-common.message.error.invalidFileName = El nombre del fichero no puede contener el carácter:
+common.message.error.invalidFileName            = El nombre del fichero no puede contener el carácter:
+common.message.error.canNotListFilesInDirectory = Can not list files in directory:
 
 common.missing.value = no value
