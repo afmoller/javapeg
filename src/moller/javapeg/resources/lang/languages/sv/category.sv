@@ -8,8 +8,10 @@ category.categoriesModel.repositoryNotAvailable = Bilddatabassökväg inte tillgän
 category.metadatavalue.selection.mode   = URVALSMETOD
 category.metadatavalue.selection.values = VÄRDEN
 
-category.enterNameForNewCategory    = Please enter a name for the new category
-category.enterNameForNewSubCategory = Please enter a name for the sub category
+category.enterNameForNewCategory    = Ange ett namn för den nya kategorin
+category.enterNameForNewSubCategory = Ange ett namn för den nya underkategorin
+category.enterNewNameForCategory    = Ange ett nytt namn för den kategorin:
+categrory.rename                    = Byt namn på kategori
 
-category.errormessage.categoryNameCanNotStartWithSpace = The category name can not start with a white space:
-category.errormessage.categoryNameAlreadyExistsInScope = already exists as a category in the selected scope, please choose another name
+category.errormessage.categoryNameCanNotStartWithSpace = Kategorinamnet kan inte börja med ett mellanslag:
+category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en kategori i vald kontext, välj ett annat namn

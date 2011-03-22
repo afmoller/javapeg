@@ -455,3 +455,4 @@ findimage.comment.defaultCommentText = Skriv kommentar här
 findimage.preview.label = FÖRHANDSGRANSKNING
 findimage.clearAllMetaDataParameters.tooltip = Rensa alla valda metadataparametrar
 findimage.searchImages.tooltip = Sök bilder
+findimage.searchImages.result = No images found
