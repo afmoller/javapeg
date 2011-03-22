@@ -99,12 +99,10 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 
-//		TODO: Fix hard coded string
-		JLabel selectionModeLabel = new JLabel("SELECTION MODE");
+		JLabel selectionModeLabel = new JLabel(lang.get("category.metadatavalue.selection.mode"));
 		selectionModeLabel.setForeground(Color.GRAY);
 
-//		TODO: Fix hard coded string
-		JLabel valuesLabel = new JLabel("VALUES");
+		JLabel valuesLabel = new JLabel(lang.get("category.metadatavalue.selection.values"));
 		valuesLabel.setForeground(Color.GRAY);
 
 		mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));

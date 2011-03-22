@@ -222,8 +222,9 @@ maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = Bil
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
 ##############################################################################################################
-maingui.popupmenu.addImageToList     = Lägg till bild till bildlistan
-maingui.popupmenu.addAllImagesToList = Lägg till alla bilder till bildlistan
+maingui.popupmenu.addImageToList        = Lägg till bild till bildlistan
+maingui.popupmenu.addAllImagesToList    = Lägg till alla bilder till bildlistan
+maingui.popupmenu.copyToSystemClipboard = Kopiera till urklipp
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
@@ -437,14 +438,14 @@ findimage.categories.clearCategoriesSelectionButton.label = Rensa valda kategori
 findimage.categories.removeAllCategoriesAndSubCategories1 = Ta bort kategori:
 findimage.categories.removeAllCategoriesAndSubCategories2 = och alla underkategorier?
 findimage.categories.removeAllCategoriesAndSubCategories3 = ?
-findimage.categories.addNewTopLevelCategory               = Lägg till ny Toppnivåkategori
-findimage.categories.collapseTopLevelCategories           = Fäll ihop Toppnivå Kategorier
-findimage.categories.expandTopLevelCategories             = Expandera Toppnivå Kategorier
+findimage.categories.addNewTopLevelCategory               = Lägg till ny toppnivåkategori
+findimage.categories.collapseTopLevelCategories           = Fäll ihop toppnivåkategorier
+findimage.categories.expandTopLevelCategories             = Expandera toppnivåkategorier
 findimage.categories.collapseCategory                     = Fäll ihop kategori:
-findimage.categories.expandCategory                       = Expandera Kategori:
-findimage.categories.addNewSubCategoryToCategory          = Lägg till ny underkategori till Kategori:
-findimage.categories.renameSelectedCategory               = Byt namn på vald Kategori:
-findimage.categories.removeSelectedCategory               = Ta bort vald Kategori:
+findimage.categories.expandCategory                       = Expandera kategori:
+findimage.categories.addNewSubCategoryToCategory          = Lägg till ny underkategori till kategori:
+findimage.categories.renameSelectedCategory               = Byt namn på vald kategori:
+findimage.categories.removeSelectedCategory               = Ta bort vald kategori:
 findimage.imagemetadata.label = BILDMETADATA
 findimage.rating.label        = KLASSIFICERING
 findimage.rating.tooltip.bad  = Dålig

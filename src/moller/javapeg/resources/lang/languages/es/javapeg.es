@@ -223,8 +223,9 @@ maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = La 
 ##############################################################################################################
 # M E N U  E M E R G E N T E  D E L  G U I  P R I N C I P A L                                                #
 ##############################################################################################################
-maingui.popupmenu.addImageToList     = Añadir imagen a la lista
-maingui.popupmenu.addAllImagesToList = Añadir todas las imágenes a la lista
+maingui.popupmenu.addImageToList        = Añadir imagen a la lista
+maingui.popupmenu.addAllImagesToList    = Añadir todas las imágenes a la lista
+maingui.popupmenu.copyToSystemClipboard = Copy to System Clipboard
 
 ##############################################################################################################
 # V E N T A N A  D E  I N F O R M A C I O N  ( A Y U D A  D E  U S U A R I O  E                              # 
@@ -436,14 +437,14 @@ findimage.categories.clearCategoriesSelectionButton.label = Clear selected categ
 findimage.categories.removeAllCategoriesAndSubCategories1 = Remove category:
 findimage.categories.removeAllCategoriesAndSubCategories2 = and all sub categories?
 findimage.categories.removeAllCategoriesAndSubCategories3 = ?
-findimage.categories.addNewTopLevelCategory               = Add new Top Level Category
-findimage.categories.collapseTopLevelCategories           = Collapse Top Level Categories
-findimage.categories.expandTopLevelCategories             = Expand Top Level Categories
-findimage.categories.collapseCategory                     = Collapse Category:
-findimage.categories.expandCategory                       = Expand Category:
-findimage.categories.addNewSubCategoryToCategory          = Add new sub category to Category:
-findimage.categories.renameSelectedCategory               = Rename selected Category:
-findimage.categories.removeSelectedCategory               = Remove selected Category:
+findimage.categories.addNewTopLevelCategory               = Add new top level category
+findimage.categories.collapseTopLevelCategories           = Collapse top level categories
+findimage.categories.expandTopLevelCategories             = Expand top level categories
+findimage.categories.collapseCategory                     = Collapse category:
+findimage.categories.expandCategory                       = Expand category:
+findimage.categories.addNewSubCategoryToCategory          = Add new sub category to category:
+findimage.categories.renameSelectedCategory               = Rename selected category:
+findimage.categories.removeSelectedCategory               = Remove selected category:
 findimage.imagemetadata.label = IMAGE META DATA
 findimage.rating.label        = RATING
 findimage.rating.tooltip.bad  = Bad

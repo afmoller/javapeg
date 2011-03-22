@@ -21,3 +21,5 @@ common.confirmation = Bekräftelse
 common.information = Information
 
 common.message.error.invalidFileName = Filnamnet kan inte innehålla tecknet:
+
+common.missing.value = inget värde

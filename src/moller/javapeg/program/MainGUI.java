@@ -961,8 +961,11 @@ public class MainGUI extends JFrame {
 		group.add(andRadioButton);
 		group.add(orRadioButton);
 
-//		TODO: Make configurable
-		orRadioButton.setSelected(true);
+		if (config.getBooleanProperty("categories.orRadioButtonIsSelected")) {
+			orRadioButton.setSelected(true);
+		} else {
+			andRadioButton.setSelected(true);
+		}
 
 		clearCategoriesSelectionButton = new JButton();
 		clearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
@@ -1521,9 +1524,7 @@ public class MainGUI extends JFrame {
 	}
 
 	public void createRightClickMenuRename() {
-
-//		TODO: Fix hard coded string
-		popupMenuCopyImageToClipBoardRename = new JMenuItem("Copy to System Clipboard");
+		popupMenuCopyImageToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
 
 		rightClickMenuRename = new JPopupMenu();
 		rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
@@ -1533,8 +1534,7 @@ public class MainGUI extends JFrame {
 
 		rightClickMenuView = new JPopupMenu();
 
-//		TODO: Fix hard coded string
-		popupMenuCopyImageToClipBoardView = new JMenuItem("Copy to System Clipboard");
+		popupMenuCopyImageToClipBoardView = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
 		popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
 		popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
 
@@ -1547,8 +1547,7 @@ public class MainGUI extends JFrame {
 	public void createRightClickMenuTag() {
 		rightClickMenuTag = new JPopupMenu();
 
-//		TODO: Fix hard coded string
-		popupMenuCopyImageToClipBoardTag = new JMenuItem("Copy to System Clipboard");
+		popupMenuCopyImageToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
 
 		rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
 	}
@@ -1614,12 +1613,14 @@ public class MainGUI extends JFrame {
 
 		config.setStringProperty("sourcePath", ApplicationContext.getInstance().getSourcePath());
 
-		if(!destinationPathTextField.getText().equals(""))
+		if(!destinationPathTextField.getText().equals("")) {
 			config.setStringProperty("destinationPath", destinationPathTextField.getText());
+		}
 
 		config.setStringProperty("subFolderName", subFolderTextField.getText());
 		config.setStringProperty("fileNameTemplate", fileNameTemplateTextField.getText());
 		config.setBooleanProperty("createThumbNailsCheckBox", createThumbNailsCheckBox.isSelected());
+		config.setBooleanProperty("categories.orRadioButtonIsSelected", orRadioButton.isSelected());
 		config.setIntProperty("mainGUI.window.location.x", this.getLocationOnScreen().x);
 		config.setIntProperty("mainGUI.window.location.y", this.getLocationOnScreen().y);
 		config.setIntProperty("mainGUI.window.width", this.getSize().width);
@@ -2705,25 +2706,21 @@ public class MainGUI extends JFrame {
 
 			// Should the category be added at the top level...
 			if (selectedPath == null) {
-//				TODO: fix hard coded string
-				categoryName = displayInputDialog("Add new root category", "Please enter a name for the new category", "");
+				categoryName = displayInputDialog(lang.get("findimage.categories.addNewTopLevelCategory"), lang.get("category.enterNameForNewCategory"), "");
 				isTopLevelCategory = true;
             // ... or as a sub category of an existing category
 			} else {
 				selectedNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 				String value = ((CategoryUserObject)selectedNode.getUserObject()).getName();
 
-//				TODO: fix hard coded string
-				categoryName = displayInputDialog("Add new sub category to category: " + value, "Please enter a name for the sub category", "");
+				categoryName = displayInputDialog(lang.get("findimage.categories.addNewSubCategoryToCategory") + " " + value, lang.get("category.enterNameForNewSubCategory"), "");
 			}
 
 			if (categoryName != null) {
 				if (!CategoryUtil.isValid(categoryName)) {
-//					TODO: fix hard coded string
-					displayErrorMessage("The category name can not start with a white space: " + "\"" + categoryName + "\"");
+					displayErrorMessage(lang.get("category.errormessage.categoryNameCanNotStartWithSpace") + " \"" + categoryName + "\"");
 				} else if(CategoryUtil.alreadyExists((DefaultMutableTreeNode)model.getRoot(), selectedPath, categoryName)) {
-//					TODO: fix hard coded string
-					displayErrorMessage("\"" + categoryName + "\"" + " already exists as a category in the selected scope, please choose another name");
+					displayErrorMessage("\"" + categoryName + "\" " + lang.get("category.errormessage.categoryNameAlreadyExistsInScope"));
 				} else {
 					CategoryUserObject cuo = new CategoryUserObject(categoryName, Integer.toString(ApplicationContext.getInstance().getNextIDToUse()));
 
@@ -2753,13 +2750,14 @@ public class MainGUI extends JFrame {
 			DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 			String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
 
+//			TODO: Fix hard coded string
 			String newName = displayInputDialog("Rename category", "Please enter a new name for category: " + value, value);
 
 			if (newName != null && !newName.equals(value)) {
 				if (!CategoryUtil.isValid(newName)) {
-					displayErrorMessage("The category name can not start with a white space: " + "\"" + newName + "\"");
+					displayErrorMessage(lang.get("category.errormessage.categoryNameCanNotStartWithSpace") + " \"" + newName + "\"");
 				} else if(CategoryUtil.alreadyExists((DefaultMutableTreeNode)model.getRoot(), selectedPath.getParentPath(), newName)) {
-					displayErrorMessage("\"" + newName + "\"" + " already exists as a category in the selected scope, please choose another name");
+					displayErrorMessage("\"" + newName + "\" " + lang.get("category.errormessage.categoryNameAlreadyExistsInScope"));
 				} else {
 					((CategoryUserObject)nodeToRename.getUserObject()).setName(newName);
 					model.nodeChanged(nodeToRename);
