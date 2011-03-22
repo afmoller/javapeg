@@ -21,3 +21,5 @@ common.confirmation = Confirmation
 common.information = Information
 
 common.message.error.invalidFileName = El nombre del fichero no puede contener el carácter:
+
+common.missing.value = no value

@@ -104,10 +104,10 @@ public class MetaDataValueSelectionDialogLessEqualGreater extends JDialog implem
 
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 
-		JLabel selectionModeLabel = new JLabel("SELECTION MODE");
+		JLabel selectionModeLabel = new JLabel(lang.get("category.metadatavalue.selection.mode"));
 		selectionModeLabel.setForeground(Color.GRAY);
 
-		JLabel valuesLabel = new JLabel("VALUES");
+		JLabel valuesLabel = new JLabel(lang.get("category.metadatavalue.selection.values"));
 		valuesLabel.setForeground(Color.GRAY);
 
 		mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
