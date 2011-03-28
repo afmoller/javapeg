@@ -65,4 +65,5 @@
 <entry key="categories.warnWhenRemoveCategoryWithSubCategories">true</entry>
 <entry key="categories.orRadioButtonIsSelected">true</entry>
 <entry key="imageRepository.automaticallyRemoveNonExistingImagePaths">false</entry>
+<entry key="imageRepository.addToRepositoryPolicy">1</entry>
 </properties>
