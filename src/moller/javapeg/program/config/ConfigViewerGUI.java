@@ -147,6 +147,10 @@ public class ConfigViewerGUI extends JFrame {
 	/**
 	 * Variables for the tag panel
 	 */
+	private JRadioButton addAutomaticallyRadioButton;
+	private JRadioButton askToAddRadioButton;
+	private JRadioButton doNotAddRadioButton;
+
 	private JRadioButton useEmbeddedThumbnail;
 	private JRadioButton useScaledThumbnail;
 
@@ -174,7 +178,7 @@ public class ConfigViewerGUI extends JFrame {
 	private String THUMBNAIL_MAX_CACHE_SIZE;
 	private String MAXIMUM_LENGTH_OF_CAMERA_MODEL;
 	private String THUMBNAIL_TOOLTIP_STATE;
-
+	private String ADD_TO_IMAGEREPOSITOY_POLICY;
 
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
@@ -234,6 +238,7 @@ public class ConfigViewerGUI extends JFrame {
 		WARN_WHEN_REMOVE_CATEGORY = conf.getBooleanProperty("categories.warnWhenRemoveCategory");
 		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories");
 		AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths");
+		ADD_TO_IMAGEREPOSITOY_POLICY = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
 	}
 
 	private void initiateWindow() {
@@ -686,15 +691,11 @@ public class ConfigViewerGUI extends JFrame {
 		 * Start of Thumbnail ToolTip Area
 		 */
 
-		JLabel toolTipDisabledLabel = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.disabled"));
-		JLabel toolTipEnabledLabel  = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.enabled"));
-		JLabel toolTipExtendedLabel = new JLabel(lang.get("configviewer.thumbnail.tooltip.label.extended"));
-
-		toolTipDisabled = new JRadioButton();
+		toolTipDisabled = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.disabled"));
 		toolTipDisabled.setName("0");
-		toolTipEnabled = new JRadioButton();
+		toolTipEnabled = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.enabled"));
 		toolTipEnabled.setName("1");
-		toolTipExtended = new JRadioButton();
+		toolTipExtended = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.extended"));
 		toolTipExtended.setName("2");
 
 		ButtonGroup group = new ButtonGroup();
@@ -718,17 +719,9 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posThumbnailToolTipPanel = new GBHelper();
 
-		thumbnailToolTipPanel.add(toolTipDisabledLabel, posThumbnailToolTipPanel);
-		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
-		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.nextCol());
-		thumbnailToolTipPanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
-		thumbnailToolTipPanel.add(toolTipEnabledLabel, posThumbnailToolTipPanel.nextRow());
-		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
-		thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextCol());
-		thumbnailToolTipPanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
-		thumbnailToolTipPanel.add(toolTipExtendedLabel, posThumbnailToolTipPanel.nextRow());
-		thumbnailToolTipPanel.add(new Gap(10), posThumbnailToolTipPanel.nextCol());
-		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextCol());
+		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel);
+		thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextRow());
+		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextRow());
 
 		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
 		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -791,6 +784,30 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Image Repositories Area
 		 */
+
+		addAutomaticallyRadioButton = new JRadioButton(lang.get("configviewer.tag.imageRepositories.label.addAutomatically"));
+		addAutomaticallyRadioButton.setName("0");
+		askToAddRadioButton = new JRadioButton(lang.get("configviewer.tag.imageRepositories.label.askToAdd"));
+		askToAddRadioButton.setName("1");
+		doNotAddRadioButton = new JRadioButton(lang.get("configviewer.tag.imageRepositories.label.doNotAskToAdd"));
+		doNotAddRadioButton.setName("2");
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+
+		buttonGroup.add(addAutomaticallyRadioButton);
+		buttonGroup.add(askToAddRadioButton);
+		buttonGroup.add(doNotAddRadioButton);
+
+		String addToImageRepositoryPolicy = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
+
+		if (addToImageRepositoryPolicy.equalsIgnoreCase(addAutomaticallyRadioButton.getName())) {
+			addAutomaticallyRadioButton.setSelected(true);
+		} else if (addToImageRepositoryPolicy.equalsIgnoreCase(askToAddRadioButton.getName())) {
+			askToAddRadioButton.setSelected(true);
+		} else {
+			doNotAddRadioButton.setSelected(true);
+		}
+
 		imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
 		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
 
@@ -829,7 +846,11 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posImageRepositories = new GBHelper();
 
-		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.expandW().expandH());
+		imageRepositoriesPanel.add(addAutomaticallyRadioButton, posImageRepositories);
+		imageRepositoriesPanel.add(askToAddRadioButton, posImageRepositories.nextRow());
+		imageRepositoriesPanel.add(doNotAddRadioButton, posImageRepositories.nextRow());
+		imageRepositoriesPanel.add(new Gap(10), posImageRepositories.nextRow());
+		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.nextRow().expandW().expandH());
 		imageRepositoriesPanel.add(new Gap(2), posImageRepositories.nextRow());
 		imageRepositoriesPanel.add(buttonPanel, posImageRepositories.nextRow());
 
@@ -938,6 +959,7 @@ public class ConfigViewerGUI extends JFrame {
 		conf.setBooleanProperty("categories.warnWhenRemoveCategory", warnWhenRemoveCategory.isSelected());
 		conf.setBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories", warnWhenRemoveCategoryWithSubCategories.isSelected());
 		conf.setBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths", automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
+		conf.setStringProperty("imageRepository.addToRepositoryPolicy", getAddToRepositoryPolicy());
 
 		/**
 		 * Show configuration changes.
@@ -954,6 +976,16 @@ public class ConfigViewerGUI extends JFrame {
 			return toolTipEnabled.getName();
 		} else {
 			return toolTipExtended.getName();
+		}
+	}
+
+	private String getAddToRepositoryPolicy() {
+		if (addAutomaticallyRadioButton.isSelected()) {
+			return addAutomaticallyRadioButton.getName();
+		} else if (askToAddRadioButton.isSelected()) {
+			return askToAddRadioButton.getName();
+		} else {
+			return doNotAddRadioButton.getName();
 		}
 	}
 
@@ -1088,7 +1120,47 @@ public class ConfigViewerGUI extends JFrame {
 				break;
 			}
 
-			displayMessage.append("Thumbnail Tooltips" + ": " + current + " (" + previous + ")\n");
+			displayMessage.append(lang.get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
+		}
+
+		if(!ADD_TO_IMAGEREPOSITOY_POLICY.equals(getAddToRepositoryPolicy())) {
+			int previousAddToImageRepositoryPolicy = -1;
+			String previous = "";
+
+			try {
+				previousAddToImageRepositoryPolicy = Integer.parseInt(ADD_TO_IMAGEREPOSITOY_POLICY);
+			} catch (NumberFormatException nfex) {
+				previousAddToImageRepositoryPolicy = 1;
+			}
+
+			switch (previousAddToImageRepositoryPolicy) {
+			case 0:
+				previous = lang.get("configviewer.tag.imageRepositories.label.addAutomatically");
+				break;
+			case 1:
+				previous = lang.get("configviewer.tag.imageRepositories.label.askToAdd");
+				break;
+			case 2:
+				previous = lang.get("configviewer.tag.imageRepositories.label.doNotAskToAdd");
+				break;
+			}
+
+			int currentAddToImageRepositoryPolicy = Integer.parseInt(getAddToRepositoryPolicy());
+			String current = "";
+
+			switch (currentAddToImageRepositoryPolicy) {
+			case 0:
+				current = lang.get("configviewer.tag.imageRepositories.label.addAutomatically");
+				break;
+			case 1:
+				current = lang.get("configviewer.tag.imageRepositories.label.askToAdd");
+				break;
+			case 2:
+				current = lang.get("configviewer.tag.imageRepositories.label.doNotAskToAdd");
+				break;
+			}
+
+			displayMessage.append(lang.get("configviewer.tag.imageRepositories.label") + ": " + current + " (" + previous + ")\n");
 		}
 
 		if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
@@ -45,14 +47,73 @@ import org.xml.sax.SAXException;
 public class ImageMetaDataDataBaseHandler {
 
 	public static boolean initiateDataBase(File directory) {
+		Config conf = Config.getInstance();
+
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 
-		if(!imageMetaDataDataBase.exists()) {
-			if(!createImageMetaDataDataBaseFile(directory)) {
+		if (!imageMetaDataDataBase.exists()) {
+			String addToImageRepositoryPolicy = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
+
+			boolean addPathToImageRepository = false;
+
+			int policy = -1;
+
+			try {
+				policy = Integer.parseInt(addToImageRepositoryPolicy);
+			} catch (NumberFormatException nfex) {
+				policy = 1;
+			}
+
+			switch (policy) {
+			case 0:
+				addPathToImageRepository = true;
+				break;
+			case 1:
+				addPathToImageRepository = addPathToImageRepository();
+				break;
+			case 2:
+				// Do nothing, false is already set as default.
+				break;
+			default:
+				addPathToImageRepository = addPathToImageRepository();
+				break;
+			}
+
+			// If the image meta data base file does not exist and should be
+			// created
+			if(!imageMetaDataDataBase.exists() && addPathToImageRepository) {
+				if(!createImageMetaDataDataBaseFile(directory)) {
+					return false;
+				}
+				return true;
+			} else {
 				return false;
 			}
+		} else {
+			// If the image image meta data base file does exist try to deserialize
+			// it.
+			boolean result = deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase, Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+
+			Logger logger = Logger.getInstance();
+
+			if (result) {
+				logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath() + " was successfully de serialized");
+			} else {
+				logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath());
+			}
+			return result;
 		}
-		return deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase, Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+	}
+
+	private static boolean addPathToImageRepository() {
+//		TODO: Fix hard coded string
+		int result = JOptionPane.showConfirmDialog(null, "Add to image repository?", "Add to image repository?", JOptionPane.OK_CANCEL_OPTION);
+
+		if (result == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean createImageMetaDataDataBaseFile(File imageRepository) {
@@ -237,7 +298,7 @@ public class ImageMetaDataDataBaseHandler {
 			logger.logERROR(sex);
 			return false;
 		} catch (IOException iox) {
-			logger.logERROR("IO exceptrion occurred when parsing file: " + imageMetaDataDataBase.getAbsolutePath());
+			logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBase.getAbsolutePath());
 			logger.logERROR(iox);
 			return false;
 		}

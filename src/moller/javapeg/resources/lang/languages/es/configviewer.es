@@ -103,6 +103,9 @@ configviewer.tag.imageRepositories.label.exists                         = Exists
 configviewer.tag.imageRepositories.label.notAvailable                   = Not Available
 configviewer.tag.imageRepositories.label.doesNotExist                   = Does not exist
 configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = The following path(s) will be removed from the image repository:
+configviewer.tag.imageRepositories.label.addAutomatically               = Add automatically
+configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add
+configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Do not Ask to add
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

@@ -1143,7 +1143,7 @@ public class MainGUI extends JFrame {
 
 		for (int i = 0; i < ratingCheckBoxes.length; i++) {
 			if (i == 0) {
-				ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox("UNRATED"), posRatingPanel);
+				ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(lang.get("findimage.rating.label.unrated")), posRatingPanel);
 			} else {
 				ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(Integer.toString(i)), posRatingPanel.nextCol());
 			}
@@ -2085,16 +2085,17 @@ public class MainGUI extends JFrame {
 			int selRow = tree.getRowForLocation(e.getX(), e.getY());
 
 			if(selRow != -1) {
-
 				Object [] path = tree.getPathForLocation(e.getX(), e.getY()).getPath();
+				StringBuilder worker = new StringBuilder();
 				String totalPath = "";
 				for(int i=0; i<path.length; i++){
 					if(i==0 || i==1 || i==path.length-1){
-						totalPath = totalPath + path[i].toString();
+						worker.append(path[i].toString());
 					} else{
-						totalPath = totalPath + path[i].toString() + "\\";
+						worker.append(path[i].toString() + C.FS);
 					}
 				}
+				totalPath = worker.toString();
 
 				ApplicationContext ac = ApplicationContext.getInstance();
 				if(!ac.getSourcePath().equals(totalPath)) {
@@ -2122,20 +2123,21 @@ public class MainGUI extends JFrame {
 					}
 
 					if (nrOfJPEGFilesInRepositoryPath > 0) {
-						ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath);
-						imddbituc.setRepositoryPath(repositoryPath);
+						if (ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath)) {
+							imddbituc.setRepositoryPath(repositoryPath);
+
+							// Populate the image repository model with any
+							// unpopulated paths.
+							ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
+
+							if(!imageRepositoryListModel.contains(iri)) {
+								imageRepositoryListModel.add(iri);
+							}
+						}
 
 						// Load thumb nails for all JPEG images that exists in the
 						// selected path.
-						loadThumbNails(new File(totalPath));
-
-						// Populate the image repository model with any
-						// unpopulated paths.
-						ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
-
-						if(!imageRepositoryListModel.contains(iri)) {
-							imageRepositoryListModel.add(iri);
-						}
+						loadThumbNails(repositoryPath);
 					}
 				}
 			}
