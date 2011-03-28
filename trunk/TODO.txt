@@ -1,7 +1,6 @@
 2.5:
 ====
 - Fix all TODO items.
-- Fix auto rotate functionality.
 - Make it possible to limit search result in the image search result viewer.
 - Test all functionality.
 - Update version numbers in language files
@@ -10,31 +9,6 @@
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-
-
-Translations:
--------------------------------
-imageviewer.button.back.toolTip                         = Anterior (Alt + Z) 
-imageviewer.button.forward.toolTip                      = Siguiente (Alt + X) 
-
-imageviewer.button.back.toolTip                         = Previous (Left Arrow) 
-imageviewer.button.forward.toolTip                      = Next (Right Arrow)
--------------------------------
-
-configviewer.rename.label.maximumCameraModelValueLength = Maximum Length of camera model value
-
-category.categoriesModel.create.error = Could not load categories.\nJavaPEG will be shut down.\n\nSee log file for details
-category.categoriesModel.store.error  = Could not store categories.\nJavaPEG will be shut down.\n\nSee log file for details
-
--------------------------------
-##############################################################################################################
-# T H U M B N A I L                                                                                          #
-##############################################################################################################
-configviewer.thumbnail.creation.label.missingOrCorrupt = If embedded thumbnail is missing or corrupt, create a temporary
-configviewer.thumbnail.creation.label.thumbnail.width  = Width of the created thumbnail
-configviewer.thumbnail.creation.label.thumbnail.height = Height of the created thumbnail
-configviewer.thumbnail.creation.label.algorithm        = Thumbnail Creation Algorithm
--------------------------------
 
 2.6:
 ====

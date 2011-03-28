@@ -106,6 +106,7 @@ public class ImageViewer extends JFrame {
 
 	private int imageToViewListIndex;
 	private int imagesToViewListSize;
+	private int currentGUIImageRotation;
 
 	private CustomKeyEventDispatcher customKeyEventDispatcher;
 
@@ -514,27 +515,34 @@ public class ImageViewer extends JFrame {
 	 * @return
 	 */
 	private Image rotateAccordingToExif(File imageFile, Image img) {
+		int rotationAccordingToExif;
+
 		switch (MetaDataUtil.getOrientationTag(imageFile)) {
 		case 1:
-			// Do nothing. Image already rotated correctly.
-			return img;
+			rotationAccordingToExif = 0;
+			break;
 		case 2:
 			return img;
 		case 3:
-			return rotateImage(img, 180);
+			rotationAccordingToExif = 180;
+			break;
 		case 4:
 			return img;
 		case 5:
 			return img;
 		case 6:
-			return rotateImage(img, 90);
+			rotationAccordingToExif = 90;
+			break;
 		case 7:
 			return img;
 		case 8:
-			return rotateImage(img, -90);
+			rotationAccordingToExif = 270;
+			break;
 		default:
 			return img;
 		}
+
+		return rotateImageAccordingToExifAndCurrentGUIRotation(rotationAccordingToExif, img);
 	}
 
 	private void loadAndViewPreviousImage() {
@@ -543,6 +551,7 @@ public class ImageViewer extends JFrame {
 		} else {
 			imageToViewListIndex -= 1;
 		}
+		currentGUIImageRotation = 0;
 		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
 		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 	}
@@ -553,6 +562,7 @@ public class ImageViewer extends JFrame {
 		} else {
 			imageToViewListIndex += 1;
 		}
+		currentGUIImageRotation = 0;
 		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
 		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 	}
@@ -647,8 +657,34 @@ public class ImageViewer extends JFrame {
 		}
 	}
 
-	private Image rotateImage(Image image, double angle) {
+	private Image rotateImageAccordingToExifAndCurrentGUIRotation(int rotationAccordingToExif, Image img) {
+		if (currentGUIImageRotation == rotationAccordingToExif) {
+			return img;
+		}
+
+		int angleToRotate = rotationAccordingToExif - currentGUIImageRotation;
+
+		if (angleToRotate < 0) {
+			angleToRotate += 360;
+		}
+		return rotateImage(img, angleToRotate);
+	}
+
+	private Image rotateImage(Image image, int angle) {
+		updateCurrentGUIImageRotation(angle);
 		return ImageUtil.rotateImage(image, angle);
+	}
+
+	private void updateCurrentGUIImageRotation(int angle) {
+		if (angle < 0) {
+			angle += 360;
+		}
+
+		currentGUIImageRotation += angle;
+
+		if (currentGUIImageRotation >= 360) {
+			currentGUIImageRotation -= 360;
+		}
 	}
 
 	private class ToolBarButtonRotateLeft implements ActionListener {
@@ -767,6 +803,7 @@ public class ImageViewer extends JFrame {
 	private class OverviewButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			imageToViewListIndex = Integer.parseInt(e.getActionCommand());
+			currentGUIImageRotation = 0;
 			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
 		}
 	}
