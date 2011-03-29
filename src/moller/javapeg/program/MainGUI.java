@@ -2854,8 +2854,10 @@ public class MainGUI extends JFrame {
 	 */
 	private void flushImageMetaDataBaseToDisk() {
 		ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
-		ImageMetaDataDataBaseHandler.updateDataBaseFile(imddbituc.getImageMetaDataBaseItems(), imddbituc.getLoadedRepositoryPath(), ImageMetaDataContextAction.UPDATE);
-		imddbituc.reInit();
+		if (imddbituc.getLoadedRepositoryPath() != null) {
+			ImageMetaDataDataBaseHandler.updateDataBaseFile(imddbituc.getImageMetaDataBaseItems(), imddbituc.getLoadedRepositoryPath(), ImageMetaDataContextAction.UPDATE);
+			imddbituc.reInit();
+		}
 	}
 
 	private ImageMetaDataContextSearchParameters collectSearchParameters() {
