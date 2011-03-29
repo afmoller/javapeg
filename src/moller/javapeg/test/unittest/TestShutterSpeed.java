@@ -3,7 +3,6 @@ package moller.javapeg.test.unittest;
 import junit.framework.Assert;
 import moller.javapeg.program.datatype.ShutterSpeed;
 import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
-import moller.util.datatype.Rational;
 
 import org.junit.Test;
 
@@ -11,48 +10,38 @@ public class TestShutterSpeed {
 
 	@Test
 	public void testToString() {
-		ShutterSpeed spOne = new ShutterSpeed(1);
-		ShutterSpeed spTwo = new ShutterSpeed(1, new Rational(1, 60));
-		ShutterSpeed spThree = new ShutterSpeed(new Rational(1, 60));
-		ShutterSpeed spFour = new ShutterSpeed(-1, null);
 
-		ShutterSpeed spFive = null;
+		ShutterSpeed spOne = null;
 		try {
-			spFive = new ShutterSpeed("1/200 sec");
+			spOne = new ShutterSpeed("1/200 sec");
 		} catch (ShutterSpeedException e) {
 			Assert.fail();
 		}
 
-		ShutterSpeed spSix = null;
+		ShutterSpeed spTwo = null;
 		try {
-			spSix = new ShutterSpeed("1 1/200 sec");
+			spTwo = new ShutterSpeed("1 1/200 sec");
 		} catch (ShutterSpeedException e) {
 			Assert.fail();
 		}
 
-		ShutterSpeed spSeven = null;
+		ShutterSpeed spThree = null;
 		try {
-			spSeven = new ShutterSpeed("1 sec");
+			spThree = new ShutterSpeed("1 sec");
 		} catch (ShutterSpeedException e) {
 			Assert.fail();
 		}
 
-		Assert.assertEquals("1", spOne.toString());
-		Assert.assertEquals("1 1/60", spTwo.toString());
-		Assert.assertEquals("1/60", spThree.toString());
-		Assert.assertEquals("", spFour.toString());
+		ShutterSpeed spFour = null;
+		try {
+			spFour = new ShutterSpeed("0.5 sec");
+		} catch (ShutterSpeedException e) {
+			Assert.fail();
+		}
 
-		Assert.assertEquals("1/200", spFive.toString());
-		Assert.assertEquals(1, spFive.getPartsOfSecond().getNumerator());
-		Assert.assertEquals(200, spFive.getPartsOfSecond().getDenominator());
-
-		Assert.assertEquals("1 1/200", spSix.toString());
-		Assert.assertEquals(1, spSix.getSeconds());
-		Assert.assertEquals(1, spSix.getPartsOfSecond().getNumerator());
-		Assert.assertEquals(200, spSix.getPartsOfSecond().getDenominator());
-
-		Assert.assertEquals("1", spSeven.toString());
-		Assert.assertEquals(1, spSeven.getSeconds());
-		Assert.assertEquals(null, spSeven.getPartsOfSecond());
+		Assert.assertEquals("1/200", spOne.toString());
+		Assert.assertEquals("1 1/200", spTwo.toString());
+		Assert.assertEquals("1", spThree.toString());
+		Assert.assertEquals("0.5", spFour.toString());
 	}
 }
