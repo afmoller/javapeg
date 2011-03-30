@@ -51,10 +51,10 @@ public class ImageMetaDataDataBaseHandler {
 
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 
+		boolean addPathToImageRepository = false;
+
 		if (!imageMetaDataDataBase.exists()) {
 			String addToImageRepositoryPolicy = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
-
-			boolean addPathToImageRepository = false;
 
 			int policy = -1;
 
@@ -72,26 +72,25 @@ public class ImageMetaDataDataBaseHandler {
 				addPathToImageRepository = addPathToImageRepository();
 				break;
 			case 2:
-				// Do nothing, false is already set as default.
+				addPathToImageRepository = false;
 				break;
 			default:
 				addPathToImageRepository = addPathToImageRepository();
 				break;
 			}
+		}
 
-			// If the image meta data base file does not exist and should be
-			// created
-			if(!imageMetaDataDataBase.exists() && addPathToImageRepository) {
-				if(!createImageMetaDataDataBaseFile(directory)) {
-					return false;
-				}
-				return true;
-			} else {
+		// If the image meta data base file does not exist and should be
+		// created
+		if(addPathToImageRepository) {
+			if(!createImageMetaDataDataBaseFile(directory)) {
 				return false;
 			}
-		} else {
-			// If the image image meta data base file does exist try to deserialize
-			// it.
+		}
+
+		// If the image image meta data base file does exist try to deserialize
+		// it.
+		if (imageMetaDataDataBase.exists()) {
 			boolean result = deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase, Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
 
 			Logger logger = Logger.getInstance();
@@ -102,6 +101,8 @@ public class ImageMetaDataDataBaseHandler {
 				logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath());
 			}
 			return result;
+		} else {
+			return false;
 		}
 	}
 
