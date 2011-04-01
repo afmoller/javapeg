@@ -15,3 +15,7 @@ categrory.rename                    = Rename category
 
 category.errormessage.categoryNameCanNotStartWithSpace = The category name can not start with a white space:
 category.errormessage.categoryNameAlreadyExistsInScope = already exists as a category in the selected scope, please choose another name
+
+category.addToImageRepositoryHeader = Add image(s) to image repository?
+category.addToImageRepositoryQuestionPartOne = Add image(s) in directory:
+category.addToImageRepositoryQuestionPartTwo = to image repository?
