@@ -16,6 +16,8 @@
 common.button.ok.label = Ok
 common.button.apply.label = Aplicar
 common.button.cancel.label = Cancelar
+common.button.yes.label = Yes
+common.button.no.label = No
 
 common.confirmation = Confirmation
 common.information = Information

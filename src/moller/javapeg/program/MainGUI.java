@@ -399,6 +399,8 @@ public class MainGUI extends JFrame {
 	private void overrideSwingUIProperties() {
 		UIManager.put("OptionPane.okButtonText", lang.get("common.button.ok.label"));
 		UIManager.put("OptionPane.cancelButtonText", lang.get("common.button.cancel.label"));
+		UIManager.put("OptionPane.yesButtonText", lang.get("common.button.yes.label"));
+		UIManager.put("OptionPane.noButtonText", lang.get("common.button.no.label"));
 	}
 
 	private void createMenuBar(){
