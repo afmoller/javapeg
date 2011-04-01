@@ -69,13 +69,13 @@ public class ImageMetaDataDataBaseHandler {
 				addPathToImageRepository = true;
 				break;
 			case 1:
-				addPathToImageRepository = addPathToImageRepository();
+				addPathToImageRepository = addPathToImageRepository(directory);
 				break;
 			case 2:
 				addPathToImageRepository = false;
 				break;
 			default:
-				addPathToImageRepository = addPathToImageRepository();
+				addPathToImageRepository = addPathToImageRepository(directory);
 				break;
 			}
 		}
@@ -106,9 +106,10 @@ public class ImageMetaDataDataBaseHandler {
 		}
 	}
 
-	private static boolean addPathToImageRepository() {
-//		TODO: Fix hard coded string
-		int result = JOptionPane.showConfirmDialog(null, "Add to image repository?", "Add to image repository?", JOptionPane.OK_CANCEL_OPTION);
+	private static boolean addPathToImageRepository(File directory) {
+		Language lang = Language.getInstance();
+
+		int result = JOptionPane.showConfirmDialog(null, lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo"), lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
 
 		if (result == 0) {
 			return true;

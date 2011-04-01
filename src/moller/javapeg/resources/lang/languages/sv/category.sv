@@ -15,3 +15,7 @@ categrory.rename                    = Byt namn på kategori
 
 category.errormessage.categoryNameCanNotStartWithSpace = Kategorinamnet kan inte börja med ett mellanslag:
 category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en kategori i vald kontext, välj ett annat namn
+
+category.addToImageRepositoryHeader = Lägg till bild(er) till bilddatabas?
+category.addToImageRepositoryQuestionPartOne = Lägg till bild(erna) i katalog:
+category.addToImageRepositoryQuestionPartTwo = till bilddatabasen?
