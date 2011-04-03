@@ -93,9 +93,9 @@ public class ImageMetaDataContextUtil {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesByRating(ratings));
 		}
 		
-		String shutterSpeed = imageMetaDataContextSearchParameters.getShutterSpeed();
-		if(shutterSpeed != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByShutterSpeed(shutterSpeed));
+		String exposureTime = imageMetaDataContextSearchParameters.getExposureTime();
+		if(exposureTime != null) {
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByExposureTime(exposureTime));
 		}
 		return compileSearchResult(searchResults); 
 	}
@@ -198,7 +198,7 @@ public class ImageMetaDataContextUtil {
 		if (imageMetaDataContextSearchParameters.getRatings() != null) {
 			return true;
 		}
-		if (imageMetaDataContextSearchParameters.getShutterSpeed() != null) {
+		if (imageMetaDataContextSearchParameters.getExposureTime() != null) {
 			return true;
 		}
 		return false;

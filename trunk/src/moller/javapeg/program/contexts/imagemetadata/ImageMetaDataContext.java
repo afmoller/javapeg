@@ -14,7 +14,7 @@ import java.util.TreeSet;
 
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 
 
@@ -26,7 +26,7 @@ public class ImageMetaDataContext {
 	private static ImageMetaDataContext instance;
 	
 	private Map<String, ImageSize> imageSizeStringImageSizeMappings;
-	private Map<String, ShutterSpeed> shutterSpeedStringShutterSpeedMappings;
+	private Map<String, ExposureTime> exposureTimeStringExposureTimeMappings;
 	
 	/**
 	 * Image Exif Meta Data
@@ -43,7 +43,7 @@ public class ImageMetaDataContext {
 	
 	private Map<Integer, Set<Integer>> isoValues;
 	private Map<String, Set<Integer>> imageSizeValues;
-	private Map<String, Set<Integer>> shutterSpeedValues;
+	private Map<String, Set<Integer>> exposureTimeValues;
 	private Map<Double, Set<Integer>> apertureValues;
 	
 	private List<Set<Integer>> ratings; 
@@ -57,7 +57,7 @@ public class ImageMetaDataContext {
 	 */
 	private ImageMetaDataContext() {
 		
-		shutterSpeedStringShutterSpeedMappings = new HashMap<String, ShutterSpeed>();
+		exposureTimeStringExposureTimeMappings = new HashMap<String, ExposureTime>();
 		imageSizeStringImageSizeMappings = new HashMap<String, ImageSize>();
 		
 		cameraModels = new HashMap<String, Set<Integer>>();
@@ -70,7 +70,7 @@ public class ImageMetaDataContext {
 		secondValues = new HashMap<Integer, Set<Integer>>();
 		isoValues = new HashMap<Integer, Set<Integer>>();
 		imageSizeValues = new HashMap<String, Set<Integer>>();
-		shutterSpeedValues = new HashMap<String, Set<Integer>>();
+		exposureTimeValues = new HashMap<String, Set<Integer>>();
 		apertureValues = new HashMap<Double, Set<Integer>>();
 		
 		ratings = new ArrayList<Set<Integer>>();
@@ -168,12 +168,12 @@ public class ImageMetaDataContext {
 		}
 	}
 	
-	public void addShutterSpeed(ShutterSpeed shutterSpeed, String imagePath) {
-		if (!shutterSpeedValues.containsKey(shutterSpeed.toString())) {
-			shutterSpeedValues.put(shutterSpeed.toString(), new HashSet<Integer>());
-			shutterSpeedStringShutterSpeedMappings.put(shutterSpeed.toString(), shutterSpeed);
+	public void addExposureTime(ExposureTime exposureTime, String imagePath) {
+		if (!exposureTimeValues.containsKey(exposureTime.toString())) {
+			exposureTimeValues.put(exposureTime.toString(), new HashSet<Integer>());
+			exposureTimeStringExposureTimeMappings.put(exposureTime.toString(), exposureTime);
 		}
-		shutterSpeedValues.get(shutterSpeed.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
+		exposureTimeValues.get(exposureTime.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addImageSize(ImageSize imageSize, String imagePath) {
@@ -260,13 +260,13 @@ public class ImageMetaDataContext {
 		return new TreeSet<Double>(apertureValues.keySet());
 	}
 	
-	public Set<ShutterSpeed> getShutterSpeedValues() {
-		Set<ShutterSpeed> shutterSpeedObjects = new TreeSet<ShutterSpeed>();
+	public Set<ExposureTime> getExposureTimeValues() {
+		Set<ExposureTime> exposureTimeObjects = new TreeSet<ExposureTime>();
 		
-		for (String shutterSpeedValue : shutterSpeedValues.keySet()) {
-			shutterSpeedObjects.add(shutterSpeedStringShutterSpeedMappings.get(shutterSpeedValue));
+		for (String exposureTimeValue : exposureTimeValues.keySet()) {
+			exposureTimeObjects.add(exposureTimeStringExposureTimeMappings.get(exposureTimeValue));
 		}
-		return shutterSpeedObjects;
+		return exposureTimeObjects;
 	}
 	
 	public Set<ImageSize> getImageSizeValues() {
@@ -452,19 +452,19 @@ public class ImageMetaDataContext {
 		return imagePaths;
 	}
 	
-	public Set<File> findImagesByShutterSpeed(String shutterSpeed) {
+	public Set<File> findImagesByExposureTime(String exposureTime) {
 		
-		Set<String> shutterSpeedValuesKeys = new TreeSet<String>(shutterSpeedValues.keySet());
-		Iterator<String> iterator = shutterSpeedValuesKeys.iterator();
+		Set<String> exposureTimeValuesKeys = new TreeSet<String>(exposureTimeValues.keySet());
+		Iterator<String> iterator = exposureTimeValuesKeys.iterator();
 		
-		List<String> shutterSpeedValuesToGet = new ArrayList<String>(); 
+		List<String> exposureTimeValuesToGet = new ArrayList<String>(); 
 			
-		FindBy.shutterSpeed(shutterSpeed, iterator, shutterSpeedValuesToGet);
+		FindBy.exposureTime(exposureTime, iterator, exposureTimeValuesToGet);
 				
 		Set<File> imagePaths = new HashSet<File>();
 		
-		for (String shutterSpeedValue : shutterSpeedValuesToGet) {
-			Set<Integer> indexForImagePaths = shutterSpeedValues.get(shutterSpeedValue);
+		for (String exposureTimeValue : exposureTimeValuesToGet) {
+			Set<Integer> indexForImagePaths = exposureTimeValues.get(exposureTimeValue);
 			populateImagePathsSet(indexForImagePaths, imagePaths);
 		}	
 		return imagePaths;

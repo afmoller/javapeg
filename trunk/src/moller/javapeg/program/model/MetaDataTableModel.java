@@ -45,7 +45,7 @@ public class MetaDataTableModel extends DefaultTableModel {
 		meta[1] = MetaDataUtil.hasValue(metaData.getExifDateAsString()) ? metaData.getExifDateAsString() : noValue;
 		meta[2] = MetaDataUtil.hasValue(metaData.getExifTimeAsString()) ? metaData.getExifTimeAsString() : noValue;
 		meta[3] = MetaDataUtil.hasValue(metaData.getExifCameraModel()) ? metaData.getExifCameraModel() : noValue;
-		meta[4] = MetaDataUtil.hasValue(metaData.getExifShutterSpeed()) ? metaData.getExifShutterSpeed() : noValue;
+		meta[4] = MetaDataUtil.hasValue(metaData.getExifExposureTime()) ? metaData.getExifExposureTime() : noValue;
 		meta[5] = MetaDataUtil.hasValue(metaData.getExifISOValue()) ? metaData.getExifISOValue() : noValue;
 		meta[6] = MetaDataUtil.hasValue(metaData.getExifPictureWidth()) ? metaData.getExifPictureWidth() : noValue;
 		meta[7] = MetaDataUtil.hasValue(metaData.getExifPictureHeight()) ? metaData.getExifPictureHeight() : noValue;

@@ -10,6 +10,9 @@
  
  2.5 (2010-xx-xx)
  
+ + If the Automatic Image Resize button is selected in the ImageViewer then a
+   deselection of this button will resize a loaded image to the original size.
+ 
  + If an image thumbnail is double clicked when JavaPEG is in 
    SEARCH / VIEW IMAGE mode the image will be added to the end of the image 
    list. If the Image Viewer is displayed the image the image will also be 
@@ -85,6 +88,12 @@
    of 15 characters. That has been changed to instead being a configurable 
    length. The configuration is made in the configuration GUI. A value of 0 
    (zero) means unlimited length.
+  
+ ~ The Exif parameter shutter speed has been changed to the Exif parameter
+   exposure time, since that is what was meant from the beginning. The
+   exposure time parameter gives values which corresponds to them seen in the
+   camera during a photo session and the shutter speed values are slightly
+   different. See Exif standard for details. 
     
  2.4 (2009-11-17)
  

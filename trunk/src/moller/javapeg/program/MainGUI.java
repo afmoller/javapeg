@@ -1024,7 +1024,7 @@ public class MainGUI extends JFrame {
 		JLabel imageSizeLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.IMAGE_SIZE.toString()));
 		JLabel isoLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.ISO.toString()));
 		JLabel cameraModelLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.CAMERA_MODEL.toString()));
-		JLabel shutterSpeedLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.SHUTTER_SPEED.toString()));
+		JLabel shutterSpeedLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.EXPOSURE_TIME.toString()));
 		JLabel apertureValueLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.APERTURE_VALUE.toString()));
 
 		MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
@@ -1037,7 +1037,7 @@ public class MainGUI extends JFrame {
 		secondMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SECOND.toString());
 		imagesSizeMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.IMAGE_SIZE.toString());
 		isoMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.ISO.toString());
-		shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SHUTTER_SPEED.toString());
+		shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.EXPOSURE_TIME.toString());
 		apertureValueMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.APERTURE_VALUE.toString());
 		cameraModelMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.CAMERA_MODEL.toString());
 
@@ -1122,8 +1122,8 @@ public class MainGUI extends JFrame {
 			case ISO:
 				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getIsoValues()), value, e.getLocationOnScreen());
 				break;
-			case SHUTTER_SPEED:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getShutterSpeedValues()), value, e.getLocationOnScreen());
+			case EXPOSURE_TIME:
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getExposureTimeValues()), value, e.getLocationOnScreen());
 				break;
 			}
 			mdvsd.collectSelectedValues();

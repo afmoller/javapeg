@@ -61,14 +61,14 @@ public class TemplateUtil {
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.cameraModelVariable") + "%", cameraModel);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.shutterSpeedVariable") + "%") > -1){
-			String shutterSpeed = "";
-			if (MetaDataUtil.hasValue(theMetaData.getExifShutterSpeed().toString())) {
-				shutterSpeed = theMetaData.getExifShutterSpeed().toString();
-				shutterSpeed = shutterSpeed.replaceAll("/", "_");
+			String exposureTime = "";
+			if (MetaDataUtil.hasValue(theMetaData.getExifExposureTime().toString())) {
+				exposureTime = theMetaData.getExifExposureTime().toString();
+				exposureTime = exposureTime.replaceAll("/", "_");
 			} else {
-				shutterSpeed = "no value";
+				exposureTime = "no value";
 			}
-			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.shutterSpeedVariable") + "%", shutterSpeed);
+			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.shutterSpeedVariable") + "%", exposureTime);
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.isoValueVariable") + "%") > -1){
 			String isoString = "";
