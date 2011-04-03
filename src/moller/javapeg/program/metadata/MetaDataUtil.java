@@ -34,7 +34,7 @@ public class MetaDataUtil {
 	           createTableRow(lang.get("variable.pictureDate"), MetaDataUtil.hasValue(md.getExifDateAsString()) ? md.getExifDateAsString() : noValue) +
 	           createTableRow(lang.get("variable.pictureTime"), MetaDataUtil.hasValue(md.getExifTimeAsString()) ? md.getExifTimeAsString() : noValue) +
 	           createTableRow(lang.get("variable.cameraModel"), MetaDataUtil.hasValue(md.getExifCameraModel()) ? md.getExifCameraModel() : noValue) +
-	           createTableRow(lang.get("variable.shutterSpeed"), MetaDataUtil.hasValue(md.getExifShutterSpeed().toString()) ? md.getExifShutterSpeed().toString() : noValue) +
+	           createTableRow(lang.get("variable.shutterSpeed"), MetaDataUtil.hasValue(md.getExifExposureTime().toString()) ? md.getExifExposureTime().toString() : noValue) +
 	           createTableRow(lang.get("variable.isoValue"), MetaDataUtil.hasValue(md.getExifISOValue()) ? Integer.toString(md.getExifISOValue()) : noValue) +
 	           createTableRow(lang.get("variable.pictureWidth"), MetaDataUtil.hasValue(md.getExifPictureWidth()) ? Integer.toString(md.getExifPictureWidth()) : noValue) +
 	           createTableRow(lang.get("variable.pictureHeight"), MetaDataUtil.hasValue(md.getExifPictureHeight()) ? Integer.toString(md.getExifPictureHeight()) : noValue) +

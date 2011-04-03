@@ -73,7 +73,7 @@
              <xs:enumeration value="date"/>
              <xs:enumeration value="time"/>
              <xs:enumeration value="cameraModel"/>
-             <xs:enumeration value="shutterSpeed"/>
+             <xs:enumeration value="exposureTime"/>
              <xs:enumeration value="isoValue"/>
              <xs:enumeration value="pictureWidth"/>
              <xs:enumeration value="pictureHeight"/>

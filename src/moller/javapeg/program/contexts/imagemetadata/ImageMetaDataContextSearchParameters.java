@@ -102,7 +102,7 @@ public class ImageMetaDataContextSearchParameters {
 		return ratings;
 	}
 	
-	public String getShutterSpeed() {
+	public String getExposureTime() {
 		return shutterSpeed;
 	}
 	

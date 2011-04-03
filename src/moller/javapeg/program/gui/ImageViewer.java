@@ -752,6 +752,8 @@ public class ImageViewer extends JFrame {
 				if((pictureWidth > backgroundWidth) || (pictureHeight > backgroundHeight)){
 					adjustToWindowSizeJButton.doClick();
 				}
+			} else {
+				createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
 			}
 		}
 	}

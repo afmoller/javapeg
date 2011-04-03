@@ -4,7 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 
@@ -16,7 +16,7 @@ public class CategoryImageExifMetaData {
     private int isoValue;
     private int pictureHeight;
     private int pictureWidth;
-    private ShutterSpeed shutterSpeed;
+    private ExposureTime exposureTime;
     
     public CategoryImageExifMetaData() {
         apertureValue = -1;;
@@ -25,7 +25,7 @@ public class CategoryImageExifMetaData {
         isoValue = -1;
         pictureHeight = -1;
         pictureWidth = -1;
-        shutterSpeed = null;
+        exposureTime = null;
     }
     
     public CategoryImageExifMetaData(File jpegFile) {
@@ -37,7 +37,7 @@ public class CategoryImageExifMetaData {
         isoValue      = md.getExifISOValue();
         pictureHeight = md.getExifPictureHeight();
         pictureWidth  = md.getExifPictureWidth();
-        shutterSpeed  = md.getExifShutterSpeed();
+        exposureTime  = md.getExifExposureTime();
     }
     
     public double getApertureValue() {
@@ -58,8 +58,8 @@ public class CategoryImageExifMetaData {
     public int getPictureWidth() {
         return pictureWidth;
     }
-    public ShutterSpeed getShutterSpeed() {
-        return shutterSpeed;
+    public ExposureTime getExposureTime() {
+        return exposureTime;
     }
     
     public void setApertureValue(double apertureValue) {
@@ -81,8 +81,8 @@ public class CategoryImageExifMetaData {
         this.pictureWidth = pictureWidth;
     }
     
-    public void setShutterSpeed(ShutterSpeed shutterSpeed) {
-        this.shutterSpeed = shutterSpeed;
+    public void setExposureTime(ExposureTime exposureTime) {
+        this.exposureTime = exposureTime;
     }
     
     public String getDateTimeAsString() {

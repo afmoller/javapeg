@@ -26,9 +26,9 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
+import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.datatype.ShutterSpeed;
-import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.language.Language;
@@ -173,7 +173,7 @@ public class ImageMetaDataDataBaseHandler {
 				XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
 				XMLUtil.writeElement("picture-height", Integer.toString(ciemd.getPictureHeight()), w);
 				XMLUtil.writeElement("picture-width" , Integer.toString(ciemd.getPictureWidth()) , w);
-				XMLUtil.writeElement("shutter-speed" , ciemd.getShutterSpeed().toString() , w);
+				XMLUtil.writeElement("exposure-time" , ciemd.getExposureTime().toString() , w);
 				XMLUtil.writeElementEnd(w);
 				XMLUtil.writeElement("comment", imddbi.getComment(), w);
 				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
@@ -315,7 +315,7 @@ public class ImageMetaDataDataBaseHandler {
 		imdc.addDateTime(imageExifMetaData.getDateTime(), imagePath);
 		imdc.addIso(imageExifMetaData.getIsoValue(), imagePath);
 		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
-		imdc.addShutterSpeed(imageExifMetaData.getShutterSpeed(), imagePath);
+		imdc.addExposureTime(imageExifMetaData.getExposureTime(), imagePath);
 		imdc.addAperture(imageExifMetaData.getApertureValue(), imagePath);
 		imdc.addComment(comment, imagePath);
 		imdc.addRating(rating, imagePath);
@@ -470,12 +470,12 @@ public class ImageMetaDataDataBaseHandler {
 				imageExifMetaData.setPictureHeight(Integer.parseInt(nodeValue));
 			} else if("picture-width".equals(nodeName)) {
 				imageExifMetaData.setPictureWidth(Integer.parseInt(nodeValue));
-			} else if("shutter-speed".equals(nodeName)) {
+			} else if("exposure-time".equals(nodeName)) {
 				try {
-					imageExifMetaData.setShutterSpeed(new ShutterSpeed(nodeValue));
-				} catch (ShutterSpeedException spex) {
-					imageExifMetaData.setShutterSpeed(null);
-					logger.logERROR("Could not create a ShutterSpeed object from string value: " + nodeValue);
+					imageExifMetaData.setExposureTime(new ExposureTime(nodeValue));
+				} catch (ExposureTimeException spex) {
+					imageExifMetaData.setExposureTime(null);
+					logger.logERROR("Could not create a ExposureTime object from string value: " + nodeValue);
 					logger.logERROR(spex);
 				}
 			}

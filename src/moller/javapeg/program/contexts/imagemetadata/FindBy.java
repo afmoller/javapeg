@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.datatype.ShutterSpeed;
-import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.enumerations.Operator;
 import moller.javapeg.program.logger.Logger;
@@ -83,8 +83,8 @@ public class FindBy {
 		stringType(MetaDataValueFieldName.IMAGE_SIZE, imageSizeString, iterator, imageSizeValuesToGet);
 	}
 
-	public static void shutterSpeed(String shutterSpeedString, Iterator<String> iterator, List<String> shutterSpeedValuesToGet) {
-		stringType(MetaDataValueFieldName.SHUTTER_SPEED, shutterSpeedString, iterator, shutterSpeedValuesToGet);
+	public static void exposureTime(String exposureTimeString, Iterator<String> iterator, List<String> exposureTimeValuesToGet) {
+		stringType(MetaDataValueFieldName.EXPOSURE_TIME, exposureTimeString, iterator, exposureTimeValuesToGet);
 	}
 
 	private static void integerType(MetaDataValueFieldName metaDataValueFieldName, String valueString, Iterator<Integer> iterator, List<Integer> valuesToGet) {
@@ -156,15 +156,15 @@ public class FindBy {
 						valuesToGet.add(imageSize.toString());
 					}
 					break;
-				case SHUTTER_SPEED:
+				case EXPOSURE_TIME:
 					try {
-						ShutterSpeed shutterSpeed = new ShutterSpeed(iterator.next());
+						ExposureTime exposureTime = new ExposureTime(iterator.next());
 
-						if (shutterSpeed.compareTo(new ShutterSpeed(valuesAsStrings[0])) < 0) {
-							valuesToGet.add(shutterSpeed.toString());
+						if (exposureTime.compareTo(new ExposureTime(valuesAsStrings[0])) < 0) {
+							valuesToGet.add(exposureTime.toString());
 						}
-					} catch (ShutterSpeedException spex) {
-						logger.logERROR("Could not create a ShutterSpeed object from string value:");
+					} catch (ExposureTimeException spex) {
+						logger.logERROR("Could not create a ExposureTime object from string value:");
 						logger.logERROR(spex);
 					}
 					break;
@@ -186,15 +186,15 @@ public class FindBy {
 						valuesToGet.add(imageSize.toString());
 					}
 					break;
-				case SHUTTER_SPEED:
+				case EXPOSURE_TIME:
 					try {
-						ShutterSpeed shutterSpeed = new ShutterSpeed(iterator.next());
+						ExposureTime exposureTime = new ExposureTime(iterator.next());
 
-						if (shutterSpeed.compareTo(new ShutterSpeed(valuesAsStrings[0])) > 0) {
-							valuesToGet.add(shutterSpeed.toString());
+						if (exposureTime.compareTo(new ExposureTime(valuesAsStrings[0])) > 0) {
+							valuesToGet.add(exposureTime.toString());
 						}
-					} catch (ShutterSpeedException spex) {
-						logger.logERROR("Could not create a ShutterSpeed object from string value:");
+					} catch (ExposureTimeException spex) {
+						logger.logERROR("Could not create a ExposureTime object from string value:");
 						logger.logERROR(spex);
 					}
 					break;

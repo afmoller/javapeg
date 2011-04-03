@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import moller.javapeg.program.datatype.ShutterSpeed;
-import moller.javapeg.program.datatype.ShutterSpeed.ShutterSpeedException;
+import moller.javapeg.program.datatype.ExposureTime;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.enumerations.FieldName;
 import moller.javapeg.program.logger.Logger;
 import moller.util.string.StringUtil;
@@ -39,7 +39,7 @@ public class MetaDataRetriever {
 		String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
 		String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
 		String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_Y_DIMENSION);
-		String shutterSpeedValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.SHUTTER_SPEED_VALUE);
+		String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.EXPOSURE_TIME_VALUE);
 
 		String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
 		String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
@@ -50,7 +50,7 @@ public class MetaDataRetriever {
 		metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));
 		metaData.setExifPictureHeight(getIntegerTagValue(tagAndValueMappings, pixelYDimensionTag));
 		metaData.setExifPictureWidth(getIntegerTagValue(tagAndValueMappings, pixelXDimensionTag));
-		metaData.setExifShutterSpeed(getShutterSpeedTagValue(tagAndValueMappings, shutterSpeedValueTag));
+		metaData.setExifExposureTime(getExposureTimeTagValue(tagAndValueMappings, exposureTimeValueTag));
 		metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
 		metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
 	}
@@ -81,10 +81,10 @@ public class MetaDataRetriever {
 		}
 	}
 
-	private static ShutterSpeed getShutterSpeedTagValue(Map<String, String> tagAndValueMappings, String tag) {
+	private static ExposureTime getExposureTimeTagValue(Map<String, String> tagAndValueMappings, String tag) {
 		try {
-			 return new ShutterSpeed(tagAndValueMappings.get(tag));
-		} catch (ShutterSpeedException e) {
+			 return new ExposureTime(tagAndValueMappings.get(tag));
+		} catch (ExposureTimeException e) {
 			return null;
 		}
 	}

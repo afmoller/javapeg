@@ -259,8 +259,8 @@ public class ThumbNailOverViewCreator {
 		if (metaVariable.equals(LayoutMetaDataVariable.PICTUREWIDTH.toString())) {
 			return Integer.toString(md.getExifPictureWidth());
 		}
-		if (metaVariable.equals(LayoutMetaDataVariable.SHUTTERSPEED.toString())) {
-			return md.getExifShutterSpeed().toString();
+		if (metaVariable.equals(LayoutMetaDataVariable.EXPOSURETIME.toString())) {
+			return md.getExifExposureTime().toString();
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.TIME.toString())) {
 			return md.getExifTimeAsString();

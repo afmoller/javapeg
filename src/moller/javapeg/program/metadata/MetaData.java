@@ -4,7 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import moller.javapeg.program.datatype.ShutterSpeed;
+import moller.javapeg.program.datatype.ExposureTime;
 
 public class MetaData {
 
@@ -12,7 +12,7 @@ public class MetaData {
 	private String fileName;
 	private Date exifDateTime;
 	private String exifCameraModel;
-	private ShutterSpeed exifShutterSpeed;
+	private ExposureTime exifExposureTime;
 	private int exifISOValue;
 	private int exifPictureWidth;
 	private int exifPictureHeight;
@@ -26,7 +26,7 @@ public class MetaData {
 		fileName = null;
 		exifDateTime = null;
 		exifCameraModel = null;
-		exifShutterSpeed = null;
+		exifExposureTime = null;
 		exifISOValue = -1;
 		exifPictureWidth = -1;
 		exifPictureHeight = -1;
@@ -67,8 +67,8 @@ public class MetaData {
 		return exifCameraModel;
 	}
 
-	public ShutterSpeed getExifShutterSpeed() {
-		return exifShutterSpeed;
+	public ExposureTime getExifExposureTime() {
+		return exifExposureTime;
 	}
 
 	public int getExifISOValue() {
@@ -112,8 +112,8 @@ public class MetaData {
 		this.exifCameraModel = exifCameraModel;
 	}
 
-	public void setExifShutterSpeed(ShutterSpeed exifShutterSpeed) {
-		this.exifShutterSpeed = exifShutterSpeed;
+	public void setExifExposureTime(ExposureTime exifExposureTime) {
+		this.exifExposureTime = exifExposureTime;
 	}
 
 	public void setExifISOValue(int exifISOValue) {
