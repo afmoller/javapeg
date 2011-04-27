@@ -32,7 +32,7 @@ public class MetaDataCameraAndTagMapping {
 	private Map<FieldName, String> getMappingsForExifDefault() {
 		Map<FieldName, String> fieldNameAndTagIdMappings = new HashMap<FieldName, String>();
 
-		fieldNameAndTagIdMappings.put(FieldName.APERTURE_VALUE, "0x9202");
+		fieldNameAndTagIdMappings.put(FieldName.FNUMBER, "0x829d");
 		fieldNameAndTagIdMappings.put(FieldName.DATE_TIME_ORIGINAL, "0x9003");
 		fieldNameAndTagIdMappings.put(FieldName.ISO_SPEED_RATINGS, "0x8827");
 		fieldNameAndTagIdMappings.put(FieldName.JPEG_INTERCHANGE_FORMAT, "0x0201");

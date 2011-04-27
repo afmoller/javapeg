@@ -34,7 +34,7 @@ public class MetaDataRetriever {
 
 		MetaDataCameraAndTagMapping mdcatm = MetaDataCameraAndTagMapping.getInstance();
 
-		String apertureValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.APERTURE_VALUE);
+		String fNumberTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.FNUMBER);
 		String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.DATE_TIME_ORIGINAL);
 		String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
 		String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
@@ -44,7 +44,7 @@ public class MetaDataRetriever {
 		String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
 		String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
 
-		metaData.setExifApertureValue(getDoubleTagValue(tagAndValueMappings, apertureValueTag));
+		metaData.setExifFNumber(getDoubleTagValue(tagAndValueMappings, fNumberTag));
 		metaData.setExifCameraModel(cameraModel);
 		metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
 		metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));

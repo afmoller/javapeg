@@ -102,11 +102,11 @@ public class TemplateUtil {
 		}
 		if(stringToConvert.indexOf("%" + lang.get("variable.apertureValueVariable") + "%") > -1){
 			String apertureString = "";
-			double apertureValue = theMetaData.getExifApertureValue();
-			if (!MetaDataUtil.hasValue(apertureValue)) {
+			double fNumber = theMetaData.getExifFNumber();
+			if (!MetaDataUtil.hasValue(fNumber)) {
 				apertureString = "no value";
 			} else {
-				apertureString = Double.toString(apertureValue);
+				apertureString = Double.toString(fNumber);
 			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.apertureValueVariable") + "%", apertureString);
 		}

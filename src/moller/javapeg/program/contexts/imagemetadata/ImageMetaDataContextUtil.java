@@ -58,9 +58,9 @@ public class ImageMetaDataContextUtil {
 			searchResults.add(ImageMetaDataContext.getInstance().findImagesBySecond(second));
 		}
 		
-		String apertureValue = imageMetaDataContextSearchParameters.getApertureValue();
+		String apertureValue = imageMetaDataContextSearchParameters.getFNumber();
 		if(apertureValue != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByApertureValue(apertureValue));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByFNumberValue(apertureValue));
 		}
 		
 		String cameraModel = imageMetaDataContextSearchParameters.getCameraModel();
@@ -177,7 +177,7 @@ public class ImageMetaDataContextUtil {
 		if (imageMetaDataContextSearchParameters.getSecond() != null) {
 			return true;
 		}
-		if (imageMetaDataContextSearchParameters.getApertureValue() != null) {
+		if (imageMetaDataContextSearchParameters.getFNumber() != null) {
 			return true;
 		}
 		if (imageMetaDataContextSearchParameters.getCameraModel() != null) {

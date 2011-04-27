@@ -236,7 +236,7 @@ public class ThumbNailOverViewCreator {
 	private String getMetaDataValue(MetaData md, String metaVariable) {
 
 		if (metaVariable.equals(LayoutMetaDataVariable.APERTUREVALUE.toString())) {
-			return Double.toString(md.getExifApertureValue());
+			return Double.toString(md.getExifFNumber());
 		}
 		if (metaVariable.equals(LayoutMetaDataVariable.CAMERAMODEL.toString())) {
 			return md.getExifCameraModel();
