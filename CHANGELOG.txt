@@ -93,7 +93,13 @@
    exposure time, since that is what was meant from the beginning. The
    exposure time parameter gives values which corresponds to them seen in the
    camera during a photo session and the shutter speed values are slightly
-   different. See Exif standard for details. 
+   different. See Exif standard for details.
+   
+ ~ The Exif parameter aperture value has been changed to the Exif parameter
+   F-Number, since that is what was meant from the beginning. The
+   F-Number parameter gives values which corresponds to them seen in the
+   camera during a photo session and the aperture values are slightly
+   different. See Exif standard for details.  
     
  2.4 (2009-11-17)
  
