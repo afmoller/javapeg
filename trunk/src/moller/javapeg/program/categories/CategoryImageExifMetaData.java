@@ -9,17 +9,17 @@ import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 
 public class CategoryImageExifMetaData {
-    
-    private double apertureValue;
+
+    private double fNumber;
     private String cameraModel;
     private Date dateTime;
     private int isoValue;
     private int pictureHeight;
     private int pictureWidth;
     private ExposureTime exposureTime;
-    
+
     public CategoryImageExifMetaData() {
-        apertureValue = -1;;
+        fNumber = -1;;
         cameraModel = "";
         dateTime = null;
         isoValue = -1;
@@ -27,11 +27,11 @@ public class CategoryImageExifMetaData {
         pictureWidth = -1;
         exposureTime = null;
     }
-    
+
     public CategoryImageExifMetaData(File jpegFile) {
         MetaData md = MetaDataRetriever.getMetaData(jpegFile);
-    	
-    	apertureValue = md.getExifApertureValue();
+
+    	fNumber       = md.getExifFNumber();
         cameraModel   = md.getExifCameraModel();
         dateTime      = md.getExifDateTime();
         isoValue      = md.getExifISOValue();
@@ -39,9 +39,9 @@ public class CategoryImageExifMetaData {
         pictureWidth  = md.getExifPictureWidth();
         exposureTime  = md.getExifExposureTime();
     }
-    
-    public double getApertureValue() {
-        return apertureValue;
+
+    public double getFNumber() {
+        return fNumber;
     }
     public String getCameraModel() {
         return cameraModel;
@@ -61,9 +61,9 @@ public class CategoryImageExifMetaData {
     public ExposureTime getExposureTime() {
         return exposureTime;
     }
-    
-    public void setApertureValue(double apertureValue) {
-        this.apertureValue = apertureValue;
+
+    public void setFNumber(double fNumber) {
+        this.fNumber = fNumber;
     }
     public void setCameraModel(String cameraModel) {
         this.cameraModel = cameraModel;
@@ -80,11 +80,11 @@ public class CategoryImageExifMetaData {
     public void setPictureWidth(int pictureWidth) {
         this.pictureWidth = pictureWidth;
     }
-    
+
     public void setExposureTime(ExposureTime exposureTime) {
         this.exposureTime = exposureTime;
     }
-    
+
     public String getDateTimeAsString() {
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 		return sdf.format(dateTime);

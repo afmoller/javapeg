@@ -44,7 +44,7 @@ public class ImageMetaDataContext {
 	private Map<Integer, Set<Integer>> isoValues;
 	private Map<String, Set<Integer>> imageSizeValues;
 	private Map<String, Set<Integer>> exposureTimeValues;
-	private Map<Double, Set<Integer>> apertureValues;
+	private Map<Double, Set<Integer>> fNumberValues;
 	
 	private List<Set<Integer>> ratings; 
 	private Map<String, Set<Integer>> categories;
@@ -71,7 +71,7 @@ public class ImageMetaDataContext {
 		isoValues = new HashMap<Integer, Set<Integer>>();
 		imageSizeValues = new HashMap<String, Set<Integer>>();
 		exposureTimeValues = new HashMap<String, Set<Integer>>();
-		apertureValues = new HashMap<Double, Set<Integer>>();
+		fNumberValues = new HashMap<Double, Set<Integer>>();
 		
 		ratings = new ArrayList<Set<Integer>>();
 		
@@ -184,11 +184,11 @@ public class ImageMetaDataContext {
 		imageSizeValues.get(imageSize.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
-	public void addAperture(double apertureValue, String imagePath) {
-		if (!apertureValues.containsKey(apertureValue)) {
-			apertureValues.put(apertureValue, new HashSet<Integer>());
+	public void addFNumber(double fNumber, String imagePath) {
+		if (!fNumberValues.containsKey(fNumber)) {
+			fNumberValues.put(fNumber, new HashSet<Integer>());
 		}
-		apertureValues.get(apertureValue).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
+		fNumberValues.get(fNumber).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
 	}
 	
 	public void addRating(int rating, String imagePath) {
@@ -256,8 +256,8 @@ public class ImageMetaDataContext {
 		return new TreeSet<Integer>(isoValues.keySet());
 	}
 	
-	public Set<Double> getApertureValues() {
-		return new TreeSet<Double>(apertureValues.keySet());
+	public Set<Double> getFNumberValues() {
+		return new TreeSet<Double>(fNumberValues.keySet());
 	}
 	
 	public Set<ExposureTime> getExposureTimeValues() {
@@ -369,18 +369,18 @@ public class ImageMetaDataContext {
 		return imagePaths;
 	}	
 	
-	public Set<File> findImagesByApertureValue(String apertureValue) {
-		Set<Double> apertureValueValuesKeys = new TreeSet<Double>(apertureValues.keySet());
-		Iterator<Double> iterator = apertureValueValuesKeys.iterator();
+	public Set<File> findImagesByFNumberValue(String fNumber) {
+		Set<Double> fNumberValuesKeys = new TreeSet<Double>(fNumberValues.keySet());
+		Iterator<Double> iterator = fNumberValuesKeys.iterator();
 		
-		List<Double> apertureValueValuesToGet = new ArrayList<Double>(); 
+		List<Double> fNumberValuesToGet = new ArrayList<Double>(); 
 			
-		FindBy.apertureValue(apertureValue, iterator, apertureValueValuesToGet);
+		FindBy.fNumber(fNumber, iterator, fNumberValuesToGet);
 				
 		Set<File> imagePaths = new HashSet<File>();
 		
-		for (Double apertureValueValue : apertureValueValuesToGet) {
-			Set<Integer> indexForImagePaths = apertureValues.get(apertureValueValue);
+		for (Double fNumberValue : fNumberValuesToGet) {
+			Set<Integer> indexForImagePaths = fNumberValues.get(fNumberValue);
 			populateImagePathsSet(indexForImagePaths, imagePaths);
 		}	
 		return imagePaths;

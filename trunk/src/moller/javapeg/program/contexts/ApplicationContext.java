@@ -113,6 +113,13 @@ public class ApplicationContext {
 	private MainTabbedPaneComponent mainTabbedPaneComponent;
 
 	/**
+	 * This boolean keeps track on whether an image meta data data base file
+	 * is loaded or not. This flag is set when a directory with images is
+	 * selected.
+	 */
+	private boolean imageMetaDataDataBaseFileLoaded;
+
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -287,5 +294,13 @@ public class ApplicationContext {
 		default:
 			return image;
 		}
+	}
+
+	public void setImageMetaDataDataBaseFileLoaded(boolean imageMetaDataDataBaseFileLoaded) {
+		this.imageMetaDataDataBaseFileLoaded = imageMetaDataDataBaseFileLoaded;
+	}
+
+	public boolean isImageMetaDataDataBaseFileLoaded() {
+		return imageMetaDataDataBaseFileLoaded;
 	}
 }

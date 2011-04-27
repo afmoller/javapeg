@@ -28,7 +28,7 @@ menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
 menu.item.programHelp                = Programhjälp
 menu.item.versionInformation         = Versionsinformation
-menu.item.about                      = Om JavaPEG 2.4
+menu.item.about                      = Om JavaPEG 2.5
 menu.item.configuration              = Inställningar
 
 #############################################################################################################
@@ -74,7 +74,7 @@ variable.pictureWidth          = Bildbredd i pixlar
 variable.pictureHeightVariable = h
 variable.pictureHeight         = Bildhöjd i pixlar
 variable.apertureValueVariable = bl
-variable.apertureValue         = Bländarvärde
+variable.apertureValue         = Bländartal
 variable.dateOftodayVariable   = dd
 variable.dateOftoday           = Dagens datum
 variable.sourceNameVariable    = f
@@ -114,12 +114,12 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
-aboutDialog.Label    = Om JavaPEG 2.4
-aboutDialog.TextRowA = JavaPEG, ver: 2.4
-aboutDialog.TextRowB = Copyright © 2005 - 2009
+aboutDialog.Label    = Om JavaPEG 2.5
+aboutDialog.TextRowA = JavaPEG, ver: 2.5
+aboutDialog.TextRowB = Copyright © 2005 - 2011
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
-aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2009-11-17.
-aboutDialog.TextRowE = Version 2.4 släppt 2009-11-17.
+aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2011-**-**.
+aboutDialog.TextRowE = Version 2.5 släppt 2011-**-**.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -414,7 +414,7 @@ tabbedpane.imageTag    = TAGGA BILDER
 fileretriever.canNotFindFile     = Kan inte hitta filen. Se loggfil för detaljer.
 fileretriever.canNotReadFromFile = Kan inte läsa från filen. Det kan vara ett annat program som låst filen. Se loggfil för detaljer.
 
-metadata.field.name.APERTURE_VALUE = BLÄNDARVÄRDE
+metadata.field.name.APERTURE_VALUE = BLÄNDARTAL
 metadata.field.name.CAMERA_MODEL = KAMERAMODELL
 metadata.field.name.IMAGE_SIZE = BILDSTORLEK 
 metadata.field.name.ISO = ISO

@@ -10,7 +10,7 @@ public class ImageMetaDataContextSearchParameters {
 	private String hour;
 	private String minute;
 	private String second;
-	private String apertureValue;
+	private String fNumber;
 	private String cameraModel;
 	private String comment;
 	private Categories categories;
@@ -35,7 +35,7 @@ public class ImageMetaDataContextSearchParameters {
 		this.hour = null;
 		this.minute = null;
 		this.second = null;
-		this.apertureValue = null;
+		this.fNumber = null;
 		this.cameraModel = null;
 		this.comment = null;
 		this.categories = null;
@@ -74,8 +74,8 @@ public class ImageMetaDataContextSearchParameters {
 		return second;
 	}
 	
-	public String getApertureValue() {
-		return apertureValue;
+	public String getFNumber() {
+		return fNumber;
 	}
 
 	public String getCameraModel() {
@@ -146,9 +146,9 @@ public class ImageMetaDataContextSearchParameters {
 		}
 	}
 	
-	public void setApertureValue(String apertureValue) {
-		if (!apertureValue.equals("")) {
-			this.apertureValue = apertureValue;	
+	public void setFNumber(String fNumber) {
+		if (!fNumber.equals("")) {
+			this.fNumber = fNumber;	
 		}
 	}	
 

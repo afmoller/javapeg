@@ -752,6 +752,8 @@ public class MainGUI extends JFrame {
 		backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		backgroundJPanel.add(previewCommentCategoriesRatingSplitpane, posBackgroundPanel.expandH().expandW());
 
+		this.setRatingCommentAndCategoryEnabled(false);
+
 		return backgroundJPanel;
 	}
 
@@ -1111,7 +1113,7 @@ public class MainGUI extends JFrame {
 				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getSeconds()), value, e.getLocationOnScreen());
 				break;
 			case APERTURE_VALUE:
-				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getApertureValues()), value, e.getLocationOnScreen());
+				mdvsd = new MetaDataValueSelectionDialogLessEqualGreater(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getFNumberValues()), value, e.getLocationOnScreen());
 				break;
 			case CAMERA_MODEL:
 				mdvsd = new MetaDataValueSelectionDialogEqual(lang.get(prefix + mdtf.toString()), new HashSet<Object>(imdc.getCameraModels()), value, e.getLocationOnScreen());
@@ -2105,8 +2107,8 @@ public class MainGUI extends JFrame {
 					if(imddbituc.getLoadedRepositoryPath() != null) {
 						storeCurrentlySelectedImageData();
 						flushImageMetaDataBaseToDisk();
-						clearTagTab();
 					}
+					clearTagTab();
 
 					File repositoryPath = new File(totalPath);
 
@@ -2123,6 +2125,8 @@ public class MainGUI extends JFrame {
 						logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
 						logger.logDEBUG(ioex);
 					}
+
+					setRatingCommentAndCategoryEnabled(false);
 
 					if (nrOfJPEGFilesInRepositoryPath > 0) {
 						if (ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath)) {
@@ -2144,6 +2148,14 @@ public class MainGUI extends JFrame {
 				}
 			}
 		}
+	}
+
+	private void setRatingCommentAndCategoryEnabled(boolean enabled) {
+		imageCommentTextArea.setEnabled(enabled);
+		for (JRadioButton ratingRadioButton : ratingRadioButtons) {
+			ratingRadioButton.setEnabled(enabled);
+		}
+		checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().setEnabled(enabled);
 	}
 
 	private void removeMouseListener(){
@@ -2197,13 +2209,19 @@ public class MainGUI extends JFrame {
 	private class ThumbNailListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			ApplicationContext ac = ApplicationContext.getInstance();
+
+			if (ac.isImageMetaDataDataBaseFileLoaded()) {
+				setRatingCommentAndCategoryEnabled(true);
+			}
+
 			File jpegImage = new File(e.getActionCommand());
 
 			imageMetaDataPanel.setMetaData(jpegImage);
 
 			MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
 
-			if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE) {
+			if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
 //				TODO: Fix -10 workaround to something generic
 				int width = imageTagPreviewScrollPane.getViewportBorderBounds().width - 10;
 				int height = imageTagPreviewScrollPane.getViewportBorderBounds().height - 10;
@@ -2874,7 +2892,7 @@ public class MainGUI extends JFrame {
 		imdcsp.setHour(hourMetaDataValue.getValue());
 		imdcsp.setMinute(minuteMetaDataValue.getValue());
 		imdcsp.setSecond(secondMetaDataValue.getValue());
-		imdcsp.setApertureValue(apertureValueMetaDataValue.getValue());
+		imdcsp.setFNumber(apertureValueMetaDataValue.getValue());
 		imdcsp.setCameraModel(cameraModelMetaDataValue.getValue());
 		imdcsp.setComment(commentTextArea.getText());
 		imdcsp.setImageSize(imagesSizeMetaDataValue.getValue());

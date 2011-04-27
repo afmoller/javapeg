@@ -23,6 +23,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
@@ -80,10 +81,13 @@ public class ImageMetaDataDataBaseHandler {
 			}
 		}
 
+		ApplicationContext ac = ApplicationContext.getInstance();
+
 		// If the image meta data base file does not exist and should be
 		// created
 		if(addPathToImageRepository) {
 			if(!createImageMetaDataDataBaseFile(directory)) {
+				ac.setImageMetaDataDataBaseFileLoaded(false);
 				return false;
 			}
 		}
@@ -100,8 +104,10 @@ public class ImageMetaDataDataBaseHandler {
 			} else {
 				logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath());
 			}
+			ac.setImageMetaDataDataBaseFileLoaded(result);
 			return result;
 		} else {
+			ac.setImageMetaDataDataBaseFileLoaded(false);
 			return false;
 		}
 	}
@@ -167,7 +173,7 @@ public class ImageMetaDataDataBaseHandler {
 				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
 				XMLUtil.writeElement("md5", MD5.calculate(image), w);
 				XMLUtil.writeElementStart("exif-meta-data", w);
-				XMLUtil.writeElement("aperture-value", Double.toString(ciemd.getApertureValue()), w);
+				XMLUtil.writeElement("f-number", Double.toString(ciemd.getFNumber()), w);
 				XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
 				XMLUtil.writeElement("date-time"     , ciemd.getDateTimeAsString()         , w);
 				XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
@@ -316,7 +322,7 @@ public class ImageMetaDataDataBaseHandler {
 		imdc.addIso(imageExifMetaData.getIsoValue(), imagePath);
 		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
 		imdc.addExposureTime(imageExifMetaData.getExposureTime(), imagePath);
-		imdc.addAperture(imageExifMetaData.getApertureValue(), imagePath);
+		imdc.addFNumber(imageExifMetaData.getFNumber(), imagePath);
 		imdc.addComment(comment, imagePath);
 		imdc.addRating(rating, imagePath);
 
@@ -451,8 +457,8 @@ public class ImageMetaDataDataBaseHandler {
 			String nodeName  = exifMetaData.item(index).getNodeName();
 			String nodeValue = exifMetaData.item(index).getTextContent();
 
-			if("aperture-value".equals(nodeName)) {
-				imageExifMetaData.setApertureValue(Double.parseDouble(nodeValue));
+			if("f-number".equals(nodeName)) {
+				imageExifMetaData.setFNumber(Double.parseDouble(nodeValue));
 			} else if("camera-model".equals(nodeName)) {
 				imageExifMetaData.setCameraModel(nodeValue);
 			} else if("date-time".equals(nodeName)) {
@@ -473,10 +479,10 @@ public class ImageMetaDataDataBaseHandler {
 			} else if("exposure-time".equals(nodeName)) {
 				try {
 					imageExifMetaData.setExposureTime(new ExposureTime(nodeValue));
-				} catch (ExposureTimeException spex) {
+				} catch (ExposureTimeException etex) {
 					imageExifMetaData.setExposureTime(null);
 					logger.logERROR("Could not create a ExposureTime object from string value: " + nodeValue);
-					logger.logERROR(spex);
+					logger.logERROR(etex);
 				}
 			}
 		}

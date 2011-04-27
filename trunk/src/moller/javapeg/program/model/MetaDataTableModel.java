@@ -49,7 +49,7 @@ public class MetaDataTableModel extends DefaultTableModel {
 		meta[5] = MetaDataUtil.hasValue(metaData.getExifISOValue()) ? metaData.getExifISOValue() : noValue;
 		meta[6] = MetaDataUtil.hasValue(metaData.getExifPictureWidth()) ? metaData.getExifPictureWidth() : noValue;
 		meta[7] = MetaDataUtil.hasValue(metaData.getExifPictureHeight()) ? metaData.getExifPictureHeight() : noValue;
-		meta[8] = MetaDataUtil.hasValue(metaData.getExifApertureValue()) ? metaData.getExifApertureValue() : noValue;
+		meta[8] = MetaDataUtil.hasValue(metaData.getExifFNumber()) ? metaData.getExifFNumber() : noValue;
 
 		this.addRow(meta);
 	}

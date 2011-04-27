@@ -42,33 +42,33 @@ public class FindBy {
 		integerType(MetaDataValueFieldName.ISO, iso, iterator, isoValuesToGet);
 	}
 
-	public static void apertureValue(String apertureValue, Iterator<Double> iterator, List<Double> apertureValueValuesToGet) {
+	public static void fNumber(String fNumber, Iterator<Double> iterator, List<Double> fNumberValuesToGet) {
 
-		Operator operator = getOperator(apertureValue);
+		Operator operator = getOperator(fNumber);
 
-		String[] apertureValueAsStrings = getValues(apertureValue);
+		String[] fNumberAsStrings = getValues(fNumber);
 
 		switch (operator) {
 		case LESS:
 			while (iterator.hasNext()) {
 				Double doubleValue = iterator.next();
 
-				if (doubleValue < Double.parseDouble(apertureValueAsStrings[0])) {
-					apertureValueValuesToGet.add(doubleValue);
+				if (doubleValue < Double.parseDouble(fNumberAsStrings[0])) {
+					fNumberValuesToGet.add(doubleValue);
 				}
 			}
 			break;
 		case EQUAL:
-			for (String apertureValueAsString : apertureValueAsStrings) {
-				apertureValueValuesToGet.add(Double.parseDouble(apertureValueAsString));
+			for (String fNumberAsString : fNumberAsStrings) {
+				fNumberValuesToGet.add(Double.parseDouble(fNumberAsString));
 			}
 			break;
 		case GREATER:
 			while (iterator.hasNext()) {
 				Double integer = iterator.next();
 
-				if (integer > Double.parseDouble(apertureValueAsStrings[0])) {
-					apertureValueValuesToGet.add(integer);
+				if (integer > Double.parseDouble(fNumberAsStrings[0])) {
+					fNumberValuesToGet.add(integer);
 				}
 			}
 			break;

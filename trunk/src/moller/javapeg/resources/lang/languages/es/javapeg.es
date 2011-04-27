@@ -28,7 +28,7 @@ menu.item.openDestinationFileChooser = Abrir selector de destino
 menu.item.startProcess               = Iniciar proceso de renombrado
 menu.item.programHelp                = Ayuda del programa
 menu.item.versionInformation         = Información de versión
-menu.item.about                      = Acerca de JavaPEG 2.4
+menu.item.about                      = Acerca de JavaPEG 2.5
 menu.item.configuration              = Configuration
 
 #############################################################################################################
@@ -73,8 +73,8 @@ variable.pictureWidthVariable  = w
 variable.pictureWidth          = Ancho de la imagen en pixeles
 variable.pictureHeightVariable = h
 variable.pictureHeight         = Alto de la imagen en pixeles
-variable.apertureValueVariable = av
-variable.apertureValue         = Valor de apertura
+variable.apertureValueVariable = f
+variable.apertureValue         = F-Number
 variable.dateOftodayVariable   = td
 variable.dateOftoday           = Fecha actual
 variable.sourceNameVariable    = sn
@@ -114,12 +114,12 @@ fileSelectionDialog.destinationPathFileChooser = Selecciona el directorio de des
 ##############################################################################################################
 # D I A L O G O  A C E R C A  D E                                                                            #
 ##############################################################################################################
-aboutDialog.Label    = Acerca de JavaPEG 2.4
-aboutDialog.TextRowA = JavaPEG, ver: 2.4
-aboutDialog.TextRowB = Copyright © 2005 - 2009
+aboutDialog.Label    = Acerca de JavaPEG 2.5
+aboutDialog.TextRowA = JavaPEG, ver: 2.5
+aboutDialog.TextRowB = Copyright © 2005 - 2011
 aboutDialog.TextRowC = Este programa está hecho en Java (JDK 1.6).
-aboutDialog.TextRowD = Programado entre 2005-05-24 - 2009-11-17.
-aboutDialog.TextRowE = Version 2.4 generada el 2009-11-17.
+aboutDialog.TextRowD = Programado entre 2005-05-24 - 2011-**-**.
+aboutDialog.TextRowE = Version 2.5 generada el 2011-**-**.
 aboutDialog.TextRowF = Desarrolador:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
@@ -413,7 +413,7 @@ tabbedpane.imageTag    = TAG IMAGES
 fileretriever.canNotFindFile     = No se pudo encontrar el fichero, revise el log para más detalles.
 fileretriever.canNotReadFromFile = No se puede leer el fichero, puede que otra aplicación tenga el fichero bloqueado. Revise el log para más detalles.
 
-metadata.field.name.APERTURE_VALUE = APERTURE VALUE
+metadata.field.name.APERTURE_VALUE = F-NUMBER
 metadata.field.name.CAMERA_MODEL = CAMERA MODEL
 metadata.field.name.IMAGE_SIZE = IMAGE SIZE 
 metadata.field.name.ISO = ISO

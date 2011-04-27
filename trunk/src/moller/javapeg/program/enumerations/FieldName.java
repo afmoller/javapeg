@@ -1,7 +1,7 @@
 package moller.javapeg.program.enumerations;
 
 public enum FieldName {
-	APERTURE_VALUE,
+	FNUMBER,
 	DATE_TIME_ORIGINAL,
 	ISO_SPEED_RATINGS,
 	PIXEL_X_DIMENSION,
