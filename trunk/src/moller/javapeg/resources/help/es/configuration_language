@@ -1,3 +1,0 @@
-Es posible seleccionar el idioma manualmente, o permitir que JavaPEG lo haga automáticamente.<LF>
-<LF>
-Si la selección es manual, entonces el idioma se escoge haciendo clic en el lenguaje deseado de la lista de idiomas disponibles. Si el modo de selección es automático, entonces JavaPEG escogerá el idioma usado por el equipo como idioma de sistema. Si el lenguaje usado por el sistema no está disponible, entonces se escogerá el Inglés.
