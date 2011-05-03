@@ -1,6 +1,5 @@
 2.5:
 ====
-- Fix all TODO items.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
