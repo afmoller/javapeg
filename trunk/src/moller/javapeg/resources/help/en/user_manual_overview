@@ -10,3 +10,6 @@ It is  also possible to create image lists (slide shows) with JavaPEG. It is pos
 <LF>
 <LF>
 There is also an embedded Image Viewer available, which displays images that have been gathered in an image list (same list as the one mentioned above). The image viewer offer possibility to navigate forward and backwards in the list of images and it is also possible to directly view any image in the list by clicking a thumbnail version in the user interface. The image viewer can also show detailed meta data information about the displayed image. It is also possible to let the viewer automatically resize the image to fit the current screen size.
+<LF>
+<LF>
+JavaPEG also has the possibility to organise images in a searchable data base. The data base is decentralized and consists of XML files, which are created in each directory with images. The XML files are created either; automatically when a directory with images is browsed in JavaPEG, or after JavaPEG has asked if the directory shall be added to the image database, or not at all. The adding behavior is configurable in the settigns of JavaPEG. It is possible to assign an image a: comment, a rating and an unlimited amount of categories. Besides from that a selection of Exif information is automaticall stored to the data base. The data base i searchable for all criterias in any combination.
