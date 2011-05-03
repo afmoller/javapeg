@@ -3,6 +3,29 @@ VERSIONSINFORMATION<LF>
 Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskaper.
 <LF>
 <LF>
+Version 2.5<LF>
+===========<LF>
+Släppt 2011-xx-xx Version 2.5 av JavaPEG har möjligheten att organisera bilder i en sökbar databas. Databasen är decentraliserad och består av XML-filer, vilka skapas i varje katalog med bilder som skall ingå i databasen. Antingen läggs en katalog som innehåller bilder automatiskt till i databasen när katalogen väljs i JavaPEG eller genom att den läggs till efter att en fråga ställts, eller inte alls. Detta beteende är konfigurerbart i JavaPEGs inställningar. Det är möjligt att tilldela en bild en kommentar, en klassificering och ett obegränsat antal kategorier. Dessutom hamnar utvald Exif information automatisk i databasen. Databasen är sökbar på samtliga listade kriterier.
+<LF>
+<LF>
+Det är möjligt att rotera bilder i bildvisaren; antingen manuellt i steg om 90 grader, eller automatiskt då en bild automatiskt roteras till korrekt visningsläge.
+<LF>
+<LF>
+Det är möjligt att konfigurera detaljeringsnivån på de tooltips som visas i JavaPEG. Tre nivåer finns. Aktiverat, Utökat och Inaktiverat.
+<LF>
+<LF>
+Det är möjligt att kopiera bilder till systemets klippbordshanterare.
+<LF>
+<LF>
+Om en bild saknar tumnagel är det möjligt att låta JavaPEG skapa en temporär som visas i de lägen då tumnaglar visas i JavaPEG.
+<LF>
+<LF>
+Det är möjligt att aktivera eller avaktivera en tumnagelcache och sätta en maxstorlek samt rensa tumnagelcachen.
+<LF>
+<LF>
+Exif parametrarna Slutar hastighet och Bländarvärde har ändrats till Exponeringstid respektive F-nummer.
+<LF>
+<LF>
 Version 2.4<LF>
 ===========<LF>
 Släppt 2009-11-17 Version 2.4 av JavaPEG har två större tillägg. Det första är en inbyggd bildvisare som visar de bilder som lagts till i bildlistan på VISA BILDER tabben. Bildvisaren har förutom navigationssupport för framåt, bakåt och till valfri bild i bildlistan också möjlighet att automatiskt anpassa bildstorleken för att passa fönsterstorleken.
