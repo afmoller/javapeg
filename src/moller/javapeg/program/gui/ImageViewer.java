@@ -262,7 +262,7 @@ public class ImageViewer extends JFrame {
 		overviewButtonListener = new OverviewButtonListener();
 
 		for(int i = 0; i < imagesToView.size(); i++) {
-			this.addImageToOverViewPanel(imagesToView.get(i), overviewButtonListener, i);
+			this.addImageToOverViewPanel(imagesToView.get(i), overviewButtonListener, i, false);
 		}
 
 		overViewScrollpane.getViewport().add(imageOverViewPanel);
@@ -275,7 +275,7 @@ public class ImageViewer extends JFrame {
 		return backgroundPanel;
 	}
 
-	private void addImageToOverViewPanel(File jpegImage, OverviewButtonListener overviewButtonListener, int index) {
+	private void addImageToOverViewPanel(File jpegImage, OverviewButtonListener overviewButtonListener, int index, boolean updateGUI) {
 		JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData()));
 
 		imageButton.setActionCommand(Integer.toString(index));
@@ -285,8 +285,10 @@ public class ImageViewer extends JFrame {
 		imageButton.addActionListener(overviewButtonListener);
 
 		imageOverViewPanel.add(imageButton);
-		Update.updateAllUIs();
 
+		if (updateGUI) {
+			Update.updateAllUIs();
+		}
 	}
 
 	// Create ToolBar
@@ -393,7 +395,7 @@ public class ImageViewer extends JFrame {
 	public void addImage(File image) {
 		imagesToView.add(image);
 		imagesToViewListSize++;
-		this.addImageToOverViewPanel(image, overviewButtonListener, imagesToView.size() - 1);
+		this.addImageToOverViewPanel(image, overviewButtonListener, imagesToView.size() - 1, true);
 	}
 
 	private void addListeners() {
@@ -459,12 +461,10 @@ public class ImageViewer extends JFrame {
 
 		thePicture = new File(imagePath);
 
-
 		// Rotate image if necessary and automatic rotation is selected.
 		if(automaticRotateToggleButton.isSelected()) {
 			img = rotateAccordingToExif(thePicture, img);
 		}
-
 
 		int imageWidth  = img.getWidth(null);
 		int imageHeight = img.getHeight(null);
