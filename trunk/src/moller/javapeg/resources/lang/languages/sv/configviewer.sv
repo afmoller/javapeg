@@ -46,20 +46,19 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 configviewer.rename.label.useLastModifiedDate.text                 = Använd Senast Ändraddatum Om Exif-datum Saknas
 configviewer.rename.label.useLastModifiedTime.text                 = Använd Senast Ändradtid Om Exif-tid Saknas
-configviewer.rename.label.maximumCameraModelValueLength            = Maximal längd för värdet av  kameramodell
+configviewer.rename.label.maximumCameraModelValueLength            = Maximal längd för värdet av kameramodell
 configviewer.rename.label.maximumCameraModelValueLengthNotNegative = Värdet för maximal kameramdodelllängd kan inte vara ett negativt heltal
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
 ##############################################################################################################
-configviewer.language.label.selectionMode        = SPRÅKVALSMETOD
+configviewer.language.label.selectionMode        = Språkvalsmetod
 configviewer.language.radiobutton.manual         = Manuellt
 configviewer.language.radiobutton.automatic      = Automatiskt
-configviewer.language.label.currentLanguage      = AKTUELLT SPRÅK
-configviewer.language.label.availableLanguages   = TILLGÄNGLIGA SPRÅK
+configviewer.language.label.currentLanguage      = Aktuellt Språk
+configviewer.language.label.availableLanguages   = Tillgängliga Språk
 configviewer.language.languageNameNotFound       = namn på språk ej funnet
 configviewer.language.information.windowlabel    = Information
-configviewer.language.information.restartMessage = Valt språk kommer inte användas innan JavaPEG startats om
 
 ##############################################################################################################
 # T H U M B N A I L                                                                                          #
@@ -94,7 +93,8 @@ configviewer.tag.previewimage.label                   = Förhandsgranskningsbild
 configviewer.tag.categories.warnWhenRemove                          = Varna vid borttagning av kategori
 configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Varna vid borttagning av kategori med underkategorier
 configviewer.tag.categories.label                                   = Kategorier
-configviewer.tag.imageRepositories.label                                = Bilddatabas
+configviewer.tag.imageRepositoriesAdditionMode.label                    = Bilddatabas Tillägg
+configviewer.tag.imageRepositoriesContent.label                         = Bilddatabas Innehåll 
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sökvägar
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sökvägar som inte finns från bilddatabasen
 configviewer.tag.imageRepositories.label.exists                         = Existerar

@@ -52,14 +52,13 @@ configviewer.rename.label.maximumCameraModelValueLengthNotNegative = The value o
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
 ##############################################################################################################
-configviewer.language.label.selectionMode        = SELECTIONMODE
+configviewer.language.label.selectionMode        = Selection mode
 configviewer.language.radiobutton.manual         = Manually
 configviewer.language.radiobutton.automatic      = Automatic
-configviewer.language.label.currentLanguage      = CURRENT LANGUAGE
-configviewer.language.label.availableLanguages   = AVAILABLE LANGUAGES
+configviewer.language.label.currentLanguage      = Current Language
+configviewer.language.label.availableLanguages   = Available Languages
 configviewer.language.languageNameNotFound       = name of language not found
 configviewer.language.information.windowlabel    = Information
-configviewer.language.information.restartMessage = Selected language will not be used until JavaPEG is restarted
 
 ##############################################################################################################
 # T H U M B N A I L                                                                                          #
@@ -94,16 +93,17 @@ configviewer.tag.previewimage.label                   = Preview Image
 configviewer.tag.categories.warnWhenRemove                          = Warn when removing category
 configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Warn when removing category with sub categories
 configviewer.tag.categories.label                                   = Categories
-configviewer.tag.imageRepositories.label                                = Image Repository
+configviewer.tag.imageRepositoriesAdditionMode.label                    = Image Repository Adding
+configviewer.tag.imageRepositoriesContent.label                         = Image Repository Content
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Remove non existing paths
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automatically remove paths from the image repository that does not exist
 configviewer.tag.imageRepositories.label.exists                         = Exists
 configviewer.tag.imageRepositories.label.notAvailable                   = Not Available
 configviewer.tag.imageRepositories.label.doesNotExist                   = Does not exist
 configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = The following path(s) will be removed from the image repository:
-configviewer.tag.imageRepositories.label.addAutomatically               = Add automatically
-configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add
-configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Do not Ask to add
+configviewer.tag.imageRepositories.label.addAutomatically               = Add directory with non added images automatically to image repository
+configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add directory with non added images to image repository 
+configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Do not add directory with non added images to image repository
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

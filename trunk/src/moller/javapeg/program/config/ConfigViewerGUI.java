@@ -1,9 +1,7 @@
 package moller.javapeg.program.config;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -454,21 +452,15 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posUpdatesPanel = new GBHelper();
 
-		JLabel updatesEnabledLabel = new JLabel(lang.get("configviewer.update.label.updateEnabled.text"));
-		updatesEnabled = new JCheckBox();
+		updatesEnabled = new JCheckBox(lang.get("configviewer.update.label.updateEnabled.text"));
 		updatesEnabled.setSelected(conf.getBooleanProperty("updatechecker.enabled"));
 
-		JLabel attachVersionInformationLabel = new JLabel(lang.get("configviewer.update.label.attachVersionInformation.text"));
-		sendVersionInformationEnabled = new JCheckBox();
+		sendVersionInformationEnabled = new JCheckBox(lang.get("configviewer.update.label.attachVersionInformation.text"));
 		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
 		sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
 
-		updatesConfigurationPanel.add(updatesEnabledLabel, posUpdatesPanel);
-		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
-		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.nextCol());
-		updatesConfigurationPanel.add(attachVersionInformationLabel, posUpdatesPanel.nextRow());
-		updatesConfigurationPanel.add(new Gap(10), posUpdatesPanel.nextCol());
-		updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextCol());
+		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.expandW());
+		updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextRow().expandW());
 	}
 
 	private void createRenameConfigurationPanel() {
@@ -477,38 +469,25 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posRenamePanel = new GBHelper();
 
-		JLabel useLastModifiedDateLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
-		useLastModifiedDate = new JCheckBox();
+		useLastModifiedDate = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
 		useLastModifiedDate.setSelected(conf.getBooleanProperty("rename.use.lastmodified.date"));
 
-		JLabel useLastModifiedTimeLabel = new JLabel(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
-		useLastModifiedTime = new JCheckBox();
+		useLastModifiedTime = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
 		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
 
 		JLabel cameraModelValueLengthLabel = new JLabel(lang.get("configviewer.rename.label.maximumCameraModelValueLength"));
 		maximumLengthOfCameraModelValueTextField = new JTextField(5);
 		maximumLengthOfCameraModelValueTextField.setText(conf.getStringProperty("rename.maximum.length.camera-model"));
 
-		renameConfigurationPanel.add(useLastModifiedDateLabel, posRenamePanel);
+		renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel);
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
-		renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextCol());
-		renameConfigurationPanel.add(useLastModifiedTimeLabel, posRenamePanel.nextRow());
-		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
-		renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextCol());
-		renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel.nextRow());
-		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
-		renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol());
+		renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol().expandW());
+		renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextRow().expandW());
+		renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextRow().expandW());
 	}
 
 	private void createLanguageConfigurationPanel() {
 		languageConfigurationPanel = new JPanel(new GridBagLayout());
-		languageConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.language"))));
-
-		JPanel leftPanel = new JPanel(new GridBagLayout());
-		JPanel rightPanel = new JPanel(new GridBagLayout());
-
-		JLabel selectionModeJLabel = new JLabel(lang.get("configviewer.language.label.selectionMode"));
-		selectionModeJLabel.setForeground(Color.GRAY);
 
 		manualRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.manual"));
 		automaticRadioButton = new JRadioButton(lang.get("configviewer.language.radiobutton.automatic"));
@@ -517,30 +496,19 @@ public class ConfigViewerGUI extends JFrame {
 		languageSelectionMode.add(manualRadioButton);
 		languageSelectionMode.add(automaticRadioButton);
 
-		JLabel currentLanguageLabel = new JLabel(lang.get("configviewer.language.label.currentLanguage"));
-		currentLanguageLabel.setForeground(Color.GRAY);
-
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			if(!conf.getStringProperty("gUILanguageISO6391").equals(System.getProperty("user.language"))) {
 				conf.setStringProperty("gUILanguageISO6391", System.getProperty("user.language"));
 			}
 		}
 
-		currentLanguage = new JLabel(ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")));
+		JPanel selectionModePanel = new JPanel(new GridBagLayout());
+		selectionModePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.language.label.selectionMode")));
 
-		GBHelper posLeft = new GBHelper();
+		GBHelper posSelectionMode = new GBHelper();
 
-		leftPanel.add(selectionModeJLabel, posLeft);
-		leftPanel.add(new Gap(2), posLeft.nextRow());
-		leftPanel.add(manualRadioButton, posLeft.nextRow());
-		leftPanel.add(automaticRadioButton, posLeft.nextRow());
-		leftPanel.add(new Gap(15), posLeft.nextRow());
-		leftPanel.add(currentLanguageLabel, posLeft.nextRow());
-		leftPanel.add(new Gap(5), posLeft.nextRow());
-		leftPanel.add(currentLanguage, posLeft.nextRow());
-
-		JLabel availableLanguages = new JLabel(lang.get("configviewer.language.label.availableLanguages"));
-		availableLanguages.setForeground(Color.GRAY);
+		selectionModePanel.add(manualRadioButton, posSelectionMode.expandW());
+		selectionModePanel.add(automaticRadioButton, posSelectionMode.nextRow().expandW());
 
 		languageList = new JList(ConfigUtil.listLanguagesFiles());
 
@@ -548,23 +516,29 @@ public class ConfigViewerGUI extends JFrame {
 			languageList.setEnabled(false);
 		}
 
-		JScrollPane sp = new JScrollPane(languageList);
+		JScrollPane languageListScrollPane = new JScrollPane(languageList);
 
-		GBHelper posRight = new GBHelper();
+		JPanel availableLanguagesPanel = new JPanel(new GridBagLayout());
+		availableLanguagesPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.language.label.availableLanguages")));
 
-		rightPanel.add(availableLanguages, posRight);
-		rightPanel.add(new Gap(2), posRight.nextRow());
-		rightPanel.add(sp, posRight.nextRow());
+		GBHelper posAvailableLanguages = new GBHelper();
+
+		availableLanguagesPanel.add(languageListScrollPane, posAvailableLanguages.expandW().expandH());
+
+		currentLanguage = new JLabel(ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")));
+
+		JPanel currentLanguagePanel = new JPanel(new GridBagLayout());
+		currentLanguagePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.language.label.currentLanguage")));
+
+		GBHelper posCurrentLanguage = new GBHelper();
+
+		currentLanguagePanel.add(currentLanguage, posCurrentLanguage.expandW());
 
 		GBHelper posLanguagePanel = new GBHelper();
 
-		languageConfigurationPanel.add(new Gap(5), posLanguagePanel);
-		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextRow());
-		languageConfigurationPanel.add(leftPanel, posLanguagePanel.nextCol().align(GridBagConstraints.NORTH));
-		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextCol());
-		languageConfigurationPanel.add(rightPanel, posLanguagePanel.nextCol());
-		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextCol());
-		languageConfigurationPanel.add(new Gap(5), posLanguagePanel.nextRow());
+		languageConfigurationPanel.add(currentLanguagePanel, posLanguagePanel.expandW().expandH());
+		languageConfigurationPanel.add(selectionModePanel, posLanguagePanel.nextRow().expandW().expandH());
+		languageConfigurationPanel.add(availableLanguagesPanel, posLanguagePanel.nextRow().expandW().expandH());
 
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			automaticRadioButton.setSelected(true);
@@ -578,8 +552,7 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Thumbnail Creation Area
 		 */
-		JLabel createThumbnailIfMissingOrCorruptLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt"));
-		createThumbnailIfMissingOrCorrupt = new JCheckBox();
+		createThumbnailIfMissingOrCorrupt = new JCheckBox(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt"));
 		createThumbnailIfMissingOrCorrupt.setSelected(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
 
 		JLabel thumbnailWidthLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.thumbnail.width"));
@@ -614,14 +587,12 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posThumbnailCreationPanel = new GBHelper();
 
-		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorruptLabel, posThumbnailCreationPanel);
-		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
-		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.nextCol());
-		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.expandW());
+		thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
 		thumbnailCreationPanel.add(thumbnailWidthLabel, posThumbnailCreationPanel.nextRow());
 		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
 		thumbnailCreationPanel.add(thumbnailWidth, posThumbnailCreationPanel.nextCol());
-		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+		thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
 		thumbnailCreationPanel.add(thumbnailHeightLabel, posThumbnailCreationPanel.nextRow());
 		thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
 		thumbnailCreationPanel.add(thumbnailHeight, posThumbnailCreationPanel.nextCol());
@@ -633,10 +604,7 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Thumbnail Cache Area
 		 */
-
-		JLabel enableThumbnailCacheLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.enable") + ": ");
-
-		enableThumbnailCache = new JCheckBox();
+		enableThumbnailCache = new JCheckBox(lang.get("configviewer.thumbnail.cache.label.enable"));
 		enableThumbnailCache.setSelected(conf.getBooleanProperty("thumbnails.cache.enabled"));
 
 
@@ -670,9 +638,7 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posThumbnailCachePanel = new GBHelper();
 
-		thumbnailCachePanel.add(enableThumbnailCacheLabel, posThumbnailCachePanel);
-		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
-		thumbnailCachePanel.add(enableThumbnailCache, posThumbnailCachePanel.nextCol());
+		thumbnailCachePanel.add(enableThumbnailCache, posThumbnailCachePanel.expandW());
 		thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
 
 		thumbnailCachePanel.add(cacheSizeLabelHeading, posThumbnailCachePanel.nextRow());
@@ -719,9 +685,9 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posThumbnailToolTipPanel = new GBHelper();
 
-		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel);
-		thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextRow());
-		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextRow());
+		thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.expandW());
+		thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextRow().expandW());
+		thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextRow().expandW());
 
 		thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
 		thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -738,12 +704,10 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Start of Preview Image Area
 		 */
-		JLabel useEmbeddedThumbnailLabel = new JLabel(lang.get("configviewer.tag.previewimage.label.embeddedthumbnail"));
-		useEmbeddedThumbnail = new JRadioButton();
+		useEmbeddedThumbnail = new JRadioButton(lang.get("configviewer.tag.previewimage.label.embeddedthumbnail"));
 		useEmbeddedThumbnail.setSelected(conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
 
-		JLabel useScaledThumbnailLabel = new JLabel(lang.get("configviewer.tag.previewimage.label.scaledthumbnail"));
-		useScaledThumbnail = new JRadioButton();
+		useScaledThumbnail = new JRadioButton(lang.get("configviewer.tag.previewimage.label.scaledthumbnail"));
 		useScaledThumbnail.setSelected(!conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
 
 		ButtonGroup group = new ButtonGroup();
@@ -755,14 +719,8 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posPreviewImagePanel = new GBHelper();
 
-		previewImagePanel.add(useEmbeddedThumbnailLabel, posPreviewImagePanel);
-		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
-		previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.nextCol());
-		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
-		previewImagePanel.add(useScaledThumbnailLabel, posPreviewImagePanel.nextRow());
-		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextCol());
-		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextCol());
-		previewImagePanel.add(new Gap(10), posPreviewImagePanel.nextRow());
+		previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.expandW());
+		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextRow().expandW());
 
 		/**
 		 * Start of Categories Area
@@ -777,9 +735,8 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posCategoriesPanel = new GBHelper();
 
-		categoriesPanel.add(warnWhenRemoveCategory, posCategoriesPanel);
-		categoriesPanel.add(new Gap(10), posCategoriesPanel.nextRow());
-		categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow());
+		categoriesPanel.add(warnWhenRemoveCategory, posCategoriesPanel.expandW());
+		categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow().expandW());
 
 		/**
 		 * Start of Image Repositories Area
@@ -814,14 +771,24 @@ public class ConfigViewerGUI extends JFrame {
 		JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
 		imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		JPanel imageRepositoriesPanel = new JPanel(new GridBagLayout());
-		imageRepositoriesPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositories.label")));
-
-		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		JPanel imageRepositoriesAdditionModePanel = new JPanel(new GridBagLayout());
+		imageRepositoriesAdditionModePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label")));
 
 		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths"));
 		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
 		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip"));
+
+
+		GBHelper posImageRepositories = new GBHelper();
+
+		imageRepositoriesAdditionModePanel.add(addAutomaticallyRadioButton, posImageRepositories.expandW());
+		imageRepositoriesAdditionModePanel.add(askToAddRadioButton, posImageRepositories.nextRow().expandW());
+		imageRepositoriesAdditionModePanel.add(doNotAddRadioButton, posImageRepositories.nextRow().expandW());
+
+		JPanel imageRepositoriesContentPanel = new JPanel(new GridBagLayout());
+		imageRepositoriesContentPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesContent.label")));
+
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
 
 		removeSelectedImagePathsButton = new JButton();
 
@@ -844,15 +811,11 @@ public class ConfigViewerGUI extends JFrame {
 		buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel);
 		buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.nextCol());
 
-		GBHelper posImageRepositories = new GBHelper();
+		GBHelper posImageRepositoriesContent = new GBHelper();
 
-		imageRepositoriesPanel.add(addAutomaticallyRadioButton, posImageRepositories);
-		imageRepositoriesPanel.add(askToAddRadioButton, posImageRepositories.nextRow());
-		imageRepositoriesPanel.add(doNotAddRadioButton, posImageRepositories.nextRow());
-		imageRepositoriesPanel.add(new Gap(10), posImageRepositories.nextRow());
-		imageRepositoriesPanel.add(imageRepositoriesScrollPane, posImageRepositories.nextRow().expandW().expandH());
-		imageRepositoriesPanel.add(new Gap(2), posImageRepositories.nextRow());
-		imageRepositoriesPanel.add(buttonPanel, posImageRepositories.nextRow());
+		imageRepositoriesContentPanel.add(imageRepositoriesScrollPane, posImageRepositoriesContent.expandW().expandH());
+		imageRepositoriesContentPanel.add(new Gap(2), posImageRepositoriesContent.nextRow());
+		imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().expandW());
 
 		tagConfigurationPanel = new JPanel(new GridBagLayout());
 		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -861,7 +824,8 @@ public class ConfigViewerGUI extends JFrame {
 
 		tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
 		tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW().expandH());
-		tagConfigurationPanel.add(imageRepositoriesPanel, posTagPanel.nextRow().expandW().expandH());
+		tagConfigurationPanel.add(imageRepositoriesAdditionModePanel, posTagPanel.nextRow().expandW().expandH());
+		tagConfigurationPanel.add(imageRepositoriesContentPanel, posTagPanel.nextRow().expandW().expandH());
 	}
 
 	private void updateWindowLocationAndSize() {
