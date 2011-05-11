@@ -1,0 +1,40 @@
+Tumnagelskapande:<LF>
+<LF>
+Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär:<LF>
+Om en bild saknar tumnagel eller om den är korrupt så kan en temporär tumnagel skapas av JavaPEG för att visas på de ställen i applikationen där tumnaglar visas.<LF>
+<LF>
+Bredd på den skapade tumnageln:<LF>
+Bestämmer i pixlar räknat, hur bred den skapade tumnageln skall bli.<LF>
+<LF>
+Höjd på den skapade tumnageln:<LF>
+Bestämmer i pixlar räknat, hur hög den skapade tumnageln skall bli.<LF>
+<LF>
+Tumnagelskaparalgoritm:<LF>
+Bestämmer vilken algoritm som skall avändas för att skapa en tumnagel. Det finns två algoritmer att välja mellan: SMOOTH eller FAST. Den förstnämnda är långsammare men ger ett bättre slutresultat.<LF>
+<LF>
+<LF>
+Tumnagel Cache:<LF>
+<LF>
+Aktivera tumnagel cache:<LF>
+Aktivering av tumnagel cache innebär att de tumnaglar som lästs in från bilder som visats i JavaPEG kommer att sparas i datorns minne tills JavaPEG stängs av. En cachning av en tumnagel innebär att visningen av den kommer att gå snabbare om en tumnagel som redan visats skall visas igen, då tumnageln kommer att hämtas från datorn arbetsminne istället för att hämtas ifrån bildfilen på det lagringsmedium som bilden finns sparad på.<LF>
+<LF>
+Tumnagel cachestorlek:<LF>
+Indikerar hur många tumnaglar som är sparade i tumnagel cachen.<LF>
+<LF>
+Tumnagel max cachestorlek:<LF>
+Anger det maximala antalet tumnaglar som skall kunna sparas i den minneslagrade tumnagel cachen.<LF>
+<LF>
+Rensa tumnagelcache:<LF>
+Tömmer tumnagel cachen på samtliga lagrade tumnaglar.<LF>
+<LF>
+<LF>
+Tumnagel Tooltips:<LF>
+<LF>
+Avaktiverad:<LF>
+Innebär att inga tool tips kommer att visas när muspekaren är över tumnaglar.<LF>
+<LF>
+Aktiverad:<LF>
+Innebär att ett tool tip kommer att visas när muspekaren är över en tumnagel.<LF>
+<LF>
+Utökad:<LF>
+Innebär att ett tool tip med mer information om bilden kommer att visas än vad som visas om tool tips bara är "Aktiverad" när muspekaren är över en tumnagel.
