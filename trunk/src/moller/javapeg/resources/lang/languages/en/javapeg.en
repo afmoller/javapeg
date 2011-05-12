@@ -259,6 +259,7 @@ helpViewerGUI.tree.updates                    = UPDATES
 helpViewerGUI.tree.rename                     = RENAME
 helpViewerGUI.tree.language                   = LANGUAGE
 helpViewerGUI.tree.thumbnail                  = THUMBNAIL
+helpViewerGUI.tree.tag                        = TAG
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #

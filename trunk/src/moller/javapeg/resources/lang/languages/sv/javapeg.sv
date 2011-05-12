@@ -258,6 +258,7 @@ helpViewerGUI.tree.updates                    = UPPDATERINGAR
 helpViewerGUI.tree.rename                     = NAMNBYTE
 helpViewerGUI.tree.language                   = SPRÅK
 helpViewerGUI.tree.thumbnail                  = TUMNAGEL
+helpViewerGUI.tree.tag                        = TAGGAR
 
 ##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
