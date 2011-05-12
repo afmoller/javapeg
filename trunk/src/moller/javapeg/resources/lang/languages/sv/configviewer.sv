@@ -101,9 +101,9 @@ configviewer.tag.imageRepositories.label.exists                         = Existe
 configviewer.tag.imageRepositories.label.notAvailable                   = Inte Tillgänglig
 configviewer.tag.imageRepositories.label.doesNotExist                   = Existerar inte
 configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = Följande sökväg(ar) kommer att tas bort från bilddatabasen:
-configviewer.tag.imageRepositories.label.addAutomatically               = Lägg till automatiskt
-configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till
-configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Fråga inte
+configviewer.tag.imageRepositories.label.addAutomatically               = Lägg automatiskt till en katalog med icke tillagda bilder till bilddatabasen
+configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen 
+configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Lägg inte till en katalog med icke tillagda bilder till bilddatabasen
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
