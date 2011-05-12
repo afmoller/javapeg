@@ -30,6 +30,7 @@ public class HelpViewerGUIUtil {
 		DefaultMutableTreeNode rename    = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.rename"), "configuration_rename"));
 		DefaultMutableTreeNode language  = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.language"), "configuration_language"));
 		DefaultMutableTreeNode thumbnail = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.thumbnail"), "configuration_thumbnail"));
+		DefaultMutableTreeNode tag       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.tag"), "configuration_tag"));
 
 		// Add configuration help items to the Configuration node
 		configuration.add(logging);
@@ -37,6 +38,7 @@ public class HelpViewerGUIUtil {
 		configuration.add(rename);
 		configuration.add(language);
 		configuration.add(thumbnail);
+		configuration.add(tag);
 
 		// Add nodes to the root node.
 		root.add(programHelpOverView);
