@@ -1,5 +1,9 @@
 2.5:
 ====
+- Add "remember answer" functionality to "Add to image repository"-dialog
+- Only write image meta data base files to disk if changes have been done to the data.
+- Only update the categories file if changes have been done.
+- Only update the image repository file if changes have been done.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
