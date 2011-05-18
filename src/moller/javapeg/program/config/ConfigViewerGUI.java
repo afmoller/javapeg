@@ -1124,7 +1124,7 @@ public class ConfigViewerGUI extends JFrame {
 				break;
 			}
 
-			displayMessage.append(lang.get("configviewer.tag.imageRepositories.label") + ": " + current + " (" + previous + ")\n");
+			displayMessage.append(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label") + ": " + current + " (" + previous + ")\n");
 		}
 
 		if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {
