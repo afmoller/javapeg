@@ -7,18 +7,20 @@ import java.util.Map;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 
 public class ImageMetaDataDataBaseItemsToUpdateContext {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static ImageMetaDataDataBaseItemsToUpdateContext instance;
-	
+
 	private Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems;
-	
+
 	private File repositoryPath;
 	private File currentlySelectedImage;
-	
-	/**
+
+	private boolean flushNeeded;
+
+    /**
 	 * Private constructor.
 	 */
 	private ImageMetaDataDataBaseItemsToUpdateContext() {
@@ -28,7 +30,7 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static ImageMetaDataDataBaseItemsToUpdateContext getInstance() {
@@ -41,25 +43,26 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
 			return instance;
 		}
 	}
-	
+
 	public void reInit() {
 		imageMetaDataDataBaseItems.clear();
 		currentlySelectedImage = null;
 		repositoryPath = null;
+		flushNeeded = false;
 	}
-	
+
 	public void setCurrentlySelectedImage(File currentlySelectedImage) {
 		this.currentlySelectedImage = currentlySelectedImage;
 	}
-	
+
 	public File getCurrentlySelectedImage() {
 		return currentlySelectedImage;
 	}
-	
+
 	public void setRepositoryPath(File repositoryPath) {
 		this.repositoryPath = repositoryPath;
 	}
-	
+
 	public File getLoadedRepositoryPath() {
 		return repositoryPath;
 	}
@@ -71,21 +74,21 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
 	public Map<File, ImageMetaDataDataBaseItem> getImageMetaDataBaseItems() {
 		return imageMetaDataDataBaseItems;
 	}
-	
+
 	/**
-	 * This method will return an {@link ImageMetaDataDataBaseItem} or null if 
-	 * the requested jpegImage does not exist in the collection of 
+	 * This method will return an {@link ImageMetaDataDataBaseItem} or null if
+	 * the requested jpegImage does not exist in the collection of
 	 * {@link ImageMetaDataDataBaseItem} objects.
-	 * 
-	 * @param jpegImage is the image to retrieve the 
+	 *
+	 * @param jpegImage is the image to retrieve the
 	 *        {@link ImageMetaDataDataBaseItem} object for.
-	 *        
+	 *
 	 * @return an {@link ImageMetaDataDataBaseItem} object or null.
 	 */
 	public ImageMetaDataDataBaseItem getImageMetaDataBaseItem(File jpegImage) {
 		return imageMetaDataDataBaseItems.get(jpegImage);
 	}
-	
+
 	/**
 	 * @param jpegFile
 	 * @param imageMetaDataDataBaseItem
@@ -93,4 +96,12 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
 	public void setImageMetaDatadataBaseItem(File jpegImage, ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
 		imageMetaDataDataBaseItems.put(jpegImage, imageMetaDataDataBaseItem);
 	}
+
+	public boolean isFlushNeeded() {
+        return flushNeeded;
+    }
+
+    public void setFlushNeeded(boolean flushNeeded) {
+        this.flushNeeded = flushNeeded;
+    }
 }

@@ -3,14 +3,14 @@ package moller.javapeg.program.categories;
 import java.io.File;
 
 public class ImageMetaDataDataBaseItem {
-    
+
     private File image;
     private String md5;
     private CategoryImageExifMetaData imageExifMetaData;
     private String comment;
     private int rating;
     private Categories categories;
-    
+
     public ImageMetaDataDataBaseItem(File image, String md5, CategoryImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
         this.image = image;
         this.md5 = md5;
@@ -19,7 +19,7 @@ public class ImageMetaDataDataBaseItem {
         this.rating = rating;
         this.categories = categories;
     }
-    
+
     public ImageMetaDataDataBaseItem() {
         this.image = null;
         this.md5 = null;
@@ -32,7 +32,7 @@ public class ImageMetaDataDataBaseItem {
 	public File getImage() {
         return image;
     }
-	
+
 	public String getMd5() {
 		return md5;
 	}
@@ -59,7 +59,7 @@ public class ImageMetaDataDataBaseItem {
     public void setImage(File image) {
         this.image = image;
     }
-    
+
     public void setMd5(String md5) {
 		this.md5 = md5;
 	}
@@ -78,5 +78,19 @@ public class ImageMetaDataDataBaseItem {
 
     public void setCategories(Categories categories) {
         this.categories = categories;
+    }
+
+
+    public boolean hasChanged(Categories categories, String comment, int rating) {
+        if (!this.getCategories().equals(categories)) {
+            return true;
+        }
+        if (!this.getComment().equals(comment)) {
+            return true;
+        }
+        if (this.getRating() != rating) {
+            return true;
+        }
+        return false;
     }
 }

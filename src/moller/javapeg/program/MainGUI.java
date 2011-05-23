@@ -2367,12 +2367,20 @@ public class MainGUI extends JFrame {
 		if(currentlySelectedImage != null) {
 			ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = null;
 
-			imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(currentlySelectedImage);
-			imageMetaDataDataBaseItem.setComment(imageCommentTextArea.getText());
-			imageMetaDataDataBaseItem.setRating(getRatingValue());
-			imageMetaDataDataBaseItem.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategroiesCategoryTree));
+			Categories categories = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategroiesCategoryTree);
+			String comment = imageCommentTextArea.getText();
+			int rating = getRatingValue();
 
-			irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
+			imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(currentlySelectedImage);
+
+			if (imageMetaDataDataBaseItem.hasChanged(categories, comment, rating)) {
+		        imageMetaDataDataBaseItem.setComment(comment);
+	            imageMetaDataDataBaseItem.setRating(rating);
+	            imageMetaDataDataBaseItem.setCategories(categories);
+
+	            irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
+	            irc.setFlushNeeded(true);
+			}
 		}
 	}
 

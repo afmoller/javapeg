@@ -156,39 +156,45 @@ public class ImageMetaDataDataBaseHandler {
 
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
-			XMLOutputFactory factory = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
+			if (ImageMetaDataDataBaseItemsToUpdateContext.getInstance().isFlushNeeded() || imageMetaDataContextAction == ImageMetaDataContextAction.ADD) {
+	            os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
+	            XMLOutputFactory factory = XMLOutputFactory.newInstance();
+	            XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
 
-			XMLUtil.writeStartDocument("1.0", w);
-			XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
-					             "files that exists in the directory where this XML file is to be found." + C.LS +
-					             "The content of this file is used and modified by the application JavaPEG", w);
-			XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
+	            XMLUtil.writeStartDocument("1.0", w);
+	            XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
+	                                 "files that exists in the directory where this XML file is to be found." + C.LS +
+	                                 "The content of this file is used and modified by the application JavaPEG", w);
+	            XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
 
-			for(File image : imageMetaDataDataBaseItems.keySet()) {
-				ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
-				CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
+	            for(File image : imageMetaDataDataBaseItems.keySet()) {
+	                ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+	                CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
-				XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
-				XMLUtil.writeElement("md5", MD5.calculate(image), w);
-				XMLUtil.writeElementStart("exif-meta-data", w);
-				XMLUtil.writeElement("f-number", Double.toString(ciemd.getFNumber()), w);
-				XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
-				XMLUtil.writeElement("date-time"     , ciemd.getDateTimeAsString()         , w);
-				XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
-				XMLUtil.writeElement("picture-height", Integer.toString(ciemd.getPictureHeight()), w);
-				XMLUtil.writeElement("picture-width" , Integer.toString(ciemd.getPictureWidth()) , w);
-				XMLUtil.writeElement("exposure-time" , ciemd.getExposureTime().toString() , w);
-				XMLUtil.writeElementEnd(w);
-				XMLUtil.writeElement("comment", imddbi.getComment(), w);
-				XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
-				XMLUtil.writeElement("categories", imddbi.getCategories().toString(), w);
+	                XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
+	                XMLUtil.writeElement("md5", MD5.calculate(image), w);
+	                XMLUtil.writeElementStart("exif-meta-data", w);
+	                XMLUtil.writeElement("f-number", Double.toString(ciemd.getFNumber()), w);
+	                XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
+	                XMLUtil.writeElement("date-time"     , ciemd.getDateTimeAsString()         , w);
+	                XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
+	                XMLUtil.writeElement("picture-height", Integer.toString(ciemd.getPictureHeight()), w);
+	                XMLUtil.writeElement("picture-width" , Integer.toString(ciemd.getPictureWidth()) , w);
+	                XMLUtil.writeElement("exposure-time" , ciemd.getExposureTime().toString() , w);
+	                XMLUtil.writeElementEnd(w);
+	                XMLUtil.writeElement("comment", imddbi.getComment(), w);
+	                XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
+	                XMLUtil.writeElement("categories", imddbi.getCategories().toString(), w);
 
-				XMLUtil.writeElementEnd(w);
+	                XMLUtil.writeElementEnd(w);
+	            }
+	            XMLUtil.writeElementEnd(w);
+	            w.flush();
+
+	            logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has been updated with the changes made to the content");
+			} else {
+			    logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has not been updated since there was no changes made to the content");
 			}
-			XMLUtil.writeElementEnd(w);
-			w.flush();
 
 			switch (imageMetaDataContextAction) {
 			case ADD:
