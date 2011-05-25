@@ -2129,7 +2129,11 @@ public class MainGUI extends JFrame {
 					setRatingCommentAndCategoryEnabled(false);
 
 					if (nrOfJPEGFilesInRepositoryPath > 0) {
-						if (ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath)) {
+					    // Load thumb nails for all JPEG images that exists in the
+                        // selected path.
+                        loadThumbNails(repositoryPath);
+
+					    if (ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath)) {
 							imddbituc.setRepositoryPath(repositoryPath);
 
 							// Populate the image repository model with any
@@ -2140,10 +2144,6 @@ public class MainGUI extends JFrame {
 								imageRepositoryListModel.add(iri);
 							}
 						}
-
-						// Load thumb nails for all JPEG images that exists in the
-						// selected path.
-						loadThumbNails(repositoryPath);
 					}
 				}
 			}
