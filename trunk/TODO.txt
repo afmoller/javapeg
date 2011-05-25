@@ -1,6 +1,5 @@
 2.5:
 ====
-- Add "remember answer" functionality to "Add to image repository"-dialog
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))

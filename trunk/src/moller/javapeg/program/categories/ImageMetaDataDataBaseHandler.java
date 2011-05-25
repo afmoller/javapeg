@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,15 +48,16 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 
+    private static Config config = Config.getInstance();
+
 	public static boolean initiateDataBase(File directory) {
-		Config conf = Config.getInstance();
 
 		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
 
 		boolean addPathToImageRepository = false;
 
 		if (!imageMetaDataDataBase.exists()) {
-			String addToImageRepositoryPolicy = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
+			String addToImageRepositoryPolicy = config.getStringProperty("imageRepository.addToRepositoryPolicy");
 
 			int policy = -1;
 
@@ -115,7 +117,26 @@ public class ImageMetaDataDataBaseHandler {
 	private static boolean addPathToImageRepository(File directory) {
 		Language lang = Language.getInstance();
 
-		int result = JOptionPane.showConfirmDialog(null, lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo"), lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
+		JCheckBox rememberSelectionCheckBox = new JCheckBox(lang.get("category.rememberMySelection"));
+
+		Object[] array = { lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo") + "\n\n",
+		                   rememberSelectionCheckBox };
+
+		int result = JOptionPane.showConfirmDialog(null, array, lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
+
+		if (rememberSelectionCheckBox.isSelected()) {
+		   String checkBoxState = "";
+
+		   if (result == 0) {
+		       checkBoxState = "0";
+		   } else if (result == 1) {
+		       checkBoxState = "2";
+		   }
+
+		   if (!checkBoxState.equals("")) {
+		       config.setStringProperty("imageRepository.addToRepositoryPolicy", checkBoxState);
+		   }
+		}
 
 		if (result == 0) {
 			return true;
@@ -155,9 +176,10 @@ public class ImageMetaDataDataBaseHandler {
 		Logger logger = Logger.getInstance();
 
 		OutputStream os = null;
-		try {
-			if (ImageMetaDataDataBaseItemsToUpdateContext.getInstance().isFlushNeeded() || imageMetaDataContextAction == ImageMetaDataContextAction.ADD) {
-	            os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
+
+		if (ImageMetaDataDataBaseItemsToUpdateContext.getInstance().isFlushNeeded() || imageMetaDataContextAction == ImageMetaDataContextAction.ADD) {
+		    try {
+			    os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
 	            XMLOutputFactory factory = XMLOutputFactory.newInstance();
 	            XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
 
@@ -192,36 +214,36 @@ public class ImageMetaDataDataBaseHandler {
 	            w.flush();
 
 	            logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has been updated with the changes made to the content");
-			} else {
-			    logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has not been updated since there was no changes made to the content");
-			}
 
-			switch (imageMetaDataContextAction) {
-			case ADD:
-				for(File image : imageMetaDataDataBaseItems.keySet()) {
-					ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
-					CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
-					populateImageMetaDataContext(image, ciemd, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
-				}
-				break;
-			case UPDATE:
-				for(File image : imageMetaDataDataBaseItems.keySet()) {
-					ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
-					updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
-				}
-				break;
-			}
-		} catch (XMLStreamException xsex) {
-			logger.logERROR("Could not write to XMLStream");
-			logger.logERROR(xsex);
-			return false;
-		} catch (FileNotFoundException fnfex) {
-			logger.logERROR("Could not find file: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME);
-			logger.logERROR(fnfex);
-			return false;
-		} finally {
-			StreamUtil.close(os, true);
-		}
+	            switch (imageMetaDataContextAction) {
+	            case ADD:
+	                for(File image : imageMetaDataDataBaseItems.keySet()) {
+	                    ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+	                    CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
+	                    populateImageMetaDataContext(image, ciemd, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+	                }
+	                break;
+	            case UPDATE:
+	                for(File image : imageMetaDataDataBaseItems.keySet()) {
+	                    ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+	                    updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+	                }
+	                break;
+	            }
+		    } catch (XMLStreamException xsex) {
+		        logger.logERROR("Could not write to XMLStream");
+		        logger.logERROR(xsex);
+		        return false;
+		    } catch (FileNotFoundException fnfex) {
+		        logger.logERROR("Could not find file: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME);
+		        logger.logERROR(fnfex);
+		        return false;
+		    } finally {
+		        StreamUtil.close(os, true);
+		    }
+		} else {
+            logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has not been updated since there was no changes made to the content");
+        }
 		return true;
 	}
 
