@@ -19,3 +19,5 @@ category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en 
 category.addToImageRepositoryHeader = Lägg till bild(er) till bilddatabas?
 category.addToImageRepositoryQuestionPartOne = Lägg till bild(erna) i katalog:
 category.addToImageRepositoryQuestionPartTwo = till bilddatabasen?
+
+category.rememberMySelection = Kom ihåg mitt val (Kan ändras i Inställningarna)
