@@ -18,6 +18,10 @@ public class HelpViewerGUIUtil {
 		DefaultMutableTreeNode programHelpOverView        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
 		DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
 		DefaultMutableTreeNode programHelpViewImages      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpViewImages"), "user_manual_viewimages"));
+
+		DefaultMutableTreeNode programHelpTagImages       = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImagesTag"), "user_manual_image_tag"));
+		DefaultMutableTreeNode programHelpSearchImages    = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImagesSearch"), "user_manual_image_search"));
+
 		DefaultMutableTreeNode programHelpImageViewer     = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpImageViewer"), "user_manual_imageviewer"));
 		DefaultMutableTreeNode programHelpOverViewCreator = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverviewCreator"), "thumbnail_overview"));
 		DefaultMutableTreeNode versionInformation         = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
@@ -44,6 +48,8 @@ public class HelpViewerGUIUtil {
 		root.add(programHelpOverView);
 		root.add(programHelpRename);
 		root.add(programHelpViewImages);
+		root.add(programHelpTagImages);
+		root.add(programHelpSearchImages);
 		root.add(programHelpImageViewer);
 		root.add(programHelpOverViewCreator);
 		root.add(versionInformation);
