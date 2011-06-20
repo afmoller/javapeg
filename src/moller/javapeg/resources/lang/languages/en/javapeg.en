@@ -223,9 +223,11 @@ maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = The
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
 ##############################################################################################################
-maingui.popupmenu.addImageToList        = Add image to image list
-maingui.popupmenu.addAllImagesToList    = Add All images to image list
-maingui.popupmenu.copyToSystemClipboard = Copy to System Clipboard
+maingui.popupmenu.addImageToList                     = Add image to image list
+maingui.popupmenu.addAllImagesToList                 = Add all images to image list
+maingui.popupmenu.addImagePathToImageRepository      = Add directory to image repository
+maingui.popupmenu.removeImagePathFromImageRepository = Remove directory from image repository
+maingui.popupmenu.copyToSystemClipboard              = Copy to System Clipboard
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
