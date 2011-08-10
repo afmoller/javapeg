@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -153,6 +155,7 @@ import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
+import moller.util.string.ParseVMArguments;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
 
@@ -388,12 +391,25 @@ public class MainGUI extends JFrame {
 	}
 
 	private void checkAvailableMemory() {
-		long maxHeapSize = Runtime.getRuntime().maxMemory();
 
-		if (maxHeapSize < 399572992) {
-			logger.logERROR("Maximum Size of Java Heap is to small. Current size is: " + maxHeapSize + " bytes and it must be atleast 399572992 bytes");
-			JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-			closeApplication(1);
+		RuntimeMXBean RuntimemxBean = ManagementFactory.getRuntimeMXBean();
+		List<String> arguments = RuntimemxBean.getInputArguments();
+
+		long xmxValue = -1;
+		String xmxString = "";
+
+		for (String argument : arguments) {
+		    if (argument.toUpperCase().contains("XMX")) {
+		        xmxString = argument;
+		        xmxValue = ParseVMArguments.parseXmxToLong(argument);
+		        break;
+		    }
+		}
+
+		if (xmxValue < ParseVMArguments.parseXmxToLong("-Xmx384m")) {
+		    logger.logERROR("Maximum Size of Java Heap is to small. Current size is: \"" + xmxString + "\" bytes and it must be atleast Xmx384m");
+		    JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+		    closeApplication(1);
 		}
 	}
 
@@ -1518,6 +1534,12 @@ public class MainGUI extends JFrame {
 		popupMenuRemoveCategory.addActionListener(new RemoveCategory());
 		popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
 		popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
+		popupMenuAddImagePathToImageRepositoryRename.addActionListener(new AddSelecetedPathToImageRepository());
+		popupMenuAddImagePathToImageRepositoryTag.addActionListener(new AddSelecetedPathToImageRepository());
+		popupMenuAddImagePathToImageRepositoryView.addActionListener(new AddSelecetedPathToImageRepository());
+		popupMenuRemoveImagePathFromImageRepositoryRename.addActionListener(new RemoveSelecetedPathFromImageRepository());
+		popupMenuRemoveImagePathFromImageRepositoryTag.addActionListener(new RemoveSelecetedPathFromImageRepository());
+		popupMenuRemoveImagePathFromImageRepositoryView.addActionListener(new RemoveSelecetedPathFromImageRepository());
 
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
 		mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
@@ -2148,17 +2170,48 @@ public class MainGUI extends JFrame {
                         // selected path.
                         loadThumbNails(repositoryPath);
 
-					    if (ImageMetaDataDataBaseHandler.initiateDataBase(repositoryPath)) {
-							imddbituc.setRepositoryPath(repositoryPath);
+                        File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 
-							// Populate the image repository model with any
-							// unpopulated paths.
-							ImageRepositoryItem iri = new ImageRepositoryItem(totalPath, Status.EXISTS);
+                        //
+                        ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath.getAbsolutePath(), Status.EXISTS);
 
-							if(!imageRepositoryListModel.contains(iri)) {
-								imageRepositoryListModel.add(iri);
-							}
-						}
+                        if (!imageRepositoryListModel.contains(iri)) {
+                            // If the selected path shall not be added to the
+                            // image meta data repository, according to policy
+                            // and answer then just do nothing
+                            if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(repositoryPath)) {
+                                return;
+                            }
+
+                            // If the there exists no image meta data file at
+                            // the selected path then such kind of file shall
+                            // be created.
+                            if (!imageMetaDataDataBaseFile.exists()) {
+                                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
+                                    return;
+                                }
+                            }
+                        }
+
+                        // Deserialize a newly created or an already existing
+                        // image meta data file.
+                        boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+
+                        Logger logger = Logger.getInstance();
+
+                        if (result) {
+                            ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
+
+                            // Populate the image repository model with any
+                            // unpopulated paths.
+                            if(!imageRepositoryListModel.contains(iri)) {
+                                imageRepositoryListModel.add(iri);
+                            }
+                            logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
+                        } else {
+                            logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                        }
+                        ac.setImageMetaDataDataBaseFileLoaded(result);
 					}
 				}
 			}
@@ -2963,18 +3016,33 @@ public class MainGUI extends JFrame {
 		@Override
 		public void mouseReleased(MouseEvent e){
 			if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 0)) {
-				popupMenuAddImagePathToImageRepositoryRename.setVisible(!imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS)));
-				popupMenuCopyImageToClipBoardRename.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+				if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+				    popupMenuAddImagePathToImageRepositoryRename.setVisible(false);
+				    popupMenuRemoveImagePathFromImageRepositoryRename.setVisible(true);
+				} else {
+				    popupMenuAddImagePathToImageRepositoryRename.setVisible(true);
+				    popupMenuRemoveImagePathFromImageRepositoryRename.setVisible(false);
+				}
+			    popupMenuCopyImageToClipBoardRename.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 				rightClickMenuRename.show(e.getComponent(),e.getX(), e.getY());
 			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
-			    popupMenuAddImagePathToImageRepositoryTag.setVisible(!imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS)));
-
-//			    popupMenuRemoveImagePathFromImageRepositoryTag
-
+			    if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+			        popupMenuAddImagePathToImageRepositoryTag.setVisible(false);
+			        popupMenuRemoveImagePathFromImageRepositoryTag.setVisible(true);
+                } else {
+                    popupMenuAddImagePathToImageRepositoryTag.setVisible(true);
+                    popupMenuRemoveImagePathFromImageRepositoryTag.setVisible(false);
+                }
 			    popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
 				rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
 			} else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
-                popupMenuAddImagePathToImageRepositoryView.setVisible(!imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS)));
+                if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+                    popupMenuAddImagePathToImageRepositoryView.setVisible(false);
+                    popupMenuRemoveImagePathFromImageRepositoryView.setVisible(true);
+                } else {
+                    popupMenuAddImagePathToImageRepositoryView.setVisible(true);
+                    popupMenuRemoveImagePathFromImageRepositoryView.setVisible(false);
+                }
                 popupMenuAddImageToViewList.setActionCommand(((JButton)e.getComponent()).getActionCommand());
                 popupMenuCopyImageToClipBoardView.setActionCommand(((JButton)e.getComponent()).getActionCommand());
                 rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
@@ -3027,6 +3095,54 @@ public class MainGUI extends JFrame {
 				break;
 			}
 		}
+	}
+
+	private class AddSelecetedPathToImageRepository implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            ApplicationContext ac = ApplicationContext.getInstance();
+
+            File repositoryPath = new File(ac.getSourcePath());
+
+            File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
+
+            // If the there exists no image meta data file at
+            // the selected path then such kind of file shall
+            // be created.
+            if (!imageMetaDataDataBaseFile.exists()) {
+                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
+                    return;
+                }
+            }
+
+            // Deserialize a newly created or an already existing
+            // image meta data file.
+            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+
+            Logger logger = Logger.getInstance();
+
+            if (result) {
+                ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
+
+                // Populate the image repository model with the currently selected
+                // path.
+                ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath.getAbsolutePath(), Status.EXISTS);
+                imageRepositoryListModel.add(iri);
+                logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
+            } else {
+                logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
+            }
+            ac.setImageMetaDataDataBaseFileLoaded(result);
+        }
+	}
+
+	private class RemoveSelecetedPathFromImageRepository implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ImageRepositoryItem iri = new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS);
+            imageRepositoryListModel.removeElement(iri);
+        }
 	}
 
 	private class CategoriesMouseButtonListener extends MouseAdapter{
