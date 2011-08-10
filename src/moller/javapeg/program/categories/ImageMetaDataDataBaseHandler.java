@@ -24,7 +24,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
-import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
@@ -50,69 +49,46 @@ public class ImageMetaDataDataBaseHandler {
 
     private static Config config = Config.getInstance();
 
-	public static boolean initiateDataBase(File directory) {
+    /**
+     * This method will check against the stored add to repository policy
+     * whether a path shall be added to the image meta data repository or not.
+     *
+     * @param path the directory to check policy against.
+     *
+     * @return a boolean value indicating whether the path shall be added to
+     *         the image meta data repository or not. A return value of true
+     *         means that the path shall be added to the image meta data
+     *         repository.
+     */
+    public static boolean addPathToRepositoryAccordingToPolicy(File path) {
 
-		File imageMetaDataDataBase = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
+        String addToImageRepositoryPolicy = config.getStringProperty("imageRepository.addToRepositoryPolicy");
 
-		boolean addPathToImageRepository = false;
+        int policy = -1;
 
-		if (!imageMetaDataDataBase.exists()) {
-			String addToImageRepositoryPolicy = config.getStringProperty("imageRepository.addToRepositoryPolicy");
+        try {
+            policy = Integer.parseInt(addToImageRepositoryPolicy);
+        } catch (NumberFormatException nfex) {
+            Logger logger = Logger.getInstance();
+            logger.logERROR("Invalid format of configuration parameter: imageRepository.addToRepositoryPolicy (" + addToImageRepositoryPolicy + ") parameter reset to \"1\"");
+            logger.logERROR(nfex);
+            policy = 1;
+        }
 
-			int policy = -1;
-
-			try {
-				policy = Integer.parseInt(addToImageRepositoryPolicy);
-			} catch (NumberFormatException nfex) {
-				policy = 1;
-			}
-
-			switch (policy) {
-			case 0:
-				addPathToImageRepository = true;
-				break;
-			case 1:
-				addPathToImageRepository = addPathToImageRepository(directory);
-				break;
-			case 2:
-				addPathToImageRepository = false;
-				break;
-			default:
-				addPathToImageRepository = addPathToImageRepository(directory);
-				break;
-			}
-		}
-
-		ApplicationContext ac = ApplicationContext.getInstance();
-
-		// If the image meta data base file does not exist and should be
-		// created
-		if(addPathToImageRepository) {
-			if(!createImageMetaDataDataBaseFile(directory)) {
-				ac.setImageMetaDataDataBaseFileLoaded(false);
-				return false;
-			}
-		}
-
-		// If the image image meta data base file does exist try to deserialize
-		// it.
-		if (imageMetaDataDataBase.exists()) {
-			boolean result = deserializeImageMetaDataDataBaseFile(imageMetaDataDataBase, Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
-
-			Logger logger = Logger.getInstance();
-
-			if (result) {
-				logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath() + " was successfully de serialized");
-			} else {
-				logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBase.getAbsolutePath());
-			}
-			ac.setImageMetaDataDataBaseFileLoaded(result);
-			return result;
-		} else {
-			ac.setImageMetaDataDataBaseFileLoaded(false);
-			return false;
-		}
-	}
+        switch (policy) {
+        // Add without a question.
+        case 0:
+            return true;
+        // Ask first if addition shall be done.
+        case 1:
+            return addPathToImageRepository(path);
+        // Do not add.
+        case 2:
+            return false;
+        default:
+            return addPathToImageRepository(path);
+        }
+    }
 
 	private static boolean addPathToImageRepository(File directory) {
 		Language lang = Language.getInstance();
@@ -145,7 +121,7 @@ public class ImageMetaDataDataBaseHandler {
 		}
 	}
 
-	private static boolean createImageMetaDataDataBaseFile(File imageRepository) {
+	public static boolean createImageMetaDataDataBaseFileIn(File imageRepository) {
 		Logger logger = Logger.getInstance();
 
 		try {
