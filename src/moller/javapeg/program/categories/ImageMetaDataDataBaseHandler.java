@@ -34,6 +34,7 @@ import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.hash.MD5;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
@@ -75,6 +76,25 @@ public class ImageMetaDataDataBaseHandler {
             policy = 1;
         }
 
+        // The following switch statement will check exceptions to the
+        // additions policy.
+        switch (policy) {
+        case 0:
+            if (ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().contains(path)) {
+                policy = 2;
+            }
+            break;
+        case 2:
+            if (ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().contains(path)) {
+                policy = 0;
+            }
+            break;
+        default:
+            // Do nothing
+            break;
+        }
+
+        // Check what to do..
         switch (policy) {
         // Add without a question.
         case 0:
@@ -155,11 +175,13 @@ public class ImageMetaDataDataBaseHandler {
 
 		if (ImageMetaDataDataBaseItemsToUpdateContext.getInstance().isFlushNeeded() || imageMetaDataContextAction == ImageMetaDataContextAction.ADD) {
 		    try {
-			    os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
-	            XMLOutputFactory factory = XMLOutputFactory.newInstance();
-	            XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
+			    String encoding = "UTF-8";
 
-	            XMLUtil.writeStartDocument("1.0", w);
+		        os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
+	            XMLOutputFactory factory = XMLOutputFactory.newInstance();
+	            XMLStreamWriter w = factory.createXMLStreamWriter(os, encoding);
+
+	            XMLUtil.writeStartDocument(encoding, "1.0", w);
 	            XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
 	                                 "files that exists in the directory where this XML file is to be found." + C.LS +
 	                                 "The content of this file is used and modified by the application JavaPEG", w);

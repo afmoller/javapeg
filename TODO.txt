@@ -1,6 +1,5 @@
 2.5:
 ====
-- Set read only in GUI for image meta data base properties if the corresponding file is read only. 
 - Add help text for tagging images.
 - Add help text for searching images.
 - Test with more images from different cameras.
