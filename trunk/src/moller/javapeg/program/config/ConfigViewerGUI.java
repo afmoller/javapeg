@@ -2,6 +2,7 @@ package moller.javapeg.program.config;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -158,6 +160,8 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
 	private JButton removeSelectedImagePathsButton;
 
+	private JList imageRepositoriesAllwaysAddList;
+	private JList imageRepositoriesNeverAddList;
 	private JList imageRepositoriesList;
 
 	private final Config   conf;
@@ -765,8 +769,44 @@ public class ConfigViewerGUI extends JFrame {
 			doNotAddRadioButton.setSelected(true);
 		}
 
+		imageRepositoriesAllwaysAddList = new JList(ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel());
+		imageRepositoriesAllwaysAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        JScrollPane imageRepositoriesAllwaysAddScrollPane = new JScrollPane(imageRepositoriesAllwaysAddList);
+        imageRepositoriesAllwaysAddScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        imageRepositoriesNeverAddList = new JList(ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel());
+        imageRepositoriesNeverAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        JScrollPane imageRepositoriesNeverAddScrollPane = new JScrollPane(imageRepositoriesNeverAddList);
+        imageRepositoriesNeverAddScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JButton removeSelectedAllwaysAddImagePaths = new JButton();
+//      TODO: Fix hard coded string
+        removeSelectedAllwaysAddImagePaths.setToolTipText("Remove selected path(s)");
+        removeSelectedAllwaysAddImagePaths.setName("AllwaysAddImagePaths");
+        removeSelectedAllwaysAddImagePaths.addActionListener(new RemoveExceptionPathsListener());
+
+        JButton removeSelectedDoNotAllwaysAddImagePaths = new JButton();
+//      TODO: Fix hard coded string
+        removeSelectedDoNotAllwaysAddImagePaths.setToolTipText("Remove selected path(s)");
+        removeSelectedDoNotAllwaysAddImagePaths.setName("DoNotAllwaysAddImagePaths");
+        removeSelectedDoNotAllwaysAddImagePaths.addActionListener(new RemoveExceptionPathsListener());
+
+        try {
+            Icon removeIcon = ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true);
+
+            removeSelectedAllwaysAddImagePaths.setIcon(removeIcon);
+            removeSelectedDoNotAllwaysAddImagePaths.setIcon(removeIcon);
+        } catch (IOException iox) {
+            removeSelectedAllwaysAddImagePaths.setText("X");
+            logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the remove selected image paths button. See stacktrace below for details");
+            logger.logERROR(iox);
+        }
+
 		imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
 		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
+		imageRepositoriesList.setVisibleRowCount(5);
 
 		JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
 		imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -778,12 +818,22 @@ public class ConfigViewerGUI extends JFrame {
 		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
 		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip"));
 
-
 		GBHelper posImageRepositories = new GBHelper();
 
 		imageRepositoriesAdditionModePanel.add(addAutomaticallyRadioButton, posImageRepositories.expandW());
 		imageRepositoriesAdditionModePanel.add(askToAddRadioButton, posImageRepositories.nextRow().expandW());
 		imageRepositoriesAdditionModePanel.add(doNotAddRadioButton, posImageRepositories.nextRow().expandW());
+
+		imageRepositoriesAdditionModePanel.add(new Gap(10), posImageRepositories.nextRow());
+//		TODO: Fix hard coded string
+		imageRepositoriesAdditionModePanel.add(new JLabel("Allways add images in the following directories automatically:"), posImageRepositories.nextRow());
+		imageRepositoriesAdditionModePanel.add(imageRepositoriesAllwaysAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
+		imageRepositoriesAdditionModePanel.add(removeSelectedAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
+		imageRepositoriesAdditionModePanel.add(new Gap(15), posImageRepositories.nextRow());
+//		TODO: Fix hard coded string
+		imageRepositoriesAdditionModePanel.add(new JLabel("Do never add images in the following directories automatically:"), posImageRepositories.nextRow().nextRow());
+		imageRepositoriesAdditionModePanel.add(imageRepositoriesNeverAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
+		imageRepositoriesAdditionModePanel.add(removeSelectedDoNotAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
 
 		JPanel imageRepositoriesContentPanel = new JPanel(new GridBagLayout());
 		imageRepositoriesContentPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesContent.label")));
@@ -1519,11 +1569,32 @@ public class ConfigViewerGUI extends JFrame {
 	}
 
 	private class CancelButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			closeWindow();
-		}
+	    @Override
+        public void actionPerformed(ActionEvent e) {
+            closeWindow();
+        }
 	}
+
+	private class RemoveExceptionPathsListener implements ActionListener {
+        @Override
+	    public void actionPerformed(ActionEvent e) {
+            if (((JButton)e.getSource()).getName().equals("AllwaysAddImagePaths")) {
+                if (!imageRepositoriesAllwaysAddList.isSelectionEmpty()) {
+                    for (Object selectedValue : imageRepositoriesAllwaysAddList.getSelectedValues()) {
+                        ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
+                    }
+                    imageRepositoriesAllwaysAddList.clearSelection();
+                }
+            } else {
+                if (!imageRepositoriesNeverAddList.isSelectionEmpty()) {
+                    for (Object selectedValue : imageRepositoriesNeverAddList.getSelectedValues()) {
+                        ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
+                    }
+                    imageRepositoriesNeverAddList.clearSelection();
+                }
+            }
+        }
+    }
 
 	private class WindowEventHandler extends WindowAdapter {
 		@Override

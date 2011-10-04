@@ -104,6 +104,7 @@ import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
+import moller.javapeg.program.gui.HeadingPanel;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
 import moller.javapeg.program.gui.MetaDataPanel;
@@ -118,6 +119,7 @@ import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagerepository.ImageRepositoryHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
+import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -150,11 +152,13 @@ import moller.util.gui.Update;
 import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
+import moller.util.io.PathUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
+import moller.util.os.OsUtil;
 import moller.util.string.ParseVMArguments;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
@@ -224,11 +228,14 @@ public class MainGUI extends JFrame {
 	private JMenuItem popupMenuRemoveCategory;
 	private JMenuItem popupMenuExpandCategoriesTreeStructure;
 	private JMenuItem popupMenuCollapseCategoriesTreeStructure;
+	private JMenuItem popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList;
+	private JMenuItem popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList;
 
 	private JPopupMenu rightClickMenuCategories;
 	private JPopupMenu rightClickMenuRename;
 	private JPopupMenu rightClickMenuView;
 	private JPopupMenu rightClickMenuTag;
+	private JPopupMenu rightClickMenuDirectoryTree;
 
 	private JPanel thumbNailsPanel;
 	private JPanel imageTagPreviewPanel;
@@ -274,6 +281,7 @@ public class MainGUI extends JFrame {
 	private Mouselistener mouseListener;
 	private MouseButtonListener mouseRightClickButtonListener;
 	private CategoriesMouseButtonListener categoriesMouseButtonListener;
+	private ActionListener addSelecetedPathToImageRepository;
 
 	private int iconWidth = 160;
 	private int columnMargin = 0;
@@ -308,6 +316,8 @@ public class MainGUI extends JFrame {
 
 	private JProgressBar thumbnailLoadingProgressBar;
 
+	private HeadingPanel thumbNailsPanelHeading;
+
 	public MainGUI(){
 
 		if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
@@ -338,11 +348,14 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Creation of Menu Bar Started");
 		this.createMenuBar();
 		logger.logDEBUG("Creation of Menu Bar Finished");
+		logger.logDEBUG("Creation of Tool Bar Started");
 		this.createToolBar();
+		logger.logDEBUG("Creation of Tool Bar Finished");
 		this.createRightClickMenuCategories();
 		this.createRightClickMenuRename();
 		this.createRightClickMenuView();
 		this.createRightClickMenuTag();
+		this.createRightClickMenuDirectoryTree();
 		logger.logDEBUG("Adding of Event Listeners Started");
 		this.addListeners();
 		logger.logDEBUG("Adding of Event Listeners Finished");
@@ -675,8 +688,7 @@ public class MainGUI extends JFrame {
 		thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
 		thumbNailMetaPanelSplitPane.setDividerSize(10);
 
-		JLabel thumbNailsTitleLable = new JLabel(lang.get("picture.panel.pictureLabel"));
-		thumbNailsTitleLable.setForeground(Color.GRAY);
+		thumbNailsPanelHeading = new HeadingPanel(lang.get("picture.panel.pictureLabel"), Color.GRAY, null);
 
 		thumbnailLoadingProgressBar = new JProgressBar();
 		thumbnailLoadingProgressBar.setStringPainted(true);
@@ -684,7 +696,7 @@ public class MainGUI extends JFrame {
 
 		thumbNailsBackgroundsPanel = new JPanel(new BorderLayout());
 		thumbNailsBackgroundsPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
-		thumbNailsBackgroundsPanel.add(thumbNailsTitleLable, BorderLayout.NORTH);
+		thumbNailsBackgroundsPanel.add(thumbNailsPanelHeading, BorderLayout.NORTH);
 		thumbNailsBackgroundsPanel.add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
 		thumbNailsBackgroundsPanel.add(thumbnailLoadingProgressBar, BorderLayout.SOUTH);
 
@@ -1534,12 +1546,15 @@ public class MainGUI extends JFrame {
 		popupMenuRemoveCategory.addActionListener(new RemoveCategory());
 		popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
 		popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
-		popupMenuAddImagePathToImageRepositoryRename.addActionListener(new AddSelecetedPathToImageRepository());
-		popupMenuAddImagePathToImageRepositoryTag.addActionListener(new AddSelecetedPathToImageRepository());
-		popupMenuAddImagePathToImageRepositoryView.addActionListener(new AddSelecetedPathToImageRepository());
+		popupMenuAddImagePathToImageRepositoryRename.addActionListener(addSelecetedPathToImageRepository = new AddSelecetedPathToImageRepository());
+		popupMenuAddImagePathToImageRepositoryTag.addActionListener(addSelecetedPathToImageRepository);
+		popupMenuAddImagePathToImageRepositoryView.addActionListener(addSelecetedPathToImageRepository);
 		popupMenuRemoveImagePathFromImageRepositoryRename.addActionListener(new RemoveSelecetedPathFromImageRepository());
 		popupMenuRemoveImagePathFromImageRepositoryTag.addActionListener(new RemoveSelecetedPathFromImageRepository());
 		popupMenuRemoveImagePathFromImageRepositoryView.addActionListener(new RemoveSelecetedPathFromImageRepository());
+		popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList());
+	    popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.addActionListener(new AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList());
+
 
 		imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
 		mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
@@ -1591,6 +1606,18 @@ public class MainGUI extends JFrame {
 		rightClickMenuTag.add(popupMenuAddImagePathToImageRepositoryTag);
 		rightClickMenuTag.add(popupMenuRemoveImagePathFromImageRepositoryTag);
 		rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
+	}
+
+	public void createRightClickMenuDirectoryTree() {
+
+//	    TODO: Fix hard coded string
+	    popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList = new JMenuItem("Add directory to the list of directories to automatically add images to the image respository");
+//	    TODO: Fix hard coded string
+	    popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList = new JMenuItem("Add directory to the list of directories which images shall not be automatically added to the image repository");
+
+	    rightClickMenuDirectoryTree = new JPopupMenu();
+	    rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList);
+	    rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList);
 	}
 
 	public void initiateProgram(){
@@ -1692,6 +1719,10 @@ public class MainGUI extends JFrame {
 		ImageRepositoryHandler.getInstance().store(imageRepositoryListModel.iterator());
 	}
 
+	private void saveRepositoryPathExceptions() {
+	    ImageRepositoryUtil.store();
+	}
+
 	private void addThumbnail(JButton thumbNail) {
 		thumbNailsPanel.add(thumbNail);
 	}
@@ -1732,6 +1763,7 @@ public class MainGUI extends JFrame {
 		if(exitValue == 0) {
 			saveSettings();
 			saveRepositoryPaths();
+			saveRepositoryPathExceptions();
 			storeCurrentlySelectedImageData();
 			flushImageMetaDataBaseToDisk();
 		}
@@ -2120,23 +2152,75 @@ public class MainGUI extends JFrame {
 	/**
 	 * Mouse listener
 	 */
-	private class Mouselistener extends MouseAdapter{
-		@Override
-		public void mousePressed(MouseEvent e){
-			int selRow = tree.getRowForLocation(e.getX(), e.getY());
+	private class Mouselistener extends MouseAdapter {
 
-			if(selRow != -1) {
-				Object [] path = tree.getPathForLocation(e.getX(), e.getY()).getPath();
-				StringBuilder worker = new StringBuilder();
-				String totalPath = "";
-				for(int i=0; i<path.length; i++){
-					if(i==0 || i==1 || i==path.length-1){
-						worker.append(path[i].toString());
-					} else{
-						worker.append(path[i].toString() + C.FS);
-					}
-				}
-				totalPath = worker.toString();
+	    @Override
+		public void mouseReleased(MouseEvent e){
+
+            if(tree.getRowForLocation(e.getX(), e.getY()) == -1) {
+                return;
+            }
+
+            String totalPath;
+
+            if (OsUtil.getOsName().toLowerCase().contains("windows")) {
+                totalPath = PathUtil.getTotalWindowsPathAsString(tree.getPathForLocation(e.getX(), e.getY()).getPath());
+            } else {
+                throw new RuntimeException("Unsupported Operating system: " + OsUtil.getOsName());
+            }
+
+		    if (e.isPopupTrigger()) {
+		        File selectedPath = new File(totalPath);
+
+		        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(totalPath, Status.EXISTS))) {
+
+		            boolean isParent = false;
+		            boolean allwaysAdd = false;
+
+		            for (Object addAutomatically : ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().getModel()) {
+		                if (selectedPath.getAbsolutePath().equals(((File)addAutomatically).getAbsolutePath())) {
+		                    allwaysAdd = true;
+		                    break;
+		                } else {
+		                    if (PathUtil.isChild(selectedPath, (File)addAutomatically)) {
+	                            allwaysAdd = true;
+	                            break;
+	                        } else if (PathUtil.isParent(selectedPath, (File)addAutomatically)) {
+                                isParent = true;
+                                break;
+                            }
+		                }
+		            }
+
+		            boolean neverAdd = false;
+
+		            for (Object doNotAddAutomatically : ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().getModel()) {
+		                if (selectedPath.getAbsolutePath().equals(((File)doNotAddAutomatically).getAbsolutePath())) {
+		                    neverAdd = true;
+                            break;
+                        } else {
+		                    if (PathUtil.isChild(selectedPath, (File)doNotAddAutomatically)) {
+                                neverAdd = true;
+                                break;
+                            } else if (PathUtil.isParent(selectedPath, (File)doNotAddAutomatically)) {
+                                isParent = true;
+                                break;
+                            }
+                        }
+                    }
+
+		            if (!allwaysAdd && !neverAdd && !isParent) {
+		                popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
+		                popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
+		                rightClickMenuDirectoryTree.show(e.getComponent(), e.getX(), e.getY());
+		            } else {
+//		                TODO: Fix some message to user
+		                System.out.println("!allwaysAdd && !neverAdd && !isParent = " + !allwaysAdd + " " + !neverAdd + " " + !isParent );
+		            }
+		        }
+		    } else {
+			    thumbNailsPanelHeading.removeIcon();
+                thumbNailsPanelHeading.removeListeners();
 
 				ApplicationContext ac = ApplicationContext.getInstance();
 				if(!ac.getSourcePath().equals(totalPath)) {
@@ -2180,6 +2264,9 @@ public class MainGUI extends JFrame {
                             // image meta data repository, according to policy
                             // and answer then just do nothing
                             if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(repositoryPath)) {
+//                                TODO: Fix hard coded string
+                                thumbNailsPanelHeading.setIcon("resources/images/db_add.png", "Selected directory is not part of the image repository database");
+                                thumbNailsPanelHeading.setListener(addSelecetedPathToImageRepository);
                                 return;
                             }
 
@@ -2212,6 +2299,18 @@ public class MainGUI extends JFrame {
                             logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
                         }
                         ac.setImageMetaDataDataBaseFileLoaded(result);
+
+                        boolean canWrite = imageMetaDataDataBaseFile.canWrite();
+
+                        ac.setImageMetaDataDataBaseFileWritable(imageMetaDataDataBaseFile.canWrite());
+
+                        if (canWrite) {
+//                            TODO: Fix hard coded string
+                            thumbNailsPanelHeading.setIcon("resources/images/db.png", "Selected directory is part of the image repository database");
+                        } else {
+//                            TODO: Fix hard coded string
+                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", "Selected directory is part of the image repository database, but the database file is write protected");
+                        }
 					}
 				}
 			}
@@ -2279,7 +2378,7 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			ApplicationContext ac = ApplicationContext.getInstance();
 
-			if (ac.isImageMetaDataDataBaseFileLoaded()) {
+			if (ac.isImageMetaDataDataBaseFileLoaded() && ac.isImageMetaDataDataBaseFileWritable()) {
 				setRatingCommentAndCategoryEnabled(true);
 			}
 
@@ -2530,15 +2629,13 @@ public class MainGUI extends JFrame {
 					if(!notExistingFiles.isEmpty()) {
 						StringBuilder missingFilesErrorMessage = new StringBuilder();
 
-						String lS = System.getProperty("line.separator");
-
 						missingFilesErrorMessage.append(lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage"));
-						missingFilesErrorMessage.append(lS);
-						missingFilesErrorMessage.append(lS);
+						missingFilesErrorMessage.append(C.LS);
+						missingFilesErrorMessage.append(C.LS);
 
 						for(String path : notExistingFiles) {
 							missingFilesErrorMessage.append(path);
-							missingFilesErrorMessage.append(lS);
+							missingFilesErrorMessage.append(C.LS);
 						}
 
 						JOptionPane.showMessageDialog(null, missingFilesErrorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
@@ -3134,6 +3231,11 @@ public class MainGUI extends JFrame {
                 logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
             }
             ac.setImageMetaDataDataBaseFileLoaded(result);
+            ac.setImageMetaDataDataBaseFileWritable(true);
+
+//            TODO: Fix hard coded string
+            thumbNailsPanelHeading.setIcon("resources/images/db.png", "Selected directory is part of the image repository database");
+            thumbNailsPanelHeading.removeListeners();
         }
 	}
 
@@ -3144,6 +3246,20 @@ public class MainGUI extends JFrame {
             imageRepositoryListModel.removeElement(iri);
         }
 	}
+
+	private class AddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().add(new File(e.getActionCommand()));
+        }
+    }
+
+	private class AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().add(new File(e.getActionCommand()));
+        }
+    }
 
 	private class CategoriesMouseButtonListener extends MouseAdapter{
 

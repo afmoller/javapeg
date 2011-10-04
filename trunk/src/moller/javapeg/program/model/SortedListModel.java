@@ -11,12 +11,12 @@ public class SortedListModel extends AbstractListModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private SortedSet<Object> model;
+	private final SortedSet<Object> model;
 
 	public SortedListModel() {
 		model = new TreeSet<Object>();
 	}
-	
+
 	public SortedListModel(Set<Object> values) {
 		model = new TreeSet<Object>();
 		model.addAll(values);
@@ -29,6 +29,10 @@ public class SortedListModel extends AbstractListModel {
 
 	public Object getElementAt(int index) {
 		return model.toArray()[index];
+	}
+
+	public SortedSet<Object> getModel() {
+	    return model;
 	}
 
 	public void add(Object element) {
@@ -68,6 +72,6 @@ public class SortedListModel extends AbstractListModel {
 		if (removed) {
 			fireContentsChanged(this, 0, getSize());
 		}
-		return removed;   
+		return removed;
 	}
 }

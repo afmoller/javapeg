@@ -1,6 +1,8 @@
 package moller.javapeg.program.model;
 
 import moller.javapeg.program.categories.CategoryUtil;
+import moller.javapeg.program.imagerepository.ImageRepositoryContentEceptions;
+import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
 
 public class ModelInstanceLibrary {
 
@@ -12,17 +14,24 @@ public class ModelInstanceLibrary {
 	private final MetaDataTableModel metaDataTableModel;
 	private final PreviewTableModel  previewTableModel;
 	private final SortedListModel    imageRepositoryListModel;
+	private final SortedListModel    addDirectoriesAutomaticallyModel;
+	private final SortedListModel    doNotAddDirectoriesAutomaticallyModel;
 	private final ImagesToViewModel  imagesToViewModel;
-	private CategoriesModel    categoriesModel = null;
+	private CategoriesModel          categoriesModel = null;
 
 	/**
 	 * Private constructor.
 	 */
 	private ModelInstanceLibrary() {
-		metaDataTableModel       = new MetaDataTableModel();
-		previewTableModel        = new PreviewTableModel();
-		imageRepositoryListModel = new SortedListModel();
-		imagesToViewModel        = new ImagesToViewModel();
+		metaDataTableModel                    = new MetaDataTableModel();
+		previewTableModel                     = new PreviewTableModel();
+		imageRepositoryListModel              = new SortedListModel();
+		imagesToViewModel                     = new ImagesToViewModel();
+
+		ImageRepositoryContentEceptions irce = ImageRepositoryUtil.createImageRepositoryModel();
+
+		addDirectoriesAutomaticallyModel = new SortedListModel(irce.getAllwaysAdd());
+	    doNotAddDirectoriesAutomaticallyModel = new SortedListModel(irce.getNeverAdd());
 	}
 
 	/**
@@ -63,4 +72,12 @@ public class ModelInstanceLibrary {
 		}
 		return categoriesModel;
 	}
+
+	public SortedListModel getAddDirectoriesAutomaticallyModel() {
+	    return addDirectoriesAutomaticallyModel;
+    }
+
+	public SortedListModel getDoNotAddDirectoriesAutomaticallyModel() {
+	    return doNotAddDirectoriesAutomaticallyModel;
+    }
 }

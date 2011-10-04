@@ -120,6 +120,13 @@ public class ApplicationContext {
 	private boolean imageMetaDataDataBaseFileLoaded;
 
 	/**
+	 * This boolean keeps track of whether any existing image meta data base
+	 * file in the currently selected directory is writable for the JavaPEG
+	 * application.
+	 */
+    private boolean imageMetaDataDataBaseFileWritable;
+
+	/**
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
@@ -303,4 +310,12 @@ public class ApplicationContext {
 	public boolean isImageMetaDataDataBaseFileLoaded() {
 		return imageMetaDataDataBaseFileLoaded;
 	}
+
+    public void setImageMetaDataDataBaseFileWritable(boolean imageMetaDataDataBaseFileWritable) {
+        this.imageMetaDataDataBaseFileWritable = imageMetaDataDataBaseFileWritable;
+    }
+
+    public boolean isImageMetaDataDataBaseFileWritable() {
+        return imageMetaDataDataBaseFileWritable;
+    }
 }
