@@ -1,8 +1,6 @@
 package moller.util.io;
-/**
- * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         :
- */
+
+import java.io.File;
 
 public class PathUtil {
 
@@ -47,5 +45,58 @@ public class PathUtil {
 		}
 
 		return isValid;
+	}
+
+	public static String getTotalWindowsPathAsString(Object[] pathArray) {
+	    StringBuilder worker = new StringBuilder();
+
+        int index = 0;
+
+        for (Object path : pathArray) {
+            if (index < 2 || index == pathArray.length-1) {
+                worker.append(path.toString());
+            } else{
+                worker.append(path.toString() + File.separator);
+            }
+            index++;
+        }
+        return worker.toString();
+	}
+
+
+	/**
+	 * This method tests whether a path is a child to a reference path.
+	 *
+	 * @param pathToTest is the path to be investigated whether it is a child
+	 *        or not to a reference path.
+	 *
+	 * @param reference is the path against which the pathToTest parameter is
+	 *        compared.
+	 *
+	 * @return a boolean value indicating whether the parameter pathToTest is a
+	 *         child of the parameter reference or not.
+	 */
+	public static boolean isChild(File pathToTest, File reference) {
+	    if (pathToTest.getAbsolutePath().equals(reference.getAbsolutePath())) {
+	        return false;
+	    } else {
+	        return pathToTest.getAbsolutePath().startsWith(reference.getAbsolutePath());
+	    }
+	}
+
+	/**
+     * This method tests whether a path is a parent to a reference path.
+     *
+     * @param pathToTest is the path to be investigated whether it is a parent
+     *        or not to a reference path.
+     *
+     * @param reference is the path against which the pathToTest parameter is
+     *        compared.
+     *
+     * @return a boolean value indicating whether the parameter pathToTest is a
+     *         parent of the parameter reference or not.
+     */
+	public static boolean isParent(File pathToTest, File reference) {
+	    return isChild(reference, pathToTest);
 	}
 }
