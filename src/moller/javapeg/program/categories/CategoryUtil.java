@@ -176,11 +176,13 @@ public class CategoryUtil {
 		OutputStream os = null;
 		boolean displayErrorMessage = false;
 		try {
+		    String encoding = "UTF-8";
+
 			os = new FileOutputStream(categoriesFile);
 			XMLOutputFactory factory = XMLOutputFactory.newInstance();
-			XMLStreamWriter w = factory.createXMLStreamWriter(os, "UTF8");
+			XMLStreamWriter w = factory.createXMLStreamWriter(os, encoding);
 
-			XMLUtil.writeStartDocument("1.0", w);
+			XMLUtil.writeStartDocument(encoding, "1.0", w);
 			XMLUtil.writeComment("This XML file contains the available categories and the logical structure" + C.LS +
 					             "of the categories. The content of this file is used and modified by the" + C.LS +
 					             "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
