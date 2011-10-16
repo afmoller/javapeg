@@ -32,27 +32,29 @@ public class MetaDataRetriever {
 		String cameraMake = tagAndValueMappings.get("0x010f");
 		String cameraModel = tagAndValueMappings.get("0x0110");
 
-		MetaDataCameraAndTagMapping mdcatm = MetaDataCameraAndTagMapping.getInstance();
+		if (cameraMake != null && cameraModel != null) {
+		    MetaDataCameraAndTagMapping mdcatm = MetaDataCameraAndTagMapping.getInstance();
 
-		String fNumberTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.FNUMBER);
-		String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.DATE_TIME_ORIGINAL);
-		String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
-		String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
-		String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_Y_DIMENSION);
-		String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.EXPOSURE_TIME_VALUE);
+	        String fNumberTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.FNUMBER);
+	        String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.DATE_TIME_ORIGINAL);
+	        String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
+	        String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
+	        String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_Y_DIMENSION);
+	        String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.EXPOSURE_TIME_VALUE);
 
-		String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
-		String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
+	        String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
+	        String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
 
-		metaData.setExifFNumber(getDoubleTagValue(tagAndValueMappings, fNumberTag));
-		metaData.setExifCameraModel(cameraModel);
-		metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
-		metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));
-		metaData.setExifPictureHeight(getIntegerTagValue(tagAndValueMappings, pixelYDimensionTag));
-		metaData.setExifPictureWidth(getIntegerTagValue(tagAndValueMappings, pixelXDimensionTag));
-		metaData.setExifExposureTime(getExposureTimeTagValue(tagAndValueMappings, exposureTimeValueTag));
-		metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
-		metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
+	        metaData.setExifFNumber(getDoubleTagValue(tagAndValueMappings, fNumberTag));
+	        metaData.setExifCameraModel(cameraModel);
+	        metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
+	        metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));
+	        metaData.setExifPictureHeight(getIntegerTagValue(tagAndValueMappings, pixelYDimensionTag));
+	        metaData.setExifPictureWidth(getIntegerTagValue(tagAndValueMappings, pixelXDimensionTag));
+	        metaData.setExifExposureTime(getExposureTimeTagValue(tagAndValueMappings, exposureTimeValueTag));
+	        metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
+	        metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
+		}
 	}
 
 	private static int getIntegerTagValue(Map<String, String> tagAndValueMappings, String tag) {
