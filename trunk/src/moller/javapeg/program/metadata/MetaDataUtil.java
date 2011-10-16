@@ -25,7 +25,7 @@ public class MetaDataUtil {
 
 		MetaData md = MetaDataRetriever.getMetaData(jpgFile);
 
-		String noValue = "no value";
+		String noValue = lang.get("common.missing.value");
 
 		if (Config.getInstance().getStringProperty("thumbnails.tooltip.state").equals("2")) {
 			return "<html>" +
