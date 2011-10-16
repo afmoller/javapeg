@@ -109,7 +109,8 @@ public class JPEGUtil {
 				return Arrays.copyOfRange(content, thumbStartIndex, thumbEndIndex);
 			}
 		}
-		throw new IOException("No thumbnail found");
+		// No thumb nail found in image, return null.
+		return null;
 	}
 
 	/**
