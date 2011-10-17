@@ -73,8 +73,21 @@ public class JPEGUtil {
 	 */
 	public static byte[] createThumbNail(File jpegFile, int width, int height, JPEGScaleAlgorithm algorithm) throws IOException {
 
+	    BufferedImage fullsizeImage = ImageIO.read(jpegFile);
+
+	    float fullSizeHeight = fullsizeImage.getHeight();
+	    float fullSizeWidth = fullsizeImage.getWidth();
+
+	    float ratioBetweenHeightAndWidth = fullSizeHeight / fullSizeWidth;
+
+	    if (ratioBetweenHeightAndWidth > 1) {
+	        width = Math.round((height / ratioBetweenHeightAndWidth));
+	    } else {
+	        height = Math.round((width / ratioBetweenHeightAndWidth));
+	    }
+
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		img.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(width, height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
+		img.createGraphics().drawImage(fullsizeImage.getScaledInstance(width, height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
 
 		ByteArrayOutputStream baos = null;
 		try {
