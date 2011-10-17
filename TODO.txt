@@ -1,9 +1,10 @@
 2.5:
 ====
+- Test under other operating system than Windows.
+- Merge repository paths file and path exceptions file.
 - Add help text for tagging images.
 - Add help text for searching images.
 - Test with more images from different cameras.
-- Add exclude lists for the add and not add directories to image repository. 
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
