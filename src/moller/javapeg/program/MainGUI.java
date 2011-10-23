@@ -117,7 +117,6 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqua
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
-import moller.javapeg.program.imagerepository.ImageRepositoryHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
@@ -1632,12 +1631,12 @@ public class MainGUI extends JFrame {
 	}
 
 	public void initiateImageMetaDataContext() {
-		Object [] repositoryPaths = ImageRepositoryHandler.getInstance().load();
+		Set<Object> repositoryPaths = ModelInstanceLibrary.getInstance().getImageRepositoryPaths().getModel();
 
 		if(repositoryPaths != null) {
-			for (int i=0; i<repositoryPaths.length; i++) {
+			for (Object repositoryPath : repositoryPaths) {
 				ImageRepositoryItem iri = new ImageRepositoryItem();
-				String directory = (String)repositoryPaths[i];
+				String directory = (String)repositoryPath;
 
 				iri.setPathStatus(DirectoryUtil.getStatus(directory));
 				iri.setPath(directory);
@@ -1715,12 +1714,8 @@ public class MainGUI extends JFrame {
 		}
 	}
 
-	private void saveRepositoryPaths() {
-		ImageRepositoryHandler.getInstance().store(imageRepositoryListModel.iterator());
-	}
-
-	private void saveRepositoryPathExceptions() {
-	    ImageRepositoryUtil.store();
+	private void saveImageRepository() {
+	    ImageRepositoryUtil.getInstance().store();
 	}
 
 	private void addThumbnail(JButton thumbNail) {
@@ -1762,8 +1757,7 @@ public class MainGUI extends JFrame {
 	private void closeApplication(int exitValue) {
 		if(exitValue == 0) {
 			saveSettings();
-			saveRepositoryPaths();
-			saveRepositoryPathExceptions();
+			saveImageRepository();
 			storeCurrentlySelectedImageData();
 			flushImageMetaDataBaseToDisk();
 		}

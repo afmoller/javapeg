@@ -1,7 +1,7 @@
 2.5:
 ====
+- Fix all TODO items.
 - Test under other operating system than Windows.
-- Merge repository paths file and path exceptions file.
 - Add help text for tagging images.
 - Add help text for searching images.
 - Test with more images from different cameras.

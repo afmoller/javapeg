@@ -1,7 +1,7 @@
 package moller.javapeg.program.model;
 
 import moller.javapeg.program.categories.CategoryUtil;
-import moller.javapeg.program.imagerepository.ImageRepositoryContentEceptions;
+import moller.javapeg.program.imagerepository.ImageRepository;
 import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
 
 public class ModelInstanceLibrary {
@@ -14,6 +14,7 @@ public class ModelInstanceLibrary {
 	private final MetaDataTableModel metaDataTableModel;
 	private final PreviewTableModel  previewTableModel;
 	private final SortedListModel    imageRepositoryListModel;
+	private final SortedListModel    imageRepositoryPaths;
 	private final SortedListModel    addDirectoriesAutomaticallyModel;
 	private final SortedListModel    doNotAddDirectoriesAutomaticallyModel;
 	private final ImagesToViewModel  imagesToViewModel;
@@ -25,13 +26,14 @@ public class ModelInstanceLibrary {
 	private ModelInstanceLibrary() {
 		metaDataTableModel                    = new MetaDataTableModel();
 		previewTableModel                     = new PreviewTableModel();
-		imageRepositoryListModel              = new SortedListModel();
 		imagesToViewModel                     = new ImagesToViewModel();
+		imageRepositoryListModel              = new SortedListModel();
 
-		ImageRepositoryContentEceptions irce = ImageRepositoryUtil.createImageRepositoryModel();
+		ImageRepository ir = ImageRepositoryUtil.getInstance().createImageRepositoryModel();
 
-		addDirectoriesAutomaticallyModel = new SortedListModel(irce.getAllwaysAdd());
-	    doNotAddDirectoriesAutomaticallyModel = new SortedListModel(irce.getNeverAdd());
+		addDirectoriesAutomaticallyModel      = new SortedListModel(ir.getAllwaysAdd());
+	    doNotAddDirectoriesAutomaticallyModel = new SortedListModel(ir.getNeverAdd());
+	    imageRepositoryPaths                  = new SortedListModel(ir.getPaths());
 	}
 
 	/**
@@ -79,5 +81,9 @@ public class ModelInstanceLibrary {
 
 	public SortedListModel getDoNotAddDirectoriesAutomaticallyModel() {
 	    return doNotAddDirectoriesAutomaticallyModel;
+    }
+
+	public SortedListModel getImageRepositoryPaths() {
+        return imageRepositoryPaths;
     }
 }
