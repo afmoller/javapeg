@@ -1,10 +1,10 @@
 2.5:
 ====
-- Fix all TODO items.
-- Test under other operating system than Windows.
-- Add help text for tagging images.
 - Add help text for searching images.
+- Add help text for manageing categories. 
+- Fix all TODO items.
 - Test with more images from different cameras.
+- Test under other operating system than Windows.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
@@ -15,6 +15,7 @@
 
 2.6:
 ====
+- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Make it possible to limit search result in the image search result viewer.
 - Add favorite directories functionality to the directory tree view. 
 - Add http://highslide.com/ functionality to thumbnail overview html. 

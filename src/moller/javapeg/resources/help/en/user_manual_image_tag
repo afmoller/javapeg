@@ -1,1 +1,12 @@
-Tag
+TAG IMAGES<LF>
+==========<LF>
+It is possible to tag images by assign searchable values to them.<LF>
+<LF>
+1:<LF>
+Select the tab TAG IMAGES.<LF>
+<LF>
+2:<LF>
+Select a directory with images that shall be tagged in the tree structure to the left.<LF>
+<LF>
+3:<LF>
+Tag an image by clicking any of the images in the loaded image overview which was loaded in step 2 above. Enter a comment of unrestricted length in the field with the headline COMMENT. It is also possible to assign an image a classification on a scale from 1 to 5. Besides from this it is also possible to assign an unlimited amount of categories to an image.
