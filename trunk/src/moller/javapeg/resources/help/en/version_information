@@ -5,7 +5,7 @@ Below is a description of what each version of JavaPEG has been able to do.
 <LF>
 Version 2.5<LF>
 ===========<LF>
-Released 2011-xx-xx Version 2.5 of JavaPEG has the possibility to organise images in a searchable data base. The data base is decentralized and consists of XML files, which are created in each directory with images. The XML files are created either; automatically when a directory with images is browsed in JavaPEG, or after JavaPEG has asked if the directory shall be added to the image database, or not at all. The adding behavior is configurable in the settigns of JavaPEG. It is possible to assign an image a: comment, a rating and an unlimited amount of categories. Besides from that a selection of Exif information is automaticall stored to the data base. The data base i searchable for all criterias in any combination. 
+Released 2011-xx-xx Version 2.5 of JavaPEG has the possibility to organize images in a searchable data base. The data base is decentralized and consists of XML files, which are created in each directory with images. The XML files are created either; automatically when a directory with images is browsed in JavaPEG, or after JavaPEG has asked if the directory shall be added to the image database, or not at all. The adding behavior is configurable in the settigns of JavaPEG. It is possible to assign an image a: comment, a rating and an unlimited amount of categories. Besides from that a selection of Exif information is automaticall stored to the data base. The data base i searchable for all criterias in any combination. 
 <LF>
 <LF>
 It is possible to rotate images in the image viewer; either manually in steps of 90 degrees, or automatically by rotating the image to correct orientation for displaying it correctly.
