@@ -15,6 +15,7 @@
 
 2.6:
 ====
+- Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Make it possible to limit search result in the image search result viewer.
 - Add favorite directories functionality to the directory tree view. 
