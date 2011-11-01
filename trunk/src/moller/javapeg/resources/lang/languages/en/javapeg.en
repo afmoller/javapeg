@@ -409,7 +409,7 @@ statusbar.message.selectedPath              = Selected Path:
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
 tabbedpane.imageRename = RENAME IMAGES
-tabbedpane.imageView   = VIEW IMAGES
+tabbedpane.imageView   = SEARCH / VIEW IMAGES
 tabbedpane.imageTag    = TAG IMAGES
 
 ##############################################################################################################
@@ -427,7 +427,7 @@ metadata.field.name.YEAR = YEAR
 metadata.field.name.MONTH = MONTH
 metadata.field.name.DAY = DAY
 metadata.field.name.HOUR = HOUR
-metadata.field.name.MINUTE - MINUTE
+metadata.field.name.MINUTE = MINUTE
 metadata.field.name.SECOND = SECOND
 
 ##############################################################################################################
