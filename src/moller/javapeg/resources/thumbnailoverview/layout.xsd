@@ -12,7 +12,7 @@
         
     <xs:complexType name="Row">
         <xs:sequence>
-            <xs:element name="column" type="tns:Column" minOccurs="1" maxOccurs="1"></xs:element>
+            <xs:element name="column" type="tns:Column" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="class"  type="xs:string"  use="optional"/>
     </xs:complexType>
@@ -20,7 +20,7 @@
     <xs:complexType name="Column">
         <xs:sequence>
             <xs:element name="image" type="tns:Image" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="meta"  type="tns:Meta"  minOccurs="1" maxOccurs="1"></xs:element>
+            <xs:element name="meta"  type="tns:Meta"  minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="class"  type="xs:string"  use="optional"/>
         <xs:attribute name="amount" type="xs:integer" use="required"/>
