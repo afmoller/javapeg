@@ -1,7 +1,6 @@
 2.5:
 ====
-- Add help text for searching images.
-- Add help text for manageing categories. 
+- Add help text for managing categories. 
 - Fix all TODO items.
 - Test with more images from different cameras.
 - Test under other operating system than Windows.
