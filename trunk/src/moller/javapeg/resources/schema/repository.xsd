@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/repository" xmlns:rep="http://www.example.org/repository" elementFormDefault="qualified">
+    
+    <xs:element name="repository" type="rep:Repository"/>
+          
+    <xs:complexType name="Repository">
+        <xs:all>
+            <xs:element name="paths" type="rep:Paths" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="exceptions" type="rep:Exceptions" minOccurs="1" maxOccurs="1"/>     
+        </xs:all>   
+    </xs:complexType>    
+        
+    <xs:complexType name="Paths">
+        <xs:all>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Exceptions">
+        <xs:all>
+            <xs:element name="allwaysAdd" type="rep:AllwaysAdd" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="neverAdd" type="rep:NeverAdd" minOccurs="1" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="AllwaysAdd">
+        <xs:all>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
+        </xs:all>
+    </xs:complexType>
+    
+     <xs:complexType name="NeverAdd">
+        <xs:all>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
+        </xs:all>
+    </xs:complexType>
+    
+</xs:schema>
