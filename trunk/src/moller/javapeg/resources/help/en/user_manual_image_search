@@ -1,23 +1,23 @@
-SÖK BILDER<LF>
-==========<LF>
-Det är möjligt att söka fram bilder ur bilddatabasen genom att söka i den meta data som har associerats med de bilder som ingår i bilddatabasen.<LF>
+SEARCH IMAGES<LF>
+=============<LF>
+It is possible the query the image repository for images by searching on meta data associated to images.<LF>
 <LF>
 1:<LF>
-Välj fliken SÖK / VISA BILDER<LF>
+Select the tab SEARCH / VIEW IMAGES<LF>
 <LF>
 2:<LF>
-Det är möjligt att söka efter bilder genom att ange sökkriterier inom fyra olika områden: KATEGORIER, BILDMETADATA, KLASSIFICERING och KOMMENTAR.<LF>
+It is possible to search for images by supplying search criteria within four different areas: CATEGOIRES, IMAGE META DATA, RATING and COMMENT.<LF>
 <LF>
-KATEGORIER: Klicka i de kategorier som skall ingå i sökningen. Det finns två sätt att ställa in kategorisökning på: OCH eller ELLER. I fallet med OCH-sökningen innebär det att de kategorier som anges måste vara tilldelade en och samma bild för att en bild skall hamna bland sökresultaten. ELLER-sökning innebär att någon av de kategorier som valts skall finns tilldelad en bild för att denna bild skall hamna i sökresultatet.<LF>
+CATEGORIES: Select the category / the categories which shall be included in the search. The category search has two search modes: AND or OR. In the case of AND search all selected categories must be set to an image to have that image added to the search result. OR search, makes any image that have any of the selected categories to end up in the search result.<LF>
 <LF>
-BILDMETADATA: Detta är information som hämtats automatiskt ur bilderna meta data information. De värden som är sökbara är de värden som finns lagrade i bilddatabasen för respektive meta data attribut. För varje meta data attribut, förutom för KAMMERAMODELL (som enbart har lika med), så är tre olika sökmetoder tillgängliga: mindre än, lika med och större än. I fallen med mindre än och större än skall ett värde väljas och alla bilder som har värden som är mindre respektive större än det valda värdet kommer att väljas ut och hamna i sökresultatet. För lika med sökning kan flera värden väljas och alla bilder som matchar valen kommer att hamna i sökresultatet.<LF>
+IMAGE META DATA: This is information which is automatically retrieved from the image meta data information. The searchable values are the ones which are stored in the image repository for each meta data attribute. For each meta data attribute, except for CAMERA MODEL (which only have equals to), it is possible to search in three modes: lesser than, equals to and larger than. In the case with lesser than and larger than only one meta data attribute value shall be selected and all images which have a value lesser than respectively larger than the selected value will be added to the search result. For the equal to search it is possible to select multiple values and all images matching any of the selected values will be added to the search result.<LF>
 <LF>
-KLASSIFICERING: Här anges vilka klassificeringar som skall sökas efter. Här är det en eller sökning som sker vilket betyder att bilder som matchar de(n) valda klassificeringarna kommer att hamna i sökresultatet.<LF>
+RATING: Here it is possible to select different ratings to search for. It is an "OR" search that is performed, which means that every image which matches any of the selected ratings will be added to the search result.<LF>
 <LF>
-KOMMENTAR: Ger en möjlighet att söka på angivna bildkommentarer. Sökningen är en "innehåller"-sökning. Vilket innebär att om en bild har kommentaren "En bildkommentar" som kommer ett sökord "bild" ge träff på den bilden.<LF>
+COMMENT: Makes it possible to search on entered image comments. The search is a "contains" search. This means that if an image has the comment "An image comment" the the search phrase "image" will put that image to the search result.<LF>
 <LF>
 <LF>
-De fyra separata sökkriterieområdena fungerar som filtrerande sökningar. Desto fler sökkriterier som anges desto snävare urval blir resultatet föurom för KLASSIFICERING och KATEGORIER (om ELLER läget är aktiverat).<LF>
+The four separate areas of search criteria works as filtering search, which means that the more search criteria that is selected the more narrow the search result will be except for RATING and CATEGORIES (if OR mode is activated).<LF>
 <LF>
 3:<LF>
-Klicka på sök bilder-knappen.
+Click the search image button.
