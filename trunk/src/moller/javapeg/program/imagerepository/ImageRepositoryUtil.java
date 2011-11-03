@@ -11,17 +11,24 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.xml.XMLUtil;
 
@@ -30,6 +37,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class ImageRepositoryUtil {
 
@@ -79,17 +87,71 @@ public class ImageRepositoryUtil {
      * @throws IOException
      * @throws ImageRepositoryContentException
      */
-    private Document parse(File repositoryFile) throws ParserConfigurationException, SAXException, IOException, ImageRepositoryContentException {
+    private Document parse(File repositoryFile) throws ParserConfigurationException, SAXException, IOException {
+
+        String repositorySchemaLocation = "resources/schema/repository.xsd";
+
+        StringBuilder errorMessage = new StringBuilder();
+
+        if (!validateAgainstSchema(repositoryFile, repositorySchemaLocation)) {
+            Logger logger = Logger.getInstance();
+
+
+            errorMessage.append("The repository file is corrupt");
+
+            // Try to make a backup of the existing corrupt repository file...
+            File backupFile = new File(repositoryFile.getParentFile(), "repository.xml.backup");
+            if (FileUtil.copyFile(repositoryFile, backupFile)) {
+//                TODO: Fix hard coded string
+                errorMessage.append("\nThe corrupt repository file was succesfully backed up to the file: " + backupFile.getAbsolutePath());
+            }
+            // ... if it was not possible to make a backup the content of the
+            // corrupted repository file will be put into the log file.
+            else {
+//              TODO: Fix hard coded string
+                errorMessage.append("\nCould not back up the repository file. Content is written to JavaPEG log file");
+
+                logger.logERROR("Could not make backup of repository file: " + repositoryFile.getAbsolutePath() + " content is logged below:");
+                logger.logERROR("Start of repository file content");
+                logger.logERROR("================================");
+
+                for (String rowInFile :  FileUtil.readFromFile(repositoryFile)) {
+                    logger.logERROR(rowInFile);
+                }
+
+                logger.logERROR("==============================");
+                logger.logERROR("End of repository file content");
+            }
+
+            if (FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/repository.xml"), repositoryFile)) {
+//              TODO: Fix hard coded string
+                errorMessage.append("\nRepository file restored to default");
+            } else {
+//              TODO: Fix hard coded string
+                errorMessage.append("\nCould not restore the repository file to default");
+                errorMessage.append("\nPlease add the following content manually to the repository file: " + repositoryFile.getAbsolutePath());
+                errorMessage.append("Content start:");
+//                TODO: Fix content
+                errorMessage.append("Content end:");
+
+                logger.logFATAL("Could not restore corrupted repository file.");
+                System.exit(1);
+            }
+
+//          TODO: Fix hard coded string
+            errorMessage.append("\nSee JavaPEG log file for details");
+        }
+
+        if (errorMessage.length() > 0) {
+//          TODO: Fix hard coded string
+            JOptionPane.showMessageDialog(null, errorMessage.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = dbFactory.newDocumentBuilder();
         Document document = builder.parse(repositoryFile);
         document.normalize();
 
-        NodeList repository = document.getElementsByTagName("repository");
-
-        if (repository.getLength() != 1) {
-            throw new ImageRepositoryContentException("Invalid xml. It is only valid to have  exactly 1 element \"repository\", But there is: " + repository.getLength() + " \"repository\" elements in the file: " + repositoryFile.getAbsolutePath());
-        }
         return document;
     }
 
@@ -118,9 +180,8 @@ public class ImageRepositoryUtil {
                 XMLStreamWriter w = factory.createXMLStreamWriter(os, encoding);
 
                 XMLUtil.writeStartDocument(encoding, "1.0", w);
-//                TODO: Fix correct comment
-                XMLUtil.writeComment("This XML file contains the available categories and the logical structure" + C.LS +
-                        "of the categories. The content of this file is used and modified by the" + C.LS +
+                XMLUtil.writeComment("This XML file contains the definition of an image repository, the content" + C.LS +
+                        "of it and exceptions. The content of this file is used and modified by the" + C.LS +
                         "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
                         "overwritten by the JavaPEG application or corrupt the file if the change is invalid" + C.LS, w);
 
@@ -199,9 +260,6 @@ public class ImageRepositoryUtil {
         } catch (IOException iox) {
             logger.logFATAL("Could not parse the repository file. See stacktrace below for details.");
             logger.logFATAL(iox);
-        } catch (ImageRepositoryContentException cce) {
-            logger.logFATAL("Invalid content in repository file. See stacktrace below for details.");
-            logger.logFATAL(cce);
         }
 
         if (!createRepositoryModelSuccess) {
@@ -213,51 +271,44 @@ public class ImageRepositoryUtil {
         return ir;
     }
 
-    private Set<Object> populateImageRepository(String tagName, Document document) throws ImageRepositoryContentException {
+    private Set<Object> populateImageRepository(String tagName, Document document) {
         Set<Object> paths = new HashSet<Object>();
 
         NodeList tagNameElementAsNodeList = document.getElementsByTagName(tagName);
 
-        if (tagNameElementAsNodeList.getLength() != 1) {
-            throw new ImageRepositoryContentException("Invalid xml. It is only valid to have  exactly 1 element \"" + tagName + "\", But there is: " + tagNameElementAsNodeList.getLength() + " \"" + tagName + "\" elements in the loaded XML document");
-        } else {
-            Node tagNameElement = tagNameElementAsNodeList.item(0);
+        Node tagNameElement = tagNameElementAsNodeList.item(0);
 
-            NodeList pathElements = tagNameElement.getChildNodes();
+        NodeList pathElements = tagNameElement.getChildNodes();
 
-            if (pathElements.getLength() > 0) {
-                for (int i = 0; i < pathElements.getLength(); i++) {
-                    Element path = (Element)pathElements.item(i);
-                    paths.add(new File(path.getTextContent()));
-                    if (tagName.equals("allwaysAdd")) {
-                        allwaysAdd.add(path.getTextContent());
-                    } else {
-                        neverAdd.add(path.getTextContent());
-                    }
+        if (pathElements.getLength() > 0) {
+            for (int i = 0; i < pathElements.getLength(); i++) {
+                Element path = (Element)pathElements.item(i);
+                paths.add(new File(path.getTextContent()));
+
+                if (tagName.equals("allwaysAdd")) {
+                    allwaysAdd.add(path.getTextContent());
+                } else {
+                    neverAdd.add(path.getTextContent());
                 }
             }
         }
         return paths;
     }
 
-    private Set<Object> populateImageRepositoryPaths(String tagName, Document document) throws ImageRepositoryContentException {
+    private Set<Object> populateImageRepositoryPaths(String tagName, Document document) {
         Set<Object> paths = new HashSet<Object>();
 
         NodeList tagNameElementAsNodeList = document.getElementsByTagName(tagName);
 
-        if (tagNameElementAsNodeList.getLength() != 1) {
-            throw new ImageRepositoryContentException("Invalid xml. It is only valid to have  exactly 1 element \"" + tagName + "\", But there is: " + tagNameElementAsNodeList.getLength() + " \"" + tagName + "\" elements in the loaded XML document");
-        } else {
-            Node tagNameElement = tagNameElementAsNodeList.item(0);
+        Node tagNameElement = tagNameElementAsNodeList.item(0);
 
-            NodeList pathElements = tagNameElement.getChildNodes();
+        NodeList pathElements = tagNameElement.getChildNodes();
 
-            if (pathElements.getLength() > 0) {
-                for (int i = 0; i < pathElements.getLength(); i++) {
-                    Element path = (Element)pathElements.item(i);
-                    paths.add(path.getTextContent());
-                    imageRepositoryPaths.add(path.getTextContent());
-                }
+        if (pathElements.getLength() > 0) {
+            for (int i = 0; i < pathElements.getLength(); i++) {
+                Element path = (Element)pathElements.item(i);
+                paths.add(path.getTextContent());
+                imageRepositoryPaths.add(path.getTextContent());
             }
         }
         return paths;
@@ -308,5 +359,32 @@ public class ImageRepositoryUtil {
             }
         }
         return false;
+    }
+
+    private boolean validateAgainstSchema(File repositoryFile, String repositorySchemaLocation) {
+        Logger logger = Logger.getInstance();
+
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+            StreamSource repositorySchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(repositorySchemaLocation));
+            Schema schema = factory.newSchema(repositorySchema);
+
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(repositoryFile));
+            return true;
+        } catch (SAXParseException spex) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(spex);
+            return false;
+        } catch (SAXException sex) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(sex);
+            return false;
+        } catch (IOException iox) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(iox);
+            return false;
+        }
     }
 }
