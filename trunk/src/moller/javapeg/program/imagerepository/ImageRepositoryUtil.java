@@ -89,6 +89,8 @@ public class ImageRepositoryUtil {
      */
     private Document parse(File repositoryFile) throws ParserConfigurationException, SAXException, IOException {
 
+        Language lang = Language.getInstance();
+
         String repositorySchemaLocation = "resources/schema/repository.xsd";
 
         StringBuilder errorMessage = new StringBuilder();
@@ -143,8 +145,7 @@ public class ImageRepositoryUtil {
         }
 
         if (errorMessage.length() > 0) {
-//          TODO: Fix hard coded string
-            JOptionPane.showMessageDialog(null, errorMessage.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, errorMessage.toString(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
         }
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
