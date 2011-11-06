@@ -23,28 +23,28 @@
  layout.xml file for validity, is listed here:
  
  <?xml version="1.0" encoding="UTF-8"?>
- <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/layout" xmlns:tns="http://www.example.org/layout" elementFormDefault="qualified">
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://moller.javapeg.layout.com" xmlns:lay="http://moller.javapeg.layout.com" elementFormDefault="qualified">
     
-     <xs:element name="document" type="tns:Document"/>
+     <xs:element name="document" type="lay:Document"/>
           
      <xs:complexType name="Document">
              <xs:sequence>
                  <xs:element name="documenttitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
-                 <xs:element name="row" type="tns:Row" minOccurs="1" maxOccurs="1"/>    
+                 <xs:element name="row" type="lay:Row" minOccurs="1" maxOccurs="1"/>    
              </xs:sequence>
          </xs:complexType>    
         
      <xs:complexType name="Row">
          <xs:sequence>
-             <xs:element name="column" type="tns:Column" minOccurs="1" maxOccurs="1"></xs:element>
+             <xs:element name="column" type="lay:Column" minOccurs="1" maxOccurs="1"></xs:element>
          </xs:sequence>
          <xs:attribute name="class"  type="xs:string"  use="optional"/>
      </xs:complexType>
     
      <xs:complexType name="Column">
          <xs:sequence>
-             <xs:element name="image" type="tns:Image" minOccurs="1" maxOccurs="1"/>
-             <xs:element name="meta"  type="tns:Meta"  minOccurs="1" maxOccurs="1"></xs:element>
+             <xs:element name="image" type="lay:Image" minOccurs="1" maxOccurs="1"/>
+             <xs:element name="meta"  type="lay:Meta"  minOccurs="1" maxOccurs="1"></xs:element>
          </xs:sequence>
          <xs:attribute name="class"  type="xs:string"  use="optional"/>
          <xs:attribute name="amount" type="xs:integer" use="required"/>
@@ -56,7 +56,7 @@
     
      <xs:complexType name="Meta">
          <xs:sequence>
-             <xs:element name="metaitem" type="tns:MetaItem" minOccurs="0" maxOccurs="unbounded"/>
+             <xs:element name="metaitem" type="lay:MetaItem" minOccurs="0" maxOccurs="unbounded"/>
          </xs:sequence>
          <xs:attribute name="class"  type="xs:string"  use="optional"/>  
      </xs:complexType>
@@ -64,7 +64,7 @@
      <xs:complexType name="MetaItem">
          <xs:attribute name="class" type="xs:string" use="optional"/>
          <xs:attribute name="label" type="xs:string" use="required"/>
-         <xs:attribute name="meta"  type="tns:MetaEnumeration" use="required"/>
+         <xs:attribute name="meta"  type="lay:MetaEnumeration" use="required"/>
      </xs:complexType>
         
      <xs:simpleType name="MetaEnumeration">
@@ -179,7 +179,7 @@
               "apertureValue"
               "fileSize"
   -->
-<document xmlns="http://www.example.org/layout">
+<document xmlns="http://moller.javapeg.layout.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://moller.javapeg.layout.com layout.xsd">
   <documenttitle>Image overview</documenttitle>
   <row class="row">
     <column class="column" amount="5">

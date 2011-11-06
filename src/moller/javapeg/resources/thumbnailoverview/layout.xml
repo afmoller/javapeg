@@ -88,7 +88,7 @@
               "apertureValue"
               "fileSize"
   -->
-<document xmlns="http://www.example.org/layout">
+<document xmlns="http://moller.javapeg.layout.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://moller.javapeg.layout.com layout.xsd">
   <documenttitle>Image overview</documenttitle>
   <row class="row">
     <column class="column" amount="5">
