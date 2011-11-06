@@ -95,6 +95,7 @@ public class ExternalOverviewLayout {
 
 			Validator validator = schema.newValidator();
 			validator.validate(new StreamSource(layoutFile));
+			log.logDEBUG("External layout file: " + System.getProperty("user.dir") + FS + "resources" + FS + "thumb" + FS + "layout.xml was successfully validated according to schema");
 		} catch (SAXException ex) {
 			vs.setValid(false);
 			vs.setStatusMessage(lang.get("validator.externalOverviewLayout.invalidXMLFile"));
