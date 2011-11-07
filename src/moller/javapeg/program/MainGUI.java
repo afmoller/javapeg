@@ -1608,11 +1608,8 @@ public class MainGUI extends JFrame {
 	}
 
 	public void createRightClickMenuDirectoryTree() {
-
-//	    TODO: Fix hard coded string
-	    popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList = new JMenuItem("Add directory to the list of directories to automatically add images to the image respository");
-//	    TODO: Fix hard coded string
-	    popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList = new JMenuItem("Add directory to the list of directories which images shall not be automatically added to the image repository");
+	    popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label"));
+	    popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToNeverAddAutomaticallyList.label"));
 
 	    rightClickMenuDirectoryTree = new JPopupMenu();
 	    rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList);

@@ -782,14 +782,12 @@ public class ConfigViewerGUI extends JFrame {
         imageRepositoriesNeverAddScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         JButton removeSelectedAllwaysAddImagePaths = new JButton();
-//      TODO: Fix hard coded string
-        removeSelectedAllwaysAddImagePaths.setToolTipText("Remove selected path(s)");
+        removeSelectedAllwaysAddImagePaths.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeSelectedPaths"));
         removeSelectedAllwaysAddImagePaths.setName("AllwaysAddImagePaths");
         removeSelectedAllwaysAddImagePaths.addActionListener(new RemoveExceptionPathsListener());
 
         JButton removeSelectedDoNotAllwaysAddImagePaths = new JButton();
-//      TODO: Fix hard coded string
-        removeSelectedDoNotAllwaysAddImagePaths.setToolTipText("Remove selected path(s)");
+        removeSelectedDoNotAllwaysAddImagePaths.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeSelectedPaths"));
         removeSelectedDoNotAllwaysAddImagePaths.setName("DoNotAllwaysAddImagePaths");
         removeSelectedDoNotAllwaysAddImagePaths.addActionListener(new RemoveExceptionPathsListener());
 
@@ -825,13 +823,11 @@ public class ConfigViewerGUI extends JFrame {
 		imageRepositoriesAdditionModePanel.add(doNotAddRadioButton, posImageRepositories.nextRow().expandW());
 
 		imageRepositoriesAdditionModePanel.add(new Gap(10), posImageRepositories.nextRow());
-//		TODO: Fix hard coded string
-		imageRepositoriesAdditionModePanel.add(new JLabel("Allways add images in the following directories automatically:"), posImageRepositories.nextRow());
+		imageRepositoriesAdditionModePanel.add(new JLabel(lang.get("configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label")), posImageRepositories.nextRow());
 		imageRepositoriesAdditionModePanel.add(imageRepositoriesAllwaysAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
 		imageRepositoriesAdditionModePanel.add(removeSelectedAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
 		imageRepositoriesAdditionModePanel.add(new Gap(15), posImageRepositories.nextRow());
-//		TODO: Fix hard coded string
-		imageRepositoriesAdditionModePanel.add(new JLabel("Do never add images in the following directories automatically:"), posImageRepositories.nextRow().nextRow());
+		imageRepositoriesAdditionModePanel.add(new JLabel(lang.get("configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label")), posImageRepositories.nextRow().nextRow());
 		imageRepositoriesAdditionModePanel.add(imageRepositoriesNeverAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
 		imageRepositoriesAdditionModePanel.add(removeSelectedDoNotAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
 

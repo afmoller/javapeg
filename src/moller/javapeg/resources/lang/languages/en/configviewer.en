@@ -13,10 +13,6 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: by Fredrik Möller 2009-09-06
-#                      : by Fredrik Möller 2009-10-04
-
 ##############################################################################################################
 # W I N D O W                                                                                                #
 ##############################################################################################################
@@ -94,6 +90,8 @@ configviewer.tag.categories.warnWhenRemove                          = Warn when 
 configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Warn when removing category with sub categories
 configviewer.tag.categories.label                                   = Categories
 configviewer.tag.imageRepositoriesAdditionMode.label                    = Image Repository Adding
+configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label         = Allways add images in the following directories automatically:
+configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label           = Do never add images in the following directories automatically:
 configviewer.tag.imageRepositoriesContent.label                         = Image Repository Content
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Remove non existing paths
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automatically remove paths from the image repository that does not exist
@@ -104,6 +102,7 @@ configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = The fo
 configviewer.tag.imageRepositories.label.addAutomatically               = Add directory with non added images automatically to image repository
 configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add directory with non added images to image repository 
 configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Do not add directory with non added images to image repository
+configviewer.tag.imageRepositories.label.removeSelectedPaths            = Remove selected path(s)
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
