@@ -99,11 +99,12 @@ public class Language {
 		Config conf = Config.getInstance();
 
 		try {
-			InputStream langFileJavaPEG      = null;
-			InputStream langFileImageViewer  = null;
-			InputStream langFileCommon       = null;
-			InputStream langFileConfigViewer = null;
-			InputStream langFileCategory     = null;
+			InputStream langFileJavaPEG         = null;
+			InputStream langFileImageViewer     = null;
+			InputStream langFileCommon          = null;
+			InputStream langFileConfigViewer    = null;
+			InputStream langFileCategory        = null;
+			InputStream langFileImageRepository = null;
 
 			String languageToLoad = "";
 			String languageCode = "";
@@ -127,11 +128,12 @@ public class Language {
 
 				embeddedFileLoad = true;
 
-				langFileJavaPEG      = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."      + languageCode);
-				langFileImageViewer  = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer."  + languageCode);
-				langFileCommon       = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common."       + languageCode);
-				langFileConfigViewer = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer." + languageCode);
-				langFileCategory     = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/category."     + languageCode);
+				langFileJavaPEG         = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."         + languageCode);
+				langFileImageViewer     = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer."     + languageCode);
+				langFileCommon          = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common."          + languageCode);
+				langFileConfigViewer    = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer."    + languageCode);
+				langFileCategory        = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/category."        + languageCode);
+				langFileImageRepository = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imagerepository." + languageCode);
 
 				if(langFileJavaPEG == null) {
 					logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in JAR file either.");
@@ -171,6 +173,11 @@ public class Language {
 				loader.load(langFileCategory);
 
 				properties.putAll(loader);
+
+				loader.clear();
+                loader.load(langFileImageRepository);
+
+                properties.putAll(loader);
 			}
 
 			loader = null;

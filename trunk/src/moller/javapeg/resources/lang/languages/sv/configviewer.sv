@@ -13,10 +13,6 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-# This file was created: by Fredrik Möller 2009-09-05
-# This file was updated: by Fredrik Möller 2009-09-06
-#                      : by Fredrik Möller 2009-10-04
-
 ##############################################################################################################
 # W I N D O W                                                                                                #
 ##############################################################################################################
@@ -94,6 +90,8 @@ configviewer.tag.categories.warnWhenRemove                          = Varna vid 
 configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Varna vid borttagning av kategori med underkategorier
 configviewer.tag.categories.label                                   = Kategorier
 configviewer.tag.imageRepositoriesAdditionMode.label                    = Bilddatabas Tillägg
+configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label         = Lägg alltid till bilder i följande kataloger automatiskt:
+configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label           = Lägg aldrig till bilder i följande kataloger automatiskt:
 configviewer.tag.imageRepositoriesContent.label                         = Bilddatabas Innehåll 
 configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sökvägar
 configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sökvägar som inte finns från bilddatabasen
@@ -104,6 +102,7 @@ configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = Följan
 configviewer.tag.imageRepositories.label.addAutomatically               = Lägg automatiskt till en katalog med icke tillagda bilder till bilddatabasen
 configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen 
 configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Lägg inte till en katalog med icke tillagda bilder till bilddatabasen
+configviewer.tag.imageRepositories.label.removeSelectedPaths            = Ta bort valda sökvägar
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
