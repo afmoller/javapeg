@@ -30,6 +30,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
+import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
@@ -186,7 +187,12 @@ public class ImageRepositoryUtil {
                         "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
                         "overwritten by the JavaPEG application or corrupt the file if the change is invalid" + C.LS, w);
 
-                XMLUtil.writeElementStart("repository", w);
+                XMLAttribute[] xmlAttributes = new XMLAttribute[3];
+                xmlAttributes[0] = new XMLAttribute("xmlns", "http://moller.javapeg.repository.com");
+                xmlAttributes[1] = new XMLAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                xmlAttributes[2] = new XMLAttribute("xsi:schemaLocation", "http://moller.javapeg.repository.com repository.xsd");
+
+                XMLUtil.writeElementStart("repository", xmlAttributes, w);
                 XMLUtil.writeElementStart("paths", w);
 
                 for (Object imageRepository : imageRepositoryList) {
