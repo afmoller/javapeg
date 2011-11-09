@@ -3,7 +3,9 @@ package moller.util.io;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 
 public class StreamUtil {
 
@@ -49,6 +51,7 @@ public class StreamUtil {
 
 	public static byte[] getByteArray(InputStream in) throws IOException {
 
+//TODO: Fix bad implementation
 		if(null == in) {
 			throw new IOException("InputStream is null");
 		}
@@ -64,4 +67,23 @@ public class StreamUtil {
 		}
 		return content;
 	}
+
+	public static String getString(InputStream is, String charSet) throws IOException {
+	    final char[] buffer = new char[0x10000];
+	    StringBuilder out = new StringBuilder();
+	    Reader reader = new InputStreamReader(is, charSet);
+	    int read;
+
+	    do {
+	      read = reader.read(buffer, 0, buffer.length);
+	      if (read>0) {
+	        out.append(buffer, 0, read);
+	      }
+	    } while (read>=0);
+
+	    return out.toString();
+	}
+
+
+
 }
