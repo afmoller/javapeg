@@ -99,20 +99,18 @@ public class ImageRepositoryUtil {
         if (!validateAgainstSchema(repositoryFile, repositorySchemaLocation)) {
             Logger logger = Logger.getInstance();
 
-
-            errorMessage.append("The repository file is corrupt");
+            errorMessage.append(lang.get("imagerepository.repositoryfile.corrupt.1"));
 
             // Try to make a backup of the existing corrupt repository file...
             File backupFile = new File(repositoryFile.getParentFile(), "repository.xml.backup");
             if (FileUtil.copyFile(repositoryFile, backupFile)) {
-//                TODO: Fix hard coded string
-                errorMessage.append("\nThe corrupt repository file was succesfully backed up to the file: " + backupFile.getAbsolutePath());
+                errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.2") + " " + backupFile.getAbsolutePath());
             }
-            // ... if it was not possible to make a backup the content of the
-            // corrupted repository file will be put into the log file.
+            // ... if it was not possible to make a backup of the content in
+            // the corrupted repository file, the content will be put into the
+            // log file.
             else {
-//              TODO: Fix hard coded string
-                errorMessage.append("\nCould not back up the repository file. Content is written to JavaPEG log file");
+                errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.3"));
 
                 logger.logERROR("Could not make backup of repository file: " + repositoryFile.getAbsolutePath() + " content is logged below:");
                 logger.logERROR("Start of repository file content");
@@ -126,23 +124,33 @@ public class ImageRepositoryUtil {
                 logger.logERROR("End of repository file content");
             }
 
+            // Start the restore process by copying the content of the embedded
+            // default file to the repository file.
             if (FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/repository.xml"), repositoryFile)) {
-//              TODO: Fix hard coded string
-                errorMessage.append("\nRepository file restored to default");
-            } else {
-//              TODO: Fix hard coded string
-                errorMessage.append("\nCould not restore the repository file to default");
-                errorMessage.append("\nPlease add the following content manually to the repository file: " + repositoryFile.getAbsolutePath());
-                errorMessage.append("Content start:");
-//                TODO: Fix content
-                errorMessage.append("Content end:");
+                errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.4"));
+            }
+            // ...if the restoration process was unsuccessful print the content
+            // of the default file in a dialog to the user.
+            else {
+                errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.6") + " " + repositoryFile.getAbsolutePath());
+                errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.7") + "\n\n");
+
+                String content = "";
+
+                try {
+                    content = StreamUtil.getString(StartJavaPEG.class.getResourceAsStream("resources/startup/repository.xml"), "UTF-8");
+                } catch (IOException iox) {
+                    content = lang.get("imagerepository.repositoryfile.corrupt.8");
+                }
+                errorMessage.append(content);
+
+                errorMessage.append("\n\n" + lang.get("imagerepository.repositoryfile.corrupt.9"));
 
                 logger.logFATAL("Could not restore corrupted repository file.");
                 System.exit(1);
             }
 
-//          TODO: Fix hard coded string
-            errorMessage.append("\nSee JavaPEG log file for details");
+            errorMessage.append("\n" + lang.get("imagerepository.repositoryfile.corrupt.10"));
         }
 
         if (errorMessage.length() > 0) {
@@ -233,8 +241,7 @@ public class ImageRepositoryUtil {
 
                 if (displayErrorMessage) {
                     Language lang = Language.getInstance();
-//                    TODO: Fix correct error message
-                    displayErrorMessage(lang.get("category.categoriesModel.store.error"), lang.get("errormessage.maingui.errorMessageLabel"));
+                    displayErrorMessage(lang.get("imagerepository.model.store.error"), lang.get("errormessage.maingui.errorMessageLabel"));
                     System.exit(1);
                 }
             }
@@ -271,8 +278,7 @@ public class ImageRepositoryUtil {
 
         if (!createRepositoryModelSuccess) {
             Language lang = Language.getInstance();
-//            TODO: Fix error messsage to a correct one
-            displayErrorMessage(lang.get("category.categoriesModel.create.error"), lang.get("errormessage.maingui.errorMessageLabel"));
+            displayErrorMessage(lang.get("imagerepository.model.create.error"), lang.get("errormessage.maingui.errorMessageLabel"));
             System.exit(1);
         }
         return ir;

@@ -166,9 +166,9 @@ public class MainGUI extends JFrame {
 
 	private static final long serialVersionUID = 4478711914847747931L;
 
-	private static Config config;
-	private static Logger logger;
-	private static Language lang;
+	private static Config config = Config.getInstance();
+	private static Logger logger = Logger.getInstance();
+	private static Language lang = Language.getInstance();
 
 	private JButton destinationPathButton;
 	private JButton startProcessButton;
@@ -324,14 +324,7 @@ public class MainGUI extends JFrame {
 		}
 		ValidateFileSetup.check();
 
-		config =  Config.getInstance();
-		logger =  Logger.getInstance();
-		lang   =  Language.getInstance();
-
 		logger.logDEBUG("JavaPEG is starting");
-		logger.logDEBUG("Language File Loading Started");
-		this.readLanguageFile();
-		logger.logDEBUG("Language File Loading Finished");
 		this.overrideSwingUIProperties();
 		if(config.getBooleanProperty("updatechecker.enabled")) {
 			logger.logDEBUG("Application Update Check Started");
@@ -423,11 +416,6 @@ public class MainGUI extends JFrame {
 		    JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 		    closeApplication(1);
 		}
-	}
-
-	// Inläsning av språkfil
-	private void readLanguageFile(){
-		lang.loadLanguageFile();
 	}
 
 	private void overrideSwingUIProperties() {
@@ -2255,8 +2243,7 @@ public class MainGUI extends JFrame {
                             // image meta data repository, according to policy
                             // and answer then just do nothing
                             if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(repositoryPath)) {
-//                                TODO: Fix hard coded string
-                                thumbNailsPanelHeading.setIcon("resources/images/db_add.png", "Selected directory is not part of the image repository database");
+                                thumbNailsPanelHeading.setIcon("resources/images/db_add.png", lang.get("imagerepository.directory.not.added"));
                                 thumbNailsPanelHeading.setListener(addSelecetedPathToImageRepository);
                                 return;
                             }
@@ -2296,11 +2283,9 @@ public class MainGUI extends JFrame {
                         ac.setImageMetaDataDataBaseFileWritable(imageMetaDataDataBaseFile.canWrite());
 
                         if (canWrite) {
-//                            TODO: Fix hard coded string
-                            thumbNailsPanelHeading.setIcon("resources/images/db.png", "Selected directory is part of the image repository database");
+                            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
                         } else {
-//                            TODO: Fix hard coded string
-                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", "Selected directory is part of the image repository database, but the database file is write protected");
+                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
                         }
 					}
 				}
@@ -3224,8 +3209,7 @@ public class MainGUI extends JFrame {
             ac.setImageMetaDataDataBaseFileLoaded(result);
             ac.setImageMetaDataDataBaseFileWritable(true);
 
-//            TODO: Fix hard coded string
-            thumbNailsPanelHeading.setIcon("resources/images/db.png", "Selected directory is part of the image repository database");
+            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
             thumbNailsPanelHeading.removeListeners();
         }
 	}
