@@ -64,6 +64,7 @@ public class Language {
 		logger = Logger.getInstance();
 
 		listEmbeddedLanguages();
+		loadLanguageFile();
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class Language {
 	 * @return if neither the desired language file exists nor the default
 	 *         file then this method return false, otherwise true.
 	 */
-	public boolean loadLanguageFile() {
+	private boolean loadLanguageFile() {
 
 		Config conf = Config.getInstance();
 
