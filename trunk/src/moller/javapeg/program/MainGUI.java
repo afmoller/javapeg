@@ -2193,8 +2193,13 @@ public class MainGUI extends JFrame {
 		                popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
 		                rightClickMenuDirectoryTree.show(e.getComponent(), e.getX(), e.getY());
 		            } else {
-//		                TODO: Fix some message to user
-		                System.out.println("!allwaysAdd && !neverAdd && !isParent = " + !allwaysAdd + " " + !neverAdd + " " + !isParent );
+		                if (allwaysAdd) {
+		                    displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.allways.add"));
+		                } else if (neverAdd) {
+		                    displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.never.add"));
+		                } else {
+		                    displayInformationMessage(lang.get("imagerepository.directory.is.parent.to.already.added.directory"));
+		                }
 		            }
 		        }
 		    } else {
