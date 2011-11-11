@@ -1,6 +1,5 @@
 2.5:
 ====
-- Fix all TODO items.
 - Test with more images from different cameras.
 - Test under other operating system than Windows.
 - Test all functionality.
