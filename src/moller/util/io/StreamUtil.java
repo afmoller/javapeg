@@ -1,5 +1,6 @@
 package moller.util.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,22 +51,18 @@ public class StreamUtil {
 	}
 
 	public static byte[] getByteArray(InputStream in) throws IOException {
+	    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-//TODO: Fix bad implementation
-		if(null == in) {
-			throw new IOException("InputStream is null");
-		}
+	    int nRead;
+	    byte[] data = new byte[16384];
 
-		int length = in.available();
+	    while ((nRead = in.read(data, 0, data.length)) != -1) {
+	      buffer.write(data, 0, nRead);
+	    }
 
-		byte [] content = new byte [length];
+	    buffer.flush();
 
-		int readLength = in.read(content);
-
-		if (readLength < length) {
-			throw new IOException("Entire stream not read. " + readLength + " bytes read of " + length + " bytes available");
-		}
-		return content;
+	    return buffer.toByteArray();
 	}
 
 	public static String getString(InputStream is, String charSet) throws IOException {
@@ -83,7 +80,4 @@ public class StreamUtil {
 
 	    return out.toString();
 	}
-
-
-
 }
