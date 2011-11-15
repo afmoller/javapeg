@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Compile and build java classes plus jar archives">
 	
-	<property name="ver" value="2.4" />
+	<property name="ver" value="3.0" />
 		
 	<property name="jar.name.javapeg"     value="JavaPEG.jar" />
 	<property name="jar.name.util"        value="Util.jar" />
@@ -36,45 +36,53 @@
 		<copy todir="build" overwrite="true">
 			<fileset dir="src">
 				<include name="**/*.gif" />
+				<include name="**/*.png" />
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
+				<include name="**/category.en" />
 				<include name="**/common.en" />
 				<include name="**/configviewer.en" />
+				<include name="**/imagerepository.en" />
 				<include name="**/imageviewer.en" />
 				<include name="**/javapeg.en" />
-				<include name="**/common.es" />
-				<include name="**/configviewer.es" />
-				<include name="**/imageviewer.es" />
-				<include name="**/javapeg.es" />
+				<include name="**/category.sv" />
 				<include name="**/common.sv" />
 				<include name="**/configviewer.sv" />
+				<include name="**/imagerepository.sv" />
 				<include name="**/imageviewer.sv" />
 				<include name="**/javapeg.sv" />
 				<include name="**/layout.xml" />
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
+				<include name="**/repository.xsd" />
+				<include name="**/categories.xml" />
 				<include name="**/conf.xml" />
 				<include name="**/help.info" />
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
+				<include name="**/repository.xml" />
 				<include name="**/style.info" />
+				<include name="**/configuration_language" />
+				<include name="**/configuration_logging" />
+				<include name="**/configuration_rename" />
+				<include name="**/configuration_tag" />
+				<include name="**/configuration_thumbnail" />
+				<include name="**/configuration_updates" />
 				<include name="**/references" />
 				<include name="**/thumbnail_overview" />
-				<include name="**/user_manual_viewimages" />
+				<include name="**/user_manual_image_search" />
+				<include name="**/user_manual_image_tag" />
 				<include name="**/user_manual_imageviewer" />
 				<include name="**/user_manual_overview" />
 				<include name="**/user_manual_rename" />
+				<include name="**/user_manual_viewimages" />
 				<include name="**/version_information" />
-				<include name="**/configuration_logging" />
-				<include name="**/configuration_updates" />
-				<include name="**/configuration_rename" />
-				<include name="**/configuration_language" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="create_jar_javapeg" depends="build">
-		<delete file="${jar.name.javapeg}" />
+		<delete file="${jar.name.javapeg}" failonerror="yes" />
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
@@ -89,7 +97,7 @@
 	</target>
 		
 	<target name="create_jar_util" depends="build">
-        <delete file="lib/${jar.name.util}" />
+        <delete file="lib/${jar.name.util}" failonerror="no" />
         <jar destfile="lib/${jar.name.util}" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Class-Path" value="." />
