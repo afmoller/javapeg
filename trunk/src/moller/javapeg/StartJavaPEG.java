@@ -1,19 +1,31 @@
 package moller.javapeg;
-/**
- * This class was created : 2009-02-25 by Fredrik Möller
- * Latest changed         : 2009-09-03 by Fredrik Möller
- */
+
+import javax.swing.JOptionPane;
 
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
 import moller.javapeg.program.MainGUI;
+import moller.util.os.OsUtil;
 
 public class StartJavaPEG {
-	
+
 	public static void main (String [] args){
-	
 		ApplicationUncaughtExceptionHandler.registerExceptionHandler();
-						
-		MainGUI mainGUI = new MainGUI();
-		mainGUI.setVisible(true);
+
+		boolean supportedOS = false;
+
+		String osName = OsUtil.getOsName();
+
+		if (osName.toLowerCase().contains("windows")) {
+		    supportedOS = true;
+		} else if (osName.toLowerCase().contains("linux")) {
+		    supportedOS = true;
+		}
+
+		if (supportedOS) {
+		    MainGUI mainGUI = new MainGUI();
+            mainGUI.setVisible(true);
+		} else {
+		    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows\nLinux", "Error", JOptionPane.ERROR_MESSAGE);
+        }
 	}
 }
