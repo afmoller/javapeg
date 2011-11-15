@@ -50,7 +50,7 @@
         startMenu="no"
         startup="no"
         target="java"
-        commandLine="-jar -Xms64m -Xmx384m $INSTALL_PATH\JavaPEG.jar"
+        commandLine="-jar -Xms64m -Xmx384m $INSTALL_PATH/JavaPEG.jar"
         iconFile="$INSTALL_PATH/javapeg.ico"
         workingDirectory="$INSTALL_PATH"
         description="This starts the program JavaPEG @ver@"
