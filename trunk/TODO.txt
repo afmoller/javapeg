@@ -1,5 +1,6 @@
-2.5:
+3.0:
 ====
+- Add support for Linux
 - Test with more images from different cameras.
 - Test under other operating system than Windows.
 - Test all functionality.
@@ -10,7 +11,7 @@
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
-2.6:
+3.1:
 ====
 - Add validation of conf.xml at application start
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
@@ -33,7 +34,7 @@
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
 
-2.x:
+3.x:
 ====
 - Add backup functionality of image repositories.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
