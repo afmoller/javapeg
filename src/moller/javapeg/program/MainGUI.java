@@ -166,9 +166,9 @@ public class MainGUI extends JFrame {
 
 	private static final long serialVersionUID = 4478711914847747931L;
 
-	private static Config config = Config.getInstance();
-	private static Logger logger = Logger.getInstance();
-	private static Language lang = Language.getInstance();
+	private static Config config;
+	private static Logger logger;
+	private static Language lang;
 
 	private JButton destinationPathButton;
 	private JButton startProcessButton;
@@ -295,8 +295,8 @@ public class MainGUI extends JFrame {
 
 	private ThumbNailListener thumbNailListener;
 
-	private final DefaultListModel imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
-	private final SortedListModel imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
+	private final DefaultListModel imagesToViewListModel;
+	private final SortedListModel imageRepositoryListModel;
 
 	private JList imagesToViewList;
 
@@ -322,7 +322,15 @@ public class MainGUI extends JFrame {
 		if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
 			JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
 		}
+
 		ValidateFileSetup.check();
+
+		logger = Logger.getInstance();
+		config = Config.getInstance();
+		lang = Language.getInstance();
+
+		imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
+		imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
 		logger.logDEBUG("JavaPEG is starting");
 		this.overrideSwingUIProperties();
