@@ -14,17 +14,20 @@ public class ValidateFileSetup {
 
 		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
 
-		File configFile          = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
-		File repositoryFile      = new File(javaPEGuserHome, "config" + C.FS + "repository.xml");
 		File logDirectory        = new File(javaPEGuserHome, "logs");
-		File helpInfo            = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
-		File languageInfo        = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
-		File layoutInfo          = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
-		File styleInfo           = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
+		File configFile     = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
+		File categoriesFile = new File(javaPEGuserHome, "config" + C.FS + "categories.xml");
+		File repositoryFile = new File(javaPEGuserHome, "config" + C.FS + "repository.xml");
+		File helpInfo       = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
+		File languageInfo   = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
+		File layoutInfo     = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
+		File styleInfo      = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
 
-		checkFileObject(configFile);
-		checkFileObject(repositoryFile);
+
 		checkFileObject(logDirectory);
+		checkFileObject(configFile);
+		checkFileObject(categoriesFile);
+		checkFileObject(repositoryFile);
 		checkFileObject(helpInfo);
 		checkFileObject(languageInfo);
 		checkFileObject(layoutInfo);
@@ -60,17 +63,27 @@ public class ValidateFileSetup {
 						logger.logDEBUG("Directory: " + parent.getAbsolutePath() + " has been created");
 					}
 				}
-				if(!createFile(fileToCheck)) {
-					if (log(fileNameToCheck)) {
-						logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
-						logger.flush();
-					}
-					System.exit(1);
-				} else {
-					if (log(fileNameToCheck)) {
-						logger.logDEBUG("File: " + fileToCheck.getAbsolutePath() + " has been created");
-					}
-				}
+				if (fileNameToCheck.equals("logs")) {
+                    if(!fileToCheck.mkdir()) {
+                        System.exit(1);
+                    } else {
+                        if (log(fileNameToCheck)) {
+                            logger.logDEBUG("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
+                        }
+                    }
+                } else {
+                    if(!createFile(fileToCheck)) {
+                        if (log(fileNameToCheck)) {
+                            logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
+                            logger.flush();
+                        }
+                        System.exit(1);
+                    } else {
+                        if (log(fileNameToCheck)) {
+                            logger.logDEBUG("File: " + fileToCheck.getAbsolutePath() + " has been created");
+                        }
+                    }
+                }
 			} else {
 				if (fileNameToCheck.equals("logs")) {
 					if(!fileToCheck.mkdir()) {
@@ -102,17 +115,18 @@ public class ValidateFileSetup {
 		if(!FileUtil.createFile(fileToCreate)) {
 			return false;
 		}
+
 		try {
-			FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
+		    FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
 		} catch (IOException e) {
-			if (log(fileToCreate.getName())) {
-				Logger logger = Logger.getInstance();
-				logger.logFATAL("Could not write to file: " + fileToCreate);
-				for(StackTraceElement element : e.getStackTrace()) {
-					logger.logFATAL(element.toString());
-				}
-			}
-			return false;
+		    if (log(fileToCreate.getName())) {
+		        Logger logger = Logger.getInstance();
+		        logger.logFATAL("Could not write to file: " + fileToCreate);
+		        for(StackTraceElement element : e.getStackTrace()) {
+		            logger.logFATAL(element.toString());
+		        }
+		    }
+		    return false;
 		}
 		return true;
 	}
