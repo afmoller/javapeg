@@ -10,7 +10,7 @@
     <!-- The info section -->
     <info>
         <appname>JavaPEG</appname>
-        <appversion>2.4</appversion>
+        <appversion>3.0</appversion>
         <authors>
             <author email="" name="Fredrik Möller"/>
         </authors>
