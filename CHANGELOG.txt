@@ -42,9 +42,10 @@
    in the tooltip in earlier versions of JavaPEG.
  
  + Added the possibility to copy image(s) to system clipboard. It is either
-   possible to copy one image to clipboard via popup menu or to copy a list of
-   images at once, by populating an image list in the VIEW IMAGES tab and click
-   on the copy image list to system clipboard button. 
+   possible to copy one image to clipboard or all images in a selected directory
+   via popup menu or to copy a list of images at once, by populating an image 
+   list in the SEARCH / VIEW IMAGES tab and click on the copy image list to 
+   system clipboard button. 
  
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds
    corrupt information about where the thumbnail is stored and JavaPEG does not

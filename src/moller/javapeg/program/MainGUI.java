@@ -28,6 +28,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -214,6 +215,9 @@ public class MainGUI extends JFrame {
 	private JMenuItem popupMenuCopyImageToClipBoardRename;
 	private JMenuItem popupMenuCopyImageToClipBoardView;
 	private JMenuItem popupMenuCopyImageToClipBoardTag;
+	private JMenuItem popupMenuCopyAllImagesToClipBoardRename;
+	private JMenuItem popupMenuCopyAllImagesToClipBoardView;
+	private JMenuItem popupMenuCopyAllImagesToClipBoardTag;
 	private JMenuItem popupMenuAddImagePathToImageRepositoryRename;
 	private JMenuItem popupMenuAddImagePathToImageRepositoryView;
 	private JMenuItem popupMenuAddImagePathToImageRepositoryTag;
@@ -1534,6 +1538,9 @@ public class MainGUI extends JFrame {
 		popupMenuCopyImageToClipBoardRename.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuCopyImageToClipBoardView.addActionListener(new CopyImageToSystemClipBoard());
 		popupMenuCopyImageToClipBoardTag.addActionListener(new CopyImageToSystemClipBoard());
+		popupMenuCopyAllImagesToClipBoardRename.addActionListener(new CopyAllImagesToSystemClipBoard());
+		popupMenuCopyAllImagesToClipBoardView.addActionListener(new CopyAllImagesToSystemClipBoard());
+		popupMenuCopyAllImagesToClipBoardTag.addActionListener(new CopyAllImagesToSystemClipBoard());
 		popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
 		popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
 		popupMenuAddCategory.addActionListener(new AddCategory());
@@ -1569,15 +1576,20 @@ public class MainGUI extends JFrame {
 	    popupMenuAddImagePathToImageRepositoryRename = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
 	    popupMenuRemoveImagePathFromImageRepositoryRename = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
 	    popupMenuCopyImageToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+	    popupMenuCopyAllImagesToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
+
 
 		rightClickMenuRename = new JPopupMenu();
 		rightClickMenuRename.add(popupMenuAddImagePathToImageRepositoryRename);
 		rightClickMenuRename.add(popupMenuRemoveImagePathFromImageRepositoryRename);
 		rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
+		rightClickMenuRename.add(popupMenuCopyAllImagesToClipBoardRename);
+
 	}
 
 	public void createRightClickMenuView(){
 		popupMenuCopyImageToClipBoardView = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+		popupMenuCopyAllImagesToClipBoardView = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
 		popupMenuAddImagePathToImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
 		popupMenuRemoveImagePathFromImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
@@ -1587,6 +1599,7 @@ public class MainGUI extends JFrame {
 		rightClickMenuView.add(popupMenuAddImagePathToImageRepositoryView);
 		rightClickMenuView.add(popupMenuRemoveImagePathFromImageRepositoryView);
 		rightClickMenuView.add(popupMenuCopyImageToClipBoardView);
+		rightClickMenuView.add(popupMenuCopyAllImagesToClipBoardView);
 		rightClickMenuView.addSeparator();
 		rightClickMenuView.add(popupMenuAddImageToViewList);
 		rightClickMenuView.add(popupMenuAddAllImagesToViewList);
@@ -1596,11 +1609,13 @@ public class MainGUI extends JFrame {
 		popupMenuAddImagePathToImageRepositoryTag = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
 		popupMenuRemoveImagePathFromImageRepositoryTag = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
 		popupMenuCopyImageToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+		popupMenuCopyAllImagesToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
 
 		rightClickMenuTag = new JPopupMenu();
 		rightClickMenuTag.add(popupMenuAddImagePathToImageRepositoryTag);
 		rightClickMenuTag.add(popupMenuRemoveImagePathFromImageRepositoryTag);
 		rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
+		rightClickMenuTag.add(popupMenuCopyAllImagesToClipBoardTag);
 	}
 
 	public void createRightClickMenuDirectoryTree() {
@@ -2242,6 +2257,11 @@ public class MainGUI extends JFrame {
 					setRatingCommentAndCategoryEnabled(false);
 
 					if (nrOfJPEGFilesInRepositoryPath > 0) {
+					    // Reset the flag indicating that an image mete data
+					    // base file has been loaded to no loaded, since we are
+					    // in the scope of potentially loading a new one.
+					    ac.setImageMetaDataDataBaseFileLoaded(false);
+
 					    // Load thumb nails for all JPEG images that exists in the
                         // selected path.
                         loadThumbNails(repositoryPath);
@@ -2850,6 +2870,17 @@ public class MainGUI extends JFrame {
 			FileSelection fileSelection = new FileSelection(selectedFiles);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
 		}
+	}
+
+	private class CopyAllImagesToSystemClipBoard implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+           Collection<File> jPEGFiles = FileRetriever.getInstance().getJPEGFiles();
+
+           if (jPEGFiles.size() > 0) {
+               FileSelection fileSelection = new FileSelection(new ArrayList<File>(jPEGFiles));
+               Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+           }
+        }
 	}
 
 	private class AddAllImagesToViewList implements ActionListener {
