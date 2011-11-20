@@ -129,4 +129,8 @@
     <native type="izpack" name="ShellLink.dll"/>
     <native type="izpack" name="ShellLink_x64.dll"/>
     
+    <installerrequirements>
+        <installerrequirement condition="izpack.windowsinstall" message="This installer could only be run on Windows operating systems."/>
+    </installerrequirements>
+    
 </installation>
