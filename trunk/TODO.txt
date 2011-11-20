@@ -1,8 +1,6 @@
 3.0:
 ====
-- Add support for Linux
 - Test with more images from different cameras.
-- Test under other operating system than Windows.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
@@ -13,6 +11,7 @@
 
 3.1:
 ====
+- Add support for Linux
 - Add validation of conf.xml at application start
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
