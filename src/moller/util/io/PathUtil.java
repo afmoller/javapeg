@@ -63,7 +63,6 @@ public class PathUtil {
         return worker.toString();
 	}
 
-
 	/**
 	 * This method tests whether a path is a child to a reference path.
 	 *
