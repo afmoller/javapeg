@@ -17,15 +17,13 @@ public class StartJavaPEG {
 
 		if (osName.toLowerCase().contains("windows")) {
 		    supportedOS = true;
-		} else if (osName.toLowerCase().contains("linux")) {
-		    supportedOS = true;
 		}
 
 		if (supportedOS) {
 		    MainGUI mainGUI = new MainGUI();
             mainGUI.setVisible(true);
 		} else {
-		    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows\nLinux", "Error", JOptionPane.ERROR_MESSAGE);
+		    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows", "Error", JOptionPane.ERROR_MESSAGE);
         }
 	}
 }
