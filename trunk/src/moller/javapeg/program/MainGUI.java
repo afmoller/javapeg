@@ -2240,23 +2240,23 @@ public class MainGUI extends JFrame {
 
 					File repositoryPath = new File(totalPath);
 
-					int nrOfJPEGFilesInRepositoryPath = -1;
+					boolean repositoryPathContainsJPEGFiles = false;
 
 					try {
-						nrOfJPEGFilesInRepositoryPath = JPEGUtil.getJPEGFiles(repositoryPath).size();
+					    repositoryPathContainsJPEGFiles = JPEGUtil.containsJPEGFiles(repositoryPath);
 					} catch (FileNotFoundException fnfex) {
-						nrOfJPEGFilesInRepositoryPath = 0;
+					    repositoryPathContainsJPEGFiles = false;
 						logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
 						logger.logDEBUG(fnfex);
 					} catch (IOException ioex) {
-						nrOfJPEGFilesInRepositoryPath = 0;
+					    repositoryPathContainsJPEGFiles = false;
 						logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
 						logger.logDEBUG(ioex);
 					}
 
 					setRatingCommentAndCategoryEnabled(false);
 
-					if (nrOfJPEGFilesInRepositoryPath > 0) {
+					if (repositoryPathContainsJPEGFiles) {
 					    // Reset the flag indicating that an image mete data
 					    // base file has been loaded to no loaded, since we are
 					    // in the scope of potentially loading a new one.
@@ -3284,97 +3284,99 @@ public class MainGUI extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent e){
-			TreePath selectedPath = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
+			if (ApplicationContext.getInstance().isImageMetaDataDataBaseFileLoaded()) {
+			    TreePath selectedPath = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
 
-			if(e.isPopupTrigger()) {
-				String collapseCategory = "";
-				String expandCategory = "";
-				String addCategory = "";
-				String renameCategory = "";
-				String removeCategory = "";
+			    if(e.isPopupTrigger()) {
+			        String collapseCategory = "";
+			        String expandCategory = "";
+			        String addCategory = "";
+			        String renameCategory = "";
+			        String removeCategory = "";
 
-				DefaultMutableTreeNode treeNode = null;
+			        DefaultMutableTreeNode treeNode = null;
 
-				// Should the category be added at the top level...
-				if (selectedPath == null) {
-					addCategory = lang.get("findimage.categories.addNewTopLevelCategory");
-					collapseCategory = lang.get("findimage.categories.collapseTopLevelCategories");
-					expandCategory = lang.get("findimage.categories.expandTopLevelCategories");
-		        // ... or as a sub category of an existing category
-				} else {
-					treeNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
-					String value = ((CategoryUserObject)treeNode.getUserObject()).getName();
-					collapseCategory = lang.get("findimage.categories.collapseCategory") + " " + value;
-					expandCategory = lang.get("findimage.categories.expandCategory") + " " + value;
-					addCategory = lang.get("findimage.categories.addNewSubCategoryToCategory") + " " + value;
-					renameCategory = lang.get("findimage.categories.renameSelectedCategory") + " " + value;
-					removeCategory = lang.get("findimage.categories.removeSelectedCategory") + " " + value;
-				}
+			        // Should the category be added at the top level...
+			        if (selectedPath == null) {
+			            addCategory = lang.get("findimage.categories.addNewTopLevelCategory");
+			            collapseCategory = lang.get("findimage.categories.collapseTopLevelCategories");
+			            expandCategory = lang.get("findimage.categories.expandTopLevelCategories");
+			            // ... or as a sub category of an existing category
+			        } else {
+			            treeNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+			            String value = ((CategoryUserObject)treeNode.getUserObject()).getName();
+			            collapseCategory = lang.get("findimage.categories.collapseCategory") + " " + value;
+			            expandCategory = lang.get("findimage.categories.expandCategory") + " " + value;
+			            addCategory = lang.get("findimage.categories.addNewSubCategoryToCategory") + " " + value;
+			            renameCategory = lang.get("findimage.categories.renameSelectedCategory") + " " + value;
+			            removeCategory = lang.get("findimage.categories.removeSelectedCategory") + " " + value;
+			        }
 
-				popupMenuAddCategory.setText(addCategory);
-				popupMenuRenameCategory.setText(renameCategory);
-				popupMenuRemoveCategory.setText(removeCategory);
+			        popupMenuAddCategory.setText(addCategory);
+			        popupMenuRenameCategory.setText(renameCategory);
+			        popupMenuRemoveCategory.setText(removeCategory);
 
-				popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
-				popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
+			        popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
+			        popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 
-				JTree categoryTree = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
+			        JTree categoryTree = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
 
-				/**
-				 * If no category has been selected.
-				 */
-				if (selectedPath == null) {
-					DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel().getRoot();
+			        /**
+			         * If no category has been selected.
+			         */
+			        if (selectedPath == null) {
+			            DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel().getRoot();
 
-					int nrOfChildren = root.getChildCount();
-					boolean someChildIsExpanded = false;
-					boolean someChildCanBeExpanded = false;
+			            int nrOfChildren = root.getChildCount();
+			            boolean someChildIsExpanded = false;
+			            boolean someChildCanBeExpanded = false;
 
-					if (nrOfChildren > 0) {
-						for (int i = 0; i < nrOfChildren; i++) {
-							DefaultMutableTreeNode child = (DefaultMutableTreeNode)root.getChildAt(i);
+			            if (nrOfChildren > 0) {
+			                for (int i = 0; i < nrOfChildren; i++) {
+			                    DefaultMutableTreeNode child = (DefaultMutableTreeNode)root.getChildAt(i);
 
-							boolean currentChildIsExpanded = categoryTree.isExpanded(new TreePath(child.getPath()));
+			                    boolean currentChildIsExpanded = categoryTree.isExpanded(new TreePath(child.getPath()));
 
-							if (!someChildIsExpanded) {
-								someChildIsExpanded = currentChildIsExpanded;
-							}
-							if (!someChildCanBeExpanded && child.getChildCount() > 0 && !currentChildIsExpanded) {
-								someChildCanBeExpanded = true;
-							}
-						}
+			                    if (!someChildIsExpanded) {
+			                        someChildIsExpanded = currentChildIsExpanded;
+			                    }
+			                    if (!someChildCanBeExpanded && child.getChildCount() > 0 && !currentChildIsExpanded) {
+			                        someChildCanBeExpanded = true;
+			                    }
+			                }
 
-						if (someChildCanBeExpanded && someChildIsExpanded ) {
-							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE);
-						} else if (someChildCanBeExpanded && !someChildIsExpanded) {
-							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_COLLAPSE);
-						} else if (!someChildCanBeExpanded && !someChildIsExpanded) {
-							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
-						} else if (!someChildCanBeExpanded && someChildIsExpanded) {
-							this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND);
-						}
-					} else {
-						this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
-					}
-				}
-				/**
-				 * If a category has been selected
-				 */
-				else {
-					if (treeNode.getChildCount() > 0) {
-						if (categoryTree.isExpanded(selectedPath)) {
-							this.createMenu(CategoryMenyType.NO_EXPAND);
-						} else {
-							this.createMenu(CategoryMenyType.NO_COLLAPSE);
-						}
-					} else {
-						this.createMenu(CategoryMenyType.NO_EXPAND_COLLAPSE);
-					}
-				}
+			                if (someChildCanBeExpanded && someChildIsExpanded ) {
+			                    this.createMenu(CategoryMenyType.NO_RENAME_REMOVE);
+			                } else if (someChildCanBeExpanded && !someChildIsExpanded) {
+			                    this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_COLLAPSE);
+			                } else if (!someChildCanBeExpanded && !someChildIsExpanded) {
+			                    this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
+			                } else if (!someChildCanBeExpanded && someChildIsExpanded) {
+			                    this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND);
+			                }
+			            } else {
+			                this.createMenu(CategoryMenyType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
+			            }
+			        }
+			        /**
+			         * If a category has been selected
+			         */
+			        else {
+			            if (treeNode.getChildCount() > 0) {
+			                if (categoryTree.isExpanded(selectedPath)) {
+			                    this.createMenu(CategoryMenyType.NO_EXPAND);
+			                } else {
+			                    this.createMenu(CategoryMenyType.NO_COLLAPSE);
+			                }
+			            } else {
+			                this.createMenu(CategoryMenyType.NO_EXPAND_COLLAPSE);
+			            }
+			        }
 
-				ApplicationContext.getInstance().setSelectedCategoryPath(selectedPath);
+			        ApplicationContext.getInstance().setSelectedCategoryPath(selectedPath);
 
-				rightClickMenuCategories.show(e.getComponent(),e.getX(), e.getY());
+			        rightClickMenuCategories.show(e.getComponent(),e.getX(), e.getY());
+			    }
 			}
 		}
 

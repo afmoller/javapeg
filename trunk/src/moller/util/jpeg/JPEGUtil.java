@@ -160,6 +160,48 @@ public class JPEGUtil {
 		return jpegFiles;
 	}
 
+
+	/**
+	 * This method returns a boolean value indicating whether a directory
+	 * contains JPEG files or not.
+	 *
+	 * @param directory is the directory to search for JPEG files
+	 *
+	 * @return a boolean value indicating whether there is JPEG files in the
+	 *         directory specified by the directory parameter.
+	 *
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static boolean containsJPEGFiles(File directory) throws FileNotFoundException, IOException {
+	    File[] files = directory.listFiles();
+	    List<File> potentialJPEGFiles = new ArrayList<File>();
+	    List<File> otherFiles = new ArrayList<File>();
+
+
+	    for (File file : files) {
+	        if (file.getName().toLowerCase().contains("jpg") || file.getName().toLowerCase().contains("jpeg")) {
+	            potentialJPEGFiles.add(file);
+	        } else {
+	            otherFiles.add(file);
+	        }
+	    }
+
+	    for(File file : potentialJPEGFiles) {
+            if(isJPEG(file)){
+                return true;
+            }
+        }
+
+	    for(File file : otherFiles) {
+            if(isJPEG(file)){
+                return true;
+            }
+        }
+
+        return false;
+	}
+
 	/**
 	 * @param data
 	 * @return
