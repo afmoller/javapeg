@@ -11,19 +11,20 @@
 
 3.1:
 ====
-- Add support for Linux
-- Add validation of conf.xml at application start
+- Add support for multiple users on the same image repository and categroy files.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
+- Add merge functionality from several source directories. in the "rename image" mode.
+- Add possibility to save multiple rename templates
+- Add slide show functionality to Image Viewer.
+- Add validation of conf.xml at application start
+- Add functionality that keeps track if a configuration change requires a restart or not to take effect.
+- Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
+- Add support for Linux
 - Make it possible to limit search result in the image search result viewer.
 - Add favorite directories functionality to the directory tree view. 
 - Add http://highslide.com/ functionality to thumbnail overview html. 
-- Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
 - Add functionality for keeping the source directory tree up to date by searching for attached or detached volumes, such as attached USB-disks and so on, and update the 
-- Add slide show functionality to Image Viewer.
-- Add possibility to save multiple rename templates
-- Add merge functionality from several source directories. in the "rename image" mode.
-- Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Test all functionality.
 - Update version numbers in language files
 - Update version information files (Program help (version_information))
@@ -31,7 +32,6 @@
 - Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
-
 
 3.x:
 ====
