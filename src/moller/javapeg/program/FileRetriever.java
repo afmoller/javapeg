@@ -1,14 +1,4 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2007-01-18 by Fredrik Möller
- * Latest changed         : 2009-02-03 by Fredrik Möller
- *                        : 2009-03-10 by Fredrik Möller
- *                        : 2009-06-17 by Fredrik Möller
- *                        : 2009-07-20 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- *                        : 2009-09-11 by Fredrik Möller
- *                        : 2009-09-13 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,34 +18,34 @@ import moller.javapeg.program.logger.Logger;
 import moller.util.jpeg.JPEGUtil;
 
 public class FileRetriever {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static FileRetriever instance;
-	
+
 	/**
 	 * This Map contains a File name and File object mapping. In other words:
 	 * the key in the Map is a file name and the value is the actual file
 	 * object which have the file name denoted by the key
 	 */
-	private Map<String, File> jpegFileNameFileObjectMap;
-	
+	private final Map<String, File> jpegFileNameFileObjectMap;
+
 	/**
 	 * This Map contains a File name and File object mapping. In other words:
 	 * the key in the Map is a file name and the value is the actual file
 	 * object which have the file name denoted by the key
 	 */
-	private Map<String, File> nonJpegFileNameFileObjectMap;
-	
+	private final Map<String, File> nonJpegFileNameFileObjectMap;
+
 	private int nrOfJpegImages;
-	
+
 	private static Language lang;
 	private static Logger   logger;
-	
+
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static FileRetriever getInstance() {
@@ -68,23 +58,23 @@ public class FileRetriever {
 			return instance;
 		}
 	}
-	
+
 	private FileRetriever() {
 		lang   = Language.getInstance();
 		logger = Logger.getInstance();
-		
+
 		nrOfJpegImages = 0;
-		
+
 		jpegFileNameFileObjectMap    = new HashMap<String, File>(128);
 		nonJpegFileNameFileObjectMap = new HashMap<String, File>(128);
 	}
 
 	/**
 	 * This method will list all files in a directory on disk and put
-	 * them into two different Map structures, one with JPEG files and 
+	 * them into two different Map structures, one with JPEG files and
 	 * the second one with all potentially existing non JPEG files and
 	 * directories.
-	 *  
+	 *
 	 * @param files is a List with all the files that shall be separated into
 	 *        the two different file categories.
 	 */
@@ -93,16 +83,18 @@ public class FileRetriever {
 		nrOfJpegImages = 0;
 		jpegFileNameFileObjectMap.clear();
 		nonJpegFileNameFileObjectMap.clear();
-		
+
 		ApplicationContext ac = ApplicationContext.getInstance();
 		ac.clearJpegFileLoadBuffer();
 		for (File file : files) {
 			try {
 				if(JPEGUtil.isJPEG(file)) {
+				    logger.logDEBUG("File: " + file.getAbsolutePath() + " added to list of JPEG Files");
 					jpegFileNameFileObjectMap.put(file.getName(), file);
 					handleNrOfJpegImages(Action.SET);
 					ac.handleJpegFileLoadBuffer(file, Action.ADD);
 				} else {
+				    logger.logDEBUG("File: " + file.getAbsolutePath() + " added to list of non JPEG Files");
 					nonJpegFileNameFileObjectMap.put(file.getName(), file);
 				}
 			} catch (FileNotFoundException fnfex) {
@@ -116,7 +108,7 @@ public class FileRetriever {
 			}
 		}
 	}
-	
+
 	public synchronized int handleNrOfJpegImages(Action action) {
 		switch (action) {
 		case RETRIEVE:
@@ -131,38 +123,38 @@ public class FileRetriever {
 
 	/**
 	 * Get a collection of JPEG File objects.
-	 * 
+	 *
 	 * @return A collection of File objects.
 	 */
 	public Collection <File> getJPEGFiles() {
 		return new TreeSet<File>(jpegFileNameFileObjectMap.values());
 	}
-		
+
 	/**
 	 * Get a Map consisting of a key - value pair of String - File
 	 * objects, where the String object represents the name of the
 	 * file and the File object the actual file.
-	 * 
+	 *
 	 * @return A Map with file name and file pairs.
 	 */
 	public Map<String, File> getJPEGFileNameFileObjectMap() {
 		return jpegFileNameFileObjectMap;
 	}
-	
+
 	/**
 	 * Get a collection of non JPEG File objects.
-	 * 
+	 *
 	 * @return A collection of File objects.
 	 */
 	public Collection <File> getNonJPEGFiles() {
 		return nonJpegFileNameFileObjectMap.values();
 	}
-	
+
 	/**
 	 * Get a Map consisting of a key - value pair of String - File
 	 * objects, where the String object represents the name of the
 	 * file and the File object the actual file.
-	 * 
+	 *
 	 * @return A Map with file name and file pairs.
 	 */
 	public Map<String, File> getNonJPEGFileNameFileObjectMap() {
