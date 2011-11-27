@@ -1,40 +1,40 @@
-Tumnagelskapande:<LF>
+Thumbnail Creation:<LF>
 <LF>
-Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär:<LF>
-Om en bild saknar tumnagel eller om den är korrupt så kan en temporär tumnagel skapas av JavaPEG för att visas på de ställen i applikationen där tumnaglar visas.<LF>
+If embedded thumbnail is missing or corrupt, create a temporary:<LF>
+If an image is missing an thumbnail or if it is corrupt then a temporary thumbnail can be created by JavaPEG to be displayed in the places where thumbnails exists.<LF>
 <LF>
-Bredd på den skapade tumnageln:<LF>
-Bestämmer i pixlar räknat, hur bred den skapade tumnageln skall bli.<LF>
+Width of the created thumbnail:<LF>
+Specifies in pixels, how wide the created thumbnail shall be.<LF>
 <LF>
-Höjd på den skapade tumnageln:<LF>
-Bestämmer i pixlar räknat, hur hög den skapade tumnageln skall bli.<LF>
+Height of the created thumbnail:<LF>
+Specifies in pixels, how high the created thumbnail shall be.<LF>
 <LF>
-Tumnagelskaparalgoritm:<LF>
-Bestämmer vilken algoritm som skall avändas för att skapa en tumnagel. Det finns två algoritmer att välja mellan: SMOOTH eller FAST. Den förstnämnda är långsammare men ger ett bättre slutresultat.<LF>
-<LF>
-<LF>
-Tumnagel Cache:<LF>
-<LF>
-Aktivera tumnagel cache:<LF>
-Aktivering av tumnagel cache innebär att de tumnaglar som lästs in från bilder som visats i JavaPEG kommer att sparas i datorns minne tills JavaPEG stängs av. En cachning av en tumnagel innebär att visningen av den kommer att gå snabbare om en tumnagel som redan visats skall visas igen, då tumnageln kommer att hämtas från datorn arbetsminne istället för att hämtas ifrån bildfilen på det lagringsmedium som bilden finns sparad på.<LF>
-<LF>
-Tumnagel cachestorlek:<LF>
-Indikerar hur många tumnaglar som är sparade i tumnagel cachen.<LF>
-<LF>
-Tumnagel max cachestorlek:<LF>
-Anger det maximala antalet tumnaglar som skall kunna sparas i den minneslagrade tumnagel cachen.<LF>
-<LF>
-Rensa tumnagelcache:<LF>
-Tömmer tumnagel cachen på samtliga lagrade tumnaglar.<LF>
+Thumbnail Creation Algorithm:<LF>
+Specifies which algorithm to use when a thumbnail is created. There are two possible algortims to choose between: SMOOTH and FAST. The first one is slower but provides a nicer looking result.<LF>
 <LF>
 <LF>
-Tumnagel Tooltips:<LF>
+Thumbnail Cache:<LF>
 <LF>
-Avaktiverad:<LF>
-Innebär att inga tool tips kommer att visas när muspekaren är över tumnaglar.<LF>
+Enable Thumbnail Cache:<LF>
+Activation of thumbnail cache will result in a more responsive application since the thumbnails from images which have already been displayed once in JavaPEG will be stored in the memory of the computer and this means that if the same thumbnail shall be displayed once more, then the thumbnail can be fetched from the computer memory instead from the source image, which is much faster.<LF>
 <LF>
-Aktiverad:<LF>
-Innebär att ett tool tip kommer att visas när muspekaren är över en tumnagel.<LF>
+Thumbnail cache size:<LF>
+Indicates how many thumbnails that currently is stored in the thumbnail cache.<LF>
 <LF>
-Utökad:<LF>
-Innebär att ett tool tip med mer information om bilden kommer att visas än vad som visas om tool tips bara är "Aktiverad" när muspekaren är över en tumnagel.
+Thumbnail cache size max:<LF>
+Specifies the maximum amount of thumbnails that can be stored in the memory based thumbnail cache.<LF>
+<LF>
+Clean Thumbnail chache:<LF>
+Empties the thumbnail cache from all currently stored thumbnails.<LF>
+<LF>
+<LF>
+Thumbnail Tooltips:<LF>
+<LF>
+Disabled:<LF>
+No tooltips will be displayed when the mouse pointer is over thumbnails.<LF>
+<LF>
+Enabled:<LF>
+Tooltips will be displayed when the mouse pointer is over an thumbnail.<LF>
+<LF>
+Extended:<LF>
+A tooltip with more information will be displayed, compared to the "Enabled" setting, when the mouse pointer is over an thumbnail.
