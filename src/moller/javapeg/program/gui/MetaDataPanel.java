@@ -1,12 +1,4 @@
 package moller.javapeg.program.gui;
-/**
-* This class was created : 2004-03-13 av Fredrik Möller
-* Latest changed         : 2004-03-15 av Fredrik Möller
-*                        : 2004-04-23 av Fredrik Möller
-*                        : 2009-06-04 av Fredrik Möller
-*                        : 2009-06-06 av Fredrik Möller
-*                        : 2009-07-07 av Fredrik Möller
-*/
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,6 +16,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Table;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -33,35 +26,38 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
 public class MetaDataPanel extends JPanel {
-		
+
 	private static final long serialVersionUID = 1L;
-	
-	private JScrollPane scrollpane;
-	private JTable table;
-	
-	private Vector<String> tableHeaderVector;
-		
-	private DefaultTableModel metaDataTableModel;
-	
+
+	private final JScrollPane scrollpane;
+	private final JTable table;
+
+	private final Vector<String> tableHeaderVector;
+
+	private final DefaultTableModel metaDataTableModel;
+
 	private static Language lang;
-	
-	private JLabel titleLabel;
-	private String titleLabelDefaultText;
-	
+
+	private static Logger logger;
+
+	private final JLabel titleLabel;
+	private final String titleLabelDefaultText;
+
 	public MetaDataPanel() {
-		
+
 		lang = Language.getInstance();
-		
+		logger = Logger.getInstance();
+
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 
 		titleLabelDefaultText = lang.get("metadatapanel.titleDefaultText");
-		
+
 		titleLabel = new JLabel(titleLabelDefaultText);
 		titleLabel.setForeground(Color.GRAY);
-		
+
 		metaDataTableModel = new DefaultTableModel();
-	
+
 		tableHeaderVector = new Vector<String>();
 		tableHeaderVector.addElement(lang.get("metadatapanel.tableheader.type"));
 		tableHeaderVector.addElement(lang.get("metadatapanel.tableheader.property"));
@@ -72,41 +68,40 @@ public class MetaDataPanel extends JPanel {
 		table.setEnabled(false);
 
 		scrollpane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
+
 		this.add(titleLabel, BorderLayout.NORTH);
 		this.add(scrollpane, BorderLayout.CENTER);
 	}
-	
+
 	public void setMetaData(File jpegFile) {
 		try{
 			Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
-			
+
 			metaDataTableModel.setColumnCount(0);
 			metaDataTableModel.setRowCount(0);
-			
+
 			for (String column : tableHeaderVector) {
 				metaDataTableModel.addColumn(column);
 			}
-			
+
 			for (Vector<String> rowData : getImageTagsInfo(metadata)) {
 				metaDataTableModel.addRow(rowData);
 			}
-			
+
 			Table.packColumns(table, 15);
 			titleLabel.setText(titleLabelDefaultText + " " + jpegFile.getName());
-		} catch (JpegProcessingException jpe) {
-			System.err.println("error 1a");
-			jpe.printStackTrace();
+		} catch (JpegProcessingException jpex) {
+			logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
+			logger.logERROR(jpex);
 		}
 	}
-	
+
 	public void clearMetaData() {
 		metaDataTableModel.setColumnCount(0);
 		metaDataTableModel.setRowCount(0);
 		titleLabel.setText(titleLabelDefaultText);
 	}
 
-	@SuppressWarnings("unchecked")
 	private Vector<Vector<String>> getImageTagsInfo(Metadata metadata){
 
 		Vector<Vector<String>> tableDataVector = new Vector<Vector<String>>();
@@ -134,8 +129,9 @@ public class MetaDataPanel extends JPanel {
 			if (directory.hasErrors()) {
 				Iterator errors = directory.getErrors();
 
+				logger.logERROR("Following Exif errors where found:");
 				while (errors.hasNext()) {
-					System.out.println("ERROR: " + errors.next());
+		            logger.logERROR("Directory error: " + errors.next());
 				}
 			}
 		}
