@@ -108,6 +108,9 @@ public class ImageViewer extends JFrame {
 	private int imagesToViewListSize;
 	private int currentGUIImageRotation;
 
+	private final LoadNextImageAction loadNextImageAction = new LoadNextImageAction();
+	private final LoadPreviousImageAction loadPreviousImageAction = new LoadPreviousImageAction();
+
 	private CustomKeyEventDispatcher customKeyEventDispatcher;
 
 	private OverviewButtonListener overviewButtonListener;
@@ -445,8 +448,7 @@ public class ImageViewer extends JFrame {
 	}
 
 	private void createImage(String imagePath) {
-
-		logger.logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
+	    logger.logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
 		logger.logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
 
 		// Load image from disk
@@ -454,7 +456,7 @@ public class ImageViewer extends JFrame {
 
 		while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
 		    try {
-		    	Thread.sleep(200);
+		    	Thread.sleep(10);
 		    } catch(InterruptedException ie) {
 		    }
 		}
@@ -552,7 +554,9 @@ public class ImageViewer extends JFrame {
 			imageToViewListIndex -= 1;
 		}
 		currentGUIImageRotation = 0;
+
 		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+
 		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 	}
 
@@ -563,7 +567,9 @@ public class ImageViewer extends JFrame {
 			imageToViewListIndex += 1;
 		}
 		currentGUIImageRotation = 0;
+
 		createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+
 		logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
 	}
 
@@ -604,17 +610,39 @@ public class ImageViewer extends JFrame {
 	private class CustomKeyEventDispatcher implements KeyEventDispatcher {
 	    @Override
 	    public boolean dispatchKeyEvent(KeyEvent e) {
+
 	        if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
-	        	if (KeyEvent.VK_LEFT == e.getKeyCode()) {
-	        		loadAndViewPreviousImage();
-	        		return true;
-	        	}
-				if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
-					loadAndViewNextImage();
-					return true;
-				}
+	            if (KeyEvent.VK_LEFT == e.getKeyCode()) {
+	                if (!loadPreviousImageAction.isRunning()) {
+
+	                    Thread thread = new Thread(new Runnable() {
+
+	                        public void run() {
+	                            loadPreviousImageAction.run();
+	                        }
+	                    });
+	                    loadPreviousImageAction.start();
+	                    thread.start();
+	                }
+	                return true;
+	            }
+	            if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
+	                if (!loadNextImageAction.isRunning()) {
+
+	                    Thread thread = new Thread(new Runnable() {
+
+	                        public void run() {
+	                            loadNextImageAction.run();
+	                        }
+	                    });
+	                    loadNextImageAction.start();
+	                    thread.start();
+	                }
+	                return true;
+	            }
 	        }
-	        return false;
+
+	        return true;
 	    }
 	}
 
@@ -809,4 +837,48 @@ public class ImageViewer extends JFrame {
 			createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
 		}
 	}
+
+	private class LoadNextImageAction {
+
+	    private boolean isRunning = false;
+
+	    public void run() {
+	        loadAndViewNextImage();
+	        completed();
+	    }
+
+	    public synchronized void start() {
+	        isRunning = true;
+	    }
+
+	    public synchronized void completed() {
+	        isRunning = false;
+	    }
+
+	    public synchronized boolean isRunning() {
+	        return isRunning;
+	    }
+	}
+
+	private class LoadPreviousImageAction {
+
+        private boolean isRunning = false;
+
+        public void run() {
+            loadAndViewPreviousImage();
+            completed();
+        }
+
+        public synchronized void start() {
+            isRunning = true;
+        }
+
+        public synchronized void completed() {
+            isRunning = false;
+        }
+
+        public synchronized boolean isRunning() {
+            return isRunning;
+        }
+    }
 }
