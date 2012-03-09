@@ -14,45 +14,45 @@ public class TestStringUtil {
 
 	@Test
 	public void testFormatString() {
-		Assert.assertEquals("TestTestTest" + System.getProperty("line.separator"), StringUtil.formatString("Test\nTest\rTest<LF>"));		
+		Assert.assertEquals("TestTestTest" + System.getProperty("line.separator"), StringUtil.formatString("Test\nTest\rTest<LF>"));
 	}
-	
+
 	@Test
 	public void testReverse() {
-		Assert.assertEquals("tset", StringUtil.reverse("test"));		
+		Assert.assertEquals("tset", StringUtil.reverse("test"));
 	}
-	
+
 	@Test
 	public void testIsInt() {
 		Assert.assertTrue(StringUtil.isInt("12345"));
 		Assert.assertTrue(StringUtil.isInt("012345"));
-		
+
 		Assert.assertFalse(StringUtil.isInt("12345a"));
 		Assert.assertFalse(StringUtil.isInt("a12345"));
 	}
-	
+
 	@Test
 	public void testRemoveFirstCharacter() {
 		Assert.assertTrue(StringUtil.removeFirstCharacter("String").equals("tring"));
 	}
-	
+
 	@Test
 	public void testRemoveLastCharacter() {
 		Assert.assertTrue(StringUtil.removeLastCharacter("String").equals("Strin"));
 	}
-	
+
 	@Test
 	public void testGetFirstCharacter() {
 		Assert.assertTrue(StringUtil.getFirstCharacter("String").equals("S"));
 	}
-	
+
 	@Test
 	public void testRemoveStringFromEnd() {
 		Assert.assertTrue(StringUtil.removeStringFromEnd("String", "ng").equals("Stri"));
 		Assert.assertTrue(StringUtil.removeStringFromEnd("String||", "||").equals("String"));
 		Assert.assertTrue(StringUtil.removeStringFromEnd("String||", "**").equals("String||"));
 	}
-	
+
 	@Test
 	public void testRemoveAnyPreceedingNonIntegerCharacters() {
 		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("a123").equals("123"));
@@ -62,7 +62,7 @@ public class TestStringUtil {
 		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters("123").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyPrecedingNonIntegerCharacters(" 123").equals("123"));
 	}
-	
+
 	@Test
 	public void testRemoveAnyTrailingNonIntegerCharacters() {
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123a").equals("123"));
@@ -72,7 +72,7 @@ public class TestStringUtil {
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyTrailingNonIntegerCharacters("123 ").equals("123"));
 	}
-	
+
 	@Test
 	public void testRemoveAnyPreceedingAndTrailingNonIntegerCharacters() {
 		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a123").equals("123"));
@@ -93,5 +93,10 @@ public class TestStringUtil {
 		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("a- 123 -a").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters("123").equals("123"));
 		Assert.assertTrue(StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(" 123 ").equals("123"));
+	}
+
+	@Test
+	public void testConvertToHexString() {
+	    Assert.assertEquals("74657374537472696e67", StringUtil.convertToHexString("testString".getBytes()));
 	}
 }
