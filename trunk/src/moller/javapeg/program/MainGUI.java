@@ -94,6 +94,7 @@ import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
@@ -155,6 +156,7 @@ import moller.util.io.FileUtil;
 import moller.util.io.PathUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
+import moller.util.java.SystemProperties;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
@@ -280,6 +282,7 @@ public class MainGUI extends JFrame {
 	private JTable previewTable;
 
 	private JTree tree;
+	private JTree categoriesTree;
 
 	private Mouselistener mouseListener;
 	private MouseButtonListener mouseRightClickButtonListener;
@@ -310,7 +313,7 @@ public class MainGUI extends JFrame {
 	private JRadioButton andRadioButton;
 	private JRadioButton orRadioButton;
 
-	private CheckTreeManager checkTreeManagerForAssignCategroiesCategoryTree;
+	private CheckTreeManager checkTreeManagerForAssignCategoriesCategoryTree;
 	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
 
 	private Thread loadFilesThread;
@@ -337,6 +340,7 @@ public class MainGUI extends JFrame {
 		imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
 		logger.logDEBUG("JavaPEG is starting");
+		this.printSystemProperties();
 		this.overrideSwingUIProperties();
 		if(config.getBooleanProperty("updatechecker.enabled")) {
 			logger.logDEBUG("Application Update Check Started");
@@ -372,9 +376,43 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("Application Context initialization Started");
 		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
+
+		// Check if JavaPEG client id is set, otherwise generate one and set it
+        // to the configuration.
+        if (!ConfigUtil.isClientIdSet(config.getStringProperty("javapeg.client.id"))) {
+            config.setStringProperty("javapeg.client.id", ConfigUtil.generateClientId());
+            saveSettings();
+        }
 	}
 
-	private void checkApplicationUpdates() {
+	private void printSystemProperties() {
+	    logger.logDEBUG("##### System Properties Start #####");
+        logger.logDEBUG("File Encoding......: " + SystemProperties.getFileEncoding());
+        logger.logDEBUG("File Encoding PKG..: " + SystemProperties.getFileEncodingPkg());
+        logger.logDEBUG("File Separator.....: " + SystemProperties.getFileSeparator());
+        logger.logDEBUG("Java Class Path....: " + SystemProperties.getJavaClassPath());
+        logger.logDEBUG("Java Class Version.: " + SystemProperties.getJavaClassVersion());
+        logger.logDEBUG("Java Compiler......: " + SystemProperties.getJavaCompiler());
+        logger.logDEBUG("Java Home..........: " + SystemProperties.getJavaHome());
+        logger.logDEBUG("Java IO Tmpdir.....: " + SystemProperties.getJavaIoTmpdir());
+        logger.logDEBUG("Java Vendor........: " + SystemProperties.getJavaVendor());
+        logger.logDEBUG("Java Vendor Url....: " + SystemProperties.getJavaVendorUrl());
+        logger.logDEBUG("Java Version.......: " + SystemProperties.getJavaVersion());
+        logger.logDEBUG("Line Separator.....: " + SystemProperties.getLineSeparator());
+        logger.logDEBUG("Os Arch............: " + SystemProperties.getOsArch());
+        logger.logDEBUG("Os Name............: " + SystemProperties.getOsName());
+        logger.logDEBUG("Os Version.........: " + SystemProperties.getOsVersion());
+        logger.logDEBUG("Path Separator.....: " + SystemProperties.getPathSeparator());
+        logger.logDEBUG("User Dir...........: " + SystemProperties.getUserDir());
+        logger.logDEBUG("User Home..........: " + SystemProperties.getUserHome());
+        logger.logDEBUG("User Language......: " + SystemProperties.getUserLanguage());
+        logger.logDEBUG("User Name..........: " + SystemProperties.getUserName());
+        logger.logDEBUG("User Region........: " + SystemProperties.getUserRegion());
+        logger.logDEBUG("User Timezone......: " + SystemProperties.getUserTimezone());
+        logger.logDEBUG("##### System Properties Stop #####");
+    }
+
+    private void checkApplicationUpdates() {
 
 		logger.logDEBUG("Search for Application Updates Started");
 		Thread updateCheck = new Thread(){
@@ -1369,11 +1407,11 @@ public class MainGUI extends JFrame {
 		JLabel categorizeHeading = new JLabel(lang.get("findimage.categories.label"));
 		categorizeHeading.setForeground(Color.GRAY);
 
-		JTree categoriesTree = CategoryUtil.createCategoriesTree();
+		categoriesTree = CategoryUtil.createCategoriesTree();
 		categoriesTree.addMouseListener(categoriesMouseButtonListener);
 
 		// makes your tree as CheckTree
-		checkTreeManagerForAssignCategroiesCategoryTree = new CheckTreeManager(categoriesTree, false, null, true);
+		checkTreeManagerForAssignCategoriesCategoryTree = new CheckTreeManager(categoriesTree, false, null, true);
 
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -1696,10 +1734,14 @@ public class MainGUI extends JFrame {
 		config.setStringProperty("fileNameTemplate", fileNameTemplateTextField.getText());
 		config.setBooleanProperty("createThumbNailsCheckBox", createThumbNailsCheckBox.isSelected());
 		config.setBooleanProperty("categories.orRadioButtonIsSelected", orRadioButton.isSelected());
-		config.setIntProperty("mainGUI.window.location.x", this.getLocationOnScreen().x);
-		config.setIntProperty("mainGUI.window.location.y", this.getLocationOnScreen().y);
-		config.setIntProperty("mainGUI.window.width", this.getSize().width);
-		config.setIntProperty("mainGUI.window.height", this.getSize().height);
+
+		if (this.isVisible()) {
+		    config.setIntProperty("mainGUI.window.location.x", this.getLocationOnScreen().x);
+		    config.setIntProperty("mainGUI.window.location.y", this.getLocationOnScreen().y);
+		    config.setIntProperty("mainGUI.window.width", this.getSize().width);
+		    config.setIntProperty("mainGUI.window.height", this.getSize().height);
+		}
+
 		config.setIntProperty("mainSplitPane.location", mainSplitPane.getDividerLocation());
 		config.setIntProperty("verticalSplitPane.location", verticalSplitPane.getDividerLocation());
 		config.setIntProperty("thumbNailMetaDataPanelSplitPane.location", thumbNailMetaPanelSplitPane.getDividerLocation());
@@ -1708,17 +1750,14 @@ public class MainGUI extends JFrame {
 
 		try {
 			config.saveSettings();
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException fnfex) {
 			logger.logFATAL("Could not save configuration to file: ");
-			for(StackTraceElement element : e.getStackTrace()) {
-				logger.logFATAL(element.toString());
-			}
-
-		} catch (IOException e) {
+			logger.logFATAL(fnfex);
+			System.exit(1);
+		} catch (IOException iox) {
 			logger.logFATAL("Could not save configuration to file: ");
-			for(StackTraceElement element : e.getStackTrace()) {
-				logger.logFATAL(element.toString());
-			}
+			logger.logFATAL(iox);
+			System.exit(1);
 		}
 	}
 
@@ -2311,14 +2350,26 @@ public class MainGUI extends JFrame {
                         }
                         ac.setImageMetaDataDataBaseFileLoaded(result);
 
-                        boolean canWrite = imageMetaDataDataBaseFile.canWrite();
+                        // 1: If the image meta data base file is created by this
+                        // JavaPEG instance, then it should be possible to edit the file...
+                        if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
 
-                        ac.setImageMetaDataDataBaseFileWritable(imageMetaDataDataBaseFile.canWrite());
-
-                        if (canWrite) {
-                            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                            // 1.1: ...if the image date base file is not write protected.
+                            boolean canWrite = imageMetaDataDataBaseFile.canWrite();
+                            ac.setImageMetaDataDataBaseFileWritable(canWrite);
+                            if (canWrite) {
+                                thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                            }
+                            // 1.2: ...otherwise display the write protected icon.
+                            else {
+                                thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+                            }
+                        // 2: If the image meta data base file is not created
+                        // by this JavaPEG instance then display the write
+                        // protected icon.
                         } else {
-                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+//                            TODO: Fix hard coded string
+                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", "Meta data file is not created by this JavaPEG instance");
                         }
 					}
 				}
@@ -2331,7 +2382,15 @@ public class MainGUI extends JFrame {
 		for (JRadioButton ratingRadioButton : ratingRadioButtons) {
 			ratingRadioButton.setEnabled(enabled);
 		}
-		checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().setEnabled(enabled);
+		checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree().setEnabled(enabled);
+		checkTreeManagerForAssignCategoriesCategoryTree.setSelectionEnabled(enabled);
+
+		if (enabled) {
+		    categoriesTree.removeMouseListener(categoriesMouseButtonListener);
+		    categoriesTree.addMouseListener(categoriesMouseButtonListener);
+		} else {
+		    categoriesTree.removeMouseListener(categoriesMouseButtonListener);
+		}
 	}
 
 	private void removeMouseListener(){
@@ -2387,7 +2446,9 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			ApplicationContext ac = ApplicationContext.getInstance();
 
-			if (ac.isImageMetaDataDataBaseFileLoaded() && ac.isImageMetaDataDataBaseFileWritable()) {
+			if (ac.isImageMetaDataDataBaseFileLoaded() &&
+			    ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() &&
+			    ac.isImageMetaDataDataBaseFileWritable()) {
 				setRatingCommentAndCategoryEnabled(true);
 			}
 
@@ -2485,10 +2546,10 @@ public class MainGUI extends JFrame {
 	@SuppressWarnings("unchecked")
 	private void setCategories(Categories categories) {
 
-		checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().clearSelection();
+		checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
 
 		if (categories.size() > 0) {
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 			Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 
 			List<TreePath> treePaths = new ArrayList<TreePath>();
@@ -2504,7 +2565,7 @@ public class MainGUI extends JFrame {
 				}
 			}
 			if (treePaths.size() > 0) {
-				checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().setSelectionPaths(treePaths.toArray(new TreePath[treePaths.size()]));
+				checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().setSelectionPaths(treePaths.toArray(new TreePath[treePaths.size()]));
 			}
 		}
 	}
@@ -2543,7 +2604,7 @@ public class MainGUI extends JFrame {
 		if(currentlySelectedImage != null) {
 			ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = null;
 
-			Categories categories = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategroiesCategoryTree);
+			Categories categories = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
 			String comment = imageCommentTextArea.getText();
 			int rating = getRatingValue();
 
@@ -2915,7 +2976,7 @@ public class MainGUI extends JFrame {
 			String categoryName = null;
 			boolean isTopLevelCategory = false;
 			DefaultMutableTreeNode selectedNode = null;
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 
 			// Should the category be added at the top level...
 			if (selectedPath == null) {
@@ -2958,7 +3019,7 @@ public class MainGUI extends JFrame {
 
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 
 			DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
 			String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
@@ -2989,7 +3050,7 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
-			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 
 			DefaultMutableTreeNode nodeToRemove = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
 
@@ -3021,10 +3082,10 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
-			JTree tree  = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
+			JTree tree  = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.collapseEntireTree(tree, root, false);
 			} else {
@@ -3037,10 +3098,10 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
-			JTree tree  = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
+			JTree tree  = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
 			if (selectedPath == null) {
-				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel();
+				DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 				TreeUtil.expandEntireTree(tree, root, false);
 			} else {
@@ -3126,7 +3187,7 @@ public class MainGUI extends JFrame {
 		imageCommentTextArea.setText("");
 		imageTagPreviewLabel.setIcon(null);
 		setRatingValue(0);
-		checkTreeManagerForAssignCategroiesCategoryTree.getSelectionModel().clearSelection();
+		checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
 	}
 
 	private class MouseButtonListener extends MouseAdapter{
@@ -3285,7 +3346,7 @@ public class MainGUI extends JFrame {
 		@Override
 		public void mouseReleased(MouseEvent e){
 			if (ApplicationContext.getInstance().isImageMetaDataDataBaseFileLoaded()) {
-			    TreePath selectedPath = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
+			    TreePath selectedPath = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
 
 			    if(e.isPopupTrigger()) {
 			        String collapseCategory = "";
@@ -3319,13 +3380,13 @@ public class MainGUI extends JFrame {
 			        popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
 			        popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 
-			        JTree categoryTree = checkTreeManagerForAssignCategroiesCategoryTree.getCheckedJtree();
+			        JTree categoryTree = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
 			        /**
 			         * If no category has been selected.
 			         */
 			        if (selectedPath == null) {
-			            DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategroiesCategoryTree.getTreeModel().getRoot();
+			            DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel().getRoot();
 
 			            int nrOfChildren = root.getChildCount();
 			            boolean someChildIsExpanded = false;

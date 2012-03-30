@@ -24,12 +24,13 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.language.Language;
@@ -186,6 +187,7 @@ public class ImageMetaDataDataBaseHandler {
 	                                 "files that exists in the directory where this XML file is to be found." + C.LS +
 	                                 "The content of this file is used and modified by the application JavaPEG", w);
 	            XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
+	            XMLUtil.writeElement("javapeg-id", config.getStringProperty("javapeg.client.id"), w);
 
 	            for(File image : imageMetaDataDataBaseItems.keySet()) {
 	                ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
@@ -257,6 +259,12 @@ public class ImageMetaDataDataBaseHandler {
 			doc = db.parse(imageMetaDataDataBase);
 			doc.getDocumentElement().normalize();
 
+			NodeList javaPegId = doc.getElementsByTagName("javapeg-id");
+			Node javaPegIdNode = javaPegId.item(0);
+			String javaPegIdValue = javaPegIdNode.getTextContent();
+
+			ApplicationContext.getInstance().setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(config.getStringProperty("javapeg.client.id").equals(javaPegIdValue));
+
 			NodeList imageTags = doc.getElementsByTagName("image");
 
 			int nrOfTags = imageTags.getLength();
@@ -318,8 +326,9 @@ public class ImageMetaDataDataBaseHandler {
 
 			switch (context) {
 			case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-				ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
-				break;
+			    ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+			    imddbituc.setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
+			    break;
 			case IMAGE_META_DATA_CONTEXT:
 				break;
 			}
