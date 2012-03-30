@@ -122,6 +122,8 @@ public class MetaDataPanel extends JPanel {
 						tempVector.addElement(tag.getDescription());
 					}
 					catch (Exception ex) {
+					    logger.logERROR("Could not get tag description: ");
+					    logger.logERROR(ex);
 					}
 					tableDataVector.addElement(tempVector);
 				}
