@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+<entry key="javapeg.client.id">NOT-DEFINED</entry>
 <entry key="languageOption.window.location.x">10</entry>
 <entry key="languageOption.window.location.y">10</entry>
 <entry key="helpViewerGUI.window.location.x">10</entry>
