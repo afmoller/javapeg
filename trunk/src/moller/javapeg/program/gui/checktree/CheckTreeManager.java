@@ -31,11 +31,12 @@ import javax.swing.tree.TreePath;
  * @email  santhosh@in.fiorano.com
  */
 public class CheckTreeManager extends MouseAdapter implements TreeSelectionListener{
-    private CheckTreeSelectionModel selectionModel;
-    private TreePathSelectable selectable;
-    private boolean smartSelection;
+    private final CheckTreeSelectionModel selectionModel;
+    private final TreePathSelectable selectable;
+    private final boolean smartSelection;
     protected JTree tree = new JTree();
     int hotspot = new JCheckBox().getPreferredSize().width;
+    private boolean selectionEnabled;
 
     public CheckTreeManager(JTree tree, boolean dig, TreePathSelectable selectable, boolean smartSelection){
         this.tree = tree;
@@ -57,29 +58,29 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     public TreePathSelectable getSelectable(TreePathSelectable selectable){
         return selectable;
     }
-    
+
     private void removeSelectionPaths(DefaultMutableTreeNode node) {
     	selectionModel.removeSelectionPath(new TreePath(node.getPath()));
-    	
+
     	if (smartSelection) {
-    		int nrOfChildren = node.getChildCount(); 
-        	
+    		int nrOfChildren = node.getChildCount();
+
         	if (nrOfChildren > 0) {
         		for (int i = 0; i < nrOfChildren; i++) {
         			removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
         		}
-        	}	
+        	}
     	}
     }
-    
+
     private void addSelectionPaths(DefaultMutableTreeNode node) {
     	TreePath nodeTreePath = new TreePath(node.getPath());
-    	
+
     	selectionModel.addSelectionPath(nodeTreePath);
-    	
+
     	if (smartSelection) {
     		TreePath parentPath = nodeTreePath.getParentPath();
-    	
+
     		while (parentPath != null) {
     			selectionModel.addSelectionPath(parentPath);
     			parentPath = parentPath.getParentPath();
@@ -87,33 +88,36 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     	}
     }
 
+    @Override
     public void mouseClicked(MouseEvent me){
-        TreePath path = tree.getPathForLocation(me.getX(), me.getY());
-        if(path==null) {
-            return;
-        }
-        if(me.getX()>tree.getPathBounds(path).x+hotspot) {
-            return;
-        }
-
-        if(selectable!=null && !selectable.isSelectable(path)) {
-            return;
-        }
-
-        boolean selected = selectionModel.isPathSelected(path, selectionModel.isDigged());
-        selectionModel.removeTreeSelectionListener(this);
-
-        try{
-        	DefaultMutableTreeNode clickedPath = (DefaultMutableTreeNode)path.getLastPathComponent();
-        	
-            if(selected) {
-            	removeSelectionPaths(clickedPath);
-            } else {
-            	addSelectionPaths(clickedPath);
+        if (isSelectionEnabled()) {
+            TreePath path = tree.getPathForLocation(me.getX(), me.getY());
+            if(path==null) {
+                return;
             }
-        } finally{
-            selectionModel.addTreeSelectionListener(this);
-            tree.treeDidChange();
+            if(me.getX()>tree.getPathBounds(path).x+hotspot) {
+                return;
+            }
+
+            if(selectable!=null && !selectable.isSelectable(path)) {
+                return;
+            }
+
+            boolean selected = selectionModel.isPathSelected(path, selectionModel.isDigged());
+            selectionModel.removeTreeSelectionListener(this);
+
+            try{
+                DefaultMutableTreeNode clickedPath = (DefaultMutableTreeNode)path.getLastPathComponent();
+
+                if(selected) {
+                    removeSelectionPaths(clickedPath);
+                } else {
+                    addSelectionPaths(clickedPath);
+                }
+            } finally{
+                selectionModel.addTreeSelectionListener(this);
+                tree.treeDidChange();
+            }
         }
     }
 
@@ -124,12 +128,20 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     public void valueChanged(TreeSelectionEvent e){
         tree.treeDidChange();
     }
-    
+
     public JTree getCheckedJtree() {
     	return tree;
     }
-    
+
     public TreeModel getTreeModel() {
     	return tree.getModel();
+    }
+
+    public boolean isSelectionEnabled() {
+        return selectionEnabled;
+    }
+
+    public void setSelectionEnabled(boolean selectionEnabled) {
+        this.selectionEnabled = selectionEnabled;
     }
 }
