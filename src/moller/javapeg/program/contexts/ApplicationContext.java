@@ -126,6 +126,12 @@ public class ApplicationContext {
 	 */
     private boolean imageMetaDataDataBaseFileWritable;
 
+    /**
+     * This boolean indicates whether an image meta data data base file is
+     * created by the running JavaPEG instance or not.
+     */
+    private boolean imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
+
 	/**
 	 * Private constructor.
 	 */
@@ -143,6 +149,9 @@ public class ApplicationContext {
 		selectedCategoryPath = null;
 		highestUsedCategoryID = -1;
 		mainTabbedPaneComponent = null;
+		imageMetaDataDataBaseFileLoaded = false;
+		imageMetaDataDataBaseFileWritable = false;
+		imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = false;
 	}
 
 	/**
@@ -317,5 +326,14 @@ public class ApplicationContext {
 
     public boolean isImageMetaDataDataBaseFileWritable() {
         return imageMetaDataDataBaseFileWritable;
+    }
+
+    public boolean isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() {
+        return imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
+    }
+
+    public void setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(
+            boolean imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance) {
+        this.imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
     }
 }
