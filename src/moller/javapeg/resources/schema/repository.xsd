@@ -11,9 +11,9 @@
     </xs:complexType>    
         
     <xs:complexType name="Paths">
-        <xs:all>
-            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
-        </xs:all>
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="Exceptions">
@@ -24,15 +24,15 @@
     </xs:complexType>
     
     <xs:complexType name="AllwaysAdd">
-        <xs:all>
-            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
-        </xs:all>
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
     </xs:complexType>
     
      <xs:complexType name="NeverAdd">
-        <xs:all>
-            <xs:element name="path" type="xs:anyURI" minOccurs="0"/> 
-        </xs:all>
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
     </xs:complexType>
     
 </xs:schema>
