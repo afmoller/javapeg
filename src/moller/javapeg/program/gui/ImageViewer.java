@@ -47,6 +47,7 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -108,8 +109,8 @@ public class ImageViewer extends JFrame {
 	private int imagesToViewListSize;
 	private int currentGUIImageRotation;
 
-	private final LoadNextImageAction loadNextImageAction = new LoadNextImageAction();
-	private final LoadPreviousImageAction loadPreviousImageAction = new LoadPreviousImageAction();
+	private final LoadImageAction loadNextImageAction = new LoadImageAction(Direction.NEXT);
+	private final LoadImageAction loadPreviousImageAction = new LoadImageAction(Direction.PREVIOUS);
 
 	private CustomKeyEventDispatcher customKeyEventDispatcher;
 
@@ -838,34 +839,26 @@ public class ImageViewer extends JFrame {
 		}
 	}
 
-	private class LoadNextImageAction {
+	private class LoadImageAction {
 
-	    private boolean isRunning = false;
+	    public LoadImageAction(Direction direction) {
+	        this.direction = direction;
+        }
 
-	    public void run() {
-	        loadAndViewNextImage();
-	        completed();
-	    }
-
-	    public synchronized void start() {
-	        isRunning = true;
-	    }
-
-	    public synchronized void completed() {
-	        isRunning = false;
-	    }
-
-	    public synchronized boolean isRunning() {
-	        return isRunning;
-	    }
-	}
-
-	private class LoadPreviousImageAction {
-
+	    private final Direction direction;
         private boolean isRunning = false;
 
         public void run() {
-            loadAndViewPreviousImage();
+            switch (direction) {
+            case NEXT:
+                loadAndViewNextImage();
+                break;
+            case PREVIOUS:
+                loadAndViewPreviousImage();
+                break;
+            default:
+                break;
+            }
             completed();
         }
 

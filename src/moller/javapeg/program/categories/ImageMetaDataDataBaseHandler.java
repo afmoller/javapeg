@@ -263,7 +263,8 @@ public class ImageMetaDataDataBaseHandler {
 			Node javaPegIdNode = javaPegId.item(0);
 			String javaPegIdValue = javaPegIdNode.getTextContent();
 
-			ApplicationContext.getInstance().setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(config.getStringProperty("javapeg.client.id").equals(javaPegIdValue));
+			ApplicationContext ac = ApplicationContext.getInstance();
+			ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(config.getStringProperty("javapeg.client.id").equals(javaPegIdValue));
 
 			NodeList imageTags = doc.getElementsByTagName("image");
 
@@ -303,7 +304,7 @@ public class ImageMetaDataDataBaseHandler {
 							logger.logINFO(nfex);
 							rating = 0;
 						}
-					} else if("categories".equals(node.getNodeName())) {
+					} else if("categories".equals(node.getNodeName()) && ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
 						String categoriesString = node.getTextContent();
 
 						if (categoriesString != null && categoriesString.length() > 0) {

@@ -12,7 +12,7 @@ import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.language.Language;
 import moller.util.io.Status;
 
-public class CustomCellRenderer	extends	JLabel implements ListCellRenderer {
+public class CustomCellRenderer	extends	JLabel implements ListCellRenderer<Object> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +20,7 @@ public class CustomCellRenderer	extends	JLabel implements ListCellRenderer {
 		this.setOpaque(true);
 	}
 
-	public Component getListCellRendererComponent(JList list, Object value, int index,
+	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,
 			                                      boolean isSelected, boolean cellHasFocus) {
 
 		Status directoryStatus = ((ImageRepositoryItem)value).getPathStatus();

@@ -13,7 +13,6 @@ import moller.util.string.StringUtil;
  */
 public class Categories {
 
-	private static final long serialVersionUID = 1L;
 	private Set<String> categories;
 
 	public Categories() {

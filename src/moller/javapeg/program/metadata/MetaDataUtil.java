@@ -63,8 +63,8 @@ public class MetaDataUtil {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> parseImageFile(File imageFile) {
+	@SuppressWarnings("rawtypes")
+    public static Map<String, String> parseImageFile(File imageFile) {
 		Logger logger = Logger.getInstance();
 
 		Map<String, String> tagsMap = new HashMap<String, String>();
@@ -103,8 +103,8 @@ public class MetaDataUtil {
 		return tagsMap;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static int getOrientationTag(File imageFile) {
+	@SuppressWarnings("rawtypes")
+    public static int getOrientationTag(File imageFile) {
 
 		Logger logger = Logger.getInstance();
 

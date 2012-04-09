@@ -10,6 +10,9 @@
  
  3.0 (2011-xx-xx)
  
+ + Possible to reorder columns and sort the rows by any column in the METADATA
+   and PREVIEW tables in the RENAME IMAGES mode. 
+ 
  + If the Automatic Image Resize button is selected in the ImageViewer then a
    deselection of this button will resize a loaded image to the original size.
  
