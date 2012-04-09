@@ -61,7 +61,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -81,6 +80,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -106,6 +107,7 @@ import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
+import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.HeadingPanel;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
@@ -278,8 +280,8 @@ public class MainGUI extends JFrame {
 	private JTabbedPane tabbedPane;
 	private JTabbedPane mainTabbedPane;
 
-	private JTable metaDataTable;
-	private JTable previewTable;
+	private CustomizedJTable metaDataTable;
+	private CustomizedJTable previewTable;
 
 	private JTree tree;
 	private JTree categoriesTree;
@@ -302,10 +304,10 @@ public class MainGUI extends JFrame {
 
 	private ThumbNailListener thumbNailListener;
 
-	private final DefaultListModel imagesToViewListModel;
+	private final DefaultListModel<File> imagesToViewListModel;
 	private final SortedListModel imageRepositoryListModel;
 
-	private JList imagesToViewList;
+	private JList<File> imagesToViewList;
 
 	private JTextArea imageCommentTextArea;
 
@@ -565,16 +567,16 @@ public class MainGUI extends JFrame {
     	metaDataTableModel = ModelInstanceLibrary.getInstance().getMetaDataTableModel();
 
     	// Skapa tabellen för metadata-informatonen och sätt attribut till den
-    	metaDataTable = new JTable(metaDataTableModel);
+    	TableRowSorter<TableModel> metaDataTableModelSorter = new TableRowSorter<TableModel>(metaDataTableModel);
+    	metaDataTable = new CustomizedJTable(metaDataTableModel);
 		metaDataTable.setEnabled(false);
-		metaDataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		metaDataTable.getTableHeader().setReorderingAllowed(false);
+		metaDataTable.setRowSorter(metaDataTableModelSorter);
 
 		// Skapa tabellen för namnförhandsgranskningen och sätt attribut till den
-		previewTable = new JTable(previewTableModel);
+		TableRowSorter<TableModel> previewTableModelSorter = new TableRowSorter<TableModel>(previewTableModel);
+		previewTable = new CustomizedJTable(previewTableModel);
 		previewTable.setEnabled(false);
-		previewTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		previewTable.getTableHeader().setReorderingAllowed(false);
+		previewTable.setRowSorter(previewTableModelSorter);
 
 		// Skapa scrollbars...
 		JScrollBar mhSB = new JScrollBar(JScrollBar.HORIZONTAL);
@@ -924,7 +926,7 @@ public class MainGUI extends JFrame {
 			}
 		}
 
-		imagesToViewList = new JList(imagesToViewListModel);
+		imagesToViewList = new JList<File>(imagesToViewListModel);
 		imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -2750,8 +2752,8 @@ public class MainGUI extends JFrame {
 
 			if(selecteIndex > -1) {
 				if(selecteIndex > 0) {
-					Object obj = imagesToViewListModel.remove(selecteIndex);
-					imagesToViewListModel.add(selecteIndex - 1, obj);
+					File image = imagesToViewListModel.remove(selecteIndex);
+					imagesToViewListModel.add(selecteIndex - 1, image);
 					imagesToViewList.setSelectedIndex(selecteIndex - 1);
 				}
 			}
@@ -2764,8 +2766,8 @@ public class MainGUI extends JFrame {
 
 			if(selecteIndex > -1) {
 				if(selecteIndex < (imagesToViewListModel.size() - 1)) {
-					Object obj = imagesToViewListModel.remove(selecteIndex);
-					imagesToViewListModel.add(selecteIndex + 1, obj);
+					File image = imagesToViewListModel.remove(selecteIndex);
+					imagesToViewListModel.add(selecteIndex + 1, image);
 					imagesToViewList.setSelectedIndex(selecteIndex + 1);
 				}
 			}
@@ -2777,8 +2779,8 @@ public class MainGUI extends JFrame {
 			int selecteIndex = imagesToViewList.getSelectedIndex();
 
 			if (selecteIndex > 0) {
-				Object obj = imagesToViewListModel.remove(selecteIndex);
-				imagesToViewListModel.add(0, obj);
+				File image = imagesToViewListModel.remove(selecteIndex);
+				imagesToViewListModel.add(0, image);
 				imagesToViewList.setSelectedIndex(0);
 			}
 		}
@@ -2789,8 +2791,8 @@ public class MainGUI extends JFrame {
 			int selecteIndex = imagesToViewList.getSelectedIndex();
 
 			if (selecteIndex > -1) {
-				Object obj = imagesToViewListModel.remove(selecteIndex);
-				imagesToViewListModel.addElement(obj);
+				File image = imagesToViewListModel.remove(selecteIndex);
+				imagesToViewListModel.addElement(image);
 				imagesToViewList.setSelectedIndex(imagesToViewListModel.size() - 1);
 			}
 		}
@@ -2807,7 +2809,7 @@ public class MainGUI extends JFrame {
 					List<File> imagesToView = new ArrayList<File>();
 
 					for (int i = 0; i < imagesToViewListModel.size(); i++) {
-						imagesToView.add((File)imagesToViewListModel.get(i));
+						imagesToView.add(imagesToViewListModel.get(i));
 					}
 
 					imageViewer = new ImageViewer(imagesToView);
@@ -2824,7 +2826,7 @@ public class MainGUI extends JFrame {
 				List<File> imagesToSetToSystemClipBoard = new ArrayList<File>();
 
 				for (int i = 0; i < imagesToViewListModel.size(); i++) {
-					imagesToSetToSystemClipBoard.add((File)imagesToViewListModel.get(i));
+					imagesToSetToSystemClipBoard.add(imagesToViewListModel.get(i));
 				}
 				FileSelection fileSelection = new FileSelection(imagesToSetToSystemClipBoard);
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
@@ -3116,7 +3118,7 @@ public class MainGUI extends JFrame {
 			int selectedIndex = imagesToViewList.getSelectedIndex();
 
 			if (selectedIndex > -1) {
-				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom((File)imagesToViewListModel.get(selectedIndex));
+				JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(imagesToViewListModel.get(selectedIndex));
 				imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
 			}
 		}

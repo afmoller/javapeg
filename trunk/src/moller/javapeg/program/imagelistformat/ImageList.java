@@ -19,17 +19,17 @@ import moller.javapeg.program.language.Language;
 import moller.util.io.FileUtil;
 
 public class ImageList {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static ImageList instance;
-	
+
 	/**
 	 * Language instance, to be able to have localization
 	 */
 	private static Language lang;
-			
+
 	/**
 	 * Private constructor.
 	 */
@@ -39,7 +39,7 @@ public class ImageList {
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static ImageList getInstance() {
@@ -52,9 +52,9 @@ public class ImageList {
 			return instance;
 		}
 	}
-		
-	public void createList(DefaultListModel images, File destination, String fileExtension, String fileDescription) {
-							
+
+	public void createList(DefaultListModel<File> images, File destination, String fileExtension, String fileDescription) {
+
 		/**
 		 * This check is done to see if an file extension has been entered in
 		 * the JFileChooser. If it is missing, the extension will be added here
@@ -65,17 +65,17 @@ public class ImageList {
 
 		if(destination.exists()) {
 			int returnValue = JOptionPane.showConfirmDialog(null, destination.getAbsolutePath() + " " + lang.get("maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists"));
-				
+
 			/**
 			 * 0 indicates a yes answer, and then the file shall be overwritten
-			 * and that is accomplished by first delete the old file and the 
+			 * and that is accomplished by first delete the old file and the
 			 * create a new.
-			 */ 
+			 */
 			if(returnValue == 0) {
 				destination.delete();
 			}
 		}
-		
+
 		if (fileDescription.equals("IrfanView")) {
 			IrfanView.createAndWriteToFile(images, destination, lang);
 		} else if (fileDescription.equals("PolyView")) {
@@ -83,7 +83,7 @@ public class ImageList {
 		} else if (fileDescription.equals("XnView")) {
 			XnView.createAndWriteToFile(images, destination, lang);
 		} else if (fileDescription.equals("JavaPEG Image List")) {
-			JavaPEG.createAndWriteToFile(images, destination, lang);	
+			JavaPEG.createAndWriteToFile(images, destination, lang);
 		}
 	}
 }

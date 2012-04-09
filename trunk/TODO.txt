@@ -1,5 +1,6 @@
 3.0:
 ====
+- Add support for multiple users on the same image repository and categroy files.
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
@@ -11,7 +12,6 @@
 
 3.1:
 ====
-- Add support for multiple users on the same image repository and categroy files.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Add merge functionality from several source directories. in the "rename image" mode.

@@ -39,7 +39,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 
 	private static final long serialVersionUID = 1L;
 
-	private JList values;
+	private JList<Object> values;
 
 	private JButton okButton;
 	private JButton cancelButton;
@@ -138,7 +138,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 		GBHelper positionJListPanel = new GBHelper();
 		JPanel jListPanel = new JPanel(new GridBagLayout());
 
-		values = new JList();
+		values = new JList<Object>();
 		values.setVisibleRowCount(5);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -189,7 +189,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 	}
 
 	private int getIndexForValue(String value) {
-		ListModel model = values.getModel();
+		ListModel<Object> model = values.getModel();
 
 		for (int index = 0; index < model.getSize(); index++) {
 			if (model.getElementAt(index).toString().equals(value)) {
@@ -212,9 +212,9 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 	}
 
 	public void collectSelectedValues() {
-		Object[] selectedValues = values.getSelectedValues();
+		List<Object> selectedValues = values.getSelectedValuesList();
 
-		int nrOfSelectedValues = selectedValues.length;
+		int nrOfSelectedValues = selectedValues.size();
 
 		if (nrOfSelectedValues > 0 && okButtonClicked) {
 			value = "=";
@@ -257,8 +257,9 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 	}
 
 	private class ValuesListListener implements ListSelectionListener {
-		public void valueChanged(ListSelectionEvent e) {
-			if(!((JList)e.getSource()).getSelectionModel().isSelectionEmpty()) {
+		@SuppressWarnings("unchecked")
+        public void valueChanged(ListSelectionEvent e) {
+			if(!((JList<Object>)e.getSource()).getSelectionModel().isSelectionEmpty()) {
 				okButton.setEnabled(true);
 			}
 		}

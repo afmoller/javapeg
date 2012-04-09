@@ -102,7 +102,8 @@ public class MetaDataPanel extends JPanel {
 		titleLabel.setText(titleLabelDefaultText);
 	}
 
-	private Vector<Vector<String>> getImageTagsInfo(Metadata metadata){
+	@SuppressWarnings("rawtypes")
+    private Vector<Vector<String>> getImageTagsInfo(Metadata metadata){
 
 		Vector<Vector<String>> tableDataVector = new Vector<Vector<String>>();
 

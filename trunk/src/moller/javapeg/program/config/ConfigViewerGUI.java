@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -97,9 +98,9 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox developerMode;
 	private JCheckBox rotateLog;
 	private JCheckBox zipLog;
-	private JComboBox rotateLogSizeFactor;
-	private JComboBox logLevels;
-	private JComboBox logEntryTimeStampFormats;
+	private JComboBox<String> rotateLogSizeFactor;
+	private JComboBox<Level> logLevels;
+	private JComboBox<String> logEntryTimeStampFormats;
 
 	private JTextField rotateLogSize;
 	private JTextField logName;
@@ -114,7 +115,7 @@ public class ConfigViewerGUI extends JFrame {
 	/**
 	 * Variables for the language panel
 	 */
-	private JList languageList;
+	private JList<String> languageList;
 
 	/**
 	 * Variables for the rename panel
@@ -134,7 +135,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox createThumbnailIfMissingOrCorrupt;
 	private JTextField thumbnailWidth;
 	private JTextField thumbnailHeight;
-	private JComboBox thumbnailCreationAlgorithm;
+	private JComboBox<JPEGScaleAlgorithm> thumbnailCreationAlgorithm;
 	private JTextField maxCacheSize;
 	private JButton clearCacheJButton;
 	private JLabel cacheSizeLabel;
@@ -160,9 +161,9 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
 	private JButton removeSelectedImagePathsButton;
 
-	private JList imageRepositoriesAllwaysAddList;
-	private JList imageRepositoriesNeverAddList;
-	private JList imageRepositoriesList;
+	private JList<Object> imageRepositoriesAllwaysAddList;
+	private JList<Object> imageRepositoriesNeverAddList;
+	private JList<Object> imageRepositoriesList;
 
 	private final Config   conf;
 	private final Logger   logger;
@@ -349,7 +350,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 		JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
-		logLevels = new JComboBox(Level.values());
+		logLevels = new JComboBox<Level>(Level.values());
 		logLevels.setSelectedIndex(seletedIndex);
 
 		JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
@@ -382,7 +383,7 @@ public class ConfigViewerGUI extends JFrame {
 
 		String [] factors = {"KiB", "MiB"};
 
-		rotateLogSizeFactor = new JComboBox(factors);
+		rotateLogSizeFactor = new JComboBox<String>(factors);
 
 		/**
 		 * Set values to the rotate log size JTextField and rotate log size
@@ -410,7 +411,7 @@ public class ConfigViewerGUI extends JFrame {
 		formats.add("MM/dd/yyyy:HH:mm:ss:SSS");
 		formats.add("dd/MM/yyyy:HH:mm:ss:SSS");
 
-		logEntryTimeStampFormats = new JComboBox(formats.toArray());
+		logEntryTimeStampFormats = new JComboBox<String>(formats.toArray(new String[]{""}));
 
 		JLabel logEntryTimeStampPreviewLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampPreview.text"));
 		logEntryTimeStampPreview = new JTextField();
@@ -514,7 +515,7 @@ public class ConfigViewerGUI extends JFrame {
 		selectionModePanel.add(manualRadioButton, posSelectionMode.expandW());
 		selectionModePanel.add(automaticRadioButton, posSelectionMode.nextRow().expandW());
 
-		languageList = new JList(ConfigUtil.listLanguagesFiles());
+		languageList = new JList<String>(ConfigUtil.listLanguagesFiles());
 
 		if(conf.getBooleanProperty("automaticLanguageSelection")) {
 			languageList.setEnabled(false);
@@ -581,7 +582,7 @@ public class ConfigViewerGUI extends JFrame {
 			}
 		}
 
-		thumbnailCreationAlgorithm = new JComboBox(JPEGScaleAlgorithm.values());
+		thumbnailCreationAlgorithm = new JComboBox<JPEGScaleAlgorithm>(JPEGScaleAlgorithm.values());
 		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
 		thumbnailCreationAlgorithm.invalidate();
 		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
@@ -769,13 +770,13 @@ public class ConfigViewerGUI extends JFrame {
 			doNotAddRadioButton.setSelected(true);
 		}
 
-		imageRepositoriesAllwaysAddList = new JList(ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel());
+		imageRepositoriesAllwaysAddList = new JList<Object>(ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel());
 		imageRepositoriesAllwaysAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         JScrollPane imageRepositoriesAllwaysAddScrollPane = new JScrollPane(imageRepositoriesAllwaysAddList);
         imageRepositoriesAllwaysAddScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        imageRepositoriesNeverAddList = new JList(ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel());
+        imageRepositoriesNeverAddList = new JList<Object>(ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel());
         imageRepositoriesNeverAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         JScrollPane imageRepositoriesNeverAddScrollPane = new JScrollPane(imageRepositoriesNeverAddList);
@@ -802,7 +803,7 @@ public class ConfigViewerGUI extends JFrame {
             logger.logERROR(iox);
         }
 
-		imageRepositoriesList = new JList(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
+		imageRepositoriesList = new JList<Object>(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
 		imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
 		imageRepositoriesList.setVisibleRowCount(5);
 
@@ -1456,7 +1457,7 @@ public class ConfigViewerGUI extends JFrame {
 	private class LanguageListListener implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent lse) {
 			if(languageList.getSelectedIndex() > -1) {
-				currentLanguage.setText((String)languageList.getSelectedValue());
+				currentLanguage.setText(languageList.getSelectedValue());
 			}
 		}
 	}
@@ -1513,7 +1514,7 @@ public class ConfigViewerGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			SortedListModel imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
-			Object[] selectedValues = imageRepositoriesList.getSelectedValues();
+			List<Object> selectedValues = imageRepositoriesList.getSelectedValuesList();
 
 			StringBuilder paths = new StringBuilder();
 
@@ -1576,14 +1577,14 @@ public class ConfigViewerGUI extends JFrame {
 	    public void actionPerformed(ActionEvent e) {
             if (((JButton)e.getSource()).getName().equals("AllwaysAddImagePaths")) {
                 if (!imageRepositoriesAllwaysAddList.isSelectionEmpty()) {
-                    for (Object selectedValue : imageRepositoriesAllwaysAddList.getSelectedValues()) {
+                    for (Object selectedValue : imageRepositoriesAllwaysAddList.getSelectedValuesList()) {
                         ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
                     }
                     imageRepositoriesAllwaysAddList.clearSelection();
                 }
             } else {
                 if (!imageRepositoriesNeverAddList.isSelectionEmpty()) {
-                    for (Object selectedValue : imageRepositoriesNeverAddList.getSelectedValues()) {
+                    for (Object selectedValue : imageRepositoriesNeverAddList.getSelectedValuesList()) {
                         ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
                     }
                     imageRepositoriesNeverAddList.clearSelection();
