@@ -1,12 +1,4 @@
 package moller.javapeg.program.updates;
-/**
- * This class was created : 2009-05-16 by Fredrik Möller
- * Latest changed         : 2009-05-17 by Fredrik Möller
- *                        : 2009-05-20 by Fredrik Möller
- *                        : 2009-07-20 by Fredrik Möller
- *                        : 2009-08-09 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- */
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,20 +21,20 @@ import moller.util.version.containers.VersionInformation;
 import org.xml.sax.SAXException;
 
 public class NewVersionChecker {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static NewVersionChecker instance;
-		
-	private Logger logger;
-	private Config config;
-	private Language lang;
-	
-	private String urlVersion;
-	private String urlChangeLog;
-	private int timeOut; 
-		
+
+	private final Logger logger;
+	private final Config config;
+	private final Language lang;
+
+	private final String urlVersion;
+	private final String urlChangeLog;
+	private final int timeOut;
+
 	/**
 	 * Private constructor.
 	 */
@@ -50,7 +42,7 @@ public class NewVersionChecker {
 		logger = Logger.getInstance();
 		config = Config.getInstance();
 		lang = Language.getInstance();
-		
+
 		urlVersion = config.getStringProperty("updatechecker.url.version");
 		urlChangeLog = config.getStringProperty("updatechecker.url.changelog");
 		timeOut = config.getIntProperty("updatechecker.timeout");
@@ -58,7 +50,7 @@ public class NewVersionChecker {
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static NewVersionChecker getInstance() {
@@ -71,13 +63,13 @@ public class NewVersionChecker {
 			return instance;
 		}
 	}
-	
+
 	public long newVersionExists(long applicationVersion) {
-		
+
 		long latestVersion = 0;
-		String errorMessage = "";	
+		String errorMessage = "";
 		URL versionURL = null;
-		
+
 		try {
 			versionURL = new URL(urlVersion);
 			latestVersion=  UpdateChecker.getLatestVersion(versionURL, Long.toString(applicationVersion), config.getBooleanProperty("updatechecker.attachVersionInformation"), timeOut);
@@ -100,19 +92,19 @@ public class NewVersionChecker {
 		if (errorMessage.length() > 0) {
 			JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 		}
-		return latestVersion;	
+		return latestVersion;
 	}
-	
+
 	public Map<Long, VersionInformation> getVersionInformation (long applicationVersion) {
-		
+
 		String errorMessage = "";
 		URL changeLogURL = null;
-				
+
 		Map<Long, VersionInformation> vim = null;
-		
+
 		try {
 			changeLogURL = new URL(urlChangeLog);
-			vim = UpdateChecker.getVersionInformationMap(changeLogURL, Long.toString(applicationVersion), config.getBooleanProperty("updatechecker.attachVersionInformation"), timeOut);	
+			vim = UpdateChecker.getVersionInformationMap(changeLogURL, Long.toString(applicationVersion), config.getBooleanProperty("updatechecker.attachVersionInformation"), timeOut);
 		} catch (MalformedURLException e) {
 			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlChangeLog + ")";
 			logger.logERROR(e);
@@ -134,27 +126,27 @@ public class NewVersionChecker {
 		}
 		return vim;
 	}
-	
+
 	public String getChangeLog(Map<Long, VersionInformation> versionInformationMap, long applicationVersion) {
-				
+
 		StringBuilder changeLogsText = null;
 		changeLogsText = new StringBuilder(512);
-		
+
 		Set<Long> reversedOrderSortedTimeStamps = new TreeSet<Long>(Collections.reverseOrder());
 		reversedOrderSortedTimeStamps.addAll(versionInformationMap.keySet());
 
 		String lS = System.getProperty("line.separator");
-		
+
 		String prolog =                                          lS +
 		                "+ = Additions since previous version" + lS +
 		                "! = Bug fixes since previous version" + lS +
 		                "~ = Changes   since previous version" + lS +
 		                                                         lS;
-		
+
 		if (reversedOrderSortedTimeStamps.size() > 0) {
 			changeLogsText.append(prolog);
 		}
-				
+
 		for (Long  timeStamp : reversedOrderSortedTimeStamps) {
 			if(timeStamp > applicationVersion) {
 				changeLogsText.append("Version: ");
@@ -164,7 +156,7 @@ public class NewVersionChecker {
 				changeLogsText.append(versionInformationMap.get(timeStamp).getChangeLogs().get(timeStamp).getChangeLog());
 				changeLogsText.append(lS);
 				changeLogsText.append(lS);
-			}	
+			}
 		}
 		return changeLogsText.toString();
 	}

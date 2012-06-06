@@ -63,14 +63,14 @@ public class JPEGThumbNailRetriever {
 			thumbNail = new JPEGThumbNail();
 			byte [] thumbNailData = null;
 
-			// Hämta in metadata för filen som tumnageln skall hämtas ur
+			// HÃ¤mta in metadata fÃ¶r filen som tumnageln skall hÃ¤mtas ur
 			MetaData md = MetaDataRetriever.getMetaData(jpegFile);
 
 			int thumbNailLength = md.getThumbNailLength();
 
 			if (thumbNailLength > 0) {
 			    try {
-			        // Skapa plats för bilden
+			        // Skapa plats fï¿½r bilden
 			        thumbNailData = new byte[thumbNailLength];
 
 			        FileInputStream image = null;
@@ -83,8 +83,8 @@ public class JPEGThumbNailRetriever {
 			                long thumbNailOffsetLong = (long)md.getThumbNailOffset() + 12;
 			                long skippedBytes = image.skip(thumbNailOffsetLong);
 
-			                // eftersom skip()-metoden enligt api:t kan skippa färre bytes
-			                // än anigvina så kontrolleras detta här och korrigeras vid behov
+			                // eftersom skip()-metoden enligt api:t kan skippa fÃ¤rre bytes
+			                // Ã¤n anigvina sÃ¥ kontrolleras detta hÃ¤r och korrigeras vid behov
 			                // detta.
 			                while(skippedBytes < thumbNailOffsetLong) {
 			                    thumbNailOffsetLong = thumbNailOffsetLong - skippedBytes;

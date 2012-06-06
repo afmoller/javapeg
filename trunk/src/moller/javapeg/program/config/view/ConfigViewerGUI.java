@@ -1,4 +1,4 @@
-package moller.javapeg.program.config;
+package moller.javapeg.program.config.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -55,6 +55,8 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;

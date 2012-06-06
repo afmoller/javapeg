@@ -1,14 +1,4 @@
 package moller.javapeg.program.imagelistformat;
-/**
-* This class was created : 2009-07-13 by Fredrik Möller
-* Latest changed         : 2009-07-14 by Fredrik Möller
-*                        : 2009-07-16 by Fredrik Möller
-*                        : 2009-07-18 by Fredrik Möller
-*                        : 2009-07-19 by Fredrik Möller
-*                        : 2009-07-20 by Fredrik Möller
-*                        : 2009-07-24 by Fredrik Möller
-*                        : 2009-08-11 by Fredrik Möller
-*/
 
 import java.io.File;
 

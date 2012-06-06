@@ -26,7 +26,7 @@
 
 	<target name="build" depends="clean_build">
 		<mkdir dir="build" />
-		<javac srcdir="src" destdir="build" target="1.6" debug="true">
+		<javac srcdir="src" destdir="build" target="1.7" debug="true">
 			<classpath>
 				<fileset dir="libraries" includes="*.jar" />
 			</classpath>
@@ -86,7 +86,7 @@
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
-				<attribute name="Class-Path" value="lib/metadata-extractor-2.3.1.jar lib/${jar.name.util}" />
+				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.2.jar lib/${jar.name.util} lib/xmpcore.jar" />
 			</manifest>
 			<fileset dir="build">
 				<exclude name="**/util/**" />
@@ -167,7 +167,8 @@
 	                <include name="gpl.txt" />
 	            	<include name="CHANGELOG.txt" />
 	                <include name="TODO.txt" />
-	                <include name="libraries/metadata-extractor-2.3.1.jar" />
+	                <include name="libraries/metadata-extractor-2.6.2.jar" />
+	            	<include name="libraries/xmpcore.jar" />
 	            </fileset>
 	        </zip>
 	    </target>

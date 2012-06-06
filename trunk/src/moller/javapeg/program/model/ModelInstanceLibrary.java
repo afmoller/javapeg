@@ -1,5 +1,8 @@
 package moller.javapeg.program.model;
 
+import java.io.File;
+
+import moller.javapeg.program.C;
 import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.imagerepository.ImageRepository;
 import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
@@ -70,7 +73,7 @@ public class ModelInstanceLibrary {
 
 	public CategoriesModel getCategoriesModel() {
 		if (null == categoriesModel) {
-			categoriesModel = new CategoriesModel(CategoryUtil.createCategoriesModel());
+			categoriesModel = new CategoriesModel(CategoryUtil.createCategoriesModel(new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml")));
 		}
 		return categoriesModel;
 	}

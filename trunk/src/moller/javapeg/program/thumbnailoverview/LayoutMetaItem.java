@@ -1,15 +1,11 @@
 package moller.javapeg.program.thumbnailoverview;
-/**
- * This class was created : 2009-03-20 by Fredrik Möller
- * Latest changed         : 
- */
 
 public class LayoutMetaItem {
-	
+
 	private String classString;
 	private String labelString;
 	private String metaString;
-	
+
 	public LayoutMetaItem(String classString, String labelString, String metaString) {
 		super();
 		this.classString = classString;

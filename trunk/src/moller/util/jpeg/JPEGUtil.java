@@ -19,14 +19,14 @@ import moller.util.io.StreamUtil;
 public class JPEGUtil {
 
 	/**
-	 * Denna metod kontrollerar om en fil ‰r av jpg-typ eller inte.
+	 * Denna metod kontrollerar om en fil √§r av jpg-typ eller inte.
 	 * Den tar ett filobjekt som inparameter och returnerar ett boleskt
-	 * v‰rde.
+	 * v√§rde.
 	 *
-	 * @param file Ett File-objekt som innehÂller den fil som
+	 * @param file Ett File-objekt som inneh√•ller den fil som
 	 *             skall kontrolleras
-	 * @return     Ett booleskt v‰rde som talar om ifall filen
-	 *             ‰r en jpg-fil eller inte.
+	 * @return     Ett booleskt v√§rde som talar om ifall filen
+	 *             √§r en jpg-fil eller inte.
 	 * @throws FileNotFoundException, IOException
 	 */
 	public static boolean isJPEG(File file) throws FileNotFoundException, IOException{
@@ -52,11 +52,11 @@ public class JPEGUtil {
 			String fileName = file.getName();
 
 			/**
-			 * H‰r kontrolleras sÂ att de tvÂ fˆrsta byten i filen har v‰rdet 255 (FF)
-			 * och 216 (D8) vilket ‰r det som identifierar en JPEG/JFIF-fil. I if-satsen
-			 * har v‰rdet r‰knats om till unsigned genom att &:a med FF. Vidare testas ifall
-			 * filnamnet slutar pÂ JPG eller JPEG sÂ att inte tumnaglar eller liknande med
-			 * annan fil‰ndelse slinker igenom.
+			 * H√§r kontrolleras s√• att de tv√• f√∂rsta byten i filen har v√§rdet 255 (FF)
+			 * och 216 (D8) vilket √§r det som identifierar en JPEG/JFIF-fil. I if-satsen
+			 * har v√§rdet r√§knats om till unsigned genom att &:a med FF. Vidare testas ifall
+			 * filnamnet slutar p√• JPG eller JPEG s√• att inte tumnaglar eller liknande med
+			 * annan fil√§ndelse slinker igenom.
 			 */
 			return (startsWithFFD8(ffd8) && endsWithFFD9(ffd9) && hasJFIFExtension(fileName));
 		} else {

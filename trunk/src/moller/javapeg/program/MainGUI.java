@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -96,7 +97,7 @@ import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
-import moller.javapeg.program.config.ConfigViewerGUI;
+import moller.javapeg.program.config.view.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
@@ -107,6 +108,7 @@ import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
+import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.HeadingPanel;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
@@ -147,6 +149,7 @@ import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
 import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
+import moller.util.DefaultLookAndFeel;
 import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -214,6 +217,8 @@ public class MainGUI extends JFrame {
 	private JMenuItem shutDownProgramJMenuItem;
 	private JMenuItem openDestinationFileChooserJMenuItem;
 	private JMenuItem startProcessJMenuItem;
+	private JMenuItem exportCategoryTreeStructureJMenuItem;
+	private JMenuItem importCategoryTreeStructureJMenuItem;
 	private JMenuItem helpJMenuItem;
 	private JMenuItem aboutJMenuItem;
 	private JMenuItem popupMenuCopyImageToClipBoardRename;
@@ -491,12 +496,27 @@ public class MainGUI extends JFrame {
 		shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
 		shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
+//		TODO: Remove hard coded string
+		exportCategoryTreeStructureJMenuItem = new JMenuItem("Export categories");
+//      TODO: Remove hard coded string
+		exportCategoryTreeStructureJMenuItem.setToolTipText("Exports the category tree structure, so it can be imported in another JavaPEG instance");
+		exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+
+		//      TODO: Remove hard coded string
+		importCategoryTreeStructureJMenuItem = new JMenuItem("Import categories");
+		//    TODO: Remove hard coded string
+		importCategoryTreeStructureJMenuItem.setToolTipText("Imports the category tree structure from another JavaPEG instance");
+		importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+
 		fileMenu = new JMenu(lang.get("menu.file"));
 		fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
 
 		fileMenu.add(openDestinationFileChooserJMenuItem);
 		fileMenu.add(startProcessJMenuItem);
 		fileMenu.add(shutDownProgramJMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exportCategoryTreeStructureJMenuItem);
+		fileMenu.add(importCategoryTreeStructureJMenuItem);
 
 		// Create rows in the Configuration menu
 		configGUIJMenuItem = new JMenuItem(lang.get("menu.item.configuration"));
@@ -507,7 +527,7 @@ public class MainGUI extends JFrame {
 
 		configMenu.add(configGUIJMenuItem);
 
-		// Skapa menyrader i hjälp-menyn
+		// Create menu items in the help menu
 		helpJMenuItem = new JMenuItem(lang.get("menu.item.programHelp"));
 		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
 
@@ -552,27 +572,27 @@ public class MainGUI extends JFrame {
 
 	private JPanel createInfoPanel() {
 
-		// Skapa övergripande panel som håller innehåller för övrigt innehåll.
+		// Skapa Ã¶vergripande panel som hÃ¥ller innehÃ¥ller fÃ¶r Ã¶vrigt innehÃ¥ll.
 		infoPanel = new JPanel(new BorderLayout());
 		infoPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 1, 2)));
 
 		infoPanelLabel = new JLabel(lang.get("information.panel.informationLabel"));
 		infoPanelLabel.setForeground(Color.GRAY);
 
-		// Skapa en tabbed pane som innehåller tre paneler
+		// Skapa en tabbed pane som innehÃ¥ller tre paneler
 		tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 
 		// Skapa tabellmodeller
     	previewTableModel = ModelInstanceLibrary.getInstance().getPreviewTableModel();
     	metaDataTableModel = ModelInstanceLibrary.getInstance().getMetaDataTableModel();
 
-    	// Skapa tabellen för metadata-informatonen och sätt attribut till den
+    	// Skapa tabellen fÃ¶r metadata-informatonen och sÃ¤tt attribut till den
     	TableRowSorter<TableModel> metaDataTableModelSorter = new TableRowSorter<TableModel>(metaDataTableModel);
     	metaDataTable = new CustomizedJTable(metaDataTableModel);
 		metaDataTable.setEnabled(false);
 		metaDataTable.setRowSorter(metaDataTableModelSorter);
 
-		// Skapa tabellen för namnförhandsgranskningen och sätt attribut till den
+		// Skapa tabellen fÃ¶r namnfÃ¶rhandsgranskningen och sÃ¤tt attribut till den
 		TableRowSorter<TableModel> previewTableModelSorter = new TableRowSorter<TableModel>(previewTableModel);
 		previewTable = new CustomizedJTable(previewTableModel);
 		previewTable.setEnabled(false);
@@ -585,7 +605,7 @@ public class MainGUI extends JFrame {
 		JScrollBar phSB = new JScrollBar(JScrollBar.HORIZONTAL);
 		JScrollBar pvSB = new JScrollBar(JScrollBar.VERTICAL);
 
-		// ... och sätt dess egenskaper
+		// ... och sÃ¤tt dess egenskaper
 		mhSB.setUnitIncrement(40);
 		mvSB.setUnitIncrement(40);
 
@@ -624,8 +644,8 @@ public class MainGUI extends JFrame {
 		return infoPanel;
 	}
 
-	// Denna metod anropas när innehållet i textfälten för undermappsnamn
-	// eller filnamnmall ändrats.
+	// Denna metod anropas nÃ¤r innehÃ¥llet i textfÃ¤lten fÃ¶r undermappsnamn
+	// eller filnamnmall Ã¤ndrats.
 	private void updatePreviewTable() {
 
 		ApplicationContext ac = ApplicationContext.getInstance();
@@ -696,18 +716,11 @@ public class MainGUI extends JFrame {
 		}
 
 		try{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			DefaultLookAndFeel.set();
 		}
-		catch (Exception e){
-			logger.logERROR("Could not set desired Look And Feel for Main GUI");
-
-			StringBuilder sb = new StringBuilder(4096);
-
-			for(StackTraceElement element : e.getStackTrace()) {
-				sb.append(element.toString());
-				sb.append(System.getProperty("line.separator"));
-			}
-			logger.logERROR(sb.toString());
+		catch (Exception ex){
+			logger.logERROR("Could not set default Look And Feel for Main GUI");
+			logger.logERROR(ex);
 		}
 
 		thumbNailListener = new ThumbNailListener();
@@ -1064,6 +1077,8 @@ public class MainGUI extends JFrame {
 
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
 
+		Map<String, JTree> importedCategoriesTrees = CategoryUtil.createImportedCategoriesTree();
+
 		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false);
 
 		JScrollPane categoriesScrollPane = new JScrollPane();
@@ -1075,7 +1090,18 @@ public class MainGUI extends JFrame {
 
 		posBackground.fill = GridBagConstraints.BOTH;
 
-		backgroundPanel.add(categoriesScrollPane, posBackground.expandH().expandW());
+		JTabbedPane categoriesTabbedPane = null;
+
+		if (importedCategoriesTrees.size() > 0) {
+		    categoriesTabbedPane = new JTabbedPane();
+		    categoriesTabbedPane.add(categoriesScrollPane);
+
+		    for (JTree importedCategoriesTree : importedCategoriesTrees.values()) {
+		        categoriesTabbedPane.add(new JScrollPane().getViewport().add(importedCategoriesTree));
+		    }
+		}
+
+		backgroundPanel.add(categoriesTabbedPane, posBackground.expandH().expandW());
 		backgroundPanel.add(new Gap(2), posBackground.nextRow());
 		backgroundPanel.add(selectionModePanel, posBackground.nextRow());
 
@@ -1553,6 +1579,8 @@ public class MainGUI extends JFrame {
 		helpJMenuItem.addActionListener(new MenuListener());
 		aboutJMenuItem.addActionListener(new MenuListener());
 		configGUIJMenuItem.addActionListener(new MenuListener());
+		exportCategoryTreeStructureJMenuItem.addActionListener(new MenuListener());
+		importCategoryTreeStructureJMenuItem.addActionListener(new MenuListener());
 
 		subFolderTextField.getDocument().addDocumentListener(new JTextFieldListener());
 		fileNameTemplateTextField.getDocument().addDocumentListener(new JTextFieldListener());
@@ -1831,6 +1859,39 @@ public class MainGUI extends JFrame {
 		return CustomJOptionPane.showInputDialog(this, label, title, initialValue);
 	}
 
+	private void importCategories() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void exportCategories() {
+
+//        TODO: Remove hard coded string
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(false, "Exportera kategorier", new Rectangle(100, 100, 300, 200), null);
+
+        if (ciep.isActionButtonClicked()) {
+            File directoryToExportCategoriesTo = ciep.getCategoryFileToImportExport();
+
+            if (FileUtil.testWriteAccess(directoryToExportCategoriesTo)) {
+                File categoryExportFile = new File(directoryToExportCategoriesTo, ciep.getFileName() + ".cml");
+                File categoriesFileToExport = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+
+               if (FileUtil.copyFile(categoriesFileToExport, categoryExportFile)) {
+//                 TODO: Remove hard coded string
+                   displayInformationMessage("Category file exported to: " + categoryExportFile.getAbsolutePath());
+               } else {
+//                 TODO: Remove hard coded string
+                   displayErrorMessage("Could not export categories to: " + categoryExportFile.getAbsolutePath());
+                   logger.logERROR("Could not export categories to: " + categoriesFileToExport.getAbsolutePath());
+               }
+            } else {
+//              TODO: Remove hard coded string
+                displayErrorMessage("No write access. Please select a different directory to which the categories shall be exported.(" + directoryToExportCategoriesTo.getAbsolutePath() + ")");
+                logger.logWARN("No write access to directory: " + directoryToExportCategoriesTo.getAbsolutePath());
+            }
+        }
+    }
+
 	// WindowDestroyer
 	private class WindowDestroyer extends WindowAdapter{
 		@Override
@@ -1866,7 +1927,11 @@ public class MainGUI extends JFrame {
 				new HelpViewerGUI().setVisible(true);
 			} else if (actionCommand.equals(lang.get("menu.item.configuration"))) {
 				new ConfigViewerGUI().setVisible(true);
-			}
+			} else if (actionCommand.equals("Export categories")) {
+			    exportCategories();
+			} else if (actionCommand.equals("Import categories")) {
+			    importCategories();
+            }
 		}
 	}
 
@@ -1879,9 +1944,9 @@ public class MainGUI extends JFrame {
 				destinationPathTextField.setEditable(true);
 
 				/**
-			     * Kontrollera så att sparad sökväg fortfarande existerar
-			     * och i annat fall hoppa upp ett steg i trädstrukturen och
-			     * kontrollera ifall den sökvägen existerar
+			     * Kontrollera sï¿½ att sparad sï¿½kvï¿½g fortfarande existerar
+			     * och i annat fall hoppa upp ett steg i trï¿½dstrukturen och
+			     * kontrollera ifall den sï¿½kvï¿½gen existerar
 			     **/
 				File tempFile = new File(config.getStringProperty("destinationPath"));
 
@@ -1904,8 +1969,8 @@ public class MainGUI extends JFrame {
 				JFileChooser chooser = new JFileChooser(tempFile.getAbsolutePath());
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setDialogTitle(lang.get("fileSelectionDialog.destinationPathFileChooser"));
-				int returnVal = chooser.showOpenDialog(MainGUI.this);
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
+
+				if(chooser.showOpenDialog(MainGUI.this) == JFileChooser.APPROVE_OPTION) {
 					String temp = chooser.getSelectedFile().getAbsolutePath();
 
 					char [] tempArray = temp.toCharArray();
@@ -1949,12 +2014,12 @@ public class MainGUI extends JFrame {
 					String subFolderName = "";
 					String fileNameTemplate = "";
 
-					// Ta bort eventuella mellanslag först och sist i undermappsnamnsmallen
+					// Ta bort eventuella mellanslag fï¿½rst och sist i undermappsnamnsmallen
 					subFolderName = subFolderTextField.getText();
 					subFolderName = subFolderName.trim();
 					subFolderTextField.setText(subFolderName);
 
-					// Ta bort eventuella mellanslag först och sist i filnamnsmallen
+					// Ta bort eventuella mellanslag fï¿½rst och sist i filnamnsmallen
 					fileNameTemplate = fileNameTemplateTextField.getText();
 					fileNameTemplate = fileNameTemplate.trim();
 					fileNameTemplateTextField.setText(fileNameTemplate);
@@ -2067,9 +2132,9 @@ public class MainGUI extends JFrame {
 		thumbNailsPanel.removeAll();
 		thumbNailsPanel.updateUI();
 
-		// Rensa en eventuellt ifylld filnamnsförhandsgranskningstabell.
-		// Detta kan ske då det redan öppnats bilder tidigare och dessa
-		// fått förhandsgranskning på sina filnamn
+		// Rensa en eventuellt ifylld filnamnsfï¿½rhandsgranskningstabell.
+		// Detta kan ske dï¿½ det redan ï¿½ppnats bilder tidigare och dessa
+		// fï¿½tt fï¿½rhandsgranskning pï¿½ sina filnamn
 		previewTableModel.setRowCount(0);
 
 		// Clear the Panel with meta data from potentially already
@@ -2188,7 +2253,7 @@ public class MainGUI extends JFrame {
 
 		this.executeLoadThumbnailsProcess();
 
-		// Byta till metadata-tabben ifall tabben skulle stå i annat läge.
+		// Byta till metadata-tabben ifall tabben skulle stï¿½ i annat lï¿½ge.
 		tabbedPane.setSelectedIndex(0);
 	}
 

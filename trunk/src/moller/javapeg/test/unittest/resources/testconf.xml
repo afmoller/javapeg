@@ -1,0 +1,154 @@
+<config xsi:schemaLocation="http://moller.javapeg.config.com config.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://moller.javapeg.config.com">
+
+	<logging>
+		<fileName>javapeg.log</fileName>
+		<developerMode>false</developerMode>
+		<level>ERROR</level>
+		<rotate>true</rotate>
+		<rotateSize>1048576</rotateSize>
+		<rotateZip>true</rotateZip>
+		<timestampFormat>yyyy-MM-dd'T'HH:mm:ss:SSS</timestampFormat>
+	</logging>
+
+	<javapegClientId>NOT-DEFINED</javapegClientId>
+
+	<gui>
+		<main>
+			<xLocation>10</xLocation>
+			<yLocation>10</yLocation>
+			<width>1024</width>
+			<height>768</height>
+
+			<splitPane id="main">200</splitPane>
+			<splitPane id="vertical">300</splitPane>
+			<splitPane id="thumbNailMetaDataPanel">600</splitPane>
+			<splitPane id="previewAndComment">300</splitPane>
+			<splitPane id="previewCommentCategoriesRating">500</splitPane>
+		</main>
+		<imageViewer>
+			<xLocation>10</xLocation>
+			<yLocation>10</yLocation>
+			<width>1024</width>
+			<height>768</height>
+
+			<splitPane id="previewCommentCategoriesRating" width="10">500
+			</splitPane>
+		</imageViewer>
+		<imageSearchResultViewer>
+			<xLocation>10</xLocation>
+			<yLocation>10</yLocation>
+			<width>1024</width>
+			<height>768</height>
+		</imageSearchResultViewer>
+		<configViewer>
+			<xLocation>10</xLocation>
+			<yLocation>10</yLocation>
+			<width>800</width>
+			<height>600</height>
+		</configViewer>
+		<helpViewer>
+			<xLocation>10</xLocation>
+			<yLocation>10</yLocation>
+			<width>800</width>
+			<height>600</height>
+		</helpViewer>
+
+
+	</gui>
+
+	<updatesChecker>
+		<enabled>true</enabled>
+		<attachVersionInformation>true</attachVersionInformation>
+		<timeout>60</timeout>
+		<urlVersion>http://javapeg.sourceforge.net/PAGES/updates/version.php
+		</urlVersion>
+		<urlVersionInformation>http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php
+		</urlVersionInformation>
+	</updatesChecker>
+
+	<language>
+		<automaticSelection>false</automaticSelection>
+		<gUILanguageISO6391>en</gUILanguageISO6391>
+	</language>
+
+	<renameImages>
+		<pathSource></pathSource>
+		<pathDestination></pathDestination>
+		<templateSubDirectoryName>Images %d%</templateSubDirectoryName>
+		<templateFileName>Image %d% Time %t%</templateFileName>
+		<createThumbNails>true</createThumbNails>
+		<useLastModifiedDate>true</useLastModifiedDate>
+		<useLastModifiedTime>true</useLastModifiedTime>
+		<cameraModelNameMaximumLength>0</cameraModelNameMaximumLength>
+		<progressLogTimestampFormat>yyyy-MM-dd' 'HH:mm:ss:SSS
+		</progressLogTimestampFormat>
+	</renameImages>
+
+
+	<tagImages>
+		<categories>
+			<warnWhenRemove>true</warnWhenRemove>
+			<warnWhenRemoveWithSubCategories>true
+			</warnWhenRemoveWithSubCategories>
+			<orRadioButtonIsSelected>true</orRadioButtonIsSelected>
+		</categories>
+		<paths>
+			<automaticallyRemoveNonExistingImagePath>false
+			</automaticallyRemoveNonExistingImagePath>
+			<addToRepositoryPolicy>1</addToRepositoryPolicy>
+		</paths>
+		<preview>
+			<useEmbeddedThumbnail>false</useEmbeddedThumbnail>
+		</preview>
+	</tagImages>
+
+
+	<thumbNail>
+		<cache>
+			<enabled>true</enabled>
+			<maxSize>512</maxSize>
+		</cache>
+		<creation>
+			<ifMissingOrCorrupt>true</ifMissingOrCorrupt>
+			<algorithm>SMOOTH</algorithm>
+			<witdth>160</witdth>
+			<height>120</height>
+		</creation>
+	</thumbNail>
+
+
+	<toolTips>
+		<state>enabled</state>
+	</toolTips>
+
+
+	<categories highest-used-id="10">
+		<category name="Annat" id="10" />
+		<category name="Familj" id="1">
+			<category name="Ella" id="3" />
+			<category name="Fredrik" id="5" />
+			<category name="Noel" id="4" />
+			<category name="Sylvia" id="2" />
+		</category>
+		<category name="Vänner" id="6">
+			<category name="Jimmy" id="9" />
+			<category name="Thomas" id="7" />
+			<category name="Östman" id="8" />
+		</category>
+	</categories>
+
+
+	<repository>
+		<paths>
+			<path>C:\JavaPEG\test\2011_03_28</path>
+			<path>C:\JavaPEG\test\2011_04_01</path>
+			<path>C:\JavaPEG\test\2011_04_02</path>
+			<path>E:\kamerabilder\egna_kamerabilder\2012\2012-03-30</path>
+		</paths>
+		<exceptions>
+			<allwaysAdd />
+			<neverAdd />
+		</exceptions>
+	</repository>
+</config>

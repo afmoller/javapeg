@@ -1,9 +1,4 @@
 package moller.javapeg.program.gui;
-/**
-* This class was created : 2009-05-26 by Fredrik Möller
-* Latest changed         : 2009-05-27 by Fredrik Möller
-*                        : 2009-07-22 by Fredrik Möller
-*/
 
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -17,24 +12,24 @@ import moller.javapeg.program.Gap;
 import moller.javapeg.program.language.Language;
 
 public class VariablesPanel extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
-	private Language lang = Language.getInstance();
-	
+	private final Language lang = Language.getInstance();
+
 	public VariablesPanel() {
-		
+
 		this.setLayout(new GridBagLayout());
-		
+
 		JPanel variablesAndInformationBackground = new JPanel(new GridBagLayout());
 		variablesAndInformationBackground.setBackground(Color.WHITE);
 		variablesAndInformationBackground.setBorder(BorderFactory.createLineBorder(new Color(127,157,185)));
-		
+
 		JPanel variables = new JPanel(new GridBagLayout());
 		variables.setBackground(Color.WHITE);
-				
+
 		JPanel information = new JPanel(new GridBagLayout());
 		information.setBackground(Color.WHITE);
-				
+
 		JLabel variablesLabel = new JLabel(lang.get("labels.variables"));
 		variablesLabel.setForeground(Color.GRAY);
 
@@ -61,7 +56,7 @@ public class VariablesPanel extends JPanel {
 
 		JLabel infoLabelA = new JLabel(lang.get("variable.comment.infoLabelA"));
 		JLabel infoLabelB = new JLabel(lang.get("variable.comment.infoLabelB"));
-		
+
 		GBHelper posVariables = new GBHelper();
 		variables.add(new Gap(2), posVariables.nextRow());
 		variables.add(dateLabelA, posVariables.nextRow());
@@ -84,11 +79,11 @@ public class VariablesPanel extends JPanel {
 		variables.add(todaysDateLabelB, posVariables.nextCol());
 		variables.add(sourceNameLabelA, posVariables.nextRow());
 		variables.add(sourceNameLabelB, posVariables.nextCol());
-				
+
 		GBHelper posInformation = new GBHelper();
 		information.add(infoLabelA, posInformation);
 		information.add(infoLabelB, posInformation.nextRow());
-		
+
 		GBHelper posVariablesAndInformation = new GBHelper();
 		variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation);
 		variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextCol());
@@ -97,7 +92,7 @@ public class VariablesPanel extends JPanel {
 		variablesAndInformationBackground.add(information, posVariablesAndInformation.nextRow().nextCol());
 		variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextRow());
 		variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextCol().nextCol());
-			
+
 		GBHelper posMain = new GBHelper();
 		this.add(variablesLabel, posMain);
 		this.add(variablesAndInformationBackground, posMain.nextRow());
