@@ -1,12 +1,4 @@
 package moller.javapeg.program.thumbnailoverview;
-/**
- * This class was created : 2009-03-20 by Fredrik Möller
- * Latest changed         : 2009-03-21 by Fredrik Möller
- *                        : 2009-03-22 by Fredrik Möller
- *                        : 2009-04-15 by Fredrik Möller
- *                        : 2009-04-21 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,14 +24,14 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class LayoutParser {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static LayoutParser instance;
-	
+
 	private static final String FS = File.separator;
-	
+
 	private static String rowClass;
 	private static String columnClass;
 	private static int columnAmount;
@@ -47,17 +39,17 @@ public class LayoutParser {
 	private static String metaClass;
 	private static List<LayoutMetaItem> metaItems;
 	private static String documentTitle;
-			
+
 	/**
 	 * Private constructor.
 	 */
 	private LayoutParser() {
 		init();
 	}
-	
+
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static LayoutParser getInstance() {
@@ -72,7 +64,7 @@ public class LayoutParser {
 			return instance;
 		}
 	}
-	
+
 	private static void init() {
 		rowClass      = "";
 		columnClass   = "";
@@ -82,32 +74,32 @@ public class LayoutParser {
 		documentTitle = "";
 		metaItems     = new ArrayList<LayoutMetaItem>();
 	}
-	
+
 	public void parse() {
-		
+
 		Language lang = Language.getInstance();
-		
-		Logger logger = Logger.getInstance(); 
-		
+
+		Logger logger = Logger.getInstance();
+
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 		Document doc;
-		
+
 		InputStream layoutSource;
-		
+
 		try {
 			layoutSource = new FileInputStream(System.getProperty("user.dir") + FS + "resources" + FS + "thumb" + FS + "layout.xml");
 		} catch (FileNotFoundException e1) {
 			layoutSource = StartJavaPEG.class.getResourceAsStream("resources/thumbnailoverview/layout.xml");
 		}
-		
+
 		try {
 			db = dbf.newDocumentBuilder();
 			doc = db.parse(layoutSource);
 			doc.getDocumentElement().normalize();
-			
+
 			NodeList documenttitle = doc.getElementsByTagName("documenttitle");
-			
+
 			if(documenttitle.getLength() == 1) {
 				if((documenttitle.item(0)).getNodeType() == Node.ELEMENT_NODE) {
 					documentTitle = documenttitle.item(0).getTextContent();
@@ -116,66 +108,66 @@ public class LayoutParser {
 				JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.wrongElementAmount") + " documenttitle" , lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				logger.logERROR("Wrong number of element for tag: \"documenttitle\". Allowed amount is: 1. Found in file is: " + documenttitle.getLength());
 			}
-						
+
 			NodeList row = doc.getElementsByTagName("row");
-			
+
 			if(row.getLength() == 1) {
 				if((row.item(0)).getNodeType() == Node.ELEMENT_NODE) {
 					String [] attributeNames = {"class"};
 					List<String> attributeValues = 	parseAttributes((Element)row.item(0), attributeNames);
-										
+
 					rowClass = attributeValues.get(0);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.wrongElementAmount") + " row" , lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				logger.logERROR("Wrong number of element for tag: \"row\". Allowed amount is: 1. Found in file is: " + row.getLength());
 			}
-			
+
 			NodeList column = doc.getElementsByTagName("column");
-			
+
 			if(column.getLength() == 1) {
 				if((column.item(0)).getNodeType() == Node.ELEMENT_NODE) {
 					String [] attributeNames = {"class", "amount"};
 					List<String> attributeValues = parseAttributes((Element)column.item(0), attributeNames);
-				
+
 					columnClass  = attributeValues.get(0);
 					columnAmount = Integer.parseInt(attributeValues.get(1));
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.wrongElementAmount") + " column" , lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-				logger.logERROR("Wrong number of element for tag: \"column\". Allowed amount is: 1. Found in file is: " + column.getLength());					
+				logger.logERROR("Wrong number of element for tag: \"column\". Allowed amount is: 1. Found in file is: " + column.getLength());
 			}
-					
+
 			NodeList image = doc.getElementsByTagName("image");
-			
+
 			if(image.getLength() == 1) {
 				if((image.item(0)).getNodeType() == Node.ELEMENT_NODE) {
 					String [] attributeNames = {"class"};
 					List<String> attributeValues = 	parseAttributes((Element)image.item(0), attributeNames);
-										
+
 					imageClass = attributeValues.get(0);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.wrongElementAmount") + " image" , lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				logger.logERROR("Wrong number of element for tag: \"image\". Allowed amount is: 1. Found in file is: " + image.getLength());
 			}
-			
+
 			NodeList meta = doc.getElementsByTagName("meta");
-			
+
 			if(meta.getLength() == 1) {
 				if((meta.item(0)).getNodeType() == Node.ELEMENT_NODE) {
 					String [] attributeNames = {"class"};
 					List<String> attributeValues = 	parseAttributes((Element)meta.item(0), attributeNames);
-										
+
 					metaClass = attributeValues.get(0);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.wrongElementAmount") + " meta" , lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 				logger.logERROR("Wrong number of element for tag: \"meta\". Allowed amount is: 1. Found in file is: " + meta.getLength());
 			}
-			
+
 			NodeList metaItem = doc.getElementsByTagName("metaitem");
-			
+
 			for (int i=0; i<metaItem.getLength(); i++) {
 				if((metaItem.item(i)).getNodeType() == Node.ELEMENT_NODE) {
 					String [] attributeNames = {"class", "label", "meta"};
@@ -194,23 +186,23 @@ public class LayoutParser {
 			logStackTrace(io);
 		}
 	}
-	
+
 	private List<String> parseAttributes (Element element, String [] attributeNames) {
 		List<String> attributeValues = new ArrayList<String>(attributeNames.length);
-				
+
 		for (String attribute : attributeNames) {
 			attributeValues.add(element.getAttribute(attribute));
 		}
 		return attributeValues;
 	}
-	
+
 	private void logStackTrace(Exception e) {
-		
+
 		Logger logger = Logger.getInstance();
 		logger.logERROR("Error when parsing layout.xml. See stack trace below for details.");
-		
+
 		for(StackTraceElement element : e.getStackTrace()) {
-			logger.logERROR(element.toString());	
+			logger.logERROR(element.toString());
 		}
 	}
 

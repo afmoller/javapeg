@@ -89,6 +89,28 @@ public class StringUtil {
 	}
 
 	/**
+	 * This method will return the int value of the String parameter. If the
+	 * value of the String parameter is not an valid integer, then the default
+	 * value specified by the defaultValue parameter will be returned.
+	 *
+	 * @param s contains the integer in String form.
+	 *
+	 * @param defaultValue is the value to return if the s parameter does not
+	 *        contain a valid integer.
+	 *
+	 * @return either an int with the value of the s parameter or the value of
+	 *         the defaultValue parameter if the s parameter does not contain
+	 *         an valid integer.
+	 */
+	public static int getIntValue(String s, int defaultValue) {
+	    try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException nfex) {
+             return defaultValue;
+        }
+	}
+
+	/**
 	 * This method removes the first character in a String.
 	 *
 	 * @param s contains the string in which the first character will be
@@ -113,7 +135,6 @@ public class StringUtil {
 	public static String removeLastCharacter(String s) {
 		return s.substring(0, s.length() - 1);
 	}
-
 
 	/**
 	 * This method returns the first character in a String.

@@ -61,7 +61,14 @@ public class MetaDataRetriever {
 		if (tagAndValueMappings.get(tag) == null) {
 			return -1;
 		} else {
-			return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
+			try {
+		    return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
+			} catch (NumberFormatException nfex) {
+                Logger logger = Logger.getInstance();
+                logger.logERROR("Could not parse String: " + removeNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a int value");
+                logger.logERROR(nfex);
+                return -1;
+            }
 		}
 	}
 

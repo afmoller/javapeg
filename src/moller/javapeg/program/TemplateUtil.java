@@ -15,7 +15,7 @@ public class TemplateUtil {
 
 		Language lang = Language.getInstance();
 		Config conf = Config.getInstance();
-		
+
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureDateVariable") + "%") > -1){
 			String date = "";
 			if (MetaDataUtil.hasValue(theMetaData.getExifDateAsString())) {
@@ -25,7 +25,7 @@ public class TemplateUtil {
 				if(conf.getBooleanProperty("rename.use.lastmodified.date")) {
 					date = FileUtil.getLatestModifiedDate(theMetaData.getFileObject());
 				} else {
-					date = "no value";	
+					date = "no value";
 				}
 			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.pictureDateVariable") + "%", date);
@@ -49,11 +49,11 @@ public class TemplateUtil {
 			if (!MetaDataUtil.hasValue(cameraModel)) {
 				cameraModel = "no value";
 			}
-			
-			// Limit the length of the Camera Model String according to a 
+
+			// Limit the length of the Camera Model String according to a
 			// configurable parameter.
-			int maxLength = Config.getInstance().getIntProperty("rename.maximum.length.camera-model"); 
-			
+			int maxLength = Config.getInstance().getIntProperty("rename.maximum.length.camera-model");
+
 			if( maxLength > 0) {
 				if(cameraModel.length() > maxLength)
 					cameraModel = cameraModel.substring(0,maxLength);
@@ -129,29 +129,29 @@ public class TemplateUtil {
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.dateOftodayVariable") + "%", date);
 		}
 		/**
-		 * The if statement below was added by Angel Bueno. It gives the 
-		 * possibility to use a variable that inserts the original filename 
+		 * The if statement below was added by Angel Bueno. It gives the
+		 * possibility to use a variable that inserts the original filename
 		 * into the resulting filename when the filename template is parsed.
 		 */
 		if(stringToConvert.indexOf("%" + lang.get("variable.sourceNameVariable") + "%") > -1){
 			String fileName = theMetaData.getFileName();
 			if (fileName.toLowerCase().endsWith(".jpeg")) {
-				fileName = fileName.substring(0, fileName.length()-5);				
+				fileName = fileName.substring(0, fileName.length()-5);
 			} else {
 				fileName = fileName.substring(0, fileName.length()-4);
 			}
 			stringToConvert = stringToConvert.replaceAll("%" + lang.get("variable.sourceNameVariable") + "%", fileName);
 		}
-		
+
 		return filterString(stringToConvert);
 	}
-	
+
 	/***
-	 * Metod för att kontrollera så att undermappsnamner endast innehåller tillåtna variabler.
+	 * Metod fÃ¶r att kontrollera sÃ¥ att undermappsnamner endast innehÃ¥ller tillÃ¥tna variabler.
 	 **/
 	public static boolean subFolderNameIsValid(String subFolderName) {
 		Language lang = Language.getInstance();
-		
+
 		if(subFolderName.indexOf("%" + lang.get("variable.pictureTimeVariable") + "%") > -1)
 			return false;
 		if(subFolderName.indexOf("%" + lang.get("variable.shutterSpeedVariable") + "%") > -1)
@@ -169,11 +169,11 @@ public class TemplateUtil {
 
 		return true;
 	}
-	
+
 	/****
-	 * Metod för att rensa en sträng från otillåtna tecken.
-	 * De tecken som rensas bort är de som inte är tillåtna
-	 * i en sökväg till en fil..
+	 * Metod fÃ¶r att rensa en strÃ¤ng frÃ¥n otillÃ¥tna tecken.
+	 * De tecken som rensas bort Ã¤r de som inte Ã¤r tillÃ¥tna
+	 * i en sÃ¶kvÃ¤g till en fil..
 	 **/
 	private static String filterString(String theStringToFilter){
 

@@ -1,8 +1,4 @@
 package moller.util.string;
-/**
- * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         :
- */
 
 public enum Tab {
 
@@ -16,13 +12,13 @@ public enum Tab {
 	EIGHT ("        "),
 	NINE  ("         "),
 	TEN   ("          ");
-	
+
 	private String value;
-	
+
 	private Tab(String value) {
 		this.value    = value;
 	}
-		
+
 	public String value() {
 		return value;
 	}

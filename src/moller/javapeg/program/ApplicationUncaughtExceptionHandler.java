@@ -1,9 +1,4 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2009-09-02 by Fredrik Möller
- * Latest changed         : 2009-09-03 by Fredrik Möller
- *                        : 2009-09-06 by Fredrik Möller  
- */
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -31,13 +26,13 @@ public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExcep
 		} catch (Throwable t) {
 			System.exit(1);
 			// don't let the exception get thrown out, will cause infinite looping!
-		} 
+		}
 	}
 
     private void showException(Throwable t) {
     	logException(t);
     	Language lang = Language.getInstance();
-    	
+
     	String errorMessage = "";
 
     	if("Java heap space".equals(t.getMessage())) {
@@ -53,7 +48,7 @@ public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExcep
     	Logger.getInstance().logFATAL(throwable);
     	Logger.getInstance().flush();
     }
-    
+
     public static void registerExceptionHandler() {
     	Thread.setDefaultUncaughtExceptionHandler(new ApplicationUncaughtExceptionHandler());
     	System.setProperty("sun.awt.exception.handler", ApplicationUncaughtExceptionHandler.class.getName());

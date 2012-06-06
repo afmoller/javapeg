@@ -1,8 +1,4 @@
 package moller.util.mnemonic;
-/**
- * This class was created : 2009-03-24 by Fredrik Möller
- * Latest changed         :
- */
 
 import java.awt.event.KeyEvent;
 

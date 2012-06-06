@@ -1,17 +1,4 @@
 package moller.util.io;
-/**
- * This class was created : 2009-04-04 by Fredrik Möller
- * Latest changed         : 2009-04-09 by Fredrik Möller
- *                        : 2009-05-17 by Fredrik Möller
- *                        : 2009-07-14 by Fredrik Möller
- *                        : 2009-07-18 by Fredrik Möller
- *                        : 2009-08-10 by Fredrik Möller
- *                        : 2009-11-14 by Fredrik Möller
- *                        : 2009-12-18 by Fredrik Möller
- *                        : 2009-12-28 by Fredrik Möller
- *                        : 2010-01-13 by Fredrik Möller
- *                        : 2010-01-28 by Fredrik Möller
- */
 
 import java.awt.Point;
 import java.io.BufferedInputStream;
@@ -154,7 +141,7 @@ public class FileUtil {
 	/**
 	 * This method calculates the size a file will occupy on disk when stored.
 	 *
-	 * @param file is the object that will have it´s actual size on disk
+	 * @param file is the object that will have itï¿½s actual size on disk
 	 *        calculated.
 
 	 * @param clusterSize is the smallest size used to store data by the file
@@ -546,4 +533,15 @@ public class FileUtil {
         }
         return bytes;
     }
+
+	public static String removeFileSuffix(File file) {
+	    String fileName = file.getName();
+
+	    if (fileName.indexOf(".") > 0) {
+
+	        return fileName.substring(0, fileName.lastIndexOf("."));
+	    } else {
+	        return fileName;
+	    }
+	}
 }

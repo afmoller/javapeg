@@ -5,9 +5,9 @@ import java.io.File;
 public class PathUtil {
 
 	/***
-	 * Metod för att kontrollera om en sträng är giltig. I detta fall kontrolleras strängen genom
-	 * att söka efter tecken som inte är tillåtna i en sökväg eller filnamn. hittas otillåtna
-	 * tecken så returnerar metoden ascii-värdet för det tecken som funnits. Hittas inga otillåtna
+	 * Metod fÃ¶r att kontrollera om en strÃ¤ng Ã¤r giltig. I detta fall kontrolleras strÃ¤ngen genom
+	 * att sÃ¶ka efter tecken som inte Ã¤r tillÃ¥tna i en sÃ¶kvÃ¤g eller filnamn. hittas otillÃ¥tna
+	 * tecken sÃ¥ returnerar metoden ascii-vÃ¤rdet fÃ¶r det tecken som funnits. Hittas inga otillÃ¥tna
 	 * tecken returneras -1
 	 **/
 	public static int validateString(String theStringToValidate, boolean isPath){

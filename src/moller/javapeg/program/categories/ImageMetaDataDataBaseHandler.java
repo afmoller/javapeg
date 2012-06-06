@@ -1,5 +1,6 @@
 package moller.javapeg.program.categories;
 
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,10 +34,12 @@ import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
+import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.hash.MD5;
+import moller.util.io.DirectoryUtil;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.xml.XMLUtil;
@@ -265,6 +268,24 @@ public class ImageMetaDataDataBaseHandler {
 
 			ApplicationContext ac = ApplicationContext.getInstance();
 			ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(config.getStringProperty("javapeg.client.id").equals(javaPegIdValue));
+
+			if (!ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
+			    File importedCategoriesDirectory = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "importedcategories");
+
+			    if (!DirectoryUtil.containsFile(importedCategoriesDirectory, javaPegIdValue + ".xml")) {
+//			        TODO: Remove hard coded string
+			        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Kategori import", new Rectangle(100, 100, 300,200), imageMetaDataDataBase);
+			        if (ciep.isActionButtonClicked()) {
+			            File categoryFileToImportExport = ciep.getCategoryFileToImportExport();
+			            String fileName = ciep.getFileName();
+			            System.out.println(categoryFileToImportExport.getAbsolutePath());
+			        }
+			    } else {
+			        System.out.println();
+			    }
+
+
+			}
 
 			NodeList imageTags = doc.getElementsByTagName("image");
 

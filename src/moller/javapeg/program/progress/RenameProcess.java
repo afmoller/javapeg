@@ -1,24 +1,4 @@
 package moller.javapeg.program.progress;
-/**
- * This class was created : 2003-10-16 by Fredrik Möller
- * Latest changed         : 2003-10-21 by Fredrik Möller
- *                        : 2003-10-24 by Fredrik Möller
- *                        : 2003-10-25 by Fredrik Möller
- *                        : 2004-03-04 by Fredrik Möller
- *                        : 2004-03-08 by Fredrik Möller
- *                        : 2007-05-01 by Fredrik Möller
- *                        : 2007-07-22 by Fredrik Möller
- *                        : 2007-07-28 by Fredrik Möller
- *                        : 2009-03-07 by Fredrik Möller
- *                        : 2009-03-09 by Fredrik Möller
- *                        : 2009-03-10 by Fredrik Möller
- *                        : 2009-03-14 by Fredrik Möller
- *                        : 2009-04-03 by Fredrik Möller
- *                        : 2009-04-13 by Fredrik Möller
- *                        : 2009-04-14 by Fredrik Möller
- *                        : 2009-05-09 by Fredrik Möller
- *                        : 2009-07-23 by Fredrik Möller
- */
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -53,59 +33,59 @@ public class RenameProcess extends JFrame implements ActionListener {
 	private static final Timer TIMER = new Timer(true);
 
 	private JProgressBar processProgressBar;
-	private CustomizedJTextArea log;
+	private final CustomizedJTextArea log;
 	private String processMessage = "";
 	private SimpleDateFormat sdf;
-		
-	private JPanel background;
+
+	private final JPanel background;
 
 	private int processProgress = 0;
-	
-	private JLabel title;
 
-	private JButton dismissWindowButton;
-	private JButton openDestinationDirectoryButton;
+	private final JLabel title;
+
+	private final JButton dismissWindowButton;
+	private final JButton openDestinationDirectoryButton;
 
 	private UpdateTask updateTask = null;
 	private GUIUpdater guiUpdater = null;
-	
-	private Language lang;
+
+	private final Language lang;
 
 	public RenameProcess() {
 		lang = Language.getInstance();
 		setTitle(lang.get("progress.RenameProcess.title.processStarting"));
-		
+
 		setLayout(new GridBagLayout());
 		updateTask = new UpdateTask();
 		guiUpdater = new GUIUpdater();
-		
+
 		background = new JPanel(new GridBagLayout());
-		
+
 		title = new JLabel("_");
 
 		if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
-			processProgressBar = new JProgressBar(0, 15);	
+			processProgressBar = new JProgressBar(0, 15);
 		} else {
 			processProgressBar = new JProgressBar(0, 11);
 		}
 		processProgressBar.setStringPainted(true);
-				
+
 		log = new CustomizedJTextArea();
 		log.setEditable(false);
-		
+
 		JScrollPane jsp = new JScrollPane(log, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		jsp.setPreferredSize(new Dimension(600,300));
-			
+
 		dismissWindowButton = new JButton(lang.get("progress.RenameProcess.dismissWindowButton.processStarting"));
 		dismissWindowButton.setToolTipText(lang.get("progress.RenameProcess.dismissWindowButton.processStarting.toolTip"));
 		dismissWindowButton.setEnabled(false);
 		dismissWindowButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.dismissWindowButton.mnemonic").charAt(0)));
-		
+
 		openDestinationDirectoryButton = new JButton(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting"));
 		openDestinationDirectoryButton.setToolTipText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip"));
 		openDestinationDirectoryButton.setEnabled(false);
 		openDestinationDirectoryButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.openDestinationDirectoryButton.mnemonic").charAt(0)));
-		
+
 		GBC gbcRIF = GBC.std().insets(0, 0, 20, 0).fill(GBC.HORIZONTAL);
 		GBC gbcEol = GBC.eol();
 		GBC gbcEolFillI = GBC.eol().fill(GBC.HORIZONTAL).insets(0, 5, 0, 0);
@@ -117,9 +97,9 @@ public class RenameProcess extends JFrame implements ActionListener {
 		background.add(Box.createVerticalStrut(10), gbcEol);
 		background.add(jsp, gbcEolFillI);
 		background.add(Box.createVerticalStrut(20), gbcEol);
-		
+
 		JPanel bottomPanel = new JPanel(new GridBagLayout());
-		
+
 		GBC gbcRight = GBC.std().anchor(GBC.SOUTHEAST).insets(5, 0, 0, 0);
 		bottomPanel.add(Box.createHorizontalGlue(), GBC.std().fill(GBC.HORIZONTAL));
 		bottomPanel.add(dismissWindowButton, gbcRight);
@@ -150,7 +130,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 
 		processProgressBar.setMinimum(0);
 		processProgressBar.setValue(0);
-		
+
 		this.setAlwaysOnTop(true);
 	}
 
@@ -159,26 +139,26 @@ public class RenameProcess extends JFrame implements ActionListener {
 		TIMER.schedule(updateTask, 0, 500);
 		sdf = new SimpleDateFormat(Config.getInstance().getStringProperty("rename.progress.log.timestamp.format"));
 	}
-	
+
 	public void incProcessProgress() {
 		processProgress++;
 		updateGUI();
 	}
-	
+
 	public void setProcessMessage(String message) {
 		processMessage = message;
 	}
-	
+
 	public void setLogMessage(String logMessage) {
 		String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
 		log.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
 	}
-		
+
 	public void renameProcessFinished() {
 		stopUpdateTask();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				
+
 				setTitle(lang.get("progress.RenameProcess.title.processFinished"));
 
 				dismissWindowButton.setText(lang.get("progress.RenameProcess.dismissWindowButton.processFinished"));
@@ -208,7 +188,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 			dispose();
 		}
 	}
-	
+
 	public void setRenameProgressMessages(String message) {
 		setProcessMessage(message);
 		setLogMessage(message);
@@ -224,7 +204,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 			}
 		} else if (dismissWindowButton.equals(source)) {
 			closeWindow();
-		} 
+		}
 	}
 
 	private class GUIUpdater implements Runnable {

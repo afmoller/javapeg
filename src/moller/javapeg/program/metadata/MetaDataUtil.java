@@ -1,8 +1,8 @@
 package moller.javapeg.program.metadata;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import moller.javapeg.program.config.Config;
@@ -15,7 +15,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifDirectory;
+import com.drew.metadata.exif.ExifIFD0Directory;
 
 public class MetaDataUtil {
 
@@ -63,7 +63,6 @@ public class MetaDataUtil {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
     public static Map<String, String> parseImageFile(File imageFile) {
 		Logger logger = Logger.getInstance();
 
@@ -71,61 +70,52 @@ public class MetaDataUtil {
 
 		try{
 			Metadata metadata = JpegMetadataReader.readMetadata(imageFile);
-			Iterator directories = metadata.getDirectoryIterator();
 
-			while (directories.hasNext()) {
-				Directory directory = (Directory)directories.next();
-				Iterator tags = directory.getTagIterator();
-
-				while (tags.hasNext()) {
-					Tag tag = (Tag)tags.next();
-
+			for (Directory directory : metadata.getDirectories()) {
+			    for (Tag tag : directory.getTags()) {
 					if(tag.toString().indexOf("Unknown tag") == -1){
-						try {
-							tagsMap.put(tag.getTagTypeHex(), tag.getDescription());
-						} catch (MetadataException mdex) {
-							logger.logERROR("Could not get value for tag (" + tag.getTagTypeHex() + ") in file: " + imageFile.getAbsolutePath());
-							logger.logERROR(mdex);
-						}
+						tagsMap.put(tag.getTagTypeHex(), tag.getDescription());
 					}
 				}
 				if (directory.hasErrors()) {
-					Iterator errors = directory.getErrors();
-					while (errors.hasNext()) {
-						logger.logERROR("File:" + imageFile.getAbsolutePath() + " contain meta data directory error for directory: " + directory.getName() + "(" + errors.next() + ")");
+					for (String error : directory.getErrors()) {
+						logger.logERROR("File:" + imageFile.getAbsolutePath() + " contain meta data directory error for directory: " + directory.getName() + "(" + error + ")");
 					}
 				}
 			}
 		} catch (JpegProcessingException jpex) {
 			logger.logERROR("Could not read meata data from file: " + imageFile.getAbsolutePath());
 			logger.logERROR(jpex);
-		}
+		} catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		return tagsMap;
 	}
 
-	@SuppressWarnings("rawtypes")
     public static int getOrientationTag(File imageFile) {
 
 		Logger logger = Logger.getInstance();
 
 		try{
 			Metadata metadata = JpegMetadataReader.readMetadata(imageFile);
-			Iterator directories = metadata.getDirectoryIterator();
 
-			while (directories.hasNext()) {
-				Directory directory = (Directory)directories.next();
+			for (Directory directory : metadata.getDirectories()) {
 
-				if(directory.containsTag(ExifDirectory.TAG_ORIENTATION)) {
-					return directory.getInt(ExifDirectory.TAG_ORIENTATION);
+				if(directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+					return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
 				}
 			}
 		} catch (JpegProcessingException jpex) {
 			logger.logERROR("Could not read meata data from file: " + imageFile.getAbsolutePath());
 			logger.logERROR(jpex);
 		} catch (MetadataException mdex) {
-			logger.logERROR("Could not get value for orientation tag (" + ExifDirectory.TAG_ORIENTATION + ") in file: " + imageFile.getAbsolutePath());
+			logger.logERROR("Could not get value for orientation tag (" + ExifIFD0Directory.TAG_ORIENTATION + ") in file: " + imageFile.getAbsolutePath());
 			logger.logERROR(mdex);
-		}
+		} catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		return -1;
 	}
 }

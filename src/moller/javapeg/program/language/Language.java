@@ -1,18 +1,4 @@
 package moller.javapeg.program.language;
-/**
- * This class was created : 2009-01-25 by Fredrik Möller
- * Latest changed         : 2009-02-20 by Fredrik Möller
- *                        : 2009-02-24 by Fredrik Möller
- *                        : 2009-03-01 by Fredrik Möller
- *                        : 2009-03-23 by Fredrik Möller
- *                        : 2009-03-24 by Fredrik Möller
- *                        : 2009-04-15 by Fredrik Möller
- *                        : 2009-04-21 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- *                        : 2009-08-30 by Fredrik Möller
- *                        : 2009-09-05 by Fredrik Möller
- *                        : 2009-10-07 by Fredrik Möller
- */
 
 import java.io.File;
 import java.io.FileInputStream;

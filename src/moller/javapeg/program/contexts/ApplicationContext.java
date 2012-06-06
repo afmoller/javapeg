@@ -15,7 +15,7 @@ import moller.javapeg.program.metadata.MetaData;
 /**
  * This is a class that holds non persistent runtime specific
  * information which different components of the application
- * will need to be able to do it´s tasks.
+ * will need to be able to do itÂ´s tasks.
  *
  * @author Fredrik
  *
@@ -76,7 +76,7 @@ public class ApplicationContext {
 	 * This list contains File objects and is populated when a directory is
 	 * selected in the tree structure. When a jpeg image is found that is added
 	 * to this buffer list. At the same time there is another task populating
-	 * the grid with image thumbnails and that task get it´s images from this
+	 * the grid with image thumbnails and that task get itÂ´s images from this
 	 * buffer list.
 	 */
 	private final List<File> jpegFileLoadBuffer;

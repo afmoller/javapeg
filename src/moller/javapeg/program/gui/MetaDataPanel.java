@@ -3,7 +3,8 @@ package moller.javapeg.program.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -93,7 +94,10 @@ public class MetaDataPanel extends JPanel {
 		} catch (JpegProcessingException jpex) {
 			logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
 			logger.logERROR(jpex);
-		}
+		} catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 
 	public void clearMetaData() {
@@ -102,20 +106,18 @@ public class MetaDataPanel extends JPanel {
 		titleLabel.setText(titleLabelDefaultText);
 	}
 
-	@SuppressWarnings("rawtypes")
     private Vector<Vector<String>> getImageTagsInfo(Metadata metadata){
 
 		Vector<Vector<String>> tableDataVector = new Vector<Vector<String>>();
 
-		Iterator directories = metadata.getDirectoryIterator();
+		for (Directory directory : metadata.getDirectories()) {
 
-		while (directories.hasNext()) {
-			Directory directory = (Directory)directories.next();
-			Iterator tags = directory.getTagIterator();
+			Collection<Tag> tags = directory.getTags();
 
-			while (tags.hasNext()) {
+			for (Tag tag : tags) {
+
 				Vector<String> tempVector = new Vector<String>();
-				Tag tag = (Tag)tags.next();
+
 				if(tag.toString().indexOf("Unknown tag") == -1){
 					tempVector.addElement(directory.getName());
 					tempVector.addElement(tag.getTagName());
@@ -130,11 +132,11 @@ public class MetaDataPanel extends JPanel {
 				}
 			}
 			if (directory.hasErrors()) {
-				Iterator errors = directory.getErrors();
 
 				logger.logERROR("Following Exif errors where found:");
-				while (errors.hasNext()) {
-		            logger.logERROR("Directory error: " + errors.next());
+
+				for (String error : directory.getErrors()) {
+				    logger.logERROR("Directory error: " + error);
 				}
 			}
 		}

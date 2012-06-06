@@ -1,10 +1,4 @@
 package moller.javapeg.program.rename.validator;
-/**
- * This class was created : 2009-02-25 by Fredrik Möller
- * Latest changed         : 2009-02-26 by Fredrik Möller
- *                        : 2009-02-27 by Fredrik Möller
- *                        : 2009-04-06 by Fredrik Möller
- */
 
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
@@ -14,7 +8,7 @@ import moller.util.io.PathUtil;
 public class SourceAndDestinationPath {
 
 	private static SourceAndDestinationPath instance;
-	
+
 	private SourceAndDestinationPath() {
 	}
 
@@ -28,25 +22,25 @@ public class SourceAndDestinationPath {
 			return instance;
 		}
 	}
-	
+
 	public ValidatorStatus test() {
-		
+
 		Language lang = Language.getInstance();
-		
+
 		String errorMessage = "";
-		
+
 		ApplicationContext ac = ApplicationContext.getInstance();
 		String sourcePath = ac.getSourcePath();
 		String destinationPath = ac.getDestinationPath();
 
 		/***
-		 * Kontrollera så att källsökvägen inte är tom
+		 * Kontrollera sÃ¥ att kÃ¤llsÃ¶kvÃ¤gen inte Ã¤r tom
 		 **/
 		if(sourcePath.equals("")){
 			errorMessage = lang.get("validator.sourceanddestinationpath.noSourcePathError") + "\n";
 		}
 		/***
-		 * Om den inte är tom kontrollera så att källsökvägen inte innehåller några otillåtna tecken: (*?"<>|)
+		 * Om den inte Ã¤r tom kontrollera sÃ¥ att kÃ¤llsÃ¶kvÃ¤gen inte innehÃ¥ller nÃ¥gra otillÃ¥tna tecken: (*?"<>|)
 		 **/
 		else {
 			int result = PathUtil.validateString(sourcePath, true);
@@ -57,13 +51,13 @@ public class SourceAndDestinationPath {
 		}
 
 		/***
-		 * Kontrollera så att destinationssökvägen inte är tom
+		 * Kontrollera sÃ¥ att destinationssÃ¶kvÃ¤gen inte Ã¤r tom
 		 **/
 		if(destinationPath.equals("")){
 			errorMessage += lang.get("validator.sourceanddestinationpath.noDestinationPathError") + "\n";
 		}
 		/***
-		 * Om den inte är tom kontrollera så att destinationssökvägen inte innehåller några otillåtna tecken: (*?"<>|)
+		 * Om den inte Ã¤r tom kontrollera sÃ¥ att destinationssÃ¶kvÃ¤gen inte innehÃ¥ller nÃ¥gra otillÃ¥tna tecken: (*?"<>|)
 		 **/
 		else {
 			int result = PathUtil.validateString(destinationPath, true);
@@ -72,15 +66,15 @@ public class SourceAndDestinationPath {
 				errorMessage += lang.get("validator.sourceanddestinationpath.invalidCharactersInDestinationPathError") + " (" + (char)result + ")\n";
 			}
 		}
-		
+
 		ValidatorStatus vs = new ValidatorStatus(true, "");
-		
+
 		if (errorMessage.length() == 0) {
 			return vs;
 		} else {
 			vs.setValid(false);
 			vs.setStatusMessage(errorMessage);
 			return vs;
-		}	
+		}
 	}
 }

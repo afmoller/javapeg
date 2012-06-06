@@ -15,7 +15,7 @@
             <author email="" name="Fredrik Möller"/>
         </authors>
         <url>http://sourceforge.net/projects/javapeg</url>
-        <javaversion>1.6</javaversion>
+        <javaversion>1.7</javaversion>
         <requiresjdk>no</requiresjdk>
         <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
@@ -121,7 +121,8 @@
             <file src="images/javapeg.ico"                                               targetdir="$INSTALL_PATH"/>
             <file src="../JavaPEG.jar"                                                   targetdir="$INSTALL_PATH"/>
             <file src="../lib/Util.jar"                                                  targetdir="$INSTALL_PATH/lib"/>
-            <file src="../libraries/metadata-extractor-2.3.1.jar"                        targetdir="$INSTALL_PATH/lib"/>
+            <file src="../libraries/metadata-extractor-2.6.2.jar"                        targetdir="$INSTALL_PATH/lib"/>
+            <file src="../libraries/xmpcore.jar"                                         targetdir="$INSTALL_PATH/lib"/>
         </pack>
     </packs>
 

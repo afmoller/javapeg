@@ -1,8 +1,4 @@
 package moller.util.gui;
-/**
- * This class was created : 2009-04-06 by Fredrik Möller
- * Latest changed         : 2009-05-30 by Fredrik Möller
- */
 
 import java.awt.Component;
 
@@ -18,13 +14,13 @@ public class Table {
 			packColumn(table, c, 2);
 		}
 	}
-	
+
 	public static void packAllColumnsButLast(JTable table, int margin) {
 		for (int c=0; c<table.getColumnCount() - 1; c++) {
 			packColumn(table, c, 2);
 		}
 	}
-	
+
 
 	// Sets the preferred width of the visible column specified
 	// by vColIndex. The column will be just wide enough

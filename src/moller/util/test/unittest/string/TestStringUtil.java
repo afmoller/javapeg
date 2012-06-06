@@ -32,6 +32,13 @@ public class TestStringUtil {
 	}
 
 	@Test
+	public void testGetIntValue() {
+	    Assert.assertEquals(1, StringUtil.getIntValue("1", -1));
+	    Assert.assertEquals(1, StringUtil.getIntValue("a", 1));
+	    Assert.assertEquals(11, StringUtil.getIntValue("11", -1));
+	}
+
+	@Test
 	public void testRemoveFirstCharacter() {
 		Assert.assertTrue(StringUtil.removeFirstCharacter("String").equals("tring"));
 	}

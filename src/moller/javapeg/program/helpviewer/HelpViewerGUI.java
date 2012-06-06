@@ -1,17 +1,4 @@
 package moller.javapeg.program.helpviewer;
-/**
- * This class was created : 2009-04-16 by Fredrik Möller
- * Latest changed         : 2009-04-19 by Fredrik Möller
- *                        : 2009-04-20 by Fredrik Möller
- *                        : 2009-04-21 by Fredrik Möller
- *                        : 2009-04-24 by Fredrik Möller
- *                        : 2009-04-27 by Fredrik Möller
- *                        : 2009-07-20 by Fredrik Möller
- *                        : 2009-08-21 by Fredrik Möller
- *                        : 2009-09-20 by Fredrik Möller
- *                        : 2009-10-14 by Fredrik Möller
- *                        : 2009-10-15 by Fredrik Möller
- */
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

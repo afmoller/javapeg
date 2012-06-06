@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -20,10 +22,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.CategoriesModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
@@ -188,7 +193,12 @@ public class CategoryUtil {
 					             "application JavaPEG and should not be edited manually, since any change might be" + C.LS +
 					             "overwritten by the JavaPEG application or corrupt the file if the change is invalid" + C.LS, w);
 
-			XMLUtil.writeElementStart("categories", "highest-used-id", Integer.toString(ApplicationContext.getInstance().getHighestUsedCategoryID()), w);
+			XMLAttribute[] rootAttributes = new XMLAttribute[2];
+
+			rootAttributes[0] = new XMLAttribute("highest-used-id", Integer.toString(ApplicationContext.getInstance().getHighestUsedCategoryID()));
+			rootAttributes[1] = new XMLAttribute("javapeg-id", Config.getInstance().getStringProperty("javapeg.client.id"));
+
+			XMLUtil.writeElementStart("categories", rootAttributes, w);
 
 			Enumeration<DefaultMutableTreeNode> children = root.children();
 
@@ -261,9 +271,30 @@ public class CategoryUtil {
 		return categoriesTree;
 	}
 
-	public static TreeNode createCategoriesModel() {
+	public static Map<String, JTree> createImportedCategoriesTree() {
 
-		File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+	    File importedCategoriesDirectory = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "importedcategories");
+	    File[] importedCategoriesFiles = importedCategoriesDirectory.listFiles();
+
+	    Map<String, JTree> categoriesTreesMap = new HashMap<String, JTree>(importedCategoriesFiles.length);
+
+	    for (File importedCategoriesFile : importedCategoriesFiles) {
+
+	        String javaPEGClientID = FileUtil.removeFileSuffix(importedCategoriesFile);
+
+	        JTree categoriesTree = new JTree();
+
+	        categoriesTree.setModel(new CategoriesModel(createCategoriesModel(importedCategoriesFile)));
+	        categoriesTree.setShowsRootHandles(true);
+	        categoriesTree.setRootVisible(false);
+
+	        categoriesTreesMap.put(javaPEGClientID, categoriesTree);
+	    }
+
+	    return categoriesTreesMap;
+	}
+
+	public static TreeNode createCategoriesModel(File categoriesFile) {
 
 		Document document = null;
 		DefaultMutableTreeNode root = null;

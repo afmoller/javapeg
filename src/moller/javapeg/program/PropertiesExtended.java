@@ -1,8 +1,4 @@
 package moller.javapeg.program;
-/**
- * This class was created : 2009-02-27 by Fredrik Möller
- * Latest changed         : 
- */
 
 import java.util.HashSet;
 import java.util.Hashtable;

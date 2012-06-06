@@ -1,4 +1,4 @@
-package moller.javapeg.program.config;
+package moller.javapeg.program.config.view;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;

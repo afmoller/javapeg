@@ -1,16 +1,4 @@
 package moller.javapeg.program.rename.process;
-/**
-* This class was created : 2009-02-19 by Fredrik Möller
-* Latest changed         : 2009-03-03 by Fredrik Möller
-*                        : 2009-03-10 by Fredrik Möller
-*                        : 2009-03-11 by Fredrik Möller
-*                        : 2009-03-14 by Fredrik Möller
-*                        : 2009-04-04 by Fredrik Möller
-*                        : 2009-04-05 by Fredrik Möller
-*                        : 2009-04-14 by Fredrik Möller
-*                        : 2009-05-20 by Fredrik Möller
-*                        : 2009-08-21 by Fredrik Möller
-*/
 
 import java.io.File;
 import java.io.IOException;
@@ -29,21 +17,21 @@ import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.io.FileUtil;
 
 public class FileProcessor {
-	
+
 	/**
 	 * The static singleton instance of this class.
 	 */
 	private static FileProcessor instance;
-	
+
 	/**
 	 * Private constructor.
 	 */
-	private FileProcessor() {	
+	private FileProcessor() {
 	}
 
 	/**
 	 * Accessor method for this Singleton class.
-	 * 
+	 *
 	 * @return the singleton instance of this class.
 	 */
 	public static FileProcessor getInstance() {
@@ -56,31 +44,31 @@ public class FileProcessor {
 			return instance;
 		}
 	}
-	
+
 	public boolean process(RenameProcess rp) {
-		
+
 		Logger logger = Logger.getInstance();
-				
+
 		ApplicationContext ac = ApplicationContext.getInstance();
-		
+
 		RenameProcessContext rpc = RenameProcessContext.getInstance();
-		
+
 		Language lang = Language.getInstance();
-		
+
 		String destinationPath = ac.getDestinationPath();
 		String subDirectoryName = rpc.getSubDirectoryName();
-		
+
 		/**
 		 * Create sub directory.
 		 */
 		rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createSubDirectory"));
-				
+
 		File subDirectory = new File(destinationPath + C.FS + subDirectoryName);
 		subDirectory.mkdir();
-		
+
 		rp.incProcessProgress();
-				
-		
+
+
 		if (ac.isCreateThumbNailsCheckBoxSelected()) {
 			/**
 			 * Create thumb nails directory.
@@ -89,7 +77,7 @@ public class FileProcessor {
 			File thumbNailDirectory = new File(destinationPath + C.FS + subDirectoryName + C.FS + rpc.getTHUMBNAIL_DIRECTORY_NAME());
 			thumbNailDirectory.mkdir();
 			rp.incProcessProgress();
-			
+
 			/**
 			 * Create thumb nails
 			 */
@@ -106,38 +94,38 @@ public class FileProcessor {
 			}
 			rp.incProcessProgress();
 		}
-				
+
 		/**
 		 * Create and transfer content of JPEG files.
 		 */
 		rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createAndTransferContentOfJPEGFiles"));
-		
+
 		Map<File, File> allJPEGFileNameMappings = rpc.getAllJPEGFileNameMappings();
-		
+
 		if (FileUtil.createFiles(allJPEGFileNameMappings.values())) {
 			for (File source : allJPEGFileNameMappings.keySet()) {
 				FileUtil.copyFile(source, allJPEGFileNameMappings.get(source));
 				rp.setLogMessage(lang.get("rename.FileProcessor.renameFromLabel") + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
 				logger.logDEBUG("File: " + source.getName() + " Renamed To: " + allJPEGFileNameMappings.get(source).getName());
-			}	
+			}
 		} else {
-			logger.logERROR("All JPEG files could not be created");		
+			logger.logERROR("All JPEG files could not be created");
 			return false;
 		}
 		rp.incProcessProgress();
-				
+
 		/**
 		 * Create non JPEG files.
 		 */
 		rp.setRenameProgressMessages(lang.get("rename.FileProcessor.createAndTransferContentOfNonJPEGFiles"));
-		
+
 		Map<File, FileAndType> allNonJPEGFileNameMappings = rpc.getAllNonJPEGFileNameMappings();
-		
+
 		for (FileAndType fileAndType : allNonJPEGFileNameMappings.values()) {
-			
+
 			Type type = fileAndType.getType();
 			File file = fileAndType.getFile();
-			
+
 			if (!file.exists()) {
 				if (type.equals(Type.FILE)) {
 					if (!file.getParentFile().exists()) {
@@ -150,26 +138,26 @@ public class FileProcessor {
 						logger.logERROR("Could not create file: " + file.getAbsolutePath());
 						return false;
 					}
-					
+
 				} else {
 					if (!file.mkdirs()) {
 						logger.logERROR("Could not create directory: " + file.getAbsolutePath());
 						return false;
 					}
-				} 	
+				}
 			}
 		}
-					
+
 		/**
 		 * Transfer content of non JPEG files.
 		 */
 		for (File sourceFile : allNonJPEGFileNameMappings.keySet()) {
-			
+
 			FileAndType fat = allNonJPEGFileNameMappings.get(sourceFile);
-			
+
 			Type type = fat.getType();
 			File destinationFile = fat.getFile();
-			
+
 			if (type.equals(Type.FILE)) {
 				if (destinationFile.exists()) {
 					if (sourceFile.getName().equals(C.JAVAPEG_IMAGE_META_NAME)) {
@@ -179,13 +167,13 @@ public class FileProcessor {
 							 */
 							List<String> fileRows = FileUtil.readFromFile(sourceFile);
 							/**
-							 * Modify the content of the meta data file (change 
-							 * file names so they will match the new names of 
+							 * Modify the content of the meta data file (change
+							 * file names so they will match the new names of
 							 * the JPEG image files).
 							 */
 							for (File originalName : allJPEGFileNameMappings.keySet()) {
 								String originalNameString = originalName.getName();
-								
+
 								for (int i = 0; i < fileRows.size(); i++) {
 									if (fileRows.get(i).contains(originalNameString)) {
 										fileRows.set(i, fileRows.get(i).replace(originalNameString, allJPEGFileNameMappings.get(originalName).getName()));
@@ -194,15 +182,15 @@ public class FileProcessor {
 								}
 							}
 							rpc.setJavaPegImageMetaFileContent(fileRows);
-							
+
 							/**
-							 * Store the modified content to new destination 
+							 * Store the modified content to new destination
 							 * file.
 							 */
 							FileUtil.writeToFile(destinationFile, fileRows, false);
-							
+
 							rp.setLogMessage(sourceFile.getAbsolutePath());
-							logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath() + " with file names changed");	
+							logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath() + " with file names changed");
 						} catch (IOException iox) {
 							logger.logERROR("Could not change the file names in the file: " + sourceFile.getAbsolutePath() + " the file is copied unchanged. See stacktrace below for details");
 							logger.logERROR(iox);
@@ -212,7 +200,7 @@ public class FileProcessor {
 						this.copyFileAndSetLogMessage(sourceFile, destinationFile, rp, logger);
 					}
 				} else {
-					logger.logERROR("Could not copy content of source file: " + sourceFile.getAbsolutePath() + " to destination file : " + destinationFile.getAbsolutePath() + " since destination file does not exist.");					
+					logger.logERROR("Could not copy content of source file: " + sourceFile.getAbsolutePath() + " to destination file : " + destinationFile.getAbsolutePath() + " since destination file does not exist.");
 					return false;
 				}
 			}
@@ -220,10 +208,10 @@ public class FileProcessor {
 		rp.incProcessProgress();
 		return true;
 	}
-	
+
 	private void copyFileAndSetLogMessage (File sourceFile, File destinationFile, RenameProcess rp, Logger logger) {
 		FileUtil.copyFile(sourceFile, destinationFile);
 		rp.setLogMessage(sourceFile.getAbsolutePath());
-		logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());	
+		logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
 	}
 }

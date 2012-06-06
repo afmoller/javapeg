@@ -1,29 +1,23 @@
 package moller.javapeg.program.gui;
-/**
- * This class was created : 2003-10-02 av Fredrik Möller
- * Latest changed         : 2003-10-03 av Fredrik Möller
- *                        : 2003-10-16 av Fredrik Möller
- *                        : 2003-10-19 av Fredrik Möller
- *                        : 2009-06-03 by Fredrik Möller
- */
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import java.util.Vector;
 
 public class StatusPanel extends JPanel {
-		
+
 	private static final long serialVersionUID = 1L;
-	private Vector<JLabel> statusVector;
-	private Vector<Timer> timerVector;
-	private int [] indexArray;
-	private int [] statusNrSetArray;
+	private final Vector<JLabel> statusVector;
+	private final Vector<Timer> timerVector;
+	private final int [] indexArray;
+	private final int [] statusNrSetArray;
 
 	// Konstruktor
 	public StatusPanel(boolean [] timerStatus) {
@@ -40,14 +34,14 @@ public class StatusPanel extends JPanel {
 		indexArray   	 = new int [timerStatus.length];
 		statusNrSetArray = new int [timerStatus.length];
 
-		// För att motverka nullpointerexception i setStatusMessage-metoden
+		// FÃ¶r att motverka nullpointerexception i setStatusMessage-metoden
 		for(int i=0; i<indexArray.length; i++){indexArray[i] = 9999;}
 
 		for(int i=0; i<timerStatus.length; i++) {
 			JLabel status;
 			Timer myTimer;
 
-			// Skapa statusfälten.
+			// Skapa statusfÃ¤lten.
 			if(i==0) {
 				status = new JLabel(" ", JLabel.LEFT);
 			} else {
@@ -57,13 +51,13 @@ public class StatusPanel extends JPanel {
 			status.setToolTipText("");
 			statusVector.addElement(status);
 
-			// Lägga till statusfälten till statusraden
+			// LÃ¤gga till statusfÃ¤lten till statusraden
 			if(i==0) {
-				leftStatusPanel.add((JLabel)statusVector.elementAt(i));
+				leftStatusPanel.add(statusVector.elementAt(i));
 			} else {
-				rightStatusPanel.add((JLabel)statusVector.elementAt(i));
+				rightStatusPanel.add(statusVector.elementAt(i));
 			}
-			
+
 			if(timerStatus[i] == true) {
 				myTimer = new Timer(10000, new TimerListener());
 				timerVector.addElement(myTimer);
@@ -90,19 +84,19 @@ public class StatusPanel extends JPanel {
 
 		statusNrSetArray[statusNr] = statusNr;
 	}
-	
+
 	public void clear () {
 		for (int i=0; i < this.getNrOfStatusMessages(); i++) {
-			this.setStatusMessage(" ", "", i);	
+			this.setStatusMessage(" ", "", i);
 		}
 	}
-	
+
 	public int getNrOfStatusMessages() {
 		return statusVector.size();
 	}
 
 	// Lyssnare till ovan skapade timer.
-	// Den rensar fälten
+	// Den rensar fÃ¤lten
 	private class TimerListener implements ActionListener {
 		public void actionPerformed(ActionEvent evt) {
 			for(int i=0; i<indexArray.length; i++) {
