@@ -1,17 +1,17 @@
 package moller.javapeg.program.config.model.repository;
 
-import java.net.URI;
+import java.io.File;
 import java.util.List;
 
 public class RepositoryPaths {
 
-    private List<URI> paths;
+    private List<File> paths;
 
-    public List<URI> getPaths() {
+    public List<File> getPaths() {
         return paths;
     }
 
-    public void setPaths(List<URI> paths) {
+    public void setPaths(List<File> paths) {
         this.paths = paths;
     }
 }

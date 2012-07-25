@@ -1,23 +1,23 @@
 package moller.javapeg.program.config.model.repository;
 
-import java.net.URI;
+import java.io.File;
 import java.util.List;
 
 public class RepositoryExceptions {
 
-    private List<URI> allwaysAdd;
-    private List<URI> neverAdd;
+    private List<File> allwaysAdd;
+    private List<File> neverAdd;
 
-    public List<URI> getAllwaysAdd() {
+    public List<File> getAllwaysAdd() {
         return allwaysAdd;
     }
-    public List<URI> getNeverAdd() {
+    public List<File> getNeverAdd() {
         return neverAdd;
     }
-    public void setAllwaysAdd(List<URI> allwaysAdd) {
+    public void setAllwaysAdd(List<File> allwaysAdd) {
         this.allwaysAdd = allwaysAdd;
     }
-    public void setNeverAdd(List<URI> neverAdd) {
+    public void setNeverAdd(List<File> neverAdd) {
         this.neverAdd = neverAdd;
     }
 }
