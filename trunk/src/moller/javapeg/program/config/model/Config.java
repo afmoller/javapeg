@@ -1,9 +1,13 @@
 package moller.javapeg.program.config.model;
 
+import java.util.Map;
+
+import javax.swing.tree.TreeNode;
+
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
-import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 
@@ -18,8 +22,9 @@ public class Config {
     private TagImages tagImages;
     private ThumbNail thumbNail;
     private ToolTips toolTips;
-    private TagImagesCategories categories;
+    private TreeNode categories;
     private Repository repository;
+    private Map<String, ImportedCategories> importedCategoriesConfig;
 
     public Logging getLogging() {
         return logging;
@@ -48,11 +53,14 @@ public class Config {
     public ToolTips getToolTips() {
         return toolTips;
     }
-    public TagImagesCategories getCategories() {
+    public TreeNode getCategories() {
         return categories;
     }
     public Repository getRepository() {
         return repository;
+    }
+    public Map<String, ImportedCategories> getImportedCategoriesConfig() {
+        return importedCategoriesConfig;
     }
     public void setLogging(Logging logging) {
         this.logging = logging;
@@ -81,10 +89,13 @@ public class Config {
     public void setToolTips(ToolTips toolTips) {
         this.toolTips = toolTips;
     }
-    public void setCategories(TagImagesCategories categories) {
+    public void setCategories(TreeNode categories) {
         this.categories = categories;
     }
     public void setRepository(Repository repository) {
         this.repository = repository;
+    }
+    public void setImportedCategories(Map<String, ImportedCategories> importedCategoriesConfig) {
+        this.importedCategoriesConfig = importedCategoriesConfig;
     }
 }

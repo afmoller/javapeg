@@ -14,7 +14,7 @@ import javax.xml.xpath.XPathFactory;
 import moller.javapeg.program.config.model.Config;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class ConfigHandler {
@@ -35,17 +35,18 @@ public class ConfigHandler {
             XPath xPath = xPathFactory.newXPath();
 
             config = new Config();
-//            config.setCategories(ConfigHandlerUtil.getCategoriesConfig(doc.getElementsByTagName("categories"), xPath));
-            config.setgUI(ConfigHandlerUtil.getGUIConfig((NodeList)xPath.evaluate("/config/gui/*", doc, XPathConstants.NODESET), xPath));
+            config.setCategories(ConfigHandlerUtil.getCategoriesConfig((Node)xPath.evaluate("/config/categories", doc, XPathConstants.NODE), xPath));
+            config.setImportedCategories(ConfigHandlerUtil.getImportedCategoriesConfig((Node)xPath.evaluate("/config/importedcategories", doc, XPathConstants.NODE), xPath));
+            config.setgUI(ConfigHandlerUtil.getGUIConfig((Node)xPath.evaluate("/config/gui", doc, XPathConstants.NODE), xPath));
             config.setJavapegClientId((String)xPath.evaluate("/config/javapegClientId", doc, XPathConstants.STRING));
-            config.setLanguage(ConfigHandlerUtil.getLanguageConfig(doc.getElementsByTagName("language"), xPath));
-            config.setLogging(ConfigHandlerUtil.getLoggingConfig(doc.getElementsByTagName("logging"), xPath));
-            config.setRenameImages(ConfigHandlerUtil.getRenameImagesConfig(doc.getElementsByTagName("renameImages"), xPath));
-            config.setRepository(ConfigHandlerUtil.getRepositoryConfig(doc.getElementsByTagName("repository"), xPath));
-            config.setTagImages(ConfigHandlerUtil.getTagImagesConfig(doc.getElementsByTagName("tagImages"), xPath));
-            config.setThumbNail(ConfigHandlerUtil.getThumbNailConfig(doc.getElementsByTagName("thumbNail"), xPath));
-            config.setToolTips(ConfigHandlerUtil.getToolTipsConfig(doc.getElementsByTagName("toolTips"), xPath));
-            config.setUpdatesChecker(ConfigHandlerUtil.getUpdatesCheckerConfig(doc.getElementsByTagName("updatesChecker"), xPath));
+            config.setLanguage(ConfigHandlerUtil.getLanguageConfig((Node)xPath.evaluate("/config/language", doc, XPathConstants.NODE), xPath));
+            config.setLogging(ConfigHandlerUtil.getLoggingConfig((Node)xPath.evaluate("/config/logging", doc, XPathConstants.NODE), xPath));
+            config.setRenameImages(ConfigHandlerUtil.getRenameImagesConfig((Node)xPath.evaluate("/config/renameImages", doc, XPathConstants.NODE), xPath));
+            config.setRepository(ConfigHandlerUtil.getRepositoryConfig((Node)xPath.evaluate("/config/repository", doc, XPathConstants.NODE), xPath));
+            config.setTagImages(ConfigHandlerUtil.getTagImagesConfig((Node)xPath.evaluate("/config/tagImages", doc, XPathConstants.NODE), xPath));
+            config.setThumbNail(ConfigHandlerUtil.getThumbNailConfig((Node)xPath.evaluate("/config/thumbNail", doc, XPathConstants.NODE), xPath));
+            config.setToolTips(ConfigHandlerUtil.getToolTipsConfig((Node)xPath.evaluate("/config/toolTips", doc, XPathConstants.NODE), xPath));
+            config.setUpdatesChecker(ConfigHandlerUtil.getUpdatesCheckerConfig((Node)xPath.evaluate("/config/updatesChecker", doc, XPathConstants.NODE), xPath));
         } catch (ParserConfigurationException pcex) {
 //            TODO: Fix error logging
         } catch (SAXException sex) {
@@ -59,7 +60,7 @@ public class ConfigHandler {
         return config;
     }
 
-    public static boolean store(Config config) {
+    public static boolean store(Config config, File configFile) {
         return true;
     }
 }

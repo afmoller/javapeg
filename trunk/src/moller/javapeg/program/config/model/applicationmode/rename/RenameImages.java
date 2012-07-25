@@ -1,12 +1,12 @@
 package moller.javapeg.program.config.model.applicationmode.rename;
 
-import java.net.URI;
+import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class RenameImages {
 
-    private URI pathSource;
-    private URI pathDestination;
+    private File pathSource;
+    private File pathDestination;
     private String templateSubDirectoryName;
     private String templateFileName;
     private Boolean createThumbNails;
@@ -15,10 +15,10 @@ public class RenameImages {
     private Integer cameraModelNameMaximumLength;
     private SimpleDateFormat progressLogTimestampFormat;
 
-    public URI getPathSource() {
+    public File getPathSource() {
         return pathSource;
     }
-    public URI getPathDestination() {
+    public File getPathDestination() {
         return pathDestination;
     }
     public String getTemplateSubDirectoryName() {
@@ -42,10 +42,10 @@ public class RenameImages {
     public SimpleDateFormat getProgressLogTimestampFormat() {
         return progressLogTimestampFormat;
     }
-    public void setPathSource(URI pathSource) {
+    public void setPathSource(File pathSource) {
         this.pathSource = pathSource;
     }
-    public void setPathDestination(URI pathDestination) {
+    public void setPathDestination(File pathDestination) {
         this.pathDestination = pathDestination;
     }
     public void setTemplateSubDirectoryName(String templateSubDirectoryName) {
