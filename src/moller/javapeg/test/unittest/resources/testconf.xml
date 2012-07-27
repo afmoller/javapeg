@@ -112,7 +112,7 @@
 		<creation>
 			<ifMissingOrCorrupt>true</ifMissingOrCorrupt>
 			<algorithm>SMOOTH</algorithm>
-			<witdth>160</witdth>
+			<width>160</width>
 			<height>120</height>
 		</creation>
 	</thumbNail>
