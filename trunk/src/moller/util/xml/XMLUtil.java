@@ -3,6 +3,8 @@ package moller.util.xml;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import moller.util.string.Tab;
+
 public class XMLUtil {
 
 	/**
@@ -81,11 +83,32 @@ public class XMLUtil {
 	}
 
 	/**
+	 * @param element
+	 * @param indent
+	 * @param xmlsw
+	 * @throws XMLStreamException
+	 */
+	public static void writeElementStart(String element, Tab indent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        writeIndent(xmlsw, indent.value());
+	    writeElementStart(element, xmlsw);
+    }
+
+	/**
 	 * @param xmlsw
 	 * @throws XMLStreamException
 	 */
 	public static void writeElementEnd(XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeEndElement();
+	}
+
+	/**
+	 * @param xmlsw
+	 * @param indent
+	 * @throws XMLStreamException
+	 */
+	public static void writeElementEnd(XMLStreamWriter xmlsw, Tab indent) throws XMLStreamException {
+	    writeIndent(xmlsw, indent.value());
+	    writeElementEnd(xmlsw);
 	}
 
 	/**
@@ -96,4 +119,29 @@ public class XMLUtil {
 	public static void writeComment(String comment, XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeComment(comment);
 	}
+
+    /**
+     * @param element
+     * @param baseIndent
+     * @param value
+     * @param xmlsw
+     * @throws XMLStreamException
+     */
+    public static void writeElementWithIndent(String element, Tab baseIndent, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
+        xmlsw.writeCharacters(baseIndent.value());
+        writeElement(element, value, xmlsw);
+    }
+
+    public static void writeElementWithIndentAndLineBreak(String element, Tab baseIndent, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
+        writeElementWithIndent(element, baseIndent, value, xmlsw);
+        writeLineBreak(xmlsw);
+    }
+
+    public static void writeLineBreak(XMLStreamWriter xmlsw) throws XMLStreamException {
+        xmlsw.writeCharacters("\n");
+    }
+
+    public static void writeIndent(XMLStreamWriter xmlsw, String indent) throws XMLStreamException {
+        xmlsw.writeCharacters(indent);
+    }
 }

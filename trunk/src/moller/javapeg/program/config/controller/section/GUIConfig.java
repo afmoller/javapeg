@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -13,6 +14,7 @@ import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.util.string.StringUtil;
+import moller.util.string.Tab;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -81,5 +83,10 @@ public class GUIConfig {
             }
         }
         return guiWindowSplitPanes;
+    }
+
+    public static void writeGUIConfig(GUI gUI, Tab baseIndent, XMLStreamWriter xmlsw) {
+        // TODO Auto-generated method stub
+
     }
 }
