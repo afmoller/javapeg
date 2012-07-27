@@ -2,6 +2,8 @@ package moller.javapeg.program.config.controller.section;
 
 import java.text.SimpleDateFormat;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -9,11 +11,18 @@ import javax.xml.xpath.XPathExpressionException;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Logging;
 import moller.javapeg.program.enumerations.Level;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
 
 public class LoggingConfig {
 
+    /**
+     * @param loggingNode
+     * @param xPath
+     * @return
+     */
     public static Logging getLoggingConfig(Node loggingNode, XPath xPath) {
         Logging logging = new Logging();
 
@@ -31,5 +40,21 @@ public class LoggingConfig {
             e.printStackTrace();
         }
         return logging;
+    }
+
+    /**
+     * @param logging
+     * @param baseIndent
+     * @param xmlsw
+     * @throws XMLStreamException
+     */
+    public static void writeLoggingConfig(Logging logging, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.DEVELOPER_MODE, baseIndent, Boolean.toString(logging.getDeveloperMode()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.FILE_NAME, baseIndent, logging.getFileName(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.LEVEL, baseIndent, logging.getLevel().toString(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ROTATE, baseIndent, Boolean.toString(logging.getRotate()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ROTATE_SIZE, baseIndent, Long.toString(logging.getRotateSize()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ROTATE_ZIP, baseIndent, Boolean.toString(logging.getRotateZip()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.TIMESTAMP_FORMAT, baseIndent, logging.getTimeStampFormat().toPattern(), xmlsw);
     }
 }
