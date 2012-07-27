@@ -23,7 +23,7 @@ public class ConfigElement {
     public static final String SPLIT_PANE = "splitPane";
     public static final String ID = "id";
     public static final String INSTANCE = "instance";
-    public static final String JAVAPEG_CLIENT_ID = " javapegClientId";
+    public static final String JAVAPEG_CLIENT_ID = "javapegClientId";
     public static final String JAVAPEG_CLIENT_ID_ATTRIBUTE = "javapegclientid";
     public static final String DISPLAY_NAME = "displayname";
     public static final String AUTOMATIC_SELECTION = "automaticSelection";
