@@ -11,6 +11,18 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import moller.javapeg.program.config.controller.section.CategoriesConfig;
+import moller.javapeg.program.config.controller.section.GUIConfig;
+import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
+import moller.javapeg.program.config.controller.section.JavapegClientIdConfig;
+import moller.javapeg.program.config.controller.section.LanguageConfig;
+import moller.javapeg.program.config.controller.section.LoggingConfig;
+import moller.javapeg.program.config.controller.section.RenameImagesConfig;
+import moller.javapeg.program.config.controller.section.RepositoryConfig;
+import moller.javapeg.program.config.controller.section.TagImagesConfig;
+import moller.javapeg.program.config.controller.section.ThumbNailConfig;
+import moller.javapeg.program.config.controller.section.ToolTipsConfig;
+import moller.javapeg.program.config.controller.section.UpdatesCheckerConfig;
 import moller.javapeg.program.config.model.Config;
 
 import org.w3c.dom.Document;
@@ -35,18 +47,18 @@ public class ConfigHandler {
             XPath xPath = xPathFactory.newXPath();
 
             config = new Config();
-            config.setCategories(ConfigHandlerUtil.getCategoriesConfig((Node)xPath.evaluate("/config/categories", doc, XPathConstants.NODE), xPath));
-            config.setImportedCategories(ConfigHandlerUtil.getImportedCategoriesConfig((Node)xPath.evaluate("/config/importedcategories", doc, XPathConstants.NODE), xPath));
-            config.setgUI(ConfigHandlerUtil.getGUIConfig((Node)xPath.evaluate("/config/gui", doc, XPathConstants.NODE), xPath));
-            config.setJavapegClientId((String)xPath.evaluate("/config/javapegClientId", doc, XPathConstants.STRING));
-            config.setLanguage(ConfigHandlerUtil.getLanguageConfig((Node)xPath.evaluate("/config/language", doc, XPathConstants.NODE), xPath));
-            config.setLogging(ConfigHandlerUtil.getLoggingConfig((Node)xPath.evaluate("/config/logging", doc, XPathConstants.NODE), xPath));
-            config.setRenameImages(ConfigHandlerUtil.getRenameImagesConfig((Node)xPath.evaluate("/config/renameImages", doc, XPathConstants.NODE), xPath));
-            config.setRepository(ConfigHandlerUtil.getRepositoryConfig((Node)xPath.evaluate("/config/repository", doc, XPathConstants.NODE), xPath));
-            config.setTagImages(ConfigHandlerUtil.getTagImagesConfig((Node)xPath.evaluate("/config/tagImages", doc, XPathConstants.NODE), xPath));
-            config.setThumbNail(ConfigHandlerUtil.getThumbNailConfig((Node)xPath.evaluate("/config/thumbNail", doc, XPathConstants.NODE), xPath));
-            config.setToolTips(ConfigHandlerUtil.getToolTipsConfig((Node)xPath.evaluate("/config/toolTips", doc, XPathConstants.NODE), xPath));
-            config.setUpdatesChecker(ConfigHandlerUtil.getUpdatesCheckerConfig((Node)xPath.evaluate("/config/updatesChecker", doc, XPathConstants.NODE), xPath));
+            config.setCategories(CategoriesConfig.getCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.CATEGORIES, doc, XPathConstants.NODE), xPath));
+            config.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.IMPORTEDCATEGORIES, doc, XPathConstants.NODE), xPath));
+            config.setgUI(GUIConfig.getGUIConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.GUI, doc, XPathConstants.NODE), xPath));
+            config.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig((String)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.JAVAPEG_CLIENT_ID, doc, XPathConstants.STRING)));
+            config.setLanguage(LanguageConfig.getLanguageConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LANGUAGE, doc, XPathConstants.NODE), xPath));
+            config.setLogging(LoggingConfig.getLoggingConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LOGGING, doc, XPathConstants.NODE), xPath));
+            config.setRenameImages(RenameImagesConfig.getRenameImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RENAME_IMAGES, doc, XPathConstants.NODE), xPath));
+            config.setRepository(RepositoryConfig.getRepositoryConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.REPOSITORY, doc, XPathConstants.NODE), xPath));
+            config.setTagImages(TagImagesConfig.getTagImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TAG_IMAGES, doc, XPathConstants.NODE), xPath));
+            config.setThumbNail(ThumbNailConfig.getThumbNailConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.THUMBNAIL, doc, XPathConstants.NODE), xPath));
+            config.setToolTips(ToolTipsConfig.getToolTipsConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TOOL_TIPS, doc, XPathConstants.NODE), xPath));
+            config.setUpdatesChecker(UpdatesCheckerConfig.getUpdatesCheckerConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.UPDATES_CHECKER, doc, XPathConstants.NODE), xPath));
         } catch (ParserConfigurationException pcex) {
 //            TODO: Fix error logging
         } catch (SAXException sex) {
