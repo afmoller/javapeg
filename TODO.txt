@@ -1,6 +1,6 @@
 3.0:
 ====
-- Add support for multiple users on the same image repository and categroy files.
+- Add support for multiple users on the same image repository and category files.
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
@@ -12,6 +12,7 @@
 
 3.1:
 ====
+- Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Add merge functionality from several source directories. in the "rename image" mode.
@@ -41,5 +42,5 @@
 - Add functionality to ask for preferred language at first application start.
 - Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
   properties implementation does.
-- Fixa så att config blir context medvetet, så att inte hela parameternamnet behöver anges.
+- Fixa sï¿½ att config blir context medvetet, sï¿½ att inte hela parameternamnet behï¿½ver anges.
 - Create unittest
