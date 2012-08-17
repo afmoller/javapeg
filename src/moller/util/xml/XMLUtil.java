@@ -36,15 +36,17 @@ public class XMLUtil {
 	 */
 	public static void writeElement(String element, String value, XMLAttribute[] xmlAttributes, XMLStreamWriter xmlsw) throws XMLStreamException {
 		xmlsw.writeStartElement(element);
-		if (value != null) {
-			xmlsw.writeCharacters(value);
-		}
 
 		if (xmlAttributes != null) {
 			for (XMLAttribute xmlAttribute : xmlAttributes) {
 				xmlsw.writeAttribute(xmlAttribute.getName(), xmlAttribute.getValue());
 			}
 		}
+
+		if (value != null) {
+		    xmlsw.writeCharacters(value);
+		}
+
 		xmlsw.writeEndElement();
 	}
 
@@ -94,6 +96,18 @@ public class XMLUtil {
     }
 
 	/**
+	 * @param element
+	 * @param indent
+	 * @param xmlsw
+	 * @throws XMLStreamException
+	 */
+	public static void writeElementStartWithLineBreak(String element, Tab indent, XMLStreamWriter xmlsw) throws XMLStreamException {
+	    writeIndent(xmlsw, indent.value());
+        writeElementStart(element, xmlsw);
+        writeLineBreak(xmlsw);
+    }
+
+	/**
 	 * @param xmlsw
 	 * @throws XMLStreamException
 	 */
@@ -109,6 +123,23 @@ public class XMLUtil {
 	public static void writeElementEnd(XMLStreamWriter xmlsw, Tab indent) throws XMLStreamException {
 	    writeIndent(xmlsw, indent.value());
 	    writeElementEnd(xmlsw);
+	}
+
+	 /**
+	 * @param xmlsw
+	 * @param indent
+	 * @throws XMLStreamException
+	 */
+	public static void writeElementEndWithLineBreak(XMLStreamWriter xmlsw, Tab indent) throws XMLStreamException {
+	    writeIndent(xmlsw, indent.value());
+	    writeElementEnd(xmlsw);
+	    writeLineBreak(xmlsw);
+	}
+
+	public static void writeEmptyElementWithIndentAndLineBreak(String element, XMLStreamWriter xmlsw, Tab indent) throws XMLStreamException {
+	    writeIndent(xmlsw, indent.value());
+	    xmlsw.writeEmptyElement(element);
+	    writeLineBreak(xmlsw);
 	}
 
 	/**
@@ -132,6 +163,16 @@ public class XMLUtil {
         writeElement(element, value, xmlsw);
     }
 
+    public static void writeElementWithIndent(String element, Tab baseIndent, XMLAttribute[] attributes, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
+        xmlsw.writeCharacters(baseIndent.value());
+        writeElement(element, value, attributes, xmlsw);
+    }
+
+    public static void writeElementWithIndentAndLineBreak(String element, Tab baseIndent, XMLAttribute[] attributes, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
+        writeElementWithIndent(element, baseIndent, attributes, value, xmlsw);
+        writeLineBreak(xmlsw);
+    }
+
     public static void writeElementWithIndentAndLineBreak(String element, Tab baseIndent, String value, XMLStreamWriter xmlsw) throws XMLStreamException {
         writeElementWithIndent(element, baseIndent, value, xmlsw);
         writeLineBreak(xmlsw);
@@ -144,4 +185,6 @@ public class XMLUtil {
     public static void writeIndent(XMLStreamWriter xmlsw, String indent) throws XMLStreamException {
         xmlsw.writeCharacters(indent);
     }
+
+
 }
