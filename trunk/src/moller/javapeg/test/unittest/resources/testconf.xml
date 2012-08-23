@@ -80,8 +80,7 @@
 		<useLastModifiedDate>true</useLastModifiedDate>
 		<useLastModifiedTime>true</useLastModifiedTime>
 		<cameraModelNameMaximumLength>0</cameraModelNameMaximumLength>
-		<progressLogTimestampFormat>yyyy-MM-dd' 'HH:mm:ss:SSS
-		</progressLogTimestampFormat>
+		<progressLogTimestampFormat>yyyy-MM-dd' 'HH:mm:ss:SSS</progressLogTimestampFormat>
 	</renameImages>
 
 
