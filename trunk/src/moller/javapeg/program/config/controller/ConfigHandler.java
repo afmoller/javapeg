@@ -127,6 +127,15 @@ public class ConfigHandler {
                     // GUI
                     GUIConfig.writeGUIConfig(config.getgUI(), Tab.TWO, w);
 
+                    // UPDATES CHECKER
+                    UpdatesCheckerConfig.writeUpdatesCheckerConfig(config.getUpdatesChecker(), Tab.TWO, w);
+
+                    // LANGUAGE
+                    LanguageConfig.writeLanguageConfig(config.getLanguage(), Tab.TWO, w);
+
+                    // RENAME IMAGES
+                    RenameImagesConfig.writeRenameImagesConfig(config.getRenameImages(), Tab.TWO, w);
+
                     XMLUtil.writeElementEnd(w);
                     w.flush();
                 } catch (XMLStreamException xse) {
