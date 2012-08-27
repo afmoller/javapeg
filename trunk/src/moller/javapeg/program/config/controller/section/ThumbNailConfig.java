@@ -1,5 +1,7 @@
 package moller.javapeg.program.config.controller.section;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -10,6 +12,8 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
 
@@ -54,5 +58,40 @@ public class ThumbNailConfig {
             e.printStackTrace();
         }
         return thumbNailCache;
+    }
+
+    public static void writeThumbNailConfig(ThumbNail thumbNail, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        //  THUMB NAIL start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.THUMBNAIL, baseIndent, xmlsw);
+
+        writeCacheConfig(thumbNail.getCache(), Tab.FOUR, xmlsw);
+        writeCreationConfig(thumbNail.getCreation(), Tab.FOUR, xmlsw);
+
+        //  THUMB NAIL end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+    }
+
+    private static void writeCacheConfig(ThumbNailCache thumbNailCache, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        //  CACHE start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.CACHE, baseIndent, xmlsw);
+
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ENABLED, Tab.SIX, Boolean.toString(thumbNailCache.getEnabled()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.MAX_SIZE, Tab.SIX, Integer.toString(thumbNailCache.getMaxSize()), xmlsw);
+
+        //  CACHE end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+    }
+
+    private static void writeCreationConfig(ThumbNailCreation thumbNailCreation, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        //  CREATION start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.CREATION, baseIndent, xmlsw);
+
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.IF_MISSING_OR_CORRUPT, Tab.SIX, Boolean.toString(thumbNailCreation.getIfMissingOrCorrupt()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ALGORITHM, Tab.SIX, thumbNailCreation.getAlgorithm().name(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.WIDTH, Tab.SIX, Integer.toString(thumbNailCreation.getWidth()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.HEIGHT, Tab.SIX, Integer.toString(thumbNailCreation.getHeight()), xmlsw);
+
+        //  CREATION end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 }

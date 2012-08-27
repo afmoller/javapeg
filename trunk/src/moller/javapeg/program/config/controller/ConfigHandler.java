@@ -136,6 +136,15 @@ public class ConfigHandler {
                     // RENAME IMAGES
                     RenameImagesConfig.writeRenameImagesConfig(config.getRenameImages(), Tab.TWO, w);
 
+                    // TAG IMAGES
+                    TagImagesConfig.writeTagImagesConfig(config.getTagImages(), Tab.TWO, w);
+
+                    // THUMB NAIL
+                    ThumbNailConfig.writeThumbNailConfig(config.getThumbNail(), Tab.TWO, w);
+
+                    // TOOL TIPS
+                    ToolTipsConfig.writeToolTipsConfig(config.getToolTips(), Tab.TWO, w);
+
                     XMLUtil.writeElementEnd(w);
                     w.flush();
                 } catch (XMLStreamException xse) {
