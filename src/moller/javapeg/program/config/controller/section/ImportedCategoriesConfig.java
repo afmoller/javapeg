@@ -1,9 +1,12 @@
 package moller.javapeg.program.config.controller.section;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -12,6 +15,9 @@ import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.controller.ConfigHandlerUtil;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.util.string.Tab;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,5 +53,37 @@ public class ImportedCategoriesConfig {
             e.printStackTrace();
         }
         return importedCategoriesConfig;
+    }
+
+    public static void writeImportedCategoriesConfig(Map<String, ImportedCategories> javaPEGIdToImportedCategoriesMappings, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+
+        //  IMPORTED CATEGORIES start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.IMPORTEDCATEGORIES, baseIndent, xmlsw);
+
+        for (String javaPEGId : javaPEGIdToImportedCategoriesMappings.keySet()) {
+
+            XMLAttribute[] xmlAttributes = new XMLAttribute[2];
+
+            ImportedCategories importedCategories = javaPEGIdToImportedCategoriesMappings.get(javaPEGId);
+
+            xmlAttributes[0] = new XMLAttribute("displayname", importedCategories.getDisplayName());
+            xmlAttributes[1] = new XMLAttribute("javapegclientid", javaPEGId);
+
+            //  INSTANCE start
+            XMLUtil.writeElementStartWithLineBreak(ConfigElement.INSTANCE, xmlAttributes, Tab.FOUR, xmlsw);
+
+            @SuppressWarnings("unchecked")
+            Enumeration<DefaultMutableTreeNode> children = importedCategories.getRoot().children();
+
+            while (children.hasMoreElements()) {
+                ConfigHandlerUtil.storeChild(children.nextElement(), Tab.FOUR.value() + Tab.TWO.value(), xmlsw);
+            }
+
+            //  INSTANCE end
+            XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.FOUR);
+        }
+
+        //  IMPORTED CATEGORIES end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 }

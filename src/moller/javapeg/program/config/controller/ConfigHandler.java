@@ -32,6 +32,7 @@ import moller.javapeg.program.config.controller.section.ThumbNailConfig;
 import moller.javapeg.program.config.controller.section.ToolTipsConfig;
 import moller.javapeg.program.config.controller.section.UpdatesCheckerConfig;
 import moller.javapeg.program.config.model.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
@@ -144,6 +145,11 @@ public class ConfigHandler {
 
                     // TOOL TIPS
                     ToolTipsConfig.writeToolTipsConfig(config.getToolTips(), Tab.TWO, w);
+
+                    // CATEGORIES
+                    CategoriesConfig.writeCategoriesConfig(config.getCategories(), ApplicationContext.getInstance().getHighestUsedCategoryID(), Tab.TWO, w);
+
+                    ImportedCategoriesConfig.writeImportedCategoriesConfig(config.getImportedCategoriesConfig(), Tab.TWO, w);
 
                     XMLUtil.writeElementEnd(w);
                     w.flush();
