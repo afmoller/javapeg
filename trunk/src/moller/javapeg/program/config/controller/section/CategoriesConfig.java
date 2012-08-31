@@ -1,7 +1,11 @@
 package moller.javapeg.program.config.controller.section;
 
+import java.util.Enumeration;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -11,6 +15,9 @@ import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.controller.ConfigHandlerUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.logger.Logger;
+import moller.util.string.Tab;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
 
@@ -42,5 +49,25 @@ public class CategoriesConfig {
         }
 
         return root;
+    }
+
+    public static void writeCategoriesConfig(TreeNode root, int highestUsedId, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+
+        XMLAttribute[] rootAttributes = new XMLAttribute[1];
+
+        rootAttributes[0] = new XMLAttribute("highest-used-id", Integer.toString(highestUsedId));
+
+        //  CATEGORIES start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.CATEGORIES, rootAttributes, baseIndent, xmlsw);
+
+        @SuppressWarnings("unchecked")
+        Enumeration<DefaultMutableTreeNode> children = root.children();
+
+        while (children.hasMoreElements()) {
+            ConfigHandlerUtil.storeChild(children.nextElement(), baseIndent.value() + Tab.TWO.value(), xmlsw);
+        }
+
+        //  CATEGORIES end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 }

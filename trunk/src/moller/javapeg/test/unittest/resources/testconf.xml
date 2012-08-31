@@ -122,21 +122,21 @@
 
 
 	<categories highest-used-id="10">
-		<category name="Annat" id="10" />
-		<category name="Familj" id="1">
-			<category name="Ella" id="3" />
-			<category name="Fredrik" id="5" />
-			<category name="Noel" id="4" />
-			<category name="Sylvia" id="2" />
+		<category id="10" name="Annat"/>
+		<category id="1" name="Familj">
+			<category id="3" name="Ella"/>
+			<category id="5" name="Fredrik"/>
+			<category id="4"  name="Noel"/>
+			<category id="2"  name="Sylvia"/>
 		</category>
-		<category name="Vänner" id="6">
-			<category name="Jimmy" id="9" />
-			<category name="Thomas" id="7" />
-			<category name="Östman" id="8" />
+		<category id="6" name="Vänner">
+			<category id="9" name="Jimmy"/>
+			<category id="7" name="Thomas"/>
+			<category id="8" name="Östman"/>
 		</category>
 	</categories>
 	
-	<importedcategories highest-used-id="10">
+	<importedcategories>
         <instance javapegclientid="7227068a-0e57-4785-bc46-c809adb5c75b" displayname="Sylvia">
             <category name="Annat" id="10" />
             <category name="Familj" id="1">

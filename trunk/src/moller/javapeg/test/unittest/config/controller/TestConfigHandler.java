@@ -5,6 +5,7 @@ import java.io.File;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.ConfigHandler;
 import moller.javapeg.program.config.model.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.util.java.SystemProperties;
 
 import org.junit.Test;
@@ -20,6 +21,8 @@ public class TestConfigHandler {
     public void testLoad() {
 
         Config config = ConfigHandler.load(new File(PATH_TO_TEST_CONF_FILE));
+
+        ApplicationContext.getInstance().setHighestUsedCategoryID(10);
 
         ConfigHandler.store(config, new File(PATH_TO_TEST_WRITE_CONF_FILE));
 
