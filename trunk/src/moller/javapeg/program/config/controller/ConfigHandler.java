@@ -149,7 +149,11 @@ public class ConfigHandler {
                     // CATEGORIES
                     CategoriesConfig.writeCategoriesConfig(config.getCategories(), ApplicationContext.getInstance().getHighestUsedCategoryID(), Tab.TWO, w);
 
+                    // IMPORTED CATEGORIES
                     ImportedCategoriesConfig.writeImportedCategoriesConfig(config.getImportedCategoriesConfig(), Tab.TWO, w);
+
+                    // REPOSITORY
+                    RepositoryConfig.writeRepositoryConfig(config.getRepository(), Tab.TWO, w);
 
                     XMLUtil.writeElementEnd(w);
                     w.flush();

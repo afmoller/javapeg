@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -12,6 +14,9 @@ import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
+import moller.util.string.StringUtil;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,7 +45,11 @@ public class RepositoryConfig {
             NodeList pathNodeList = (NodeList)xPath.evaluate(ConfigElement.PATH, repositoryNode, XPathConstants.NODESET);
 
             for (int index = 0; index < pathNodeList.getLength(); index++) {
-                paths.add(new File(pathNodeList.item(index).getTextContent()));
+                String path = pathNodeList.item(index).getTextContent();
+
+                if (StringUtil.isNotBlank(path)) {
+                    paths.add(new File(path));
+                }
             }
             repositoryPaths.setPaths(paths);
         } catch (XPathExpressionException e) {
@@ -60,7 +69,11 @@ public class RepositoryConfig {
             NodeList allwaysAddNodeList = (NodeList)xPath.evaluate(ConfigElement.ALLWAYS_ADD, exceptionsNode, XPathConstants.NODESET);
 
             for (int index = 0; index < allwaysAddNodeList.getLength(); index++) {
-                allwaysAdd.add(new File(allwaysAddNodeList.item(index).getTextContent()));
+                String path = allwaysAddNodeList.item(index).getTextContent();
+
+                if (StringUtil.isNotBlank(path)) {
+                    allwaysAdd.add(new File(path));
+                }
             }
             repositoryExceptions.setAllwaysAdd(allwaysAdd);
 
@@ -73,7 +86,11 @@ public class RepositoryConfig {
             NodeList neverAddNodeList = (NodeList)xPath.evaluate(ConfigElement.NEVER_ADD, exceptionsNode, XPathConstants.NODESET);
 
             for (int index = 0; index < neverAddNodeList.getLength(); index++) {
-                neverAdd.add(new File(neverAddNodeList.item(index).getTextContent()));
+                String path = neverAddNodeList.item(index).getTextContent();
+
+                if (StringUtil.isNotBlank(path)) {
+                    neverAdd.add(new File(path));
+                }
             }
             repositoryExceptions.setNeverAdd(neverAdd);
 
@@ -82,5 +99,64 @@ public class RepositoryConfig {
             e.printStackTrace();
         }
         return repositoryExceptions;
+    }
+
+    public static void writeRepositoryConfig(Repository repository, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+
+        // REPOSITORY start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.REPOSITORY, baseIndent, xmlsw);
+
+        RepositoryPaths repositoryPaths = repository.getPaths();
+
+        // PATHS start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.PATHS, Tab.FOUR, xmlsw);
+
+        for (File repositoryPath : repositoryPaths.getPaths()) {
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.PATH, Tab.SIX, repositoryPath.getAbsolutePath(), xmlsw);
+        }
+
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.FOUR);
+
+        // PATHS end
+
+        // EXCEPTIONS start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.EXCEPTIONS, Tab.FOUR, xmlsw);
+
+
+        RepositoryExceptions repositoryExceptions = repository.getExceptions();
+
+        if (repositoryExceptions.getAllwaysAdd().isEmpty()) {
+            XMLUtil.writeEmptyElementWithIndentAndLineBreak(ConfigElement.ALLWAYS_ADD, xmlsw, Tab.SIX);
+        } else {
+            // ALLWAYS ADD start
+            XMLUtil.writeElementStartWithLineBreak(ConfigElement.ALLWAYS_ADD, Tab.SIX, xmlsw);
+
+            for (File allwaysAdd : repositoryExceptions.getAllwaysAdd()) {
+                XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.PATH, Tab.EIGHT, allwaysAdd.getAbsolutePath(), xmlsw);
+            }
+
+            // ALLWAYS ADD end
+            XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);
+        }
+
+        if (repositoryExceptions.getNeverAdd().isEmpty()) {
+            XMLUtil.writeEmptyElementWithIndentAndLineBreak(ConfigElement.NEVER_ADD, xmlsw, Tab.SIX);
+        } else {
+            // NEVER ADD start
+            XMLUtil.writeElementStartWithLineBreak(ConfigElement.NEVER_ADD, Tab.SIX, xmlsw);
+
+            for (File neverAdd : repositoryExceptions.getNeverAdd()) {
+                XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.PATH, Tab.EIGHT, neverAdd.getAbsolutePath(), xmlsw);
+            }
+
+            // NEVER ADD end
+            XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);
+        }
+
+        // EXCEPTIONS end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.FOUR);
+
+        //  REPOSITORY end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 }
