@@ -106,4 +106,12 @@ public class TestStringUtil {
 	public void testConvertToHexString() {
 	    Assert.assertEquals("74657374537472696e67", StringUtil.convertToHexString("testString".getBytes()));
 	}
+
+
+	@Test
+    public void testIsNotBlank() {
+	    Assert.assertTrue(StringUtil.isNotBlank("noteEmpty"));
+	    Assert.assertFalse(StringUtil.isNotBlank(""));
+	    Assert.assertFalse(StringUtil.isNotBlank(null));
+	}
 }

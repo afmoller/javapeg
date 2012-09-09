@@ -235,4 +235,23 @@ public class StringUtil {
         }
         return new String(chars);
     }
+
+    /**
+     * This method checks whether the argument is null or empty.
+     *
+     * @param s contains the string to check
+     *
+     * @return true if the parameter s is not null or empty, otherwise false.
+     */
+    public static boolean isNotBlank(String s) {
+        if (s == null) {
+            return false;
+        }
+
+        if (s.length() == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
