@@ -97,6 +97,19 @@ import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
+import moller.javapeg.program.config.controller.ConfigElement;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.ToolTips;
+import moller.javapeg.program.config.model.UpdatesChecker;
+import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
+import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
 import moller.javapeg.program.config.view.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
@@ -174,7 +187,7 @@ public class MainGUI extends JFrame {
 
 	private static final long serialVersionUID = 4478711914847747931L;
 
-	private static Config config;
+	private static Configuration configuration;
 	private static Logger logger;
 	private static Language lang;
 
@@ -340,8 +353,9 @@ public class MainGUI extends JFrame {
 		ValidateFileSetup.check();
 
 		logger = Logger.getInstance();
-		config = Config.getInstance();
+		configuration = Config.getInstance().get();
 		lang = Language.getInstance();
+
 
 		imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 		imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
@@ -349,7 +363,10 @@ public class MainGUI extends JFrame {
 		logger.logDEBUG("JavaPEG is starting");
 		this.printSystemProperties();
 		this.overrideSwingUIProperties();
-		if(config.getBooleanProperty("updatechecker.enabled")) {
+
+		UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+
+		if(updatesChecker.getEnabled()) {
 			logger.logDEBUG("Application Update Check Started");
 			this.checkApplicationUpdates();
 			logger.logDEBUG("Application Update Check Finished");
@@ -386,8 +403,8 @@ public class MainGUI extends JFrame {
 
 		// Check if JavaPEG client id is set, otherwise generate one and set it
         // to the configuration.
-        if (!ConfigUtil.isClientIdSet(config.getStringProperty("javapeg.client.id"))) {
-            config.setStringProperty("javapeg.client.id", ConfigUtil.generateClientId());
+        if (!ConfigUtil.isClientIdSet(configuration.getJavapegClientId())) {
+            configuration.setJavapegClientId(ConfigUtil.generateClientId());
             saveSettings();
         }
 	}
@@ -703,9 +720,13 @@ public class MainGUI extends JFrame {
 			}
 		}
 
-		this.setSize(new Dimension(config.getIntProperty("mainGUI.window.width"), config.getIntProperty("mainGUI.window.height")));
+		GUI gUI = configuration.getgUI();
 
-		Point xyFromConfig = new Point(config.getIntProperty("mainGUI.window.location.x"),config.getIntProperty("mainGUI.window.location.y"));
+		GUIWindow mainGUI = gUI.getMain();
+
+		this.setSize(mainGUI.getSizeAndLocation().getSize());
+
+		Point xyFromConfig = mainGUI.getSizeAndLocation().getLocation();
 
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -727,16 +748,18 @@ public class MainGUI extends JFrame {
 		mouseRightClickButtonListener = new MouseButtonListener();
 		categoriesMouseButtonListener = new CategoriesMouseButtonListener();
 
+		List<GUIWindowSplitPane> guiWindowSplitPanes = mainGUI.getGuiWindowSplitPane();
+
 		mainSplitPane = new JSplitPane();
-		mainSplitPane.setDividerLocation(config.getIntProperty("mainSplitPane.location"));
+		mainSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN));
 		mainSplitPane.setOneTouchExpandable(true);
 
 		verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		verticalSplitPane.setDividerLocation(config.getIntProperty("verticalSplitPane.location"));
+		verticalSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL));
 		verticalSplitPane.setOneTouchExpandable(true);
 
 		thumbNailMetaPanelSplitPane = new JSplitPane();
-		thumbNailMetaPanelSplitPane.setDividerLocation(config.getIntProperty("thumbNailMetaDataPanelSplitPane.location"));
+		thumbNailMetaPanelSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL));
 		thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
 		thumbNailMetaPanelSplitPane.setDividerSize(10);
 
@@ -825,11 +848,13 @@ public class MainGUI extends JFrame {
 
 	private JPanel createCategorizePanel() {
 
+	    GUI gUI = configuration.getgUI();
+
 		previewCommentCategoriesRatingSplitpane = new JSplitPane();
 
 		previewCommentCategoriesRatingSplitpane.setLeftComponent(this.createPreviweAndCommentPanel());
 		previewCommentCategoriesRatingSplitpane.setRightComponent(this.createCategoryAndRatingPanel());
-		previewCommentCategoriesRatingSplitpane.setDividerLocation(config.getIntProperty("previewCommentCategoriesRatingSplitpane.location"));
+		previewCommentCategoriesRatingSplitpane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUI.getMain().getGuiWindowSplitPane(), ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING));
 
 		GBHelper posBackgroundPanel = new GBHelper();
 
@@ -1051,7 +1076,11 @@ public class MainGUI extends JFrame {
 		group.add(andRadioButton);
 		group.add(orRadioButton);
 
-		if (config.getBooleanProperty("categories.orRadioButtonIsSelected")) {
+		TagImages tagImages = configuration.getTagImages();
+
+		TagImagesCategories tagImagesCategories = tagImages.getCategories();
+
+		if (tagImagesCategories.getOrRadioButtonIsSelected()) {
 			orRadioButton.setSelected(true);
 		} else {
 			andRadioButton.setSelected(true);
@@ -1538,8 +1567,10 @@ public class MainGUI extends JFrame {
 		bottomPanel.add(new Gap(2), posBottom.nextRow());
 		bottomPanel.add(scrollPane, posBottom.nextRow().expandH().expandW());
 
+		GUI gUI = configuration.getgUI();
+
 		previewAndCommentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		previewAndCommentSplitPane.setDividerLocation(config.getIntProperty("previewAndCommentSplitPane.location"));
+		previewAndCommentSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUI.getMain().getGuiWindowSplitPane(), ConfigElement.PREVIEW_AND_COMMENT));
 		previewAndCommentSplitPane.setTopComponent(topPanel);
 		previewAndCommentSplitPane.setBottomComponent(bottomPanel);
 
@@ -1697,10 +1728,12 @@ public class MainGUI extends JFrame {
 
 	public void initiateProgram(){
 
-	 	subFolderTextField.setText(config.getStringProperty("subFolderName"));
-		fileNameTemplateTextField.setText(config.getStringProperty("fileNameTemplate"));
+	    RenameImages renameImages = configuration.getRenameImages();
 
-		if(config.getBooleanProperty("createThumbNailsCheckBox")) {
+	 	subFolderTextField.setText(renameImages.getTemplateSubDirectoryName());
+		fileNameTemplateTextField.setText(renameImages.getTemplateFileName());
+
+		if(renameImages.getCreateThumbNails()) {
 			createThumbNailsCheckBox.setSelected(true);
 		}
 		Update.updateAllUIs();
@@ -1710,9 +1743,15 @@ public class MainGUI extends JFrame {
 		Set<Object> repositoryPaths = ModelInstanceLibrary.getInstance().getImageRepositoryPaths().getModel();
 
 		if(repositoryPaths != null) {
-			for (Object repositoryPath : repositoryPaths) {
+		    TagImages tagImages = configuration.getTagImages();
+
+		    TagImagesPaths tagImagesPaths = tagImages.getImagesPaths();
+
+			boolean automaticallyRemoveNonExistingImagePath = tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath();
+
+		    for (Object repositoryPath : repositoryPaths) {
 				ImageRepositoryItem iri = new ImageRepositoryItem();
-				String directory = (String)repositoryPath;
+				File directory = (File)repositoryPath;
 
 				iri.setPathStatus(DirectoryUtil.getStatus(directory));
 				iri.setPath(directory);
@@ -1724,7 +1763,7 @@ public class MainGUI extends JFrame {
 						ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);
 						imageRepositoryListModel.add(iri);
 					} else {
-						if (!config.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths")) {
+						if (!automaticallyRemoveNonExistingImagePath) {
 							imageRepositoryListModel.add(iri);
 						}
 					}
@@ -1733,7 +1772,7 @@ public class MainGUI extends JFrame {
 					imageRepositoryListModel.add(iri);
 					break;
 				case DOES_NOT_EXIST:
-					if (!config.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths")) {
+					if (!automaticallyRemoveNonExistingImagePath) {
 						imageRepositoryListModel.add(iri);
 					}
 					break;
@@ -1746,49 +1785,55 @@ public class MainGUI extends JFrame {
 		ApplicationContext ac = ApplicationContext.getInstance();
 		// Disabled to avoid NPE:s with current model of load previous path at application start (Not loading)
 //		ac.setSourcePath(config.getStringProperty("sourcePath"));
-		ac.setTemplateFileName(config.getStringProperty("fileNameTemplate"));
-		ac.setTemplateSubFolderName(config.getStringProperty("subFolderName"));
-		ac.setCreateThumbNailsCheckBoxSelected(config.getBooleanProperty("createThumbNailsCheckBox"));
+
+		RenameImages renameImages = configuration.getRenameImages();
+
+		ac.setTemplateFileName(renameImages.getTemplateFileName());
+		ac.setTemplateSubFolderName(renameImages.getTemplateSubDirectoryName());
+		ac.setCreateThumbNailsCheckBoxSelected(renameImages.getCreateThumbNails());
 		ac.setMainTabbedPaneComponent(MainTabbedPaneComponent.valueOf(mainTabbedPane.getSelectedComponent().getName()));
 	}
 
 	private void saveSettings(){
 
-		config.setStringProperty("sourcePath", ApplicationContext.getInstance().getSourcePath());
+	    RenameImages renameImages = configuration.getRenameImages();
+
+	    renameImages.setPathSource(ApplicationContext.getInstance().getSourcePath());
 
 		if(!destinationPathTextField.getText().equals("")) {
-			config.setStringProperty("destinationPath", destinationPathTextField.getText());
+			renameImages.setPathDestination(new File(destinationPathTextField.getText()));
 		}
 
-		config.setStringProperty("subFolderName", subFolderTextField.getText());
-		config.setStringProperty("fileNameTemplate", fileNameTemplateTextField.getText());
-		config.setBooleanProperty("createThumbNailsCheckBox", createThumbNailsCheckBox.isSelected());
-		config.setBooleanProperty("categories.orRadioButtonIsSelected", orRadioButton.isSelected());
+		renameImages.setTemplateSubDirectoryName(subFolderTextField.getText());
+		renameImages.setTemplateFileName(fileNameTemplateTextField.getText());
+		renameImages.setCreateThumbNails(createThumbNailsCheckBox.isSelected());
+
+		TagImages tagImages = configuration.getTagImages();
+
+		TagImagesCategories tagImagesCategories = tagImages.getCategories();
+
+		tagImagesCategories.setOrRadioButtonIsSelected(orRadioButton.isSelected());
+
+		GUI gUI = configuration.getgUI();
 
 		if (this.isVisible()) {
-		    config.setIntProperty("mainGUI.window.location.x", this.getLocationOnScreen().x);
-		    config.setIntProperty("mainGUI.window.location.y", this.getLocationOnScreen().y);
-		    config.setIntProperty("mainGUI.window.width", this.getSize().width);
-		    config.setIntProperty("mainGUI.window.height", this.getSize().height);
+
+		    Rectangle sizeAndLocation = gUI.getMain().getSizeAndLocation();
+
+		    sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+		    sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
 		}
 
-		config.setIntProperty("mainSplitPane.location", mainSplitPane.getDividerLocation());
-		config.setIntProperty("verticalSplitPane.location", verticalSplitPane.getDividerLocation());
-		config.setIntProperty("thumbNailMetaDataPanelSplitPane.location", thumbNailMetaPanelSplitPane.getDividerLocation());
-		config.setIntProperty("previewAndCommentSplitPane.location", previewAndCommentSplitPane.getDividerLocation());
-		config.setIntProperty("previewCommentCategoriesRatingSplitpane.location", previewCommentCategoriesRatingSplitpane.getDividerLocation());
+		List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getMain().getGuiWindowSplitPane();
 
-		try {
-			config.saveSettings();
-		} catch (FileNotFoundException fnfex) {
-			logger.logFATAL("Could not save configuration to file: ");
-			logger.logFATAL(fnfex);
-			System.exit(1);
-		} catch (IOException iox) {
-			logger.logFATAL("Could not save configuration to file: ");
-			logger.logFATAL(iox);
-			System.exit(1);
-		}
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN, mainSplitPane.getDividerLocation());
+
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL, verticalSplitPane.getDividerLocation());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL, thumbNailMetaPanelSplitPane.getDividerLocation());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_AND_COMMENT, previewAndCommentSplitPane.getDividerLocation());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitpane.getDividerLocation());
+
+		Config.getInstance().save();
 	}
 
 	private void saveImageRepository() {
@@ -1943,30 +1988,31 @@ public class MainGUI extends JFrame {
 			if(actionCommand.equals("destinationPathButton")) {
 				destinationPathTextField.setEditable(true);
 
+				RenameImages renameImages = configuration.getRenameImages();
+
 				/**
 			     * Kontrollera s� att sparad s�kv�g fortfarande existerar
 			     * och i annat fall hoppa upp ett steg i tr�dstrukturen och
 			     * kontrollera ifall den s�kv�gen existerar
 			     **/
-				File tempFile = new File(config.getStringProperty("destinationPath"));
+				File pathDestination = renameImages.getPathDestination();
 
 				boolean exists = false;
 				while(!exists) {
 					try {
-						if(!tempFile.exists()) {
-							tempFile = tempFile.getParentFile();
+						if(!pathDestination.exists()) {
+							pathDestination = pathDestination.getParentFile();
 						} else {
 							exists = true;
 						}
 					} catch (NullPointerException npe) {
-						System.out.println("catch");
 						FileSystemView fsv = FileSystemView.getFileSystemView();
-						tempFile = fsv.getDefaultDirectory();
+						pathDestination = fsv.getDefaultDirectory();
 						exists = true;
 					}
 				}
 
-				JFileChooser chooser = new JFileChooser(tempFile.getAbsolutePath());
+				JFileChooser chooser = new JFileChooser(pathDestination.getAbsolutePath());
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setDialogTitle(lang.get("fileSelectionDialog.destinationPathFileChooser"));
 
@@ -1985,7 +2031,7 @@ public class MainGUI extends JFrame {
 
 						ApplicationContext.getInstance().setDestinationPath(String.valueOf(tempArray));
 						destinationPathTextField.setText(String.valueOf(tempArray));
-						config.setStringProperty("destinationPath", destinationPathTextField.getText());
+						renameImages.setPathDestination(new File(destinationPathTextField.getText()));
 
 						subFolderTextField.setEnabled(true);
 						subFolderTextField.setToolTipText(lang.get("tooltip.subFolderName"));
@@ -2004,92 +2050,94 @@ public class MainGUI extends JFrame {
 				}
 			}
 
-			if(actionCommand.equals("startProcessButton")){
-				if(ApplicationContext.getInstance().isImageViewerDisplayed()) {
-					JOptionPane.showMessageDialog(null, lang.get("errormessage.jpgrename.imageViewerMustBeClosed"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					removeMouseListener();
-					setInputsEnabled(false);
+            if(actionCommand.equals("startProcessButton")){
+                if(ApplicationContext.getInstance().isImageViewerDisplayed()) {
+                    JOptionPane.showMessageDialog(null, lang.get("errormessage.jpgrename.imageViewerMustBeClosed"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    removeMouseListener();
+                    setInputsEnabled(false);
 
-					String subFolderName = "";
-					String fileNameTemplate = "";
+                    String subFolderName = "";
+                    String fileNameTemplate = "";
 
-					// Ta bort eventuella mellanslag f�rst och sist i undermappsnamnsmallen
-					subFolderName = subFolderTextField.getText();
-					subFolderName = subFolderName.trim();
-					subFolderTextField.setText(subFolderName);
+                    // Remove potential white spaces at the start and end of the
+                    // sub directory template
+                    subFolderName = subFolderTextField.getText();
+                    subFolderName = subFolderName.trim();
+                    subFolderTextField.setText(subFolderName);
 
-					// Ta bort eventuella mellanslag f�rst och sist i filnamnsmallen
-					fileNameTemplate = fileNameTemplateTextField.getText();
-					fileNameTemplate = fileNameTemplate.trim();
-					fileNameTemplateTextField.setText(fileNameTemplate);
+                    // Remove potential white spaces at the start and end of the
+                    // file name template
+                    fileNameTemplate = fileNameTemplateTextField.getText();
+                    fileNameTemplate = fileNameTemplate.trim();
+                    fileNameTemplateTextField.setText(fileNameTemplate);
 
-					Thread renameThread = new Thread() {
+                    Thread renameThread = new Thread() {
 
-						@Override
-						public void run(){
+                        @Override
+                        public void run(){
 
-							RenameProcess rp = new RenameProcess();
-							rp.init();
-							rp.setVisible(true);
+                            RenameProcess rp = new RenameProcess();
+                            rp.init();
+                            rp.setVisible(true);
 
-							logger.logDEBUG("Pre File Processing Started");
-							rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
-							ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
-							logger.logDEBUG("Pre File Processing Finished");
-							rp.setLogMessage(lang.get("rename.PreFileProcessor.finished"));
+                            logger.logDEBUG("Pre File Processing Started");
+                            rp.setLogMessage(lang.get("rename.PreFileProcessor.starting"));
+                            ValidatorStatus vs = PreFileProcessor.getInstance().startTest(rp);
+                            logger.logDEBUG("Pre File Processing Finished");
+                            rp.setLogMessage(lang.get("rename.PreFileProcessor.finished"));
 
-							if(!vs.isValid()) {
-								rp.setAlwaysOnTop(false);
-								JOptionPane.showMessageDialog(null, vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-								logger.logERROR("Pre File Processing found following errors:\n" + vs.getStatusMessage());
-								rp.setLogMessage(lang.get("rename.PreFileProcessor.error")+ "\n" + vs.getStatusMessage());
-								rp.setAlwaysOnTop(true);
-								setInputsEnabled(true);
-								addMouseListener();
-							} else {
-								logger.logDEBUG("File Processing Started");
-								rp.setLogMessage(lang.get("rename.FileProcessor.starting"));
-								FileProcessor.getInstance().process(rp);
-								logger.logDEBUG("File Processing Finished");
-								rp.setLogMessage(lang.get("rename.FileProcessor.finished"));
+                            if(!vs.isValid()) {
+                                rp.setAlwaysOnTop(false);
+                                JOptionPane.showMessageDialog(null, vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+                                logger.logERROR("Pre File Processing found following errors:\n" + vs.getStatusMessage());
+                                rp.setLogMessage(lang.get("rename.PreFileProcessor.error")+ "\n" + vs.getStatusMessage());
+                                rp.setAlwaysOnTop(true);
+                                setInputsEnabled(true);
+                                addMouseListener();
+                            } else {
+                                logger.logDEBUG("File Processing Started");
+                                rp.setLogMessage(lang.get("rename.FileProcessor.starting"));
+                                FileProcessor.getInstance().process(rp);
+                                logger.logDEBUG("File Processing Finished");
+                                rp.setLogMessage(lang.get("rename.FileProcessor.finished"));
 
-								if(createThumbNailsCheckBox.isSelected()) {
-									logger.logDEBUG("Thumb Nail Overview Creation Started");
-									rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.starting"));
-									ThumbNailOverViewCreator.getInstance().create();
-									logger.logDEBUG("Thumb Nail Overview Creation Finished");
-									rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.finished"));
-									rp.incProcessProgress();
-								}
+                                if(createThumbNailsCheckBox.isSelected()) {
+                                    logger.logDEBUG("Thumb Nail Overview Creation Started");
+                                    rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.starting"));
+                                    ThumbNailOverViewCreator.getInstance().create();
+                                    logger.logDEBUG("Thumb Nail Overview Creation Finished");
+                                    rp.setLogMessage(lang.get("thumbnailoverview.ThumbNailOverViewCreator.finished"));
+                                    rp.incProcessProgress();
+                                }
 
-								logger.logDEBUG("File Integrity Check Started");
-								rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.starting"));
-								if(!PostFileProcessor .getInstance().process(rp)) {
-									rp.setAlwaysOnTop(false);
-									JOptionPane.showMessageDialog(null, lang.get("rename.PostFileProcessor.integrityCheck.error"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-									rp.setAlwaysOnTop(true);
-									rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.error"));
-								}
-								logger.logDEBUG("File Integrity Check Finished");
-								rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.finished"));
-								rp.incProcessProgress();
+                                logger.logDEBUG("File Integrity Check Started");
+                                rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.starting"));
+                                if(!PostFileProcessor .getInstance().process(rp)) {
+                                    rp.setAlwaysOnTop(false);
+                                    JOptionPane.showMessageDialog(null, lang.get("rename.PostFileProcessor.integrityCheck.error"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+                                    rp.setAlwaysOnTop(true);
+                                    rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.error"));
+                                }
+                                logger.logDEBUG("File Integrity Check Finished");
+                                rp.setLogMessage(lang.get("rename.PostFileProcessor.integrityCheck.finished"));
+                                rp.incProcessProgress();
 
-								rp.setAlwaysOnTop(false);
-								JOptionPane.showMessageDialog(null, lang.get("rename.FileProcessor.finished"), "", JOptionPane.INFORMATION_MESSAGE);
-								rp.setAlwaysOnTop(true);
+                                rp.setAlwaysOnTop(false);
+                                JOptionPane.showMessageDialog(null, lang.get("rename.FileProcessor.finished"), "", JOptionPane.INFORMATION_MESSAGE);
+                                rp.setAlwaysOnTop(true);
 
-								setInputsEnabled(true);
-								addMouseListener();
-							}
-							rp.renameProcessFinished();
-						}
-					};
-					renameThread.start();
-				}
-			}
-		}
-	}
+                                setInputsEnabled(true);
+                                addMouseListener();
+                            }
+                            rp.renameProcessFinished();
+                        }
+                    };
+                    renameThread.start();
+                }
+            }
+        }
+    }
 
 	private class JTextFieldListener implements DocumentListener {
 
@@ -2164,7 +2212,10 @@ public class MainGUI extends JFrame {
 						JButton thumbContainer = new JButton();
 						thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
 						thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-						if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+
+						ToolTips toolTips = configuration.getToolTips();
+
+						if (!toolTips.getState().equals("0")) {
 							thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
 						}
 						thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
@@ -2218,15 +2269,16 @@ public class MainGUI extends JFrame {
 	private void loadThumbNails(final File sourcePath) {
 		this.prepareLoadThumbnailsProcess();
 
-		String sourcePathString = sourcePath.getAbsolutePath();
-
 		ApplicationContext ac = ApplicationContext.getInstance();
 
-		ac.setSourcePath(sourcePathString);
+		ac.setSourcePath(sourcePath);
 		ac.setNrOfFilesInSourcePath(sourcePath.listFiles().length);
 
-		config.setStringProperty("sourcePath", sourcePathString);
-		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePathString, lang.get("statusbar.message.selectedPath"), 0);
+		RenameImages renameImages = configuration.getRenameImages();
+
+		renameImages.setPathSource(sourcePath);
+
+		statusBar.setStatusMessage(lang.get("statusbar.message.selectedPath") + " " + sourcePath.getAbsolutePath(), lang.get("statusbar.message.selectedPath"), 0);
 
 		loadFilesThread = new Thread() {
 			@Override
@@ -2280,7 +2332,7 @@ public class MainGUI extends JFrame {
 		    if (e.isPopupTrigger()) {
 		        File selectedPath = new File(totalPath);
 
-		        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(totalPath, Status.EXISTS))) {
+		        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
 
 		            boolean isParent = false;
 		            boolean allwaysAdd = false;
@@ -2375,7 +2427,7 @@ public class MainGUI extends JFrame {
                         File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 
                         //
-                        ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath.getAbsolutePath(), Status.EXISTS);
+                        ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
 
                         if (!imageRepositoryListModel.contains(iri)) {
                             // If the selected path shall not be added to the
@@ -2534,7 +2586,11 @@ public class MainGUI extends JFrame {
 					Image scaledImage = null;
 					JPEGThumbNail thumbnail = null;
 
-					if(config.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail")) {
+					TagImages tagImages = configuration.getTagImages();
+
+					TagImagesPreview tagImagesPreview = tagImages.getPreview();
+
+					if(tagImagesPreview.getUseEmbeddedThumbnail()) {
 						JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
 						thumbnail = jtc.get(jpegImage);
 					}
@@ -3014,7 +3070,7 @@ public class MainGUI extends JFrame {
 	private class AddAllImagesToViewList implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			File imageFilePath = new File(ApplicationContext.getInstance().getSourcePath());
+			File imageFilePath = ApplicationContext.getInstance().getSourcePath();
 
 			for (File file : imageFilePath.listFiles()) {
 				try {
@@ -3123,15 +3179,17 @@ public class MainGUI extends JFrame {
 
 			int result = 0;
 
-			Config config = Config.getInstance();
+			TagImages tagImages = configuration.getTagImages();
+
+			TagImagesCategories tagImagesCategories = tagImages.getCategories();
 
 			if (nodeToRemove.getChildCount() > 0) {
-				if (config.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories")) {
+				if (tagImagesCategories.getWarnWhenRemoveWithSubCategories()) {
 					String message = lang.get("findimage.categories.removeAllCategoriesAndSubCategories1") + " " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " " + lang.get("findimage.categories.removeAllCategoriesAndSubCategories2");
 					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
 				}
 			} else {
-				if (config.getBooleanProperty("categories.warnWhenRemoveCategory")) {
+				if (tagImagesCategories.getWarnWhenRemove()) {
 					String message = lang.get("findimage.categories.removeAllCategoriesAndSubCategories1") + " " + ((CategoryUserObject)nodeToRemove.getUserObject()).getName() + " " + lang.get("findimage.categories.removeAllCategoriesAndSubCategories3");
 					result = displayConfirmDialog(message, lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.OK_CANCEL_OPTION);
 				}
@@ -3348,7 +3406,7 @@ public class MainGUI extends JFrame {
 
             ApplicationContext ac = ApplicationContext.getInstance();
 
-            File repositoryPath = new File(ac.getSourcePath());
+            File repositoryPath = ac.getSourcePath();
 
             File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 
@@ -3372,7 +3430,7 @@ public class MainGUI extends JFrame {
 
                 // Populate the image repository model with the currently selected
                 // path.
-                ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath.getAbsolutePath(), Status.EXISTS);
+                ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
                 imageRepositoryListModel.add(iri);
                 logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
             } else {

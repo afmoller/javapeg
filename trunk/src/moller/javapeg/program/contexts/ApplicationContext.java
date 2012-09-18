@@ -31,7 +31,7 @@ public class ApplicationContext {
 	 * This variable contains the path to the selected folder
 	 *  containing JPEG images.
 	 */
-	private String sourcePath;
+	private File sourcePath;
 
 	private int nrOfFilesInSourcePath;
 
@@ -136,7 +136,7 @@ public class ApplicationContext {
 	 * Private constructor.
 	 */
 	private ApplicationContext() {
-		sourcePath = "";
+		sourcePath = null;
 		destinationPath = "";
 		createThumbNailsCheckBoxSelected = false;
 		templateFileName = "";
@@ -173,7 +173,7 @@ public class ApplicationContext {
 	/**
 	 * GET  - methods
 	 */
-	public String getSourcePath() {
+	public File getSourcePath() {
 		return sourcePath;
 	}
 
@@ -233,7 +233,7 @@ public class ApplicationContext {
 	/**
 	 * SET  - methods
 	 */
-	public void setSourcePath(String sourcePath) {
+	public void setSourcePath(File sourcePath) {
 		this.sourcePath = sourcePath;
 	}
 

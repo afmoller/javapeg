@@ -87,7 +87,7 @@ public class NonJPEGTotalPathLength {
 		ApplicationContext ac = ApplicationContext.getInstance();
 
 		String destinationPath = ac.getDestinationPath();
-		String sourcePath      = ac.getSourcePath();
+        File sourcePath      = ac.getSourcePath();
 
 		Collection<File> nonJPEGFiles = FileRetriever.getInstance().getNonJPEGFiles();
 
@@ -137,7 +137,7 @@ public class NonJPEGTotalPathLength {
 
 					for (File f : DirectoryUtil.getDirectoryContent(file)) {
 
-						FileAndType fat = new FileAndType(new File(destinationPath + FS + convertedSubFolderNameTemplate + f.getAbsolutePath().substring(sourcePath.length())));
+						FileAndType fat = new FileAndType(new File(destinationPath + FS + convertedSubFolderNameTemplate + f.getAbsolutePath().substring(sourcePath.getAbsolutePath().length())));
 						fat.setType(f.isFile() ? (Type.FILE) : Type.DIRECTORY);
 
 						rpc.addNonJPEGFileNameMapping(f, fat);

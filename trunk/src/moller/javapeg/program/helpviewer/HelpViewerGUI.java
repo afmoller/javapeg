@@ -1,8 +1,8 @@
 package moller.javapeg.program.helpviewer;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -29,6 +29,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.gui.CustomizedJScrollPane;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -47,7 +49,7 @@ public class HelpViewerGUI extends JFrame {
 
 	private JSplitPane splitPane;
 
-	private final Config   conf;
+	private final Configuration configuration;
 	private final Logger   logger;
 	private final Language lang;
 
@@ -65,7 +67,7 @@ public class HelpViewerGUI extends JFrame {
 	private final static String HELP_FILE_BASE = System.getProperty("user.dir") + FS + "resources" + FS + "help";
 
 	public HelpViewerGUI() {
-		conf   = Config.getInstance();
+		configuration = Config.getInstance().get();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
 
@@ -75,9 +77,13 @@ public class HelpViewerGUI extends JFrame {
 
 	private void initiateWindow() {
 
-		this.setSize(new Dimension(conf.getIntProperty("helpViewerGUI.window.width"),conf.getIntProperty("helpViewerGUI.window.height")));
+	    GUI gUI = configuration.getgUI();
 
-		Point xyFromConfig = new Point(conf.getIntProperty("helpViewerGUI.window.location.x"),conf.getIntProperty("helpViewerGUI.window.location.y"));
+	    Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
+
+		this.setSize(sizeAndLocation.getSize());
+
+		Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -140,10 +146,12 @@ public class HelpViewerGUI extends JFrame {
 	}
 
 	private void updateWindowLocationAndSize() {
-		conf.setIntProperty("helpViewerGUI.window.location.x", this.getLocation().x);
-		conf.setIntProperty("helpViewerGUI.window.location.y", this.getLocation().y);
-		conf.setIntProperty("helpViewerGUI.window.width", this.getSize().width);
-		conf.setIntProperty("helpViewerGUI.window.height", this.getSize().height);
+		GUI gUI = configuration.getgUI();
+
+		Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
+
+		sizeAndLocation.setLocation(this.getLocation().x, this.getLocation().y);
+		sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
 	}
 
 	private JScrollPane initiateJTree() {
@@ -160,7 +168,8 @@ public class HelpViewerGUI extends JFrame {
 
 	private JTextArea getContent(String identityString) {
 		if (content.equals("") && identityString != null) {
-			String confLang = conf.getStringProperty("gUILanguageISO6391");
+
+		    String confLang = configuration.getLanguage().getgUILanguageISO6391();
 
 			InputStream helpFile = null;
 

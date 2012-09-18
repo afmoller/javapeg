@@ -21,7 +21,7 @@ public class JPEGThumbNailCache {
 	/**
 	 * The maximum number of entries in the cache.
 	 */
-	private static final int MAX_ENTRIES = Config.getInstance().getIntProperty("thumbnails.cache.max-size");
+	private static final int MAX_ENTRIES = Config.getInstance().get().getThumbNail().getCache().getMaxSize();
 
 	/**
 	 * Private constructor. It creates an LinkedHashMap

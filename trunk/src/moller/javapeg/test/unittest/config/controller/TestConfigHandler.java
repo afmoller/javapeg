@@ -7,7 +7,7 @@ import java.util.List;
 import junit.framework.Assert;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.ConfigHandler;
-import moller.javapeg.program.config.model.Config;
+import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.util.io.FileUtil;
 import moller.util.java.SystemProperties;
@@ -24,7 +24,7 @@ public class TestConfigHandler {
     @Test
     public void testLoad() throws IOException {
 
-        Config config = ConfigHandler.load(new File(PATH_TO_TEST_CONF_FILE));
+        Configuration config = ConfigHandler.load(new File(PATH_TO_TEST_CONF_FILE));
 
         ApplicationContext.getInstance().setHighestUsedCategoryID(10);
 

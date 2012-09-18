@@ -11,7 +11,7 @@ import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 
-public class Config {
+public class Configuration {
 
     private Logging logging;
     private String javapegClientId;

@@ -196,7 +196,7 @@ public class CategoryUtil {
 			XMLAttribute[] rootAttributes = new XMLAttribute[2];
 
 			rootAttributes[0] = new XMLAttribute("highest-used-id", Integer.toString(ApplicationContext.getInstance().getHighestUsedCategoryID()));
-			rootAttributes[1] = new XMLAttribute("javapeg-id", Config.getInstance().getStringProperty("javapeg.client.id"));
+			rootAttributes[1] = new XMLAttribute("javapeg-id", Config.getInstance().get().getJavapegClientId());
 
 			XMLUtil.writeElementStart("categories", rootAttributes, w);
 

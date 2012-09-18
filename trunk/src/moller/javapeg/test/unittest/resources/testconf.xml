@@ -31,7 +31,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <yLocation>10</yLocation>
       <width>1024</width>
       <height>768</height>
-      <splitPane id="previewCommentCategoriesRating" width="10">500</splitPane>
+      <splitPane id="imageMetaData" width="10">500</splitPane>
     </imageViewer>
     <imageSearchResultViewer>
       <xLocation>10</xLocation>

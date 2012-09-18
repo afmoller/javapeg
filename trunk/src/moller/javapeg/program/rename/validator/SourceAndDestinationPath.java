@@ -1,5 +1,7 @@
 package moller.javapeg.program.rename.validator;
 
+import java.io.File;
+
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.rename.ValidatorStatus;
@@ -30,7 +32,7 @@ public class SourceAndDestinationPath {
 		String errorMessage = "";
 
 		ApplicationContext ac = ApplicationContext.getInstance();
-		String sourcePath = ac.getSourcePath();
+		File sourcePath = ac.getSourcePath();
 		String destinationPath = ac.getDestinationPath();
 
 		/***
@@ -43,7 +45,7 @@ public class SourceAndDestinationPath {
 		 * Om den inte är tom kontrollera så att källsökvägen inte innehåller några otillåtna tecken: (*?"<>|)
 		 **/
 		else {
-			int result = PathUtil.validateString(sourcePath, true);
+			int result = PathUtil.validateString(sourcePath.getAbsolutePath(), true);
 
 			if(result > -1) {
 				errorMessage += lang.get("validator.sourceanddestinationpath.invalidCharactersInSourcePathError") + " (" + (char)result + ")\n";

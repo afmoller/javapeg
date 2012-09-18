@@ -24,7 +24,7 @@ public class CustomCellRenderer	extends	JLabel implements ListCellRenderer<Objec
 			                                      boolean isSelected, boolean cellHasFocus) {
 
 		Status directoryStatus = ((ImageRepositoryItem)value).getPathStatus();
-		String directoryPathValue = ((ImageRepositoryItem)value).getPath();
+		String directoryPathValue = ((ImageRepositoryItem)value).getPath().getAbsolutePath();
 
 		this.setText(directoryPathValue);
 

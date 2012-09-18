@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
@@ -14,7 +16,9 @@ public class TemplateUtil {
 	public static String convertTemplateToString(String stringToConvert, MetaData theMetaData){
 
 		Language lang = Language.getInstance();
-		Config conf = Config.getInstance();
+		Configuration configuration = Config.getInstance().get();
+
+		RenameImages renameImages = configuration.getRenameImages();
 
 		if(stringToConvert.indexOf("%" + lang.get("variable.pictureDateVariable") + "%") > -1){
 			String date = "";
@@ -22,7 +26,7 @@ public class TemplateUtil {
 				date = theMetaData.getExifDateAsString();
 				date = date.replaceAll(":", "-");
 			} else {
-				if(conf.getBooleanProperty("rename.use.lastmodified.date")) {
+				if(renameImages.getUseLastModifiedDate()) {
 					date = FileUtil.getLatestModifiedDate(theMetaData.getFileObject());
 				} else {
 					date = "no value";
@@ -36,7 +40,7 @@ public class TemplateUtil {
 				time = theMetaData.getExifTimeAsString();
 				time = time.replaceAll(":", "-");
 			} else {
-				if(conf.getBooleanProperty("rename.use.lastmodified.time")) {
+				if(renameImages.getUseLastModifiedTime()) {
 					time = FileUtil.getLatestModifiedTime(theMetaData.getFileObject());
 				} else {
 					time = "no value";
@@ -52,7 +56,7 @@ public class TemplateUtil {
 
 			// Limit the length of the Camera Model String according to a
 			// configurable parameter.
-			int maxLength = Config.getInstance().getIntProperty("rename.maximum.length.camera-model");
+			int maxLength = renameImages.getCameraModelNameMaximumLength();
 
 			if( maxLength > 0) {
 				if(cameraModel.length() > maxLength)

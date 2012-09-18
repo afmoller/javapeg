@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Logging;
 import moller.javapeg.program.enumerations.Level;
 import moller.util.io.FileUtil;
 
@@ -34,24 +35,24 @@ public class Logger {
     private final boolean rotateLog;
     private final boolean zipLog;
 
-    private final int	rotateSize;
+    private final Long	rotateSize;
     private final String logName;
 
     private final static String BASE_PATH = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "logs";
 
     private Logger() {
 
-    	Config config = Config.getInstance();
+    	Logging logging = Config.getInstance().get().getLogging();
 
-    	developerMode = config.getBooleanProperty("logger.developerMode");
-    	rotateLog     = config.getBooleanProperty("logger.log.rotate");
-    	logName       = config.getStringProperty("logger.log.name");
-    	logLevel      = parseConfValue(config.getStringProperty("logger.log.level"));
-    	rotateSize    = config.getIntProperty("logger.log.rotate.size");
-    	zipLog        =	config.getBooleanProperty("logger.log.rotate.zip");
+    	developerMode = logging.getDeveloperMode();
+    	rotateLog     = logging.getRotate();
+    	logName       = logging.getFileName();
+    	logLevel      = logging.getLevel();
+    	rotateSize    = logging.getRotateSize();
+    	zipLog        =	logging.getRotateZip();
 
-    	date     = new Date();
-    	sdf      = new SimpleDateFormat(config.getStringProperty("logger.log.entry.timestamp.format"));
+    	date = new Date();
+    	sdf  = logging.getTimeStampFormat();
 
     	logFile = new File(BASE_PATH + C.FS + logName);
 

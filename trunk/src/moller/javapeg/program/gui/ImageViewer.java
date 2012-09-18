@@ -46,6 +46,11 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.controller.ConfigElement;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -62,7 +67,7 @@ public class ImageViewer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Config config;
+	private static Configuration configuration;
 	private static Logger logger;
 	private static Language lang;
 
@@ -118,7 +123,7 @@ public class ImageViewer extends JFrame {
 
 	public ImageViewer(List<File> imagesToView) {
 
-		config = Config.getInstance();
+		configuration = Config.getInstance().get();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
 
@@ -138,9 +143,13 @@ public class ImageViewer extends JFrame {
 	// Create Main Window
 	public void createMainFrame() {
 
-		this.setSize(new Dimension(config.getIntProperty("imageViewerGUI.window.width"), config.getIntProperty("imageViewerGUI.window.height")));
+	    GUI gUI = configuration.getgUI();
 
-		Point xyFromConfig = new Point(config.getIntProperty("imageViewerGUI.window.location.x"),config.getIntProperty("imageViewerGUI.window.location.y"));
+	    Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
+
+		this.setSize(sizeAndLocation.getSize());
+
+		Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -194,8 +203,11 @@ public class ImageViewer extends JFrame {
 
 		imageMetaDataSplitPane = new JSplitPane();
 		imageMetaDataSplitPane.setOneTouchExpandable(true);
-		imageMetaDataSplitPane.setDividerSize(config.getIntProperty("imageViewerGUI.splitpane.width.image-metadata"));
-		imageMetaDataSplitPane.setDividerLocation(config.getIntProperty("imageViewerGUI.splitpane.location.image-metadata"));
+
+		List<GUIWindowSplitPane> gUIWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+
+		imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
+		imageMetaDataSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
 		imageMetaDataSplitPane.setLeftComponent(scrollpane);
 		imageMetaDataSplitPane.setRightComponent(metaDataPanel);
 
@@ -283,7 +295,7 @@ public class ImageViewer extends JFrame {
 		JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData()));
 
 		imageButton.setActionCommand(Integer.toString(index));
-		if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+		if (!configuration.getToolTips().getState().equals("0")) {
 			imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage));
 		}
 		imageButton.addActionListener(overviewButtonListener);
@@ -420,12 +432,17 @@ public class ImageViewer extends JFrame {
 	}
 
 	private void saveSettings() {
-		config.setIntProperty("imageViewerGUI.window.location.x", this.getLocationOnScreen().x);
-		config.setIntProperty("imageViewerGUI.window.location.y", this.getLocationOnScreen().y);
-		config.setIntProperty("imageViewerGUI.window.width", this.getSize().width);
-		config.setIntProperty("imageViewerGUI.window.height", this.getSize().height);
-		config.setIntProperty("imageViewerGUI.splitpane.location.image-metadata", imageMetaDataSplitPane.getDividerLocation());
-		config.setIntProperty("imageViewerGUI.splitpane.width.image-metadata", imageMetaDataSplitPane.getDividerSize());
+		GUI gUI = configuration.getgUI();
+
+		Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
+
+		sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+		sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
+
+		List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_VIEWER, imageMetaDataSplitPane.getDividerLocation());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_VIEWER, imageMetaDataSplitPane.getDividerSize());
 	}
 
 	private void removeCustomKeyEventDispatcher() {

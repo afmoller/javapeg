@@ -14,7 +14,6 @@ import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.controller.ConfigHandlerUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.logger.Logger;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
@@ -26,9 +25,6 @@ public class CategoriesConfig {
     public static TreeNode getCategoriesConfig(Node categoriesNode, XPath xPath) {
 
         DefaultMutableTreeNode root = null;
-        boolean createCategoriesModelSuccess = false;
-
-        Logger logger = Logger.getInstance();
 
         try {
             String id = (String)xPath.evaluate("@" + ConfigElement.HIGHEST_USED_ID, categoriesNode, XPathConstants.STRING);
@@ -36,15 +32,8 @@ public class CategoriesConfig {
 
             root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
             ConfigHandlerUtil.populateTreeModelFromNode(categoriesNode, root, xPath);
-            createCategoriesModelSuccess = true;
         } catch (XPathExpressionException xpee) {
-            logger.logFATAL("Invalid XPathExpression. See stacktrace below for details.");
-            logger.logFATAL(xpee);
-        }
-
-        if (!createCategoriesModelSuccess) {
-            moller.javapeg.program.language.Language lang = moller.javapeg.program.language.Language.getInstance();
-            ConfigHandlerUtil.displayErrorMessage(lang.get("category.categoriesModel.create.error"), lang.get("errormessage.maingui.errorMessageLabel"));
+            ConfigHandlerUtil.displayErrorMessage("Error", "Could not create Categories Model: " + xpee.getMessage());
             System.exit(1);
         }
 

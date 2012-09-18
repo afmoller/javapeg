@@ -27,7 +27,7 @@ public class MetaDataUtil {
 
 		String noValue = lang.get("common.missing.value");
 
-		if (Config.getInstance().getStringProperty("thumbnails.tooltip.state").equals("2")) {
+		if (Config.getInstance().get().getToolTips().getState().equals("2")) {
 			return "<html>" +
 	         "<table>" +
 	           createTableRow(lang.get("variable.comment.fileName"), jpgFile.getName()) +

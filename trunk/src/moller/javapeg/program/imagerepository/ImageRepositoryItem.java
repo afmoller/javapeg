@@ -1,10 +1,12 @@
 package moller.javapeg.program.imagerepository;
 
+import java.io.File;
+
 import moller.util.io.Status;
 
 public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
 
-	private String path;
+	private File path;
 	private Status pathStatus;
 
 	public ImageRepositoryItem() {
@@ -12,13 +14,13 @@ public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
 		this.pathStatus = null;
 	}
 
-	public ImageRepositoryItem(String path, Status pathStatus) {
+	public ImageRepositoryItem(File path, Status pathStatus) {
 		super();
 		this.path = path;
 		this.pathStatus = pathStatus;
 	}
 
-	public String getPath() {
+	public File getPath() {
 		return path;
 	}
 
@@ -26,7 +28,7 @@ public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
 		return pathStatus;
 	}
 
-	public void setPath(String path) {
+	public void setPath(File path) {
 		this.path = path;
 	}
 
