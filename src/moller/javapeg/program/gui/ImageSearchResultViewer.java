@@ -2,10 +2,10 @@ package moller.javapeg.program.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +42,8 @@ import javax.swing.UIManager;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -55,7 +57,7 @@ public class ImageSearchResultViewer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Config config;
+	private static Configuration configuration;
 	private static Logger logger;
 	private static Language lang;
 
@@ -81,7 +83,7 @@ public class ImageSearchResultViewer extends JFrame {
 
 	public ImageSearchResultViewer(Set<File> imagesToView) {
 
-		config = Config.getInstance();
+		configuration = Config.getInstance().get();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
 
@@ -98,9 +100,13 @@ public class ImageSearchResultViewer extends JFrame {
 	// Create Main Window
 	public void createMainFrame() {
 
-		this.setSize(new Dimension(config.getIntProperty("imageSearchResultViewerGUI.window.width"), config.getIntProperty("imageSearchResultViewerGUI.window.height")));
+	    GUI gUI = configuration.getgUI();
 
-		Point xyFromConfig = new Point(config.getIntProperty("imageSearchResultViewerGUI.window.location.x"),config.getIntProperty("imageSearchResultViewerGUI.window.location.y"));
+	    Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
+
+		this.setSize(sizeAndLocation.getSize());
+
+		Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -232,10 +238,12 @@ public class ImageSearchResultViewer extends JFrame {
 	}
 
 	private void saveSettings() {
-		config.setIntProperty("imageSearchResultViewerGUI.window.location.x", this.getLocationOnScreen().x);
-		config.setIntProperty("imageSearchResultViewerGUI.window.location.y", this.getLocationOnScreen().y);
-		config.setIntProperty("imageSearchResultViewerGUI.window.width", this.getSize().width);
-		config.setIntProperty("imageSearchResultViewerGUI.window.height", this.getSize().height);
+		GUI gUI = configuration.getgUI();
+
+		Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
+
+		sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
+		sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
 	}
 
 	private void setStatusMessages () {
@@ -367,7 +375,7 @@ public class ImageSearchResultViewer extends JFrame {
 			JToggleButton thumbContainer = new JToggleButton();
 			thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
 			thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-			if (!config.getStringProperty("thumbnails.tooltip.state").equals("0")) {
+			if (!configuration.getToolTips().getState().equals("0")) {
 				thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image));
 			}
 			thumbContainer.setActionCommand(image.getAbsolutePath());

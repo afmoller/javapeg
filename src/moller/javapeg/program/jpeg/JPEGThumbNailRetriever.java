@@ -7,11 +7,12 @@ import java.io.IOException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.util.io.StreamUtil;
-import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 
 public class JPEGThumbNailRetriever {
@@ -50,7 +51,10 @@ public class JPEGThumbNailRetriever {
 		JPEGThumbNail thumbNail = null;
 		JPEGThumbNailCache jpgtnc = null;
 
-		if(config.getBooleanProperty("thumbnails.cache.enabled")) {
+		ThumbNailCache thumbNailCache = config.get().getThumbNail().getCache();
+		ThumbNailCreation thumbNailCreation = config.get().getThumbNail().getCreation();
+
+		if(thumbNailCache.getEnabled()) {
 			// Get the thumbnail cache
 			jpgtnc = JPEGThumbNailCache.getInstance();
 
@@ -105,7 +109,7 @@ public class JPEGThumbNailRetriever {
 			        if (!JPEGUtil.isJPEG(thumbNailData)) {
 			            logger.logDEBUG("Embedded thumbnail missing or corrupt in file: " + jpegFile.getAbsolutePath());
 
-			            if(config.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt")) {
+			            if(thumbNailCreation.getIfMissingOrCorrupt()) {
 			                thumbNailData = searchForOrCreateThumbnail(jpegFile);
 			            } else {
 			                logger.logDEBUG("Loading missing thumbnail image");
@@ -120,7 +124,7 @@ public class JPEGThumbNailRetriever {
 			}
 			// Could not find the meta data for the thumbnail length
             else {
-                if(config.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt")) {
+                if(thumbNailCreation.getIfMissingOrCorrupt()) {
 
                     try {
                         thumbNailData = searchForOrCreateThumbnail(jpegFile);
@@ -142,7 +146,7 @@ public class JPEGThumbNailRetriever {
             thumbNail.setThumbNailData(thumbNailData);
             thumbNail.setThumbNailSize(thumbNailLength);
 
-            if(jpgtnc != null && config.getBooleanProperty("thumbnails.cache.enabled")) {
+            if(jpgtnc != null && thumbNailCache.getEnabled()) {
                 jpgtnc.add(jpegFile, thumbNail);
             }
 		}
@@ -161,10 +165,11 @@ public class JPEGThumbNailRetriever {
 	    } else {
 	        logger.logDEBUG("Creating thumbnail for image: "  + jpegFile.getAbsolutePath());
 
-	        String algorithm = config.getStringProperty("thumbnails.view.create.algorithm");
-	        logger.logDEBUG("Thumbnail creation algorithm: " + algorithm);
+	        ThumbNailCreation thumbNailCreation = config.get().getThumbNail().getCreation();
 
-	        return thumbNailData = JPEGUtil.createThumbNail(jpegFile, config.getIntProperty("thumbnails.view.width"), config.getIntProperty("thumbnails.view.height"), algorithm.equals("FAST") ? JPEGScaleAlgorithm.FAST : JPEGScaleAlgorithm.SMOOTH);
+	        logger.logDEBUG("Thumbnail creation algorithm: " + thumbNailCreation.getAlgorithm());
+
+	        return thumbNailData = JPEGUtil.createThumbNail(jpegFile, thumbNailCreation.getWidth(), thumbNailCreation.getHeight(), thumbNailCreation.getAlgorithm());
 	    }
 	}
 }

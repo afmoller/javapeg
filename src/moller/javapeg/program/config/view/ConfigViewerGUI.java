@@ -1,10 +1,10 @@
 package moller.javapeg.program.config.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -57,6 +57,19 @@ import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.Logging;
+import moller.javapeg.program.config.model.ToolTips;
+import moller.javapeg.program.config.model.UpdatesChecker;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
+import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
+import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
+import moller.javapeg.program.config.model.thumbnail.ThumbNail;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
@@ -70,6 +83,7 @@ import moller.util.gui.Screen;
 import moller.util.image.ImageUtil;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
+import moller.util.java.SystemProperties;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 
@@ -167,23 +181,23 @@ public class ConfigViewerGUI extends JFrame {
 	private JList<Object> imageRepositoriesNeverAddList;
 	private JList<Object> imageRepositoriesList;
 
-	private final Config   conf;
+	private final Configuration configuration;
 	private final Logger   logger;
 	private final Language lang;
 
 	// Configuration values read from configuration.
-	private String LOG_LEVEL;
+	private Level LOG_LEVEL;
 	private String LOG_NAME;
-	private String LOG_ROTATE_SIZE;
-	private String LOG_ENTRY_TIMESTAMP_FORMAT;
+	private Long LOG_ROTATE_SIZE;
+	private SimpleDateFormat LOG_ENTRY_TIMESTAMP_FORMAT;
 	private String GUI_LANGUAGE_ISO6391;
-	private String THUMBNAIL_WIDTH;
-	private String THUMBNAIL_HEIGHT;
-	private String CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
-	private String THUMBNAIL_MAX_CACHE_SIZE;
-	private String MAXIMUM_LENGTH_OF_CAMERA_MODEL;
+	private Integer THUMBNAIL_WIDTH;
+	private Integer THUMBNAIL_HEIGHT;
+	private JPEGScaleAlgorithm CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
+	private Integer THUMBNAIL_MAX_CACHE_SIZE;
+	private Integer MAXIMUM_LENGTH_OF_CAMERA_MODEL;
 	private String THUMBNAIL_TOOLTIP_STATE;
-	private String ADD_TO_IMAGEREPOSITOY_POLICY;
+	private Integer ADD_TO_IMAGEREPOSITOY_POLICY;
 
 	private boolean DEVELOPER_MODE;
 	private boolean LOG_ROTATE;
@@ -201,7 +215,7 @@ public class ConfigViewerGUI extends JFrame {
 	private boolean AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX;
 
 	public ConfigViewerGUI() {
-		conf   = Config.getInstance();
+		configuration = Config.getInstance().get();
 		logger = Logger.getInstance();
 		lang   = Language.getInstance();
 
@@ -218,39 +232,41 @@ public class ConfigViewerGUI extends JFrame {
 
 	private void setStartupConfig() {
 
-		LOG_LEVEL = conf.getStringProperty("logger.log.level");
-		DEVELOPER_MODE = conf.getBooleanProperty("logger.developerMode");
-		LOG_ROTATE = conf.getBooleanProperty("logger.log.rotate");
-		LOG_ROTATE_ZIP = conf.getBooleanProperty("logger.log.rotate.zip");
-		LOG_ROTATE_SIZE = conf.getStringProperty("logger.log.rotate.size");
-		LOG_NAME = conf.getStringProperty("logger.log.name");
-		LOG_ENTRY_TIMESTAMP_FORMAT = conf.getStringProperty("logger.log.entry.timestamp.format");
-		UPDATE_CHECK_ENABLED = conf.getBooleanProperty("updatechecker.enabled");
-		UPDATE_CHECK_ATTACH_VERSION = conf.getBooleanProperty("updatechecker.attachVersionInformation");
-		USE_LAST_MODIFIED_DATE = conf.getBooleanProperty("rename.use.lastmodified.date");
-		USE_LAST_MODIFIED_TIME = conf.getBooleanProperty("rename.use.lastmodified.time");
-		AUTOMATIC_LANGUAGE_SELECTION = conf.getBooleanProperty("automaticLanguageSelection");
-		GUI_LANGUAGE_ISO6391 = conf.getStringProperty("gUILanguageISO6391");
-		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt");
-		THUMBNAIL_WIDTH = conf.getStringProperty("thumbnails.view.width");
-		THUMBNAIL_HEIGHT = conf.getStringProperty("thumbnails.view.height");
-		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = conf.getStringProperty("thumbnails.view.create.algorithm");
-		THUMBNAIL_MAX_CACHE_SIZE = conf.getStringProperty("thumbnails.cache.max-size");
-		ENABLE_THUMBNAIL_CACHE = conf.getBooleanProperty("thumbnails.cache.enabled");
-		MAXIMUM_LENGTH_OF_CAMERA_MODEL = conf.getStringProperty("rename.maximum.length.camera-model");
-		USE_EMBEDDED_THUMBNAIL = conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail");
-		THUMBNAIL_TOOLTIP_STATE = conf.getStringProperty("thumbnails.tooltip.state");
-		WARN_WHEN_REMOVE_CATEGORY = conf.getBooleanProperty("categories.warnWhenRemoveCategory");
-		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories");
-		AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths");
-		ADD_TO_IMAGEREPOSITOY_POLICY = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
+		LOG_LEVEL = configuration.getLogging().getLevel();
+		DEVELOPER_MODE = configuration.getLogging().getDeveloperMode();
+		LOG_ROTATE = configuration.getLogging().getRotate();
+		LOG_ROTATE_ZIP = configuration.getLogging().getRotateZip();
+		LOG_ROTATE_SIZE = configuration.getLogging().getRotateSize();
+		LOG_NAME = configuration.getLogging().getFileName();
+		LOG_ENTRY_TIMESTAMP_FORMAT = configuration.getLogging().getTimeStampFormat();
+		UPDATE_CHECK_ENABLED = configuration.getUpdatesChecker().getEnabled();
+		UPDATE_CHECK_ATTACH_VERSION = configuration.getUpdatesChecker().getAttachVersionInformation();
+		USE_LAST_MODIFIED_DATE = configuration.getRenameImages().getUseLastModifiedDate();
+		USE_LAST_MODIFIED_TIME = configuration.getRenameImages().getUseLastModifiedTime();
+		MAXIMUM_LENGTH_OF_CAMERA_MODEL = configuration.getRenameImages().getCameraModelNameMaximumLength();
+		AUTOMATIC_LANGUAGE_SELECTION = configuration.getLanguage().getAutomaticSelection();
+		GUI_LANGUAGE_ISO6391 = configuration.getLanguage().getgUILanguageISO6391();
+		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = configuration.getThumbNail().getCreation().getIfMissingOrCorrupt();
+		THUMBNAIL_WIDTH = configuration.getThumbNail().getCreation().getWidth();
+		THUMBNAIL_HEIGHT = configuration.getThumbNail().getCreation().getHeight();
+		CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = configuration.getThumbNail().getCreation().getAlgorithm();
+		THUMBNAIL_MAX_CACHE_SIZE = configuration.getThumbNail().getCache().getMaxSize();
+		ENABLE_THUMBNAIL_CACHE = configuration.getThumbNail().getCache().getEnabled();
+		USE_EMBEDDED_THUMBNAIL = configuration.getTagImages().getPreview().getUseEmbeddedThumbnail();
+		THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getState();
+		WARN_WHEN_REMOVE_CATEGORY = configuration.getTagImages().getCategories().getWarnWhenRemove();
+		WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = configuration.getTagImages().getCategories().getWarnWhenRemoveWithSubCategories();
+		AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath();
+		ADD_TO_IMAGEREPOSITOY_POLICY = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
 	}
 
 	private void initiateWindow() {
 
-		this.setSize(new Dimension(conf.getIntProperty("configViewerGUI.window.width"),conf.getIntProperty("configViewerGUI.window.height")));
+	    Rectangle sizeAndLocation = configuration.getgUI().getConfigViewer().getSizeAndLocation();
 
-		Point xyFromConfig = new Point(conf.getIntProperty("configViewerGUI.window.location.x"),conf.getIntProperty("configViewerGUI.window.location.y"));
+		this.setSize(sizeAndLocation.getSize());
+
+		Point xyFromConfig = sizeAndLocation.getLocation();
 
 		if(Screen.isOnScreen(xyFromConfig)) {
 			this.setLocation(xyFromConfig);
@@ -342,30 +358,24 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posLoggingPanel = new GBHelper();
 
-		String logLevel = conf.getStringProperty("logger.log.level");
-		int seletedIndex = 0;
+		Logging logging = configuration.getLogging();
 
-		for (Level level : Level.values()) {
-			if(level.toString().equals(logLevel)) {
-				seletedIndex = level.ordinal();
-				break;
-			}
-		}
 		JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
 		logLevels = new JComboBox<Level>(Level.values());
-		logLevels.setSelectedIndex(seletedIndex);
+		// TODO: Check this so if works
+		logLevels.setSelectedItem(logging.getLevel());
 
 		JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
 		developerMode = new JCheckBox();
-		developerMode.setSelected(conf.getBooleanProperty("logger.developerMode"));
+		developerMode.setSelected(logging.getDeveloperMode());
 
 		JLabel rotateLogLabel = new JLabel(lang.get("configviewer.logging.label.rotateLog.text"));
 		rotateLog = new JCheckBox();
-		rotateLog.setSelected(conf.getBooleanProperty("logger.log.rotate"));
+		rotateLog.setSelected(logging.getRotate());
 
 		JLabel zipLogLabel = new JLabel(lang.get("configviewer.logging.label.zipLog.text"));
 		zipLog = new JCheckBox();
-		zipLog.setSelected(conf.getBooleanProperty("logger.log.rotate.zip"));
+		zipLog.setSelected(logging.getRotateZip());
 
 		JLabel rotateLogSizeLabel = new JLabel(lang.get("configviewer.logging.label.rotateLogSize.text"));
 
@@ -373,15 +383,9 @@ public class ConfigViewerGUI extends JFrame {
 		GBHelper posLogSizePanel = new GBHelper();
 
 		rotateLogSize = new JTextField();
-		rotateLogSize.setEnabled(conf.getBooleanProperty("logger.log.rotate"));
+		rotateLogSize.setEnabled(logging.getRotate());
 
-		long logSize = 0;
-
-		try {
-			logSize = Long.parseLong(conf.getStringProperty("logger.log.rotate.size"));
-		} catch (NumberFormatException nfex) {
-			logSize = 1024000;
-		}
+		long logSize = logging.getRotateSize();
 
 		String [] factors = {"KiB", "MiB"};
 
@@ -399,13 +403,13 @@ public class ConfigViewerGUI extends JFrame {
 
 		JLabel logNameLabel = new JLabel(lang.get("configviewer.logging.label.logName.text"));
 		logName = new JTextField();
-		logName.setText(conf.getStringProperty("logger.log.name"));
+		logName.setText(logging.getFileName());
 
 		JLabel logEntryTimeStampFormatLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text"));
 
 		Set<String> formats = new LinkedHashSet<String>();
 
-		formats.add(conf.getStringProperty("logger.log.entry.timestamp.format"));
+		formats.add(logging.getTimeStampFormat().toPattern());
 		formats.add("yyyy-MM-dd'T'HH:mm:ss:SSSZ");
 		formats.add("yyyyMMdd'T'HHmmssSSSZ");
 		formats.add("yyyy-D'T'HH:mm:ss:SSSZ");
@@ -459,11 +463,13 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posUpdatesPanel = new GBHelper();
 
+		UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+
 		updatesEnabled = new JCheckBox(lang.get("configviewer.update.label.updateEnabled.text"));
-		updatesEnabled.setSelected(conf.getBooleanProperty("updatechecker.enabled"));
+		updatesEnabled.setSelected(updatesChecker.getEnabled());
 
 		sendVersionInformationEnabled = new JCheckBox(lang.get("configviewer.update.label.attachVersionInformation.text"));
-		sendVersionInformationEnabled.setSelected(conf.getBooleanProperty("updatechecker.attachVersionInformation"));
+		sendVersionInformationEnabled.setSelected(updatesChecker.getAttachVersionInformation());
 		sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
 
 		updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.expandW());
@@ -476,15 +482,17 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posRenamePanel = new GBHelper();
 
+		RenameImages renameImages = configuration.getRenameImages();
+
 		useLastModifiedDate = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
-		useLastModifiedDate.setSelected(conf.getBooleanProperty("rename.use.lastmodified.date"));
+		useLastModifiedDate.setSelected(renameImages.getUseLastModifiedDate());
 
 		useLastModifiedTime = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
-		useLastModifiedTime.setSelected(conf.getBooleanProperty("rename.use.lastmodified.time"));
+		useLastModifiedTime.setSelected(renameImages.getUseLastModifiedTime());
 
 		JLabel cameraModelValueLengthLabel = new JLabel(lang.get("configviewer.rename.label.maximumCameraModelValueLength"));
 		maximumLengthOfCameraModelValueTextField = new JTextField(5);
-		maximumLengthOfCameraModelValueTextField.setText(conf.getStringProperty("rename.maximum.length.camera-model"));
+		maximumLengthOfCameraModelValueTextField.setText(Integer.toString(renameImages.getCameraModelNameMaximumLength()));
 
 		renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel);
 		renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
@@ -503,9 +511,11 @@ public class ConfigViewerGUI extends JFrame {
 		languageSelectionMode.add(manualRadioButton);
 		languageSelectionMode.add(automaticRadioButton);
 
-		if(conf.getBooleanProperty("automaticLanguageSelection")) {
-			if(!conf.getStringProperty("gUILanguageISO6391").equals(System.getProperty("user.language"))) {
-				conf.setStringProperty("gUILanguageISO6391", System.getProperty("user.language"));
+		moller.javapeg.program.config.model.Language language = configuration.getLanguage();
+
+		if (language.getAutomaticSelection()) {
+			if (!language.getgUILanguageISO6391().equals(SystemProperties.getUserLanguage())) {
+				language.setgUILanguageISO6391(SystemProperties.getUserLanguage());
 			}
 		}
 
@@ -519,7 +529,7 @@ public class ConfigViewerGUI extends JFrame {
 
 		languageList = new JList<String>(ConfigUtil.listLanguagesFiles());
 
-		if(conf.getBooleanProperty("automaticLanguageSelection")) {
+		if (language.getAutomaticSelection()) {
 			languageList.setEnabled(false);
 		}
 
@@ -532,7 +542,7 @@ public class ConfigViewerGUI extends JFrame {
 
 		availableLanguagesPanel.add(languageListScrollPane, posAvailableLanguages.expandW().expandH());
 
-		currentLanguage = new JLabel(ConfigUtil.resolveCodeToLanguageName(conf.getStringProperty("gUILanguageISO6391")));
+		currentLanguage = new JLabel(ConfigUtil.resolveCodeToLanguageName(language.getgUILanguageISO6391()));
 
 		JPanel currentLanguagePanel = new JPanel(new GridBagLayout());
 		currentLanguagePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.language.label.currentLanguage")));
@@ -547,7 +557,7 @@ public class ConfigViewerGUI extends JFrame {
 		languageConfigurationPanel.add(selectionModePanel, posLanguagePanel.nextRow().expandW().expandH());
 		languageConfigurationPanel.add(availableLanguagesPanel, posLanguagePanel.nextRow().expandW().expandH());
 
-		if(conf.getBooleanProperty("automaticLanguageSelection")) {
+		if (language.getAutomaticSelection()) {
 			automaticRadioButton.setSelected(true);
 		} else {
 			manualRadioButton.setSelected(true);
@@ -556,38 +566,31 @@ public class ConfigViewerGUI extends JFrame {
 
 	private void createThumbnailConfigurationPanel() {
 
+	    ThumbNail thumbNail = configuration.getThumbNail();
+
 		/**
 		 * Start of Thumbnail Creation Area
 		 */
 		createThumbnailIfMissingOrCorrupt = new JCheckBox(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt"));
-		createThumbnailIfMissingOrCorrupt.setSelected(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+		createThumbnailIfMissingOrCorrupt.setSelected(thumbNail.getCreation().getIfMissingOrCorrupt());
 
 		JLabel thumbnailWidthLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.thumbnail.width"));
-		thumbnailWidth = new JTextField(conf.getStringProperty("thumbnails.view.width"));
+		thumbnailWidth = new JTextField(Integer.toString(thumbNail.getCreation().getWidth()));
 		thumbnailWidth.setColumns(5);
-		thumbnailWidth.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+		thumbnailWidth.setEnabled(thumbNail.getCreation().getIfMissingOrCorrupt());
 
 		JLabel thumbnailHeightLabel = new JLabel(lang.get("configviewer.thumbnail.creation.label.thumbnail.height"));
-		thumbnailHeight = new JTextField(conf.getStringProperty("thumbnails.view.height"));
+		thumbnailHeight = new JTextField(Integer.toString(thumbNail.getCreation().getHeight()));
 		thumbnailHeight.setColumns(5);
-		thumbnailHeight.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+		thumbnailHeight.setEnabled(thumbNail.getCreation().getIfMissingOrCorrupt());
 
 		JLabel thumbnailCreationMode = new JLabel(lang.get("configviewer.thumbnail.creation.label.algorithm"));
 
-		String scaleAlgorithm = conf.getStringProperty("thumbnails.view.create.algorithm");
-		int seletedIndex = 0;
-
-		for (JPEGScaleAlgorithm algorithm : JPEGScaleAlgorithm.values()) {
-			if(algorithm.toString().equals(scaleAlgorithm)) {
-				seletedIndex = algorithm.ordinal();
-				break;
-			}
-		}
-
 		thumbnailCreationAlgorithm = new JComboBox<JPEGScaleAlgorithm>(JPEGScaleAlgorithm.values());
-		thumbnailCreationAlgorithm.setSelectedIndex(seletedIndex);
+		thumbnailCreationAlgorithm.setSelectedItem(thumbNail.getCreation().getAlgorithm());
 		thumbnailCreationAlgorithm.invalidate();
-		thumbnailCreationAlgorithm.setEnabled(conf.getBooleanProperty("thumbnails.view.create-if-missing-or-corrupt"));
+		// TODO: Verify that it works
+		thumbnailCreationAlgorithm.setEnabled(thumbNail.getCreation().getIfMissingOrCorrupt());
 
 		JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());
 		thumbnailCreationPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.creation.label")));
@@ -612,20 +615,19 @@ public class ConfigViewerGUI extends JFrame {
 		 * Start of Thumbnail Cache Area
 		 */
 		enableThumbnailCache = new JCheckBox(lang.get("configviewer.thumbnail.cache.label.enable"));
-		enableThumbnailCache.setSelected(conf.getBooleanProperty("thumbnails.cache.enabled"));
-
+		enableThumbnailCache.setSelected(thumbNail.getCache().getEnabled());
 
 		JPEGThumbNailCache jptc = JPEGThumbNailCache.getInstance();
 		JLabel cacheSizeLabelHeading = new JLabel(lang.get("configviewer.thumbnail.cache.label.size") + ": ");
 
 		cacheSizeLabel = new JLabel(Integer.toString(jptc.getCurrentSize()));
-		cacheSizeLabel.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		cacheSizeLabel.setEnabled(thumbNail.getCache().getEnabled());
 
 		JLabel cacheMaxSizeLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.size.max") + ": ");
 
 		maxCacheSize = new JTextField(6);
-		maxCacheSize.setText(Integer.toString(conf.getIntProperty("thumbnails.cache.max-size")));
-		maxCacheSize.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled"));
+		maxCacheSize.setText(Integer.toString(thumbNail.getCache().getMaxSize()));
+		maxCacheSize.setEnabled(thumbNail.getCache().getEnabled());
 
 		JLabel clearCachLabel = new JLabel(lang.get("configviewer.thumbnail.cache.label.clear"));
 
@@ -638,7 +640,7 @@ public class ConfigViewerGUI extends JFrame {
 			logger.logERROR(iox);
 		}
 
-		clearCacheJButton.setEnabled(conf.getBooleanProperty("thumbnails.cache.enabled") && (jptc.getCurrentSize() > 0));
+		clearCacheJButton.setEnabled(thumbNail.getCache().getEnabled() && (jptc.getCurrentSize() > 0));
 
 		JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());
 		thumbnailCachePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.cache.label")));
@@ -677,7 +679,9 @@ public class ConfigViewerGUI extends JFrame {
 		group.add(toolTipEnabled);
 		group.add(toolTipExtended);
 
-		String toolTipState = conf.getStringProperty("thumbnails.tooltip.state");
+		ToolTips toolTips = configuration.getToolTips();
+
+		String toolTipState = toolTips.getState();
 
 		if (toolTipState.equalsIgnoreCase(toolTipDisabled.getName())) {
 			toolTipDisabled.setSelected(true);
@@ -708,14 +712,16 @@ public class ConfigViewerGUI extends JFrame {
 
 	private void createTagConfigurationPanel() {
 
+	    TagImagesPreview tagImagesPreview = configuration.getTagImages().getPreview();
+
 		/**
 		 * Start of Preview Image Area
 		 */
 		useEmbeddedThumbnail = new JRadioButton(lang.get("configviewer.tag.previewimage.label.embeddedthumbnail"));
-		useEmbeddedThumbnail.setSelected(conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
+		useEmbeddedThumbnail.setSelected(tagImagesPreview.getUseEmbeddedThumbnail());
 
 		useScaledThumbnail = new JRadioButton(lang.get("configviewer.tag.previewimage.label.scaledthumbnail"));
-		useScaledThumbnail.setSelected(!conf.getBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail"));
+		useScaledThumbnail.setSelected(!tagImagesPreview.getUseEmbeddedThumbnail());
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(useEmbeddedThumbnail);
@@ -729,13 +735,15 @@ public class ConfigViewerGUI extends JFrame {
 		previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.expandW());
 		previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextRow().expandW());
 
+		TagImagesCategories tagImagesCategories = configuration.getTagImages().getCategories();
+
 		/**
 		 * Start of Categories Area
 		 */
 		warnWhenRemoveCategory = new JCheckBox(lang.get("configviewer.tag.categories.warnWhenRemove"));
-		warnWhenRemoveCategory.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategory"));
+		warnWhenRemoveCategory.setSelected(tagImagesCategories.getWarnWhenRemove());
 		warnWhenRemoveCategoryWithSubCategories = new JCheckBox(lang.get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories"));
-		warnWhenRemoveCategoryWithSubCategories.setSelected(conf.getBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories"));
+		warnWhenRemoveCategoryWithSubCategories.setSelected(tagImagesCategories.getWarnWhenRemoveWithSubCategories());
 
 		JPanel categoriesPanel = new JPanel(new GridBagLayout());
 		categoriesPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.categories.label")));
@@ -762,7 +770,9 @@ public class ConfigViewerGUI extends JFrame {
 		buttonGroup.add(askToAddRadioButton);
 		buttonGroup.add(doNotAddRadioButton);
 
-		String addToImageRepositoryPolicy = conf.getStringProperty("imageRepository.addToRepositoryPolicy");
+		TagImagesPaths tagImagesPaths = configuration.getTagImages().getImagesPaths();
+
+		String addToImageRepositoryPolicy = Integer.toString(tagImagesPaths.getAddToRepositoryPolicy());
 
 		if (addToImageRepositoryPolicy.equalsIgnoreCase(addAutomaticallyRadioButton.getName())) {
 			addAutomaticallyRadioButton.setSelected(true);
@@ -816,7 +826,7 @@ public class ConfigViewerGUI extends JFrame {
 		imageRepositoriesAdditionModePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label")));
 
 		automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths"));
-		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(conf.getBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths"));
+		automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath());
 		automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip"));
 
 		GBHelper posImageRepositories = new GBHelper();
@@ -878,10 +888,14 @@ public class ConfigViewerGUI extends JFrame {
 	}
 
 	private void updateWindowLocationAndSize() {
-		conf.setIntProperty("configViewerGUI.window.location.x", this.getLocation().x);
-		conf.setIntProperty("configViewerGUI.window.location.y", this.getLocation().y);
-		conf.setIntProperty("configViewerGUI.window.width", this.getSize().width);
-		conf.setIntProperty("configViewerGUI.window.height", this.getSize().height);
+		GUIWindow configViewer = configuration.getgUI().getConfigViewer();
+
+		Rectangle sizeAndLocation = new Rectangle();
+
+		sizeAndLocation.setLocation(this.getLocation().x, this.getLocation().y);
+		sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+
+		configViewer.setSizeAndLocation(sizeAndLocation);
 	}
 
 	private JScrollPane initiateJTree() {
@@ -927,52 +941,81 @@ public class ConfigViewerGUI extends JFrame {
 		/**
 		 * Update Logging Configuration
 		 */
-		conf.setStringProperty("logger.log.level", logLevels.getSelectedItem().toString());
-		conf.setBooleanProperty("logger.developerMode", developerMode.isSelected());
-		conf.setBooleanProperty("logger.log.rotate", rotateLog.isSelected());
-		conf.setBooleanProperty("logger.log.rotate.zip", zipLog.isSelected());
-		conf.setStringProperty("logger.log.rotate.size", Long.toString(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString())));
-		conf.setStringProperty("logger.log.name", logName.getText().trim());
-		conf.setStringProperty("logger.log.entry.timestamp.format", logEntryTimeStampFormats.getSelectedItem().toString());
+		Logging logging = configuration.getLogging();
+
+		logging.setDeveloperMode(developerMode.isSelected());
+		logging.setFileName(logName.getText().trim());
+		logging.setLevel((Level)logLevels.getSelectedItem());
+		logging.setRotate(rotateLog.isSelected());
+		logging.setRotateSize(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString()));
+		logging.setRotateZip(zipLog.isSelected());
+		logging.setTimeStampFormat(new SimpleDateFormat((String)logEntryTimeStampFormats.getSelectedItem()));
 
 		/**
 		 * Update Updates Configuration
 		 */
-		conf.setBooleanProperty("updatechecker.enabled", updatesEnabled.isSelected());
-		conf.setBooleanProperty("updatechecker.attachVersionInformation", sendVersionInformationEnabled.isSelected());
+		UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+
+		updatesChecker.setEnabled(updatesEnabled.isSelected());
+		updatesChecker.setAttachVersionInformation(sendVersionInformationEnabled.isSelected());
 
 		/**
 		 * Update Language Configuration
 		 */
-		conf.setBooleanProperty("automaticLanguageSelection", automaticRadioButton.isSelected());
-		conf.setStringProperty("gUILanguageISO6391", ISO639.getInstance().getCode(currentLanguage.getText()));
+		moller.javapeg.program.config.model.Language language = configuration.getLanguage();
+
+		language.setAutomaticSelection(automaticRadioButton.isSelected());
+		language.setgUILanguageISO6391(ISO639.getInstance().getCode(currentLanguage.getText()));
 
 		/**
 		 * Update Rename Configuration
 		 */
-		conf.setBooleanProperty("rename.use.lastmodified.date", useLastModifiedDate.isSelected());
-		conf.setBooleanProperty("rename.use.lastmodified.time", useLastModifiedTime.isSelected());
-		conf.setStringProperty("rename.maximum.length.camera-model", maximumLengthOfCameraModelValueTextField.getText());
+		RenameImages renameImages = configuration.getRenameImages();
+
+		renameImages.setCameraModelNameMaximumLength(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()));
+		renameImages.setUseLastModifiedDate(useLastModifiedDate.isSelected());
+		renameImages.setUseLastModifiedTime(useLastModifiedTime.isSelected());
 
 		/**
 		 * Update Thumbnail Configuration
 		 */
-		conf.setBooleanProperty("thumbnails.view.create-if-missing-or-corrupt", createThumbnailIfMissingOrCorrupt.isSelected());
-		conf.setStringProperty("thumbnails.view.width", thumbnailWidth.getText());
-		conf.setStringProperty("thumbnails.view.height", thumbnailHeight.getText());
-		conf.setStringProperty("thumbnails.view.create.algorithm", thumbnailCreationAlgorithm.getSelectedItem().toString());
-		conf.setStringProperty("thumbnails.cache.max-size", maxCacheSize.getText());
-		conf.setBooleanProperty("thumbnails.cache.enabled", enableThumbnailCache.isSelected());
-		conf.setStringProperty("thumbnails.tooltip.state", getToolTipState());
+		ThumbNail thumbNail = configuration.getThumbNail();
+
+		ThumbNailCache thumbNailCache = thumbNail.getCache();
+
+		thumbNailCache.setEnabled(enableThumbnailCache.isSelected());
+		thumbNailCache.setMaxSize(Integer.parseInt(maxCacheSize.getText()));
+
+		ThumbNailCreation thumbNailCreation = thumbNail.getCreation();
+
+		thumbNailCreation.setAlgorithm((JPEGScaleAlgorithm)thumbnailCreationAlgorithm.getSelectedItem());
+		thumbNailCreation.setHeight(Integer.parseInt(thumbnailHeight.getText()));
+		thumbNailCreation.setIfMissingOrCorrupt(createThumbnailIfMissingOrCorrupt.isSelected());
+		thumbNailCreation.setWidth(Integer.parseInt(thumbnailWidth.getText()));
+
+		/***
+		 * Update ToolTips configuration
+		 */
+		configuration.getToolTips().setState(getToolTipState());
 
 		/**
 		 * Update Tag Configuration
 		 */
-		conf.setBooleanProperty("tab.tagImage.previewImage.useEmbeddedThumbnail", useEmbeddedThumbnail.isSelected());
-		conf.setBooleanProperty("categories.warnWhenRemoveCategory", warnWhenRemoveCategory.isSelected());
-		conf.setBooleanProperty("categories.warnWhenRemoveCategoryWithSubCategories", warnWhenRemoveCategoryWithSubCategories.isSelected());
-		conf.setBooleanProperty("imageRepository.automaticallyRemoveNonExistingImagePaths", automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
-		conf.setStringProperty("imageRepository.addToRepositoryPolicy", getAddToRepositoryPolicy());
+		TagImages tagImages = configuration.getTagImages();
+
+		TagImagesCategories tagImagesCategories = tagImages.getCategories();
+
+		tagImagesCategories.setWarnWhenRemove(warnWhenRemoveCategory.isSelected());
+		tagImagesCategories.setWarnWhenRemoveWithSubCategories(warnWhenRemoveCategoryWithSubCategories.isSelected());
+
+		TagImagesPaths tagImagesPaths = tagImages.getImagesPaths();
+
+		tagImagesPaths.setAddToRepositoryPolicy(Integer.parseInt(getAddToRepositoryPolicy()));
+		tagImagesPaths.setAutomaticallyRemoveNonExistingImagePath(automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
+
+		TagImagesPreview tagImagesPreview = tagImages.getPreview();
+
+		tagImagesPreview.setUseEmbeddedThumbnail(useEmbeddedThumbnail.isSelected());
 
 		/**
 		 * Show configuration changes.
@@ -1136,17 +1179,10 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
 		}
 
-		if(!ADD_TO_IMAGEREPOSITOY_POLICY.equals(getAddToRepositoryPolicy())) {
-			int previousAddToImageRepositoryPolicy = -1;
+		if(!ADD_TO_IMAGEREPOSITOY_POLICY.equals(Integer.parseInt(getAddToRepositoryPolicy()))) {
 			String previous = "";
 
-			try {
-				previousAddToImageRepositoryPolicy = Integer.parseInt(ADD_TO_IMAGEREPOSITOY_POLICY);
-			} catch (NumberFormatException nfex) {
-				previousAddToImageRepositoryPolicy = 1;
-			}
-
-			switch (previousAddToImageRepositoryPolicy) {
+			switch (ADD_TO_IMAGEREPOSITOY_POLICY) {
 			case 0:
 				previous = lang.get("configviewer.tag.imageRepositories.label.addAutomatically");
 				break;
@@ -1239,17 +1275,13 @@ public class ConfigViewerGUI extends JFrame {
 		return Long.toString(calculateRotateLogSize(Long.parseLong(size), factor));
 	}
 
-	private String parseRotateLongSize(String size, String factor) {
-
-		long longSize = Long.parseLong(size);
-
+	private String parseRotateLongSize(Long size, String factor) {
 		if (factor.equals("KiB")) {
-			longSize /= 1024;
+		    size /= 1024;
 		} else {
-			longSize /= 1024 * 1024;
+		    size /= 1024 * 1024;
 		}
-		return Long.toString(longSize);
-
+		return Long.toString(size);
 	}
 
 	private long calculateRotateLogSize(Long size, String factor) {
@@ -1450,7 +1482,7 @@ public class ConfigViewerGUI extends JFrame {
 
 			String userLanguage = System.getProperty("user.language");
 
-			if(!conf.getStringProperty("gUILanguageISO6391").equals(userLanguage)) {
+			if(!configuration.getLanguage().getgUILanguageISO6391().equals(userLanguage)) {
 				currentLanguage.setText(ConfigUtil.resolveCodeToLanguageName(userLanguage));
 			}
 		}

@@ -49,7 +49,7 @@ public class ImageRepositoryUtil {
 
     private final File repositoryFile;
 
-    private final TreeSet<String> imageRepositoryPaths;
+    private final TreeSet<File> imageRepositoryPaths;
     private final Set<String> allwaysAdd;
     private final Set<String> neverAdd;
 
@@ -59,7 +59,7 @@ public class ImageRepositoryUtil {
     private ImageRepositoryUtil() {
         repositoryFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "repository.xml");
 
-        imageRepositoryPaths = new TreeSet<String>();
+        imageRepositoryPaths = new TreeSet<File>();
         allwaysAdd = new HashSet<String>();
         neverAdd = new HashSet<String>();
     }
@@ -204,7 +204,7 @@ public class ImageRepositoryUtil {
                 XMLUtil.writeElementStart("paths", w);
 
                 for (Object imageRepository : imageRepositoryList) {
-                    XMLUtil.writeElement("path", ((ImageRepositoryItem)imageRepository).getPath(), w);
+                    XMLUtil.writeElement("path", ((ImageRepositoryItem)imageRepository).getPath().getAbsolutePath(), w);
                 }
 
                 XMLUtil.writeElementEnd(w);
@@ -320,8 +320,8 @@ public class ImageRepositoryUtil {
         if (pathElements.getLength() > 0) {
             for (int i = 0; i < pathElements.getLength(); i++) {
                 Element path = (Element)pathElements.item(i);
-                paths.add(path.getTextContent());
-                imageRepositoryPaths.add(path.getTextContent());
+                paths.add(new File(path.getTextContent()));
+                imageRepositoryPaths.add(new File(path.getTextContent()));
             }
         }
         return paths;
@@ -348,7 +348,7 @@ public class ImageRepositoryUtil {
             return true;
         }
 
-        for (String imageRepositoryPath : imageRepositoryPaths) {
+        for (File imageRepositoryPath : imageRepositoryPaths) {
             boolean found = false;
 
             for (Object directoryPath : directoryPaths) {

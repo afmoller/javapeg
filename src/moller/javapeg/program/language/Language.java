@@ -15,6 +15,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.logger.Logger;
+import moller.util.io.StreamUtil;
 
 public class Language {
 
@@ -85,22 +86,25 @@ public class Language {
 
 		Config conf = Config.getInstance();
 
-		try {
-			InputStream langFileJavaPEG         = null;
-			InputStream langFileImageViewer     = null;
-			InputStream langFileCommon          = null;
-			InputStream langFileConfigViewer    = null;
-			InputStream langFileCategory        = null;
-			InputStream langFileImageRepository = null;
+		InputStream langFileJavaPEG         = null;
+		InputStream langFileImageViewer     = null;
+		InputStream langFileCommon          = null;
+		InputStream langFileConfigViewer    = null;
+		InputStream langFileCategory        = null;
+		InputStream langFileImageRepository = null;
 
-			String languageToLoad = "";
+		try {
+
+		    String languageToLoad = "";
 			String languageCode = "";
 
-			if (conf.getBooleanProperty("automaticLanguageSelection")) {
+			moller.javapeg.program.config.model.Language language = conf.get().getLanguage();
+
+			if (language.getAutomaticSelection()) {
 				languageCode   = System.getProperty("user.language");
 				languageToLoad = "language." + languageCode;
 			} else {
-				languageCode   = conf.getStringProperty("gUILanguageISO6391");
+				languageCode   = language.getgUILanguageISO6391();
 				languageToLoad = "language." + languageCode;
 			}
 
@@ -174,6 +178,13 @@ public class Language {
 				logger.logFATAL(element.toString());
 			}
         	return false;
+        } finally {
+            StreamUtil.close(langFileJavaPEG, true);
+            StreamUtil.close(langFileImageViewer, true);
+            StreamUtil.close(langFileCommon, true);
+            StreamUtil.close(langFileConfigViewer, true);
+            StreamUtil.close(langFileCategory, true);
+            StreamUtil.close(langFileImageRepository, true);
         }
         return true;
 	}

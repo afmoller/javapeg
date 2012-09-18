@@ -117,11 +117,8 @@ public class RenameProcess extends JFrame implements ActionListener {
 		dismissWindowButton.addActionListener(this);
 		openDestinationDirectoryButton.addActionListener(this);
 
-		// Initialize the layout in respect to the layout (font size ...)
 		pack();
 
-		// The layout is now initialized - we disable it because we don't want
-		// want to the labels to jump around if the content changes.
 		background.setLayout(null);
 
 		Dimension dScreen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -137,7 +134,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 	public void init() {
 		updateGUI();
 		TIMER.schedule(updateTask, 0, 500);
-		sdf = new SimpleDateFormat(Config.getInstance().getStringProperty("rename.progress.log.timestamp.format"));
+		sdf = Config.getInstance().get().getRenameImages().getProgressLogTimestampFormat();
 	}
 
 	public void incProcessProgress() {

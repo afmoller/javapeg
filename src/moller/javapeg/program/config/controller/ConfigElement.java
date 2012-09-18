@@ -79,4 +79,9 @@ public class ConfigElement {
     public static final String THUMBNAIL = "thumbNail";
     public static final String TOOL_TIPS = "toolTips";
     public static final String UPDATES_CHECKER = "updatesChecker";
+    public static final String VERTICAL = "vertical";
+    public static final String THUMB_NAIL_META_DATA_PANEL = "thumbNailMetaDataPanel";
+    public static final String PREVIEW_COMMENT_CATEGORIES_RATING = "previewCommentCategoriesRating";
+    public static final String PREVIEW_AND_COMMENT = "previewAndComment";
+    public static final String IMAGE_META_DATA = "imageMetaData";
 }

@@ -2,6 +2,7 @@ package moller.javapeg.program.updates;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -34,6 +35,9 @@ import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
@@ -50,7 +54,7 @@ public class NewVersionGUI extends JFrame{
 	private final JButton downloadButton;
 	private final JButton closeButton;
 
-	private final Config conf;
+	private final Configuration configuration;
 	private final Logger logger;
 	private final Language lang;
 
@@ -70,7 +74,7 @@ public class NewVersionGUI extends JFrame{
 
 	public NewVersionGUI(String changeLogText, String downloadURL, String fileName, String versionNumber, int fileSize) {
 
-		conf = Config.getInstance();
+		configuration = Config.getInstance().get();
 		lang = Language.getInstance();
 		logger = Logger.getInstance();
 
@@ -138,8 +142,13 @@ public class NewVersionGUI extends JFrame{
 			mainGUILocationX = this.getParent().getLocation().x;
 			mainGUILocationY = this.getParent().getLocation().y;
 		} else {
-			mainGUILocationX = conf.getIntProperty("mainGUI.window.location.x");
-			mainGUILocationY = conf.getIntProperty("mainGUI.window.location.y");
+
+		    GUI gUI = configuration.getgUI();
+
+		    Rectangle sizeAndLocation = gUI.getMain().getSizeAndLocation();
+
+			mainGUILocationX = sizeAndLocation.x;
+			mainGUILocationY = sizeAndLocation.y;
 		}
 
 		int mainGUICenterX = mainGUILocationX + (mainGUIWidth / 2);
@@ -171,7 +180,7 @@ public class NewVersionGUI extends JFrame{
 
 			huc.connect();
 
-			if ("DEBUG".equals(conf.getStringProperty("logger.log.level"))) {
+			if (Level.DEBUG  == configuration.getLogging().getLevel()) {
 				Map<String, List<String>> headers = huc.getHeaderFields();
 
 				logger.logDEBUG("Response headers and their values for the request to: " + downloadURL);

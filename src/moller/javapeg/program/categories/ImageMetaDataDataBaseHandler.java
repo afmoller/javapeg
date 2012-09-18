@@ -25,6 +25,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
@@ -52,7 +53,7 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 
-    private static Config config = Config.getInstance();
+    private static Configuration configuration = Config.getInstance().get();
 
     /**
      * This method will check against the stored add to repository policy
@@ -67,18 +68,7 @@ public class ImageMetaDataDataBaseHandler {
      */
     public static boolean addPathToRepositoryAccordingToPolicy(File path) {
 
-        String addToImageRepositoryPolicy = config.getStringProperty("imageRepository.addToRepositoryPolicy");
-
-        int policy = -1;
-
-        try {
-            policy = Integer.parseInt(addToImageRepositoryPolicy);
-        } catch (NumberFormatException nfex) {
-            Logger logger = Logger.getInstance();
-            logger.logERROR("Invalid format of configuration parameter: imageRepository.addToRepositoryPolicy (" + addToImageRepositoryPolicy + ") parameter reset to \"1\"");
-            logger.logERROR(nfex);
-            policy = 1;
-        }
+        Integer policy = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
 
         // The following switch statement will check exceptions to the
         // additions policy.
@@ -125,16 +115,16 @@ public class ImageMetaDataDataBaseHandler {
 		int result = JOptionPane.showConfirmDialog(null, array, lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
 
 		if (rememberSelectionCheckBox.isSelected()) {
-		   String checkBoxState = "";
+		   Integer checkBoxState = null;
 
 		   if (result == 0) {
-		       checkBoxState = "0";
+		       checkBoxState = 0;
 		   } else if (result == 1) {
-		       checkBoxState = "2";
+		       checkBoxState = 2;
 		   }
 
-		   if (!checkBoxState.equals("")) {
-		       config.setStringProperty("imageRepository.addToRepositoryPolicy", checkBoxState);
+		   if (checkBoxState != null) {
+		       configuration.getTagImages().getImagesPaths().setAddToRepositoryPolicy(checkBoxState);
 		   }
 		}
 
@@ -190,7 +180,7 @@ public class ImageMetaDataDataBaseHandler {
 	                                 "files that exists in the directory where this XML file is to be found." + C.LS +
 	                                 "The content of this file is used and modified by the application JavaPEG", w);
 	            XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
-	            XMLUtil.writeElement("javapeg-id", config.getStringProperty("javapeg.client.id"), w);
+	            XMLUtil.writeElement("javapeg-id", configuration.getJavapegClientId(), w);
 
 	            for(File image : imageMetaDataDataBaseItems.keySet()) {
 	                ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
@@ -267,7 +257,7 @@ public class ImageMetaDataDataBaseHandler {
 			String javaPegIdValue = javaPegIdNode.getTextContent();
 
 			ApplicationContext ac = ApplicationContext.getInstance();
-			ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(config.getStringProperty("javapeg.client.id").equals(javaPegIdValue));
+			ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(configuration.getJavapegClientId().equals(javaPegIdValue));
 
 			if (!ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
 			    File importedCategoriesDirectory = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "importedcategories");
