@@ -1067,7 +1067,7 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(LOG_ROTATE_SIZE, rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
 		}
 
-		if(!LOG_LEVEL.equals(logLevels.getSelectedItem().toString())) {
+		if(LOG_LEVEL != (Level)logLevels.getSelectedItem()) {
 			displayMessage.append(lang.get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + LOG_LEVEL + ")\n");
 		}
 
@@ -1075,8 +1075,8 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + LOG_NAME + ")\n");
 		}
 
-		if(!LOG_ENTRY_TIMESTAMP_FORMAT.equals(logEntryTimeStampFormats.getSelectedItem().toString())) {
-			displayMessage.append(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + LOG_ENTRY_TIMESTAMP_FORMAT + ")\n");
+		if(!LOG_ENTRY_TIMESTAMP_FORMAT.toPattern().equals(logEntryTimeStampFormats.getSelectedItem())) {
+			displayMessage.append(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + LOG_ENTRY_TIMESTAMP_FORMAT.toPattern() + ")\n");
 		}
 
 		if(UPDATE_CHECK_ENABLED != updatesEnabled.isSelected()){
@@ -1107,19 +1107,19 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.missingOrCorrupt") + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
 		}
 
-		if(!THUMBNAIL_WIDTH.equals(thumbnailWidth.getText())) {
+		if(!THUMBNAIL_WIDTH.equals(Integer.parseInt(thumbnailWidth.getText()))) {
 			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.thumbnail.width") + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
 		}
 
-		if(!THUMBNAIL_HEIGHT.equals(thumbnailHeight.getText())) {
+		if(!THUMBNAIL_HEIGHT.equals(Integer.parseInt(thumbnailHeight.getText()))) {
 			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.thumbnail.height") + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
 		}
 
-		if(!CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM.equals(thumbnailCreationAlgorithm.getSelectedItem().toString())) {
+		if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM != (JPEGScaleAlgorithm)thumbnailCreationAlgorithm.getSelectedItem()) {
 			displayMessage.append(lang.get("configviewer.thumbnail.creation.label.algorithm") + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
 		}
 
-		if(!THUMBNAIL_MAX_CACHE_SIZE.equals(maxCacheSize.getText())) {
+		if(!THUMBNAIL_MAX_CACHE_SIZE.equals(Integer.parseInt(maxCacheSize.getText()))) {
 			displayMessage.append(lang.get("configviewer.thumbnail.cache.label.size.max") + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
 		}
 
@@ -1127,7 +1127,7 @@ public class ConfigViewerGUI extends JFrame {
 			displayMessage.append(lang.get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
 		}
 
-		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(maximumLengthOfCameraModelValueTextField.getText())) {
+		if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()))) {
 			displayMessage.append(lang.get("configviewer.rename.label.maximumCameraModelValueLength") + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
 		}
 
@@ -1271,8 +1271,8 @@ public class ConfigViewerGUI extends JFrame {
 		return isValid;
 	}
 
-	private String calculateRotateLogSize(String size, String factor) {
-		return Long.toString(calculateRotateLogSize(Long.parseLong(size), factor));
+	private Long calculateRotateLogSize(String size, String factor) {
+		return calculateRotateLogSize(Long.parseLong(size), factor);
 	}
 
 	private String parseRotateLongSize(Long size, String factor) {
