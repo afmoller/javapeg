@@ -132,6 +132,13 @@ public class ApplicationContext {
      */
     private boolean imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
 
+
+    /**
+     * This boolean indicates whether there is a change in the application that
+     * need a restart of the application to fully make use of the change.
+     */
+    private boolean restartNeeded;
+
 	/**
 	 * Private constructor.
 	 */
@@ -152,6 +159,7 @@ public class ApplicationContext {
 		imageMetaDataDataBaseFileLoaded = false;
 		imageMetaDataDataBaseFileWritable = false;
 		imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = false;
+		restartNeeded = false;
 	}
 
 	/**
@@ -335,5 +343,14 @@ public class ApplicationContext {
     public void setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(
             boolean imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance) {
         this.imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
+    }
+
+
+    public void setRestartNeeded() {
+        restartNeeded = true;
+    }
+
+    public boolean isRestartNeeded() {
+        return restartNeeded;
     }
 }

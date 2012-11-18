@@ -25,7 +25,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
@@ -40,7 +42,6 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.hash.MD5;
-import moller.util.io.DirectoryUtil;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.xml.XMLUtil;
@@ -213,7 +214,7 @@ public class ImageMetaDataDataBaseHandler {
 	                for(File image : imageMetaDataDataBaseItems.keySet()) {
 	                    ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
 	                    CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
-	                    populateImageMetaDataContext(image, ciemd, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+	                    populateImageMetaDataContext(configuration.getJavapegClientId(), image, ciemd, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
 	                }
 	                break;
 	            case UPDATE:
@@ -240,6 +241,30 @@ public class ImageMetaDataDataBaseHandler {
 		return true;
 	}
 
+	private static void showCategoryImportPopup(File imageMetaDataDataBase, String javaPegIdValue) {
+	    Logger logger = Logger.getInstance();
+//      TODO: Remove hard coded string
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Importera Kategorier", new Rectangle(100, 100, 500,200), imageMetaDataDataBase);
+        if (ciep.isActionButtonClicked()) {
+            ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
+
+            if (importedCategoriesFromFile.getJavaPegId().equals(javaPegIdValue)) {
+                ImportedCategories importedCategories = new ImportedCategories();
+                importedCategories.setDisplayName(ciep.getFileName());
+                importedCategories.setRoot(importedCategoriesFromFile.getRoot());
+
+                configuration.getImportedCategoriesConfig().put(javaPegIdValue, importedCategories);
+                ApplicationContext.getInstance().setRestartNeeded();
+            } else {
+                logger.logWARN("The JavaPEG client id (" + importedCategoriesFromFile.getJavaPegId() + ") in the categories file (" + ciep.getCategoryFileToImportExport().getAbsolutePath() + ") does not match the client id (" + javaPegIdValue + ") in the image meta data base file (" + imageMetaDataDataBase.getAbsolutePath() + ")");
+//             TODO: Remove hard coded string
+                if (0 == JOptionPane.showConfirmDialog(null, "Wrong categories file.\n\nThe JavaPEG client id in the selected categories file does not match the client id\nin the image meta data base file. See log file for details\n\nSelect another categories file?", "Wrong categories file", JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE)) {
+                    showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
+                }
+            }
+        }
+	}
+
 	public static boolean deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase, Context context) {
 		Logger logger = Logger.getInstance();
 
@@ -260,21 +285,10 @@ public class ImageMetaDataDataBaseHandler {
 			ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(configuration.getJavapegClientId().equals(javaPegIdValue));
 
 			if (!ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
-			    File importedCategoriesDirectory = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "importedcategories");
 
-			    if (!DirectoryUtil.containsFile(importedCategoriesDirectory, javaPegIdValue + ".xml")) {
-//			        TODO: Remove hard coded string
-			        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Kategori import", new Rectangle(100, 100, 300,200), imageMetaDataDataBase);
-			        if (ciep.isActionButtonClicked()) {
-			            File categoryFileToImportExport = ciep.getCategoryFileToImportExport();
-			            String fileName = ciep.getFileName();
-			            System.out.println(categoryFileToImportExport.getAbsolutePath());
-			        }
-			    } else {
-			        System.out.println();
+			    if (!configuration.getImportedCategoriesConfig().containsKey(javaPegIdValue)) {
+			        showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
 			    }
-
-
 			}
 
 			NodeList imageTags = doc.getElementsByTagName("image");
@@ -315,11 +329,25 @@ public class ImageMetaDataDataBaseHandler {
 							logger.logINFO(nfex);
 							rating = 0;
 						}
-					} else if("categories".equals(node.getNodeName()) && ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
+					} else if("categories".equals(node.getNodeName())) {
 						String categoriesString = node.getTextContent();
+
+						ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+
+						Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
+
+						Set<String> categoryIdsForJavePegId = javaPegIdToCategories.get(javaPegIdValue).keySet();
 
 						if (categoriesString != null && categoriesString.length() > 0) {
 							categories.addCategories(categoriesString);
+						}
+
+						for (String categoryId : categories.getCategories()) {
+						    if (!categoryIdsForJavePegId.contains(categoryId)) {
+						        if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+				                    showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
+				                }
+						    }
 						}
 					}
 				}
@@ -331,7 +359,7 @@ public class ImageMetaDataDataBaseHandler {
 					break;
 
 				case IMAGE_META_DATA_CONTEXT:
-					populateImageMetaDataContext(image, imageExifMetaData, comment, rating, categories);
+					populateImageMetaDataContext(javaPegIdValue, image, imageExifMetaData, comment, rating, categories);
 					break;
 				}
 			}
@@ -360,7 +388,7 @@ public class ImageMetaDataDataBaseHandler {
 		return true;
 	}
 
-	private static void populateImageMetaDataContext(File image, CategoryImageExifMetaData imageExifMetaData, String comment, int rating, Categories categories) {
+	private static void populateImageMetaDataContext(String javaPegIdValue, File image, CategoryImageExifMetaData imageExifMetaData, String comment, int rating, Categories categories) {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 		final String imagePath = image.getAbsolutePath();
 
@@ -374,7 +402,7 @@ public class ImageMetaDataDataBaseHandler {
 		imdc.addRating(rating, imagePath);
 
 		for (String category : categories.getCategories()) {
-			imdc.addCategory(category, imagePath);
+			imdc.addCategory(javaPegIdValue, category, imagePath);
 		}
 	}
 
@@ -452,11 +480,13 @@ public class ImageMetaDataDataBaseHandler {
 	}
 
 	private static void updateImageCategories(File image, Categories categories, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
-		Map<String, Set<Integer>> categoriesMap = imdc.getCategories();
+		Map<String, Map<String, Set<Integer>>> javaPegIdToCategoriesMap = imdc.getCategories();
 
 		int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
 
 		List<String> categoriesToRemove = new ArrayList<String>();
+
+		 Map<String, Set<Integer>> categoriesMap = javaPegIdToCategoriesMap.get(configuration.getJavapegClientId());
 
 		/**
 		 * Remove any unselected categories from the ImageMetaDataContext
@@ -478,7 +508,7 @@ public class ImageMetaDataDataBaseHandler {
 		 *  Remove any empty categories.
 		 */
 		for (String categoryToRemove : categoriesToRemove) {
-			categoriesMap.remove(categoryToRemove);
+			javaPegIdToCategoriesMap.remove(categoryToRemove);
 		}
 
 		/**
@@ -488,7 +518,7 @@ public class ImageMetaDataDataBaseHandler {
 			Set<Integer> indices = categoriesMap.get(category);
 
 			if (indices == null || !indices.contains(imageIndex)) {
-				imdc.addCategory(category, image.getAbsolutePath());
+				imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
 			}
 		}
 	}

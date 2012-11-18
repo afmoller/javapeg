@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -30,6 +32,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.DefaultLookAndFeel;
 import moller.util.image.ImageUtil;
+import moller.util.io.FileUtil;
 import moller.util.java.SystemProperties;
 
 public class CategoryImportExportPopup extends JDialog {
@@ -43,6 +46,7 @@ public class CategoryImportExportPopup extends JDialog {
     private JButton pathSelectionButton;
 
     private boolean actionButtonClicked;
+    private boolean filePathSelected;
     private boolean isImport;
 
     private JTextField nameTextField;
@@ -67,7 +71,7 @@ public class CategoryImportExportPopup extends JDialog {
         GBHelper pos = new GBHelper();
         pos.insets = new Insets(1, 1, 1, 1);
 
-        background.add(this.cretaMainPane(title), pos.expandW().expandH());
+        background.add(this.cretaMainPane(imageMetaDataDataBase), pos.expandW().expandH());
         background.add(this.createButtonPanel(), pos.nextRow().expandW());
 
         this.getContentPane().add(background);
@@ -111,18 +115,25 @@ public class CategoryImportExportPopup extends JDialog {
         }
     }
 
-    private JPanel cretaMainPane(String title) {
+    private JPanel cretaMainPane(File imageMetaDataDataBase) {
         GBHelper positionMainPanel = new GBHelper();
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        JLabel importFileLabel = null;
 
-//        TODO: Remove hard coded string
+        if (isImport && imageMetaDataDataBase != null) {
+            //      TODO: Remove hard coded string
+            importFileLabel = new JLabel("Kategoriimport för fil: " + imageMetaDataDataBase.getAbsolutePath());
+            importFileLabel.setForeground(Color.GRAY);
+        }
+
+        //        TODO: Remove hard coded string
         JLabel importNameLabel = new JLabel("Namn");
         importNameLabel.setForeground(Color.GRAY);
 
         nameTextField = new JTextField();
 
-        if (!isImport()) {
+        if (!isImport) {
             nameTextField.setText(SystemProperties.getUserName());
         }
 
@@ -158,12 +169,16 @@ public class CategoryImportExportPopup extends JDialog {
 
         mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
-        mainPanel.add(importNameLabel, positionMainPanel);
-        mainPanel.add(nameTextField, positionMainPanel.nextRow().expandW());
-        mainPanel.add(new Gap(4), positionMainPanel.nextRow());
+        if (isImport && imageMetaDataDataBase != null) {
+            mainPanel.add(importFileLabel, positionMainPanel);
+            mainPanel.add(new JLabel(" "), positionMainPanel.nextRow());
+        }
         mainPanel.add(categoryImportExportLabel, positionMainPanel.nextRow().expandW());
         mainPanel.add(categoryImportExportTextField, positionMainPanel.nextRow().expandW());
         mainPanel.add(pathSelectionButton, positionMainPanel.nextCol());
+        mainPanel.add(new Gap(4), positionMainPanel.nextRow());
+        mainPanel.add(importNameLabel, positionMainPanel.nextRow().expandW());
+        mainPanel.add(nameTextField, positionMainPanel.nextRow().expandW());
 
         return mainPanel;
     }
@@ -193,6 +208,7 @@ public class CategoryImportExportPopup extends JDialog {
         actionButton.addActionListener(new ActionButtonListener());
         cancelButton.addActionListener(new CancelButtonListener());
         pathSelectionButton.addActionListener(new CategoryImportButtonListener());
+        nameTextField.getDocument().addDocumentListener(new NameTextFieldListener());
     }
 
     public File getCategoryFileToImportExport() {
@@ -227,7 +243,11 @@ public class CategoryImportExportPopup extends JDialog {
             if(chooser.showOpenDialog(CategoryImportExportPopup.this) == JFileChooser.APPROVE_OPTION) {
                 categoryFileToImportExport = chooser.getSelectedFile();
                 categoryImportExportTextField.setText(categoryFileToImportExport.getAbsolutePath());
-                actionButton.setEnabled(true);
+                filePathSelected = true;
+
+                if (!nameTextField.getText().isEmpty()) {
+                    actionButton.setEnabled(true);
+                }
             }
         }
     }
@@ -243,5 +263,24 @@ public class CategoryImportExportPopup extends JDialog {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+    }
+
+    private class NameTextFieldListener implements DocumentListener {
+
+        public void insertUpdate(DocumentEvent e) {
+            validateInputInRealtime();
+        }
+        public void removeUpdate(DocumentEvent e) {
+            validateInputInRealtime();
+        }
+        public void changedUpdate(DocumentEvent e) {
+        }
+    }
+
+    public void validateInputInRealtime() {
+        actionButton.setEnabled(FileUtil.validFileName(nameTextField.getText()) &&
+                                                      !nameTextField.getText().isEmpty() &&
+                                                       filePathSelected);
+
     }
 }

@@ -250,27 +250,6 @@ public class Logger {
         }
     }
 
-    private Level parseConfValue(String level) {
-
-    	if(level.equals("DEBUG")) {
-    		return Level.DEBUG;
-    	}
-    	if(level.equals("INFO")) {
-    		return Level.INFO;
-    	}
-    	if(level.equals("WARN")) {
-    		return Level.WARN;
-    	}
-    	if(level.equals("ERROR")) {
-    		return Level.ERROR;
-    	}
-    	if(level.equals("FATAL")) {
-    		return Level.FATAL;
-    	} else {
-    		return Level.DEBUG;
-    	}
-    }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
