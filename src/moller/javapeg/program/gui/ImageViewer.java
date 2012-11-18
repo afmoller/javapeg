@@ -277,9 +277,16 @@ public class ImageViewer extends JFrame {
 
 		overviewButtonListener = new OverviewButtonListener();
 
-		for(int i = 0; i < imagesToView.size(); i++) {
-			this.addImageToOverViewPanel(imagesToView.get(i), overviewButtonListener, i, false);
-		}
+		Thread addImagesToOverviewPanel = new Thread() {
+
+		    @Override
+            public void run(){
+		        for(int i = 0; i < imagesToView.size(); i++) {
+		            addImageToOverViewPanel(imagesToView.get(i), overviewButtonListener, i, false);
+		        }
+		    }
+		};
+		addImagesToOverviewPanel.start();
 
 		overViewScrollpane.getViewport().add(imageOverViewPanel);
 

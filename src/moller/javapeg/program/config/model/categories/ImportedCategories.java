@@ -4,9 +4,23 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class ImportedCategories {
 
+    private String javaPegId;
     private String displayName;
     private DefaultMutableTreeNode root;
+    private Integer highestUsedId;
 
+    public String getJavaPegId() {
+        return javaPegId;
+    }
+    public Integer getHighestUsedId() {
+        return highestUsedId;
+    }
+    public void setJavaPegId(String javaPegId) {
+        this.javaPegId = javaPegId;
+    }
+    public void setHighestUsedId(Integer highestUsedId) {
+        this.highestUsedId = highestUsedId;
+    }
     public String getDisplayName() {
         return displayName;
     }

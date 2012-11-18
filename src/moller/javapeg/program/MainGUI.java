@@ -23,8 +23,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -87,6 +91,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
@@ -95,9 +102,11 @@ import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
+import moller.javapeg.program.categories.ImportedCategoryTreeAndDisplayJavaPegID;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.controller.ConfigElement;
+import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.ToolTips;
 import moller.javapeg.program.config.model.UpdatesChecker;
@@ -110,6 +119,7 @@ import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.view.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
@@ -336,6 +346,8 @@ public class MainGUI extends JFrame {
 	private CheckTreeManager checkTreeManagerForAssignCategoriesCategoryTree;
 	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
 
+	private Map<String, CheckTreeManager> javaPegIdToCheckTreeManager;
+
 	private Thread loadFilesThread;
 
 	private ImageViewer imageViewer;
@@ -343,6 +355,8 @@ public class MainGUI extends JFrame {
 	private JProgressBar thumbnailLoadingProgressBar;
 
 	private HeadingPanel thumbNailsPanelHeading;
+
+	private ArrayList<ButtonGroup> importedButtonGroups;
 
 	public MainGUI(){
 
@@ -1105,13 +1119,24 @@ public class MainGUI extends JFrame {
 		selectionModePanel.add(clearCategoriesSelectionButton);
 
 		JTree categoriesTree = CategoryUtil.createCategoriesTree();
+		 ((DefaultTreeCellRenderer)categoriesTree.getCellRenderer()).setLeafIcon(null);
 
-		Map<String, JTree> importedCategoriesTrees = CategoryUtil.createImportedCategoriesTree();
+
+
+		Map<String, ImportedCategoryTreeAndDisplayJavaPegID> importedCategoriesTrees = CategoryUtil.createImportedCategoriesTree();
 
 		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false);
+		checkTreeManagerForFindImagesCategoryTree.setSelectionEnabled(true);
 
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
+
+		GBHelper posCategoryTreeAndSelectionMode = new GBHelper();
+		JPanel categoryTreeAndSelectionModePanel = new JPanel(new GridBagLayout());
+
+		categoryTreeAndSelectionModePanel.add(categoriesScrollPane, posCategoryTreeAndSelectionMode.expandH().expandW());
+		categoryTreeAndSelectionModePanel.add(new Gap(2), posCategoryTreeAndSelectionMode.nextRow());
+		categoryTreeAndSelectionModePanel.add(selectionModePanel, posCategoryTreeAndSelectionMode.nextRow());
 
 		GBHelper posBackground = new GBHelper();
 		JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1122,17 +1147,86 @@ public class MainGUI extends JFrame {
 		JTabbedPane categoriesTabbedPane = null;
 
 		if (importedCategoriesTrees.size() > 0) {
+
+		    javaPegIdToCheckTreeManager = new HashMap<String, CheckTreeManager>(importedCategoriesTrees.size());
+
 		    categoriesTabbedPane = new JTabbedPane();
-		    categoriesTabbedPane.add(categoriesScrollPane);
 
-		    for (JTree importedCategoriesTree : importedCategoriesTrees.values()) {
-		        categoriesTabbedPane.add(new JScrollPane().getViewport().add(importedCategoriesTree));
+//		    TODO: Fix hard coded string
+		    categoriesTabbedPane.add("Mina", categoryTreeAndSelectionModePanel);
+
+		    Set<String> displayNames = new TreeSet<String>(importedCategoriesTrees.keySet());
+
+		    importedButtonGroups = new ArrayList<ButtonGroup>(importedCategoriesTrees.size());
+
+		    for (String displayName : displayNames) {
+
+		        ImportedCategoryTreeAndDisplayJavaPegID importedCategoryTree = importedCategoriesTrees.get(displayName);
+
+		        ((DefaultTreeCellRenderer)importedCategoryTree.getCategoriesTree().getCellRenderer()).setLeafIcon(null);
+
+		        CheckTreeManager checkTreeManager = new CheckTreeManager(importedCategoryTree.getCategoriesTree(), false, null, false);
+		        checkTreeManager.setSelectionEnabled(true);
+
+		        String importedJavePegId = importedCategoryTree.getJavaPegId();
+
+		        javaPegIdToCheckTreeManager.put(importedJavePegId, checkTreeManager);
+
+		        JScrollPane scrollPane = new JScrollPane();
+		        scrollPane.getViewport().add(importedCategoriesTrees.get(displayName).getCategoriesTree());
+
+		        JRadioButton andRadioButton = new JRadioButton(lang.get("findimage.categories.andRadioButton.label"));
+		        andRadioButton.setToolTipText(lang.get("findimage.categories.andRadioButton.tooltip"));
+		        andRadioButton.setActionCommand("AND");
+		        andRadioButton.setName(importedJavePegId);
+
+		        JRadioButton orRadioButton = new JRadioButton(lang.get("findimage.categories.orRadioButton.label"));
+		        orRadioButton.setToolTipText(lang.get("findimage.categories.orRadioButton.tooltip"));
+		        orRadioButton.setActionCommand("OR");
+		        orRadioButton.setName(importedJavePegId);
+		        orRadioButton.setSelected(true);
+
+		        ButtonGroup importedGroup = new ButtonGroup();
+
+		        importedGroup.add(andRadioButton);
+		        importedGroup.add(orRadioButton);
+
+		        importedButtonGroups.add(importedGroup);
+
+		        JButton importedClearCategoriesSelectionButton = new JButton();
+		        importedClearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
+		        importedClearCategoriesSelectionButton.setActionCommand(importedJavePegId);
+		        importedClearCategoriesSelectionButton.addActionListener(new ImportedClearCategoriesSelectionListener());
+
+		        try {
+		            importedClearCategoriesSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
+		        } catch (IOException iox) {
+		            importedClearCategoriesSelectionButton.setText("x");
+		            Logger logger = Logger.getInstance();
+		            logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear categories button. See stacktrace below for details");
+		            logger.logERROR(iox);
+		        }
+
+		        JPanel importedSelectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+		        importedSelectionModePanel.add(andRadioButton);
+		        importedSelectionModePanel.add(orRadioButton);
+		        importedSelectionModePanel.add(importedClearCategoriesSelectionButton);
+
+
+		        GBHelper posImportedCategoryTreeAndSelectionMode = new GBHelper();
+		        JPanel importedCategoryTreeAndSelectionModePanel = new JPanel(new GridBagLayout());
+
+		        importedCategoryTreeAndSelectionModePanel.add(scrollPane, posImportedCategoryTreeAndSelectionMode.expandH().expandW());
+		        importedCategoryTreeAndSelectionModePanel.add(new Gap(2), posImportedCategoryTreeAndSelectionMode.nextRow());
+		        importedCategoryTreeAndSelectionModePanel.add(importedSelectionModePanel, posImportedCategoryTreeAndSelectionMode.nextRow());
+
+		        categoriesTabbedPane.add(displayName, importedCategoryTreeAndSelectionModePanel);
 		    }
+		    backgroundPanel.add(categoriesTabbedPane, posBackground.expandH().expandW());
+		} else {
+		    backgroundPanel.add(categoryTreeAndSelectionModePanel, posBackground.expandH().expandW());
 		}
-
-		backgroundPanel.add(categoriesTabbedPane, posBackground.expandH().expandW());
-		backgroundPanel.add(new Gap(2), posBackground.nextRow());
-		backgroundPanel.add(selectionModePanel, posBackground.nextRow());
 
 		return backgroundPanel;
 	}
@@ -1778,6 +1872,11 @@ public class MainGUI extends JFrame {
 					break;
 				}
 			}
+
+            if (ApplicationContext.getInstance().isRestartNeeded()) {
+//              TODO: remove hard coded string
+              displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+          }
 		}
 	}
 
@@ -1905,36 +2004,77 @@ public class MainGUI extends JFrame {
 	}
 
 	private void importCategories() {
-        // TODO Auto-generated method stub
 
-    }
+//      TODO: Remove hard coded string
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Importera Kategorier", new Rectangle(100, 100, 500,200), null);
+        if (ciep.isActionButtonClicked()) {
+
+            ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
+
+            ImportedCategories importedCategories = new ImportedCategories();
+            importedCategories.setDisplayName(ciep.getFileName());
+            importedCategories.setRoot(importedCategoriesFromFile.getRoot());
+
+            Map<String, ImportedCategories> importedCategoriesConfig = configuration.getImportedCategoriesConfig();
+
+            String importedCategoriesJavePegId = importedCategoriesFromFile.getJavaPegId();
+
+            if (importedCategoriesConfig.containsKey(importedCategoriesJavePegId)) {
+                if (importedCategoriesFromFile.getHighestUsedId() >= importedCategoriesConfig.get(importedCategoriesJavePegId).getHighestUsedId()) {
+                    importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
+                } else {
+//                 TODO: remove hard coded string
+                    displayInformationMessage("Newer version of the categories are already imported");
+                }
+            } else {
+                importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
+            }
+        }
+	}
 
     private void exportCategories() {
 
 //        TODO: Remove hard coded string
-        CategoryImportExportPopup ciep = new CategoryImportExportPopup(false, "Exportera kategorier", new Rectangle(100, 100, 300, 200), null);
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(false, "Exportera Kategorier", new Rectangle(100, 100, 300, 200), null);
 
         if (ciep.isActionButtonClicked()) {
             File directoryToExportCategoriesTo = ciep.getCategoryFileToImportExport();
 
             if (FileUtil.testWriteAccess(directoryToExportCategoriesTo)) {
-                File categoryExportFile = new File(directoryToExportCategoriesTo, ciep.getFileName() + ".cml");
-                File categoriesFileToExport = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
+                OutputStream os = null;
+                File categoryExportFile = null;
+                String encoding = "UTF-8";
 
-               if (FileUtil.copyFile(categoriesFileToExport, categoryExportFile)) {
-//                 TODO: Remove hard coded string
-                   displayInformationMessage("Category file exported to: " + categoryExportFile.getAbsolutePath());
-               } else {
-//                 TODO: Remove hard coded string
-                   displayErrorMessage("Could not export categories to: " + categoryExportFile.getAbsolutePath());
-                   logger.logERROR("Could not export categories to: " + categoriesFileToExport.getAbsolutePath());
-               }
+                try {
+                    categoryExportFile = new File(directoryToExportCategoriesTo, ciep.getFileName() + ".cml");
+                    os = new FileOutputStream(categoryExportFile);
+
+                    XMLOutputFactory factory = XMLOutputFactory.newInstance();
+                    XMLStreamWriter xmlsw = factory.createXMLStreamWriter(os, encoding);
+
+                    CategoriesConfig.exportCategoriesConfig(configuration.getCategories(), configuration.getJavapegClientId(), ApplicationContext.getInstance().getHighestUsedCategoryID(), xmlsw);
+
+                    displayInformationMessage("Category file exported to: " + categoryExportFile.getAbsolutePath());
+                } catch (FileNotFoundException fnfex) {
+                 categoryExportError(categoryExportFile, fnfex);
+                } catch (XMLStreamException xsex) {
+                 categoryExportError(categoryExportFile, xsex);
+                } finally {
+                    StreamUtil.close(os, true);
+                }
             } else {
 //              TODO: Remove hard coded string
                 displayErrorMessage("No write access. Please select a different directory to which the categories shall be exported.(" + directoryToExportCategoriesTo.getAbsolutePath() + ")");
                 logger.logWARN("No write access to directory: " + directoryToExportCategoriesTo.getAbsolutePath());
             }
         }
+    }
+
+    private void categoryExportError(File categoryExportFile, Exception ex) {
+//      TODO: Remove hard coded string
+        displayErrorMessage("Could not export categories to: " + categoryExportFile.getAbsolutePath());
+        logger.logERROR("Could not export categories to: " + categoryExportFile.getAbsolutePath());
+        logger.logERROR(ex);
     }
 
 	// WindowDestroyer
@@ -2388,7 +2528,7 @@ public class MainGUI extends JFrame {
                 thumbNailsPanelHeading.removeListeners();
 
 				ApplicationContext ac = ApplicationContext.getInstance();
-				if(!ac.getSourcePath().equals(totalPath)) {
+				if(!new File(totalPath).equals(ac.getSourcePath())) {
 					ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 					if(imddbituc.getLoadedRepositoryPath() != null) {
 						storeCurrentlySelectedImageData();
@@ -2490,6 +2630,11 @@ public class MainGUI extends JFrame {
 //                            TODO: Fix hard coded string
                             thumbNailsPanelHeading.setIcon("resources/images/lock.png", "Meta data file is not created by this JavaPEG instance");
                         }
+
+                        if (ac.isRestartNeeded()) {
+//                          TODO: remove hard coded string
+                          displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+                      }
 					}
 				}
 			}
@@ -2718,6 +2863,19 @@ public class MainGUI extends JFrame {
 		}
 		return selectedId;
 	}
+
+	private Map<String, Categories> getSelectedJavaPegIdToCategoriesMapFromTreeModels(Map<String, CheckTreeManager> javaPegIdToCheckTreeManager) {
+        Map<String, Categories> javaPegIdToCategories = null;
+
+        if (!javaPegIdToCheckTreeManager.isEmpty()) {
+            javaPegIdToCategories = new HashMap<String, Categories>();
+
+            for (String javaPegId : javaPegIdToCheckTreeManager.keySet()) {
+                javaPegIdToCategories.put(javaPegId, getSelectedCategoriesFromTreeModel(javaPegIdToCheckTreeManager.get(javaPegId)));
+            }
+        }
+	    return javaPegIdToCategories;
+    }
 
 	private void storeCurrentlySelectedImageData() {
 		ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
@@ -2957,7 +3115,8 @@ public class MainGUI extends JFrame {
 
 	private class SearchImagesListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
+
+		    ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
 
 			Set<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
 
@@ -2974,6 +3133,17 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
 		}
+	}
+
+	private class ImportedClearCategoriesSelectionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            CheckTreeManager checkTreeManager = javaPegIdToCheckTreeManager.get(e.getActionCommand());
+
+            if (checkTreeManager != null) {
+                checkTreeManager.getSelectionModel().clearSelection();
+            }
+        }
 	}
 
 	private class ClearAllMetaDataParametersListener implements ActionListener {
@@ -3263,7 +3433,9 @@ public class MainGUI extends JFrame {
 
 		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
 		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
+		imdcsp.setJavaPegIdToCategoriesMap(getSelectedJavaPegIdToCategoriesMapFromTreeModels(javaPegIdToCheckTreeManager));
 		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
+		imdcsp.setImportedAndCategoriesSearch(getImportedAndCategoriesSearch(importedButtonGroups));
 
 		imdcsp.setYear(yearMetaDataValue.getValue());
 		imdcsp.setMonth(monthMetaDataValue.getValue());
@@ -3282,7 +3454,29 @@ public class MainGUI extends JFrame {
 		return imdcsp;
 	}
 
-	private boolean[] getSelectedRatings() {
+    private Map<String, Boolean> getImportedAndCategoriesSearch(List<ButtonGroup> importedButtonGroups) {
+        Map<String, Boolean> javaPegIdToImportedAndCategories = null;
+
+        if (importedButtonGroups != null && importedButtonGroups.size() > 0) {
+            javaPegIdToImportedAndCategories = new HashMap<String, Boolean>();
+
+            for (ButtonGroup buttonGroup : importedButtonGroups) {
+
+                Enumeration<AbstractButton> abstractButtons = buttonGroup.getElements();
+
+                while (abstractButtons.hasMoreElements()) {
+                    AbstractButton abstractButton = abstractButtons.nextElement();
+
+                    if (abstractButton.isSelected()) {
+                        javaPegIdToImportedAndCategories.put(abstractButton.getName(), abstractButton.getActionCommand().equals("AND") ? true : false);
+                    }
+                }
+            }
+        }
+        return javaPegIdToImportedAndCategories;
+    }
+
+    private boolean[] getSelectedRatings() {
 		boolean[] selectedRatings = null;
 		boolean allDeSelected = true;
 
@@ -3441,6 +3635,11 @@ public class MainGUI extends JFrame {
 
             thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
             thumbNailsPanelHeading.removeListeners();
+
+            if (ac.isRestartNeeded()) {
+//                TODO: remove harde coded string
+                displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+            }
         }
 	}
 

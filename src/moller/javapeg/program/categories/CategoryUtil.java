@@ -23,12 +23,12 @@ import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.CategoriesModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
-import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
@@ -271,26 +271,28 @@ public class CategoryUtil {
 		return categoriesTree;
 	}
 
-	public static Map<String, JTree> createImportedCategoriesTree() {
+	public static Map<String, ImportedCategoryTreeAndDisplayJavaPegID> createImportedCategoriesTree() {
 
-	    File importedCategoriesDirectory = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "importedcategories");
-	    File[] importedCategoriesFiles = importedCategoriesDirectory.listFiles();
+	    Map<String, ImportedCategories> importedCategories = Config.getInstance().get().getImportedCategoriesConfig();
 
-	    Map<String, JTree> categoriesTreesMap = new HashMap<String, JTree>(importedCategoriesFiles.length);
+	    Map<String, ImportedCategoryTreeAndDisplayJavaPegID> categoriesTreesMap = new HashMap<String, ImportedCategoryTreeAndDisplayJavaPegID>(importedCategories.size());
 
-	    for (File importedCategoriesFile : importedCategoriesFiles) {
-
-	        String javaPEGClientID = FileUtil.removeFileSuffix(importedCategoriesFile);
+	    for (String javaPegID : importedCategories.keySet()) {
+	        ImportedCategories importedCategory = importedCategories.get(javaPegID);
 
 	        JTree categoriesTree = new JTree();
 
-	        categoriesTree.setModel(new CategoriesModel(createCategoriesModel(importedCategoriesFile)));
-	        categoriesTree.setShowsRootHandles(true);
-	        categoriesTree.setRootVisible(false);
+            categoriesTree.setModel(new CategoriesModel(importedCategory.getRoot()));
+            categoriesTree.setShowsRootHandles(true);
+            categoriesTree.setRootVisible(false);
 
-	        categoriesTreesMap.put(javaPEGClientID, categoriesTree);
+            ImportedCategoryTreeAndDisplayJavaPegID importedCategoryTreeAndDisplayJavaPegID = new ImportedCategoryTreeAndDisplayJavaPegID();
+
+            importedCategoryTreeAndDisplayJavaPegID.setCategoriesTree(categoriesTree);
+            importedCategoryTreeAndDisplayJavaPegID.setJavaPegId(javaPegID);
+
+            categoriesTreesMap.put(importedCategory.getDisplayName(), importedCategoryTreeAndDisplayJavaPegID);
 	    }
-
 	    return categoriesTreesMap;
 	}
 

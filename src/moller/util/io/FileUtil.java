@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import moller.util.os.OsUtil;
 import moller.util.string.StringUtil;
 
 public class FileUtil {
@@ -543,5 +544,24 @@ public class FileUtil {
 	    } else {
 	        return fileName;
 	    }
+	}
+
+	public static boolean validFileName(String fileName) {
+	    if (OsUtil.getOsName().toLowerCase().contains("windows")) {
+	        return validWindowsFileName(fileName);
+	    }
+	    return true;
+	}
+
+	private static boolean validWindowsFileName(String fileName) {
+	    return fileName.indexOf('/')  == -1 &&
+	           fileName.indexOf('\\') == -1 &&
+	           fileName.indexOf(':')  == -1 &&
+	           fileName.indexOf('<')  == -1 &&
+	           fileName.indexOf('>')  == -1 &&
+	           fileName.indexOf('|')  == -1 &&
+	           fileName.indexOf('*')  == -1 &&
+	           fileName.indexOf('?')  == -1 &&
+	           fileName.indexOf('"')  == -1;
 	}
 }

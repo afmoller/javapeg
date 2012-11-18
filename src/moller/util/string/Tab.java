@@ -2,6 +2,7 @@ package moller.util.string;
 
 public enum Tab {
 
+    ZERO  (""),
 	ONE   (" "),
 	TWO   ("  "),
 	THREE ("   "),
