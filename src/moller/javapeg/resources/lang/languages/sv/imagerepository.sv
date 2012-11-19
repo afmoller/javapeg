@@ -13,27 +13,27 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
-imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label = Lägg till katalog till listan av kataloger där bilder läggs till i bilddatabasen automatiskt
-imagerepository.addDirectoryToNeverAddAutomaticallyList.label   = Lägg till katalog till listan av kataloger där bilder inte skall läggas till automatiskt till bilddatabasen
+imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label = LÃ¤gg till katalog till listan av kataloger dÃ¤r bilder lÃ¤ggs till i bilddatabasen automatiskt
+imagerepository.addDirectoryToNeverAddAutomaticallyList.label   = LÃ¤gg till katalog till listan av kataloger dÃ¤r bilder inte skall lÃ¤ggas till automatiskt till bilddatabasen
 
-imagerepository.repositoryfile.corrupt.1 = Bilddatabasfilen är korrupt
-imagerepository.repositoryfile.corrupt.2 = Den korrupta bilddatabasfilen säkerhetskopierades korrekt:
-imagerepository.repositoryfile.corrupt.3 = Kunde inte säkerhetskopiera bilddatabasfilen. Innehållet har skrivits till JavaPEGs loggfil
-imagerepository.repositoryfile.corrupt.4 = Bilddatabasfilen har återställts till ursprungligt skick.
-imagerepository.repositoryfile.corrupt.5 = Kunde inte återställa bilddatabasfilen till ursprungligt skick
-imagerepository.repositoryfile.corrupt.6 = Vänligen mata inte följande innehåll manuellt i bilddatabasen:
-imagerepository.repositoryfile.corrupt.7 = Start innehåll:
-imagerepository.repositoryfile.corrupt.8 = Kunde inte hämta innehåll
-imagerepository.repositoryfile.corrupt.9 = Innehåll slut:
-imagerepository.repositoryfile.corrupt.10 = Se JavaPEGs loggfil för detaljer
+imagerepository.repositoryfile.corrupt.1 = Bilddatabasfilen Ã¤r korrupt
+imagerepository.repositoryfile.corrupt.2 = Den korrupta bilddatabasfilen sÃ¤kerhetskopierades korrekt:
+imagerepository.repositoryfile.corrupt.3 = Kunde inte sÃ¤kerhetskopiera bilddatabasfilen. InnehÃ¥llet har skrivits till JavaPEGs loggfil
+imagerepository.repositoryfile.corrupt.4 = Bilddatabasfilen har Ã¥terstÃ¤llts till ursprungligt skick.
+imagerepository.repositoryfile.corrupt.5 = Kunde inte Ã¥terstÃ¤lla bilddatabasfilen till ursprungligt skick
+imagerepository.repositoryfile.corrupt.6 = VÃ¤nligen mata inte fÃ¶ljande innehÃ¥ll manuellt i bilddatabasen:
+imagerepository.repositoryfile.corrupt.7 = Start innehÃ¥ll:
+imagerepository.repositoryfile.corrupt.8 = Kunde inte hÃ¤mta innehÃ¥ll
+imagerepository.repositoryfile.corrupt.9 = InnehÃ¥ll slut:
+imagerepository.repositoryfile.corrupt.10 = Se JavaPEGs loggfil fÃ¶r detaljer
 
-imagerepository.model.store.error  = Kunde inte spara bilddatabasen, se loggfil för detaljer.
-imagerepository.model.create.error = Kunde inte öppna bilddatabasen, se loggfil för detaljer.
+imagerepository.model.store.error  = Kunde inte spara bilddatabasen, se loggfil fÃ¶r detaljer.
+imagerepository.model.create.error = Kunde inte Ã¶ppna bilddatabasen, se loggfil fÃ¶r detaljer.
 
-imagerepository.directory.added                = Vald katalog är en del av bilddatabasen
-imagerepository.directory.added.writeprotected = Vald katalog är en del av bilddatabasen, men databasfilen är skrivskyddad
-imagerepository.directory.not.added            = Vald katalog är inte en del av bilddatabasen
+imagerepository.directory.added                = Vald katalog Ã¤r en del av bilddatabasen
+imagerepository.directory.added.writeprotected = Vald katalog Ã¤r en del av bilddatabasen, men databasfilen Ã¤r skrivskyddad
+imagerepository.directory.not.added            = Vald katalog Ã¤r inte en del av bilddatabasen
 
-imagerepository.directory.already.added.to.allways.add         = har redan blivit tillagd i listan av kataloger för vilka\n bilder alltid kommer att läggas till automatiskt till bilddatabasen.
-imagerepository.directory.already.added.to.never.add           = har redan blivit tillagd i listan av kataloger för vilka\n bilder aldrig kommer att läggas till automatiskt till bilddatabasen.
-imagerepository.directory.is.parent.to.already.added.directory = En underkatalog har redan blivit tillagd i listan av kataloger\n för vilka bilder alltid kommer att läggas till automatiskt \ntill bilddatabasen eller i listan av kataloger för vilka bilder\n aldrig kommer att läggas till automatiskt till bilddatabasen.\n\nSe JavaPEGs inställningar för detaljer.
+imagerepository.directory.already.added.to.allways.add         = har redan blivit tillagd i listan av kataloger fÃ¶r vilka\n bilder alltid kommer att lÃ¤ggas till automatiskt till bilddatabasen.
+imagerepository.directory.already.added.to.never.add           = har redan blivit tillagd i listan av kataloger fÃ¶r vilka\n bilder aldrig kommer att lÃ¤ggas till automatiskt till bilddatabasen.
+imagerepository.directory.is.parent.to.already.added.directory = En underkatalog har redan blivit tillagd i listan av kataloger\n fÃ¶r vilka bilder alltid kommer att lÃ¤ggas till automatiskt \ntill bilddatabasen eller i listan av kataloger fÃ¶r vilka bilder\n aldrig kommer att lÃ¤ggas till automatiskt till bilddatabasen.\n\nSe JavaPEGs instÃ¤llningar fÃ¶r detaljer.

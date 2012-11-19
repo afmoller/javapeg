@@ -14,15 +14,15 @@
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
 common.button.ok.label = Ok
-common.button.apply.label = Verkst‰ll
+common.button.apply.label = Verkst√§ll
 common.button.cancel.label = Avbryt
 common.button.yes.label = Ja
 common.button.no.label = Nej
 
-common.confirmation = Bekr‰ftelse
+common.confirmation = Bekr√§ftelse
 common.information = Information
 
-common.message.error.invalidFileName            = Filnamnet kan inte innehÂlla tecknet:
+common.message.error.invalidFileName            = Filnamnet kan inte inneh√•lla tecknet:
 common.message.error.canNotListFilesInDirectory = Kan inte lista filer i katalog:
 
-common.missing.value = inget v‰rde
+common.missing.value = inget v√§rde

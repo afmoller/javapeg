@@ -17,19 +17,19 @@
 # M E N U                                                                                                   #
 #############################################################################################################
 menu.file          = Arkiv
-menu.help          = Hjälp
-menu.configuration = Inställningar
+menu.help          = HjÃ¤lp
+menu.configuration = InstÃ¤llningar
 
 #############################################################################################################
 # M E N U  I T E M S                                                                                        #
 #############################################################################################################
 menu.item.exit                       = Avsluta
-menu.item.openDestinationFileChooser = Öppna Destinationsfilsväljaren
+menu.item.openDestinationFileChooser = Ã–ppna DestinationsfilsvÃ¤ljaren
 menu.item.startProcess               = Starta Namnbytesprocessen
-menu.item.programHelp                = Programhjälp
+menu.item.programHelp                = ProgramhjÃ¤lp
 menu.item.versionInformation         = Versionsinformation
 menu.item.about                      = Om JavaPEG 3.0
-menu.item.configuration              = Inställningar
+menu.item.configuration              = InstÃ¤llningar
 
 #############################################################################################################
 # M E N U  M N E M O N I C                                                                                  #
@@ -50,8 +50,8 @@ menu.item.about.accelerator                      = O
 ##############################################################################################################
 # L A B E L S                                                                                                #
 ##############################################################################################################
-labels.sourcePath       = KÄLLKATALOG
-labels.destinatonPath   = SÖKVÄG TILL DESTINATIONSKATALOG
+labels.sourcePath       = KÃ„LLKATALOG
+labels.destinatonPath   = SÃ–KVÃ„G TILL DESTINATIONSKATALOG
 labels.subFolderName    = UNDERKATALOGSMALL
 labels.fileNameTemplate = FILNAMNSMALL
 labels.variables        = VARIABLER
@@ -60,21 +60,21 @@ labels.variables        = VARIABLER
 # V A R I A B L E S                                                                                          #
 ##############################################################################################################
 variable.pictureDateVariable   = d
-variable.pictureDate           = Datum då bilden togs
+variable.pictureDate           = Datum dÃ¥ bilden togs
 variable.pictureTimeVariable   = t
-variable.pictureTime           = Tidpunkt då bilden togs
+variable.pictureTime           = Tidpunkt dÃ¥ bilden togs
 variable.cameraModelVariable   = m
 variable.cameraModel           = Kameramodell
 variable.shutterSpeedVariable  = e
 variable.shutterSpeed          = Exponeringstid
 variable.isoValueVariable      = i
-variable.isoValue              = ISO-värde
+variable.isoValue              = ISO-vÃ¤rde
 variable.pictureWidthVariable  = b
 variable.pictureWidth          = Bildbredd i pixlar
 variable.pictureHeightVariable = h
-variable.pictureHeight         = Bildhöjd i pixlar
+variable.pictureHeight         = BildhÃ¶jd i pixlar
 variable.apertureValueVariable = bl
-variable.apertureValue         = Bländartal
+variable.apertureValue         = BlÃ¤ndartal
 variable.dateOftodayVariable   = dd
 variable.dateOftoday           = Dagens datum
 variable.sourceNameVariable    = f
@@ -83,45 +83,45 @@ variable.sourceName            = Ursprungligt filnamn
 ##############################################################################################################
 # V A R I A B L E S  C O M M E N T                                                                           #
 ##############################################################################################################
-variable.comment.infoLabelA = * = Dessa variabler kan användas
+variable.comment.infoLabelA = * = Dessa variabler kan anvÃ¤ndas
 variable.comment.infoLabelB = vid namngivning av undermapp
 variable.comment.fileName   = Filnamn
 
 ##############################################################################################################
 # C H E C K  B O X E S                                                                                       #
 ##############################################################################################################
-checkbox.createThumbNails = SKAPA TUMNAGELÖVERSIKT
+checkbox.createThumbNails = SKAPA TUMNAGELÃ–VERSIKT
 
 ##############################################################################################################
 # T O O L T I P S                                                                                            #
 ##############################################################################################################
-tooltip.destinationPathButton                                  = Välj sökväg för destinationskatalog
-tooltip.subFolderName                                          = Ange namnet på mappen inklusive eventuella variabler här
-tooltip.fileNameTemplate                                       = Skriv in filnamnsmallen inklusive variabler här
-tooltip.createThumbNails                                       = Skapa tumnaglar av omdöpta filer
-tooltip.openDestinationFolder                                  = Öppna mappen där de omdöpta filerna hamnar efter avslutad process
+tooltip.destinationPathButton                                  = VÃ¤lj sÃ¶kvÃ¤g fÃ¶r destinationskatalog
+tooltip.subFolderName                                          = Ange namnet pÃ¥ mappen inklusive eventuella variabler hÃ¤r
+tooltip.fileNameTemplate                                       = Skriv in filnamnsmallen inklusive variabler hÃ¤r
+tooltip.createThumbNails                                       = Skapa tumnaglar av omdÃ¶pta filer
+tooltip.openDestinationFolder                                  = Ã–ppna mappen dÃ¤r de omdÃ¶pta filerna hamnar efter avslutad process
 tooltip.beginNameChangeProcessButton                           = Starta namnbytarprocessen
-tooltip.selectSourceDirectoryWithImages                        = Välj en katalog med bilder
-tooltip.selectDestinationDirectory                             = Välj en destinationskatalog
-tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Välj en källkatalog med bilder och en destinationskatalog
-tooltip.enableTemplateFields                                   = För att aktivera, välj en destinationskatalog
+tooltip.selectSourceDirectoryWithImages                        = VÃ¤lj en katalog med bilder
+tooltip.selectDestinationDirectory                             = VÃ¤lj en destinationskatalog
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = VÃ¤lj en kÃ¤llkatalog med bilder och en destinationskatalog
+tooltip.enableTemplateFields                                   = FÃ¶r att aktivera, vÃ¤lj en destinationskatalog
 
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
 ##############################################################################################################
-fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
+fileSelectionDialog.destinationPathFileChooser = VÃ¤lj destinationsmapp
 
 ##############################################################################################################
 # A B O U T  D I A L O G                                                                                     #
 ##############################################################################################################
 aboutDialog.Label    = Om JavaPEG 3.0
 aboutDialog.TextRowA = JavaPEG, ver: 3.0
-aboutDialog.TextRowB = Copyright © 2005 - 2011
-aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.6).
+aboutDialog.TextRowB = Copyright Â© 2005 - 2012
+aboutDialog.TextRowC = Detta program Ã¤r programmerat i Java (JDK 1.7).
 aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2011-**-**.
-aboutDialog.TextRowE = Version 3.0 släppt 2011-**-**.
+aboutDialog.TextRowE = Version 3.0 slÃ¤ppt 2011-**-**.
 aboutDialog.TextRowF = Utvecklare:
-aboutDialog.TextRowG = Fredrik Möller
+aboutDialog.TextRowG = Fredrik MÃ¶ller
 aboutDialog.TextRowH = _______________________________________
 
 ##############################################################################################################
@@ -130,28 +130,28 @@ aboutDialog.TextRowH = _______________________________________
 errormessage.maingui.errorMessageLabel             = Fel
 errormessage.maingui.warningMessageLabel           = Varning
 errormessage.maingui.informationMessageLabel       = Information
-errormessage.maingui.locationError                 = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-errormessage.maingui.sameSourceAndDestination      = Käll och destinationskatalog är samma.
-errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG måste startas med sin genväg eller med -Xmx384m som JVM parameter.\n\nSe loggfil för detaljer. 
-errormessage.maingui.onlyOneImageViewer            = Det är bara möjligt att starta en bildvisare.
+errormessage.maingui.locationError                 = Kunde inte sÃ¤tta fÃ¶nsterposition enligt konfigurationen. Se loggfil fÃ¶r detaljer.
+errormessage.maingui.sameSourceAndDestination      = KÃ¤ll och destinationskatalog Ã¤r samma.
+errormessage.maingui.notEnoughMemory               = Minnesfel - Applikationsstart avbryts.\n\nJavaPEG mÃ¥ste startas med sin genvÃ¤g eller med -Xmx384m som JVM parameter.\n\nSe loggfil fÃ¶r detaljer. 
+errormessage.maingui.onlyOneImageViewer            = Det Ã¤r bara mÃ¶jligt att starta en bildvisare.
 
 ##############################################################################################################
 # P R O G R E S S B A R                                                                                      #
 ##############################################################################################################
 progress.ThumbNailLoading.title = Laddar tumnaglar
 
-progress.RenameProcess.title.processStarting                                  = Byter namn på bilder...
-progress.RenameProcess.title.processFinished                                  = Namnbytesprocessen färdig
+progress.RenameProcess.title.processStarting                                  = Byter namn pÃ¥ bilder...
+progress.RenameProcess.title.processFinished                                  = Namnbytesprocessen fÃ¤rdig
 progress.RenameProcess.dismissWindowButton.mnemonic                           = S
-progress.RenameProcess.dismissWindowButton.processStarting                    = vänta..
-progress.RenameProcess.dismissWindowButton.processFinished                    = Stäng
-progress.RenameProcess.dismissWindowButton.processStarting.toolTip            = Namnbyte pågår...
-progress.RenameProcess.dismissWindowButton.processFinished.toolTip            = Stäng detta fönster
+progress.RenameProcess.dismissWindowButton.processStarting                    = vÃ¤nta..
+progress.RenameProcess.dismissWindowButton.processFinished                    = StÃ¤ng
+progress.RenameProcess.dismissWindowButton.processStarting.toolTip            = Namnbyte pÃ¥gÃ¥r...
+progress.RenameProcess.dismissWindowButton.processFinished.toolTip            = StÃ¤ng detta fÃ¶nster
 progress.RenameProcess.openDestinationDirectoryButton.mnemonic                = P
-progress.RenameProcess.openDestinationDirectoryButton.processStarting         = vänta..
-progress.RenameProcess.openDestinationDirectoryButton.processFinished         = Öppna
-progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip = Namnbyte pågår...
-progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = Öppna destinations katalogen i ett utforskarfönster
+progress.RenameProcess.openDestinationDirectoryButton.processStarting         = vÃ¤nta..
+progress.RenameProcess.openDestinationDirectoryButton.processFinished         = Ã¶ppna
+progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip = Namnbyte pÃ¥gÃ¥r...
+progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = Ã–ppna destinations katalogen i ett utforskarfÃ¶nster
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
@@ -159,80 +159,80 @@ progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = 
 errormessage.jpgrename.joptionPaneYes          = Ja
 errormessage.jpgrename.joptionPaneNo           = Nej
 errormessage.jpgrename.noImagesInPathLabel     = Felmeddelande
-errormessage.jpgrename.noImagesInPath          = Den valda sökvägen innehåller inga bildfiler
-errormessage.jpgrename.noExifInImage           = Ingen exif information kunde hittas. För att göra om processen från början, ta bort följande fil från de filer som skall döpas om:
+errormessage.jpgrename.noImagesInPath          = Den valda sÃ¶kvÃ¤gen innehÃ¥ller inga bildfiler
+errormessage.jpgrename.noExifInImage           = Ingen exif information kunde hittas. FÃ¶r att gÃ¶ra om processen frÃ¥n bÃ¶rjan, ta bort fÃ¶ljande fil frÃ¥n de filer som skall dÃ¶pas om:
 errormessage.jpgrename.noExifInImageLabel      = Ingen Exif
-errormessage.jpgrename.imageViewerMustBeClosed = Namnbytesprocessen kan inte starta när bildvisaren är startad.\nVänligen stäng bildvisaren och starta namnbytesprocessen igen.
+errormessage.jpgrename.imageViewerMustBeClosed = Namnbytesprocessen kan inte starta nÃ¤r bildvisaren Ã¤r startad.\nVÃ¤nligen stÃ¤ng bildvisaren och starta namnbytesprocessen igen.
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
 ##############################################################################################################
 errormessage.filehandler.fileNotFoundExceptionA = Filen:
 errormessage.filehandler.fileNotFoundExceptionB = kan inte hittas 
-errormessage.filehandler.canNotReadFile         = Kan inte läsa filen: 
+errormessage.filehandler.canNotReadFile         = Kan inte lÃ¤sa filen: 
 errormessage.filehandler.canNotWriteFile        = Kan inte skriva:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
 ##############################################################################################################
-errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG har fått slut på minne.\n\nSe loggfil för detaljer och se README-filen\ni installationskatalogen för en lösning.\n\nJavaPEG kommer att avslutas.
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = Ett oväntat fel har inträffat:
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSe loggfil för detaljer och se README-filen\ni installationskatalogen för en lösning.\n\nJavaPEG kommer att avslutas.
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG har fÃ¥tt slut pÃ¥ minne.\n\nSe loggfil fÃ¶r detaljer och se README-filen\ni installationskatalogen fÃ¶r en lÃ¶sning.\n\nJavaPEG kommer att avslutas.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = Ett ovÃ¤ntat fel har intrÃ¤ffat:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSe loggfil fÃ¶r detaljer och se README-filen\ni installationskatalogen fÃ¶r en lÃ¶sning.\n\nJavaPEG kommer att avslutas.
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
 ##############################################################################################################
 maingui.tabbedpane.imagelist.label.list                 = BILDLISTA
-maingui.tabbedpane.imagelist.label.preview              = FÖRHANDSGRANSKNING
+maingui.tabbedpane.imagelist.label.preview              = FÃ–RHANDSGRANSKNING
 maingui.tabbedpane.imagelist.label.numberOfImagesInList = Antal bilder i bildlistan:
 
-maingui.tabbedpane.imagelist.button.removeSelectedImages = Ta bort markerade bilder från listan
-maingui.tabbedpane.imagelist.button.removeAllImages      = Ta bort alla bilder från listan
-maingui.tabbedpane.imagelist.button.openImageList        = Öpna en sparad bildlista
+maingui.tabbedpane.imagelist.button.removeSelectedImages = Ta bort markerade bilder frÃ¥n listan
+maingui.tabbedpane.imagelist.button.removeAllImages      = Ta bort alla bilder frÃ¥n listan
+maingui.tabbedpane.imagelist.button.openImageList        = Ã–pna en sparad bildlista
 maingui.tabbedpane.imagelist.button.saveImageList        = Spara bildlistan
 maingui.tabbedpane.imagelist.button.exportImageList      = Exportera bildlistan
-maingui.tabbedpane.imagelist.button.moveUp               = Flytta vald bild uppåt i listan
-maingui.tabbedpane.imagelist.button.moveDown             = Flytta vald bild nedåt i listan
+maingui.tabbedpane.imagelist.button.moveUp               = Flytta vald bild uppÃ¥t i listan
+maingui.tabbedpane.imagelist.button.moveDown             = Flytta vald bild nedÃ¥t i listan
 maingui.tabbedpane.imagelist.button.viewImages           = Visa valda bilder i bildvisaren
 maingui.tabbedpane.imagelist.button.moveToTop            = Flytta vald bild till toppen av listan
 maingui.tabbedpane.imagelist.button.moveToBottom         = Flytta vald bild till botten av listan
 
-maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Öppna 
-maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Bildlistan är inte sparad, skriv över?
-maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = Följande filer listade i den valda filen finns inte och laddades därmed inte till listan:
+maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Ã–ppna 
+maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Bildlistan Ã¤r inte sparad, skriv Ã¶ver?
+maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = FÃ¶ljande filer listade i den valda filen finns inte och laddades dÃ¤rmed inte till listan:
 
 maingui.tabbedpane.imagelist.filechooser.saveImageList.title = Spara
 
 maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
 
-maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva över?
+maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = existerar redan. Skriva Ã¶ver?
 
 maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved    = Bildlistan sparades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = Bildlistan kunde inte sparas, se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved = Bildlistan kunde inte sparas, se loggfil fÃ¶r detaljer.
 
 maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated    = Bildlistan i PolyView-format skapades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = Bildlistan i PolyView-format kunde inte skapas. Se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated = Bildlistan i PolyView-format kunde inte skapas. Se loggfil fÃ¶r detaljer.
 
 maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = Bildlistan i IrfanView-format skapades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = Bildlistan i IrfanView-format kunde inte skapas. Se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = Bildlistan i IrfanView-format kunde inte skapas. Se loggfil fÃ¶r detaljer.
 
 maingui.tabbedpane.imagelist.imagelistformat.xnView.successfullyCreated    = Bildlistan i XnView-format skapades korrekt.
-maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = Bildlistan i XnView-format kunde inte skapas. Se loggfil för detaljer.
+maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = Bildlistan i XnView-format kunde inte skapas. Se loggfil fÃ¶r detaljer.
 
 ##############################################################################################################
 # M A I N  G U I  P O P U P  M E N U                                                                         #
 ##############################################################################################################
-maingui.popupmenu.addImageToList                     = Lägg till bild till bildlistan
-maingui.popupmenu.addAllImagesToList                 = Lägg till alla bilder till bildlistan
-maingui.popupmenu.addImagePathToImageRepository      = Lägg till katalog till bilddatabasen
-maingui.popupmenu.removeImagePathFromImageRepository = Ta bort katalog från bilddatabasen
+maingui.popupmenu.addImageToList                     = LÃ¤gg till bild till bildlistan
+maingui.popupmenu.addAllImagesToList                 = LÃ¤gg till alla bilder till bildlistan
+maingui.popupmenu.addImagePathToImageRepository      = LÃ¤gg till katalog till bilddatabasen
+maingui.popupmenu.removeImagePathFromImageRepository = Ta bort katalog frÃ¥n bilddatabasen
 maingui.popupmenu.copyToSystemClipboard              = Kopiera bild till urklipp
 maingui.popupmenu.copyAllToSystemClipboard           = Kopiera alla bilder till urklipp
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
 ##############################################################################################################
-information.window.userHelpWindowTitle           = Programhjälp
+information.window.userHelpWindowTitle           = ProgramhjÃ¤lp
 information.window.versionInformationWindowTitle = Versionsinformation
 
 ##############################################################################################################
@@ -243,25 +243,25 @@ picture.panel.pictureLabel = BILDER I VALD MAPP
 ##############################################################################################################
 # H E L P  V I E W E R                                                                                       #
 ##############################################################################################################
-helpViewerGUI.window.locationError = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-helpViewerGUI.window.title         = Hjälp
-helpViewerGUI.errorMessage         = Kunde inte ladda hjälpfil, se loggfil för detaljer.
+helpViewerGUI.window.locationError = Kunde inte sÃ¤tta fÃ¶nsterposition enligt konfigurationen. Se loggfil fÃ¶r detaljer.
+helpViewerGUI.window.title         = HjÃ¤lp
+helpViewerGUI.errorMessage         = Kunde inte ladda hjÃ¤lpfil, se loggfil fÃ¶r detaljer.
 
-helpViewerGUI.tree.content                    = Innehåll
+helpViewerGUI.tree.content                    = InnehÃ¥ll
 helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
-helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
+helpViewerGUI.tree.programHelpRename          = BYT NAMN PÃ… BILDER
 helpViewerGUI.tree.programHelpViewImages      = VISA BILDER
 helpViewerGUI.tree.programHelpImagesTag       = TAGGA BILDER
-helpViewerGUI.tree.programHelpImagesSearch    = SÖK BILDER
+helpViewerGUI.tree.programHelpImagesSearch    = SÃ–K BILDER
 helpViewerGUI.tree.programHelpImageViewer     = BILDVISARE
-helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
+helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÃ–VERSIKT
 helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
 helpViewerGUI.tree.references                 = REFERENSER / TACK TILL
-helpViewerGUI.tree.configuration              = Inställningar
+helpViewerGUI.tree.configuration              = InstÃ¤llningar
 helpViewerGUI.tree.logging                    = LOGGNING
 helpViewerGUI.tree.updates                    = UPPDATERINGAR
 helpViewerGUI.tree.rename                     = NAMNBYTE
-helpViewerGUI.tree.language                   = SPRÅK
+helpViewerGUI.tree.language                   = SPRÃ…K
 helpViewerGUI.tree.thumbnail                  = TUMNAGEL
 helpViewerGUI.tree.tag                        = TAGGAR
 
@@ -271,42 +271,42 @@ helpViewerGUI.tree.tag                        = TAGGAR
 information.panel.informationLabel   = INFORMATION
 information.panel.columnNameFileName = Filnamn
 information.panel.fileNameCurrent    = Nuvarande filnamn
-information.panel.fileNamePreview    = Förhandsgranskning av filnamn
+information.panel.fileNamePreview    = FÃ¶rhandsgranskning av filnamn
 information.panel.metaDataLabel      = METADATA
-information.panel.previewLabel       = FÖRHANDSGRANSKNING
-information.panel.progressLabel      = FÖRLOPP
+information.panel.previewLabel       = FÃ–RHANDSGRANSKNING
+information.panel.progressLabel      = FÃ–RLOPP
 information.panel.subFolderNameLabel = Undermappsnamn
 
 ##############################################################################################################
 # R E N A M E  P R O C E S S  I N F O R M A T I O N  M E S S A G E                                           #
 ##############################################################################################################
-rename.PreFileProcessor.starting                           = Proceser Före Filomdöpningsprocessen Startad
-rename.PreFileProcessor.error                              = Proceser Före Filomdöpningsprocessen Fann Följande Fel:
-rename.PreFileProcessor.finished                           = Proceser Före Filomdöpningsprocessen Avslutad
-rename.PreFileProcessor.sourceAndDestinationPath           = Validerar Käll Och Destinations Sökvägar
+rename.PreFileProcessor.starting                           = Proceser FÃ¶re FilomdÃ¶pningsprocessen Startad
+rename.PreFileProcessor.error                              = Proceser FÃ¶re FilomdÃ¶pningsprocessen Fann FÃ¶ljande Fel:
+rename.PreFileProcessor.finished                           = Proceser FÃ¶re FilomdÃ¶pningsprocessen Avslutad
+rename.PreFileProcessor.sourceAndDestinationPath           = Validerar KÃ¤ll Och Destinations SÃ¶kvÃ¤gar
 rename.PreFileProcessor.fileAndSubDirectoryTemplate        = Validerar Filnams Och Underkatalognamns-mallar
 rename.PreFileProcessor.destinationDirectoryDoesNotExist   = Validerar Att Destinationskatalogen Inte Existerar
-rename.PreFileProcessor.uniqueFilesInSourceDirectory       = Validerar Unika Bild Filer i Källkatalogen
-rename.PreFileProcessor.jPEGTotalPathLength                = Validerar Total Sökvägslängd För JPEG Filer
-rename.PreFileProcessor.nonJPEGTotalPathLength             = Validerar Total Sökvägslängd För Icke JPEG Filer
-rename.PreFileProcessor.availableDiskSpace                 = Validerar Tillgängligt Disk Utrymme
+rename.PreFileProcessor.uniqueFilesInSourceDirectory       = Validerar Unika Bildfiler i KÃ¤llkatalogen
+rename.PreFileProcessor.jPEGTotalPathLength                = Validerar Total SÃ¶kvÃ¤gslÃ¤ngd FÃ¶r JPEG Filer
+rename.PreFileProcessor.nonJPEGTotalPathLength             = Validerar Total SÃ¶kvÃ¤gslÃ¤ngd FÃ¶r Icke JPEG Filer
+rename.PreFileProcessor.availableDiskSpace                 = Validerar TillgÃ¤ngligt Disk Utrymme
 rename.PreFileProcessor.fileCreationAtDestinationDirectory = Validerar Filskapande I Destinationskatalogen
-rename.PreFileProcessor.externalOverviewLayout             = Validerar Layout För Tumnagelöversikt
+rename.PreFileProcessor.externalOverviewLayout             = Validerar Layout FÃ¶r TumnagelÃ¶versikt
 
-rename.FileProcessor.starting                               = Filomdöpningsprocessen Är Startad
-rename.FileProcessor.finished                               = Filomdöpningsprocessen Är Avslutad
+rename.FileProcessor.starting                               = FilomdÃ¶pningsprocessen Ã¤r Startad
+rename.FileProcessor.finished                               = FilomdÃ¶pningsprocessen Ã¤r Avslutad
 rename.FileProcessor.createSubDirectory                     = Skapande Av Underkatalog
 rename.FileProcessor.createThumbNailsDirectory              = Skapande av Tumnagelkatalog
 rename.FileProcessor.createAndTransferContentOfJPEGFiles    = Kopiering Och Namnbyte Av JPEG Filer
 rename.FileProcessor.createThumbNails                       = Skapande Av Tumnaglar
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Kopiering Av Icke JPEG Filer
 rename.FileProcessor.renameFromLabel                        = Fil:
-rename.FileProcessor.renameToLabel                          = Omdöpt till:
+rename.FileProcessor.renameToLabel                          = OmdÃ¶pt till:
 
 rename.PostFileProcessor.integrityCheck.starting = Integritetskontroll Av Filer Startad
 rename.PostFileProcessor.integrityCheck.finished = Integritetskontroll Av Filer Avslutad
-rename.PostFileProcessor.integrityCheck.error    = Alla Filer Har Inte Kopierats Korrekt, Se Loggfil För Detaljer
-rename.PostFileProcessor.integrityCheck.checking = Integritet På Kopierade Filer Kontrolleras
+rename.PostFileProcessor.integrityCheck.error    = Alla Filer Har Inte Kopierats Korrekt, Se Loggfil FÃ¶r Detaljer
+rename.PostFileProcessor.integrityCheck.checking = Integritet PÃ¥ Kopierade Filer Kontrolleras
 rename.PostFileProcessor.renameFromLabel         = Fil:
 rename.PostFileProcessor.copiedWithError         = Kopierad med FEL till:
 rename.PostFileProcessor.copiedOK                = Kopierad OK till:
@@ -318,21 +318,21 @@ rename.PostFileProcessor.renamedOK               = Namnbytt OK till:
 ##############################################################################################################
 #
 # Available disk space validator
-validator.availablediskspace.notEnoughDiskSpace = Det finns inte tillräckligt med lagringsutrymme i vald destination.
+validator.availablediskspace.notEnoughDiskSpace = Det finns inte tillrÃ¤ckligt med lagringsutrymme i vald destination.
 
 # Destination directory does not exist validator
-validator.destinationdirectorydoesnotexist.existingSubDirectory = Destinations katalogen existerar redan.
+validator.destinationdirectorydoesnotexist.existingSubDirectory = Destinationskatalogen existerar redan.
 
 # File and sub directory template validator
-validator.fileandsubdirectorytemplate.noSubFolderNameError                  = Ett namn på underkatalogen måste anges
-validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = Namnet på undermappen innehåller otillåtna tecken
-validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = Namnet på undermappen kan bara innehålla följande variabler:
-validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = En punkt som första tecken i undermappsnamnet är inte tillåtet
-validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = En punkt som sista tecken i undermappsnamnet är inte tillåtet
-validator.fileandsubdirectorytemplate.noFileNameError                       = En filnamnsmall måste definieras
-validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = Filnamnsmallen innehåller otillåtna tecken
-validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = En punkt som första tecken i filnamnsmallen är inte tillåtet
-validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = En punkt som sista tecken i filnamnsmallen är inte tillåtet
+validator.fileandsubdirectorytemplate.noSubFolderNameError                  = Ett namn pÃ¥ underkatalogen mÃ¥ste anges
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = Namnet pÃ¥ undermappen innehÃ¥ller otillÃ¥tna tecken
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = Namnet pÃ¥ undermappen kan bara innehÃ¥lla fÃ¶ljande variabler:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = En punkt som fÃ¶rsta tecken i undermappsnamnet Ã¤r inte tillÃ¥tet
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = En punkt som sista tecken i undermappsnamnet Ã¤r inte tillÃ¥tet
+validator.fileandsubdirectorytemplate.noFileNameError                       = En filnamnsmall mÃ¥ste definieras
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = Filnamnsmallen innehÃ¥ller otillÃ¥tna tecken
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = En punkt som fÃ¶rsta tecken i filnamnsmallen Ã¤r inte tillÃ¥tet
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = En punkt som sista tecken i filnamnsmallen Ã¤r inte tillÃ¥tet
 
 # File creation at destination directory
 validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = Kunde inte skapa underkatalog
@@ -343,61 +343,61 @@ validator.filecreationatdestinationdirectory.couldNotCreateAllNonJPEGFiles    = 
 validator.filecreationatdestinationdirectory.couldNotDeleateSubDirectory      = Kunde inte ta bort underkatalogen
 
 # JPEG total path length
-validator.jpegtotalpathlength.toLongFileName               = Med nuvarande destinationskatalog och mallar så kommer den totala sökvägen\nför de omdöpta filerna bli längre än vad som är tillåtet.\n\nFör att undvika detta, ändra antingen destinationskatalog eller mallarna. 
-validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = Inga JPEG filer i den valda källkatalogen
+validator.jpegtotalpathlength.toLongFileName               = Med nuvarande destinationskatalog och mallar sÃ¥ kommer den totala sÃ¶kvÃ¤gen\nfÃ¶r de omdÃ¶pta filerna bli lÃ¤ngre Ã¤n vad som Ã¤r tillÃ¥tet.\n\nFÃ¶r att undvika detta, Ã¤ndra antingen destinationskatalog eller mallarna. 
+validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = Inga JPEG filer i den valda kÃ¤llkatalogen
 
 # Non JPEG total path length
-validator.nonjpegtotalpathlength.toLongFileName      = Den totala sökvägen med vald destinationskatalog kommer att bli för lång för filen:
-validator.nonjpegtotalpathlength.toLongDirectoryPath = Den totala sökvägen med vald destinationskatalog kommer att bli för lång för katalogen:
+validator.nonjpegtotalpathlength.toLongFileName      = Den totala sÃ¶kvÃ¤gen med vald destinationskatalog kommer att bli fÃ¶r lÃ¥ng fÃ¶r filen:
+validator.nonjpegtotalpathlength.toLongDirectoryPath = Den totala sÃ¶kvÃ¤gen med vald destinationskatalog kommer att bli fÃ¶r lÃ¥ng fÃ¶r katalogen:
 
 # Source and destination path validator
-validator.sourceanddestinationpath.noSourcePathError                       = En sökväg till bildmappen måste anges
-validator.sourceanddestinationpath.invalidCharactersInSourcePathError      = Sökvägen till bildmappen innehåller otillåtna tecken
-validator.sourceanddestinationpath.noDestinationPathError                  = En sökväg till destinationsmappen måste anges
-validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = Sökvägen till destinationsmappen innehåller otillåtna tecken
+validator.sourceanddestinationpath.noSourcePathError                       = En sÃ¶kvÃ¤g till bildmappen mÃ¥ste anges
+validator.sourceanddestinationpath.invalidCharactersInSourcePathError      = SÃ¶kvÃ¤gen till bildmappen innehÃ¥ller otillÃ¥tna tecken
+validator.sourceanddestinationpath.noDestinationPathError                  = En sÃ¶kvÃ¤g till destinationsmappen mÃ¥ste anges
+validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = SÃ¶kvÃ¤gen till destinationsmappen innehÃ¥ller otillÃ¥tna tecken
 
 # Thumb nail overview layout validator
-validator.externalOverviewLayout.invalidXMLFile = Innehållet i filen layout.xml är inte giltigt. Se loggfil för detaljer.
+validator.externalOverviewLayout.invalidXMLFile = InnehÃ¥llet i filen layout.xml Ã¤r inte giltigt. Se loggfil fÃ¶r detaljer.
 
 ##############################################################################################################
 # T H U M B N A I L  O V E R V I E W                                                                         #
 ##############################################################################################################
 
-thumbnailoverview.ThumbNailOverViewCreator.starting             = Skapande Av Tumnagelöversikt Startad
-thumbnailoverview.ThumbNailOverViewCreator.finished             = Skapande Av Tumnagelöversikt Avslutad
-thumbnailoverview.ThumbNailOverViewCreator.error.createCSSFile  = Kunde inte skapa CSS fil i destinationskatalogen. Se loggfil för detaljer.
-thumbnailoverview.ThumbNailOverViewCreator.error.accessCSSFile  = Atkomst nekad till CSS fil. Se loggfil för detaljer.
+thumbnailoverview.ThumbNailOverViewCreator.starting             = Skapande Av TumnagelÃ¶versikt Startad
+thumbnailoverview.ThumbNailOverViewCreator.finished             = Skapande Av TumnagelÃ¶versikt Avslutad
+thumbnailoverview.ThumbNailOverViewCreator.error.createCSSFile  = Kunde inte skapa CSS fil i destinationskatalogen. Se loggfil fÃ¶r detaljer.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessCSSFile  = Atkomst nekad till CSS fil. Se loggfil fÃ¶r detaljer.
 thumbnailoverview.ThumbNailOverViewCreator.error.createHTMLFile = Kunde inte skapa HTML file i destinationskatalogen.
-thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Åtkomst nekad till HTML fil. Se loggfil för detaljer.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Ã…tkomst nekad till HTML fil. Se loggfil fÃ¶r detaljer.
 
-thumbnailoverview.LayoutParser.wrongElementAmount = Filen layout.xml innehåller fel antal av element:
-thumbnailoverview.LayoutParser.parseError         = Fel vid inläsning av layout.xml. Se loggfil för detaljer.
+thumbnailoverview.LayoutParser.wrongElementAmount = Filen layout.xml innehï¿½ller fel antal av element:
+thumbnailoverview.LayoutParser.parseError         = Fel vid inlÃ¤sning av layout.xml. Se loggfil fÃ¶r detaljer.
 
 ##############################################################################################################
 # U P D A T E  C H E C K E R                                                                                 #
 ##############################################################################################################
 
-updatechecker.errormessage.uRLInvalid                  = Ogiltigt format på url:en till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.errormessage.uRLWrong                    = Fel url till uppdateringsservern. Se loggfil för detaljer.
-updatechecker.errormessage.networkTimeOut              = Uppdateringsserven svarade inte, nytt försök sker nästa programstart.
-updatechecker.errormessage.downloadError               = Kunde inte ladda ner den senaste versionen. Se loggfil för detaljer.
-updatechecker.errormessage.parseException              = Kunde inte läsa hämtad fil, se loggfil för detaljer.
-updatechecker.errormessage.parseConfigurationException = Kunde inte konfigurera en XML parser. Se loggfil för detaljer.
+updatechecker.errormessage.uRLInvalid                  = Ogiltigt format pÃ¥ url:en till uppdateringsservern. Se loggfil fÃ¶r detaljer.
+updatechecker.errormessage.uRLWrong                    = Fel url till uppdateringsservern. Se loggfil fÃ¶r detaljer.
+updatechecker.errormessage.networkTimeOut              = Uppdateringsserven svarade inte, nytt fÃ¶rsÃ¶k sker nÃ¤sta programstart.
+updatechecker.errormessage.downloadError               = Kunde inte ladda ner den senaste versionen. Se loggfil fÃ¶r detaljer.
+updatechecker.errormessage.parseException              = Kunde inte lÃ¤sa hÃ¤mtad fil, se loggfil fÃ¶r detaljer.
+updatechecker.errormessage.parseConfigurationException = Kunde inte konfigurera en XML parser. Se loggfil fÃ¶r detaljer.
 
 updatechecker.informationmessage.downloadFinished = Nedladdningen klar.
 
-updatechecker.gui.title          = Ny version tillgänglig
-updatechecker.gui.newVersion     = Det finns en nyare version av JavaPEG tillgänglig. Se nedan för loggen över ändringar.
+updatechecker.gui.title          = Ny version tillgÃ¤nglig
+updatechecker.gui.newVersion     = Det finns en nyare version av JavaPEG tillgÃ¤nglig. Se nedan fÃ¶r loggen Ã¶ver Ã¤ndringar.
 updatechecker.gui.downloadButton = Ladda ner
-updatechecker.gui.closeButton    = Stäng
+updatechecker.gui.closeButton    = StÃ¤ng
 
 ##############################################################################################################
 # M E T A  D A T A  P A N E L                                                                                #
 ##############################################################################################################
-metadatapanel.titleDefaultText     = METADATA FÖR BILD:
+metadatapanel.titleDefaultText     = METADATA FÃ–R BILD:
 metadatapanel.tableheader.type     = TYP
 metadatapanel.tableheader.property = EGENSKAP
-metadatapanel.tableheader.value    = VÄRDE
+metadatapanel.tableheader.value    = VÃ„RDE
 
 ##############################################################################################################
 # S T A T U S  B A R  M E S S A G E S                                                                        #
@@ -406,28 +406,28 @@ metadatapanel.tableheader.value    = VÄRDE
 statusbar.message.amountOfRows              = Antal rader
 statusbar.message.amountOfColumns           = Antal kolumner
 statusbar.message.amountOfImagesInDirectory = Antal bilder i katalogen
-statusbar.message.selectedPath              = Vald sökväg:
+statusbar.message.selectedPath              = Vald sÃ¶kvÃ¤g:
 
 ##############################################################################################################
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
-tabbedpane.imageRename = BYT NAMN PÅ BILDER
-tabbedpane.imageView   = SÖK / VISA BILDER
+tabbedpane.imageRename = BYT NAMN PÃ… BILDER
+tabbedpane.imageView   = SÃ–K / VISA BILDER
 tabbedpane.imageTag    = TAGGA BILDER
 
 ##############################################################################################################
 # F I L E  R E T R I E V E R                                                                                 #
 ##############################################################################################################
-fileretriever.canNotFindFile     = Kan inte hitta filen. Se loggfil för detaljer.
-fileretriever.canNotReadFromFile = Kan inte läsa från filen. Det kan vara ett annat program som låst filen. Se loggfil för detaljer.
+fileretriever.canNotFindFile     = Kan inte hitta filen. Se loggfil fÃ¶r detaljer.
+fileretriever.canNotReadFromFile = Kan inte lÃ¤sa frÃ¥n filen. Det kan vara ett annat program som lÃ¤st filen. Se loggfil fÃ¶r detaljer.
 
-metadata.field.name.APERTURE_VALUE = BLÄNDARTAL
+metadata.field.name.APERTURE_VALUE = BLÃ„NDARTAL
 metadata.field.name.CAMERA_MODEL = KAMERAMODELL
 metadata.field.name.IMAGE_SIZE = BILDSTORLEK 
 metadata.field.name.ISO = ISO
 metadata.field.name.EXPOSURE_TIME = EXPONERINGSTID
-metadata.field.name.YEAR = ÅR
-metadata.field.name.MONTH = MÅNAD
+metadata.field.name.YEAR = Ã…R
+metadata.field.name.MONTH = MÃ…NAD
 metadata.field.name.DAY = DAG
 metadata.field.name.HOUR = TIMME
 metadata.field.name.MINUTE = MINUT
@@ -438,29 +438,29 @@ metadata.field.name.SECOND = SEKUND
 ##############################################################################################################
 findimage.categories.label                                = KATEGORIER
 findimage.categories.andRadioButton.label                 = OCH
-findimage.categories.andRadioButton.tooltip               = <html>En bild måste ha alla valda kategorier<br/>tilldelade för att adderas till sökresultateta.</html>
+findimage.categories.andRadioButton.tooltip               = <html>En bild mÃ¥ste ha alla valda kategorier<br/>tilldelade fÃ¶r att adderas till sÃ¶kresultatet.</html>
 findimage.categories.orRadioButton.label                  = ELLER
-findimage.categories.orRadioButton.tooltip                = <html>En bild kan ha valfri kombination av valda<br/>katergorier tilldelad för att adderas till sökresultatet.</html>
+findimage.categories.orRadioButton.tooltip                = <html>En bild kan ha valfri kombination av valda<br/>katergorier tilldelad fÃ¶r att adderas till sÃ¶kresultatet.</html>
 findimage.categories.clearCategoriesSelectionButton.label = Rensa valda kategorier
 findimage.categories.removeAllCategoriesAndSubCategories1 = Ta bort kategori:
 findimage.categories.removeAllCategoriesAndSubCategories2 = och alla underkategorier?
 findimage.categories.removeAllCategoriesAndSubCategories3 = ?
-findimage.categories.addNewTopLevelCategory               = Lägg till ny toppnivåkategori
-findimage.categories.collapseTopLevelCategories           = Fäll ihop toppnivåkategorier
-findimage.categories.expandTopLevelCategories             = Expandera toppnivåkategorier
-findimage.categories.collapseCategory                     = Fäll ihop kategori:
+findimage.categories.addNewTopLevelCategory               = LÃ¤gg till ny toppnivÃ¥kategori
+findimage.categories.collapseTopLevelCategories           = FÃ¤ll ihop toppnivÃ¥kategorier
+findimage.categories.expandTopLevelCategories             = Expandera toppnivÃ¥kategorier
+findimage.categories.collapseCategory                     = FÃ¤ll ihop kategori:
 findimage.categories.expandCategory                       = Expandera kategori:
-findimage.categories.addNewSubCategoryToCategory          = Lägg till ny underkategori till kategori:
-findimage.categories.renameSelectedCategory               = Byt namn på vald kategori:
+findimage.categories.addNewSubCategoryToCategory          = LÃ¤gg till ny underkategori till kategori:
+findimage.categories.renameSelectedCategory               = Byt namn pÃ¥ vald kategori:
 findimage.categories.removeSelectedCategory               = Ta bort vald kategori:
 findimage.imagemetadata.label = BILDMETADATA
 findimage.rating.label         = KLASSIFICERING
 findimage.rating.label.unrated = OKLASSIFICERAD
-findimage.rating.tooltip.bad   = Dålig
+findimage.rating.tooltip.bad   = DÃ¥lig
 findimage.rating.tooltip.good  = Bra
 findimage.comment.label              = KOMMENTAR
-findimage.comment.defaultCommentText = Skriv kommentar här
-findimage.preview.label = FÖRHANDSGRANSKNING
+findimage.comment.defaultCommentText = Skriv kommentar hÃ¤r
+findimage.preview.label = FÃ–RHANDSGRANSKNING
 findimage.clearAllMetaDataParameters.tooltip = Rensa alla valda metadataparametrar
-findimage.searchImages.tooltip = Sök bilder
-findimage.searchImages.result = No images found
+findimage.searchImages.tooltip = SÃ¶k bilder
+findimage.searchImages.result = Inga bilder funna
