@@ -1,23 +1,25 @@
-category.categoriesModel.create.error = Kan inte ladda kategorier.\nJavaPEG kommer att avslutas\n\nSe loggfil för detaljer.
-category.categoriesModel.store.error  = Kan inte spara kategorier.\nJavaPEG kommer att avslutas\n\nSe loggfil för detaljer.
+category.categoriesModel.create.error = Kan inte ladda kategorier.\nJavaPEG kommer att avslutas\n\nSe loggfil fÃ¶r detaljer.
+category.categoriesModel.store.error  = Kan inte spara kategorier.\nJavaPEG kommer att avslutas\n\nSe loggfil fÃ¶r detaljer.
 
-category.categoriesModel.repositoryExists       = Bilddatabassökväg existerar.
-category.categoriesModel.repositoryNotExists    = Bilddatabassökväg existerar inte.
-category.categoriesModel.repositoryNotAvailable = Bilddatabassökväg inte tillgänglig.
+category.categoriesModel.repositoryExists       = BilddatabassÃ¶kvÃ¤g existerar.
+category.categoriesModel.repositoryNotExists    = BilddatabassÃ¶kvÃ¤g existerar inte.
+category.categoriesModel.repositoryNotAvailable = BilddatabassÃ¶kvÃ¤g inte tillgÃ¤nglig.
 
 category.metadatavalue.selection.mode   = URVALSMETOD
-category.metadatavalue.selection.values = VÄRDEN
+category.metadatavalue.selection.values = VÃ„RDEN
 
-category.enterNameForNewCategory    = Ange ett namn för den nya kategorin
-category.enterNameForNewSubCategory = Ange ett namn för den nya underkategorin
-category.enterNewNameForCategory    = Ange ett nytt namn för den kategorin:
-categrory.rename                    = Byt namn på kategori
+category.enterNameForNewCategory    = Ange ett namn fÃ¶r den nya kategorin
+category.enterNameForNewSubCategory = Ange ett namn fÃ¶r den nya underkategorin
+category.enterNewNameForCategory    = Ange ett nytt namn fÃ¶r den kategorin:
+categrory.rename                    = Byt namn pÃ¥ kategori
 
-category.errormessage.categoryNameCanNotStartWithSpace = Kategorinamnet kan inte börja med ett mellanslag:
-category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en kategori i vald kontext, välj ett annat namn
+category.errormessage.categoryNameCanNotStartWithSpace = Kategorinamnet kan inte bÃ¶rja med ett mellanslag:
+category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en kategori i vald kontext, vÃ¤lj ett annat namn
 
-category.addToImageRepositoryHeader = Lägg till bild(er) till bilddatabas?
-category.addToImageRepositoryQuestionPartOne = Lägg till bild(erna) i katalog:
+category.addToImageRepositoryHeader = LÃ¤gg till bild(er) till bilddatabas?
+category.addToImageRepositoryQuestionPartOne = LÃ¤gg till bild(erna) i katalog:
 category.addToImageRepositoryQuestionPartTwo = till bilddatabasen?
 
-category.rememberMySelection = Kom ihåg mitt val (Kan ändras i Inställningarna)
+category.rememberMySelection = Kom ihÃ¥g mitt val (Kan Ã¤ndras i InstÃ¤llningarna)
+
+category.mineCategoriesTab = Mina

@@ -1151,9 +1151,7 @@ public class MainGUI extends JFrame {
 		    javaPegIdToCheckTreeManager = new HashMap<String, CheckTreeManager>(importedCategoriesTrees.size());
 
 		    categoriesTabbedPane = new JTabbedPane();
-
-//		    TODO: Fix hard coded string
-		    categoriesTabbedPane.add("Mina", categoryTreeAndSelectionModePanel);
+		    categoriesTabbedPane.add(lang.get("category.mineCategoriesTab"), categoryTreeAndSelectionModePanel);
 
 		    Set<String> displayNames = new TreeSet<String>(importedCategoriesTrees.keySet());
 
