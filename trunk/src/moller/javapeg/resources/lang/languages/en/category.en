@@ -21,3 +21,5 @@ category.addToImageRepositoryQuestionPartOne = Add image(s) in directory:
 category.addToImageRepositoryQuestionPartTwo = to image repository?
 
 category.rememberMySelection = Remember my selection (can be changed in the configuration)
+
+category.mineCategoriesTab = Mine
