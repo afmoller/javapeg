@@ -16,20 +16,20 @@
 ##############################################################################################################
 # W I N D O W                                                                                                #
 ##############################################################################################################
-configviewer.window.locationError = Kunde inte sätta fönster position enligt konfigurationen. Se loggfil för detaljer.
-configviewer.window.title         = Inställningar
+configviewer.window.locationError = Kunde inte sÃ¤tta fÃ¶nsterposition enligt konfigurationen. Se loggfil fÃ¶r detaljer.
+configviewer.window.title         = InstÃ¤llningar
 
 ##############################################################################################################
 # L O G G I N G                                                                                              #
 ##############################################################################################################
-configviewer.logging.label.logLevel.text                 = Loggningsnivå
+configviewer.logging.label.logLevel.text                 = LoggningsnivÃ¥
 configviewer.logging.label.developerMode.text            = Obuffrad Loggning
 configviewer.logging.label.rotateLog.text                = Rotera Loggen automatiskt
 configviewer.logging.label.zipLog.text                   = Komprimera Roterad Loggfil
 configviewer.logging.label.rotateLogSize.text            = Loggroteringsstorlek
 configviewer.logging.label.logName.text                  = Loggnamm
-configviewer.logging.label.logEntryTimeStampFormat.text  = Tidsstämpelsformat för loggfilsnotering
-configviewer.logging.label.logEntryTimeStampPreview.text = Förhandsgranskning av tidsstämpel för loggfilsnotering
+configviewer.logging.label.logEntryTimeStampFormat.text  = TidsstÃ¤mpelsformat fÃ¶r loggfilsnotering
+configviewer.logging.label.logEntryTimeStampPreview.text = FÃ¶rhandsgranskning av tidsstÃ¤mpel fÃ¶r loggfilsnotering
 
 ##############################################################################################################
 # U P D A T E                                                                                                #
@@ -40,91 +40,91 @@ configviewer.update.label.attachVersionInformation.text = Bifoga versionsinforma
 ##############################################################################################################
 # R E N A M E                                                                                                #
 ##############################################################################################################
-configviewer.rename.label.useLastModifiedDate.text                 = Använd Senast Ändraddatum Om Exif-datum Saknas
-configviewer.rename.label.useLastModifiedTime.text                 = Använd Senast Ändradtid Om Exif-tid Saknas
-configviewer.rename.label.maximumCameraModelValueLength            = Maximal längd för värdet av kameramodell
-configviewer.rename.label.maximumCameraModelValueLengthNotNegative = Värdet för maximal kameramdodelllängd kan inte vara ett negativt heltal
+configviewer.rename.label.useLastModifiedDate.text                 = AnvÃ¤nd Senast Ã¤ndraddatum Om Exif-datum Saknas
+configviewer.rename.label.useLastModifiedTime.text                 = AnvÃ¤nd Senast Ã¤ndradtid Om Exif-tid Saknas
+configviewer.rename.label.maximumCameraModelValueLength            = Maximal lÃ¤ngd fÃ¶r vÃ¤rdet av kameramodell
+configviewer.rename.label.maximumCameraModelValueLengthNotNegative = VÃ¤rdet fÃ¶r maximal kameramdodelllÃ¤ngd kan inte vara ett negativt heltal
 
 ##############################################################################################################
 # L A N G U A G E                                                                                            #
 ##############################################################################################################
-configviewer.language.label.selectionMode        = Språkvalsmetod
+configviewer.language.label.selectionMode        = SprÃ¥kvalsmetod
 configviewer.language.radiobutton.manual         = Manuellt
 configviewer.language.radiobutton.automatic      = Automatiskt
-configviewer.language.label.currentLanguage      = Aktuellt Språk
-configviewer.language.label.availableLanguages   = Tillgängliga Språk
-configviewer.language.languageNameNotFound       = namn på språk ej funnet
+configviewer.language.label.currentLanguage      = Aktuellt SprÃ¥k
+configviewer.language.label.availableLanguages   = Tillgï¿½ngliga SprÃ¥k
+configviewer.language.languageNameNotFound       = namn pÃ¥ sprÃ¥k ej funnet
 configviewer.language.information.windowlabel    = Information
 
 ##############################################################################################################
 # T H U M B N A I L                                                                                          #
 ##############################################################################################################
-configviewer.thumbnail.creation.label.missingOrCorrupt               = Om inbäddad tumnagel saknas eller är korrupt, skapa en temporär
-configviewer.thumbnail.creation.label.thumbnail.width                = Bredd på den skapade tumnageln
-configviewer.thumbnail.creation.label.thumbnail.height               = Höjd på den skapade tumnageln
+configviewer.thumbnail.creation.label.missingOrCorrupt               = Om inbÃ¤ddad tumnagel saknas eller Ã¤r korrupt, skapa en temporÃ¤r
+configviewer.thumbnail.creation.label.thumbnail.width                = Bredd pÃ¥ den skapade tumnageln
+configviewer.thumbnail.creation.label.thumbnail.height               = HÃ¶jd pÃ¥ den skapade tumnageln
 configviewer.thumbnail.creation.label.algorithm                      = Tumnagelskaparalgoritm
 configviewer.thumbnail.creation.label                                = Tumnagelskapande
-configviewer.thumbnail.creation.validation.width.integer             = Värdet på tumnagelbredd måste var ett heltal
-configviewer.thumbnail.creation.validation.width.integerNonNegative  = Värdet på tumnagelbredd måste var ett icke negativt heltal
-configviewer.thumbnail.creation.validation.height.integer            = Värdet på tumnagelhöjd måste var ett heltal
-configviewer.thumbnail.creation.validation.height.integerNonNegative = Värdet på tumnagelhöjd måste var ett icke negativt heltal
+configviewer.thumbnail.creation.validation.width.integer             = VÃ¤rdet pÃ¥ tumnagelbredd mÃ¥ste var ett heltal
+configviewer.thumbnail.creation.validation.width.integerNonNegative  = VÃ¤rdet pÃ¥ tumnagelbredd mÃ¥ste var ett icke negativt heltal
+configviewer.thumbnail.creation.validation.height.integer            = VÃ¤rdet pÃ¥ tumnagelhÃ¶jd mÃ¥ste var ett heltal
+configviewer.thumbnail.creation.validation.height.integerNonNegative = VÃ¤rdet pÃ¥ tumnagelhÃ¶jd mÃ¥ste var ett icke negativt heltal
 configviewer.thumbnail.cache.label.enable              = Aktivera tumnagel cache
 configviewer.thumbnail.cache.label.size                = Tumnagel cachestorlek
 configviewer.thumbnail.cache.label.size.max            = Tumnagel max cachestorlek
 configviewer.thumbnail.cache.label.clear               = Rensa tumnagelcache
 configviewer.thumbnail.cache.label.clear.question      = Alla minnescacheade tumnaglar kommer att rensas bort.
 configviewer.thumbnail.cache.label                     = Tumnagel Cache
-configviewer.thumbnail.cache.validation.size.max       = Värdet på maximal tumnagelcache får inte vara ett negativt heltal
+configviewer.thumbnail.cache.validation.size.max       = VÃ¤rdet pÃ¥ maximal tumnagelcache fÃ¥r inte vara ett negativt heltal
 configviewer.thumbnail.tooltip.label.disabled          = Avaktiverad:
 configviewer.thumbnail.tooltip.label.enabled           = Aktiverad:
-configviewer.thumbnail.tooltip.label.extended          = Utökad:
+configviewer.thumbnail.tooltip.label.extended          = UtÃ¶kad:
 configviewer.thumbnail.tooltip.label                   = Tumnagel Tooltips
 
 ##############################################################################################################
 # T A G                                                                                                      #
 ##############################################################################################################
-configviewer.tag.previewimage.label.embeddedthumbnail = Använd inbäddad tumnagel som förhandsgranskningsbild (Snabbt)
-configviewer.tag.previewimage.label.scaledthumbnail   = Använd skaladtumnagel som förhandsgranskningsbild (Långsamt)
-configviewer.tag.previewimage.label                   = Förhandsgranskningsbild
+configviewer.tag.previewimage.label.embeddedthumbnail = AnvÃ¤nd inbÃ¤ddad tumnagel som fÃ¶rhandsgranskningsbild (Snabbt)
+configviewer.tag.previewimage.label.scaledthumbnail   = AnvÃ¤nd skalad tumnagel som fÃ¶rhandsgranskningsbild (LÃ¥ngsamt)
+configviewer.tag.previewimage.label                   = FÃ¶rhandsgranskningsbild
 configviewer.tag.categories.warnWhenRemove                          = Varna vid borttagning av kategori
 configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories = Varna vid borttagning av kategori med underkategorier
 configviewer.tag.categories.label                                   = Kategorier
-configviewer.tag.imageRepositoriesAdditionMode.label                    = Bilddatabas Tillägg
-configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label         = Lägg alltid till bilder i följande kataloger automatiskt:
-configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label           = Lägg aldrig till bilder i följande kataloger automatiskt:
-configviewer.tag.imageRepositoriesContent.label                         = Bilddatabas Innehåll 
-configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sökvägar
-configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sökvägar som inte finns från bilddatabasen
+configviewer.tag.imageRepositoriesAdditionMode.label                    = Bilddatabas TillÃ¤gg
+configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label         = LÃ¤gg alltid till bilder i fÃ¶ljande kataloger automatiskt:
+configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label           = LÃ¤gg aldrig till bilder i fÃ¤ljande kataloger automatiskt:
+configviewer.tag.imageRepositoriesContent.label                         = Bilddatabas InnehÃ¥ll 
+configviewer.tag.imageRepositories.label.removeNonExistingPaths         = Ta bort icke existerande sÃ¶kvï¿½gar
+configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta automatiskt bort sÃ¶kvÃ¤gar som inte finns frÃ¥n bilddatabasen
 configviewer.tag.imageRepositories.label.exists                         = Existerar
-configviewer.tag.imageRepositories.label.notAvailable                   = Inte Tillgänglig
+configviewer.tag.imageRepositories.label.notAvailable                   = Inte TillgÃ¤nglig
 configviewer.tag.imageRepositories.label.doesNotExist                   = Existerar inte
-configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = Följande sökväg(ar) kommer att tas bort från bilddatabasen:
-configviewer.tag.imageRepositories.label.addAutomatically               = Lägg automatiskt till en katalog med icke tillagda bilder till bilddatabasen
-configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen 
-configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Lägg inte till en katalog med icke tillagda bilder till bilddatabasen
-configviewer.tag.imageRepositories.label.removeSelectedPaths            = Ta bort valda sökvägar
+configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = FÃ¶ljande sÃ¶kvÃ¤g(ar) kommer att tas bort frÃ¥n bilddatabasen:
+configviewer.tag.imageRepositories.label.addAutomatically               = LÃ¤gg automatiskt till en katalog med icke tillagda bilder till bilddatabasen
+configviewer.tag.imageRepositories.label.askToAdd                       = FrÃ¥ga fÃ¶r att lÃ¤gga till katalog med icke tillagda bilder till bilddatabasen 
+configviewer.tag.imageRepositories.label.doNotAskToAdd                  = LÃ¤gg inte till en katalog med icke tillagda bilder till bilddatabasen
+configviewer.tag.imageRepositories.label.removeSelectedPaths            = Ta bort valda sÃ¶kvÃ¤gar
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
-configviewer.errormessage.rotateLogSizeToLargeKiB   = Loggroteringsstorleken är för stor: Maximalt tillåtna är 100000 KiB 
-configviewer.errormessage.rotateLogSizeToLargeMiB   = Loggroteringsstorleken är för stor: Maximalt tillåtna är 100 MiB 
-configviewer.errormessage.rotateLogSizeToSmall      = Loggroteringsstorleken är för liten: Minsta tillåtna är 10 KiB
-configviewer.errormessage.rotateLogSizeNotAnInteger = Logroteringsstorleken måste vara ett heltal
+configviewer.errormessage.rotateLogSizeToLargeKiB   = Loggroteringsstorleken Ã¤r fÃ¶r stor: Maximalt tillÃ¥tna Ã¤r 100000 KiB 
+configviewer.errormessage.rotateLogSizeToLargeMiB   = Loggroteringsstorleken Ã¤r fÃ¶r stor: Maximalt tillÃ¥tna Ã¤r 100 MiB 
+configviewer.errormessage.rotateLogSizeToSmall      = Loggroteringsstorleken Ã¤r fÃ¶r liten: Minsta tillÃ¥tna Ã¤r 10 KiB
+configviewer.errormessage.rotateLogSizeNotAnInteger = Logroteringsstorleken mÃ¥ste vara ett heltal
 
 ##############################################################################################################
 # T R E E  N O D E S                                                                                         #
 ##############################################################################################################
-configviewer.tree.root           = Inställningar
+configviewer.tree.root           = InstÃ¤llningar
 configviewer.tree.node.logging   = Loggning
 configviewer.tree.node.updates   = Uppdateringar
 configviewer.tree.node.rename    = Namnbyte
-configviewer.tree.node.language  = Språk
+configviewer.tree.node.language  = SprÃ¥k
 configviewer.tree.node.thumbnail = Tumnagel
 configviewer.tree.node.tag       = Taggar
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
 ##############################################################################################################
-configviewer.changed.configuration.start = Följande inställningar har ändrats:
-configviewer.changed.configuration.end   = JavaPEG måste startas om för att ändringarna skall ha effekt
+configviewer.changed.configuration.start = FÃ¶ljande instÃ¤llningar har Ã¤ndrats:
+configviewer.changed.configuration.end   = JavaPEG mÃ¥ste startas om fÃ¶r att Ã¤ndringarna skall ha effekt
