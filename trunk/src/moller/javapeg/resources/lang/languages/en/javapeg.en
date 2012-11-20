@@ -76,14 +76,14 @@ variable.pictureHeight         = Picture height in pixels
 variable.apertureValueVariable = f
 variable.apertureValue         = F-Number
 variable.dateOftodayVariable   = td
-variable.dateOftoday           = Today´s date
+variable.dateOftoday           = Today's date
 variable.sourceNameVariable    = sn
 variable.sourceName            = Original file name
 
 ##############################################################################################################
 # V A R I A B L E S  C O M M E N T                                                                           #
 ##############################################################################################################
-variable.comment.infoLabelA = * = Theese variables might be
+variable.comment.infoLabelA = * = These variables might be
 variable.comment.infoLabelB = used when naming a subdirectory
 variable.comment.fileName   = File name
 
@@ -116,12 +116,12 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 aboutDialog.Label    = About JavaPEG 3.0
 aboutDialog.TextRowA = JavaPEG, ver: 3.0
-aboutDialog.TextRowB = Copyright © 2005 - 2011
-aboutDialog.TextRowC = This program is coded in Java (JDK 1.6).
-aboutDialog.TextRowD = Programmed between 2005-05-24 - 2011-**-**.
-aboutDialog.TextRowE = Version 3.0 released 2011-**-**.
+aboutDialog.TextRowB = Copyright Â© 2005 - 2012
+aboutDialog.TextRowC = This program is coded in Java (JDK 1.7).
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2012-**-**.
+aboutDialog.TextRowE = Version 3.0 released 2012-**-**.
 aboutDialog.TextRowF = Developer:
-aboutDialog.TextRowG = Fredrik Möller
+aboutDialog.TextRowG = Fredrik MÃ¶ller
 aboutDialog.TextRowH = _______________________________________
 
 ##############################################################################################################
@@ -160,7 +160,7 @@ errormessage.jpgrename.joptionPaneYes          = Yes
 errormessage.jpgrename.joptionPaneNo           = No
 errormessage.jpgrename.noImagesInPathLabel     = Fault message
 errormessage.jpgrename.noImagesInPath          = Chosen path contains no image files
-errormessage.jpgrename.noExifInImage           = No exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImage           = No Exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
 errormessage.jpgrename.noExifInImageLabel      = No Exif
 errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
 
@@ -175,9 +175,9 @@ errormessage.filehandler.canNotWriteFile        = Can not write:
 ##############################################################################################################
 # E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
 ##############################################################################################################
-errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occured:
-errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installationdirectory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installation directory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occurred:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installation directory to find a solution\n\nJavaPEG will be shut down.
 
 ##############################################################################################################
 # M A I N  G U I  T A B B E D  P A N E                                                                       #
@@ -348,8 +348,8 @@ validator.jpegtotalpathlength.toLongFileName               = With the current de
 validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = No JPEG files in selected source directory
 
 # Non JPEG total path length validator
-validator.nonjpegtotalpathlength.toLongFileName      = The total path with the current destinaton directory will be to long for the file:
-validator.nonjpegtotalpathlength.toLongDirectoryPath = The total path with the current destinaton directory will be to long for the directory:
+validator.nonjpegtotalpathlength.toLongFileName      = The total path with the current destination directory will be to long for the file:
+validator.nonjpegtotalpathlength.toLongDirectoryPath = The total path with the current destination directory will be to long for the directory:
 
 # Source and destination path validator
 validator.sourceanddestinationpath.noSourcePathError                       = A path to source folder must be set
@@ -386,7 +386,7 @@ updatechecker.errormessage.parseConfigurationException = Could not configure an 
 updatechecker.informationmessage.downloadFinished = Download Finished
 
 updatechecker.gui.title          = New version available
-updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See changelog below for the changes.
+updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See change log below for the changes.
 updatechecker.gui.downloadButton = Download
 updatechecker.gui.closeButton    = Close
 
@@ -403,7 +403,7 @@ metadatapanel.tableheader.value    = VALUE
 ##############################################################################################################
 statusbar.message.amountOfRows              = Number of rows
 statusbar.message.amountOfColumns           = Number of columns
-statusbar.message.amountOfImagesInDirectory = Amount of Images in directroy
+statusbar.message.amountOfImagesInDirectory = Amount of Images in directory
 statusbar.message.selectedPath              = Selected Path:
 
 ##############################################################################################################
