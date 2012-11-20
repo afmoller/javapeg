@@ -28,6 +28,7 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
@@ -40,7 +41,6 @@ import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.hash.MD5;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
@@ -71,16 +71,18 @@ public class ImageMetaDataDataBaseHandler {
 
         Integer policy = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
 
+        RepositoryExceptions repositoryExceptions = configuration.getRepository().getExceptions();
+
         // The following switch statement will check exceptions to the
         // additions policy.
         switch (policy) {
         case 0:
-            if (ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().contains(path)) {
+            if (repositoryExceptions.getNeverAdd().contains(path)) {
                 policy = 2;
             }
             break;
         case 2:
-            if (ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().contains(path)) {
+            if (repositoryExceptions.getAllwaysAdd().contains(path)) {
                 policy = 0;
             }
             break;

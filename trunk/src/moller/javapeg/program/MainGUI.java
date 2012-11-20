@@ -120,6 +120,8 @@ import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategori
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.config.model.repository.RepositoryExceptions;
+import moller.javapeg.program.config.model.repository.RepositoryPaths;
 import moller.javapeg.program.config.view.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
@@ -147,7 +149,6 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLess
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
-import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -1832,7 +1833,7 @@ public class MainGUI extends JFrame {
 	}
 
 	public void initiateImageMetaDataContext() {
-		Set<Object> repositoryPaths = ModelInstanceLibrary.getInstance().getImageRepositoryPaths().getModel();
+	    RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
 
 		if(repositoryPaths != null) {
 		    TagImages tagImages = configuration.getTagImages();
@@ -1841,16 +1842,15 @@ public class MainGUI extends JFrame {
 
 			boolean automaticallyRemoveNonExistingImagePath = tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath();
 
-		    for (Object repositoryPath : repositoryPaths) {
+		    for (File repositoryPath : repositoryPaths.getPaths()) {
 				ImageRepositoryItem iri = new ImageRepositoryItem();
-				File directory = (File)repositoryPath;
 
-				iri.setPathStatus(DirectoryUtil.getStatus(directory));
-				iri.setPath(directory);
+				iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
+				iri.setPath(repositoryPath);
 
 				switch (iri.getPathStatus()) {
 				case EXISTS:
-					File imageMetaDataDataBaseFile = new File(directory, C.JAVAPEG_IMAGE_META_NAME);
+					File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 					if (imageMetaDataDataBaseFile.exists()) {
 						ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);
 						imageRepositoryListModel.add(iri);
@@ -1933,10 +1933,6 @@ public class MainGUI extends JFrame {
 		Config.getInstance().save();
 	}
 
-	private void saveImageRepository() {
-	    ImageRepositoryUtil.getInstance().store();
-	}
-
 	private void addThumbnail(JButton thumbNail) {
 		thumbNailsPanel.add(thumbNail);
 	}
@@ -1976,7 +1972,6 @@ public class MainGUI extends JFrame {
 	private void closeApplication(int exitValue) {
 		if(exitValue == 0) {
 			saveSettings();
-			saveImageRepository();
 			storeCurrentlySelectedImageData();
 			flushImageMetaDataBaseToDisk();
 		}
@@ -2472,18 +2467,20 @@ public class MainGUI extends JFrame {
 
 		        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
 
+		            RepositoryExceptions repositoryExceptions = Config.getInstance().get().getRepository().getExceptions();
+
 		            boolean isParent = false;
 		            boolean allwaysAdd = false;
 
-		            for (Object addAutomatically : ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().getModel()) {
-		                if (selectedPath.getAbsolutePath().equals(((File)addAutomatically).getAbsolutePath())) {
+		            for (File addAutomatically : repositoryExceptions.getAllwaysAdd()) {
+		                if (selectedPath.getAbsolutePath().equals((addAutomatically).getAbsolutePath())) {
 		                    allwaysAdd = true;
 		                    break;
 		                } else {
-		                    if (PathUtil.isChild(selectedPath, (File)addAutomatically)) {
+		                    if (PathUtil.isChild(selectedPath, addAutomatically)) {
 	                            allwaysAdd = true;
 	                            break;
-	                        } else if (PathUtil.isParent(selectedPath, (File)addAutomatically)) {
+	                        } else if (PathUtil.isParent(selectedPath, addAutomatically)) {
                                 isParent = true;
                                 break;
                             }
@@ -2492,15 +2489,15 @@ public class MainGUI extends JFrame {
 
 		            boolean neverAdd = false;
 
-		            for (Object doNotAddAutomatically : ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().getModel()) {
-		                if (selectedPath.getAbsolutePath().equals(((File)doNotAddAutomatically).getAbsolutePath())) {
+		            for (File doNotAddAutomatically : repositoryExceptions.getNeverAdd()) {
+		                if (selectedPath.getAbsolutePath().equals((doNotAddAutomatically).getAbsolutePath())) {
 		                    neverAdd = true;
                             break;
                         } else {
-		                    if (PathUtil.isChild(selectedPath, (File)doNotAddAutomatically)) {
+		                    if (PathUtil.isChild(selectedPath, doNotAddAutomatically)) {
                                 neverAdd = true;
                                 break;
-                            } else if (PathUtil.isParent(selectedPath, (File)doNotAddAutomatically)) {
+                            } else if (PathUtil.isParent(selectedPath, doNotAddAutomatically)) {
                                 isParent = true;
                                 break;
                             }
@@ -3296,8 +3293,6 @@ public class MainGUI extends JFrame {
 					} else {
 						TreeUtil.insertNodeInAlphabeticalOrder(newCategory, selectedNode, model);
 					}
-					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
-					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
 				}
 			}
 		}
@@ -3329,9 +3324,6 @@ public class MainGUI extends JFrame {
 					DefaultMutableTreeNode parent = (DefaultMutableTreeNode)nodeToRename.getParent();
 
 					TreeUtil.sortNodesAlphabetically(parent, model);
-
-					File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
-					CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
 				}
 			}
 		}
@@ -3364,9 +3356,6 @@ public class MainGUI extends JFrame {
 			}
 			if (result == 0) {
 				model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
-
-				File categoriesFile = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml");
-				CategoryUtil.store(categoriesFile, (DefaultMutableTreeNode)model.getRoot());
 			}
 		}
 	}
@@ -3651,15 +3640,15 @@ public class MainGUI extends JFrame {
 
 	private class AddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().add(new File(e.getActionCommand()));
+        public void actionPerformed(ActionEvent ae) {
+            Config.getInstance().get().getRepository().getExceptions().getAllwaysAdd().add(new File(ae.getActionCommand()));
         }
     }
 
 	private class AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().add(new File(e.getActionCommand()));
+        public void actionPerformed(ActionEvent ae) {
+            Config.getInstance().get().getRepository().getExceptions().getNeverAdd().add(new File(ae.getActionCommand()));
         }
     }
 
