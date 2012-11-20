@@ -55,12 +55,10 @@
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
 				<include name="**/repository.xsd" />
-				<include name="**/categories.xml" />
 				<include name="**/conf.xml" />
 				<include name="**/help.info" />
 				<include name="**/language.info" />
 				<include name="**/layout.info" />
-				<include name="**/repository.xml" />
 				<include name="**/style.info" />
 				<include name="**/configuration_language" />
 				<include name="**/configuration_logging" />

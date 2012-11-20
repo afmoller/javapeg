@@ -1,12 +1,5 @@
 package moller.javapeg.program.model;
 
-import java.io.File;
-
-import moller.javapeg.program.C;
-import moller.javapeg.program.categories.CategoryUtil;
-import moller.javapeg.program.imagerepository.ImageRepository;
-import moller.javapeg.program.imagerepository.ImageRepositoryUtil;
-
 public class ModelInstanceLibrary {
 
 	/**
@@ -17,11 +10,7 @@ public class ModelInstanceLibrary {
 	private final MetaDataTableModel metaDataTableModel;
 	private final PreviewTableModel  previewTableModel;
 	private final SortedListModel    imageRepositoryListModel;
-	private final SortedListModel    imageRepositoryPaths;
-	private final SortedListModel    addDirectoriesAutomaticallyModel;
-	private final SortedListModel    doNotAddDirectoriesAutomaticallyModel;
 	private final ImagesToViewModel  imagesToViewModel;
-	private CategoriesModel          categoriesModel = null;
 
 	/**
 	 * Private constructor.
@@ -31,12 +20,6 @@ public class ModelInstanceLibrary {
 		previewTableModel                     = new PreviewTableModel();
 		imagesToViewModel                     = new ImagesToViewModel();
 		imageRepositoryListModel              = new SortedListModel();
-
-		ImageRepository ir = ImageRepositoryUtil.getInstance().createImageRepositoryModel();
-
-		addDirectoriesAutomaticallyModel      = new SortedListModel(ir.getAllwaysAdd());
-	    doNotAddDirectoriesAutomaticallyModel = new SortedListModel(ir.getNeverAdd());
-	    imageRepositoryPaths                  = new SortedListModel(ir.getPaths());
 	}
 
 	/**
@@ -70,23 +53,4 @@ public class ModelInstanceLibrary {
 	public ImagesToViewModel getImagesToViewModel() {
 		return imagesToViewModel;
 	}
-
-	public CategoriesModel getCategoriesModel() {
-		if (null == categoriesModel) {
-			categoriesModel = new CategoriesModel(CategoryUtil.createCategoriesModel(new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS +  "categories.xml")));
-		}
-		return categoriesModel;
-	}
-
-	public SortedListModel getAddDirectoriesAutomaticallyModel() {
-	    return addDirectoriesAutomaticallyModel;
-    }
-
-	public SortedListModel getDoNotAddDirectoriesAutomaticallyModel() {
-	    return doNotAddDirectoriesAutomaticallyModel;
-    }
-
-	public SortedListModel getImageRepositoryPaths() {
-        return imageRepositoryPaths;
-    }
 }

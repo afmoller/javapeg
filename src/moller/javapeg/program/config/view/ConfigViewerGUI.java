@@ -67,6 +67,7 @@ import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
+import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
@@ -782,13 +783,15 @@ public class ConfigViewerGUI extends JFrame {
 			doNotAddRadioButton.setSelected(true);
 		}
 
-		imageRepositoriesAllwaysAddList = new JList<Object>(ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel());
+		RepositoryExceptions repositoryExceptions = configuration.getRepository().getExceptions();
+
+		imageRepositoriesAllwaysAddList = new JList<Object>(repositoryExceptions.getAllwaysAdd().toArray());
 		imageRepositoriesAllwaysAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         JScrollPane imageRepositoriesAllwaysAddScrollPane = new JScrollPane(imageRepositoriesAllwaysAddList);
         imageRepositoriesAllwaysAddScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        imageRepositoriesNeverAddList = new JList<Object>(ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel());
+        imageRepositoriesNeverAddList = new JList<Object>(repositoryExceptions.getNeverAdd().toArray());
         imageRepositoriesNeverAddList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         JScrollPane imageRepositoriesNeverAddScrollPane = new JScrollPane(imageRepositoriesNeverAddList);
@@ -1609,17 +1612,19 @@ public class ConfigViewerGUI extends JFrame {
 	private class RemoveExceptionPathsListener implements ActionListener {
         @Override
 	    public void actionPerformed(ActionEvent e) {
+            RepositoryExceptions repositoryExceptions = Config.getInstance().get().getRepository().getExceptions();
+
             if (((JButton)e.getSource()).getName().equals("AllwaysAddImagePaths")) {
                 if (!imageRepositoriesAllwaysAddList.isSelectionEmpty()) {
                     for (Object selectedValue : imageRepositoriesAllwaysAddList.getSelectedValuesList()) {
-                        ModelInstanceLibrary.getInstance().getAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
+                        repositoryExceptions.getAllwaysAdd().remove(selectedValue);
                     }
                     imageRepositoriesAllwaysAddList.clearSelection();
                 }
             } else {
                 if (!imageRepositoriesNeverAddList.isSelectionEmpty()) {
                     for (Object selectedValue : imageRepositoriesNeverAddList.getSelectedValuesList()) {
-                        ModelInstanceLibrary.getInstance().getDoNotAddDirectoriesAutomaticallyModel().removeElement(selectedValue);
+                        repositoryExceptions.getNeverAdd().remove(selectedValue);
                     }
                     imageRepositoriesNeverAddList.clearSelection();
                 }

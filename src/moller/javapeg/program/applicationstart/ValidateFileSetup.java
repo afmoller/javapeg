@@ -16,8 +16,6 @@ public class ValidateFileSetup {
 
 		File logDirectory   = new File(javaPEGuserHome, "logs");
 		File configFile     = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
-		File categoriesFile = new File(javaPEGuserHome, "config" + C.FS + "categories.xml");
-		File repositoryFile = new File(javaPEGuserHome, "config" + C.FS + "repository.xml");
 		File helpInfo       = new File(javaPEGuserHome, "resources" + C.FS + "help" + C.FS + "help.info");
 		File languageInfo   = new File(javaPEGuserHome, "resources" + C.FS + "lang" + C.FS + "language.info");
 		File layoutInfo     = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
@@ -25,8 +23,6 @@ public class ValidateFileSetup {
 
 		checkFileObject(logDirectory);
 		checkFileObject(configFile);
-		checkFileObject(categoriesFile);
-		checkFileObject(repositoryFile);
 		checkFileObject(helpInfo);
 		checkFileObject(languageInfo);
 		checkFileObject(layoutInfo);

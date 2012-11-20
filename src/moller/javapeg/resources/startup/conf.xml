@@ -1,70 +1,118 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties>
-<entry key="javapeg.client.id">NOT-DEFINED</entry>
-<entry key="languageOption.window.location.x">10</entry>
-<entry key="languageOption.window.location.y">10</entry>
-<entry key="helpViewerGUI.window.location.x">10</entry>
-<entry key="helpViewerGUI.window.location.y">10</entry>
-<entry key="helpViewerGUI.window.width">800</entry>
-<entry key="helpViewerGUI.window.height">600</entry>
-<entry key="logger.log.level">ERROR</entry>
-<entry key="logger.developerMode">false</entry>
-<entry key="automaticLanguageSelection">false</entry>
-<entry key="logger.log.entry.timestamp.format">yyyy-MM-dd'T'HH:mm:ss:SSS</entry>
-<entry key="createThumbNailsCheckBox">true</entry>
-<entry key="destinationPath"></entry>
-<entry key="sourcePath"></entry>
-<entry key="subFolderName">Images %d%</entry>
-<entry key="fileNameTemplate">Image %d% Time %t%</entry>
-<entry key="rename.progress.log.timestamp.format">yyyy-MM-dd' 'HH:mm:ss:SSS</entry>
-<entry key="rename.use.lastmodified.date">true</entry>
-<entry key="rename.use.lastmodified.time">true</entry>
-<entry key="rename.maximum.length.camera-model">0</entry>
-<entry key="logger.log.rotate">true</entry>
-<entry key="logger.log.rotate.size">1048576</entry>
-<entry key="logger.log.rotate.zip">true</entry>
-<entry key="logger.log.name">javapeg.log</entry>
-<entry key="mainGUI.window.location.x">10</entry>
-<entry key="mainGUI.window.location.y">10</entry>
-<entry key="mainGUI.window.width">1024</entry>
-<entry key="mainGUI.window.height">768</entry>
-<entry key="gUILanguageISO6391">en</entry>
-<entry key="updatechecker.enabled">true</entry>
-<entry key="updatechecker.attachVersionInformation">true</entry>
-<entry key="updatechecker.timeout">60</entry>
-<entry key="updatechecker.url.version">http://javapeg.sourceforge.net/PAGES/updates/version.php</entry>
-<entry key="updatechecker.url.changelog">http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</entry>
-<entry key="mainSplitPane.location">200</entry>
-<entry key="verticalSplitPane.location">300</entry>
-<entry key="thumbNailMetaDataPanelSplitPane.location">600</entry>
-<entry key="configViewerGUI.window.width">800</entry>
-<entry key="configViewerGUI.window.height">600</entry>
-<entry key="configViewerGUI.window.location.x">10</entry>
-<entry key="configViewerGUI.window.location.y">10</entry>
-<entry key="imageViewerGUI.window.location.y">10</entry>
-<entry key="imageViewerGUI.window.location.x">10</entry>
-<entry key="imageViewerGUI.window.width">1024</entry>
-<entry key="imageViewerGUI.window.height">768</entry>
-<entry key="imageViewerGUI.splitpane.width.image-metadata">10</entry>
-<entry key="imageViewerGUI.splitpane.location.image-metadata">600</entry>
-<entry key="imageSearchResultViewerGUI.window.location.y">10</entry>
-<entry key="imageSearchResultViewerGUI.window.location.x">10</entry>
-<entry key="imageSearchResultViewerGUI.window.width">1024</entry>
-<entry key="imageSearchResultViewerGUI.window.height">768</entry>
-<entry key="thumbnails.view.create-if-missing-or-corrupt">true</entry>
-<entry key="thumbnails.view.create.algorithm">SMOOTH</entry>
-<entry key="thumbnails.view.width">160</entry>
-<entry key="thumbnails.view.height">120</entry>
-<entry key="thumbnails.cache.enabled">true</entry>
-<entry key="thumbnails.cache.max-size">512</entry>
-<entry key="thumbnails.tooltip.state">enabled</entry>
-<entry key="previewAndCommentSplitPane.location">300</entry>
-<entry key="tab.tagImage.previewImage.useEmbeddedThumbnail">false</entry>
-<entry key="previewCommentCategoriesRatingSplitpane.location">500</entry>
-<entry key="categories.warnWhenRemoveCategory">true</entry>
-<entry key="categories.warnWhenRemoveCategoryWithSubCategories">true</entry>
-<entry key="categories.orRadioButtonIsSelected">true</entry>
-<entry key="imageRepository.automaticallyRemoveNonExistingImagePaths">false</entry>
-<entry key="imageRepository.addToRepositoryPolicy">1</entry>
-</properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--The content of this file, application configuration, is used and modified by the
+application JavaPEG and should not be edited manually, since any change might be
+overwritten by the JavaPEG application or corrupt the file if the change is invalid
+-->
+<config xmlns="http://moller.javapeg.config.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://moller.javapeg.config.com config.xsd">
+  <logging>
+    <developerMode>false</developerMode>
+    <fileName>javapeg.log</fileName>
+    <level>INFO</level>
+    <rotate>true</rotate>
+    <rotateSize>1048576</rotateSize>
+    <rotateZip>true</rotateZip>
+    <timestampFormat>yyyy-MM-dd'T'HH:mm:ss:SSSZ</timestampFormat>
+  </logging>
+  <javapegClientId>NOT-DEFINED</javapegClientId>
+  <gui>
+    <main>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>1200</width>
+      <height>768</height>
+      <splitPane id="main">120</splitPane>
+      <splitPane id="vertical">300</splitPane>
+      <splitPane id="thumbNailMetaDataPanel">640</splitPane>
+      <splitPane id="previewAndComment">160</splitPane>
+      <splitPane id="previewCommentCategoriesRating">400</splitPane>
+    </main>
+    <imageViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>1024</width>
+      <height>768</height>
+      <splitPane id="imageMetaData" width="10">500</splitPane>
+    </imageViewer>
+    <imageSearchResultViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>1024</width>
+      <height>768</height>
+    </imageSearchResultViewer>
+    <configViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>800</width>
+      <height>600</height>
+    </configViewer>
+    <helpViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>800</width>
+      <height>600</height>
+    </helpViewer>
+  </gui>
+  <updatesChecker>
+    <enabled>true</enabled>
+    <attachVersionInformation>true</attachVersionInformation>
+    <timeout>60</timeout>
+    <urlVersion>http://javapeg.sourceforge.net/PAGES/updates/version.php</urlVersion>
+    <urlVersionInformation>http://javapeg.sourceforge.net/PAGES/updates/versionInformation.php</urlVersionInformation>
+  </updatesChecker>
+  <language>
+    <automaticSelection>false</automaticSelection>
+    <gUILanguageISO6391>en</gUILanguageISO6391>
+  </language>
+  <renameImages>
+    <pathSource/>
+    <pathDestination/>
+    <templateSubDirectoryName>Images %d%</templateSubDirectoryName>
+    <templateFileName>Image %d% Time %t%</templateFileName>
+    <createThumbNails>true</createThumbNails>
+    <useLastModifiedDate>true</useLastModifiedDate>
+    <useLastModifiedTime>true</useLastModifiedTime>
+    <cameraModelNameMaximumLength>0</cameraModelNameMaximumLength>
+    <progressLogTimestampFormat>yyyy-MM-dd' 'HH:mm:ss:SSS</progressLogTimestampFormat>
+  </renameImages>
+  <tagImages>
+    <categories>
+      <warnWhenRemove>true</warnWhenRemove>
+      <warnWhenRemoveWithSubCategories>true</warnWhenRemoveWithSubCategories>
+      <orRadioButtonIsSelected>true</orRadioButtonIsSelected>
+    </categories>
+    <paths>
+      <automaticallyRemoveNonExistingImagePath>false</automaticallyRemoveNonExistingImagePath>
+      <addToRepositoryPolicy>2</addToRepositoryPolicy>
+    </paths>
+    <preview>
+      <useEmbeddedThumbnail>true</useEmbeddedThumbnail>
+    </preview>
+  </tagImages>
+  <thumbNail>
+    <cache>
+      <enabled>true</enabled>
+      <maxSize>512</maxSize>
+    </cache>
+    <creation>
+      <ifMissingOrCorrupt>true</ifMissingOrCorrupt>
+      <algorithm>SMOOTH</algorithm>
+      <width>160</width>
+      <height>120</height>
+    </creation>
+  </thumbNail>
+  <toolTips>
+    <state>2</state>
+  </toolTips>
+  <categories highest-used-id="0">
+  </categories>
+  <importedcategories>
+  </importedcategories>
+  <repository>
+    <paths>
+    </paths>
+    <exceptions>
+      <allwaysAdd/>
+      <neverAdd/>
+    </exceptions>
+  </repository>
+</config>

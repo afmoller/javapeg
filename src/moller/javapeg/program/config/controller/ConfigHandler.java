@@ -7,17 +7,23 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JOptionPane;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.controller.section.GUIConfig;
@@ -43,6 +49,7 @@ import moller.util.xml.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class ConfigHandler {
 
@@ -182,5 +189,33 @@ public class ConfigHandler {
 
     private static void displayErrorMessage(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+//    TODO: Create config file schema validation
+    private boolean validateAgainstSchema(File repositoryFile, String repositorySchemaLocation) {
+        Logger logger = Logger.getInstance();
+
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+            StreamSource repositorySchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(repositorySchemaLocation));
+            Schema schema = factory.newSchema(repositorySchema);
+
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(repositoryFile));
+            return true;
+        } catch (SAXParseException spex) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(spex);
+            return false;
+        } catch (SAXException sex) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(sex);
+            return false;
+        } catch (IOException iox) {
+            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
+            logger.logERROR(iox);
+            return false;
+        }
     }
 }
