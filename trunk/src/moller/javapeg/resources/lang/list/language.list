@@ -3,9 +3,5 @@
 # entry with the name of the new language file and a description must be added
 # to the listing below.
 
-# This file was created : 2009-03-24 by Fredrik Möller
-# Latest changed        : 2009-07-26 by Fredrik Möller, Spanish language file was added (Created by Angel Bueno)
-#                       : 2011-05-02 by Fredrik Möller, Spanish language file was removed.
-
 language.en = The application embedded language file for English
 language.sv = The application embedded language file for Swedish

@@ -1,10 +1,8 @@
 package moller.javapeg.program.language;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -12,10 +10,12 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
+import moller.util.java.SystemProperties;
 
 public class Language {
 
@@ -23,17 +23,6 @@ public class Language {
 	 * The static singleton instance of this class.
 	 */
 	private static Language instance;
-
-	/**
-	 * The system dependent file separator char
-	 */
-	private final static String FS = File.separator;
-
-	/**
-	 * The base path to the language files including the common "language" part
-	 * of the file name.
-	 */
-	private final static String LANGUAGE_FILE_BASE = System.getProperty("user.dir") + FS + "resources" + FS + "lang";
 
 	/**
 	 * The data structure containing all the key value pairs for the selected
@@ -86,92 +75,72 @@ public class Language {
 
 		Config conf = Config.getInstance();
 
-		InputStream langFileJavaPEG         = null;
-		InputStream langFileImageViewer     = null;
-		InputStream langFileCommon          = null;
-		InputStream langFileConfigViewer    = null;
-		InputStream langFileCategory        = null;
-		InputStream langFileImageRepository = null;
+		InputStreamReader langFileJavaPEG         = null;
+		InputStreamReader langFileImageViewer     = null;
+		InputStreamReader langFileCommon          = null;
+		InputStreamReader langFileConfigViewer    = null;
+		InputStreamReader langFileCategory        = null;
+		InputStreamReader langFileImageRepository = null;
 
 		try {
-
-		    String languageToLoad = "";
 			String languageCode = "";
 
 			moller.javapeg.program.config.model.Language language = conf.get().getLanguage();
 
 			if (language.getAutomaticSelection()) {
-				languageCode   = System.getProperty("user.language");
-				languageToLoad = "language." + languageCode;
+				languageCode = SystemProperties.getUserLanguage();
 			} else {
-				languageCode   = language.getgUILanguageISO6391();
-				languageToLoad = "language." + languageCode;
+				languageCode = language.getgUILanguageISO6391();
 			}
 
-			boolean embeddedFileLoad = false;
-
-			try {
-				langFileJavaPEG = new FileInputStream(LANGUAGE_FILE_BASE + FS + languageToLoad);
-				logger.logDEBUG("Language file: \"" + languageToLoad + "\" found in directroy: " + LANGUAGE_FILE_BASE);
-			} catch (FileNotFoundException fnfe1) {
-				logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in directroy: " + LANGUAGE_FILE_BASE);
-				logger.logDEBUG("Try to load language file: " + languageToLoad + " from JAR file instead");
-
-				embeddedFileLoad = true;
-
-				langFileJavaPEG         = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."         + languageCode);
-				langFileImageViewer     = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer."     + languageCode);
-				langFileCommon          = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common."          + languageCode);
-				langFileConfigViewer    = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer."    + languageCode);
-				langFileCategory        = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/category."        + languageCode);
-				langFileImageRepository = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imagerepository." + languageCode);
-
-				if(langFileJavaPEG == null) {
-					logger.logDEBUG("Could not find Language file: \"" + languageToLoad + "\" in JAR file either.");
-					try {
-						logger.logDEBUG("Try to load default language file: language.en  from directory: " +  LANGUAGE_FILE_BASE);
-						langFileJavaPEG = new FileInputStream(LANGUAGE_FILE_BASE + FS + "language.en");
-					} catch (FileNotFoundException fnfe2) {
-						logger.logDEBUG("Could not find language file: \"language.en\" in directroy: " + LANGUAGE_FILE_BASE);
-						logger.logDEBUG("Try to load language file: \"language.en\" from JAR file instead");
-						langFileJavaPEG = StartJavaPEG.class.getResourceAsStream("resources/lang/languages/language.en");
-					}
-				}
+			/**
+			 * If the assigned language code does not exist, then fall back to
+			 * English.
+			 */
+			if (StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg." + languageCode) == null) {
+			    languageCode = "en";
 			}
+
+			langFileJavaPEG         = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/javapeg."         + languageCode), C.UTF8);
+			langFileImageViewer     = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imageviewer."     + languageCode), C.UTF8) ;
+			langFileCommon          = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/common."          + languageCode), C.UTF8);
+			langFileConfigViewer    = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/configviewer."    + languageCode), C.UTF8);
+			langFileCategory        = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/category."        + languageCode), C.UTF8);
+			langFileImageRepository = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/imagerepository." + languageCode), C.UTF8);
 
 			Properties loader = new Properties();
 			loader.load(langFileJavaPEG);
 
 			properties.putAll(loader);
 
-			if(embeddedFileLoad) {
-				loader.clear();
-				loader.load(langFileImageViewer);
+			loader.clear();
+			loader.load(langFileImageViewer);
 
-				properties.putAll(loader);
+			properties.putAll(loader);
 
-				loader.clear();
-				loader.load(langFileCommon);
+			loader.clear();
+			loader.load(langFileCommon);
 
-				properties.putAll(loader);
+			properties.putAll(loader);
 
-				loader.clear();
-				loader.load(langFileConfigViewer);
+			loader.clear();
+			loader.load(langFileConfigViewer);
 
-				properties.putAll(loader);
+			properties.putAll(loader);
 
-				loader.clear();
-				loader.load(langFileCategory);
+			loader.clear();
+			loader.load(langFileCategory);
 
-				properties.putAll(loader);
+			properties.putAll(loader);
 
-				loader.clear();
-                loader.load(langFileImageRepository);
+			loader.clear();
+			loader.load(langFileImageRepository);
 
-                properties.putAll(loader);
-			}
+			properties.putAll(loader);
 
 			loader = null;
+
+			return true;
         } catch (IOException e) {
 			logger.logFATAL("No language file found");
 			for(StackTraceElement element : e.getStackTrace()) {
@@ -186,7 +155,6 @@ public class Language {
             StreamUtil.close(langFileCategory, true);
             StreamUtil.close(langFileImageRepository, true);
         }
-        return true;
 	}
 
 	/**
