@@ -9,9 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,6 +25,7 @@ import javax.swing.WindowConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
@@ -54,17 +52,6 @@ public class HelpViewerGUI extends JFrame {
 	private final Language lang;
 
 	private String content = "";
-
-	/**
-	 * The system dependent file separator char
-	 */
-	private final static String FS = File.separator;
-
-	/**
-	 * The base path to the language files including the common "language" part
-	 * of the file name.
-	 */
-	private final static String HELP_FILE_BASE = System.getProperty("user.dir") + FS + "resources" + FS + "help";
 
 	public HelpViewerGUI() {
 		configuration = Config.getInstance().get();
@@ -174,31 +161,11 @@ public class HelpViewerGUI extends JFrame {
 			InputStream helpFile = null;
 
 			try {
-				helpFile = new FileInputStream(HELP_FILE_BASE + FS + confLang + FS + identityString);
-				content = StreamUtil.getString(helpFile);
-			} catch (IOException e) {
-				logger.logDEBUG("Could not find help file: \"" + identityString + "\" in directroy: " + HELP_FILE_BASE + FS + confLang + FS);
-				logger.logDEBUG("Try to load help file: " + identityString + " from JAR file instead");
-
-				helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
-
-				if(helpFile == null) {
-					logger.logDEBUG("Could not find help file: \"" + identityString + "\" in JAR file either.");
-					try {
-						logger.logDEBUG("Try to load default help file: " + identityString + " from directory: " + HELP_FILE_BASE + FS + confLang + FS);
-						helpFile = new FileInputStream(HELP_FILE_BASE + FS + "en" + FS + identityString);
-					} catch (FileNotFoundException fnfe2) {
-						logger.logDEBUG("Could not find help file: \"" + identityString + "\" in directroy: " + HELP_FILE_BASE + FS + "en" + FS);
-						logger.logDEBUG("Try to load help file: \"" + identityString + "\" from JAR file instead");
-						helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/en/" + identityString);
-					}
-				}
-				try {
-					content = StreamUtil.getString(helpFile);
-				} catch (IOException iox) {
-					logger.logFATAL("Could not read content from helpfile");
-					logger.logFATAL(iox);
-				}
+			    helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
+			    content = StreamUtil.getString(helpFile, C.UTF8);
+			} catch (IOException iox) {
+			    logger.logFATAL("Could not read content from helpfile");
+			    logger.logFATAL(iox);
 			}
 		}
 

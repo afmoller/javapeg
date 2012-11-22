@@ -24,7 +24,7 @@
  + An image tagging functionality has been implemented. It is possible to tag
    an image with an unlimited amount of categories, set an image rating between
    1 and 5 and to enter a comment. This meta data and additional image specific
-   data, such as ISO rating, exposure data and time, shutterspeed... is 
+   data, such as ISO rating, exposure data and time, shutterspeed,... is 
    persistently stored in xml files.
       
  + A search engine that searches in an in memory database compiled by all 
@@ -79,6 +79,9 @@
  ! If the keyboard was used to change image in the Image Viewer and the change
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in the version.  
+   
+ ~ The possibility to override the application embedded language and help files
+   has been removed.  
    
  ~ The progress bar displayed when loading images has been changed from being a
    separate window to be integrated in the thumbnail display area. 

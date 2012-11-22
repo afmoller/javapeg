@@ -39,4 +39,6 @@ public class C {
 	public final static String META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP = "\\s\\|\\|\\s";
 
 	public final static String ICONFILEPATH_IMAGEVIEWER = "resources/images/imageviewer/";
+
+	public final static String UTF8 = "UTF-8";
 }

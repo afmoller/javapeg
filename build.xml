@@ -56,8 +56,6 @@
 				<include name="**/style.css" />
 				<include name="**/repository.xsd" />
 				<include name="**/conf.xml" />
-				<include name="**/help.info" />
-				<include name="**/language.info" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
 				<include name="**/configuration_language" />
