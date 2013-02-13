@@ -52,7 +52,7 @@ configviewer.language.label.selectionMode        = Språkvalsmetod
 configviewer.language.radiobutton.manual         = Manuellt
 configviewer.language.radiobutton.automatic      = Automatiskt
 configviewer.language.label.currentLanguage      = Aktuellt Språk
-configviewer.language.label.availableLanguages   = Tillg�ngliga Språk
+configviewer.language.label.availableLanguages   = Tillgängliga Språk
 configviewer.language.languageNameNotFound       = namn på språk ej funnet
 configviewer.language.information.windowlabel    = Information
 
