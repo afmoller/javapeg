@@ -71,7 +71,6 @@
     <!-- The resources needed by the various panels -->
     <resources>
         <res src="text/install_readme_eng"  id="InfoPanel.info_eng"/>
-        <res src="text/install_readme_spa"  id="InfoPanel.info_spa"/>
         <res src="text/install_readme_swe"  id="InfoPanel.info_swe"/>
         <res src="text/install_license.txt" id="LicencePanel.licence"/>
         
