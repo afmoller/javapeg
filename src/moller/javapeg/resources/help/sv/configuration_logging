@@ -1,23 +1,23 @@
 Obuffrad Loggning:<LF>
-All loggning skrivs direkt ner till loggiflen utan att buffras i minnet. Är användbart vid felsökning.<LF>
+All loggning skrivs direkt ner till loggiflen utan att buffras i minnet. Ã¤r anvÃ¤ndbart vid felsÃ¶kning.<LF>
 <LF>
 Rotera Loggen Automatiskt:<LF>
-Betyder att loggfilen kommer att roteras, det vill säga att nuvarande fil kommer att stängas och en ny kommer att skapas automatiskt.<LF>
+Betyder att loggfilen kommer att roteras, det vill sÃ¤ga att nuvarande fil kommer att stÃ¤ngas och en ny kommer att skapas automatiskt.<LF>
 <LF>
 Komprimera Roterad Loggfil:<LF>
-När en loggfil roteras kan denna komprimeras för att spara utrymme. Komprimeringsformatet som används är ZIP.<LF>
+NÃ¤r en loggfil roteras kan denna komprimeras fÃ¶r att spara utrymme. Komprimeringsformatet som anvÃ¤nds Ã¤r ZIP.<LF>
 <LF>
 Loggroteringsstorlek:<LF>
-Här anges vid vilken storlek som loggfilen roteras. Storleken anges i KiB eller MiB, minsta storlek är 10 KiB och största storlek är 100 MiB.<LF>
+HÃ¤r anges vid vilken storlek som loggfilen roteras. Storleken anges i KiB eller MiB, minsta storlek Ã¤r 10 KiB och stÃ¶rsta storlek Ã¤r 100 MiB.<LF>
 <LF>
-Loggningsnivå:<LF>
-Specificerar hur detaljerad loggning som sker. Valbara alternativ är DEBUG, INFO, WARN, ERROR och FATAL. DEBUG innebär mest detaljerad loggning och FATAL minst detaljerad.<LF>
+LoggningsnivÃ¥:<LF>
+Specificerar hur detaljerad loggning som sker. Valbara alternativ Ã¤r DEBUG, INFO, WARN, ERROR och FATAL. DEBUG innebÃ¤r mest detaljerad loggning och FATAL minst detaljerad.<LF>
 <LF>
 Loggnamn:<LF>
 Anger det namn som loggfilen kommer att ha.<LF>
 <LF>
-Tidsstämpelsformat för loggfilsnotering:<LF>
-Specificerar hur tidsstämpeln i loggfilen kommer att se ut.<LF>
+TidsstÃ¤mpelsformat fÃ¶r loggfilsnotering:<LF>
+Specificerar hur tidsstÃ¤mpeln i loggfilen kommer att se ut.<LF>
 <LF>
-Förhandsgranskning av tidsstämpel för loggfilsnotering:<LF>
-Visar en förhandsgranskning av hur en tidsstämpel för en loggfilsnotering kommer att se ut i loggfilen.
+FÃ¶rhandsgranskning av tidsstÃ¤mpel fÃ¶r loggfilsnotering:<LF>
+Visar en fÃ¶rhandsgranskning av hur en tidsstÃ¤mpel fÃ¶r en loggfilsnotering kommer att se ut i loggfilen.

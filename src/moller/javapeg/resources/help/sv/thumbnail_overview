@@ -1,9 +1,9 @@
-SKAPA TUMNAGELÖVERSIKT<LF>
+SKAPA TUMNAGELÃ–VERSIKT<LF>
 ======================<LF>
-JavaPEG kan skapa en tumnagelöversikt i form av ett HTML-dokument som visar tumnagelversioner av de bilder som döpts om. Varje tumnagel länkar vidare till den fullstora bilden. Syftet med denna översikt är att snabbt ge en överblick om vilka bilder som finns i en katalog med bilder.
+JavaPEG kan skapa en tumnagelÃ¶versikt i form av ett HTML-dokument som visar tumnagelversioner av de bilder som dÃ¶pts om. Varje tumnagel lÃ¤nkar vidare till den fullstora bilden. Syftet med denna Ã¶versikt Ã¤r att snabbt ge en Ã¶verblick om vilka bilder som finns i en katalog med bilder.
 <LF>
 <LF>
-Utseendet på tumnagelöversikten går att förändra genom att skapa en layout.xml fil och / eller style.css fil. Hur innehållet i dessa filer skall se ut finns beskrivet i följande två filer: layout.info och style.info. Dessa finns lagrade på följande plats: <installationskatalog för JavaPEG>/resources/thumb/
+Utseendet pÃ¥ tumnagelÃ¶versikten gÃ¥r att fÃ¶rÃ¤ndra genom att skapa en layout.xml fil och / eller style.css fil. Hur innehÃ¥llet i dessa filer skall se ut finns beskrivet i fÃ¶ljande tvÃ¥ filer: layout.info och style.info. Dessa finns lagrade pÃ¥ fÃ¶ljande plats: <installationskatalog fÃ¶r JavaPEG>/resources/thumb/
 <LF>
 <LF>
-Det är inte tvunget att skapa båda filerna, utan det går bra att skapa bara den ena av dem. Filen / filerna skall skapas på samma plats som info-filerna finns. 
+Det Ã¤r inte tvunget att skapa bÃ¥da filerna, utan det gÃ¥r bra att skapa bara den ena av dem. Filen / filerna skall skapas pÃ¥ samma plats som info-filerna finns. 
