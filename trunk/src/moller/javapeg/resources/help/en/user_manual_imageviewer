@@ -19,7 +19,7 @@ The thumbnail list to the left and the meta data panel to the right are possible
 There is support for following activities in the Image Viewer:
 <LF>
 <LF>
-* Navigation forward and backwards in the list of images, either with button in the button list, or by right-clicking the actual image or by using keyboard accelerators.
+* Navigation forward and backwards in the list of images, either with button in the button list, or by right-clicking the actual image or by using keyboard accelerators or with the left or right arrow keys.
 <LF>
 <LF>
 * Navigation to any image in the list by clicking it in the thumbnail overview to the left.
@@ -29,3 +29,12 @@ There is support for following activities in the Image Viewer:
 <LF>
 <LF>
 * Automatically adjust the size of the displayed image to fit the available size of the image display area when an image is selected.
+<LF>
+<LF>
+* Automatically rotate the displayed image according to the embedded Exif information.
+<LF>
+<LF>
+* Rotate the displayed image 90 degrees clockwise.
+<LF>
+<LF>
+* Rotate the displayed image 90 degrees counterclockwise.
