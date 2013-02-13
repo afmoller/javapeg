@@ -121,6 +121,8 @@ public class ImageViewer extends JFrame {
 
 	private OverviewButtonListener overviewButtonListener;
 
+	private final Toolkit toolkit;
+
 	public ImageViewer(List<File> imagesToView) {
 
 		configuration = Config.getInstance().get();
@@ -131,6 +133,8 @@ public class ImageViewer extends JFrame {
 
 		imageToViewListIndex = 0;
 		imagesToViewListSize = imagesToView.size();
+
+		toolkit = Toolkit.getDefaultToolkit();
 
 		this.createMainFrame();
 		this.createToolBar();
@@ -173,10 +177,8 @@ public class ImageViewer extends JFrame {
 
 		InputStream imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Open16.gif");
 
-		ImageIcon image = new ImageIcon();
 		try {
-			image.setImage(ImageIO.read(imageStream));
-			this.setIconImage(image.getImage());
+		    this.setIconImage(ImageIO.read(imageStream));
 		} catch (IOException e) {
 			logger.logERROR("Could not load icon: Open16.gif");
 			logger.logERROR(e);
@@ -448,8 +450,8 @@ public class ImageViewer extends JFrame {
 
 		List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
 
-		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_VIEWER, imageMetaDataSplitPane.getDividerLocation());
-		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_VIEWER, imageMetaDataSplitPane.getDividerSize());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerLocation());
+		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerSize());
 	}
 
 	private void removeCustomKeyEventDispatcher() {
@@ -477,7 +479,7 @@ public class ImageViewer extends JFrame {
 		logger.logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
 
 		// Load image from disk
-		Image img = Toolkit.getDefaultToolkit().createImage(imagePath);
+		Image img = toolkit.createImage(imagePath);
 
 		while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
 		    try {
