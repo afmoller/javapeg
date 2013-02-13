@@ -58,10 +58,18 @@ public class JPEGUtil {
 			 * filnamnet slutar på JPG eller JPEG så att inte tumnaglar eller liknande med
 			 * annan filändelse slinker igenom.
 			 */
-			return (startsWithFFD8(ffd8) && endsWithFFD9(ffd9) && hasJFIFExtension(fileName));
+			return ((startsWithFFD8(ffd8) && endsWithFFD9(ffd9) && hasJFIFExtension(fileName)) || (hasJFIFExtension(fileName) && canDecodeJPEGFile(file)));
 		} else {
 			return false;
 		}
+	}
+
+	private static boolean canDecodeJPEGFile(File jpegFile) {
+	    try {
+            return ImageIO.read(jpegFile) == null ? false : true;
+        } catch (IOException e) {
+           return false;
+        }
 	}
 
 	/**
