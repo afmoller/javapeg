@@ -49,7 +49,7 @@ metadatapanel.tableheader.property = EGENSKAP
 metadatapanel.tableheader.value    = VÄRDE
 
 ##############################################################################################################
-# I M A G E  S E A R C H  R E S U L T  V I E W E R                                                                                     #
+# I M A G E  S E A R C H  R E S U L T  V I E W E R                                                           #
 ##############################################################################################################
 imagesearchresultviewer.title = Sökresultat
 imagesearchresultviewer.menuitem.selectAll = Markera alla bilder
