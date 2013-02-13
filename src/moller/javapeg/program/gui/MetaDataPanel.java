@@ -33,8 +33,6 @@ public class MetaDataPanel extends JPanel {
 	private final JScrollPane scrollpane;
 	private final JTable table;
 
-	private final Vector<String> tableHeaderVector;
-
 	private final DefaultTableModel metaDataTableModel;
 
 	private static Language lang;
@@ -58,11 +56,9 @@ public class MetaDataPanel extends JPanel {
 		titleLabel.setForeground(Color.GRAY);
 
 		metaDataTableModel = new DefaultTableModel();
-
-		tableHeaderVector = new Vector<String>();
-		tableHeaderVector.addElement(lang.get("metadatapanel.tableheader.type"));
-		tableHeaderVector.addElement(lang.get("metadatapanel.tableheader.property"));
-		tableHeaderVector.addElement(lang.get("metadatapanel.tableheader.value"));
+		metaDataTableModel.addColumn(lang.get("metadatapanel.tableheader.type"));
+		metaDataTableModel.addColumn(lang.get("metadatapanel.tableheader.property"));
+		metaDataTableModel.addColumn(lang.get("metadatapanel.tableheader.value"));
 
 		table = new JTable(metaDataTableModel);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -78,12 +74,7 @@ public class MetaDataPanel extends JPanel {
 		try{
 			Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
 
-			metaDataTableModel.setColumnCount(0);
 			metaDataTableModel.setRowCount(0);
-
-			for (String column : tableHeaderVector) {
-				metaDataTableModel.addColumn(column);
-			}
 
 			for (Vector<String> rowData : getImageTagsInfo(metadata)) {
 				metaDataTableModel.addRow(rowData);
@@ -101,8 +92,8 @@ public class MetaDataPanel extends JPanel {
 	}
 
 	public void clearMetaData() {
-		metaDataTableModel.setColumnCount(0);
 		metaDataTableModel.setRowCount(0);
+		Table.packColumns(table, 15);
 		titleLabel.setText(titleLabelDefaultText);
 	}
 
