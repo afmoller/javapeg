@@ -1,157 +1,157 @@
 VERSIONSINFORMATION<LF>
 ===================<LF>
-Nedan är en beskrivning av vad de olika verisonerna av JavaPEG har för egenskaper.
+Nedan Ã¤r en beskrivning av vad de olika verisonerna av JavaPEG har fÃ¶r egenskaper.
 <LF>
 <LF>
 Version 2.5<LF>
 ===========<LF>
-Släppt 2011-xx-xx Version 2.5 av JavaPEG har möjligheten att organisera bilder i en sökbar databas. Databasen är decentraliserad och består av XML-filer, vilka skapas i varje katalog med bilder som skall ingå i databasen. Antingen läggs en katalog som innehåller bilder automatiskt till i databasen när katalogen väljs i JavaPEG eller genom att den läggs till efter att en fråga ställts, eller inte alls. Detta beteende är konfigurerbart i JavaPEGs inställningar. Det är möjligt att tilldela en bild en kommentar, en klassificering och ett obegränsat antal kategorier. Dessutom hamnar utvald Exif information automatisk i databasen. Databasen är sökbar på samtliga listade kriterier.
+SlÃ¤ppt 2011-xx-xx Version 2.5 av JavaPEG har mÃ¶jligheten att organisera bilder i en sÃ¶kbar databas. Databasen Ã¤r decentraliserad och bestÃ¥r av XML-filer, vilka skapas i varje katalog med bilder som skall ingÃ¥ i databasen. Antingen lÃ¤ggs en katalog som innehÃ¥ller bilder automatiskt till i databasen nÃ¤r katalogen vÃ¤ljs i JavaPEG eller genom att den lÃ¤ggs till efter att en frÃ¥ga stÃ¤llts, eller inte alls. Detta beteende Ã¤r konfigurerbart i JavaPEGs instÃ¤llningar. Det Ã¤r mÃ¶jligt att tilldela en bild en kommentar, en klassificering och ett obegrÃ¤nsat antal kategorier. Dessutom hamnar utvald Exif information automatiskt i databasen. Databasen Ã¤r sÃ¶kbar pÃ¥ samtliga listade kriterier.
 <LF>
 <LF>
-Det är möjligt att rotera bilder i bildvisaren; antingen manuellt i steg om 90 grader, eller automatiskt då en bild automatiskt roteras till korrekt visningsläge.
+Det Ã¤r mÃ¶jligt att rotera bilder i bildvisaren; antingen manuellt i steg om 90 grader, eller automatiskt dÃ¥ en bild automatiskt roteras till korrekt visningslÃ¤ge.
 <LF>
 <LF>
-Det är möjligt att konfigurera detaljeringsnivån på de tooltips som visas i JavaPEG. Tre nivåer finns. Aktiverat, Utökat och Inaktiverat.
+Det Ã¤r mÃ¶jligt att konfigurera detaljeringsnivÃ¥n pÃ¥ de tooltips som visas i JavaPEG. Tre nivÃ¥er finns. Aktiverat, UtÃ¶kat och Inaktiverat.
 <LF>
 <LF>
-Det är möjligt att kopiera bilder till systemets klippbordshanterare.
+Det Ã¤r mÃ¶jligt att kopiera bilder till systemets klippbordshanterare.
 <LF>
 <LF>
-Om en bild saknar tumnagel är det möjligt att låta JavaPEG skapa en temporär som visas i de lägen då tumnaglar visas i JavaPEG.
+Om en bild saknar tumnagel Ã¤r det mÃ¶jligt att lÃ¥ta JavaPEG skapa en temporÃ¤r som visas i de lÃ¤gen dÃ¥ tumnaglar visas i JavaPEG.
 <LF>
 <LF>
-Det är möjligt att aktivera eller avaktivera en tumnagelcache och sätta en maxstorlek samt rensa tumnagelcachen.
+Det Ã¤r mÃ¶jligt att aktivera eller avaktivera en tumnagelcache och sÃ¤tta en maxstorlek samt rensa tumnagelcachen.
 <LF>
 <LF>
-Exif parametrarna Slutar hastighet och Bländarvärde har ändrats till Exponeringstid respektive F-nummer.
+Exif parametrarna Slutarhastighet och BlÃ¤ndarvÃ¤rde har Ã¤ndrats till Exponeringstid respektive F-nummer.
 <LF>
 <LF>
 Version 2.4<LF>
 ===========<LF>
-Släppt 2009-11-17 Version 2.4 av JavaPEG har två större tillägg. Det första är en inbyggd bildvisare som visar de bilder som lagts till i bildlistan på VISA BILDER tabben. Bildvisaren har förutom navigationssupport för framåt, bakåt och till valfri bild i bildlistan också möjlighet att automatiskt anpassa bildstorleken för att passa fönsterstorleken.
+SlÃ¤ppt 2009-11-17 Version 2.4 av JavaPEG har tvÃ¥ stÃ¶rre tillÃ¤gg. Det fÃ¶rsta Ã¤r en inbyggd bildvisare som visar de bilder som lagts till i bildlistan pÃ¥ VISA BILDER tabben. Bildvisaren har fÃ¶rutom navigationssupport fÃ¶r framÃ¥t, bakÃ¥t och till valfri bild i bildlistan ocksÃ¥ mÃ¶jlighet att automatiskt anpassa bildstorleken fÃ¶r att passa fÃ¶nsterstorleken.
 <LF>
 <LF>
-Det andra större tilläget är ett grafiskt gränssnitt för inställningarna. Från och med nu är det inte nödvändingt att göra inställningsändringar manuellt i inställningsfilen. Alla inställningsändringar kan göras inifrån JavaPEG-applikationen.
+Det andra stÃ¶rre tillÃ¤get Ã¤r ett grafiskt grÃ¤nssnitt fÃ¶r instÃ¤llningarna. FrÃ¥n och med nu Ã¤r det inte nÃ¶dvÃ¤ndingt att gÃ¶ra instÃ¤llningsÃ¤ndringar manuellt i instÃ¤llningsfilen. Alla instÃ¤llningsÃ¤ndringar kan gÃ¶ras inifrÃ¥n JavaPEG-applikationen.
 <LF>
 <LF>
-Som ett resultat av det nya inställnignsgränssnittet så har det föregående fristående gränssnittet för språkval tagits bort då den funktionaliteten har hamnat i det nya gränssnittet.
+Som ett resultat av det nya instÃ¤llnignsgrÃ¤nssnittet sÃ¥ har det fÃ¶regÃ¥ende fristÃ¥ende grÃ¤nssnittet fÃ¶r sprÃ¥kval tagits bort dÃ¥ den funktionaliteten har hamnat i det nya grÃ¤nssnittet.
 <LF>
 <LF>
-Övrig ny funktionalitet listas här nedan:
+Ã–vrig ny funktionalitet listas hÃ¤r nedan:
 <LF>
 <LF>
-Ett nytt bildlisteformat har lagts till. Från och med nu är det möjligt att exportera bildlistor som stöds av bildvisare XnView. (http://www.xnview.com/)
+Ett nytt bildlisteformat har lagts till. FrÃ¥n och med nu Ã¤r det mÃ¶jligt att exportera bildlistor som stÃ¶ds av bildvisare XnView. (http://www.xnview.com/)
 <LF>
 <LF>
-Det är möjligt att använda tid- och datuminformation från när bildfilen senast ändrades när namnbyte sker, om det är så att tid och datuminformation saknas i Exif-informationen. Detta aktiveras i inställningarna.
+Det Ã¤r mÃ¶jligt att anvÃ¤nda tid- och datuminformation frÃ¥n nÃ¤r bildfilen senast Ã¤ndrades nÃ¤r namnbyte sker, om det Ã¤r sÃ¥ att tid och datuminformation saknas i Exif-informationen. Detta aktiveras i instÃ¤llningarna.
 <LF>
 <LF>
-För att spara utrymme så är det möjligt att få loggfilerna komprimerade i Zip-format när de roteras. 
+FÃ¶r att spara utrymme sÃ¥ Ã¤r det mÃ¶jligt att fÃ¥ loggfilerna komprimerade i Zip-format nÃ¤r de roteras. 
 <LF>
 <LF>
-För statistiska ändamål så är det möjligt att låta JavaPEG skicka med versionsnumret när en uppdateringskontroll mot uppdateringsservern sker. Den enda information som skickas är vilken version av JavaPEG det är som gör uppdateringskontrollen. Med andra ord, detta är totalt anonymt och ingen systemunik information skickas.
+FÃ¶r statistiska Ã¤ndamÃ¥l sÃ¥ Ã¤r det mÃ¶jligt att lÃ¥ta JavaPEG skicka med versionsnumret nÃ¤r en uppdateringskontroll mot uppdateringsservern sker. Den enda information som skickas Ã¤r vilken version av JavaPEG det Ã¤r som gÃ¶r uppdateringskontrollen. Med andra ord, detta Ã¤r totalt anonymt och ingen systemunik information skickas.
 <LF>
 <LF>
-Knappar för att flytta en bild till toppen eller botten av bildlistan har lagts till på VISA BILDER-tabben.
+Knappar fÃ¶r att flytta en bild till toppen eller botten av bildlistan har lagts till pÃ¥ VISA BILDER-tabben.
 <LF>
 <LF>
 Version 2.3<LF>
 ===========<LF>
-Släppt 2009-08-03 Version 2.3 av JavaPEG är en ren buggrättningsversion. Den inbyggda funktionaliteten för nedladdning av den senaste versionen av JavaPEG fungerade inte och fungerar fortfarande inte i de föregående versioner som har stöd för att kontrollera om det finns en nyare version tillgänglig (2.1 & 2.2). Anledningen till att denna bugg uppkommit är att formatet på de URL:er som SourceForge har till de släppta versionerna av JavaPEG har ändrats och tidigare versioner av JavaPEG var inte generella nog att hantera denna förändring.
+SlÃ¤ppt 2009-08-03 Version 2.3 av JavaPEG Ã¤r en ren buggrÃ¤ttningsversion. Den inbyggda funktionaliteten fÃ¶r nedladdning av den senaste versionen av JavaPEG fungerade inte och fungerar fortfarande inte i de fÃ¶regÃ¥ende versioner som har stÃ¶d fÃ¶r att kontrollera om det finns en nyare version tillgÃ¤nglig (2.1 & 2.2). Anledningen till att denna bugg uppkommit Ã¤r att formatet pÃ¥ de URL:er som SourceForge har till de slÃ¤ppta versionerna av JavaPEG har Ã¤ndrats och tidigare versioner av JavaPEG var inte generella nog att hantera denna fÃ¶rÃ¤ndring.
 <LF>
 <LF>
 Version 2.2<LF>
 ===========<LF>
-Släppt 2009-08-02 Version 2.2 av JavaPEG har fått en ny layout av det grafiska användargränssnittet. Från och med nu kan storleken förändras och således kan hela skärmytan på en högupplöst monitor utnyttjas helt. Storleken på alla huvudpaneler kan enkelt ändras och de kan även gömmas helt för att ge återstående synliga paneler mer yta. Storleken på varje panel sparas mellan programkörningar.
+SlÃ¤ppt 2009-08-02 Version 2.2 av JavaPEG har fÃ¥tt en ny layout av det grafiska anvÃ¤ndargrÃ¤nssnittet. FrÃ¥n och med nu kan storleken fÃ¶rÃ¤ndras och sÃ¥ledes kan hela skÃ¤rmytan pÃ¥ en hÃ¶gupplÃ¶st monitor utnyttjas helt. Storleken pÃ¥ alla huvudpaneler kan enkelt Ã¤ndras och de kan Ã¤ven gÃ¶mmas helt fÃ¶r att ge Ã¥terstÃ¥ende synliga paneler mer yta. Storleken pÃ¥ varje panel sparas mellan programkÃ¶rningar.
 <LF>
 <LF>
-En andra stor skilland är att det separata filväljarfönstret för att välja källkatalog har ersatts med en ständigt tillgänglig trädstruktur som visar filsystemet. 
+En andra stor skilland Ã¤r att det separata filvÃ¤ljarfÃ¶nstret fÃ¶r att vÃ¤lja kÃ¤llkatalog har ersatts med en stÃ¤ndigt tillgÃ¤nglig trÃ¤dstruktur som visar filsystemet. 
 <LF>
 <LF>
-Det har också lagts till en meta data panel som visar detaljerad meta data för bilderna. Meta datat laddas och visas när en en tumnagelbild markeras.
+Det har ocksÃ¥ lagts till en meta data panel som visar detaljerad meta data fÃ¶r bilderna. Meta datat laddas och visas nÃ¤r en en tumnagelbild markeras.
 <LF>
 <LF>
-Det har lagts till en ny variabel, "Ursprungligt filnamn", som kan användas i filnamnsmallen. Den sätter in det ursprungliga filnamnet för varje bild på den plats som variablen finns i filnamnsmallen. 
+Det har lagts till en ny variabel, "Ursprungligt filnamn", som kan anvÃ¤ndas i filnamnsmallen. Den sÃ¤tter in det ursprungliga filnamnet fÃ¶r varje bild pÃ¥ den plats som variablen finns i filnamnsmallen. 
 <LF>
 <LF>
-En statusrad har lagts till i nederkanten av användargränssnittet. Statusraden visas vald sökväg och antalet bilder i den katalogen och hur många kolumner och rader som visas i tumnagelrutnätet.
+En statusrad har lagts till i nederkanten av anvÃ¤ndargrÃ¤nssnittet. Statusraden visas vald sÃ¶kvÃ¤g och antalet bilder i den katalogen och hur mÃ¥nga kolumner och rader som visas i tumnagelrutnÃ¤tet.
 <LF>
 <LF>
-Förutom ovanstående så finns det ett helt nytt funktionalitetsområde i JavaPEG 2.2. Det är från och med nu möjligt, inte bara att byta namn på bilder utan också, att skapa bildlistor (slide shows). Det är möjligt att spara listor i ett internt JavaPEG-format för att senare laddas in igen för vidare bearbetning. Det är också möjligt att exportera bildlistor till listformat som stödjs av tredjeparts programvaror. I version 2.2 av JavaPEG finns det stöd för export av bildlistor till PolyView- och IrfanView-format.
+FÃ¶rutom ovanstÃ¥ende sÃ¥ finns det ett helt nytt funktionalitetsomrÃ¥de i JavaPEG 2.2. Det Ã¤r frÃ¥n och med nu mÃ¶jligt, inte bara att byta namn pÃ¥ bilder utan ocksÃ¥, att skapa bildlistor (slide shows). Det Ã¤r mÃ¶jligt att spara listor i ett internt JavaPEG-format fÃ¶r att senare laddas in igen fÃ¶r vidare bearbetning. Det Ã¤r ocksÃ¥ mÃ¶jligt att exportera bildlistor till listformat som stÃ¶ds av tredjeparts programvaror. I version 2.2 av JavaPEG finns det stÃ¶d fÃ¶r export av bildlistor till PolyView- och IrfanView-format.
 <LF>
 <LF>
 Version 2.1<LF>
 ===========<LF>
-Släppt 2009-05-21 Version 2.1 av JavaPEG har fått detaljerade utskrifter i loggen för namnbytes processen för namnbytet på JPEG-filer, kopierandet av icke JPEG filer och för kontrol av filitegriteten efter nämnda processer.
+SlÃ¤ppt 2009-05-21 Version 2.1 av JavaPEG har fÃ¥tt detaljerade utskrifter i loggen fÃ¶r namnbytes processen fÃ¶r namnbytet pÃ¥ JPEG-filer, kopierandet av icke JPEG filer och fÃ¶r kontroll av filitegriteten efter nÃ¤mnda processer.
 <LF>
 <LF>
-Från och med version 2.1 så sker (konfigurerbart) en kontroll mot en uppdaterigsserver om det finns någon nyare version av JavaPEG tillgänglig. Om en ny version finns tillgänlig så kommer dess skillnader mot nuvarande version visas och dessutom går det att ladda ner den nya versionen via JavaPEG
+FrÃ¥n och med version 2.1 sÃ¥ sker (konfigurerbart) en kontroll mot en uppdaterigsserver om det finns nÃ¥gon nyare version av JavaPEG tillgÃ¤nglig. Om en ny version finns tillgÃ¤nlig sÃ¥ kommer dess skillnader mot nuvarande version visas och dessutom gÃ¥r det att ladda ner den nya versionen via JavaPEG
 <LF>
 <LF>
-Om det finns en layout.xml fil som definierar hur tumnagelöversikten skall se ut som har skapats av användaren av JavPEG så kommer denna att valideras mot ett schema för att garantera dess korrekthet.
+Om det finns en layout.xml fil som definierar hur tumnagelÃ¶versikten skall se ut som har skapats av anvÃ¤ndaren av JavPEG sÃ¥ kommer denna att valideras mot ett schema fÃ¶r att garantera dess korrekthet.
 <LF>
 <LF>
 Version 2.0<LF>
 ===========<LF>
-Släppt 2009-05-05 Version 2.0 av JavaPEG är mer eller mindre en ifrån grunden omskriven applikation i förhållande till versionerna 1.x, men med samma grundidé: att vara ett verktyg för att på ett enkelt och säkert sätt kunna byta namn på bilder tagna med en digitalkamera.
+SlÃ¤ppt 2009-05-05 Version 2.0 av JavaPEG Ã¤r mer eller mindre en ifrÃ¥n grunden omskriven applikation i fÃ¶rhÃ¥llande till versionerna 1.x, men med samma grundidÃ©: att vara ett verktyg fÃ¶r att pÃ¥ ett enkelt och sÃ¤kert sÃ¤tt kunna byta namn pÃ¥ bilder tagna med en digitalkamera.
 <LF>
 <LF>
-Programmet vill fortfarande ha en sökväg angiven till en katalog med bilder. När detta är gjort så skall en destinationskatalog väljas. Därefter återstår att skapa filnamns- och underkatalogsmallar och slutligen innan namnbytesprocessen startas så är det möjligt att välja om man vill få en tumnagelöversikt skapad.
+Programmet vill fortfarande ha en sÃ¶kvÃ¤g angiven till en katalog med bilder. NÃ¤r detta Ã¤r gjort sÃ¥ skall en destinationskatalog vÃ¤ljas. DÃ¤refter Ã¥terstÃ¥r att skapa filnamns- och underkatalogsmallar och slutligen innan namnbytesprocessen startas sÃ¥ Ã¤r det mÃ¶jligt att vÃ¤lja om man vill fÃ¥ en tumnagelÃ¶versikt skapad.
 <LF>
 <LF>
-En stor skillnad jämfört med de gamla versionerna är att denna enbart möjliggör kopiering av filerna och namnbytet kommer att ske på dess kopierade filer. Detta för att minimera risken för dataförluster.
+En stor skillnad jÃ¤mfÃ¶rt med de gamla versionerna Ã¤r att denna enbart mÃ¶jliggÃ¶r kopiering av filerna och namnbytet kommer att ske pÃ¥ de kopierade filerna. Detta fÃ¶r att minimera risken fÃ¶r datafÃ¶rluster.
 <LF>
 <LF>
-Nyheter i denna version jämfört med tidigare:
+Nyheter i denna version jÃ¤mfÃ¶rt med tidigare:
 <LF>
 <LF>
-Filväljaren för att leta upp katalogen med bilder som skall döpas om, visar tumnaglar av bilderna i den katalog som markerats i filväljaren, detta underlättar arbetet med att hitta rätt bilder.
+FilvÃ¤ljaren fÃ¶r att leta upp katalogen med bilder som skall dÃ¶pas om, visar tumnaglar av bilderna i den katalog som markerats i filvÃ¤ljaren, detta underlÃ¤ttar arbetet med att hitta rÃ¤tt bilder.
 <LF>
 <LF>
-När en katalog med bilder valts i filväljaren så kommer dessa att visas i programmets huvudfönster.
+NÃ¤r en katalog med bilder valts i filvÃ¤ljaren sÃ¥ kommer dessa att visas i programmets huvudfÃ¶nster.
 <LF>
 <LF>
-När en filnams- eller underkatalogsmall ändras så visas en omedelbar förhandsgranskning av hur de resulterande filnamnen blir med dessa mallarna.
+NÃ¤r en filnams- eller underkatalogsmall Ã¤ndras sÃ¥ visas en omedelbar fÃ¶rhandsgranskning av hur de resulterande filnamnen blir med dessa mallarna.
 <LF>
 <LF>
-Om en felaktig vairabel, otillåtet tecken, eller maximal sökvägslängd övrerskridits så visas detta som ett felmeddelande så fort som felet inträffat.
+Om en felaktig variabel, otillÃ¥tet tecken, eller maximal sÃ¶kvÃ¤gslÃ¤ngd Ã¶vrerskridits sÃ¥ visas detta som ett felmeddelande sÃ¥ fort som felet intrÃ¤ffat.
 <LF>
 <LF>
-Innan namnbytesprocessen startar så sker en valideringprocess som säkerställer att alla inmatade värden är giltiga, att maximal sökvägslängd inte överskridits, att destinationskatalogen inte existerar, att det finns tillräkligt med utrymme att spara de nya kopierade filerna och att det går att skapa alla filer som finns i den valda källkatalogen i den valda destinationskatalogen. 
+Innan namnbytesprocessen startar sÃ¥ sker en valideringprocess som sÃ¤kerstÃ¤ller att alla inmatade vÃ¤rden Ã¤r giltiga, att maximal sÃ¶kvÃ¤gslÃ¤ngd inte Ã¶verskridits, att destinationskatalogen inte existerar, att det finns tillrÃ¤kligt med utrymme att spara de nya kopierade filerna och att det gÃ¥r att skapa alla filer som finns i den valda kÃ¤llkatalogen i den valda destinationskatalogen.
 <LF>
 <LF>
-Efter namnbytesprocessen så sker en validering av att alla filer fått rätt namn och innehåll vid kopieringen och namnbytet från källkatalog till destinationskatalog.
+Efter namnbytesprocessen sÃ¥ sker en validering av att alla filer fÃ¥tt rÃ¤tt namn och innehÃ¥ll vid kopieringen och namnbytet frÃ¥n kÃ¤llkatalog till destinationskatalog.
 <LF>
 <LF>
-Under hela namnbytesprocessen visas ett statusfönster som visar hur processen fortlöper.
+Under hela namnbytesprocessen visas ett statusfÃ¶nster som visar hur processen fortlÃ¶per.
 <LF>
 <LF>
-Det är möjligt att styra utseendet på den tumnagelöversikt som kan skapas.
+Det Ã¤r mÃ¶jligt att styra utseendet pÃ¥ den tumnagelÃ¶versikt som kan skapas.
 <LF>
 <LF>
-Det finns loggning till fil, för fel som kan inträffa. 
+Det finns loggning till fil, fÃ¶r fel som kan intrï¿½ffa.
 <LF>
 <LF>
 Version 1.01<LF>
 ============<LF>
-Släppt 2007-02-02: Version 1.01 av JavaPEG är en i första hand buggrättad version, med rättningar i felmeddelanden och i omdöpningsmotorn.
+SlÃ¤ppt 2007-02-02: Version 1.01 av JavaPEG Ã¤r en i fÃ¶rsta hand buggrÃ¤ttad version, med rÃ¤ttningar i felmeddelanden och i omdÃ¶pningsmotorn.
 <LF>
 <LF>
-Programmet hängde sig ifall en punkt fanns med som första eller sista tecken i filnamnsmall eller undermappsnamnsmallen. Samma problem fanns även för mellanslag först och sist i mallarna. Vidare fanns en förväxling mellan två felmeddelanden i den engelska språkfilen som rättades till.
+Programmet hÃ¤ngde sig ifall en punkt fanns med som fÃ¶rsta eller sista tecken i filnamnsmall eller undermappsnamnsmallen. Samma problem fanns Ã¤ven fÃ¶r mellanslag fÃ¶rst och sist i mallarna. Vidare fanns en fÃ¶rvÃ¤xling mellan tvÃ¥ felmeddelanden i den engelska sprÃ¥kfilen som rÃ¤ttades till.
 <LF>
 <LF>
 Version 1.0<LF>
 ===========<LF>
-Släppt 2006-11-27: Version 1.0 av JavaPEG klarar av att byta namn på jpg-filer som innehåller Exif-information.
+SlÃ¤ppt 2006-11-27: Version 1.0 av JavaPEG klarar av att byta namn pÃ¥ jpg-filer som innehÃ¥ller Exif-information.
 <LF>
 <LF>
-Programmet byter namn enligt en mall som användaren anger i rutan för "FILNAMNSMALL". Det finns ett antal variabler att välja mellan, se rutan under rubriken "VARIABLER" för samtliga tillgängliga.
+Programmet byter namn enligt en mall som anvÃ¤ndaren anger i rutan fÃ¶r "FILNAMNSMALL". Det finns ett antal variabler att vÃ¤lja mellan, se rutan under rubriken "VARIABLER" fÃ¶r samtliga tillgÃ¤ngliga.
 <LF>
 <LF>
-Användaren kan välja mellan att byta namn på originalfilerna eller på kopior vilka sparas i samma mapp som originalfilerna eller i en annan mapp eller slutligen i en undermapp i en annan mapp än originalfilerna. Vidare är det möjligt att ange hur undermappens namns skall se ut. Detta går till på samma sätt som för bildfilerna.
+AnvÃ¤ndaren kan vÃ¤lja mellan att byta namn pÃ¥ originalfilerna eller pÃ¥ kopior vilka sparas i samma mapp som originalfilerna eller i en annan mapp eller slutligen i en undermapp i en annan mapp Ã¤n originalfilerna. Vidare Ã¤r det mÃ¶jligt att ange hur undermappens namns skall se ut. Detta gÃ¥r till pÃ¥ samma sÃ¤tt som fÃ¶r bildfilerna.
 <LF>
 <LF>
-Innan processen sätts igång kan användaren välja ifall denne vill få tumnaglar av de omdöpta bilderna skapade. Samtidigt som detta skapas skapas också ett html-dokument, vilket, vid öppnande, visar samtliga skapade tumnaglar. Dessa tumnaglar länkar till respektive bilds fullskaleversion.
+Innan processen sÃ¤tts igÃ¥ng kan anvÃ¤ndaren vÃ¤lja ifall denne vill fÃ¥ tumnaglar av de omdÃ¶pta bilderna skapade. Samtidigt som detta skapas skapas ocksÃ¥ ett html-dokument, vilket, vid Ã¶ppnande, visar samtliga skapade tumnaglar. Dessa tumnaglar lÃ¤nkar till respektive bilds fullskaleversion.
 <LF>
 <LF>
-Som sista alternativ kan användaren välja ifall mappen med de omdöpta filerna skall öppnas automatiskt efter att omdöpningsprocessen är avklarad.
+Som sista alternativ kan anvÃ¤ndaren vÃ¤lja ifall mappen med de omdÃ¶pta filerna skall Ã¶ppnas automatiskt efter att omdÃ¶pningsprocessen Ã¤r avklarad.

@@ -1,31 +1,40 @@
 BILDVISARE<LF>
 ==========<LF>
-JavaPEG har möjlighet att visa bilder. De bilder som kan visas är sådanan som lagts till i "BILDLISTA"-listan i fliken "VISA BILDER". Se hjälpavsnitt för "VISA BILDER" för hjälp med att skapa en bildlista.
+JavaPEG har mÃ¶jlighet att visa bilder. De bilder som kan visas Ã¤r sÃ¥danna som lagts till i "BILDLISTA"-listan i fliken "VISA BILDER". Se hjÃ¤lpavsnitt fÃ¶r "VISA BILDER" fÃ¶r hjÃ¤lp med att skapa en bildlista.
 <LF>
 <LF>
 1:<LF>
-Om en lista med bilder skapats enligt ovan så kan knappen "Visa valda bilder i bildivsaren" i tabben "VISA BILDER" tryckas på för att få fram bildvisaren, annars skapa en bildlista först.
+Om en lista med bilder skapats enligt ovan sÃ¥ kan knappen "Visa valda bilder i bildivsaren" i tabben "VISA BILDER" tryckas pÃ¥ fÃ¥r att fÃ¥ fram bildvisaren, annars skapa en bildlista fÃ¶rst.
 <LF>
 <LF>
-Egenskaper för bildvisaren:
+Egenskaper fÃ¶r bildvisaren:
 <LF>
 <LF>
-Bildvisaren innehåller tre huvudelement: En lista med tillgängliga bilder för bildvisaren att visa (visas som en lista med tumnagelversioner av bilderna.) som finns till vänster i användargränssnittet. I mitten finns själva ytan för att visa upp bilderna på. Till höger finns en panel som visar detaljerad metadatainformation om visad bild.
+Bildvisaren innehÃ¥ller tre huvudelement: En lista med tillgÃ¤ngliga bilder fÃ¶r bildvisaren att visa (visas som en lista med tumnagelversioner av bilderna.) som finns till vÃ¤nster i anvÃ¤ndargrÃ¤nssnittet. I mitten finns sjÃ¤lva ytan fÃ¶r att visa upp bilderna pÃ¥. Till hÃ¶ger finns en panel som visar detaljerad metadatainformation om visad bild.
 <LF>
 <LF>
-Tumnagellistan till vänster och metadatapanelen till höger går att dölja för att ge mer plats för att visa bilder.
+Tumnagellistan till vÃ¤nster och metadatapanelen till hÃ¶ger gÃ¥r att dÃ¶lja fÃ¶r att ge mer plats fÃ¶r att visa bilder.
 <LF>
 <LF>
-Det finns stöd för följande aktiviteter i bildvisaren:
+Det finns stÃ¶d fÃ¶r fÃ¶ljande aktiviteter i bildvisaren:
 <LF>
 <LF>
-* Navigering framåt och bakåt i listan med bilder, med antingen knapp i knapplistan, eller genom högerklicksmeny på själva bilden, eller med snabbkommando.
+* Navigering framÃ¥t och bakÃ¥t i listan med bilder, med antingen knapp i knapplistan, eller genom hÃ¶gerklicksmeny pÃ¥ sjÃ¤lva bilden, eller med snabbkommando eller med hÃ¶ger eller vÃ¤nster piltangent.
 <LF>
 <LF>
-* Navigation till valfri bild i listan genom att markera en bild i tumnagelöversikten till vänster.
+* Navigation till valfri bild i listan genom att markera en bild i tumnagelÃ¶versikten till vÃ¤nster.
 <LF>
 <LF>
-* Anpassa storleken på visad bild så att den får plats i tillgängligt utrymme för bildvisarytan.
+* Anpassa storleken pÃ¥ visad bild sÃ¥ att den fÃ¥r plats i tillgÃ¤ngligt utrymme fÃ¶r bildvisarytan.
 <LF>
 <LF>
-* Automatiskt anpassa storleken på visad bild så att den får plats i tillgängligt utrymme för bildvisarytan när en bild väljs.
+* Automatiskt anpassa storleken pÃ¥ visad bild sÃ¥ att den fÃ¥r plats i tillgÃ¤ngligt utrymme fÃ¶r bildvisarytan nÃ¤r en bild vÃ¤ljs.
+<LF>
+<LF>
+* Automatiskt rotera visad bild enligt Exif information.
+<LF>
+<LF>
+* Rotera visad bild 90 grader medurs.
+<LF>
+<LF>
+* Rotera visad bild 90 grader moturs.

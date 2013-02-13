@@ -1,35 +1,35 @@
-BYT NAMN PÅ BILDER<LF>
+BYT NAMN PÃ… BILDER<LF>
 ==================<LF>
-Texten nedan är upplagd så att den uppifrån och ner visar hur en komplett programkörning går till. Börja alltså med att läsa nästkommande stycke först.
+Texten nedan Ã¤r upplagd sÃ¥ att den uppifrÃ¥n och ner visar hur en komplett programkÃ¶rning gÃ¥r till. BÃ¶rja alltsÃ¥ med att lÃ¤sa nÃ¤stkommande stycke fÃ¶rst.
 <LF>
 <LF>
 1:<LF>
-Välj en katalog med bilder i trädstrukturen till vänster.
+VÃ¤lj en katalog med bilder i trÃ¤dstrukturen till vÃ¤nster.
 <LF>
 <LF>
 2:<LF>
-En destinationkatalog skall väljas. Detta görs genom att trycka på den knapp som finns till höger om fältet som heter "SÖKVÄG TILL DESTINATIONSKATALOG" så kommer ett nytt fönster öppnas, där det går att välja en destinationskatalog.
+En destinationkatalog skall vÃ¤ljas. Detta gÃ¶rs genom att trycka pÃ¥ den knapp som finns till hÃ¶ger om fÃ¤ltet som heter "SÃ–KVÃ„G TILL DESTINATIONSKATALOG" sÃ¥ kommer ett nytt fÃ¶nster Ã¶ppnas, dÃ¤r det gÃ¥r att vÃ¤lja en destinationskatalog.
 <LF>
 <LF>
 3:<LF>
-"FILNAMNSMALL" och "UNDERKATALOGSMALL", skapas med hjälp av de variabler som finns i rutan "VARIABLER". Detta är variabler som hämtar sin information från bildens inbäddade Exif-information.
+"FILNAMNSMALL" och "UNDERKATALOGSMALL", skapas med hjÃ¤lp av de variabler som finns i rutan "VARIABLER". Detta Ã¤r variabler som hÃ¤mtar sin information frÃ¥n bildens inbÃ¤ddade Exif-information.
 <LF>
 <LF>
-"UNDERKATALOGSMALL" kan enbart använda sig av de variabler som är markerade med en asterisk bakom sig i listan. Förutom detta är det möjligt att blanda variabler med statiska strängar i form av ord och siffror i valfri kombination. 
+"UNDERKATALOGSMALL" kan enbart anvÃ¤nda sig av de variabler som Ã¤r markerade med en asterisk bakom sig i listan. FÃ¶rutom detta Ã¤r det mÃ¶jligt att blanda variabler med statiska strÃ¤ngar i form av ord och siffror i valfri kombination. 
 <LF>
 <LF>
- Exempel på en filnamsmall kan vara: "Bild %d% - %t%" 
+ Exempel pÃ¥ en filnamsmall kan vara: "Bild %d% - %t%" 
 <LF>
 <LF>
  vilket ger ett resultat i stil med "Bild 2005-06-15 - 16-25-14.jpg"
 <LF>
 <LF>
 4:<LF>
-För att skapa en tumnagelöversikt skall kryssrutan med texten "SKAPA TUMNAGELÖVERSIKT" markeras.
+FÃ¶r att skapa en tumnagelÃ¶versikt skall kryssrutan med texten "SKAPA TUMNAGELÃ–VERSIKT" markeras.
 <LF>
 <LF>
 5:<LF>
-Nu är alla förberedelser gjorda inför namnomdöpningsprocessen. Processen startas genom att klicka på knappen som har en pil pekandes åt höger, eller välja motsvarande alternativ i Arkiv-menyn.
+Nu Ã¤r alla fÃ¶rberedelser gjorda infÃ¶r namnomdÃ¶pningsprocessen. Processen startas genom att klicka pÃ¥ knappen som har en pil pekandes Ã¥t hÃ¶ger, eller vÃ¤lja motsvarande alternativ i Arkiv-menyn.
 <LF>
 <LF>
 Lathund - fem enkla steg<LF>
@@ -38,5 +38,5 @@ Lathund - fem enkla steg<LF>
  1. Leta upp bildkatalog.<LF>
  2. Ange en destinationskatalog.<LF>
  3. Skriv in filnamnsmall och underkatalogsmall.<LF>
- 4. Ange om tumnagelöversikt skall skapas.<LF>
- 5. Starta omdöpningen genom att trycka på knappen med en högerpil<LF>
+ 4. Ange om tumnagelÃ¶versikt skall skapas.<LF>
+ 5. Starta omdÃ¶pningen genom att trycka pÃ¥ knappen med en hÃ¶gerpil<LF>

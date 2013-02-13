@@ -1,33 +1,33 @@
-Förhandsgranskningsbild:<LF>
+FÃ¶rhandsgranskningsbild:<LF>
 <LF>
-Använd inbäddad tumnagel som förhandsgranskningsbild (Snabbt):<LF>
-Innebär att den tumnagel som finns i bildfilen kommer att användas. Det går generellt sett snabbare att visa än att skapa en skalad version av bilden.<LF>
+AnvÃ¤nd inbÃ¤ddad tumnagel som fÃ¶rhandsgranskningsbild (Snabbt):<LF>
+InnebÃ¤r att den tumnagel som finns i bildfilen kommer att anvÃ¤ndas. Det gÃ¥r generellt sett snabbare att visa Ã¤n att skapa en skalad version av bilden.<LF>
 <LF>
-Använd skalad tumnagel som förhandsgranskningsbild (Långsamt)<LF>
-Innebär att de tumnaglar som visar upp i tagga bilder-läget i JavaPEG kommer att skalas från originalfilen för att passa in i det tillgängliga utrymmet som finns för att visa en tumnagel.<LF>
+AnvÃ¤nd skalad tumnagel som fÃ¶rhandsgranskningsbild (LÃ¥ngsamt)<LF>
+InnebÃ¤r att de tumnaglar som visar upp i tagga bilder-lÃ¤get i JavaPEG kommer att skalas frÃ¥n originalfilen fÃ¶r att passa in i det tillgÃ¤ngliga utrymmet som finns fÃ¶r att visa en tumnagel.<LF>
 <LF>
 <LF>
 Kategorier:<LF>
 <LF>
 Varna vid borttagning av kategori:<LF>
-Ett varningsmeddelande kommer att visas när en kategori skall tas bort. Det är möjligt att avbryta borttagningen när varningsmeddelandet visas.<LF>
+Ett varningsmeddelande kommer att visas nÃ¤r en kategori skall tas bort. Det Ã¤r mÃ¶jligt att avbryta borttagningen nÃ¤r varningsmeddelandet visas.<LF>
 <LF>
 Varna vid borttagning av kategori med underkategorier:<LF>
-Om en kategori innehåller underkategorier så kommer ett varningsmeddelande att visas när en sådan skall tas bort om denna inställning aktiveras.<LF>
+Om en kategori innehÃ¥ller underkategorier sÃ¥ kommer ett varningsmeddelande att visas nÃ¤r en sÃ¥dan skall tas bort om denna instÃ¤llning aktiveras.<LF>
 <LF>
 <LF>
-Bilddatabas Tillägg:<LF>
+Bilddatabas TillÃ¤gg:<LF>
 <LF>
-Lägg automatiskt till en katalog med icke tillagda bilder till bilddatabasen:<LF>
-Innebär att en katalog som innehåller bilder som inte redan är tillagd i bilddatabasen kommer att läggas till automatiskt när denna katalog visas i JavaPEG.<LF>
+LÃ¤gg automatiskt till en katalog med icke tillagda bilder till bilddatabasen:<LF>
+InnebÃ¤r att en katalog som innehÃ¥ller bilder som inte redan Ã¤r tillagd i bilddatabasen kommer att lÃ¤ggas till automatiskt nÃ¤r denna katalog visas i JavaPEG.<LF>
 <LF>
-Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen:<LF>
-Innebär att en fråga kommer att ställas om ifall en katalog som innehåller bilder som inte redan är tillagd i bilddatabasen skall läggas till.<LF>
+FrÃ¥ga fÃ¶r att lÃ¤gga till katalog med icke tillagda bilder till bilddatabasen:<LF>
+InnebÃ¤r att en frÃ¥ga kommer att stÃ¤llas om ifall en katalog som innehÃ¥ller bilder som inte redan Ã¤r tillagd i bilddatabasen skall lÃ¤ggas till.<LF>
 <LF> 
-Lägg inte till en katalog med icke tillagda bilder till bilddatabasen:<LF>
-En katalog som innehåller bilder som inte redan är tillagd i bilddatabasen kommer inte att läggas till i bilddatabasen<LF>
+LÃ¤gg inte till en katalog med icke tillagda bilder till bilddatabasen:<LF>
+En katalog som innehÃ¥ller bilder som inte redan Ã¤r tillagd i bilddatabasen kommer inte att lÃ¤ggas till i bilddatabasen<LF>
 <LF>
 <LF>
-Bilddatabas Innehåll:<LF>
-Ta bort icke existerande sökvägar:<LF>
-Om denna inställning är aktiverad så kommer eventuella sökvägar som inte längre finns att automatiskt rensas bort ut bilddatabasen ifall de finns tillagda där sedan tidigare.
+Bilddatabas InnehÃ¥ll:<LF>
+Ta bort icke existerande sÃ¶kvÃ¤gar:<LF>
+Om denna instÃ¤llning Ã¤r aktiverad sÃ¥ kommer eventuella sÃ¶kvÃ¤gar som inte lÃ¤ngre finns att automatiskt rensas bort ut bilddatabasen ifall de finns tillagda dÃ¤r sedan tidigare.

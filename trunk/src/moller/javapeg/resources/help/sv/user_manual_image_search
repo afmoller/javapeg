@@ -1,23 +1,23 @@
-SÖK BILDER<LF>
+SÃ–K BILDER<LF>
 ==========<LF>
-Det är möjligt att söka fram bilder ur bilddatabasen genom att söka i den meta data som har associerats med de bilder som ingår i bilddatabasen.<LF>
+Det Ã¤r mÃ¶jligt att sÃ¶ka fram bilder ur bilddatabasen genom att sÃ¶ka i den meta data som har associerats med de bilder som ingÃ¥r i bilddatabasen.<LF>
 <LF>
 1:<LF>
-Välj fliken SÖK / VISA BILDER<LF>
+VÃ¤lj fliken SÃ–K / VISA BILDER<LF>
 <LF>
 2:<LF>
-Det är möjligt att söka efter bilder genom att ange sökkriterier inom fyra olika områden: KATEGORIER, BILDMETADATA, KLASSIFICERING och KOMMENTAR.<LF>
+Det Ã¤r mÃ¶jligt att sÃ¶ka efter bilder genom att ange sÃ¶kkriterier inom fyra olika omrÃ¥den: KATEGORIER, BILDMETADATA, KLASSIFICERING och KOMMENTAR.<LF>
 <LF>
-KATEGORIER: Klicka i de kategorier som skall ingå i sökningen. Det finns två sätt att ställa in kategorisökning på: OCH eller ELLER. I fallet med OCH-sökningen innebär det att de kategorier som anges måste vara tilldelade en och samma bild för att en bild skall hamna bland sökresultaten. ELLER-sökning innebär att någon av de kategorier som valts skall finns tilldelad en bild för att denna bild skall hamna i sökresultatet.<LF>
+KATEGORIER: Klicka i de kategorier som skall ingÃ¥ i sÃ¶kningen. Det finns tvÃ¥ sÃ¤tt att stÃ¤lla in kategorisÃ¶kning pÃ¥: OCH eller ELLER. I fallet med OCH-sÃ¶kningen innebÃ¤r det att de kategorier som anges mÃ¥ste vara tilldelade en och samma bild fÃ¶r att en bild skall hamna bland sÃ¶kresultaten. ELLER-sÃ¶kning innebÃ¤r att nÃ¥gon av de kategorier som valts skall finns tilldelad en bild fÃ¶r att denna bild skall hamna i sÃ¶kresultatet.<LF>
 <LF>
-BILDMETADATA: Detta är information som hämtats automatiskt ur bilderna meta data information. De värden som är sökbara är de värden som finns lagrade i bilddatabasen för respektive meta data attribut. För varje meta data attribut, förutom för KAMMERAMODELL (som enbart har lika med), så är tre olika sökmetoder tillgängliga: mindre än, lika med och större än. I fallen med mindre än och större än skall ett värde väljas och alla bilder som har värden som är mindre respektive större än det valda värdet kommer att väljas ut och hamna i sökresultatet. För lika med sökning kan flera värden väljas och alla bilder som matchar valen kommer att hamna i sökresultatet.<LF>
+BILDMETADATA: Detta Ã¤r information som hÃ¤mtats automatiskt ur bildernas meta data information. De vÃ¤rden som Ã¤r sÃ¶kbara Ã¤r de vÃ¤rden som finns lagrade i bilddatabasen fÃ¶r respektive meta data attribut. FÃ¶r varje meta data attribut, fÃ¶rutom fÃ¶r KAMMERAMODELL (som enbart har lika med), sÃ¥ Ã¤r tre olika sÃ¶kmetoder tillgÃ¤ngliga: mindre Ã¤n, lika med och stÃ¶rre Ã¤n. I fallen med mindre Ã¤n och stÃ¶rre Ã¤n skall ett vÃ¤rde vÃ¤ljas och alla bilder som har vÃ¤rden som Ã¤r mindre respektive stÃ¶rre Ã¤n det valda vÃ¤rdet kommer att vÃ¤ljas ut och hamna i sÃ¶kresultatet. FÃ¶r lika med sÃ¶kning kan flera vÃ¤rden vÃ¤ljas och alla bilder som matchar valen kommer att hamna i sÃ¶kresultatet.<LF>
 <LF>
-KLASSIFICERING: Här anges vilka klassificeringar som skall sökas efter. Här är det en eller sökning som sker vilket betyder att bilder som matchar de(n) valda klassificeringarna kommer att hamna i sökresultatet.<LF>
+KLASSIFICERING: HÃ¤r anges vilka klassificeringar som skall sÃ¶kas efter. HÃ¤r Ã¤r det en eller sÃ¶kning som sker vilket betyder att bilder som matchar de(n) valda klassificeringarna kommer att hamna i sÃ¶kresultatet.<LF>
 <LF>
-KOMMENTAR: Ger en möjlighet att söka på angivna bildkommentarer. Sökningen är en "innehåller"-sökning. Vilket innebär att om en bild har kommentaren "En bildkommentar" som kommer ett sökord "bild" ge träff på den bilden.<LF>
+KOMMENTAR: Ger en mÃ¶jlighet att sÃ¶ka pÃ¥ angivna bildkommentarer. SÃ¶kningen Ã¤r en "innehÃ¥ller"-sÃ¶kning. Vilket innebÃ¤r att om en bild har kommentaren "En bildkommentar" sÃ¥ kommer ett sÃ¶kord "bild" ge trÃ¤ff pÃ¥ den bilden.<LF>
 <LF>
 <LF>
-De fyra separata sökkriterieområdena fungerar som filtrerande sökningar. Desto fler sökkriterier som anges desto snävare urval blir resultatet föurom för KLASSIFICERING och KATEGORIER (om ELLER läget är aktiverat).<LF>
+De fyra separata sÃ¶kkriterieomrÃ¥dena fungerar som filtrerande sÃ¶kningar. Desto fler sÃ¶kkriterier som anges desto snÃ¤vare urval blir resultatet fÃ¶urom fÃ¶r KLASSIFICERING och KATEGORIER (om ELLER lÃ¤get Ã¤r aktiverat fÃ¶r KATEGORIER).<LF>
 <LF>
 3:<LF>
-Klicka på sök bilder-knappen.
+Klicka pÃ¥ sÃ¶k bilder-knappen.
