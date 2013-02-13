@@ -80,6 +80,13 @@
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in the version.  
    
+ ~ Made the JPEG filtering a little bit more relaxed. All images with the 
+   suffixes (case insensitive) JPG or JPEG that is able to be loaded by the 
+   JAVA Virtual Machine is treated as JPEG files that shall be handles as 
+   images by JavaPEG, for instance in the rename mode of JavaPEG. This change
+   makes it possible to load images which have some garbage bytes in the file, 
+   but which are possible to load by the JAVA Virtual Machine.  
+   
  ~ The possibility to override the application embedded language and help files
    has been removed.  
    
