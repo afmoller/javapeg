@@ -10,7 +10,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
-import moller.util.hash.MD5;
+import moller.util.hash.MD5Calculator;
 import moller.util.io.FileUtil;
 
 public class PostFileProcessor {
@@ -93,8 +93,8 @@ public class PostFileProcessor {
 	private boolean notEqual(File sourceFile, File destFile) {
 		Logger logger = Logger.getInstance();
 		
-		String sourceHash = MD5.calculate(sourceFile);
-		String destHash   = MD5.calculate(destFile);
+		String sourceHash = MD5Calculator.calculate(sourceFile);
+		String destHash   = MD5Calculator.calculate(destFile);
 		
 		logger.logDEBUG(sourceHash + " = Hash value for file: " + sourceFile.getAbsolutePath());
 		logger.logDEBUG(destHash + " = Hash value for file: " + destFile.getAbsolutePath());
