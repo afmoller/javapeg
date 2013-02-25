@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 
 import moller.util.string.StringUtil;
 
-public class MD5 {
+public class MD5Calculator {
 
 	public static String calculate(File theFileToCalculate) {
 
