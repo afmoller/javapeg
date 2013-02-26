@@ -41,7 +41,7 @@ import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.util.hash.MD5;
+import moller.util.hash.MD5Calculator;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.xml.XMLUtil;
@@ -54,6 +54,21 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 
+    private static final String FILE = "file";
+    private static final String IMAGE = "image";
+    private static final String JAVAPEG_ID = "javapeg-id";
+    private static final String CATEGORIES = "categories";
+    private static final String RATING = "rating";
+    private static final String COMMENT = "comment";
+    private static final String EXPOSURE_TIME = "exposure-time";
+    private static final String PICTURE_WIDTH = "picture-width";
+    private static final String PICTURE_HEIGHT = "picture-height";
+    private static final String ISO_VALUE = "iso-value";
+    private static final String DATE_TIME = "date-time";
+    private static final String CAMERA_MODEL = "camera-model";
+    private static final String F_NUMBER = "f-number";
+    private static final String EXIF_META_DATA = "exif-meta-data";
+    private static final String MD5 = "md5";
     private static Configuration configuration = Config.getInstance().get();
 
     /**
@@ -172,7 +187,7 @@ public class ImageMetaDataDataBaseHandler {
 
 		if (ImageMetaDataDataBaseItemsToUpdateContext.getInstance().isFlushNeeded() || imageMetaDataContextAction == ImageMetaDataContextAction.ADD) {
 		    try {
-			    String encoding = "UTF-8";
+			    String encoding = C.UTF8;
 
 		        os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
 	            XMLOutputFactory factory = XMLOutputFactory.newInstance();
@@ -183,26 +198,26 @@ public class ImageMetaDataDataBaseHandler {
 	                                 "files that exists in the directory where this XML file is to be found." + C.LS +
 	                                 "The content of this file is used and modified by the application JavaPEG", w);
 	            XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
-	            XMLUtil.writeElement("javapeg-id", configuration.getJavapegClientId(), w);
+	            XMLUtil.writeElement(JAVAPEG_ID, configuration.getJavapegClientId(), w);
 
 	            for(File image : imageMetaDataDataBaseItems.keySet()) {
 	                ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
 	                CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
-	                XMLUtil.writeElementStart("image", "file", imddbi.getImage().getName(), w);
-	                XMLUtil.writeElement("md5", MD5.calculate(image), w);
-	                XMLUtil.writeElementStart("exif-meta-data", w);
-	                XMLUtil.writeElement("f-number", Double.toString(ciemd.getFNumber()), w);
-	                XMLUtil.writeElement("camera-model"  , ciemd.getCameraModel()  , w);
-	                XMLUtil.writeElement("date-time"     , ciemd.getDateTimeAsString()         , w);
-	                XMLUtil.writeElement("iso-value"     , Integer.toString(ciemd.getIsoValue())     , w);
-	                XMLUtil.writeElement("picture-height", Integer.toString(ciemd.getPictureHeight()), w);
-	                XMLUtil.writeElement("picture-width" , Integer.toString(ciemd.getPictureWidth()) , w);
-	                XMLUtil.writeElement("exposure-time" , ciemd.getExposureTime().toString() , w);
+	                XMLUtil.writeElementStart(IMAGE, FILE, imddbi.getImage().getName(), w);
+	                XMLUtil.writeElement(MD5, MD5Calculator.calculate(image), w);
+	                XMLUtil.writeElementStart(EXIF_META_DATA, w);
+	                XMLUtil.writeElement(F_NUMBER, Double.toString(ciemd.getFNumber()), w);
+	                XMLUtil.writeElement(CAMERA_MODEL  , ciemd.getCameraModel()  , w);
+	                XMLUtil.writeElement(DATE_TIME     , ciemd.getDateTimeAsString()         , w);
+	                XMLUtil.writeElement(ISO_VALUE     , Integer.toString(ciemd.getIsoValue())     , w);
+	                XMLUtil.writeElement(PICTURE_HEIGHT, Integer.toString(ciemd.getPictureHeight()), w);
+	                XMLUtil.writeElement(PICTURE_WIDTH , Integer.toString(ciemd.getPictureWidth()) , w);
+	                XMLUtil.writeElement(EXPOSURE_TIME , ciemd.getExposureTime().toString() , w);
 	                XMLUtil.writeElementEnd(w);
-	                XMLUtil.writeElement("comment", imddbi.getComment(), w);
-	                XMLUtil.writeElement("rating", Integer.toString(imddbi.getRating()), w);
-	                XMLUtil.writeElement("categories", imddbi.getCategories().toString(), w);
+	                XMLUtil.writeElement(COMMENT, imddbi.getComment(), w);
+	                XMLUtil.writeElement(RATING, Integer.toString(imddbi.getRating()), w);
+	                XMLUtil.writeElement(CATEGORIES, imddbi.getCategories().toString(), w);
 
 	                XMLUtil.writeElementEnd(w);
 	            }
@@ -279,7 +294,7 @@ public class ImageMetaDataDataBaseHandler {
 			doc = db.parse(imageMetaDataDataBase);
 			doc.getDocumentElement().normalize();
 
-			NodeList javaPegId = doc.getElementsByTagName("javapeg-id");
+			NodeList javaPegId = doc.getElementsByTagName(JAVAPEG_ID);
 			Node javaPegIdNode = javaPegId.item(0);
 			String javaPegIdValue = javaPegIdNode.getTextContent();
 
@@ -293,7 +308,7 @@ public class ImageMetaDataDataBaseHandler {
 			    }
 			}
 
-			NodeList imageTags = doc.getElementsByTagName("image");
+			NodeList imageTags = doc.getElementsByTagName(IMAGE);
 
 			int nrOfTags = imageTags.getLength();
 
@@ -303,7 +318,7 @@ public class ImageMetaDataDataBaseHandler {
 				Node imageTag = imageTags.item(i);
 
 				NamedNodeMap nnm = imageTag.getAttributes();
-				Node file = nnm.getNamedItem("file");
+				Node file = nnm.getNamedItem(FILE);
 
 				File image = new File(imageMetaDataDataBase.getParentFile(), file.getNodeValue());
 
@@ -317,13 +332,13 @@ public class ImageMetaDataDataBaseHandler {
 
 				for (int j = 0; j < content.getLength(); j++) {
 					Node node = content.item(j);
-					if ("md5".equals(node.getNodeName())) {
+					if (MD5.equals(node.getNodeName())) {
 						md5 = node.getTextContent();
-					} else if ("exif-meta-data".equals(node.getNodeName())) {
+					} else if (EXIF_META_DATA.equals(node.getNodeName())) {
 						imageExifMetaData = createImageExifMetaData(node.getChildNodes());
-					} else if("comment".equals(node.getNodeName())) {
+					} else if(COMMENT.equals(node.getNodeName())) {
 						comment = node.getTextContent();
-					} else if("rating".equals(node.getNodeName())) {
+					} else if(RATING.equals(node.getNodeName())) {
 						try {
 							rating = Integer.parseInt(node.getTextContent());
 						} catch (NumberFormatException nfex) {
@@ -331,24 +346,33 @@ public class ImageMetaDataDataBaseHandler {
 							logger.logINFO(nfex);
 							rating = 0;
 						}
-					} else if("categories".equals(node.getNodeName())) {
+					} else if(CATEGORIES.equals(node.getNodeName())) {
 						String categoriesString = node.getTextContent();
 
-						ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
-
-						Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
-
-						Set<String> categoryIdsForJavePegId = javaPegIdToCategories.get(javaPegIdValue).keySet();
-
+						// If there are no categories set to the current image,
+						// then there is no need to do anything from here...
 						if (categoriesString != null && categoriesString.length() > 0) {
-							categories.addCategories(categoriesString);
-						}
+						    ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 
-						for (String categoryId : categories.getCategories()) {
-						    if (!categoryIdsForJavePegId.contains(categoryId)) {
-						        if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
-				                    showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
-				                }
+						    Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
+
+						    Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
+
+						    // If there are no categories defined for current
+						    // JavaPeg Id, then do not do anything here...
+						    if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
+
+						        categories.addCategories(categoriesString);
+						        Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
+
+						        for (String categoryId : categories.getCategories()) {
+						            if (!categoryIdsForJavePegId.contains(categoryId)) {
+						                //						        TODO: Remove hard coded string
+						                if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+						                    showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
+						                }
+						            }
+						        }
 						    }
 						}
 					}
@@ -490,39 +514,43 @@ public class ImageMetaDataDataBaseHandler {
 
 		 Map<String, Set<Integer>> categoriesMap = javaPegIdToCategoriesMap.get(configuration.getJavapegClientId());
 
-		/**
-		 * Remove any unselected categories from the ImageMetaDataContext
-		 */
-		for (String category : categoriesMap.keySet()) {
-			Set<Integer> indices = categoriesMap.get(category);
+		 // Only do this if there are any categories defined for this
+		 // JavapegClientId.
+		 if (categoriesMap != null) {
+		     /**
+		      * Remove any unselected categories from the ImageMetaDataContext
+		      */
+		     for (String category : categoriesMap.keySet()) {
+		         Set<Integer> indices = categoriesMap.get(category);
 
-			if (indices.contains(imageIndex)) {
-				if (!categories.getCategories().contains(category)) {
-					indices.remove(imageIndex);
-					if(indices.size() == 0) {
-						categoriesToRemove.add(category);
-					}
-				}
-			}
-		}
+		         if (indices.contains(imageIndex)) {
+		             if (!categories.getCategories().contains(category)) {
+		                 indices.remove(imageIndex);
+		                 if(indices.size() == 0) {
+		                     categoriesToRemove.add(category);
+		                 }
+		             }
+		         }
+		     }
 
-		/**
-		 *  Remove any empty categories.
-		 */
-		for (String categoryToRemove : categoriesToRemove) {
-			javaPegIdToCategoriesMap.remove(categoryToRemove);
-		}
+		     /**
+		      *  Remove any empty categories.
+		      */
+		     for (String categoryToRemove : categoriesToRemove) {
+		         javaPegIdToCategoriesMap.remove(categoryToRemove);
+		     }
 
-		/**
-		 * Add any newly selected categories to the ImageMetaDataContext
-		 */
-		for (String category : categories.getCategories()) {
-			Set<Integer> indices = categoriesMap.get(category);
+		     /**
+		      * Add any newly selected categories to the ImageMetaDataContext
+		      */
+		     for (String category : categories.getCategories()) {
+		         Set<Integer> indices = categoriesMap.get(category);
 
-			if (indices == null || !indices.contains(imageIndex)) {
-				imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
-			}
-		}
+		         if (indices == null || !indices.contains(imageIndex)) {
+		             imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
+		         }
+		     }
+		 }
 	}
 
 	private static CategoryImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
@@ -536,11 +564,11 @@ public class ImageMetaDataDataBaseHandler {
 			String nodeName  = exifMetaData.item(index).getNodeName();
 			String nodeValue = exifMetaData.item(index).getTextContent();
 
-			if("f-number".equals(nodeName)) {
+			if(F_NUMBER.equals(nodeName)) {
 				imageExifMetaData.setFNumber(Double.parseDouble(nodeValue));
-			} else if("camera-model".equals(nodeName)) {
+			} else if(CAMERA_MODEL.equals(nodeName)) {
 				imageExifMetaData.setCameraModel(nodeValue);
-			} else if("date-time".equals(nodeName)) {
+			} else if(DATE_TIME.equals(nodeName)) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 				try {
 					imageExifMetaData.setDateTime(sdf.parse(nodeValue));
@@ -549,13 +577,13 @@ public class ImageMetaDataDataBaseHandler {
 					logger.logERROR("Could not parse date string: \"" + nodeValue + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
 					logger.logERROR(pex);
 				}
-			} else if("iso-value".equals(nodeName)) {
+			} else if(ISO_VALUE.equals(nodeName)) {
 				imageExifMetaData.setIsoValue(Integer.parseInt(nodeValue));
-			} else if("picture-height".equals(nodeName)) {
+			} else if(PICTURE_HEIGHT.equals(nodeName)) {
 				imageExifMetaData.setPictureHeight(Integer.parseInt(nodeValue));
-			} else if("picture-width".equals(nodeName)) {
+			} else if(PICTURE_WIDTH.equals(nodeName)) {
 				imageExifMetaData.setPictureWidth(Integer.parseInt(nodeValue));
-			} else if("exposure-time".equals(nodeName)) {
+			} else if(EXPOSURE_TIME.equals(nodeName)) {
 				try {
 					imageExifMetaData.setExposureTime(new ExposureTime(nodeValue));
 				} catch (ExposureTimeException etex) {

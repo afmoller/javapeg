@@ -379,6 +379,12 @@ public class MainGUI extends JFrame {
 		this.printSystemProperties();
 		this.overrideSwingUIProperties();
 
+		// Check if JavaPEG client id is set, otherwise generate one and set it
+        // to the configuration.
+        if (!ConfigUtil.isClientIdSet(configuration.getJavapegClientId())) {
+            configuration.setJavapegClientId(ConfigUtil.generateClientId());
+        }
+
 		UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
 
 		if(updatesChecker.getEnabled()) {
@@ -416,12 +422,7 @@ public class MainGUI extends JFrame {
 		this.initiateApplicationContext();
 		logger.logDEBUG("Application Context initialization Finished");
 
-		// Check if JavaPEG client id is set, otherwise generate one and set it
-        // to the configuration.
-        if (!ConfigUtil.isClientIdSet(configuration.getJavapegClientId())) {
-            configuration.setJavapegClientId(ConfigUtil.generateClientId());
-            saveSettings();
-        }
+
 	}
 
 	private void printSystemProperties() {
@@ -2862,7 +2863,7 @@ public class MainGUI extends JFrame {
 	private Map<String, Categories> getSelectedJavaPegIdToCategoriesMapFromTreeModels(Map<String, CheckTreeManager> javaPegIdToCheckTreeManager) {
         Map<String, Categories> javaPegIdToCategories = null;
 
-        if (!javaPegIdToCheckTreeManager.isEmpty()) {
+        if (javaPegIdToCheckTreeManager != null && !javaPegIdToCheckTreeManager.isEmpty()) {
             javaPegIdToCategories = new HashMap<String, Categories>();
 
             for (String javaPegId : javaPegIdToCheckTreeManager.keySet()) {
@@ -3602,7 +3603,7 @@ public class MainGUI extends JFrame {
 
             // Deserialize a newly created or an already existing
             // image meta data file.
-            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_CONTEXT);
 
             Logger logger = Logger.getInstance();
 
@@ -3613,6 +3614,11 @@ public class MainGUI extends JFrame {
                 // path.
                 ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
                 imageRepositoryListModel.add(iri);
+
+                // Add the path to the configuration, so the entry will be
+                // persisted upon application exit.
+                configuration.getRepository().getPaths().getPaths().add(repositoryPath);
+
                 logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
             } else {
                 logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
