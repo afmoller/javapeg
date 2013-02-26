@@ -80,6 +80,7 @@ public class ImageSearchResultViewer extends JFrame {
 	private GridLayout thumbNailGridLayout;
 
 	private JPanel thumbNailsPanel;
+	private JScrollPane scrollpane;
 
 	public ImageSearchResultViewer(Set<File> imagesToView) {
 
@@ -139,7 +140,7 @@ public class ImageSearchResultViewer extends JFrame {
 		hSB.setUnitIncrement(40);
 		vSB.setUnitIncrement(40);
 
-		JScrollPane scrollpane = new JScrollPane(thumbNailsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpane = new JScrollPane(thumbNailsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.setHorizontalScrollBar(hSB);
 		scrollpane.setVerticalScrollBar(vSB);
 
@@ -401,9 +402,15 @@ public class ImageSearchResultViewer extends JFrame {
 	private class ComponentListener extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
-			if (((thumbNailsPanel.getVisibleRect().width - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
+		    int scrollbarWidth = 0;
 
-				int columns = (thumbNailsPanel.getVisibleRect().width - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
+            if (scrollpane.getHorizontalScrollBar().isVisible()) {
+                scrollbarWidth = scrollpane.getVerticalScrollBar().getWidth();
+            }
+
+		    if (((thumbNailsPanel.getWidth() - scrollbarWidth - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
+
+				int columns = (thumbNailsPanel.getWidth() - scrollbarWidth - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
 
 				thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
 				thumbNailsPanel.invalidate();
