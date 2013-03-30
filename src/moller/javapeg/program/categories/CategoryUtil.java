@@ -10,6 +10,7 @@ import javax.swing.tree.TreePath;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.model.CategoriesModel;
+import moller.javapeg.program.model.ModelInstanceLibrary;
 
 public class CategoryUtil {
 
@@ -75,7 +76,13 @@ public class CategoryUtil {
 	public static JTree createCategoriesTree() {
 		JTree categoriesTree = new JTree();
 
-		categoriesTree.setModel(new CategoriesModel(Config.getInstance().get().getCategories()));
+		CategoriesModel categoriesModel = ModelInstanceLibrary.getInstance().getCategoriesModel();
+
+		if (categoriesModel.getRoot() == null) {
+		    categoriesModel.setRoot(Config.getInstance().get().getCategories());
+		}
+
+		categoriesTree.setModel(categoriesModel);
 		categoriesTree.setShowsRootHandles(true);
 		categoriesTree.setRootVisible(false);
 

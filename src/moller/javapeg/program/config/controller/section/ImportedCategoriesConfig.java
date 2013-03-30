@@ -37,6 +37,7 @@ public class ImportedCategoriesConfig {
                 Node instanceNode = instancesNodeList.item(index);
                 String javapegClientId = (String)xPath.evaluate("@" + ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE, instanceNode, XPathConstants.STRING);
                 String displayName = (String)xPath.evaluate("@" + ConfigElement.DISPLAY_NAME, instanceNode, XPathConstants.STRING);
+                Integer highestUsedId = Integer.parseInt((String)xPath.evaluate("@" + ConfigElement.HIGHEST_USED_ID, instanceNode, XPathConstants.STRING));
 
                 DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
 
@@ -44,6 +45,8 @@ public class ImportedCategoriesConfig {
 
                 ImportedCategories importedCategories = new ImportedCategories();
                 importedCategories.setDisplayName(displayName);
+                importedCategories.setHighestUsedId(highestUsedId);
+                importedCategories.setJavaPegId(javapegClientId);
                 importedCategories.setRoot(root);
 
                 importedCategoriesConfig.put(javapegClientId, importedCategories);
@@ -62,12 +65,13 @@ public class ImportedCategoriesConfig {
 
         for (String javaPEGId : javaPEGIdToImportedCategoriesMappings.keySet()) {
 
-            XMLAttribute[] xmlAttributes = new XMLAttribute[2];
+            XMLAttribute[] xmlAttributes = new XMLAttribute[3];
 
             ImportedCategories importedCategories = javaPEGIdToImportedCategoriesMappings.get(javaPEGId);
 
-            xmlAttributes[0] = new XMLAttribute("displayname", importedCategories.getDisplayName());
-            xmlAttributes[1] = new XMLAttribute("javapegclientid", javaPEGId);
+            xmlAttributes[0] = new XMLAttribute(ConfigElement.DISPLAY_NAME, importedCategories.getDisplayName());
+            xmlAttributes[1] = new XMLAttribute(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE, javaPEGId);
+            xmlAttributes[2] = new XMLAttribute(ConfigElement.HIGHEST_USED_ID, importedCategories.getHighestUsedId());
 
             //  INSTANCE start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.INSTANCE, xmlAttributes, Tab.FOUR, xmlsw);

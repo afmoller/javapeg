@@ -17,13 +17,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -67,6 +70,7 @@ import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
@@ -178,6 +182,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
 	private JButton removeSelectedImagePathsButton;
 
+	private JList<Object> importedCategoriesList;
 	private JList<Object> imageRepositoriesAllwaysAddList;
 	private JList<Object> imageRepositoriesNeverAddList;
 	private JList<Object> imageRepositoriesList;
@@ -711,7 +716,8 @@ public class ConfigViewerGUI extends JFrame {
 		thumbnailConfigurationPanel.add(thumbnailToolTipPanel, posThumbnailPanel.nextRow().expandW().expandH());
 	}
 
-	private void createTagConfigurationPanel() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    private void createTagConfigurationPanel() {
 
 	    TagImagesPreview tagImagesPreview = configuration.getTagImages().getPreview();
 
@@ -755,9 +761,39 @@ public class ConfigViewerGUI extends JFrame {
 		categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow().expandW());
 
 		/**
+         * Start of Imported Categories Area
+         */
+		Map<String, ImportedCategories> importedCategories = configuration.getImportedCategoriesConfig();
+
+		DefaultListModel<ImportedCategories> importedCategoriesListModel = new DefaultListModel<ImportedCategories>();
+		for (ImportedCategories importedCategory : importedCategories.values()) {
+		    importedCategoriesListModel.addElement(importedCategory);
+		}
+
+		importedCategoriesList = new JList(importedCategoriesListModel);
+		importedCategoriesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		JScrollPane importedCategoriesScrollPane = new JScrollPane(importedCategoriesList);
+		importedCategoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		JButton removeSelectedImportedCategoriesButton = new JButton();
+//		TODO: Remove hard coded string
+		removeSelectedImportedCategoriesButton.setToolTipText("Remove the selected imported categories");
+		removeSelectedImportedCategoriesButton.addActionListener(new RemoveImportedCategoriesListener());
+
+		JPanel importedCategoriesPanel = new JPanel(new GridBagLayout());
+//      TODO: Remove hard coded string
+		importedCategoriesPanel.setBorder(BorderFactory.createTitledBorder("Imported Categories"));
+
+		GBHelper posImportedCategoriesPanel = new GBHelper();
+
+        importedCategoriesPanel.add(importedCategoriesScrollPane , posImportedCategoriesPanel.expandW().expandH());
+        importedCategoriesPanel.add(removeSelectedImportedCategoriesButton, posImportedCategoriesPanel.nextRow().align(GridBagConstraints.WEST));
+
+
+		/**
 		 * Start of Image Repositories Area
 		 */
-
 		addAutomaticallyRadioButton = new JRadioButton(lang.get("configviewer.tag.imageRepositories.label.addAutomatically"));
 		addAutomaticallyRadioButton.setName("0");
 		askToAddRadioButton = new JRadioButton(lang.get("configviewer.tag.imageRepositories.label.askToAdd"));
@@ -812,8 +848,11 @@ public class ConfigViewerGUI extends JFrame {
 
             removeSelectedAllwaysAddImagePaths.setIcon(removeIcon);
             removeSelectedDoNotAllwaysAddImagePaths.setIcon(removeIcon);
+            removeSelectedImportedCategoriesButton.setIcon(removeIcon);
         } catch (IOException iox) {
             removeSelectedAllwaysAddImagePaths.setText("X");
+            removeSelectedDoNotAllwaysAddImagePaths.setText("X");
+            removeSelectedImportedCategoriesButton.setText("X");
             logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the remove selected image paths button. See stacktrace below for details");
             logger.logERROR(iox);
         }
@@ -870,14 +909,14 @@ public class ConfigViewerGUI extends JFrame {
 
 		GBHelper posButtonPanel = new GBHelper();
 
-		buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel);
-		buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.nextCol());
+		buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.align(GridBagConstraints.WEST));
+		buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel.nextRow());
 
 		GBHelper posImageRepositoriesContent = new GBHelper();
 
 		imageRepositoriesContentPanel.add(imageRepositoriesScrollPane, posImageRepositoriesContent.expandW().expandH());
 		imageRepositoriesContentPanel.add(new Gap(2), posImageRepositoriesContent.nextRow());
-		imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().expandW());
+		imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().align(GridBagConstraints.WEST));
 
 		tagConfigurationPanel = new JPanel(new GridBagLayout());
 		tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -886,6 +925,7 @@ public class ConfigViewerGUI extends JFrame {
 
 		tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
 		tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW().expandH());
+		tagConfigurationPanel.add(importedCategoriesPanel, posTagPanel.nextRow().expandW().expandH());
 		tagConfigurationPanel.add(imageRepositoriesAdditionModePanel, posTagPanel.nextRow().expandW().expandH());
 		tagConfigurationPanel.add(imageRepositoriesContentPanel, posTagPanel.nextRow().expandW().expandH());
 	}
@@ -1628,6 +1668,36 @@ public class ConfigViewerGUI extends JFrame {
                     }
                     imageRepositoriesNeverAddList.clearSelection();
                 }
+            }
+        }
+    }
+
+	private class RemoveImportedCategoriesListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (!importedCategoriesList.isSelectionEmpty()) {
+
+                Map<String, ImportedCategories> importedCategoriesMap = Config.getInstance().get().getImportedCategoriesConfig();
+
+                Set<String> keysToRemove = new HashSet<String>();
+
+                // Search for imported categories to remove...
+                for (Object selectedValue : importedCategoriesList.getSelectedValuesList()) {
+
+                    for (String key : importedCategoriesMap.keySet()) {
+                        if (importedCategoriesMap.get(key).equals(selectedValue)) {
+                            keysToRemove.add(key);
+                            ((DefaultListModel<Object>)importedCategoriesList.getModel()).removeElement(selectedValue);
+                        }
+                    }
+                }
+
+                // ... and remove the found matches.
+                for (String key : keysToRemove) {
+                    importedCategoriesMap.remove(key);
+                }
+
+                importedCategoriesList.clearSelection();
             }
         }
     }

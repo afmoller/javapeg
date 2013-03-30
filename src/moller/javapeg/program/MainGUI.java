@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -39,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
@@ -562,7 +562,7 @@ public class MainGUI extends JFrame {
 
 		// Create menu items in the help menu
 		helpJMenuItem = new JMenuItem(lang.get("menu.item.programHelp"));
-		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
+		helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
 
 		aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
 		aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
@@ -1931,6 +1931,19 @@ public class MainGUI extends JFrame {
 		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_AND_COMMENT, previewAndCommentSplitPane.getDividerLocation());
 		GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitpane.getDividerLocation());
 
+
+		SortedSet<Object> imageRepositoryItems = imageRepositoryListModel.getModel();
+
+		List<File> paths = new ArrayList<File>();
+
+		for (Object imageRepositoryItem : imageRepositoryItems) {
+		    paths.add(((ImageRepositoryItem)imageRepositoryItem).getPath());
+		}
+
+		RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
+
+		repositoryPaths.setPaths(paths);
+
 		Config.getInstance().save();
 	}
 
@@ -2005,25 +2018,82 @@ public class MainGUI extends JFrame {
 
             ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
 
+            String importedCategoriesJavePegId = importedCategoriesFromFile.getJavaPegId();
+
             ImportedCategories importedCategories = new ImportedCategories();
             importedCategories.setDisplayName(ciep.getFileName());
+            importedCategories.setHighestUsedId(importedCategoriesFromFile.getHighestUsedId());
+            importedCategories.setJavaPegId(importedCategoriesJavePegId);
             importedCategories.setRoot(importedCategoriesFromFile.getRoot());
 
             Map<String, ImportedCategories> importedCategoriesConfig = configuration.getImportedCategoriesConfig();
 
-            String importedCategoriesJavePegId = importedCategoriesFromFile.getJavaPegId();
+            ApplicationContext ac = ApplicationContext.getInstance();
 
             if (importedCategoriesConfig.containsKey(importedCategoriesJavePegId)) {
                 if (importedCategoriesFromFile.getHighestUsedId() >= importedCategoriesConfig.get(importedCategoriesJavePegId).getHighestUsedId()) {
+
+                    // Check if there already is an imported categories from
+                    // currently imported JavaPEG client but with a different
+                    // name than entered in the import dialog.
+                    String currentDispayName = importedCategoriesConfig.get(importedCategoriesJavePegId).getDisplayName();
+
+                    if (!ciep.getFileName().equals(currentDispayName)) {
+                        // TODO: remomve hard coded string.
+                        switch (displayConfirmDialog("The categories to import are already imported but with a different display name.\n\nShall the old display name (" + currentDispayName + ") continue to be used?  (new display name: " + ciep.getFileName() + ")", "Warning", JOptionPane.YES_NO_OPTION)) {
+                        case JOptionPane.YES_OPTION:
+                            importedCategories.setDisplayName(currentDispayName);
+                            break;
+                        default:
+                            // Do nothing. The correct name is already set.
+                            break;
+                        }
+                    }
+
+                    if (displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {
+                        askForANewDisplayName(importedCategories, importedCategoriesConfig);
+                    }
+
                     importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
+                    ac.setRestartNeeded();
                 } else {
 //                 TODO: remove hard coded string
                     displayInformationMessage("Newer version of the categories are already imported");
                 }
             } else {
+                if (displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {
+                    askForANewDisplayName(importedCategories, importedCategoriesConfig);
+                }
+
                 importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
+                ac.setRestartNeeded();
+            }
+
+            if (ac.isRestartNeeded()) {
+//              TODO: remove hard coded string
+              displayInformationMessage("JavaPEG needs to be restarted to make use of categories import");
             }
         }
+	}
+
+	private boolean displayNameAlreadyInUse(String displayName, Collection<ImportedCategories> importedCategoriesConfig) {
+	    for (ImportedCategories importedCategoryConfig : importedCategoriesConfig) {
+	        if (importedCategoryConfig.getDisplayName().equals(displayName)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	private void askForANewDisplayName(ImportedCategories importedCategories, Map<String, ImportedCategories> importedCategoriesConfig) {
+	    String newDisplayName = importedCategories.getDisplayName();
+
+        while (displayNameAlreadyInUse(newDisplayName, importedCategoriesConfig.values()) || newDisplayName == null /** Cancel button was clicked **/ || newDisplayName.length() == 0) {
+//            TODO: Remove hard coded string
+
+            newDisplayName = displayInputDialog("Display name conflict", "The entered displayname is already in use, please enter another displayname", "");
+        }
+        importedCategories.setDisplayName(newDisplayName);
 	}
 
     private void exportCategories() {
@@ -2037,14 +2107,13 @@ public class MainGUI extends JFrame {
             if (FileUtil.testWriteAccess(directoryToExportCategoriesTo)) {
                 OutputStream os = null;
                 File categoryExportFile = null;
-                String encoding = "UTF-8";
 
                 try {
                     categoryExportFile = new File(directoryToExportCategoriesTo, ciep.getFileName() + ".cml");
                     os = new FileOutputStream(categoryExportFile);
 
                     XMLOutputFactory factory = XMLOutputFactory.newInstance();
-                    XMLStreamWriter xmlsw = factory.createXMLStreamWriter(os, encoding);
+                    XMLStreamWriter xmlsw = factory.createXMLStreamWriter(os, C.UTF8);
 
                     CategoriesConfig.exportCategoriesConfig(configuration.getCategories(), configuration.getJavapegClientId(), ApplicationContext.getInstance().getHighestUsedCategoryID(), xmlsw);
 
@@ -3146,6 +3215,12 @@ public class MainGUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
 
+			if (javaPegIdToCheckTreeManager != null) {
+			    for (CheckTreeManager checkTreeManager : javaPegIdToCheckTreeManager.values()) {
+			        checkTreeManager.getSelectionModel().clearSelection();
+			    }
+			}
+
 			yearMetaDataValue.clearValue();
 			monthMetaDataValue.clearValue();
 			dayMetaDataValue.clearValue();
@@ -3609,6 +3684,7 @@ public class MainGUI extends JFrame {
 
             if (result) {
                 ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
+                ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
 
                 // Populate the image repository model with the currently selected
                 // path.
