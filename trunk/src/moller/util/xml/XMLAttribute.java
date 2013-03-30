@@ -1,11 +1,11 @@
 package moller.util.xml;
 
 public class XMLAttribute {
-	
+
 	private String attributeName;
-	private String attributeValue;
-	
-	public XMLAttribute(String attributeName, String attributeValue) {
+	private Object attributeValue;
+
+	public XMLAttribute(String attributeName, Object attributeValue) {
 		super();
 		this.attributeName = attributeName;
 		this.attributeValue = attributeValue;
@@ -16,14 +16,14 @@ public class XMLAttribute {
 	}
 
 	public String getValue() {
-		return attributeValue;
+		return attributeValue.toString();
 	}
 
 	public void setAttributeName(String attributeName) {
 		this.attributeName = attributeName;
 	}
 
-	public void setAttributeValue(String attributeValue) {
+	public void setAttributeValue(Object attributeValue) {
 		this.attributeValue = attributeValue;
 	}
 }

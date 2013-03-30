@@ -311,9 +311,15 @@ public class ImageMetaDataContext {
 
 		        imagePaths = ImageMetaDataContextUtil.compileSearchResult(searchResults);
 		    } else {
-		        for (String categroyId : c.getCategories()) {
-		            Set<Integer> indexForImagePaths = javaPegIdToCategories.get(javaPegId).get(categroyId);
-		            populateImagePathsSet(indexForImagePaths, imagePaths);
+		        for (String categoryId : c.getCategories()) {
+		            Map<String, Set<Integer>> categoryIdToIndex = javaPegIdToCategories.get(javaPegId);
+
+		            // If there are any images associated with the selected
+		            // categoryId.
+		            if (categoryIdToIndex != null) {
+		                Set<Integer> indexForImagePaths = categoryIdToIndex.get(categoryId);
+		                populateImagePathsSet(indexForImagePaths, imagePaths);
+		            }
 		        }
 		    }
 		}

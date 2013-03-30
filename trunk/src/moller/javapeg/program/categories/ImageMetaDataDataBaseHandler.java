@@ -347,34 +347,44 @@ public class ImageMetaDataDataBaseHandler {
 							rating = 0;
 						}
 					} else if(CATEGORIES.equals(node.getNodeName())) {
-						String categoriesString = node.getTextContent();
+					    String categoriesString = node.getTextContent();
+					    categories.addCategories(categoriesString);
 
-						// If there are no categories set to the current image,
-						// then there is no need to do anything from here...
-						if (categoriesString != null && categoriesString.length() > 0) {
-						    ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+					    switch (context) {
+                        case IMAGE_META_DATA_CONTEXT:
+                            // Do nothing here.
+                            break;
 
-						    Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
+                        case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
+                            // If there are no categories set to the current image,
+                            // then there is no need to do anything from here...
+                            if (categoriesString != null && categoriesString.length() > 0) {
+                                ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 
-						    Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
+                                Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
 
-						    // If there are no categories defined for current
-						    // JavaPeg Id, then do not do anything here...
-						    if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
+                                Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
 
-						        categories.addCategories(categoriesString);
-						        Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
+                                // If there are no categories defined for current
+                                // JavaPeg Id, then do not do anything here...
+                                if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
 
-						        for (String categoryId : categories.getCategories()) {
-						            if (!categoryIdsForJavePegId.contains(categoryId)) {
-						                //						        TODO: Remove hard coded string
-						                if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
-						                    showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
-						                }
-						            }
-						        }
-						    }
-						}
+                                    Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
+
+                                    for (String categoryId : categories.getCategories()) {
+                                        if (!categoryIdsForJavePegId.contains(categoryId)) {
+                                            //						        TODO: Remove hard coded string
+                                            if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+                                                showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+					    }
+
 					}
 				}
 

@@ -196,9 +196,17 @@ public class ImageMetaDataContextUtil {
 		if (imageMetaDataContextSearchParameters.getCategories() != null) {
 			return true;
 		}
-		if (imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap() != null) {
-		    return true;
+
+		Map<String, Categories> javaPegIdToCategoriesMap = imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap();
+
+		if (javaPegIdToCategoriesMap != null) {
+		    for (Categories categories : javaPegIdToCategoriesMap.values()) {
+		        if (!categories.getCategories().isEmpty()) {
+		            return true;
+		        }
+		    }
 		}
+
 		if (imageMetaDataContextSearchParameters.getImageSize() != null) {
 			return true;
 		}

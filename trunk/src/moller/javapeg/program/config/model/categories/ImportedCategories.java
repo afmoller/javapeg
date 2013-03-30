@@ -33,4 +33,8 @@ public class ImportedCategories {
     public void setRoot(DefaultMutableTreeNode root) {
         this.root = root;
     }
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }

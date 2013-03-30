@@ -11,15 +11,17 @@ public class ModelInstanceLibrary {
 	private final PreviewTableModel  previewTableModel;
 	private final SortedListModel    imageRepositoryListModel;
 	private final ImagesToViewModel  imagesToViewModel;
+	private final CategoriesModel    categoriesModel;
 
 	/**
 	 * Private constructor.
 	 */
 	private ModelInstanceLibrary() {
-		metaDataTableModel                    = new MetaDataTableModel();
-		previewTableModel                     = new PreviewTableModel();
-		imagesToViewModel                     = new ImagesToViewModel();
-		imageRepositoryListModel              = new SortedListModel();
+		metaDataTableModel       = new MetaDataTableModel();
+		previewTableModel        = new PreviewTableModel();
+		imagesToViewModel        = new ImagesToViewModel();
+		imageRepositoryListModel = new SortedListModel();
+		categoriesModel          = new CategoriesModel(null);
 	}
 
 	/**
@@ -53,4 +55,8 @@ public class ModelInstanceLibrary {
 	public ImagesToViewModel getImagesToViewModel() {
 		return imagesToViewModel;
 	}
+
+	public CategoriesModel getCategoriesModel() {
+        return categoriesModel;
+    }
 }
