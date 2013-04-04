@@ -174,7 +174,6 @@ import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.DefaultLookAndFeel;
-import moller.util.gui.CustomJOptionPane;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.TreeUtil;
@@ -2007,7 +2006,7 @@ public class MainGUI extends JFrame {
 	}
 
 	public String displayInputDialog(String title, String label, String initialValue) {
-		return CustomJOptionPane.showInputDialog(this, label, title, initialValue);
+		return CategoryUtil.displayInputDialog(this, title, label, initialValue);
 	}
 
 	private void importCategories() {
@@ -2038,11 +2037,14 @@ public class MainGUI extends JFrame {
                     // name than entered in the import dialog.
                     String currentDispayName = importedCategoriesConfig.get(importedCategoriesJavePegId).getDisplayName();
 
+                    boolean skipNameTest = false;
+
                     if (!ciep.getFileName().equals(currentDispayName)) {
                         // TODO: remomve hard coded string.
                         switch (displayConfirmDialog("The categories to import are already imported but with a different display name.\n\nShall the old display name (" + currentDispayName + ") continue to be used?  (new display name: " + ciep.getFileName() + ")", "Warning", JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
                             importedCategories.setDisplayName(currentDispayName);
+                            skipNameTest = true;
                             break;
                         default:
                             // Do nothing. The correct name is already set.
@@ -2050,8 +2052,10 @@ public class MainGUI extends JFrame {
                         }
                     }
 
-                    if (displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {
-                        askForANewDisplayName(importedCategories, importedCategoriesConfig);
+                    if (!skipNameTest) {
+                        if (CategoryUtil.displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values()) || importedCategories.getDisplayName().trim().length() == 0) {
+                            importedCategories.setDisplayName(CategoryUtil.askForANewDisplayName(this, importedCategories.getDisplayName(), importedCategoriesConfig));
+                        }
                     }
 
                     importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
@@ -2061,8 +2065,8 @@ public class MainGUI extends JFrame {
                     displayInformationMessage("Newer version of the categories are already imported");
                 }
             } else {
-                if (displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {
-                    askForANewDisplayName(importedCategories, importedCategoriesConfig);
+                if (CategoryUtil.displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {
+                    importedCategories.setDisplayName(CategoryUtil.askForANewDisplayName(this, importedCategories.getDisplayName(), importedCategoriesConfig));
                 }
 
                 importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
@@ -2074,26 +2078,6 @@ public class MainGUI extends JFrame {
               displayInformationMessage("JavaPEG needs to be restarted to make use of categories import");
             }
         }
-	}
-
-	private boolean displayNameAlreadyInUse(String displayName, Collection<ImportedCategories> importedCategoriesConfig) {
-	    for (ImportedCategories importedCategoryConfig : importedCategoriesConfig) {
-	        if (importedCategoryConfig.getDisplayName().equals(displayName)) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-
-	private void askForANewDisplayName(ImportedCategories importedCategories, Map<String, ImportedCategories> importedCategoriesConfig) {
-	    String newDisplayName = importedCategories.getDisplayName();
-
-        while (displayNameAlreadyInUse(newDisplayName, importedCategoriesConfig.values()) || newDisplayName == null /** Cancel button was clicked **/ || newDisplayName.length() == 0) {
-//            TODO: Remove hard coded string
-
-            newDisplayName = displayInputDialog("Display name conflict", "The entered displayname is already in use, please enter another displayname", "");
-        }
-        importedCategories.setDisplayName(newDisplayName);
 	}
 
     private void exportCategories() {

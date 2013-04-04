@@ -35,8 +35,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -58,6 +60,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
+import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.model.Configuration;
@@ -145,7 +148,7 @@ public class ConfigViewerGUI extends JFrame {
 	private JCheckBox useLastModifiedTime;
 	private JTextField maximumLengthOfCameraModelValueTextField;
 
-	private  JLabel currentLanguage;
+	private JLabel currentLanguage;
 
 	private JRadioButton manualRadioButton;
 	private JRadioButton automaticRadioButton;
@@ -186,6 +189,9 @@ public class ConfigViewerGUI extends JFrame {
 	private JList<Object> imageRepositoriesAllwaysAddList;
 	private JList<Object> imageRepositoriesNeverAddList;
 	private JList<Object> imageRepositoriesList;
+
+	private JPopupMenu importedCategoriesPopupMenu;
+	private ImportedCategories theImportedCategoriesToRenameOrDelete;
 
 	private final Configuration configuration;
 	private final Logger   logger;
@@ -772,6 +778,21 @@ public class ConfigViewerGUI extends JFrame {
 
 		importedCategoriesList = new JList(importedCategoriesListModel);
 		importedCategoriesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		importedCategoriesList.addMouseListener(new RightClickMouseListener());
+
+//		TODO: Fix hard coded string
+		JMenuItem renameImportedCategoriesJMenuItem = new JMenuItem("Rename");
+		renameImportedCategoriesJMenuItem.setActionCommand("Rename");
+		renameImportedCategoriesJMenuItem.addActionListener(new ImportedCategoiresPopupListener());
+
+//		TODO: Fix hard coded string
+		JMenuItem deleteImportedCategoriesJMenuItem = new JMenuItem("Delete");
+		deleteImportedCategoriesJMenuItem.setActionCommand("Delete");
+		deleteImportedCategoriesJMenuItem.addActionListener(new ImportedCategoiresPopupListener());
+
+		importedCategoriesPopupMenu = new JPopupMenu();
+		importedCategoriesPopupMenu.add(renameImportedCategoriesJMenuItem);
+		importedCategoriesPopupMenu.add(deleteImportedCategoriesJMenuItem);
 
 		JScrollPane importedCategoriesScrollPane = new JScrollPane(importedCategoriesList);
 		importedCategoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -1400,7 +1421,31 @@ public class ConfigViewerGUI extends JFrame {
 		return JOptionPane.showConfirmDialog(this, message, label, type);
 	}
 
-	private class RotateLogSizeJTextFieldListener implements DocumentListener {
+	private void removeImportedCategories() {
+        Map<String, ImportedCategories> importedCategoriesMap = Config.getInstance().get().getImportedCategoriesConfig();
+
+        Set<String> keysToRemove = new HashSet<String>();
+
+        // Search for imported categories to remove...
+        for (Object selectedValue : importedCategoriesList.getSelectedValuesList()) {
+
+            for (String key : importedCategoriesMap.keySet()) {
+                if (importedCategoriesMap.get(key).equals(selectedValue)) {
+                    keysToRemove.add(key);
+                    ((DefaultListModel<Object>)importedCategoriesList.getModel()).removeElement(selectedValue);
+                }
+            }
+        }
+
+        // ... and remove the found matches.
+        for (String key : keysToRemove) {
+            importedCategoriesMap.remove(key);
+        }
+
+        importedCategoriesList.clearSelection();
+    }
+
+    private class RotateLogSizeJTextFieldListener implements DocumentListener {
 
 		public void changedUpdate(DocumentEvent e) {
 		}
@@ -1676,31 +1721,58 @@ public class ConfigViewerGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!importedCategoriesList.isSelectionEmpty()) {
-
-                Map<String, ImportedCategories> importedCategoriesMap = Config.getInstance().get().getImportedCategoriesConfig();
-
-                Set<String> keysToRemove = new HashSet<String>();
-
-                // Search for imported categories to remove...
-                for (Object selectedValue : importedCategoriesList.getSelectedValuesList()) {
-
-                    for (String key : importedCategoriesMap.keySet()) {
-                        if (importedCategoriesMap.get(key).equals(selectedValue)) {
-                            keysToRemove.add(key);
-                            ((DefaultListModel<Object>)importedCategoriesList.getModel()).removeElement(selectedValue);
-                        }
-                    }
-                }
-
-                // ... and remove the found matches.
-                for (String key : keysToRemove) {
-                    importedCategoriesMap.remove(key);
-                }
-
-                importedCategoriesList.clearSelection();
+                removeImportedCategories();
             }
         }
     }
+
+	private class RightClickMouseListener extends MouseAdapter  {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                ((JList<Object>)e.getSource()).setSelectedIndex(((JList<Object>)e.getSource()).locationToIndex(e.getPoint()) );
+
+                int selecteIndex = ((JList<Object>)e.getSource()).locationToIndex(e.getPoint());
+
+                if (selecteIndex > -1) {
+                    theImportedCategoriesToRenameOrDelete = (ImportedCategories)((JList<Object>)e.getSource()).getModel().getElementAt(selecteIndex);
+                }
+                importedCategoriesPopupMenu.show(e.getComponent(), e.getX(), e.getY());
+
+            }
+        }
+	}
+
+	private class ImportedCategoiresPopupListener implements ActionListener {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	        if (e.getActionCommand().equals("Rename")) {
+	            if (theImportedCategoriesToRenameOrDelete != null) {
+
+	                // TODO: Fix hard coded string
+	                String newName = CategoryUtil.displayInputDialog(ConfigViewerGUI.this, "Rename Imported categories", "Enter a new name for imported categories: " + theImportedCategoriesToRenameOrDelete.getDisplayName(), "");
+
+	                // If newName is null then the cancel button has been
+	                // clicked, then do nothing.
+	                if (newName != null) {
+	                    if (CategoryUtil.displayNameAlreadyInUse(newName, configuration.getImportedCategoriesConfig().values()) || newName.trim().length() == 0) {
+	                        theImportedCategoriesToRenameOrDelete.setDisplayName(CategoryUtil.askForANewDisplayName(ConfigViewerGUI.this, newName, configuration.getImportedCategoriesConfig()));
+	                    } else {
+	                        theImportedCategoriesToRenameOrDelete.setDisplayName(newName);
+	                    }
+	                }
+	            }
+	        } else if (e.getActionCommand().equals("Delete")) {
+	            if (theImportedCategoriesToRenameOrDelete != null) {
+	                removeImportedCategories();
+	                theImportedCategoriesToRenameOrDelete = null;
+	            }
+	        }
+	    }
+	}
 
 	private class WindowEventHandler extends WindowAdapter {
 		@Override
