@@ -31,7 +31,6 @@ import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -83,6 +82,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableModel;
@@ -135,6 +136,7 @@ import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.gui.CustomizedJTable;
+import moller.javapeg.program.gui.FileTreeCellRenderer;
 import moller.javapeg.program.gui.HeadingPanel;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
 import moller.javapeg.program.gui.ImageViewer;
@@ -157,7 +159,6 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
-import moller.javapeg.program.model.FileModel;
 import moller.javapeg.program.model.MetaDataTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.PreviewTableModel;
@@ -358,6 +359,9 @@ public class MainGUI extends JFrame {
 
 	private ArrayList<ButtonGroup> importedButtonGroups;
 
+	/** Provides nice icons and names for files. */
+    private final FileSystemView fileSystemView;
+
 	public MainGUI(){
 
 		if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
@@ -370,6 +374,7 @@ public class MainGUI extends JFrame {
 		configuration = Config.getInstance().get();
 		lang = Language.getInstance();
 
+		fileSystemView = FileSystemView.getFileSystemView();
 
 		imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 		imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
@@ -1674,24 +1679,67 @@ public class MainGUI extends JFrame {
 
 	private JScrollPane initiateJTree() {
 
-		tree = new JTree (new FileModel (new Comparator<Object> (){
-			public int compare (Object fileAsObjectA, Object fileAsObjectB){
-				File fileA = (File) fileAsObjectA;
-				File fileB = (File) fileAsObjectB;
-				return (fileA.isDirectory () && ! fileB.isDirectory ()) ? -1 : (! fileA.isDirectory () && fileB.isDirectory ()) ? 1 : fileA.getAbsolutePath ().compareToIgnoreCase (fileB.getAbsolutePath ());
-			}
-		}));
+	    // the File tree
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
-		DefaultTreeCellRenderer renderer = 	new DefaultTreeCellRenderer();
-    	renderer.setLeafIcon(renderer.getDefaultClosedIcon());
+        TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
+            public void valueChanged(TreeSelectionEvent tse){
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)tse.getPath().getLastPathComponent();
+                showChildren(node);
+            }
+        };
 
-		tree.setCellRenderer(renderer);
-		tree.setRootVisible (false);
-		tree.setShowsRootHandles (true);
-		tree.addMouseListener(mouseListener = new Mouselistener());
+        // show the file system roots.
+        File[] roots = fileSystemView.getRoots();
+        for (File fileSystemRoot : roots) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
+            root.add( node );
+            File[] files = fileSystemView.getFiles(fileSystemRoot, true);
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    node.add(new DefaultMutableTreeNode(file));
+                }
+            }
+            //
+        }
 
+        tree = new JTree(treeModel);
+        tree.setRootVisible(false);
+        tree.addTreeSelectionListener(treeSelectionListener);
+        tree.setCellRenderer(new FileTreeCellRenderer());
+        tree.addMouseListener(mouseListener = new Mouselistener());
+        tree.setShowsRootHandles (true);
+        tree.expandRow(0);
+
+        showRootFile();
 		return new JScrollPane(tree);
 	}
+
+    private void showChildren(final DefaultMutableTreeNode node) {
+        tree.setEnabled(false);
+
+        File file = (File) node.getUserObject();
+        if (file.isDirectory()) {
+            File[] files = fileSystemView.getFiles(file, true); //!!
+
+            Arrays.sort(files);
+
+            if (node.isLeaf()) {
+                for (File child : files) {
+                    if (child.isDirectory()) {
+                        node.add(new DefaultMutableTreeNode(child));
+                    }
+                }
+            }
+        }
+        tree.setEnabled(true);
+    }
+
+    public void showRootFile() {
+        // ensure the main files are displayed
+        tree.setSelectionInterval(0,0);
+    }
 
 	public void addListeners(){
 		this.addWindowListener(new WindowDestroyer());
@@ -2511,7 +2559,20 @@ public class MainGUI extends JFrame {
             String totalPath;
 
             if (OsUtil.getOsName().toLowerCase().contains("windows")) {
-                totalPath = PathUtil.getTotalWindowsPathAsString(tree.getPathForLocation(e.getX(), e.getY()).getPath());
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+                File selectedFile = (File)selectedNode.getUserObject();
+                try {
+                    totalPath = selectedFile.getCanonicalPath();
+                } catch (IOException e1) {
+                    // If an exception is thrown then it means that a "special"
+                    // folder such as "Computer" or "Network" has been
+                    // selected. Thoose folders are no real directories and
+                    // will therefore cause an exception to be thrown when the
+                    // cannonical path is asked. And this is the thereby the
+                    // mechanism to decide wether an folder shall be
+                    // investigated for images or not.
+                    return;
+                }
             } else {
                 throw new RuntimeException("Unsupported Operating system: " + OsUtil.getOsName());
             }
@@ -3891,3 +3952,4 @@ public class MainGUI extends JFrame {
 		NO_RENAME_REMOVE_EXPAND;
 	}
 }
+
