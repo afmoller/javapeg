@@ -1,6 +1,7 @@
 3.0:
 ====
-- Add rename label of imported categories to configuration.
+- Fix the search when imported categories exists.
+- Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files

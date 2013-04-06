@@ -78,7 +78,12 @@
    
  ! If the keyboard was used to change image in the Image Viewer and the change
    image key was held down, then the change of images did not stop at once when
-   the key was released. This has been fixed in the version.  
+   the key was released. This has been fixed in this version.  
+   
+ ~ The directory selection tree to the left in the main windows is enhanced to
+   look like, with icons and content, as the icons in the native file explorer.
+   For instance the Desktop and Computer folders are displayed in an Windows
+   environment. 
    
  ~ Made the JPEG filtering a little bit more relaxed. All images with the 
    suffixes (case insensitive) JPG or JPEG that is able to be loaded by the 

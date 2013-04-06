@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.util.io.StreamUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -184,6 +185,8 @@ public class LayoutParser {
 		} catch (IOException io) {
 			JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.LayoutParser.parseError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
 			logStackTrace(io);
+		} finally {
+		    StreamUtil.close(layoutSource, true);
 		}
 	}
 
