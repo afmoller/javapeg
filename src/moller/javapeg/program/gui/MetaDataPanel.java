@@ -15,6 +15,8 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -60,8 +62,11 @@ public class MetaDataPanel extends JPanel {
 		metaDataTableModel.addColumn(lang.get("metadatapanel.tableheader.property"));
 		metaDataTableModel.addColumn(lang.get("metadatapanel.tableheader.value"));
 
+		TableRowSorter<TableModel> metaDataTableModelSorter = new TableRowSorter<TableModel>(metaDataTableModel);
+
 		table = new JTable(metaDataTableModel);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setRowSorter(metaDataTableModelSorter);
 		table.setEnabled(false);
 
 		scrollpane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

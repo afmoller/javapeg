@@ -8,7 +8,9 @@
  ! = Bug fixes since previous version
  ~ = Changes   since previous version
  
- 3.0 (2011-xx-xx)
+ 3.0 (2013-xx-xx)
+ 
+ + Row sorting, by column, added to the meta data tables.
  
  + Possible to reorder columns and sort the rows by any column in the METADATA
    and PREVIEW tables in the RENAME IMAGES mode. 
