@@ -6,15 +6,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.config.Config;
 
 public class ImageMetaDataContextUtil {
 
 	public static Set<File> performImageSearch(ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters) {
 		if (containSearchParameters(imageMetaDataContextSearchParameters)) {
-			return doSearch(imageMetaDataContextSearchParameters);
+			Set<File> searchResult = new HashSet<File>();
+
+		    for (String javaPegId : imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap().keySet()) {
+			    searchResult.addAll(doSearch(imageMetaDataContextSearchParameters, javaPegId));
+			}
+
+		    return searchResult;
 		} else {
 			Set<String> imagePathsAsStrings = ImagePathAndIndex.getInstance().getImagePaths();
 			Set<File> imagePathsAsFiles = new HashSet<File>(imagePathsAsStrings.size());
@@ -26,83 +32,78 @@ public class ImageMetaDataContextUtil {
 		}
 	}
 
-	private static Set<File> doSearch(ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters) {
+	private static Set<File> doSearch(ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters, String javaPegId) {
 
 		List<Set<File>> searchResults = new ArrayList<Set<File>>();
 
 		String year = imageMetaDataContextSearchParameters.getYear();
 		if(year != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByYear(year));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByYear(javaPegId, year));
 		}
 
 		String month = imageMetaDataContextSearchParameters.getMonth();
 		if(month != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMonth(month));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMonth(javaPegId, month));
 		}
 
 		String day = imageMetaDataContextSearchParameters.getDay();
 		if(day != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByDay(day));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByDay(javaPegId, day));
 		}
 
 		String hour = imageMetaDataContextSearchParameters.getHour();
 		if(hour != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByHour(hour));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByHour(javaPegId, hour));
 		}
 
 		String minute = imageMetaDataContextSearchParameters.getMinute();
 		if(minute != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMinute(minute));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByMinute(javaPegId, minute));
 		}
 
 		String second = imageMetaDataContextSearchParameters.getSecond();
 		if(second != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesBySecond(second));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesBySecond(javaPegId, second));
 		}
 
 		String apertureValue = imageMetaDataContextSearchParameters.getFNumber();
 		if(apertureValue != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByFNumberValue(apertureValue));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByFNumberValue(javaPegId, apertureValue));
 		}
 
 		String cameraModel = imageMetaDataContextSearchParameters.getCameraModel();
 		if(cameraModel != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCameraModel(cameraModel));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCameraModel(javaPegId, cameraModel));
 		}
 
 		String comment = imageMetaDataContextSearchParameters.getComment();
 		if(comment != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByComment(comment));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByComment(javaPegId, comment));
 		}
 
-		Categories categories = imageMetaDataContextSearchParameters.getCategories();
+		Categories categories = imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap().get(javaPegId);
 		if(categories != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCategory(Config.getInstance().get().getJavapegClientId(), categories, imageMetaDataContextSearchParameters.isAndCategoriesSearch()));
-		}
-
-		Map<String, Categories> javaPegIdToCategoriesMap = imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap();
-		if(javaPegIdToCategoriesMap != null) {
-		    searchResults.add(ImageMetaDataContext.getInstance().findImagesByJavaPegIdToCategoriesMap(javaPegIdToCategoriesMap, imageMetaDataContextSearchParameters.getImportedCategoriesSearch()));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByCategory(javaPegId, categories, imageMetaDataContextSearchParameters.getJavaPegToAndCategoriesSearch().get(javaPegId)));
 		}
 
 		String imageSize = imageMetaDataContextSearchParameters.getImageSize();
 		if(imageSize != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByImageSize(imageSize));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByImageSize(javaPegId, imageSize));
 		}
 
 		String iso = imageMetaDataContextSearchParameters.getIso();
 		if(iso != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByIso(iso));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByIso(javaPegId, iso));
 		}
 
 		boolean[] ratings = imageMetaDataContextSearchParameters.getRatings();
 		if(ratings != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByRating(ratings));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByRating(javaPegId, ratings));
 		}
 
 		String exposureTime = imageMetaDataContextSearchParameters.getExposureTime();
 		if(exposureTime != null) {
-			searchResults.add(ImageMetaDataContext.getInstance().findImagesByExposureTime(exposureTime));
+			searchResults.add(ImageMetaDataContext.getInstance().findImagesByExposureTime(javaPegId, exposureTime));
 		}
 		return compileSearchResult(searchResults);
 	}
@@ -193,15 +194,12 @@ public class ImageMetaDataContextUtil {
 		if (imageMetaDataContextSearchParameters.getComment() != null) {
 			return true;
 		}
-		if (imageMetaDataContextSearchParameters.getCategories() != null) {
-			return true;
-		}
 
 		Map<String, Categories> javaPegIdToCategoriesMap = imageMetaDataContextSearchParameters.getJavaPegIdToCategoriesMap();
 
 		if (javaPegIdToCategoriesMap != null) {
 		    for (Categories categories : javaPegIdToCategoriesMap.values()) {
-		        if (!categories.getCategories().isEmpty()) {
+		        if (categories != null) {
 		            return true;
 		        }
 		    }
@@ -221,4 +219,40 @@ public class ImageMetaDataContextUtil {
 		}
 		return false;
 	}
+
+	/**
+	 * This method looks up all the values (for instance years) to display in
+	 * the, selection box for search parameters when the year box is selected.
+	 *
+	 * @param integerCollectionWithValuesToFetch is the collection to search
+	 *        for values to display.
+	 * @return a sorted set with all found values for a specific
+	 *         {@link Integer} based search box; years, months, dates, ...
+	 */
+	public static Set<Integer> getAllIntegerValues(Map<String, Map<Integer, Set<Integer>>> integerCollectionWithValuesToFetch) {
+        Set<Integer> returnValues = new TreeSet<Integer>();
+
+        for (String javaPegId : integerCollectionWithValuesToFetch.keySet()) {
+            returnValues.addAll(integerCollectionWithValuesToFetch.get(javaPegId).keySet());
+        }
+        return returnValues;
+    }
+
+	/**
+     * This method looks up all the values (for instance years) to display in
+     * the, selection box for search parameters when the FNumber box is selected.
+     *
+     * @param doubleCollectionWithValuesToFetch is the collection to search
+     *        for values to display.
+     * @return a sorted set with all found values for a specific
+     *         {@link Double} based search box; FNumber
+     */
+    public static Set<Double> getAllDoubleValues(Map<String, Map<Double, Set<Integer>>> doubleCollectionWithValuesToFetch) {
+        Set<Double> returnValues = new TreeSet<Double>();
+
+        for (String javaPegId : doubleCollectionWithValuesToFetch.keySet()) {
+            returnValues.addAll(doubleCollectionWithValuesToFetch.get(javaPegId).keySet());
+        }
+        return returnValues;
+    }
 }

@@ -15,7 +15,6 @@ public class ImageMetaDataContextSearchParameters {
 	private String fNumber;
 	private String cameraModel;
 	private String comment;
-	private Categories categories;
 	private Map<String, Categories> javaPegIdToCategoriesMap;
 	private String iso;
 	private String shutterSpeed;
@@ -28,9 +27,7 @@ public class ImageMetaDataContextSearchParameters {
 	 * an image if the the image shall be added to the search result, if this
 	 * parameter is set to true.
 	 */
-	private boolean andCategoriesSearch;
-
-	private Map<String, Boolean> importedCategoriesSearch;
+		private Map<String, Boolean> javaPegToAndCategoriesSearch;
 
 	public ImageMetaDataContextSearchParameters() {
 		super();
@@ -43,22 +40,16 @@ public class ImageMetaDataContextSearchParameters {
 		this.fNumber = null;
 		this.cameraModel = null;
 		this.comment = null;
-		this.categories = null;
 		this.javaPegIdToCategoriesMap = null;
 		this.iso = null;
 		this.shutterSpeed = null;
 		this.imageSize = null;
 		this.ratings = null;
-		this.andCategoriesSearch = false;
-		this.importedCategoriesSearch = null;
+		this.javaPegToAndCategoriesSearch = null;
 	}
 
-	public boolean isAndCategoriesSearch() {
-		return andCategoriesSearch;
-	}
-
-	public Map<String, Boolean> getImportedCategoriesSearch() {
-        return importedCategoriesSearch;
+	public Map<String, Boolean> getJavaPegToAndCategoriesSearch() {
+        return javaPegToAndCategoriesSearch;
     }
 
 	public String getYear() {
@@ -97,10 +88,6 @@ public class ImageMetaDataContextSearchParameters {
 		return comment;
 	}
 
-	public Categories getCategories() {
-		return categories;
-	}
-
 	public Map<String, Categories> getJavaPegIdToCategoriesMap() {
         return javaPegIdToCategoriesMap;
     }
@@ -119,10 +106,6 @@ public class ImageMetaDataContextSearchParameters {
 
 	public String getExposureTime() {
 		return shutterSpeed;
-	}
-
-	public void setAndCategoriesSearch(boolean andCategoriesSearch) {
-		this.andCategoriesSearch = andCategoriesSearch;
 	}
 
 	public void setYear(String year) {
@@ -179,12 +162,6 @@ public class ImageMetaDataContextSearchParameters {
 		}
 	}
 
-	public void setCategories(Categories categories) {
-		if (categories.size() > 0) {
-			this.categories = categories;
-		}
-	}
-
 	public void setJavaPegIdToCategoriesMap(Map<String, Categories> javaPegIdToCategoriesMap) {
         this.javaPegIdToCategoriesMap = javaPegIdToCategoriesMap;
     }
@@ -211,7 +188,7 @@ public class ImageMetaDataContextSearchParameters {
 		}
 	}
 
-    public void setImportedAndCategoriesSearch(Map<String, Boolean> importedCategoriesSearch) {
-        this.importedCategoriesSearch = importedCategoriesSearch;
+    public void setJavaPegToAndCategoriesSearch(Map<String, Boolean> javaPegToAndCategoriesSearch) {
+        this.javaPegToAndCategoriesSearch = javaPegToAndCategoriesSearch;
     }
 }
