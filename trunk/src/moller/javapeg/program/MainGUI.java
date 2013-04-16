@@ -345,7 +345,6 @@ public class MainGUI extends JFrame {
 	private JRadioButton orRadioButton;
 
 	private CheckTreeManager checkTreeManagerForAssignCategoriesCategoryTree;
-	private CheckTreeManager checkTreeManagerForFindImagesCategoryTree;
 
 	private Map<String, CheckTreeManager> javaPegIdToCheckTreeManager;
 
@@ -1131,8 +1130,11 @@ public class MainGUI extends JFrame {
 
 		Map<String, ImportedCategoryTreeAndDisplayJavaPegID> importedCategoriesTrees = CategoryUtil.createImportedCategoriesTree();
 
-		checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false);
+		CheckTreeManager checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false);
 		checkTreeManagerForFindImagesCategoryTree.setSelectionEnabled(true);
+
+		javaPegIdToCheckTreeManager = new HashMap<String, CheckTreeManager>(importedCategoriesTrees.size() + 1);
+		javaPegIdToCheckTreeManager.put(configuration.getJavapegClientId(), checkTreeManagerForFindImagesCategoryTree);
 
 		JScrollPane categoriesScrollPane = new JScrollPane();
 		categoriesScrollPane.getViewport().add(categoriesTree);
@@ -1153,8 +1155,6 @@ public class MainGUI extends JFrame {
 		JTabbedPane categoriesTabbedPane = null;
 
 		if (importedCategoriesTrees.size() > 0) {
-
-		    javaPegIdToCheckTreeManager = new HashMap<String, CheckTreeManager>(importedCategoriesTrees.size());
 
 		    categoriesTabbedPane = new JTabbedPane();
 		    categoriesTabbedPane.add(lang.get("category.mineCategoriesTab"), categoryTreeAndSelectionModePanel);
@@ -2926,7 +2926,7 @@ public class MainGUI extends JFrame {
 
 		checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
 
-		if (categories.size() > 0) {
+		if (categories != null && categories.size() > 0) {
 			DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
 			Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 
@@ -2952,13 +2952,15 @@ public class MainGUI extends JFrame {
 	 * @return
 	 */
 	private Categories getSelectedCategoriesFromTreeModel(CheckTreeManager checkTreeManager) {
-		Categories selectedId = new Categories();;
+		Categories selectedId = null;
 
 		// to get the paths that were checked
 		TreePath checkedPaths[] = checkTreeManager.getSelectionModel().getSelectionPaths();
 
 		if (checkedPaths != null  && checkedPaths.length > 0 ) {
-			for (TreePath checkedPath : checkedPaths) {
+			selectedId = new Categories();
+
+		    for (TreePath checkedPath : checkedPaths) {
 
 				Object[] defaultMutableTreeNodes = checkedPath.getPath();
 				Object leafNode = defaultMutableTreeNodes[defaultMutableTreeNodes.length-1];
@@ -3241,7 +3243,7 @@ public class MainGUI extends JFrame {
 
 	private class ClearCategoriesSelectionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
+		    javaPegIdToCheckTreeManager.get(configuration.getJavapegClientId()).getSelectionModel().clearSelection();
 		}
 	}
 
@@ -3258,7 +3260,6 @@ public class MainGUI extends JFrame {
 
 	private class ClearAllMetaDataParametersListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			checkTreeManagerForFindImagesCategoryTree.getSelectionModel().clearSelection();
 
 			if (javaPegIdToCheckTreeManager != null) {
 			    for (CheckTreeManager checkTreeManager : javaPegIdToCheckTreeManager.values()) {
@@ -3540,10 +3541,8 @@ public class MainGUI extends JFrame {
 	private ImageMetaDataContextSearchParameters collectSearchParameters() {
 
 		ImageMetaDataContextSearchParameters imdcsp = new ImageMetaDataContextSearchParameters();
-		imdcsp.setCategories(getSelectedCategoriesFromTreeModel(checkTreeManagerForFindImagesCategoryTree));
 		imdcsp.setJavaPegIdToCategoriesMap(getSelectedJavaPegIdToCategoriesMapFromTreeModels(javaPegIdToCheckTreeManager));
-		imdcsp.setAndCategoriesSearch(andRadioButton.isSelected());
-		imdcsp.setImportedAndCategoriesSearch(getImportedAndCategoriesSearch(importedButtonGroups));
+		imdcsp.setJavaPegToAndCategoriesSearch(getImportedAndCategoriesSearch(importedButtonGroups));
 
 		imdcsp.setYear(yearMetaDataValue.getValue());
 		imdcsp.setMonth(monthMetaDataValue.getValue());
@@ -3565,8 +3564,12 @@ public class MainGUI extends JFrame {
     private Map<String, Boolean> getImportedAndCategoriesSearch(List<ButtonGroup> importedButtonGroups) {
         Map<String, Boolean> javaPegIdToImportedAndCategories = null;
 
+        // Set the state for this client "AND" button...
+        javaPegIdToImportedAndCategories = new HashMap<String, Boolean>();
+        javaPegIdToImportedAndCategories.put(configuration.getJavapegClientId(), andRadioButton.isSelected());
+
+        // And set the state of the "AND" button for any imported categories.
         if (importedButtonGroups != null && importedButtonGroups.size() > 0) {
-            javaPegIdToImportedAndCategories = new HashMap<String, Boolean>();
 
             for (ButtonGroup buttonGroup : importedButtonGroups) {
 
@@ -3683,7 +3686,7 @@ public class MainGUI extends JFrame {
 
 					for (File image : imageMetaDataBaseItems.keySet()) {
 						ImageMetaDataDataBaseItem imddbi = imageMetaDataBaseItems.get(image);
-						ImageMetaDataDataBaseHandler.updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+						ImageMetaDataDataBaseHandler.updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
 					}
 				}
 				ac.setMainTabbedPaneComponent(mainTabbedPaneComponent);

@@ -237,7 +237,7 @@ public class ImageMetaDataDataBaseHandler {
 	            case UPDATE:
 	                for(File image : imageMetaDataDataBaseItems.keySet()) {
 	                    ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
-	                    updateImageMetaDataContext(image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+	                    updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
 	                }
 	                break;
 	            }
@@ -428,31 +428,31 @@ public class ImageMetaDataDataBaseHandler {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 		final String imagePath = image.getAbsolutePath();
 
-		imdc.addCameraModel(imageExifMetaData.getCameraModel(), imagePath);
-		imdc.addDateTime(imageExifMetaData.getDateTime(), imagePath);
-		imdc.addIso(imageExifMetaData.getIsoValue(), imagePath);
-		imdc.addImageSize(new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
-		imdc.addExposureTime(imageExifMetaData.getExposureTime(), imagePath);
-		imdc.addFNumber(imageExifMetaData.getFNumber(), imagePath);
-		imdc.addComment(comment, imagePath);
-		imdc.addRating(rating, imagePath);
+		imdc.addCameraModel(javaPegIdValue, imageExifMetaData.getCameraModel(), imagePath);
+		imdc.addDateTime(javaPegIdValue, imageExifMetaData.getDateTime(), imagePath);
+		imdc.addIso(javaPegIdValue, imageExifMetaData.getIsoValue(), imagePath);
+		imdc.addImageSize(javaPegIdValue, new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
+		imdc.addExposureTime(javaPegIdValue, imageExifMetaData.getExposureTime(), imagePath);
+		imdc.addFNumber(javaPegIdValue, imageExifMetaData.getFNumber(), imagePath);
+		imdc.addComment(javaPegIdValue, comment, imagePath);
+		imdc.addRating(javaPegIdValue, rating, imagePath);
 
 		for (String category : categories.getCategories()) {
 			imdc.addCategory(javaPegIdValue, category, imagePath);
 		}
 	}
 
-	public static void updateImageMetaDataContext(File image, String newComment, int rating, Categories categories) {
+	public static void updateImageMetaDataContext(String javaPegIdValue, File image, String newComment, int rating, Categories categories) {
 		ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 		ImagePathAndIndex ipai = ImagePathAndIndex.getInstance();
 
-		updateImageComment(image, newComment, imdc, ipai);
-		updateImageRating(image, rating, imdc, ipai);
+		updateImageComment(javaPegIdValue, image, newComment, imdc, ipai);
+		updateImageRating(javaPegIdValue, image, rating, imdc, ipai);
 		updateImageCategories(image, categories, imdc, ipai);
 	}
 
-	private static void updateImageComment(File image, String newComment, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
-		Map<String, Set<Integer>> comments = imdc.getComments();
+	private static void updateImageComment(String javaPegIdValue, File image, String newComment, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
+		Map<String, Set<Integer>> comments = imdc.getComments(javaPegIdValue);
 
 		search:
 		for (String comment : comments.keySet()) {
@@ -469,7 +469,7 @@ public class ImageMetaDataDataBaseHandler {
 						if(indices.size() == 0) {
 							comments.remove(comment);
 						}
-						imdc.addComment(newComment, image.getAbsolutePath());
+						imdc.addComment(javaPegIdValue, newComment, image.getAbsolutePath());
 						break search;
 					}
 					/**
@@ -483,8 +483,8 @@ public class ImageMetaDataDataBaseHandler {
 		}
 	}
 
-	private static void updateImageRating(File image, int rating, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
-		List<Set<Integer>> ratings = imdc.getRatings();
+	private static void updateImageRating(String javaPegIdValue, File image, int rating, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
+		Map<Integer, Set<Integer>> ratings = imdc.getRatings(javaPegIdValue);
 
 		int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
 
@@ -507,7 +507,7 @@ public class ImageMetaDataDataBaseHandler {
 					 */
 					if (ratings.get(index).contains(imageIndex)) {
 						ratings.get(index).remove(imageIndex);
-						imdc.addRating(rating, image.getAbsolutePath());
+						imdc.addRating(javaPegIdValue, rating, image.getAbsolutePath());
 						break search;
 					}
 				}

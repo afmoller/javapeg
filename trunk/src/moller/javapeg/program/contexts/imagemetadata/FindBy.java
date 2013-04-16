@@ -5,8 +5,8 @@ import java.util.List;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
+import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.enumerations.Operator;
 import moller.javapeg.program.logger.Logger;

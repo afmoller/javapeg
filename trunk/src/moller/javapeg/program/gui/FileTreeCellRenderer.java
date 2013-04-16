@@ -46,8 +46,6 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
             label.setBackground(backgroundNonSelectionColor);
             label.setForeground(textNonSelectionColor);
         }
-
         return label;
     }
 }
-
