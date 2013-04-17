@@ -109,6 +109,8 @@ public class FindBy {
 					if (integer < Integer.parseInt(valuesAsStrings[0])) {
 						valuesToGet.add(integer);
 					}
+                default:
+                    break;
 				}
 			}
 			break;
@@ -132,6 +134,8 @@ public class FindBy {
 					if (integer > Integer.parseInt(valuesAsStrings[0])) {
 						valuesToGet.add(integer);
 					}
+                default:
+                    break;
 				}
 			}
 			break;
@@ -168,6 +172,8 @@ public class FindBy {
 						logger.logERROR(spex);
 					}
 					break;
+                default:
+                    break;
 				}
 			}
 			break;
@@ -198,6 +204,8 @@ public class FindBy {
 						logger.logERROR(spex);
 					}
 					break;
+                default:
+                    break;
 				}
 			}
 			break;
