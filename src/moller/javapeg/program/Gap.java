@@ -10,10 +10,10 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 
 public class Gap extends JComponent {
-	
-	private static final long serialVersionUID = 1L;
 
-	//============================================================== constructor
+    private static final long serialVersionUID = 1L;
+
+    //============================================================== constructor
     /* Creates filler with minimum size, but expandable infinitely. */
     public Gap() {
         Dimension min = new Dimension(0, 0);
@@ -22,7 +22,7 @@ public class Gap extends JComponent {
         setPreferredSize(min);
         setMaximumSize(max);
     }
-    
+
     //============================================================== constructor
     /* Creates rigid filler. */
     public Gap(int size) {

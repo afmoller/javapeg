@@ -8,22 +8,22 @@ import moller.util.os.OsUtil;
 
 public class StartJavaPEG {
 
-	public static void main (String [] args){
-		ApplicationUncaughtExceptionHandler.registerExceptionHandler();
+    public static void main (String [] args){
+        ApplicationUncaughtExceptionHandler.registerExceptionHandler();
 
-		boolean supportedOS = false;
+        boolean supportedOS = false;
 
-		String osName = OsUtil.getOsName();
+        String osName = OsUtil.getOsName();
 
-		if (osName.toLowerCase().contains("windows")) {
-		    supportedOS = true;
-		}
-
-		if (supportedOS) {
-		    MainGUI mainGUI = new MainGUI();
-            mainGUI.setVisible(true);
-		} else {
-		    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows", "Error", JOptionPane.ERROR_MESSAGE);
+        if (osName.toLowerCase().contains("windows")) {
+            supportedOS = true;
         }
-	}
+
+        if (supportedOS) {
+            MainGUI mainGUI = new MainGUI();
+            mainGUI.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

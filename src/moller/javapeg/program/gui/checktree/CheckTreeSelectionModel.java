@@ -15,11 +15,16 @@
 
 package moller.javapeg.program.gui.checktree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Stack;
+
 import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreeSelectionModel;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeModel;
-import java.util.*;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * @author Santhosh Kumar T
@@ -27,10 +32,10 @@ import java.util.*;
  */
 public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private TreeModel model;
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private final TreeModel model;
     private boolean dig = true;
 
     public CheckTreeSelectionModel(TreeModel model, boolean dig){
@@ -79,6 +84,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
         return true;
     }
 
+    @Override
     public void setSelectionPaths(TreePath[] paths){
         if(dig)
             throw new UnsupportedOperationException("not implemented yet!!!");
@@ -86,6 +92,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
             super.setSelectionPaths(paths);
     }
 
+    @Override
     public void addSelectionPaths(TreePath[] paths){
         if(!dig){
             super.addSelectionPaths(paths);
@@ -103,7 +110,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
                 if(isDescendant(selectionPaths[j], path))
                     toBeRemoved.add(selectionPaths[j]);
             }
-            super.removeSelectionPaths((TreePath[])toBeRemoved.toArray(new TreePath[0]));
+            super.removeSelectionPaths(toBeRemoved.toArray(new TreePath[0]));
         }
 
         // if all siblings are selected then unselect them and select parent recursively
@@ -149,6 +156,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
         return true;
     }
 
+    @Override
     public void removeSelectionPaths(TreePath[] paths){
         if(!dig){
             super.removeSelectionPaths(paths);
@@ -182,7 +190,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
         }
 
         while(!stack.isEmpty()){
-            TreePath temp = (TreePath)stack.pop();
+            TreePath temp = stack.pop();
             TreePath peekPath = stack.isEmpty() ? path : (TreePath)stack.peek();
             Object node = temp.getLastPathComponent();
             Object peekNode = peekPath.getLastPathComponent();
@@ -197,7 +205,7 @@ public class CheckTreeSelectionModel extends DefaultTreeSelectionModel{
     }
 
     @SuppressWarnings("unchecked")
-	public Enumeration<TreePath> getAllSelectedPaths(){
+    public Enumeration<TreePath> getAllSelectedPaths(){
         TreePath[] treePaths = getSelectionPaths();
         if(treePaths==null)
             return Collections.enumeration(Collections.EMPTY_LIST);

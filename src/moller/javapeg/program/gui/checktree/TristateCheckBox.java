@@ -15,11 +15,25 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.*;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ActionMapUIResource;
-import java.awt.event.*;
-import java.awt.*;
 
 /**
  * Maintenance tip - There were some tricks to getting this code
@@ -46,14 +60,15 @@ import java.awt.*;
  */
 
 public class TristateCheckBox extends JCheckBox{
-   
-	private static final long serialVersionUID = 1L;
-	private final TristateDecorator model;
+
+    private static final long serialVersionUID = 1L;
+    private final TristateDecorator model;
 
     public TristateCheckBox(String text, Icon icon, Boolean initial){
         super(text, icon);
         // Add a listener for when the mouse is pressed
         super.addMouseListener(new MouseAdapter(){
+            @Override
             public void mousePressed(MouseEvent e){
                 grabFocus();
                 model.nextState();
@@ -62,10 +77,10 @@ public class TristateCheckBox extends JCheckBox{
         // Reset the keyboard action map
         ActionMap map = new ActionMapUIResource();
         map.put("pressed", new AbstractAction(){      //NOI18N
-           
-			private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e){
+            private static final long serialVersionUID = 1L;
+
+            public void actionPerformed(ActionEvent e){
                 grabFocus();
                 model.nextState();
             }
@@ -91,6 +106,7 @@ public class TristateCheckBox extends JCheckBox{
     }
 
     /** No one may add mouse listeners, not even Swing! */
+    @Override
     public void addMouseListener(MouseListener l){}
 
     /**
@@ -176,7 +192,7 @@ public class TristateCheckBox extends JCheckBox{
         }
 
         @SuppressWarnings("unused")
-		public boolean isFocusTraversable() {
+        public boolean isFocusTraversable() {
             return isEnabled();
         }
 

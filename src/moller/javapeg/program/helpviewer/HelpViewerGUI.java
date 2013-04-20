@@ -38,172 +38,172 @@ import moller.util.string.StringUtil;
 
 public class HelpViewerGUI extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JTree tree;
+    private JTree tree;
 
-	private JPanel contentJPanel;
-	private JPanel backgroundsPanel;
+    private JPanel contentJPanel;
+    private JPanel backgroundsPanel;
 
-	private JSplitPane splitPane;
+    private JSplitPane splitPane;
 
-	private final Configuration configuration;
-	private final Logger   logger;
-	private final Language lang;
+    private final Configuration configuration;
+    private final Logger   logger;
+    private final Language lang;
 
-	private String content = "";
+    private String content = "";
 
-	public HelpViewerGUI() {
-		configuration = Config.getInstance().get();
-		logger = Logger.getInstance();
-		lang   = Language.getInstance();
+    public HelpViewerGUI() {
+        configuration = Config.getInstance().get();
+        logger = Logger.getInstance();
+        lang   = Language.getInstance();
 
-		this.initiateWindow();
-		this.addListeners();
-	}
+        this.initiateWindow();
+        this.addListeners();
+    }
 
-	private void initiateWindow() {
+    private void initiateWindow() {
 
-	    GUI gUI = configuration.getgUI();
+        GUI gUI = configuration.getgUI();
 
-	    Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
+        Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
 
-		this.setSize(sizeAndLocation.getSize());
+        this.setSize(sizeAndLocation.getSize());
 
-		Point xyFromConfig = new Point(sizeAndLocation.getLocation());
+        Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
-		if(Screen.isOnScreen(xyFromConfig)) {
-			this.setLocation(xyFromConfig);
-		} else {
-			this.setLocation(0,0);
-			JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-			logger.logERROR("Could not set location of Help Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
-		}
-		this.setLayout(new BorderLayout());
+        if(Screen.isOnScreen(xyFromConfig)) {
+            this.setLocation(xyFromConfig);
+        } else {
+            this.setLocation(0,0);
+            JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+            logger.logERROR("Could not set location of Help Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+        }
+        this.setLayout(new BorderLayout());
 
-		try{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e){
-			logger.logERROR("Could not set desired Look And Feel for Help Viewer GUI");
-			logger.logERROR("Below is the generated StackTrace");
+        try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e){
+            logger.logERROR("Could not set desired Look And Feel for Help Viewer GUI");
+            logger.logERROR("Below is the generated StackTrace");
 
-			for(StackTraceElement element : e.getStackTrace()) {
-				logger.logERROR(element.toString());
-			}
-		}
-		this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
+            for(StackTraceElement element : e.getStackTrace()) {
+                logger.logERROR(element.toString());
+            }
+        }
+        this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
 
-		InputStream imageStream = null;
-		try {
-			imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Help16.gif");
-			this.setIconImage(ImageIO.read(imageStream));
-		} catch (Exception e) {
-			Logger.getInstance().logERROR("Could not open the image Help16.gif");
-		} finally {
-			StreamUtil.close(imageStream, true);
-		}
+        InputStream imageStream = null;
+        try {
+            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Help16.gif");
+            this.setIconImage(ImageIO.read(imageStream));
+        } catch (Exception e) {
+            Logger.getInstance().logERROR("Could not open the image Help16.gif");
+        } finally {
+            StreamUtil.close(imageStream, true);
+        }
 
-		this.setTitle(lang.get("helpViewerGUI.window.title"));
-	}
+        this.setTitle(lang.get("helpViewerGUI.window.title"));
+    }
 
-	private JSplitPane initiateSplitPane() {
-		backgroundsPanel = new JPanel(new BorderLayout());
-		backgroundsPanel.add(this.initiateContentPanel(), BorderLayout.CENTER);
+    private JSplitPane initiateSplitPane() {
+        backgroundsPanel = new JPanel(new BorderLayout());
+        backgroundsPanel.add(this.initiateContentPanel(), BorderLayout.CENTER);
 
-		splitPane = new JSplitPane();
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(200);
-		splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
-		splitPane.add(backgroundsPanel, JSplitPane.RIGHT);
+        splitPane = new JSplitPane();
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(200);
+        splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
+        splitPane.add(backgroundsPanel, JSplitPane.RIGHT);
 
-		return splitPane;
-	}
+        return splitPane;
+    }
 
-	private void addListeners(){
-		this.addWindowListener(new WindowEventHandler());
-		backgroundsPanel.addComponentListener(new WindowComponentListener());
-	}
+    private void addListeners(){
+        this.addWindowListener(new WindowEventHandler());
+        backgroundsPanel.addComponentListener(new WindowComponentListener());
+    }
 
-	private class WindowEventHandler extends WindowAdapter {
-		@Override
-		public void windowClosing(WindowEvent e) {
-			updateWindowLocationAndSize();
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		}
-	}
+    private class WindowEventHandler extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            updateWindowLocationAndSize();
+            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        }
+    }
 
-	private void updateWindowLocationAndSize() {
-		GUI gUI = configuration.getgUI();
+    private void updateWindowLocationAndSize() {
+        GUI gUI = configuration.getgUI();
 
-		Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
+        Rectangle sizeAndLocation = gUI.getHelpViewer().getSizeAndLocation();
 
-		sizeAndLocation.setLocation(this.getLocation().x, this.getLocation().y);
-		sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
-	}
+        sizeAndLocation.setLocation(this.getLocation().x, this.getLocation().y);
+        sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+    }
 
-	private JScrollPane initiateJTree() {
-		tree = new JTree(HelpViewerGUIUtil.createNodes());
-		tree.setShowsRootHandles(true);
-		tree.addMouseListener(new Mouselistener());
-		return new JScrollPane(tree);
-	}
+    private JScrollPane initiateJTree() {
+        tree = new JTree(HelpViewerGUIUtil.createNodes());
+        tree.setShowsRootHandles(true);
+        tree.addMouseListener(new Mouselistener());
+        return new JScrollPane(tree);
+    }
 
-	private CustomizedJScrollPane initiateContentPanel() {
-		contentJPanel = new JPanel(new BorderLayout());
-		return new CustomizedJScrollPane(contentJPanel);
-	}
+    private CustomizedJScrollPane initiateContentPanel() {
+        contentJPanel = new JPanel(new BorderLayout());
+        return new CustomizedJScrollPane(contentJPanel);
+    }
 
-	private JTextArea getContent(String identityString) {
-		if (content.equals("") && identityString != null) {
+    private JTextArea getContent(String identityString) {
+        if (content.equals("") && identityString != null) {
 
-		    String confLang = configuration.getLanguage().getgUILanguageISO6391();
+            String confLang = configuration.getLanguage().getgUILanguageISO6391();
 
-			InputStream helpFile = null;
+            InputStream helpFile = null;
 
-			try {
-			    helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
-			    content = StreamUtil.getString(helpFile, C.UTF8);
-			} catch (IOException iox) {
-			    logger.logFATAL("Could not read content from helpfile");
-			    logger.logFATAL(iox);
-			}
-		}
+            try {
+                helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
+                content = StreamUtil.getString(helpFile, C.UTF8);
+            } catch (IOException iox) {
+                logger.logFATAL("Could not read content from helpfile");
+                logger.logFATAL(iox);
+            }
+        }
 
-		JTextArea textarea = new JTextArea();
-		textarea.setLineWrap(true);
-		textarea.setWrapStyleWord(true);
-		textarea.setEditable(false);
-		textarea.setText(StringUtil.formatString(content));
-		textarea.setCaretPosition(0);
+        JTextArea textarea = new JTextArea();
+        textarea.setLineWrap(true);
+        textarea.setWrapStyleWord(true);
+        textarea.setEditable(false);
+        textarea.setText(StringUtil.formatString(content));
+        textarea.setCaretPosition(0);
 
-		return textarea;
-	}
+        return textarea;
+    }
 
-	/**
-	 * Mouse listener
-	 */
-	private class Mouselistener extends MouseAdapter{
-		@Override
-		public void mousePressed(MouseEvent e){
-			int selRow = tree.getRowForLocation(e.getX(), e.getY());
+    /**
+     * Mouse listener
+     */
+    private class Mouselistener extends MouseAdapter{
+        @Override
+        public void mousePressed(MouseEvent e){
+            int selRow = tree.getRowForLocation(e.getX(), e.getY());
 
-			if(selRow > -1) {
-				String identity = ((UserObject)((DefaultMutableTreeNode)tree.getLastSelectedPathComponent()).getUserObject()).getIdentityString();
+            if(selRow > -1) {
+                String identity = ((UserObject)((DefaultMutableTreeNode)tree.getLastSelectedPathComponent()).getUserObject()).getIdentityString();
 
-				content = "";
-				contentJPanel.removeAll();
-				contentJPanel.updateUI();
-				contentJPanel.add(getContent(identity), BorderLayout.CENTER);
-			}
-		}
-	}
+                content = "";
+                contentJPanel.removeAll();
+                contentJPanel.updateUI();
+                contentJPanel.add(getContent(identity), BorderLayout.CENTER);
+            }
+        }
+    }
 
-	private class WindowComponentListener extends ComponentAdapter {
-		@Override
-		public void componentResized(ComponentEvent e) {
-			contentJPanel.removeAll();
-			contentJPanel.updateUI();
-			contentJPanel.add(getContent(null), BorderLayout.CENTER);
-		}
-	}
+    private class WindowComponentListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            contentJPanel.removeAll();
+            contentJPanel.updateUI();
+            contentJPanel.add(getContent(null), BorderLayout.CENTER);
+        }
+    }
 }

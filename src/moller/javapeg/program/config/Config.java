@@ -8,43 +8,43 @@ import moller.javapeg.program.config.model.Configuration;
 
 public class Config {
 
-	/**
-	 * The static singleton instance of this class.
-	 */
-	private static Config instance;
+    /**
+     * The static singleton instance of this class.
+     */
+    private static Config instance;
 
-	private final static File PATH_TO_CONF_FILE =  new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml");
+    private final static File PATH_TO_CONF_FILE =  new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml");
 
-	private final Configuration configuration;
+    private final Configuration configuration;
 
-	/**
-	 * Private constructor.
-	 */
-	private Config() {
-	    configuration = ConfigHandler.load(PATH_TO_CONF_FILE);
-	}
+    /**
+     * Private constructor.
+     */
+    private Config() {
+        configuration = ConfigHandler.load(PATH_TO_CONF_FILE);
+    }
 
-	/**
-	 * Accessor method for this Singleton class.
-	 *
-	 * @return the singleton instance of this class.
-	 */
-	public static Config getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (Config.class) {
-			if (instance == null) {
-				instance = new Config();
-			}
-			return instance;
-		}
-	}
+    /**
+     * Accessor method for this Singleton class.
+     *
+     * @return the singleton instance of this class.
+     */
+    public static Config getInstance() {
+        if (instance != null)
+            return instance;
+        synchronized (Config.class) {
+            if (instance == null) {
+                instance = new Config();
+            }
+            return instance;
+        }
+    }
 
-	public Configuration get() {
-	    return configuration;
-	}
+    public Configuration get() {
+        return configuration;
+    }
 
-	public void save() {
-	    ConfigHandler.store(configuration, PATH_TO_CONF_FILE);
-	}
+    public void save() {
+        ConfigHandler.store(configuration, PATH_TO_CONF_FILE);
+    }
 }

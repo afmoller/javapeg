@@ -15,96 +15,96 @@ import moller.javapeg.program.rename.validator.SourceAndDestinationPath;
 
 public class PreFileProcessor {
 
-	/**
-	 * The singleton object of this class.
-	 */
-	private static PreFileProcessor instance;
+    /**
+     * The singleton object of this class.
+     */
+    private static PreFileProcessor instance;
 
-	/**
-	 * Private constructor
-	 */
-	private PreFileProcessor() {
-	}
+    /**
+     * Private constructor
+     */
+    private PreFileProcessor() {
+    }
 
-	/**
-	 * Accessor method for this Singleton class.
-	 *
-	 * @return the singleton instance of this class.
-	 */
-	public static PreFileProcessor getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (PreFileProcessor.class) {
-			if (instance == null) {
-				instance = new PreFileProcessor();
-			}
-			return instance;
-		}
-	}
+    /**
+     * Accessor method for this Singleton class.
+     *
+     * @return the singleton instance of this class.
+     */
+    public static PreFileProcessor getInstance() {
+        if (instance != null)
+            return instance;
+        synchronized (PreFileProcessor.class) {
+            if (instance == null) {
+                instance = new PreFileProcessor();
+            }
+            return instance;
+        }
+    }
 
-	public ValidatorStatus startTest(RenameProcess rp) {
+    public ValidatorStatus startTest(RenameProcess rp) {
 
-		Language lang = Language.getInstance();
+        Language lang = Language.getInstance();
 
-		ValidatorStatus vs;
+        ValidatorStatus vs;
 
-		if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
-			rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.externalOverviewLayout"));
-			vs = ExternalOverviewLayout.getInstance().test();
-			if(!vs.isValid()) {
-				return vs;
-			}
-			rp.incProcessProgress();
-		}
+        if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
+            rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.externalOverviewLayout"));
+            vs = ExternalOverviewLayout.getInstance().test();
+            if(!vs.isValid()) {
+                return vs;
+            }
+            rp.incProcessProgress();
+        }
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.sourceAndDestinationPath"));
-		vs = SourceAndDestinationPath.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.sourceAndDestinationPath"));
+        vs = SourceAndDestinationPath.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.fileAndSubDirectoryTemplate"));
-		vs = FileAndSubDirectoryTemplate.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.fileAndSubDirectoryTemplate"));
+        vs = FileAndSubDirectoryTemplate.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.destinationDirectoryDoesNotExist"));
-		vs = DestinationDirectoryDoesNotExist.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.destinationDirectoryDoesNotExist"));
+        vs = DestinationDirectoryDoesNotExist.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.jPEGTotalPathLength"));
-		vs = JPEGTotalPathLength.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.jPEGTotalPathLength"));
+        vs = JPEGTotalPathLength.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.nonJPEGTotalPathLength"));
-		vs = NonJPEGTotalPathLength.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.nonJPEGTotalPathLength"));
+        vs = NonJPEGTotalPathLength.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.availableDiskSpace"));
-		vs = AvailableDiskSpace.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.availableDiskSpace"));
+        vs = AvailableDiskSpace.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
 
-		rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.fileCreationAtDestinationDirectory"));
-		vs = FileCreationAtDestinationDirectory.getInstance().test();
-		if(!vs.isValid()) {
-			return vs;
-		}
-		rp.incProcessProgress();
-		return vs;
-	}
+        rp.setRenameProgressMessages(lang.get("rename.PreFileProcessor.fileCreationAtDestinationDirectory"));
+        vs = FileCreationAtDestinationDirectory.getInstance().test();
+        if(!vs.isValid()) {
+            return vs;
+        }
+        rp.incProcessProgress();
+        return vs;
+    }
 }

@@ -29,13 +29,13 @@ public class ImageMetaDataDataBaseItem {
         this.categories = null;
     }
 
-	public File getImage() {
+    public File getImage() {
         return image;
     }
 
-	public String getMd5() {
-		return md5;
-	}
+    public String getMd5() {
+        return md5;
+    }
 
     public CategoryImageExifMetaData getImageExifMetaData() {
         return imageExifMetaData;
@@ -53,7 +53,7 @@ public class ImageMetaDataDataBaseItem {
      * @return
      */
     public Categories getCategories() {
-    	return categories;
+        return categories;
     }
 
     public void setImage(File image) {
@@ -61,8 +61,8 @@ public class ImageMetaDataDataBaseItem {
     }
 
     public void setMd5(String md5) {
-		this.md5 = md5;
-	}
+        this.md5 = md5;
+    }
 
     public void setImageExifMetaData(CategoryImageExifMetaData imageExifMetaData) {
         this.imageExifMetaData = imageExifMetaData;

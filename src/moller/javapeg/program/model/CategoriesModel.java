@@ -5,9 +5,9 @@ import javax.swing.tree.TreeNode;
 
 public class CategoriesModel extends DefaultTreeModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CategoriesModel(TreeNode root) {
-		super(root);
-	}
+    public CategoriesModel(TreeNode root) {
+        super(root);
+    }
 }

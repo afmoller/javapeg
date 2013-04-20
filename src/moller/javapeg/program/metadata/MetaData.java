@@ -8,153 +8,153 @@ import moller.javapeg.program.datatype.ExposureTime;
 
 public class MetaData {
 
-	private String fileName;
-	private Date exifDateTime;
-	private String exifCameraModel;
-	private ExposureTime exifExposureTime;
-	private int exifISOValue;
-	private int exifPictureWidth;
-	private int exifPictureHeight;
-	private double exifFNumber;
-	private int thumbNailOffset;
-	private int thumbNailLength;
-	private File fileObject;
+    private String fileName;
+    private Date exifDateTime;
+    private String exifCameraModel;
+    private ExposureTime exifExposureTime;
+    private int exifISOValue;
+    private int exifPictureWidth;
+    private int exifPictureHeight;
+    private double exifFNumber;
+    private int thumbNailOffset;
+    private int thumbNailLength;
+    private File fileObject;
 
-	public MetaData() {
-		fileName = null;
-		exifDateTime = null;
-		exifCameraModel = null;
-		exifExposureTime = null;
-		exifISOValue = -1;
-		exifPictureWidth = -1;
-		exifPictureHeight = -1;
-		exifFNumber = -1;
-		thumbNailOffset = -1;
-		thumbNailLength = -1;
-		fileObject = null;
-	}
+    public MetaData() {
+        fileName = null;
+        exifDateTime = null;
+        exifCameraModel = null;
+        exifExposureTime = null;
+        exifISOValue = -1;
+        exifPictureWidth = -1;
+        exifPictureHeight = -1;
+        exifFNumber = -1;
+        thumbNailOffset = -1;
+        thumbNailLength = -1;
+        fileObject = null;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public Date getExifTime() {
-		return exifDateTime;
-	}
+    public Date getExifTime() {
+        return exifDateTime;
+    }
 
-	public Date getExifDate() {
-		return exifDateTime;
-	}
+    public Date getExifDate() {
+        return exifDateTime;
+    }
 
-	public Date getExifDateTime() {
-		return exifDateTime;
-	}
+    public Date getExifDateTime() {
+        return exifDateTime;
+    }
 
-	public String getExifDateAsString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
-		return exifDateTime != null ? sdf.format(exifDateTime) : null;
-	}
+    public String getExifDateAsString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd");
+        return exifDateTime != null ? sdf.format(exifDateTime) : null;
+    }
 
-	public String getExifTimeAsString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		return exifDateTime != null ? sdf.format(exifDateTime) : null;
-	}
+    public String getExifTimeAsString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return exifDateTime != null ? sdf.format(exifDateTime) : null;
+    }
 
-	public String getExifCameraModel() {
-		return exifCameraModel;
-	}
+    public String getExifCameraModel() {
+        return exifCameraModel;
+    }
 
-	public ExposureTime getExifExposureTime() {
-		return exifExposureTime;
-	}
+    public ExposureTime getExifExposureTime() {
+        return exifExposureTime;
+    }
 
-	public int getExifISOValue() {
-		return exifISOValue;
-	}
+    public int getExifISOValue() {
+        return exifISOValue;
+    }
 
-	public int getExifPictureWidth() {
-		return exifPictureWidth;
-	}
+    public int getExifPictureWidth() {
+        return exifPictureWidth;
+    }
 
-	public int getExifPictureHeight() {
-		return exifPictureHeight;
-	}
+    public int getExifPictureHeight() {
+        return exifPictureHeight;
+    }
 
-	public double getExifFNumber() {
-		return exifFNumber;
-	}
+    public double getExifFNumber() {
+        return exifFNumber;
+    }
 
-	public int getThumbNailOffset() {
-		return thumbNailOffset;
-	}
+    public int getThumbNailOffset() {
+        return thumbNailOffset;
+    }
 
-	public int getThumbNailLength() {
-		return thumbNailLength;
-	}
+    public int getThumbNailLength() {
+        return thumbNailLength;
+    }
 
-	public File getFileObject() {
-		return fileObject;
-	}
+    public File getFileObject() {
+        return fileObject;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public void setExifDateTime(Date exifDateTime) {
-		this.exifDateTime = exifDateTime;
-	}
+    public void setExifDateTime(Date exifDateTime) {
+        this.exifDateTime = exifDateTime;
+    }
 
-	public void setExifCameraModel(String exifCameraModel) {
-		this.exifCameraModel = exifCameraModel;
-	}
+    public void setExifCameraModel(String exifCameraModel) {
+        this.exifCameraModel = exifCameraModel;
+    }
 
-	public void setExifExposureTime(ExposureTime exifExposureTime) {
-		this.exifExposureTime = exifExposureTime;
-	}
+    public void setExifExposureTime(ExposureTime exifExposureTime) {
+        this.exifExposureTime = exifExposureTime;
+    }
 
-	public void setExifISOValue(int exifISOValue) {
-		this.exifISOValue = exifISOValue;
-	}
+    public void setExifISOValue(int exifISOValue) {
+        this.exifISOValue = exifISOValue;
+    }
 
-	public void setExifPictureWidth(int exifPictureWidth) {
-		this.exifPictureWidth = exifPictureWidth;
-	}
+    public void setExifPictureWidth(int exifPictureWidth) {
+        this.exifPictureWidth = exifPictureWidth;
+    }
 
-	public void setExifPictureHeight(int exifPictureHeight) {
-		this.exifPictureHeight = exifPictureHeight;
-	}
+    public void setExifPictureHeight(int exifPictureHeight) {
+        this.exifPictureHeight = exifPictureHeight;
+    }
 
-	public void setExifFNumber(double exifFNumber) {
-		this.exifFNumber = exifFNumber;
-	}
+    public void setExifFNumber(double exifFNumber) {
+        this.exifFNumber = exifFNumber;
+    }
 
-	public void setThumbNailOffset(int thumbNailOffset) {
-		this.thumbNailOffset = thumbNailOffset;
-	}
+    public void setThumbNailOffset(int thumbNailOffset) {
+        this.thumbNailOffset = thumbNailOffset;
+    }
 
-	public void setThumbNailLength(int thumbNailLength) {
-		this.thumbNailLength = thumbNailLength;
-	}
+    public void setThumbNailLength(int thumbNailLength) {
+        this.thumbNailLength = thumbNailLength;
+    }
 
-	public void setFileObject(File fileObject) {
-		this.fileObject = fileObject;
-	}
+    public void setFileObject(File fileObject) {
+        this.fileObject = fileObject;
+    }
 
-	@Override
+    @Override
     public String toString() {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("fileName: "); sb.append(fileName); sb.append("\n");
-	    sb.append("exifDateTime: "); sb.append(exifDateTime); sb.append("\n");
-	    sb.append("exifCameraModel: "); sb.append(exifCameraModel); sb.append("\n");
-	    sb.append("exifExposureTime: "); sb.append(exifExposureTime); sb.append("\n");
-	    sb.append("exifISOValue: "); sb.append(exifISOValue); sb.append("\n");
-	    sb.append("exifPictureWidth: "); sb.append(exifPictureWidth); sb.append("\n");
-	    sb.append("exifPictureHeight: "); sb.append(exifPictureHeight); sb.append("\n");
-	    sb.append("exifFNumber: "); sb.append(exifFNumber); sb.append("\n");
-	    sb.append("thumbNailOffset: "); sb.append(thumbNailOffset); sb.append("\n");
-	    sb.append("thumbNailLength: "); sb.append(thumbNailLength); sb.append("\n");
-	    sb.append("fileObject: "); sb.append(fileObject);
+        StringBuilder sb = new StringBuilder();
+        sb.append("fileName: "); sb.append(fileName); sb.append("\n");
+        sb.append("exifDateTime: "); sb.append(exifDateTime); sb.append("\n");
+        sb.append("exifCameraModel: "); sb.append(exifCameraModel); sb.append("\n");
+        sb.append("exifExposureTime: "); sb.append(exifExposureTime); sb.append("\n");
+        sb.append("exifISOValue: "); sb.append(exifISOValue); sb.append("\n");
+        sb.append("exifPictureWidth: "); sb.append(exifPictureWidth); sb.append("\n");
+        sb.append("exifPictureHeight: "); sb.append(exifPictureHeight); sb.append("\n");
+        sb.append("exifFNumber: "); sb.append(exifFNumber); sb.append("\n");
+        sb.append("thumbNailOffset: "); sb.append(thumbNailOffset); sb.append("\n");
+        sb.append("thumbNailLength: "); sb.append(thumbNailLength); sb.append("\n");
+        sb.append("fileObject: "); sb.append(fileObject);
 
-	    return sb.toString();
-	}
+        return sb.toString();
+    }
 }

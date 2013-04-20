@@ -22,108 +22,108 @@ import moller.javapeg.program.metadata.MetaData;
  */
 public class ApplicationContext {
 
-	/**
-	 * The static singleton instance of this class.
-	 */
-	private static ApplicationContext instance;
+    /**
+     * The static singleton instance of this class.
+     */
+    private static ApplicationContext instance;
 
-	/**
-	 * This variable contains the path to the selected folder
-	 *  containing JPEG images.
-	 */
-	private File sourcePath;
+    /**
+     * This variable contains the path to the selected folder
+     *  containing JPEG images.
+     */
+    private File sourcePath;
 
-	private int nrOfFilesInSourcePath;
+    private int nrOfFilesInSourcePath;
 
-	/**
-	 * This variable contains the path to the selected destination
-	 * folder, the folder to where the renamed copies of the source
-	 *  folder will end up.
-	 */
-	private String destinationPath;
+    /**
+     * This variable contains the path to the selected destination
+     * folder, the folder to where the renamed copies of the source
+     *  folder will end up.
+     */
+    private String destinationPath;
 
-	/**
-	 * This variable will contain the value that is entered in the
-	 * template JTextField for file in the GUI part of this application.
-	 */
-	private String templateFileName;
+    /**
+     * This variable will contain the value that is entered in the
+     * template JTextField for file in the GUI part of this application.
+     */
+    private String templateFileName;
 
-	/**
-	 * This variable will contain the value that is entered in the
-	 * template JTextField for sub folder in the GUI part of this application.
-	 */
-	private String templateSubFolderName;
+    /**
+     * This variable will contain the value that is entered in the
+     * template JTextField for sub folder in the GUI part of this application.
+     */
+    private String templateSubFolderName;
 
-	/**
-	 * This variable indicates whether the check box for creating thumb nails has
-	 * been clicked in the GUI.
-	 */
-	private boolean createThumbNailsCheckBoxSelected;
+    /**
+     * This variable indicates whether the check box for creating thumb nails has
+     * been clicked in the GUI.
+     */
+    private boolean createThumbNailsCheckBoxSelected;
 
-	/**
-	 * This List contains MetaData objects of all JPEG files in the folder
-	 * that has been selected in the file chooser GUI.
-	 */
-	private final List <MetaData>metaDataObjects;
+    /**
+     * This List contains MetaData objects of all JPEG files in the folder
+     * that has been selected in the file chooser GUI.
+     */
+    private final List <MetaData>metaDataObjects;
 
-	/**
-	 * This List contains the name of each language file that is embedded into
-	 * the application JAR file.
-	 */
-	private Set<String> jarFileEmbeddedLanguageFiles;
+    /**
+     * This List contains the name of each language file that is embedded into
+     * the application JAR file.
+     */
+    private Set<String> jarFileEmbeddedLanguageFiles;
 
-	/**
-	 * This list contains File objects and is populated when a directory is
-	 * selected in the tree structure. When a jpeg image is found that is added
-	 * to this buffer list. At the same time there is another task populating
-	 * the grid with image thumbnails and that task get it´s images from this
-	 * buffer list.
-	 */
-	private final List<File> jpegFileLoadBuffer;
+    /**
+     * This list contains File objects and is populated when a directory is
+     * selected in the tree structure. When a jpeg image is found that is added
+     * to this buffer list. At the same time there is another task populating
+     * the grid with image thumbnails and that task get it´s images from this
+     * buffer list.
+     */
+    private final List<File> jpegFileLoadBuffer;
 
-	/**
-	 * This flag indicates whether the imageviewer is displayed or not
-	 */
-	private boolean imageViewerDisplayed;
+    /**
+     * This flag indicates whether the imageviewer is displayed or not
+     */
+    private boolean imageViewerDisplayed;
 
-	/**
-	 * Indicates which image that has been selected in the grid of thumbnails
-	 * that has been populated when a directory has been selected in the tree
-	 * object.
-	 */
-	private File selectedThumbNail;
+    /**
+     * Indicates which image that has been selected in the grid of thumbnails
+     * that has been populated when a directory has been selected in the tree
+     * object.
+     */
+    private File selectedThumbNail;
 
-	/**
-	 * This contains the currently selected TreePath in the category tree
-	 * structure. It can contain a null value, if no path is currently
-	 * selected.
-	 */
-	private TreePath selectedCategoryPath;
+    /**
+     * This contains the currently selected TreePath in the category tree
+     * structure. It can contain a null value, if no path is currently
+     * selected.
+     */
+    private TreePath selectedCategoryPath;
 
-	/**
-	 * This integer holds the value of the highest used category ID.
-	 */
-	private int highestUsedCategoryID;
+    /**
+     * This integer holds the value of the highest used category ID.
+     */
+    private int highestUsedCategoryID;
 
-	/**
-	 * This {@link MainTabbedPaneComponent} variable keeps track of the
-	 * currently selected tab in the "Main tabbed pane", the one with the
-	 * Rename, Tag and Search / View.
-	 */
-	private MainTabbedPaneComponent mainTabbedPaneComponent;
+    /**
+     * This {@link MainTabbedPaneComponent} variable keeps track of the
+     * currently selected tab in the "Main tabbed pane", the one with the
+     * Rename, Tag and Search / View.
+     */
+    private MainTabbedPaneComponent mainTabbedPaneComponent;
 
-	/**
-	 * This boolean keeps track on whether an image meta data data base file
-	 * is loaded or not. This flag is set when a directory with images is
-	 * selected.
-	 */
-	private boolean imageMetaDataDataBaseFileLoaded;
+    /**
+     * This boolean keeps track on whether an image meta data data base file
+     * is loaded or not. This flag is set when a directory with images is
+     * selected.
+     */
+    private boolean imageMetaDataDataBaseFileLoaded;
 
-	/**
-	 * This boolean keeps track of whether any existing image meta data base
-	 * file in the currently selected directory is writable for the JavaPEG
-	 * application.
-	 */
+    /**
+     * This boolean keeps track of whether any existing image meta data base
+     * file in the currently selected directory is writable for the JavaPEG
+     * application.
+     */
     private boolean imageMetaDataDataBaseFileWritable;
 
     /**
@@ -139,194 +139,194 @@ public class ApplicationContext {
      */
     private boolean restartNeeded;
 
-	/**
-	 * Private constructor.
-	 */
-	private ApplicationContext() {
-		sourcePath = null;
-		destinationPath = "";
-		createThumbNailsCheckBoxSelected = false;
-		templateFileName = "";
-		templateSubFolderName = "";
-		metaDataObjects = new ArrayList<MetaData>();
-		jarFileEmbeddedLanguageFiles = new HashSet<String>();
-		jpegFileLoadBuffer = new ArrayList<File>();
-		imageViewerDisplayed = false;
-		selectedThumbNail = null;
-		selectedCategoryPath = null;
-		highestUsedCategoryID = -1;
-		mainTabbedPaneComponent = null;
-		imageMetaDataDataBaseFileLoaded = false;
-		imageMetaDataDataBaseFileWritable = false;
-		imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = false;
-		restartNeeded = false;
-	}
+    /**
+     * Private constructor.
+     */
+    private ApplicationContext() {
+        sourcePath = null;
+        destinationPath = "";
+        createThumbNailsCheckBoxSelected = false;
+        templateFileName = "";
+        templateSubFolderName = "";
+        metaDataObjects = new ArrayList<MetaData>();
+        jarFileEmbeddedLanguageFiles = new HashSet<String>();
+        jpegFileLoadBuffer = new ArrayList<File>();
+        imageViewerDisplayed = false;
+        selectedThumbNail = null;
+        selectedCategoryPath = null;
+        highestUsedCategoryID = -1;
+        mainTabbedPaneComponent = null;
+        imageMetaDataDataBaseFileLoaded = false;
+        imageMetaDataDataBaseFileWritable = false;
+        imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = false;
+        restartNeeded = false;
+    }
 
-	/**
-	 * Accessor method for this Singleton class.
-	 *
-	 * @return the singleton instance of this class.
-	 */
-	public static ApplicationContext getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (ApplicationContext.class) {
-			if (instance == null) {
-				instance = new ApplicationContext();
-			}
-			return instance;
-		}
-	}
+    /**
+     * Accessor method for this Singleton class.
+     *
+     * @return the singleton instance of this class.
+     */
+    public static ApplicationContext getInstance() {
+        if (instance != null)
+            return instance;
+        synchronized (ApplicationContext.class) {
+            if (instance == null) {
+                instance = new ApplicationContext();
+            }
+            return instance;
+        }
+    }
 
-	/**
-	 * GET  - methods
-	 */
-	public File getSourcePath() {
-		return sourcePath;
-	}
+    /**
+     * GET  - methods
+     */
+    public File getSourcePath() {
+        return sourcePath;
+    }
 
-	public String getDestinationPath() {
-		return destinationPath;
-	}
+    public String getDestinationPath() {
+        return destinationPath;
+    }
 
-	public List<MetaData> getMetaDataObjects() {
-		return metaDataObjects;
-	}
+    public List<MetaData> getMetaDataObjects() {
+        return metaDataObjects;
+    }
 
-	public String getTemplateFileName() {
-		return templateFileName;
-	}
+    public String getTemplateFileName() {
+        return templateFileName;
+    }
 
-	public String getTemplateSubFolderName() {
-		return templateSubFolderName;
-	}
+    public String getTemplateSubFolderName() {
+        return templateSubFolderName;
+    }
 
-	public boolean isCreateThumbNailsCheckBoxSelected() {
-		return createThumbNailsCheckBoxSelected;
-	}
+    public boolean isCreateThumbNailsCheckBoxSelected() {
+        return createThumbNailsCheckBoxSelected;
+    }
 
-	public boolean isImageViewerDisplayed() {
-		return imageViewerDisplayed;
-	}
+    public boolean isImageViewerDisplayed() {
+        return imageViewerDisplayed;
+    }
 
-	public Set<String> getJarFileEmbeddedLanguageFiles() {
-		return jarFileEmbeddedLanguageFiles;
-	}
+    public Set<String> getJarFileEmbeddedLanguageFiles() {
+        return jarFileEmbeddedLanguageFiles;
+    }
 
-	public File getSelectedThumbNail() {
-		return selectedThumbNail;
-	}
+    public File getSelectedThumbNail() {
+        return selectedThumbNail;
+    }
 
-	public TreePath getSelectedCategoryPath() {
-		return selectedCategoryPath;
-	}
+    public TreePath getSelectedCategoryPath() {
+        return selectedCategoryPath;
+    }
 
-	public int getHighestUsedCategoryID() {
-		return highestUsedCategoryID;
-	}
+    public int getHighestUsedCategoryID() {
+        return highestUsedCategoryID;
+    }
 
-	public int getNextIDToUse() {
-		setHighestUsedCategoryID(highestUsedCategoryID + 1);
-		return getHighestUsedCategoryID();
-	}
+    public int getNextIDToUse() {
+        setHighestUsedCategoryID(highestUsedCategoryID + 1);
+        return getHighestUsedCategoryID();
+    }
 
-	public MainTabbedPaneComponent getMainTabbedPaneComponent() {
-		return mainTabbedPaneComponent;
-	}
+    public MainTabbedPaneComponent getMainTabbedPaneComponent() {
+        return mainTabbedPaneComponent;
+    }
 
-	public int getNrOfFilesInSourcePath() {
-		return nrOfFilesInSourcePath;
-	}
+    public int getNrOfFilesInSourcePath() {
+        return nrOfFilesInSourcePath;
+    }
 
-	/**
-	 * SET  - methods
-	 */
-	public void setSourcePath(File sourcePath) {
-		this.sourcePath = sourcePath;
-	}
+    /**
+     * SET  - methods
+     */
+    public void setSourcePath(File sourcePath) {
+        this.sourcePath = sourcePath;
+    }
 
-	public void setDestinationPath(String destinationPath) {
-		this.destinationPath = destinationPath;
-	}
+    public void setDestinationPath(String destinationPath) {
+        this.destinationPath = destinationPath;
+    }
 
-	public void clearMetaDataObjects () {
-		this.metaDataObjects.clear();
-	}
+    public void clearMetaDataObjects () {
+        this.metaDataObjects.clear();
+    }
 
-	public void addMetaDataObject(MetaData metaData) {
-		this.metaDataObjects.add(metaData);
-	}
+    public void addMetaDataObject(MetaData metaData) {
+        this.metaDataObjects.add(metaData);
+    }
 
-	public void setTemplateFileName(String templateFileName) {
-		this.templateFileName = templateFileName;
-	}
+    public void setTemplateFileName(String templateFileName) {
+        this.templateFileName = templateFileName;
+    }
 
-	public void setTemplateSubFolderName(String templateSubFolderName) {
-		this.templateSubFolderName = templateSubFolderName;
-	}
+    public void setTemplateSubFolderName(String templateSubFolderName) {
+        this.templateSubFolderName = templateSubFolderName;
+    }
 
-	public void setCreateThumbNailsCheckBoxSelected(boolean createThumbNailsCheckBoxSelected) {
-		this.createThumbNailsCheckBoxSelected = createThumbNailsCheckBoxSelected;
-	}
+    public void setCreateThumbNailsCheckBoxSelected(boolean createThumbNailsCheckBoxSelected) {
+        this.createThumbNailsCheckBoxSelected = createThumbNailsCheckBoxSelected;
+    }
 
-	public void setJarFileEmbeddedLanguageFiles(Set<String> jarFileEmbeddedLanguageFiles) {
-		if (!this.jarFileEmbeddedLanguageFiles.isEmpty()) {
-			this.jarFileEmbeddedLanguageFiles.clear();
-		}
-		this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
-	}
+    public void setJarFileEmbeddedLanguageFiles(Set<String> jarFileEmbeddedLanguageFiles) {
+        if (!this.jarFileEmbeddedLanguageFiles.isEmpty()) {
+            this.jarFileEmbeddedLanguageFiles.clear();
+        }
+        this.jarFileEmbeddedLanguageFiles = jarFileEmbeddedLanguageFiles;
+    }
 
-	public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
-		this.imageViewerDisplayed = imageViewerDisplayed;
-	}
+    public void setImageViewerDisplayed(boolean imageViewerDisplayed) {
+        this.imageViewerDisplayed = imageViewerDisplayed;
+    }
 
-	public void setSelectedThumbNail(File selectedThumbNail) {
-		this.selectedThumbNail = selectedThumbNail;
-	}
+    public void setSelectedThumbNail(File selectedThumbNail) {
+        this.selectedThumbNail = selectedThumbNail;
+    }
 
-	public void setSelectedCategoryPath(TreePath selectedCategoryPath) {
-		this.selectedCategoryPath = selectedCategoryPath;
-	}
+    public void setSelectedCategoryPath(TreePath selectedCategoryPath) {
+        this.selectedCategoryPath = selectedCategoryPath;
+    }
 
-	public void setHighestUsedCategoryID(int highestUsedCategoryID) {
-		this.highestUsedCategoryID = highestUsedCategoryID;
-	}
+    public void setHighestUsedCategoryID(int highestUsedCategoryID) {
+        this.highestUsedCategoryID = highestUsedCategoryID;
+    }
 
-	public void setMainTabbedPaneComponent(MainTabbedPaneComponent mainTabbedPaneComponent) {
-		this.mainTabbedPaneComponent = mainTabbedPaneComponent;
-	}
+    public void setMainTabbedPaneComponent(MainTabbedPaneComponent mainTabbedPaneComponent) {
+        this.mainTabbedPaneComponent = mainTabbedPaneComponent;
+    }
 
-	public void setNrOfFilesInSourcePath(int nrOfFilesInSourcePath) {
-		this.nrOfFilesInSourcePath = nrOfFilesInSourcePath;
-	}
+    public void setNrOfFilesInSourcePath(int nrOfFilesInSourcePath) {
+        this.nrOfFilesInSourcePath = nrOfFilesInSourcePath;
+    }
 
-	public void clearJpegFileLoadBuffer() {
-		jpegFileLoadBuffer.clear();
-	}
+    public void clearJpegFileLoadBuffer() {
+        jpegFileLoadBuffer.clear();
+    }
 
-	public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
-		switch (action) {
-		case ADD:
-			jpegFileLoadBuffer.add(image);
-			return image;
-		case RETRIEVE:
-			if (jpegFileLoadBuffer.size() > 0) {
-				return jpegFileLoadBuffer.remove(0);
-			} else {
-				return image;
-			}
-		default:
-			return image;
-		}
-	}
+    public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
+        switch (action) {
+        case ADD:
+            jpegFileLoadBuffer.add(image);
+            return image;
+        case RETRIEVE:
+            if (jpegFileLoadBuffer.size() > 0) {
+                return jpegFileLoadBuffer.remove(0);
+            } else {
+                return image;
+            }
+        default:
+            return image;
+        }
+    }
 
-	public void setImageMetaDataDataBaseFileLoaded(boolean imageMetaDataDataBaseFileLoaded) {
-		this.imageMetaDataDataBaseFileLoaded = imageMetaDataDataBaseFileLoaded;
-	}
+    public void setImageMetaDataDataBaseFileLoaded(boolean imageMetaDataDataBaseFileLoaded) {
+        this.imageMetaDataDataBaseFileLoaded = imageMetaDataDataBaseFileLoaded;
+    }
 
-	public boolean isImageMetaDataDataBaseFileLoaded() {
-		return imageMetaDataDataBaseFileLoaded;
-	}
+    public boolean isImageMetaDataDataBaseFileLoaded() {
+        return imageMetaDataDataBaseFileLoaded;
+    }
 
     public void setImageMetaDataDataBaseFileWritable(boolean imageMetaDataDataBaseFileWritable) {
         this.imageMetaDataDataBaseFileWritable = imageMetaDataDataBaseFileWritable;
