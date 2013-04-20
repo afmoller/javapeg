@@ -28,199 +28,199 @@ import moller.util.mnemonic.MnemonicConverter;
 
 public class RenameProcess extends JFrame implements ActionListener {
 
-	private static final long serialVersionUID = 3159146939361532653L;
+    private static final long serialVersionUID = 3159146939361532653L;
 
-	private static final Timer TIMER = new Timer(true);
+    private static final Timer TIMER = new Timer(true);
 
-	private JProgressBar processProgressBar;
-	private final CustomizedJTextArea log;
-	private String processMessage = "";
-	private SimpleDateFormat sdf;
+    private JProgressBar processProgressBar;
+    private final CustomizedJTextArea log;
+    private String processMessage = "";
+    private SimpleDateFormat sdf;
 
-	private final JPanel background;
+    private final JPanel background;
 
-	private int processProgress = 0;
+    private int processProgress = 0;
 
-	private final JLabel title;
+    private final JLabel title;
 
-	private final JButton dismissWindowButton;
-	private final JButton openDestinationDirectoryButton;
+    private final JButton dismissWindowButton;
+    private final JButton openDestinationDirectoryButton;
 
-	private UpdateTask updateTask = null;
-	private GUIUpdater guiUpdater = null;
+    private UpdateTask updateTask = null;
+    private GUIUpdater guiUpdater = null;
 
-	private final Language lang;
+    private final Language lang;
 
-	public RenameProcess() {
-		lang = Language.getInstance();
-		setTitle(lang.get("progress.RenameProcess.title.processStarting"));
+    public RenameProcess() {
+        lang = Language.getInstance();
+        setTitle(lang.get("progress.RenameProcess.title.processStarting"));
 
-		setLayout(new GridBagLayout());
-		updateTask = new UpdateTask();
-		guiUpdater = new GUIUpdater();
+        setLayout(new GridBagLayout());
+        updateTask = new UpdateTask();
+        guiUpdater = new GUIUpdater();
 
-		background = new JPanel(new GridBagLayout());
+        background = new JPanel(new GridBagLayout());
 
-		title = new JLabel("_");
+        title = new JLabel("_");
 
-		if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
-			processProgressBar = new JProgressBar(0, 15);
-		} else {
-			processProgressBar = new JProgressBar(0, 11);
-		}
-		processProgressBar.setStringPainted(true);
+        if(ApplicationContext.getInstance().isCreateThumbNailsCheckBoxSelected()) {
+            processProgressBar = new JProgressBar(0, 15);
+        } else {
+            processProgressBar = new JProgressBar(0, 11);
+        }
+        processProgressBar.setStringPainted(true);
 
-		log = new CustomizedJTextArea();
-		log.setEditable(false);
+        log = new CustomizedJTextArea();
+        log.setEditable(false);
 
-		JScrollPane jsp = new JScrollPane(log, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		jsp.setPreferredSize(new Dimension(600,300));
+        JScrollPane jsp = new JScrollPane(log, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setPreferredSize(new Dimension(600,300));
 
-		dismissWindowButton = new JButton(lang.get("progress.RenameProcess.dismissWindowButton.processStarting"));
-		dismissWindowButton.setToolTipText(lang.get("progress.RenameProcess.dismissWindowButton.processStarting.toolTip"));
-		dismissWindowButton.setEnabled(false);
-		dismissWindowButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.dismissWindowButton.mnemonic").charAt(0)));
+        dismissWindowButton = new JButton(lang.get("progress.RenameProcess.dismissWindowButton.processStarting"));
+        dismissWindowButton.setToolTipText(lang.get("progress.RenameProcess.dismissWindowButton.processStarting.toolTip"));
+        dismissWindowButton.setEnabled(false);
+        dismissWindowButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.dismissWindowButton.mnemonic").charAt(0)));
 
-		openDestinationDirectoryButton = new JButton(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting"));
-		openDestinationDirectoryButton.setToolTipText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip"));
-		openDestinationDirectoryButton.setEnabled(false);
-		openDestinationDirectoryButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.openDestinationDirectoryButton.mnemonic").charAt(0)));
+        openDestinationDirectoryButton = new JButton(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting"));
+        openDestinationDirectoryButton.setToolTipText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip"));
+        openDestinationDirectoryButton.setEnabled(false);
+        openDestinationDirectoryButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("progress.RenameProcess.openDestinationDirectoryButton.mnemonic").charAt(0)));
 
-		GBC gbcRIF = GBC.std().insets(0, 0, 20, 0).fill(GBC.HORIZONTAL);
-		GBC gbcEol = GBC.eol();
-		GBC gbcEolFillI = GBC.eol().fill(GBC.HORIZONTAL).insets(0, 5, 0, 0);
+        GBC gbcRIF = GBC.std().insets(0, 0, 20, 0).fill(GBC.HORIZONTAL);
+        GBC gbcEol = GBC.eol();
+        GBC gbcEolFillI = GBC.eol().fill(GBC.HORIZONTAL).insets(0, 5, 0, 0);
 
-		background.add(title, gbcRIF);
-		background.add(Box.createVerticalStrut(20), gbcEol);
+        background.add(title, gbcRIF);
+        background.add(Box.createVerticalStrut(20), gbcEol);
 
-		background.add(processProgressBar, gbcEolFillI);
-		background.add(Box.createVerticalStrut(10), gbcEol);
-		background.add(jsp, gbcEolFillI);
-		background.add(Box.createVerticalStrut(20), gbcEol);
+        background.add(processProgressBar, gbcEolFillI);
+        background.add(Box.createVerticalStrut(10), gbcEol);
+        background.add(jsp, gbcEolFillI);
+        background.add(Box.createVerticalStrut(20), gbcEol);
 
-		JPanel bottomPanel = new JPanel(new GridBagLayout());
+        JPanel bottomPanel = new JPanel(new GridBagLayout());
 
-		GBC gbcRight = GBC.std().anchor(GBC.SOUTHEAST).insets(5, 0, 0, 0);
-		bottomPanel.add(Box.createHorizontalGlue(), GBC.std().fill(GBC.HORIZONTAL));
-		bottomPanel.add(dismissWindowButton, gbcRight);
-		bottomPanel.add(openDestinationDirectoryButton, gbcRight);
+        GBC gbcRight = GBC.std().anchor(GBC.SOUTHEAST).insets(5, 0, 0, 0);
+        bottomPanel.add(Box.createHorizontalGlue(), GBC.std().fill(GBC.HORIZONTAL));
+        bottomPanel.add(dismissWindowButton, gbcRight);
+        bottomPanel.add(openDestinationDirectoryButton, gbcRight);
 
-		background.add(bottomPanel, gbcEolFillI);
+        background.add(bottomPanel, gbcEolFillI);
 
-		JPanel borderPanel = new JPanel(new GridBagLayout());
-		borderPanel.setBorder(BorderFactory.createRaisedBevelBorder());
-		borderPanel.add(background, GBC.std().insets(10, 10, 10, 10).fill());
+        JPanel borderPanel = new JPanel(new GridBagLayout());
+        borderPanel.setBorder(BorderFactory.createRaisedBevelBorder());
+        borderPanel.add(background, GBC.std().insets(10, 10, 10, 10).fill());
 
-		add(borderPanel, GBC.std().fill());
-		setUndecorated(true);
+        add(borderPanel, GBC.std().fill());
+        setUndecorated(true);
 
-		dismissWindowButton.addActionListener(this);
-		openDestinationDirectoryButton.addActionListener(this);
+        dismissWindowButton.addActionListener(this);
+        openDestinationDirectoryButton.addActionListener(this);
 
-		pack();
+        pack();
 
-		background.setLayout(null);
+        background.setLayout(null);
 
-		Dimension dScreen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension dContent = getSize();
-		setLocation((dScreen.width - dContent.width) / 2, (dScreen.height - dContent.height) / 2);
+        Dimension dScreen = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dContent = getSize();
+        setLocation((dScreen.width - dContent.width) / 2, (dScreen.height - dContent.height) / 2);
 
-		processProgressBar.setMinimum(0);
-		processProgressBar.setValue(0);
+        processProgressBar.setMinimum(0);
+        processProgressBar.setValue(0);
 
-		this.setAlwaysOnTop(true);
-	}
+        this.setAlwaysOnTop(true);
+    }
 
-	public void init() {
-		updateGUI();
-		TIMER.schedule(updateTask, 0, 500);
-		sdf = Config.getInstance().get().getRenameImages().getProgressLogTimestampFormat();
-	}
+    public void init() {
+        updateGUI();
+        TIMER.schedule(updateTask, 0, 500);
+        sdf = Config.getInstance().get().getRenameImages().getProgressLogTimestampFormat();
+    }
 
-	public void incProcessProgress() {
-		processProgress++;
-		updateGUI();
-	}
+    public void incProcessProgress() {
+        processProgress++;
+        updateGUI();
+    }
 
-	public void setProcessMessage(String message) {
-		processMessage = message;
-	}
+    public void setProcessMessage(String message) {
+        processMessage = message;
+    }
 
-	public void setLogMessage(String logMessage) {
-		String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
-		log.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
-	}
+    public void setLogMessage(String logMessage) {
+        String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
+        log.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
+    }
 
-	public void renameProcessFinished() {
-		stopUpdateTask();
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+    public void renameProcessFinished() {
+        stopUpdateTask();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
 
-				setTitle(lang.get("progress.RenameProcess.title.processFinished"));
+                setTitle(lang.get("progress.RenameProcess.title.processFinished"));
 
-				dismissWindowButton.setText(lang.get("progress.RenameProcess.dismissWindowButton.processFinished"));
-				dismissWindowButton.setToolTipText(lang.get("progress.RenameProcess.dismissWindowButton.processFinished.toolTip"));
-				dismissWindowButton.setEnabled(true);
+                dismissWindowButton.setText(lang.get("progress.RenameProcess.dismissWindowButton.processFinished"));
+                dismissWindowButton.setToolTipText(lang.get("progress.RenameProcess.dismissWindowButton.processFinished.toolTip"));
+                dismissWindowButton.setEnabled(true);
 
-				openDestinationDirectoryButton.setText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processFinished"));
-				openDestinationDirectoryButton.setToolTipText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip"));
-				openDestinationDirectoryButton.setEnabled(true);
-			}
-		});
-	}
+                openDestinationDirectoryButton.setText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processFinished"));
+                openDestinationDirectoryButton.setToolTipText(lang.get("progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip"));
+                openDestinationDirectoryButton.setEnabled(true);
+            }
+        });
+    }
 
-	private synchronized void stopUpdateTask() {
-		try {
-			updateTask.cancel();
-			updateTask = null;
-		} catch (Exception e) {
-		}
-	}
+    private synchronized void stopUpdateTask() {
+        try {
+            updateTask.cancel();
+            updateTask = null;
+        } catch (Exception e) {
+        }
+    }
 
-	public void closeWindow() {
-		try {
-			stopUpdateTask();
-			setVisible(false);
-		} finally {
-			dispose();
-		}
-	}
+    public void closeWindow() {
+        try {
+            stopUpdateTask();
+            setVisible(false);
+        } finally {
+            dispose();
+        }
+    }
 
-	public void setRenameProgressMessages(String message) {
-		setProcessMessage(message);
-		setLogMessage(message);
-	}
+    public void setRenameProgressMessages(String message) {
+        setProcessMessage(message);
+        setLogMessage(message);
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		if (openDestinationDirectoryButton.equals(source)) {
-			try {
-				String strCmd = "rundll32 url.dll,FileProtocolHandler" + " " + ApplicationContext.getInstance().getDestinationPath();
-				Runtime.getRuntime().exec(strCmd);
-			} catch (Exception ex) {
-			}
-		} else if (dismissWindowButton.equals(source)) {
-			closeWindow();
-		}
-	}
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (openDestinationDirectoryButton.equals(source)) {
+            try {
+                String strCmd = "rundll32 url.dll,FileProtocolHandler" + " " + ApplicationContext.getInstance().getDestinationPath();
+                Runtime.getRuntime().exec(strCmd);
+            } catch (Exception ex) {
+            }
+        } else if (dismissWindowButton.equals(source)) {
+            closeWindow();
+        }
+    }
 
-	private class GUIUpdater implements Runnable {
+    private class GUIUpdater implements Runnable {
 
-		public void run() {
-			processProgressBar.setValue(processProgress);
-			title.setText(processMessage);
-		}
-	}
+        public void run() {
+            processProgressBar.setValue(processProgress);
+            title.setText(processMessage);
+        }
+    }
 
-	private void updateGUI() {
-		SwingUtilities.invokeLater(guiUpdater);
-	}
+    private void updateGUI() {
+        SwingUtilities.invokeLater(guiUpdater);
+    }
 
-	private class UpdateTask extends TimerTask {
+    private class UpdateTask extends TimerTask {
 
-		@Override
-		public void run() {
-			updateGUI();
-		}
-	}
+        @Override
+        public void run() {
+            updateGUI();
+        }
+    }
 }

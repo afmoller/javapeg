@@ -8,28 +8,28 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileSelection implements Transferable {
-	// the Image object which will be housed by the ImageSelection
-	private List<File> files;
+    // the Image object which will be housed by the ImageSelection
+    private final List<File> files;
 
-	public FileSelection(List<File> files) {
-		this.files = files;
-	}
+    public FileSelection(List<File> files) {
+        this.files = files;
+    }
 
-	// Returns the supported flavors of our implementation
-	public DataFlavor[] getTransferDataFlavors() {
-		return new DataFlavor[] {DataFlavor.javaFileListFlavor};
-	}
+    // Returns the supported flavors of our implementation
+    public DataFlavor[] getTransferDataFlavors() {
+        return new DataFlavor[] {DataFlavor.javaFileListFlavor};
+    }
 
-	// Returns true if flavor is supported
-	public boolean isDataFlavorSupported(DataFlavor flavor)	{
-		return DataFlavor.javaFileListFlavor.equals(flavor);
-	}
+    // Returns true if flavor is supported
+    public boolean isDataFlavorSupported(DataFlavor flavor)    {
+        return DataFlavor.javaFileListFlavor.equals(flavor);
+    }
 
-	// Returns Image object housed by Transferable object
-	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,IOException {
-		if (!DataFlavor.javaFileListFlavor.equals(flavor)) {
-			throw new UnsupportedFlavorException(flavor);
-		}
-		return files;
-	}
+    // Returns Image object housed by Transferable object
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,IOException {
+        if (!DataFlavor.javaFileListFlavor.equals(flavor)) {
+            throw new UnsupportedFlavorException(flavor);
+        }
+        return files;
+    }
 }

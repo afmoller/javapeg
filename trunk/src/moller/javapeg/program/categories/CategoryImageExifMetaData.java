@@ -31,7 +31,7 @@ public class CategoryImageExifMetaData {
     public CategoryImageExifMetaData(File jpegFile) {
         MetaData md = MetaDataRetriever.getMetaData(jpegFile);
 
-    	fNumber       = md.getExifFNumber();
+        fNumber       = md.getExifFNumber();
         cameraModel   = md.getExifCameraModel();
         dateTime      = md.getExifDateTime();
         isoValue      = md.getExifISOValue();
@@ -86,7 +86,7 @@ public class CategoryImageExifMetaData {
     }
 
     public String getDateTimeAsString() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-		return sdf.format(dateTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        return sdf.format(dateTime);
     }
 }

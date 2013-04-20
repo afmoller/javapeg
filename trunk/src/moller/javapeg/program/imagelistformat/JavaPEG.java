@@ -13,35 +13,35 @@ import moller.util.io.FileUtil;
 
 public class JavaPEG {
 
-	private static Logger  logger = Logger.getInstance();
+    private static Logger  logger = Logger.getInstance();
 
-	public static void createAndWriteToFile(DefaultListModel<File> images, File file, Language lang) {
+    public static void createAndWriteToFile(DefaultListModel<File> images, File file, Language lang) {
 
-		boolean success = true;
+        boolean success = true;
 
-		StringBuilder sb = new StringBuilder(512);
+        StringBuilder sb = new StringBuilder(512);
 
-		if(FileUtil.createFile(file)) {
-			for (int i = 0; i < images.size(); i++) {
-				sb.append(images.get(i).getAbsolutePath() + C.LS);
-			}
+        if(FileUtil.createFile(file)) {
+            for (int i = 0; i < images.size(); i++) {
+                sb.append(images.get(i).getAbsolutePath() + C.LS);
+            }
 
-			try {
-				FileUtil.writeToFile(file, sb.toString(), true);
-			} catch (IOException e) {
-				success = false;
-				logger.logERROR("Could not write to file: " + file.getAbsolutePath());
-				logger.logERROR(e);
-			}
-		} else {
-			success = false;
-			logger.logERROR("Could not create file: " + file.getAbsolutePath());
-		}
+            try {
+                FileUtil.writeToFile(file, sb.toString(), true);
+            } catch (IOException e) {
+                success = false;
+                logger.logERROR("Could not write to file: " + file.getAbsolutePath());
+                logger.logERROR(e);
+            }
+        } else {
+            success = false;
+            logger.logERROR("Could not create file: " + file.getAbsolutePath());
+        }
 
-		if(success) {
-			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved"), "", JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved"), "", JOptionPane.ERROR_MESSAGE);
-		}
-	}
+        if(success) {
+            JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved"), "", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved"), "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

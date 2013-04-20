@@ -11,11 +11,11 @@ import java.awt.GridBagConstraints;
 public class GBHelper extends GridBagConstraints {
 
     /**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	//============================================================== constructor
+    //============================================================== constructor
     /* Creates helper at top left, component always fills cells. */
     public GBHelper() {
         gridx = 0;

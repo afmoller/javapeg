@@ -60,32 +60,32 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     }
 
     private void removeSelectionPaths(DefaultMutableTreeNode node) {
-    	selectionModel.removeSelectionPath(new TreePath(node.getPath()));
+        selectionModel.removeSelectionPath(new TreePath(node.getPath()));
 
-    	if (smartSelection) {
-    		int nrOfChildren = node.getChildCount();
+        if (smartSelection) {
+            int nrOfChildren = node.getChildCount();
 
-        	if (nrOfChildren > 0) {
-        		for (int i = 0; i < nrOfChildren; i++) {
-        			removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
-        		}
-        	}
-    	}
+            if (nrOfChildren > 0) {
+                for (int i = 0; i < nrOfChildren; i++) {
+                    removeSelectionPaths((DefaultMutableTreeNode)node.getChildAt(i));
+                }
+            }
+        }
     }
 
     private void addSelectionPaths(DefaultMutableTreeNode node) {
-    	TreePath nodeTreePath = new TreePath(node.getPath());
+        TreePath nodeTreePath = new TreePath(node.getPath());
 
-    	selectionModel.addSelectionPath(nodeTreePath);
+        selectionModel.addSelectionPath(nodeTreePath);
 
-    	if (smartSelection) {
-    		TreePath parentPath = nodeTreePath.getParentPath();
+        if (smartSelection) {
+            TreePath parentPath = nodeTreePath.getParentPath();
 
-    		while (parentPath != null) {
-    			selectionModel.addSelectionPath(parentPath);
-    			parentPath = parentPath.getParentPath();
-    		}
-    	}
+            while (parentPath != null) {
+                selectionModel.addSelectionPath(parentPath);
+                parentPath = parentPath.getParentPath();
+            }
+        }
     }
 
     @Override
@@ -130,11 +130,11 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     }
 
     public JTree getCheckedJtree() {
-    	return tree;
+        return tree;
     }
 
     public TreeModel getTreeModel() {
-    	return tree.getModel();
+        return tree.getModel();
     }
 
     public boolean isSelectionEnabled() {

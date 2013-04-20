@@ -25,140 +25,140 @@ import org.xml.sax.SAXException;
 
 public class NewVersionChecker {
 
-	/**
-	 * The static singleton instance of this class.
-	 */
-	private static NewVersionChecker instance;
+    /**
+     * The static singleton instance of this class.
+     */
+    private static NewVersionChecker instance;
 
-	private final Logger logger;
-	private final Configuration configuration;
-	private final Language lang;
+    private final Logger logger;
+    private final Configuration configuration;
+    private final Language lang;
 
-	private final URL urlVersion;
-	private final URL urlChangeLog;
-	private final int timeOut;
+    private final URL urlVersion;
+    private final URL urlChangeLog;
+    private final int timeOut;
 
-	/**
-	 * Private constructor.
-	 */
-	private NewVersionChecker() {
-		logger = Logger.getInstance();
-		configuration = Config.getInstance().get();
-		lang = Language.getInstance();
+    /**
+     * Private constructor.
+     */
+    private NewVersionChecker() {
+        logger = Logger.getInstance();
+        configuration = Config.getInstance().get();
+        lang = Language.getInstance();
 
-		UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+        UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
 
-		urlVersion = updatesChecker.getUrlVersion();
-		urlChangeLog = updatesChecker.getUrlVersionInformation();
-		timeOut = updatesChecker.getTimeOut();
-	}
+        urlVersion = updatesChecker.getUrlVersion();
+        urlChangeLog = updatesChecker.getUrlVersionInformation();
+        timeOut = updatesChecker.getTimeOut();
+    }
 
-	/**
-	 * Accessor method for this Singleton class.
-	 *
-	 * @return the singleton instance of this class.
-	 */
-	public static NewVersionChecker getInstance() {
-		if (instance != null)
-			return instance;
-		synchronized (NewVersionChecker.class) {
-			if (instance == null) {
-				instance = new NewVersionChecker();
-			}
-			return instance;
-		}
-	}
+    /**
+     * Accessor method for this Singleton class.
+     *
+     * @return the singleton instance of this class.
+     */
+    public static NewVersionChecker getInstance() {
+        if (instance != null)
+            return instance;
+        synchronized (NewVersionChecker.class) {
+            if (instance == null) {
+                instance = new NewVersionChecker();
+            }
+            return instance;
+        }
+    }
 
-	public long newVersionExists(long applicationVersion) {
+    public long newVersionExists(long applicationVersion) {
 
-		long latestVersion = 0;
-		String errorMessage = "";
+        long latestVersion = 0;
+        String errorMessage = "";
 
-		try {
-		    UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
-			latestVersion=  UpdateChecker.getLatestVersion(urlVersion, Long.toString(applicationVersion), updatesChecker.getAttachVersionInformation(), timeOut);
-		} catch (MalformedURLException e) {
-			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlVersion + ")";
-			logger.logERROR(e);
-		} catch (SocketTimeoutException e) {
-			errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlVersion.toString() + ")";
-			logger.logERROR(e);
-		} catch (IOException e) {
-			errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlVersion.toString() + ")";
-			logger.logERROR(e);
-		} catch (SAXException e) {
-			errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlVersion.toString() + ")";
-			logger.logERROR(e);
-		} catch (ParserConfigurationException e) {
-			errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + urlVersion.toString() + ")";
-			logger.logERROR(e);
-		}
-		if (errorMessage.length() > 0) {
-			JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-		}
-		return latestVersion;
-	}
+        try {
+            UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+            latestVersion=  UpdateChecker.getLatestVersion(urlVersion, Long.toString(applicationVersion), updatesChecker.getAttachVersionInformation(), timeOut);
+        } catch (MalformedURLException e) {
+            errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlVersion + ")";
+            logger.logERROR(e);
+        } catch (SocketTimeoutException e) {
+            errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlVersion.toString() + ")";
+            logger.logERROR(e);
+        } catch (IOException e) {
+            errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlVersion.toString() + ")";
+            logger.logERROR(e);
+        } catch (SAXException e) {
+            errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlVersion.toString() + ")";
+            logger.logERROR(e);
+        } catch (ParserConfigurationException e) {
+            errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + urlVersion.toString() + ")";
+            logger.logERROR(e);
+        }
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+        }
+        return latestVersion;
+    }
 
-	public Map<Long, VersionInformation> getVersionInformation (long applicationVersion) {
+    public Map<Long, VersionInformation> getVersionInformation (long applicationVersion) {
 
-		String errorMessage = "";
+        String errorMessage = "";
 
-		Map<Long, VersionInformation> vim = null;
+        Map<Long, VersionInformation> vim = null;
 
-		try {
-		    UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
-			vim = UpdateChecker.getVersionInformationMap(urlChangeLog, Long.toString(applicationVersion), updatesChecker.getAttachVersionInformation(), timeOut);
-		} catch (MalformedURLException e) {
-			errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlChangeLog + ")";
-			logger.logERROR(e);
-		} catch (SocketTimeoutException e) {
-			errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlChangeLog.toString() + ")";
-			logger.logERROR(e);
-		} catch (IOException e) {
-			errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlChangeLog.toString() + ")";
-			logger.logERROR(e);
-		} catch (SAXException e) {
-			errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlChangeLog.toString() + ")";
-			logger.logERROR(e);
-		} catch (ParserConfigurationException e) {
-			errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + urlChangeLog.toString() + ")";
-			logger.logERROR(e);
-		}
-		if (errorMessage.length() > 0) {
-			JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-		}
-		return vim;
-	}
+        try {
+            UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
+            vim = UpdateChecker.getVersionInformationMap(urlChangeLog, Long.toString(applicationVersion), updatesChecker.getAttachVersionInformation(), timeOut);
+        } catch (MalformedURLException e) {
+            errorMessage = lang.get("updatechecker.errormessage.uRLInvalid") + "\n(" + urlChangeLog + ")";
+            logger.logERROR(e);
+        } catch (SocketTimeoutException e) {
+            errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlChangeLog.toString() + ")";
+            logger.logERROR(e);
+        } catch (IOException e) {
+            errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlChangeLog.toString() + ")";
+            logger.logERROR(e);
+        } catch (SAXException e) {
+            errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlChangeLog.toString() + ")";
+            logger.logERROR(e);
+        } catch (ParserConfigurationException e) {
+            errorMessage = lang.get("updatechecker.errormessage.parseConfigurationException") + "\n(" + urlChangeLog.toString() + ")";
+            logger.logERROR(e);
+        }
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(null, errorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+        }
+        return vim;
+    }
 
-	public String getChangeLog(Map<Long, VersionInformation> versionInformationMap, long applicationVersion) {
+    public String getChangeLog(Map<Long, VersionInformation> versionInformationMap, long applicationVersion) {
 
-		StringBuilder changeLogsText = null;
-		changeLogsText = new StringBuilder(512);
+        StringBuilder changeLogsText = null;
+        changeLogsText = new StringBuilder(512);
 
-		Set<Long> reversedOrderSortedTimeStamps = new TreeSet<Long>(Collections.reverseOrder());
-		reversedOrderSortedTimeStamps.addAll(versionInformationMap.keySet());
+        Set<Long> reversedOrderSortedTimeStamps = new TreeSet<Long>(Collections.reverseOrder());
+        reversedOrderSortedTimeStamps.addAll(versionInformationMap.keySet());
 
-		String prolog =                                          C.LS +
-		                "+ = Additions since previous version" + C.LS +
-		                "! = Bug fixes since previous version" + C.LS +
-		                "~ = Changes   since previous version" + C.LS +
-		                                                         C.LS;
+        String prolog =                                          C.LS +
+                        "+ = Additions since previous version" + C.LS +
+                        "! = Bug fixes since previous version" + C.LS +
+                        "~ = Changes   since previous version" + C.LS +
+                                                                 C.LS;
 
-		if (reversedOrderSortedTimeStamps.size() > 0) {
-			changeLogsText.append(prolog);
-		}
+        if (reversedOrderSortedTimeStamps.size() > 0) {
+            changeLogsText.append(prolog);
+        }
 
-		for (Long  timeStamp : reversedOrderSortedTimeStamps) {
-			if(timeStamp > applicationVersion) {
-				changeLogsText.append("Version: ");
-				changeLogsText.append(versionInformationMap.get(timeStamp).getVersionNumber());
-				changeLogsText.append(C.LS);
-				changeLogsText.append(C.LS);
-				changeLogsText.append(versionInformationMap.get(timeStamp).getChangeLogs().get(timeStamp).getChangeLog());
-				changeLogsText.append(C.LS);
-				changeLogsText.append(C.LS);
-			}
-		}
-		return changeLogsText.toString();
-	}
+        for (Long  timeStamp : reversedOrderSortedTimeStamps) {
+            if(timeStamp > applicationVersion) {
+                changeLogsText.append("Version: ");
+                changeLogsText.append(versionInformationMap.get(timeStamp).getVersionNumber());
+                changeLogsText.append(C.LS);
+                changeLogsText.append(C.LS);
+                changeLogsText.append(versionInformationMap.get(timeStamp).getChangeLogs().get(timeStamp).getChangeLog());
+                changeLogsText.append(C.LS);
+                changeLogsText.append(C.LS);
+            }
+        }
+        return changeLogsText.toString();
+    }
 }

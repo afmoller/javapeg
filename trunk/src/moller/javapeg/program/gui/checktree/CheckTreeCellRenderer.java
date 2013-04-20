@@ -15,10 +15,13 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+
+import javax.swing.JPanel;
+import javax.swing.JTree;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
-import java.awt.*;
 
 /**
  * @author Santhosh Kumar T
@@ -27,10 +30,10 @@ import java.awt.*;
 
 public class CheckTreeCellRenderer extends JPanel implements TreeCellRenderer{
    private static final long serialVersionUID = 1L;
-	private CheckTreeSelectionModel selectionModel;
-    private TreePathSelectable selectable;
-    private TreeCellRenderer delegate;
-    private TristateCheckBox checkBox = new TristateCheckBox();
+    private final CheckTreeSelectionModel selectionModel;
+    private final TreePathSelectable selectable;
+    private final TreeCellRenderer delegate;
+    private final TristateCheckBox checkBox = new TristateCheckBox();
 
     public CheckTreeCellRenderer(TreeCellRenderer delegate, CheckTreeSelectionModel selectionModel, TreePathSelectable selectable){
         this.delegate = delegate;

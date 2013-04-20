@@ -37,231 +37,231 @@ import moller.util.string.StringUtil;
 
 public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDataValueSelectionDialog {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JList<Object> values;
+    private JList<Object> values;
 
-	private JButton okButton;
-	private JButton cancelButton;
+    private JButton okButton;
+    private JButton cancelButton;
 
-	private boolean okButtonClicked;
+    private boolean okButtonClicked;
 
-	private String value;
-	private final String oldValue;
+    private String value;
+    private final String oldValue;
 
-	private JRadioButton equal;
+    private JRadioButton equal;
 
-	private final Language lang = Language.getInstance();
+    private final Language lang = Language.getInstance();
 
-	public MetaDataValueSelectionDialogEqual(String title, Set<Object> values, String oldValue, Point position) {
+    public MetaDataValueSelectionDialogEqual(String title, Set<Object> values, String oldValue, Point position) {
 
-		this.value = "";
-		this.oldValue = oldValue;
+        this.value = "";
+        this.oldValue = oldValue;
 
-		okButtonClicked = false;
+        okButtonClicked = false;
 
-		this.setTitle(title);
-		this.setModal(true);
+        this.setTitle(title);
+        this.setModal(true);
 
-		JPanel background = new JPanel(new GridBagLayout());
+        JPanel background = new JPanel(new GridBagLayout());
 
-		GBHelper pos = new GBHelper();
-		pos.insets = new Insets(1, 1, 1, 1);
+        GBHelper pos = new GBHelper();
+        pos.insets = new Insets(1, 1, 1, 1);
 
-		background.add(this.cretaMainPane(title), pos.expandW());
-		background.add(this.createButtonPanel(), pos.nextRow().expandW());
+        background.add(this.cretaMainPane(title), pos.expandW());
+        background.add(this.createButtonPanel(), pos.nextRow().expandW());
 
-		this.getContentPane().add(background);
-		this.setValues(values);
-		this.setOldValue(oldValue);
-		this.setOkButtonState();
-		this.addListeners();
-		this.pack();
-		this.setLocation(position);
-		this.setVisible(true);
-	}
+        this.getContentPane().add(background);
+        this.setValues(values);
+        this.setOldValue(oldValue);
+        this.setOkButtonState();
+        this.addListeners();
+        this.pack();
+        this.setLocation(position);
+        this.setVisible(true);
+    }
 
-	private JPanel createButtonPanel() {
-		okButton = new JButton(lang.get("common.button.ok.label"));
-		cancelButton = new JButton(lang.get("common.button.cancel.label"));
+    private JPanel createButtonPanel() {
+        okButton = new JButton(lang.get("common.button.ok.label"));
+        cancelButton = new JButton(lang.get("common.button.cancel.label"));
 
-		JPanel background = new JPanel();
+        JPanel background = new JPanel();
 
-		background.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
-		background.add(okButton);
-		background.add(cancelButton);
+        background.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+        background.add(okButton);
+        background.add(cancelButton);
 
-		return background;
-	}
+        return background;
+    }
 
-	private JPanel cretaMainPane(String title) {
-		GBHelper positionMainPanel = new GBHelper();
+    private JPanel cretaMainPane(String title) {
+        GBHelper positionMainPanel = new GBHelper();
 
-		JPanel mainPanel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new GridBagLayout());
 
-		JLabel selectionModeLabel = new JLabel(lang.get("category.metadatavalue.selection.mode"));
-		selectionModeLabel.setForeground(Color.GRAY);
+        JLabel selectionModeLabel = new JLabel(lang.get("category.metadatavalue.selection.mode"));
+        selectionModeLabel.setForeground(Color.GRAY);
 
-		JLabel valuesLabel = new JLabel(lang.get("category.metadatavalue.selection.values"));
-		valuesLabel.setForeground(Color.GRAY);
+        JLabel valuesLabel = new JLabel(lang.get("category.metadatavalue.selection.values"));
+        valuesLabel.setForeground(Color.GRAY);
 
-		mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
-		mainPanel.add(selectionModeLabel, positionMainPanel);
-		mainPanel.add(this.createOperatorsPanel(), positionMainPanel.nextRow().expandW().align(GridBagConstraints.WEST));
-		mainPanel.add(new Gap(4), positionMainPanel.nextRow());
-		mainPanel.add(valuesLabel, positionMainPanel.nextRow());
-		mainPanel.add(this.createValuesJList(), positionMainPanel.nextRow().expandW());
+        mainPanel.add(selectionModeLabel, positionMainPanel);
+        mainPanel.add(this.createOperatorsPanel(), positionMainPanel.nextRow().expandW().align(GridBagConstraints.WEST));
+        mainPanel.add(new Gap(4), positionMainPanel.nextRow());
+        mainPanel.add(valuesLabel, positionMainPanel.nextRow());
+        mainPanel.add(this.createValuesJList(), positionMainPanel.nextRow().expandW());
 
-		return mainPanel;
-	}
+        return mainPanel;
+    }
 
-	private JPanel createOperatorsPanel() {
-		GBHelper positionOperatorsPanel = new GBHelper();
+    private JPanel createOperatorsPanel() {
+        GBHelper positionOperatorsPanel = new GBHelper();
 
-		JPanel backgroundPanel = new JPanel();
+        JPanel backgroundPanel = new JPanel();
 
-		JPanel operatorsPanel = new JPanel(new GridBagLayout());
+        JPanel operatorsPanel = new JPanel(new GridBagLayout());
 
-		equal = new JRadioButton("=");
-		equal.setName("equal");
-		equal.doClick();
+        equal = new JRadioButton("=");
+        equal.setName("equal");
+        equal.doClick();
 
-		operatorsPanel.add(equal, positionOperatorsPanel.nextRow());
+        operatorsPanel.add(equal, positionOperatorsPanel.nextRow());
 
-		backgroundPanel.add(operatorsPanel);
+        backgroundPanel.add(operatorsPanel);
 
-		return backgroundPanel;
-	}
+        return backgroundPanel;
+    }
 
-	private JPanel createValuesJList() {
-		GBHelper positionJListPanel = new GBHelper();
-		JPanel jListPanel = new JPanel(new GridBagLayout());
+    private JPanel createValuesJList() {
+        GBHelper positionJListPanel = new GBHelper();
+        JPanel jListPanel = new JPanel(new GridBagLayout());
 
-		values = new JList<Object>();
-		values.setVisibleRowCount(5);
+        values = new JList<Object>();
+        values.setVisibleRowCount(5);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getViewport().add(values);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.getViewport().add(values);
 
-		jListPanel.add(scrollPane, positionJListPanel.expandW());
+        jListPanel.add(scrollPane, positionJListPanel.expandW());
 
-		return jListPanel;
-	}
+        return jListPanel;
+    }
 
-	private void addListeners() {
-		this.addWindowListener(new WindowDestroyer());
-		okButton.addActionListener(new OkButtonListener());
-		cancelButton.addActionListener(new CancelButtonListener());
-		values.addListSelectionListener(new ValuesListListener());
-	}
+    private void addListeners() {
+        this.addWindowListener(new WindowDestroyer());
+        okButton.addActionListener(new OkButtonListener());
+        cancelButton.addActionListener(new CancelButtonListener());
+        values.addListSelectionListener(new ValuesListListener());
+    }
 
-	private void setOldValue(String oldValue) {
-		if (oldValue.length() > 0) {
-			 if (oldValue.startsWith("=")) {
-				equal.setSelected(true);
-			}
-			this.setValuesInJList(oldValue.substring(1));
-		} else {
-			equal.setSelected(true);
-		}
-	}
+    private void setOldValue(String oldValue) {
+        if (oldValue.length() > 0) {
+             if (oldValue.startsWith("=")) {
+                equal.setSelected(true);
+            }
+            this.setValuesInJList(oldValue.substring(1));
+        } else {
+            equal.setSelected(true);
+        }
+    }
 
-	private void setValuesInJList(String valuesStringWithoutPrefix) {
-		String[] valueStrings = valuesStringWithoutPrefix.split(C.META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP);
+    private void setValuesInJList(String valuesStringWithoutPrefix) {
+        String[] valueStrings = valuesStringWithoutPrefix.split(C.META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP);
 
-		List<Integer> indices = new ArrayList<Integer>();
+        List<Integer> indices = new ArrayList<Integer>();
 
-		for (String valueString : valueStrings) {
-			int index = this.getIndexForValue(valueString);
+        for (String valueString : valueStrings) {
+            int index = this.getIndexForValue(valueString);
 
-			if (index != -1) {
-				indices.add(index);
-			}
-		}
+            if (index != -1) {
+                indices.add(index);
+            }
+        }
 
-		int[] indicesArray = new int[indices.size()];
+        int[] indicesArray = new int[indices.size()];
 
-		for (int i = 0; i < indices.size(); i++) {
-			indicesArray[i] = indices.get(i);
-		}
-		values.setSelectedIndices(indicesArray);
-	}
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = indices.get(i);
+        }
+        values.setSelectedIndices(indicesArray);
+    }
 
-	private int getIndexForValue(String value) {
-		ListModel<Object> model = values.getModel();
+    private int getIndexForValue(String value) {
+        ListModel<Object> model = values.getModel();
 
-		for (int index = 0; index < model.getSize(); index++) {
-			if (model.getElementAt(index).toString().equals(value)) {
-				return index;
-			}
-		}
-		return -1;
-	}
+        for (int index = 0; index < model.getSize(); index++) {
+            if (model.getElementAt(index).toString().equals(value)) {
+                return index;
+            }
+        }
+        return -1;
+    }
 
-	public String getResult() {
-		return value;
-	}
+    public String getResult() {
+        return value;
+    }
 
-	private void setOkButtonState() {
-		if (oldValue.length() >  0) {
-			okButton.setEnabled(true);
-		} else {
-			okButton.setEnabled(false);
-		}
-	}
+    private void setOkButtonState() {
+        if (oldValue.length() >  0) {
+            okButton.setEnabled(true);
+        } else {
+            okButton.setEnabled(false);
+        }
+    }
 
-	public void collectSelectedValues() {
-		List<Object> selectedValues = values.getSelectedValuesList();
+    public void collectSelectedValues() {
+        List<Object> selectedValues = values.getSelectedValuesList();
 
-		int nrOfSelectedValues = selectedValues.size();
+        int nrOfSelectedValues = selectedValues.size();
 
-		if (nrOfSelectedValues > 0 && okButtonClicked) {
-			value = "=";
+        if (nrOfSelectedValues > 0 && okButtonClicked) {
+            value = "=";
 
-			StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-			for (Object selectedValue : selectedValues) {
-				sb.append(selectedValue.toString());
-				sb.append(C.META_DATA_PARAMETER_VALUES_DELIMITER);
-			}
-			value += StringUtil.removeStringFromEnd(sb.toString(), C.META_DATA_PARAMETER_VALUES_DELIMITER);
-		} else {
-			value = oldValue;
-		}
-	}
+            for (Object selectedValue : selectedValues) {
+                sb.append(selectedValue.toString());
+                sb.append(C.META_DATA_PARAMETER_VALUES_DELIMITER);
+            }
+            value += StringUtil.removeStringFromEnd(sb.toString(), C.META_DATA_PARAMETER_VALUES_DELIMITER);
+        } else {
+            value = oldValue;
+        }
+    }
 
-	private void setValues(Set<Object> values) {
-		this.values.setModel(new SortedListModel(values));
-	}
+    private void setValues(Set<Object> values) {
+        this.values.setModel(new SortedListModel(values));
+    }
 
-	private class WindowDestroyer extends WindowAdapter{
-		@Override
-		public void windowClosing (WindowEvent e){
-			e.getWindow().dispose();
-		}
-	}
+    private class WindowDestroyer extends WindowAdapter{
+        @Override
+        public void windowClosing (WindowEvent e){
+            e.getWindow().dispose();
+        }
+    }
 
-	private class OkButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			okButtonClicked = true;
-			dispose();
-		}
-	}
+    private class OkButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            okButtonClicked = true;
+            dispose();
+        }
+    }
 
-	private class CancelButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			value = oldValue;
-			dispose();
-		}
-	}
+    private class CancelButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            value = oldValue;
+            dispose();
+        }
+    }
 
-	private class ValuesListListener implements ListSelectionListener {
-		@SuppressWarnings("unchecked")
+    private class ValuesListListener implements ListSelectionListener {
+        @SuppressWarnings("unchecked")
         public void valueChanged(ListSelectionEvent e) {
-			if(!((JList<Object>)e.getSource()).getSelectionModel().isSelectionEmpty()) {
-				okButton.setEnabled(true);
-			}
-		}
-	}
+            if(!((JList<Object>)e.getSource()).getSelectionModel().isSelectionEmpty()) {
+                okButton.setEnabled(true);
+            }
+        }
+    }
 }

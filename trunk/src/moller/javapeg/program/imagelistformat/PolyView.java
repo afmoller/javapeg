@@ -13,7 +13,7 @@ import moller.util.io.FileUtil;
 
 public class PolyView {
 
-	private static final String PROLOG = "<randomize 0"    + C.LS +
+    private static final String PROLOG = "<randomize 0"    + C.LS +
                                          "<animate 0"      + C.LS +
                                          "<time 10"        + C.LS +
                                          "<absolute 0"     + C.LS +
@@ -29,37 +29,37 @@ public class PolyView {
                                          "<cycle 1"        + C.LS +
                                          "<windowed 0"     + C.LS;
 
-	private static Logger  logger = Logger.getInstance();
+    private static Logger  logger = Logger.getInstance();
 
-	public static void createAndWriteToFile(DefaultListModel<File> images, File file, Language lang) {
+    public static void createAndWriteToFile(DefaultListModel<File> images, File file, Language lang) {
 
-		boolean success = true;
+        boolean success = true;
 
-		StringBuilder sb = new StringBuilder(512);
+        StringBuilder sb = new StringBuilder(512);
 
-		if(FileUtil.createFile(file)) {
-			sb.append(PROLOG);
+        if(FileUtil.createFile(file)) {
+            sb.append(PROLOG);
 
-			for (int i = 0; i < images.size(); i++) {
-				sb.append(images.get(i).getAbsolutePath() + C.LS);
-			}
+            for (int i = 0; i < images.size(); i++) {
+                sb.append(images.get(i).getAbsolutePath() + C.LS);
+            }
 
-			try {
-				FileUtil.writeToFile(file, sb.toString(), true);
-			} catch (IOException e) {
-				success = false;
-				logger.logERROR("Could not write to file: " + file.getAbsolutePath());
-				logger.logERROR(e);
-			}
-		} else {
-			success = false;
-			logger.logERROR("Could not create file: " + file.getAbsolutePath());
-		}
+            try {
+                FileUtil.writeToFile(file, sb.toString(), true);
+            } catch (IOException e) {
+                success = false;
+                logger.logERROR("Could not write to file: " + file.getAbsolutePath());
+                logger.logERROR(e);
+            }
+        } else {
+            success = false;
+            logger.logERROR("Could not create file: " + file.getAbsolutePath());
+        }
 
-		if(success) {
-			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated"), "", JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated"), "", JOptionPane.ERROR_MESSAGE);
-		}
-	}
+        if(success) {
+            JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated"), "", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated"), "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
