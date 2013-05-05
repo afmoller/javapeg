@@ -362,6 +362,8 @@ public class MainGUI extends JFrame {
     private final FileSystemView fileSystemView;
 
     public MainGUI(){
+        logger = Logger.getInstance();
+        logger.logDEBUG("JavaPEG is starting");
 
         if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
             JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
@@ -369,7 +371,6 @@ public class MainGUI extends JFrame {
 
         ValidateFileSetup.check();
 
-        logger = Logger.getInstance();
         configuration = Config.getInstance().get();
         lang = Language.getInstance();
 
@@ -378,7 +379,6 @@ public class MainGUI extends JFrame {
         imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
         imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
-        logger.logDEBUG("JavaPEG is starting");
         this.printSystemProperties();
         this.overrideSwingUIProperties();
 
@@ -2088,8 +2088,7 @@ public class MainGUI extends JFrame {
                     boolean skipNameTest = false;
 
                     if (!ciep.getFileName().equals(currentDispayName)) {
-                        // TODO: remomve hard coded string.
-                        switch (displayConfirmDialog("The categories to import are already imported but with a different display name.\n\nShall the old display name (" + currentDispayName + ") continue to be used?  (new display name: " + ciep.getFileName() + ")", "Warning", JOptionPane.YES_NO_OPTION)) {
+                        switch (displayConfirmDialog(String.format(lang.get("categoryimportexport.alreadyImportedWithAnotherName"), currentDispayName, ciep.getFileName()), lang.get("errormessage.maingui.warningMessageLabel"), JOptionPane.YES_NO_OPTION)) {
                         case JOptionPane.YES_OPTION:
                             importedCategories.setDisplayName(currentDispayName);
                             skipNameTest = true;
@@ -2109,8 +2108,7 @@ public class MainGUI extends JFrame {
                     importedCategoriesConfig.put(importedCategoriesFromFile.getJavaPegId(), importedCategories);
                     ac.setRestartNeeded();
                 } else {
-//                 TODO: remove hard coded string
-                    displayInformationMessage("Newer version of the categories are already imported");
+                    displayInformationMessage(lang.get("categoryimportexport.newerVersionAlreadyImported"));
                 }
             } else {
                 if (CategoryUtil.displayNameAlreadyInUse(importedCategories.getDisplayName(), importedCategoriesConfig.values())) {

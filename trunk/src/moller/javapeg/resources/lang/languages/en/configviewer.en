@@ -103,6 +103,12 @@ configviewer.tag.imageRepositories.label.addAutomatically               = Add di
 configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add directory with non added images to image repository 
 configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Do not add directory with non added images to image repository
 configviewer.tag.imageRepositories.label.removeSelectedPaths            = Remove selected path(s)
+configviewer.tag.importedCategories.menuitem.rename                     = Rename
+configviewer.tag.importedCategories.menuitem.delete                     = Delete
+configviewer.tag.importedCategories.removeSelectedImportedCategoriesButton.tooltip = Remove the selected imported categories
+configviewer.tag.importedCategories.panel.border.label                             = Imported Categories
+configviewer.tag.importedCategories.rename.dialog.title                            = Rename Imported categories
+configviewer.tag.importedCategories.rename.dialog.text                             = Enter a new name for imported categories:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
