@@ -88,11 +88,10 @@ public class CategoryImportExportPopup extends JDialog {
 
         actionButton = new JButton();
 
-        //TODO: Remove hard coded string
         if (isImport()) {
-            actionButton.setText("Import");
+            actionButton.setText(lang.get("categoryimportexport.import"));
         } else {
-            actionButton.setText("Export");
+            actionButton.setText(lang.get("categoryimportexport.export"));
         }
 
         cancelButton = new JButton(lang.get("common.button.cancel.label"));
@@ -122,13 +121,11 @@ public class CategoryImportExportPopup extends JDialog {
         JLabel importFileLabel = null;
 
         if (isImport && imageMetaDataDataBase != null) {
-            //      TODO: Remove hard coded string
-            importFileLabel = new JLabel("Kategoriimport för fil: " + imageMetaDataDataBase.getAbsolutePath());
+            importFileLabel = new JLabel(lang.get("categoryimportexport.importFileLabel") + " " + imageMetaDataDataBase.getAbsolutePath());
             importFileLabel.setForeground(Color.GRAY);
         }
 
-        //        TODO: Remove hard coded string
-        JLabel importNameLabel = new JLabel("Namn");
+        JLabel importNameLabel = new JLabel(lang.get("categoryimportexport.importNameLabel"));
         importNameLabel.setForeground(Color.GRAY);
 
         nameTextField = new JTextField();
@@ -137,13 +134,12 @@ public class CategoryImportExportPopup extends JDialog {
             nameTextField.setText(SystemProperties.getUserName());
         }
 
-//      TODO: Remove hard coded string
         JLabel categoryImportExportLabel = new JLabel();
 
         if (isImport()) {
-            categoryImportExportLabel.setText("Kategorifil att importera");
+            categoryImportExportLabel.setText(lang.get("categoryimportexport.categoryImportExportImportLabel"));
         } else {
-            categoryImportExportLabel.setText("Exportera kategorifil till");
+            categoryImportExportLabel.setText(lang.get("categoryimportexport.categoryImportExportExportLabel"));
         }
         categoryImportExportLabel.setForeground(Color.GRAY);
 
@@ -152,11 +148,10 @@ public class CategoryImportExportPopup extends JDialog {
 
         pathSelectionButton = new JButton();
 
-//      TODO: Remove hard coded string
         if (isImport()) {
-            pathSelectionButton.setToolTipText("Välj kategorifil att importera");
+            pathSelectionButton.setToolTipText(lang.get("categoryimportexport.selectCategoryFileToImport"));
         } else {
-            pathSelectionButton.setToolTipText("Välj destination för kategoriexport");
+            pathSelectionButton.setToolTipText(lang.get("categoryimportexport.selectDestinationForCategoryExport"));
         }
 
         try {
@@ -232,12 +227,10 @@ public class CategoryImportExportPopup extends JDialog {
                 chooser.setFileFilter(filter);
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
-//              TODO: Remove hard coded string
-                chooser.setDialogTitle("Välj kategorifil att importera");
+                chooser.setDialogTitle(lang.get("categoryimportexport.selectCategoryFileToImport"));
             } else {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//              TODO: Remove hard coded string
-                chooser.setDialogTitle("Välj katalog att exportera till");
+                chooser.setDialogTitle(lang.get("categoryimportexport.selectDestinationForCategoryExport"));
             }
 
             if(chooser.showOpenDialog(CategoryImportExportPopup.this) == JFileChooser.APPROVE_OPTION) {

@@ -1,6 +1,5 @@
 3.0:
 ====
-- Fix the search when imported categories exists.
 - Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.

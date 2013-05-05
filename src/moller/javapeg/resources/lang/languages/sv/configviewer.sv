@@ -103,6 +103,12 @@ configviewer.tag.imageRepositories.label.addAutomatically               = Lägg 
 configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen 
 configviewer.tag.imageRepositories.label.doNotAskToAdd                  = Lägg inte till en katalog med icke tillagda bilder till bilddatabasen
 configviewer.tag.imageRepositories.label.removeSelectedPaths            = Ta bort valda sökvägar
+configviewer.tag.importedCategories.menuitem.rename                     = Byt namn
+configviewer.tag.importedCategories.menuitem.delete                     = Ta bort
+configviewer.tag.importedCategories.removeSelectedImportedCategoriesButton.tooltip = Ta bort de valda importerade kategorierna
+configviewer.tag.importedCategories.panel.border.label                             = Importerade Kategorier
+configviewer.tag.importedCategories.rename.dialog.title                            = Byt namn på importerade kategorier
+configviewer.tag.importedCategories.rename.dialog.text                             = Ange ett nytt namn för importerade kategorier:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

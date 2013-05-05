@@ -11,6 +11,7 @@ import javax.swing.tree.TreePath;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.language.Language;
 import moller.javapeg.program.model.CategoriesModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.gui.CustomJOptionPane;
@@ -131,12 +132,12 @@ public class CategoryUtil {
 
             while (newDisplayName == null /** Cancel button was clicked **/ || newDisplayName.trim().length() == 0 || displayNameAlreadyInUse(newDisplayName, importedCategoriesConfig.values())) {
 
+                Language lang = Language.getInstance();
+
                 if (newDisplayName == null || newDisplayName.trim().length() == 0) {
-//                TODO: Remove hard coded string
-                    newDisplayName = displayInputDialog(parent, "Invalid Name", "The entered displayname is empty, please enter another displayname", "");
+                    newDisplayName = displayInputDialog(parent, lang.get("categoryimportexport.displayName.invalid.label"), lang.get("categoryimportexport.displayName.invalid.empty"), "");
                 } else {
-//                TODO: Remove hard coded string
-                    newDisplayName = displayInputDialog(parent, "Invalid Name", "The entered displayname is already in use, please enter another displayname", "");
+                    newDisplayName = displayInputDialog(parent, lang.get("categoryimportexport.displayName.invalid.label"), lang.get("categoryimportexport.displayName.invalid.alreadyInUse"), "");
                 }
             }
             return newDisplayName;

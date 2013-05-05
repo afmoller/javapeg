@@ -40,7 +40,9 @@ public class Language {
         logger = Logger.getInstance();
 
         listEmbeddedLanguages();
+        logger.logDEBUG("Start loading language files");
         loadLanguageFile();
+        logger.logDEBUG("Finished loading language files");
     }
 
     /**
@@ -111,39 +113,66 @@ public class Language {
             langFileCategoryImportExport = new InputStreamReader(StartJavaPEG.class.getResourceAsStream("resources/lang/languages/" + languageCode + "/categoryimportexport." + languageCode), C.UTF8);
 
             Properties loader = new Properties();
+
+            logger.logDEBUG("Start loading language file: javapeg." + languageCode);
             loader.load(langFileJavaPEG);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: javapeg." + languageCode);
+            logger.logDEBUG("Start loading language file: imageviewer." + languageCode);
+
             loader.load(langFileImageViewer);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: imageviewer." + languageCode);
+            logger.logDEBUG("Start loading language file: common." + languageCode);
+
             loader.load(langFileCommon);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: common." + languageCode);
+            logger.logDEBUG("Start loading language file: configviewer." + languageCode);
+
             loader.load(langFileConfigViewer);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: configviewer." + languageCode);
+            logger.logDEBUG("Start loading language file: category." + languageCode);
+
             loader.load(langFileCategory);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: category." + languageCode);
+            logger.logDEBUG("Start loading language file: imagerepository." + languageCode);
+
             loader.load(langFileImageRepository);
 
             properties.putAll(loader);
 
             loader.clear();
+
+            logger.logDEBUG("Finished loading language file: imagerepository." + languageCode);
+            logger.logDEBUG("Start loading language file: categoryimportexport." + languageCode);
+
             loader.load(langFileCategoryImportExport);
 
             properties.putAll(loader);
+            logger.logDEBUG("Finished loading language file: categoryimportexport." + languageCode);
 
             loader = null;
 
