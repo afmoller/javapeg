@@ -44,8 +44,7 @@ public class RenameImagesConfig {
             renameImages.setUseLastModifiedDate(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_LAST_MODIFIED_DATE, renameImagesNode, XPathConstants.STRING)));
             renameImages.setUseLastModifiedTime(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_LAST_MODIFIED_TIME, renameImagesNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get rename images config", e);
         }
         return renameImages;
     }

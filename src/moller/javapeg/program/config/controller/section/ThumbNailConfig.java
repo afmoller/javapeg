@@ -26,8 +26,7 @@ public class ThumbNailConfig {
             thumbNail.setCache(getCache((Node)xPath.evaluate(ConfigElement.CACHE, thumbNailNode, XPathConstants.NODE), xPath));
             thumbNail.setCreation(getCreation((Node)xPath.evaluate(ConfigElement.CREATION, thumbNailNode, XPathConstants.NODE), xPath));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get thumbnail config", e);
         }
         return thumbNail;
     }
@@ -41,8 +40,7 @@ public class ThumbNailConfig {
             thumbNailCreation.setIfMissingOrCorrupt(Boolean.valueOf((String)xPath.evaluate(ConfigElement.IF_MISSING_OR_CORRUPT, creationNode, XPathConstants.STRING)));
             thumbNailCreation.setWidth(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.WIDTH, creationNode, XPathConstants.STRING), 160));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get creation", e);
         }
         return thumbNailCreation;
     }
@@ -54,8 +52,7 @@ public class ThumbNailConfig {
             thumbNailCache.setEnabled(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ENABLED, cacheNode, XPathConstants.STRING)));
             thumbNailCache.setMaxSize(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.MAX_SIZE, cacheNode, XPathConstants.STRING), 1000));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get cache", e);
         }
         return thumbNailCache;
     }

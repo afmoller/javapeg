@@ -1,13 +1,11 @@
 package moller.javapeg.program.config.controller.section;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.UpdatesChecker;
@@ -28,12 +26,8 @@ public class UpdatesCheckerConfig {
             updatesChecker.setTimeOut(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.TIMEOUT, updatesCheckerNode, XPathConstants.STRING), 60));
             updatesChecker.setUrlVersion(new URL((String)xPath.evaluate(ConfigElement.URL_VERSION, updatesCheckerNode, XPathConstants.STRING)));
             updatesChecker.setUrlVersionInformation(new URL((String)xPath.evaluate(ConfigElement.URL_VERSION_INFORMATION, updatesCheckerNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException("Could not get updates checker config", e);
         }
         return updatesChecker;
     }

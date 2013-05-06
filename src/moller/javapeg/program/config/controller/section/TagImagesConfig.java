@@ -27,8 +27,7 @@ public class TagImagesConfig {
             tagImages.setImagesPaths(getImagesPaths((Node)xPath.evaluate(ConfigElement.PATHS, tagImagesNode, XPathConstants.NODE), xPath));
             tagImages.setPreview(getPreview((Node)xPath.evaluate(ConfigElement.PREVIEW, tagImagesNode, XPathConstants.NODE), xPath));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get tag images config", e);
         }
         return tagImages;
     }
@@ -39,8 +38,7 @@ public class TagImagesConfig {
         try {
             tagImagesPreview.setUseEmbeddedThumbnail(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_EMBEDDED_THUMBNAIL, previewNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get tag images preview", e);
         }
         return tagImagesPreview;
     }
@@ -52,8 +50,7 @@ public class TagImagesConfig {
             tagImagesPaths.setAddToRepositoryPolicy(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.ADD_TO_REPOSITORY_POLICY, pathsNode, XPathConstants.STRING), 1));
             tagImagesPaths.setAutomaticallyRemoveNonExistingImagePath(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATH, pathsNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get image paths", e);
         }
         return tagImagesPaths;
     }
@@ -66,8 +63,7 @@ public class TagImagesConfig {
             tagImagesCategories.setWarnWhenRemove(Boolean.valueOf((String)xPath.evaluate(ConfigElement.WARN_WHEN_REMOVE, categoriesNode, XPathConstants.STRING)));
             tagImagesCategories.setWarnWhenRemoveWithSubCategories(Boolean.valueOf((String)xPath.evaluate(ConfigElement.WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES, categoriesNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get categories", e);
         }
         return tagImagesCategories;
     }

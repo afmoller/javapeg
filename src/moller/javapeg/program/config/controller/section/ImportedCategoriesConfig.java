@@ -52,8 +52,7 @@ public class ImportedCategoriesConfig {
                 importedCategoriesConfig.put(javapegClientId, importedCategories);
             }
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get imported categories config", e);
         }
         return importedCategoriesConfig;
     }
