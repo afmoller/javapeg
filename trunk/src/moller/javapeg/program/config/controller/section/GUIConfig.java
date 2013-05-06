@@ -35,8 +35,7 @@ public class GUIConfig {
             gui.setMain(createGUIWindow((Node)xPath.evaluate(ConfigElement.MAIN, gUINode, XPathConstants.NODE), xPath));
 
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get gui config", e);
         }
         return gui;
     }
@@ -55,9 +54,7 @@ public class GUIConfig {
             guiWindow.setSizeAndLocation(sizeAndLocation);
             guiWindow.setGuiWindowSplitPane(createGUIWindowSplitPane((NodeList)xPath.evaluate(ConfigElement.SPLIT_PANE, windowNode, XPathConstants.NODESET), xPath));
         } catch (XPathExpressionException e) {
-
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not create gui window", e);
         }
         return guiWindow;
     }
@@ -81,8 +78,7 @@ public class GUIConfig {
 
                 guiWindowSplitPanes.add(guiWindowSplitPane);
             } catch (XPathExpressionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException("Could not create gui window split pane config", e);
             }
         }
         return guiWindowSplitPanes;

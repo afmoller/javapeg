@@ -30,8 +30,7 @@ public class RepositoryConfig {
             repository.setExceptions(getRepositoryExceptions((Node)xPath.evaluate(ConfigElement.EXCEPTIONS, repositoryNode, XPathConstants.NODE), xPath));
             repository.setPaths(getRepositoryPaths((Node)xPath.evaluate(ConfigElement.PATHS, repositoryNode, XPathConstants.NODE), xPath));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get repository config", e);
         }
         return repository;
     }
@@ -53,8 +52,7 @@ public class RepositoryConfig {
             }
             repositoryPaths.setPaths(paths);
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get repository paths", e);
         }
         return repositoryPaths;
     }
@@ -78,8 +76,7 @@ public class RepositoryConfig {
             repositoryExceptions.setAllwaysAdd(allwaysAdd);
 
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get repository exceptions allways add", e);
         }
 
         try {
@@ -95,8 +92,7 @@ public class RepositoryConfig {
             repositoryExceptions.setNeverAdd(neverAdd);
 
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get repository exceptions never add", e);
         }
         return repositoryExceptions;
     }

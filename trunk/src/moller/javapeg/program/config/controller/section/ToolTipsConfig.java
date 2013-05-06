@@ -21,8 +21,7 @@ public class ToolTipsConfig {
         try {
             toolTips.setState((String)xPath.evaluate(ConfigElement.STATE, toolTipsNode, XPathConstants.STRING));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get tooltips config", e);
         }
         return toolTips;
     }

@@ -22,8 +22,7 @@ public class LanguageConfig {
             language.setAutomaticSelection(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATIC_SELECTION, languageNode, XPathConstants.STRING)));
             language.setgUILanguageISO6391((String)xPath.evaluate(ConfigElement.GUI_LANGUAGE_ISO_6391, languageNode, XPathConstants.STRING));
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get language config", e);
         }
         return language;
     }

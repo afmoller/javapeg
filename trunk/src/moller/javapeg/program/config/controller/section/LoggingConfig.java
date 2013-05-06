@@ -35,9 +35,7 @@ public class LoggingConfig {
             logging.setRotateZip(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ROTATE_ZIP, loggingNode, XPathConstants.STRING)));
             logging.setTimeStampFormat(new SimpleDateFormat((String)xPath.evaluate(ConfigElement.TIMESTAMP_FORMAT, loggingNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
-
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not get logging config", e);
         }
         return logging;
     }
