@@ -83,12 +83,9 @@ public class MetaDataUtil {
                     }
                 }
             }
-        } catch (JpegProcessingException jpex) {
+        } catch (JpegProcessingException | IOException ex) {
             logger.logERROR("Could not read meata data from file: " + imageFile.getAbsolutePath());
-            logger.logERROR(jpex);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.logERROR(ex);
         }
         return tagsMap;
     }
@@ -106,15 +103,12 @@ public class MetaDataUtil {
                     return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
                 }
             }
-        } catch (JpegProcessingException jpex) {
+        } catch (JpegProcessingException | IOException ex) {
             logger.logERROR("Could not read meata data from file: " + imageFile.getAbsolutePath());
-            logger.logERROR(jpex);
+            logger.logERROR(ex);
         } catch (MetadataException mdex) {
             logger.logERROR("Could not get value for orientation tag (" + ExifIFD0Directory.TAG_ORIENTATION + ") in file: " + imageFile.getAbsolutePath());
             logger.logERROR(mdex);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return -1;
     }

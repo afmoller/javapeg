@@ -374,7 +374,6 @@ public class ConfigViewerGUI extends JFrame {
 
         JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
         logLevels = new JComboBox<Level>(Level.values());
-        // TODO: Check this so if works
         logLevels.setSelectedItem(logging.getLevel());
 
         JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
@@ -601,7 +600,6 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailCreationAlgorithm = new JComboBox<JPEGScaleAlgorithm>(JPEGScaleAlgorithm.values());
         thumbnailCreationAlgorithm.setSelectedItem(thumbNail.getCreation().getAlgorithm());
         thumbnailCreationAlgorithm.invalidate();
-        // TODO: Verify that it works
         thumbnailCreationAlgorithm.setEnabled(thumbNail.getCreation().getIfMissingOrCorrupt());
 
         JPanel thumbnailCreationPanel = new JPanel(new GridBagLayout());

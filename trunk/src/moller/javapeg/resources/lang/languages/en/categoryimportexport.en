@@ -17,7 +17,11 @@ categoryimportexport.alreadyImportedWithAnotherName = The categories to import a
 categoryimportexport.newerVersionAlreadyImported = Newer version of the categories are already imported
 
 categoryimportexport.import = Import
+categoryimportexport.import.long.title = Import categories
+categoryimportexport.import.long.title.tooltip = Imports the category tree structure from another JavaPEG instance
 categoryimportexport.export = Export
+categoryimportexport.export.long.title = Export categories
+categoryimportexport.export.long.title.tooltip = Exports the category tree structure, so it can be imported in another JavaPEG instance
 
 categoryimportexport.importFileLabel = Category import for file:
 categoryimportexport.importNameLabel = Name

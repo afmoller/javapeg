@@ -532,16 +532,12 @@ public class MainGUI extends JFrame {
         shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
         shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
-//        TODO: Remove hard coded string
-        exportCategoryTreeStructureJMenuItem = new JMenuItem("Export categories");
-//      TODO: Remove hard coded string
-        exportCategoryTreeStructureJMenuItem.setToolTipText("Exports the category tree structure, so it can be imported in another JavaPEG instance");
+        exportCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.export.long.title"));
+        exportCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.export.long.title.tooltip"));
         exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
-        //      TODO: Remove hard coded string
-        importCategoryTreeStructureJMenuItem = new JMenuItem("Import categories");
-        //    TODO: Remove hard coded string
-        importCategoryTreeStructureJMenuItem.setToolTipText("Imports the category tree structure from another JavaPEG instance");
+        importCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.import.long.title"));
+        importCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.import.long.title.tooltip"));
         importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
 
         fileMenu = new JMenu(lang.get("menu.file"));
@@ -1920,8 +1916,7 @@ public class MainGUI extends JFrame {
             }
 
             if (ApplicationContext.getInstance().isRestartNeeded()) {
-//              TODO: remove hard coded string
-              displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+              displayInformationMessage(lang.get("common.application.restart.needed"));
           }
         }
     }
@@ -2059,8 +2054,7 @@ public class MainGUI extends JFrame {
 
     private void importCategories() {
 
-//      TODO: Remove hard coded string
-        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Importera Kategorier", new Rectangle(100, 100, 500,200), null);
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, lang.get("categoryimportexport.import.long.title"), new Rectangle(100, 100, 500,200), null);
         if (ciep.isActionButtonClicked()) {
 
             ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
@@ -2120,16 +2114,14 @@ public class MainGUI extends JFrame {
             }
 
             if (ac.isRestartNeeded()) {
-//              TODO: remove hard coded string
-              displayInformationMessage("JavaPEG needs to be restarted to make use of categories import");
+              displayInformationMessage(lang.get("common.application.restart.needed"));
             }
         }
     }
 
     private void exportCategories() {
 
-//        TODO: Remove hard coded string
-        CategoryImportExportPopup ciep = new CategoryImportExportPopup(false, "Exportera Kategorier", new Rectangle(100, 100, 300, 200), null);
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(false, lang.get("categoryimportexport.export.long.title"), new Rectangle(100, 100, 300, 200), null);
 
         if (ciep.isActionButtonClicked()) {
             File directoryToExportCategoriesTo = ciep.getCategoryFileToImportExport();
@@ -2740,8 +2732,7 @@ public class MainGUI extends JFrame {
                         }
 
                         if (ac.isRestartNeeded()) {
-//                          TODO: remove hard coded string
-                          displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+                          displayInformationMessage(lang.get("common.application.restart.needed"));
                       }
                     }
                 }
@@ -3752,8 +3743,7 @@ public class MainGUI extends JFrame {
             thumbNailsPanelHeading.removeListeners();
 
             if (ac.isRestartNeeded()) {
-//                TODO: remove harde coded string
-                displayInformationMessage("JavaPEG needs to be restarted to make use of configuration changes");
+                displayInformationMessage(lang.get("common.application.restart.needed"));
             }
         }
     }

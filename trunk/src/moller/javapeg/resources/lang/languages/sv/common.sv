@@ -26,3 +26,5 @@ common.message.error.invalidFileName            = Filnamnet kan inte innehålla 
 common.message.error.canNotListFilesInDirectory = Kan inte lista filer i katalog:
 
 common.missing.value = inget värde
+
+common.application.restart.needed = JavaPEG måste startas om för att använda konfigurationsändringarna

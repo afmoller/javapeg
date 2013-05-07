@@ -1,14 +1,12 @@
 package moller.javapeg.program.config.controller.section;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
@@ -27,7 +25,6 @@ import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 public class CategoriesConfig {
 
@@ -76,15 +73,8 @@ public class CategoriesConfig {
             importedCategories.setHighestUsedId(Integer.parseInt((String)xPath.evaluate("@" + ConfigElement.HIGHEST_USED_ID, instanceNode, XPathConstants.STRING)));
             importedCategories.setRoot(root);
 
-        } catch (ParserConfigurationException pcex) {
-            //          TODO: Fix error logging
-        } catch (SAXException sex) {
-            //        TODO: Fix error logging
-        } catch (IOException iox) {
-            //        TODO: Fix error logging
-        } catch (XPathExpressionException xpee) {
-            ConfigHandlerUtil.displayErrorMessage("Error", "Could not create Categories Model: " + xpee.getMessage());
-            System.exit(1);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not create imported categories config", e);
         }
         return importedCategories;
     }
