@@ -90,10 +90,9 @@ public class MetaDataPanel extends JPanel {
         } catch (JpegProcessingException jpex) {
             logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
             logger.logERROR(jpex);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } catch (IOException iox) {
+            logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
+            logger.logERROR(iox);        }
     }
 
     public void clearMetaData() {

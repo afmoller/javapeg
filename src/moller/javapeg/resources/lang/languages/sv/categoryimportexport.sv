@@ -17,7 +17,12 @@ categoryimportexport.alreadyImportedWithAnotherName = Kategorierna som skall imp
 categoryimportexport.newerVersionAlreadyImported = Nyare version av kategorierna är redan importerade
 
 categoryimportexport.import = Import
+categoryimportexport.import.long.title = Importera kategorier
+categoryimportexport.import.long.title.tooltip = Importerar kategoriträdstrukturen från en annan JavaPEG-installation
+
 categoryimportexport.export = Export
+categoryimportexport.export.long.title = Exportera kategorier
+categoryimportexport.export.long.title.tooltip = Exporterar kategoriträdstrukturen, så att den kan importeras i en annan JavaPEG-installation
 
 categoryimportexport.importFileLabel = Kategoriimport för fil:
 categoryimportexport.importNameLabel = Namn

@@ -260,8 +260,9 @@ public class ImageMetaDataDataBaseHandler {
 
     private static void showCategoryImportPopup(File imageMetaDataDataBase, String javaPegIdValue) {
         Logger logger = Logger.getInstance();
-//      TODO: Remove hard coded string
-        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, "Importera Kategorier", new Rectangle(100, 100, 500,200), imageMetaDataDataBase);
+        Language lang = Language.getInstance();
+
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, lang.get("categoryimportexport.import.long.title"), new Rectangle(100, 100, 500,200), imageMetaDataDataBase);
         if (ciep.isActionButtonClicked()) {
             ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
 
