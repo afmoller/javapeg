@@ -275,8 +275,7 @@ public class ImageMetaDataDataBaseHandler {
                 ApplicationContext.getInstance().setRestartNeeded();
             } else {
                 logger.logWARN("The JavaPEG client id (" + importedCategoriesFromFile.getJavaPegId() + ") in the categories file (" + ciep.getCategoryFileToImportExport().getAbsolutePath() + ") does not match the client id (" + javaPegIdValue + ") in the image meta data base file (" + imageMetaDataDataBase.getAbsolutePath() + ")");
-//             TODO: Remove hard coded string
-                if (0 == JOptionPane.showConfirmDialog(null, "Wrong categories file.\n\nThe JavaPEG client id in the selected categories file does not match the client id\nin the image meta data base file. See log file for details\n\nSelect another categories file?", "Wrong categories file", JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE)) {
+                if (0 == JOptionPane.showConfirmDialog(null, lang.get("categoryimportexport.import.wrongCategoriesFile"), lang.get("categoryimportexport.import.wrongCategoriesFile.label"), JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE)) {
                     showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
                 }
             }
@@ -374,8 +373,7 @@ public class ImageMetaDataDataBaseHandler {
 
                                     for (String categoryId : categories.getCategories()) {
                                         if (!categoryIdsForJavePegId.contains(categoryId)) {
-                                            //                                TODO: Remove hard coded string
-                                            if (0 == JOptionPane.showConfirmDialog(null, "A newer version exist for the categories file for meta data base file: " + imageMetaDataDataBase.getAbsolutePath() + "\nMake the import now?", "Newer version exists", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+                                            if (0 == JOptionPane.showConfirmDialog(null, String.format(Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile"), imageMetaDataDataBase.getAbsolutePath()), Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile.label"), JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
                                                 showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
                                             }
                                         }

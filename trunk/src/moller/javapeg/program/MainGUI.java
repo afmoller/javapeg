@@ -2139,7 +2139,7 @@ public class MainGUI extends JFrame {
 
                     CategoriesConfig.exportCategoriesConfig(configuration.getCategories(), configuration.getJavapegClientId(), ApplicationContext.getInstance().getHighestUsedCategoryID(), xmlsw);
 
-                    displayInformationMessage("Category file exported to: " + categoryExportFile.getAbsolutePath());
+                    displayInformationMessage(lang.get("categoryimportexport.categoryImportExportExport.exported") + " " + categoryExportFile.getAbsolutePath());
                 } catch (FileNotFoundException fnfex) {
                  categoryExportError(categoryExportFile, fnfex);
                 } catch (XMLStreamException xsex) {
@@ -2148,16 +2148,14 @@ public class MainGUI extends JFrame {
                     StreamUtil.close(os, true);
                 }
             } else {
-//              TODO: Remove hard coded string
-                displayErrorMessage("No write access. Please select a different directory to which the categories shall be exported.(" + directoryToExportCategoriesTo.getAbsolutePath() + ")");
+                displayErrorMessage(lang.get("categoryimportexport.export.noWriteAccess") + "(" + directoryToExportCategoriesTo.getAbsolutePath() + ")");
                 logger.logWARN("No write access to directory: " + directoryToExportCategoriesTo.getAbsolutePath());
             }
         }
     }
 
     private void categoryExportError(File categoryExportFile, Exception ex) {
-//      TODO: Remove hard coded string
-        displayErrorMessage("Could not export categories to: " + categoryExportFile.getAbsolutePath());
+        displayErrorMessage(lang.get("categoryimportexport.export.error") + " " + categoryExportFile.getAbsolutePath());
         logger.logERROR("Could not export categories to: " + categoryExportFile.getAbsolutePath());
         logger.logERROR(ex);
     }
@@ -2727,13 +2725,12 @@ public class MainGUI extends JFrame {
                         // by this JavaPEG instance then display the write
                         // protected icon.
                         } else {
-//                            TODO: Fix hard coded string
-                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", "Meta data file is not created by this JavaPEG instance");
+                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.notCreatedByThisInstance"));
                         }
 
                         if (ac.isRestartNeeded()) {
                           displayInformationMessage(lang.get("common.application.restart.needed"));
-                      }
+                        }
                     }
                 }
             }

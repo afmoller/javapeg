@@ -2,7 +2,6 @@ package moller.javapeg.program.config.controller;
 
 import java.util.Enumeration;
 
-import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -30,10 +29,8 @@ public class ConfigHandlerUtil {
                 }
             }
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not populate tree model from node", e);
         }
-
     }
 
     private static void populateNodeBranch(DefaultMutableTreeNode node, Node category, XPath xPath ) {
@@ -56,8 +53,7 @@ public class ConfigHandlerUtil {
                 }
             }
         } catch (XPathExpressionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not node branch", e);
         }
     }
 
@@ -91,9 +87,5 @@ public class ConfigHandlerUtil {
             xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
             XMLUtil.writeEmptyElementWithIndentAndLineBreak("category", w, indent, xmlAttributes);
         }
-    }
-
-    public static void displayErrorMessage(String message, String title) {
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
     }
 }
