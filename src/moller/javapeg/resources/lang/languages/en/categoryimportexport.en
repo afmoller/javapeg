@@ -15,19 +15,28 @@
 
 categoryimportexport.alreadyImportedWithAnotherName = The categories to import are already imported but with a different display name.\n\nShall the old display name ("%s") continue to be used?  (new display name: "%s")
 categoryimportexport.newerVersionAlreadyImported = Newer version of the categories are already imported
+categoryimportexport.newerVersionExistsForThisFile = A newer version exist for the categories file for meta data base file: %s\nMake the import now?
+categoryimportexport.newerVersionExistsForThisFile.label = Newer version exists
 
 categoryimportexport.import = Import
 categoryimportexport.import.long.title = Import categories
 categoryimportexport.import.long.title.tooltip = Imports the category tree structure from another JavaPEG instance
+categoryimportexport.import.wrongCategoriesFile = Wrong categories file.\n\nThe JavaPEG client id in the selected categories file does not match the client id\nin the image meta data base file. See log file for details\n\nSelect another categories file?
+categoryimportexport.import.wrongCategoriesFile.label = Wrong categories file
+
 categoryimportexport.export = Export
 categoryimportexport.export.long.title = Export categories
 categoryimportexport.export.long.title.tooltip = Exports the category tree structure, so it can be imported in another JavaPEG instance
+categoryimportexport.export.error = Could not export categories to:
+
+categoryimportexport.export.noWriteAccess = No write access. Please select a different directory to which the categories shall be exported.
 
 categoryimportexport.importFileLabel = Category import for file:
 categoryimportexport.importNameLabel = Name
 
 categoryimportexport.categoryImportExportImportLabel = Category file to import
 categoryimportexport.categoryImportExportExportLabel = Export category file to
+categoryimportexport.categoryImportExportExport.exported = Category file exported to:
 
 categoryimportexport.selectCategoryFileToImport = Select category file to import
 categoryimportexport.selectDestinationForCategoryExport = Select destination for category export

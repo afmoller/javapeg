@@ -32,6 +32,7 @@ imagerepository.model.create.error = Could not load image repository, see log fi
 
 imagerepository.directory.added                = Selected directory is part of the image repository database
 imagerepository.directory.added.writeprotected = Selected directory is part of the image repository database, but the database file is write protected
+imagerepository.directory.added.notCreatedByThisInstance = Meta data file is not created by this JavaPEG instance
 imagerepository.directory.not.added            = Selected directory is not part of the image repository database
 
 imagerepository.directory.already.added.to.allways.add         = has already been added to the list of directories for which\n images always will be automatically added to the image repository

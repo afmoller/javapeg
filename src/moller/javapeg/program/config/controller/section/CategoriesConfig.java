@@ -39,8 +39,7 @@ public class CategoriesConfig {
             root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
             ConfigHandlerUtil.populateTreeModelFromNode(categoriesNode, root, xPath);
         } catch (XPathExpressionException xpee) {
-            ConfigHandlerUtil.displayErrorMessage("Error", "Could not create Categories Model: " + xpee.getMessage());
-            System.exit(1);
+            throw new RuntimeException("Could not get categories config", xpee);
         }
 
         return root;

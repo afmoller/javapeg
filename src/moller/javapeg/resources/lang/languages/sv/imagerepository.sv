@@ -32,6 +32,7 @@ imagerepository.model.create.error = Kunde inte öppna bilddatabasen, se loggfil
 
 imagerepository.directory.added                = Vald katalog är en del av bilddatabasen
 imagerepository.directory.added.writeprotected = Vald katalog är en del av bilddatabasen, men databasfilen är skrivskyddad
+imagerepository.directory.added.notCreatedByThisInstance = Bilddatabasfilen är inte skapad av denna JavaPEG installationen
 imagerepository.directory.not.added            = Vald katalog är inte en del av bilddatabasen
 
 imagerepository.directory.already.added.to.allways.add         = har redan blivit tillagd i listan av kataloger för vilka\n bilder alltid kommer att läggas till automatiskt till bilddatabasen.
