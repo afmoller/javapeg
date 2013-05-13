@@ -14,10 +14,10 @@ public class ValidateFileSetup {
 
         File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
 
-        File logDirectory   = new File(javaPEGuserHome, "logs");
-        File configFile     = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
-        File layoutInfo     = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
-        File styleInfo      = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
+        File logDirectory = new File(javaPEGuserHome, "logs");
+        File configFile   = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
+        File layoutInfo   = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
+        File styleInfo    = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
 
         checkFileObject(logDirectory);
         checkFileObject(configFile);
