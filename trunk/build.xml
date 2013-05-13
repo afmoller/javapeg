@@ -40,12 +40,14 @@
 				<include name="**/iso639.dat" />
 				<include name="**/language.list" />
 				<include name="**/category.en" />
+				<include name="**/categoryimportexport.en" />
 				<include name="**/common.en" />
 				<include name="**/configviewer.en" />
 				<include name="**/imagerepository.en" />
 				<include name="**/imageviewer.en" />
 				<include name="**/javapeg.en" />
 				<include name="**/category.sv" />
+				<include name="**/categoryimportexport.sv" />
 				<include name="**/common.sv" />
 				<include name="**/configviewer.sv" />
 				<include name="**/imagerepository.sv" />
@@ -82,7 +84,7 @@
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
-				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.2.jar lib/${jar.name.util} lib/xmpcore.jar" />
+				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar" />
 			</manifest>
 			<fileset dir="build">
 				<exclude name="**/util/**" />
@@ -163,7 +165,7 @@
 	                <include name="gpl.txt" />
 	            	<include name="CHANGELOG.txt" />
 	                <include name="TODO.txt" />
-	                <include name="libraries/metadata-extractor-2.6.2.jar" />
+	                <include name="libraries/metadata-extractor-2.6.4.jar" />
 	            	<include name="libraries/xmpcore.jar" />
 	            </fileset>
 	        </zip>
