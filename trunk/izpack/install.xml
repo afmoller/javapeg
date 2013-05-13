@@ -115,13 +115,14 @@
         <!-- The core files -->
         <pack name="Core" required="yes">
             <description>The JavaPEG core files, which are needed to run the application.</description>
-            <file src="readme/README.html"                                               targetdir="$INSTALL_PATH/"/>
-            <file src="text/gpl.txt"                                                     targetdir="$INSTALL_PATH/"/>
-            <file src="images/javapeg.ico"                                               targetdir="$INSTALL_PATH"/>
-            <file src="../JavaPEG.jar"                                                   targetdir="$INSTALL_PATH"/>
-            <file src="../lib/Util.jar"                                                  targetdir="$INSTALL_PATH/lib"/>
-            <file src="../libraries/metadata-extractor-2.6.2.jar"                        targetdir="$INSTALL_PATH/lib"/>
-            <file src="../libraries/xmpcore.jar"                                         targetdir="$INSTALL_PATH/lib"/>
+            <file src="readme/README.html"                        targetdir="${INSTALL_PATH}"/>
+            <file src="text/gpl.txt"                              targetdir="${INSTALL_PATH}"/>
+            <file src="images/javapeg.ico"                        targetdir="${INSTALL_PATH}"/>
+            <file src="../JavaPEG.jar"                            targetdir="${INSTALL_PATH}"/>
+            <file src="../lib/Util.jar"                           targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/metadata-extractor-2.6.4.jar" targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/xmpcore.jar"                  targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="firstLaunch/firstLaunch"                   targetdir="${USER_HOME}${FILE_SEPARATOR}javapeg-${APP_VER}"/>
         </pack>
     </packs>
 
