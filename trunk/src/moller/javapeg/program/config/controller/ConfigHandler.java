@@ -1,5 +1,6 @@
 package moller.javapeg.program.config.controller;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,22 +8,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JOptionPane;
-import javax.xml.XMLConstants;
+import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
+import moller.javapeg.program.config.ConfigUtil;
+import moller.javapeg.program.config.VersionToSchema;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.controller.section.GUIConfig;
 import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
@@ -39,19 +39,97 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
+import moller.util.io.ZipUtil;
+import moller.util.result.ResultObject;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 public class ConfigHandler {
 
     public static Configuration load(File configFile) {
+
+        String configSchemaLocation = "resources/schema/" + VersionToSchema.getConfigurationSchema(C.JAVAPEG_VERSION);
+
+        StringBuilder errorMessage = null;
+
+        ResultObject validationResult = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+        Boolean couldStoreCorruptConfiguration = false;
+        ResultObject restoreResult = null;
+
+        if (!validationResult.getResult()) {
+
+            errorMessage = new StringBuilder();
+            errorMessage.append("Configuration file is corrupt:");
+            errorMessage.append(C.LS);
+            errorMessage.append(validationResult.getObject());
+            errorMessage.append(C.LS);
+
+            couldStoreCorruptConfiguration = ConfigUtil.storeCorruptConfiguration(configFile);
+
+            errorMessage.append(C.LS);
+            if (couldStoreCorruptConfiguration) {
+                errorMessage.append("The corrupt configuration file is stored in the directory: ");
+                errorMessage.append(C.LS);
+                errorMessage.append(configFile.getParentFile().getAbsolutePath() + C.FS + "corrupt");
+            } else {
+                errorMessage.append("The corrupt configuration file could not be stored into a \"corrupt\" directory");
+            }
+
+            File configurationBackupFile = new File(configFile.getParentFile(), configFile.getName() + ".zip");
+
+            restoreResult = ConfigUtil.restoreConfigurationFromBackup(configurationBackupFile);
+
+            errorMessage.append(C.LS);
+            errorMessage.append(C.LS);
+            if (restoreResult.getResult()) {
+                errorMessage.append("Configuration restored from backup");
+            } else {
+                errorMessage.append("Configuration could not be restored from backup:");
+                errorMessage.append(C.LS);
+                errorMessage.append(restoreResult.getObject());
+            }
+
+            if (restoreResult.getResult()) {
+                ResultObject validationResultForRestoredConfiguration = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+
+                if (!validationResultForRestoredConfiguration.getResult()) {
+                    errorMessage.append(C.LS);
+                    try {
+                        FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
+
+                        errorMessage.append("Configuration restored from default configuration");
+                    } catch (IOException iox) {
+                        errorMessage.append("Could not restore configuration from default configuration:");
+                        errorMessage.append(C.LS);
+                        errorMessage.append(iox);
+                        displayErrorMessage(errorMessage.toString(), "Error - Corrupt configuration");
+                        System.exit(1);
+                    }
+                }
+            } else {
+                try {
+                    FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
+
+                    errorMessage.append("Configuration restored from default configuration");
+                } catch (IOException iox) {
+                    errorMessage.append("Could not restore configuration from default configuration:");
+                    errorMessage.append(C.LS);
+                    errorMessage.append(iox);
+                    displayErrorMessage(errorMessage.toString(), "Error - Corrupt configuration");
+                    System.exit(1);
+                }
+            }
+        }
+
+        if (errorMessage != null) {
+            displayErrorMessage(errorMessage.toString(), "Error");
+        }
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -155,6 +233,12 @@ public class ConfigHandler {
 
             XMLUtil.writeElementEnd(w);
             w.flush();
+
+            // Store a restore version, to have as fallback if the
+            // configuration by any reason have been corrupted between two
+            // application sessions.
+            ZipUtil.zip(configurationFile, true);
+
         } catch (XMLStreamException xse) {
             Logger logger = Logger.getInstance();
             logger.logFATAL("Could not store content of repository file (" + configurationFile.getAbsolutePath() + "). See stacktrace below for details");
@@ -165,6 +249,9 @@ public class ConfigHandler {
             logger.logFATAL("Could not store content of repository file (" + configurationFile.getAbsolutePath() + "). See stacktrace below for details");
             logger.logFATAL(fnex);
             displayErrorMessage = true;
+        } catch (IOException iox) {
+            Logger logger = Logger.getInstance();
+            logger.logERROR("Could not make a backup of the configuration file.");
         } finally {
             StreamUtil.close(os, true);
 
@@ -179,34 +266,13 @@ public class ConfigHandler {
     }
 
     private static void displayErrorMessage(String message, String title) {
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
-    }
+        JTextArea textArea = new JTextArea();
+        textArea.setText(message);
+        textArea.setEditable(false);
+        textArea.setColumns(80);
+        textArea.setLineWrap(true);
+        textArea.setBorder(new LineBorder(Color.BLACK));
 
-//    TODO: Create config file schema validation
-    private boolean validateAgainstSchema(File repositoryFile, String repositorySchemaLocation) {
-        Logger logger = Logger.getInstance();
-
-        try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-            StreamSource repositorySchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(repositorySchemaLocation));
-            Schema schema = factory.newSchema(repositorySchema);
-
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(repositoryFile));
-            return true;
-        } catch (SAXParseException spex) {
-            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
-            logger.logERROR(spex);
-            return false;
-        } catch (SAXException sex) {
-            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
-            logger.logERROR(sex);
-            return false;
-        } catch (IOException iox) {
-            logger.logERROR("Invalid content of repository file: " + repositoryFile.getAbsolutePath() + " see stacktrace below for details");
-            logger.logERROR(iox);
-            return false;
-        }
+        JOptionPane.showMessageDialog(null, textArea, title, JOptionPane.ERROR_MESSAGE);
     }
 }

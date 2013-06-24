@@ -19,7 +19,6 @@
 - Add merge functionality from several source directories. in the "rename image" mode.
 - Add possibility to save multiple rename templates
 - Add slide show functionality to Image Viewer.
-- Add validation of conf.xml at application start
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
 - Add support for Linux

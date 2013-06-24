@@ -10,6 +10,12 @@
  
  3.0 (2013-xx-xx)
  
+ + Configuration validation against Schema at application start. If the
+   configuration is invalid then the invalid configuration will be stored into
+   a "corrupt" directory and the configuration will be restored from a zipped
+   backup. If that backup also is corrupt, then the configuration will be 
+   restored from a built in fall back configuration.
+  
  + Row sorting, by column, added to the meta data tables.
  
  + Possible to reorder columns and sort the rows by any column in the METADATA
