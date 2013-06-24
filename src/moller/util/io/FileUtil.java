@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import moller.util.os.OsUtil;
 import moller.util.string.StringUtil;
@@ -52,6 +50,10 @@ public class FileUtil {
 		FileChannel source = null;
 		FileChannel destination = null;
 		try {
+		    if (!destinationFile.getParentFile().exists()) {
+		        destinationFile.getParentFile().mkdirs();
+		    }
+
 			source = new FileInputStream(sourceFile).getChannel();
 			destination = new FileOutputStream(destinationFile).getChannel();
 			long transferedBytes = destination.transferFrom(source, 0, source.size());
@@ -472,30 +474,6 @@ public class FileUtil {
 	 */
 	public static String getLatestModifiedTime(File file) {
 		return getLatestModified(file,"HH-mm-ss");
-	}
-
-	/**
-	 * @param theFileToZip
-	 * @throws IOException
-	 */
-	public static void zipTheFile (File theFileToZip) throws IOException {
-
-	    byte[] buf = new byte[8096];
-
-	    File zipFile = new File(theFileToZip.getParent(), theFileToZip.getName() + ".zip");
-	    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
-
-	    FileInputStream fis = new FileInputStream(theFileToZip);
-
-	    zos.putNextEntry(new ZipEntry(theFileToZip.getName()));
-
-	    int lenght;
-	    while ((lenght = fis.read(buf)) > 0) {
-	    	zos.write(buf, 0, lenght);
-	    }
-	    zos.closeEntry();
-	    fis.close();
-	    zos.close();
 	}
 
 	public static boolean testWriteAccess(File directory) {

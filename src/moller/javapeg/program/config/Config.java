@@ -13,7 +13,7 @@ public class Config {
      */
     private static Config instance;
 
-    private final static File PATH_TO_CONF_FILE =  new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml");
+    public final static File PATH_TO_CONF_FILE =  new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml");
 
     private final Configuration configuration;
 

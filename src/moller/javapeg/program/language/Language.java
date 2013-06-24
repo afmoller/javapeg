@@ -1,18 +1,12 @@
 package moller.javapeg.program.language;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
-import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
 import moller.util.java.SystemProperties;
@@ -39,7 +33,7 @@ public class Language {
         properties = new Properties();
         logger = Logger.getInstance();
 
-        listEmbeddedLanguages();
+        LanguageUtil.listEmbeddedLanguages(logger);
         logger.logDEBUG("Start loading language files");
         loadLanguageFile();
         logger.logDEBUG("Finished loading language files");
@@ -205,29 +199,5 @@ public class Language {
      */
     public String get(String key) {
         return properties.getProperty(key).trim();
-    }
-
-    private void listEmbeddedLanguages() {
-
-        InputStream languageListFile = StartJavaPEG.class.getResourceAsStream("resources/lang/list/language.list");
-
-        Properties availableLanguages = new Properties();
-        try {
-            availableLanguages.load(languageListFile);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Could not load file language.list, se log file for details", "Error", JOptionPane.ERROR_MESSAGE);
-
-            logger.logERROR("Could not load file language.list, se stack trace below for details");
-            for(StackTraceElement element : e.getStackTrace()) {
-                logger.logERROR(element.toString());
-            }
-        }
-
-        Set<String> languageNames = new HashSet<String>();
-
-        for (Object language : availableLanguages.keySet()) {
-            languageNames.add((String)language);
-        }
-        ApplicationContext.getInstance().setJarFileEmbeddedLanguageFiles(languageNames);
     }
 }

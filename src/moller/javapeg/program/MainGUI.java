@@ -362,8 +362,6 @@ public class MainGUI extends JFrame {
     private final FileSystemView fileSystemView;
 
     public MainGUI(){
-        logger = Logger.getInstance();
-        logger.logDEBUG("JavaPEG is starting");
 
         if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
             JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
@@ -372,6 +370,10 @@ public class MainGUI extends JFrame {
         ValidateFileSetup.check();
 
         configuration = Config.getInstance().get();
+
+        logger = Logger.getInstance();
+        logger.logDEBUG("JavaPEG is starting");
+
         lang = Language.getInstance();
 
         fileSystemView = FileSystemView.getFileSystemView();
