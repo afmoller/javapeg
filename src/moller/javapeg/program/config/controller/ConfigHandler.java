@@ -237,7 +237,7 @@ public class ConfigHandler {
             // Store a restore version, to have as fallback if the
             // configuration by any reason have been corrupted between two
             // application sessions.
-            ZipUtil.zip(configurationFile, true);
+            ZipUtil.zip(configurationFile);
 
         } catch (XMLStreamException xse) {
             Logger logger = Logger.getInstance();
