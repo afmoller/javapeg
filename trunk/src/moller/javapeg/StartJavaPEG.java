@@ -6,7 +6,12 @@ import javax.swing.SwingUtilities;
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
 import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.applicationstart.ApplicationBootUtil;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.importconfig.ConfigImporter;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.Language;
 import moller.javapeg.program.firstlaunch.InitialConfigGUI;
+import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
 
 public class StartJavaPEG {
@@ -40,6 +45,19 @@ public class StartJavaPEG {
                         int result = JOptionPane.showOptionDialog(null, initialConfigGUI, "Initial Configuration", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, initialValue);
 
                         if (result == JOptionPane.YES_OPTION) {
+                            Configuration config = Config.getInstance().get();
+
+                            if (initialConfigGUI.isImport()) {
+                                ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
+                            } else {
+                                Language language = new Language();
+                                language.setAutomaticSelection(false);
+                                language.setgUILanguageISO6391(ISO639.getInstance().getCode(initialConfigGUI.getLanguage()));
+
+                                config.setLanguage(language);
+                            }
+
+//                            TODO: Delete the first launch marker file...
                             startApplication = true;
                         }
                     } else {

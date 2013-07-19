@@ -144,7 +144,7 @@ public class FileUtil {
 	/**
 	 * This method calculates the size a file will occupy on disk when stored.
 	 *
-	 * @param file is the object that will have it�s actual size on disk
+	 * @param file is the object that will have it´s actual size on disk
 	 *        calculated.
 
 	 * @param clusterSize is the smallest size used to store data by the file
@@ -415,7 +415,7 @@ public class FileUtil {
 		if(index == -1) {
 			return false;
 		} else {
-			fileSuffix = fileName.substring(index, fileName.length());
+			fileSuffix = fileName.substring(index + 1, fileName.length());
 		}
 
 		return fileSuffix.equalsIgnoreCase(extension);

@@ -246,4 +246,63 @@ public class DirectoryUtil {
 	    }
 	    return false;
 	}
+
+    /**
+     * This method return a {@link List} of {@link File} objects that was found
+     * in the directory specified by the parameter directory (or in any sub
+     * directory) and which matches the file suffix specified by the parameter
+     * fileSuffix
+     *
+     * @param directory
+     *            specifies the directory in which to search for files
+     * @param fileSuffix
+     *            specifies the file suffix to search for.
+     * @return A {@link List} of {@link File} objects found in the directory
+     *         specified by the parameter directory and which matches the file
+     *         suffix specified by the parameter fileSuffix. If the parameter is
+     *         null or empty, all files found will be returned
+     */
+	public static List<File> findFiles(File directory, String fileSuffix) {
+	    List<File> foundFiles = new ArrayList<>();
+
+	    if (directory.canRead() && directory.isDirectory()) {
+	        File[] directoryContent = directory.listFiles();
+
+	        if (directoryContent != null) {
+	            for (File file : directoryContent) {
+	                if (file.isFile()) {
+	                    if (fileSuffix == null || fileSuffix.isEmpty() || FileUtil.isOfType(fileSuffix, file)) {
+	                        foundFiles.add(file);
+	                    }
+	                } else {
+	                    foundFiles.addAll(findFiles(file, fileSuffix));
+	                }
+	            }
+	        }
+	    }
+
+	    return foundFiles;
+	}
+
+	public static List<File> findDirectories(File directory, String namePattern) {
+	    List<File> foundDirectories = new ArrayList<>();
+
+        if (directory.canRead() && directory.isDirectory()) {
+            File[] directoryContent = directory.listFiles();
+
+            if (directoryContent != null) {
+                for (File file : directoryContent) {
+                    if (file.isDirectory()) {
+                        if (file.getName().contains(namePattern)) {
+                            foundDirectories.add(file);
+                        } else {
+                            foundDirectories.addAll(findDirectories(file, namePattern));
+                        }
+                    }
+                }
+            }
+        }
+
+        return foundDirectories;
+	}
 }

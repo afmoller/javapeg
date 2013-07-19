@@ -1,12 +1,15 @@
 package moller.javapeg.program.firstlaunch;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -18,43 +21,48 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.ConfigUtil;
+import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.LanguageUtil;
 import moller.util.DefaultLookAndFeel;
+import moller.util.io.DirectoryUtil;
 import moller.util.java.SystemProperties;
 
 public class InitialConfigGUI extends JPanel {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
-    private JLabel languageSelectionLabel;
-    private JList<String> availableLanguagesJList;
-
+    private JLabel availableLanguageSelectionLabel;
+    private JLabel availableConfigurationsInUserDirLabel;
     private JLabel importConfigLabel;
+    private JLabel availableAlternativeConfigurationsLabel;
+
+    private JList<String> availableLanguagesJList;
+    private JList<String> availableConfigurationsInUserDirectoryJList;
+    private JList<String> availableAlternativeConfigurationsJList;
+
     private JButton importConfigFileChooserOpenButton;
 
     private JRadioButton noImportMode;
-
-    private final Configuration configuration;
+    private JRadioButton importMode;
 
     private int englishIndex;
 
+    private boolean selectionChange = false;
+
     public InitialConfigGUI() {
-
-        configuration = Config.getInstance().get();
-
         this.createMainFrame();
         this.initialize();
     }
@@ -64,6 +72,29 @@ public class InitialConfigGUI extends JPanel {
 
         if (englishIndex > -1) {
             availableLanguagesJList.setSelectedIndex(englishIndex);
+        }
+
+        List<File> foundConfigurationFilesInUserHome = findJavaPEGConfigurationFiles(new File(SystemProperties.getUserHome()));
+
+        populateJList(availableConfigurationsInUserDirectoryJList, foundConfigurationFilesInUserHome);
+
+        if (foundConfigurationFilesInUserHome != null && !foundConfigurationFilesInUserHome.isEmpty()) {
+            importMode.doClick();
+        } else {
+            noImportMode.doClick();
+        }
+    }
+
+    public void populateJList(JList<String> list, List<File> configurations) {
+        if (configurations != null && !configurations.isEmpty()) {
+            String[] listData = new String[configurations.size()];
+
+            for (int i = 0; i < configurations.size(); i++) {
+                listData[i] = configurations.get(i).getAbsolutePath();
+            }
+            list.setListData(listData);
+        } else {
+            list.setListData(new String[]{"No older installations found"});
         }
     }
 
@@ -104,7 +135,7 @@ public class InitialConfigGUI extends JPanel {
         noImportMode = new JRadioButton("No Import");
         noImportMode.addActionListener(new NoImportModeListener());
 
-        JRadioButton importMode = new JRadioButton("Import");
+        importMode = new JRadioButton("Import");
         importMode.addActionListener(new ImportModeListener());
 
         ButtonGroup group = new ButtonGroup();
@@ -126,7 +157,7 @@ public class InitialConfigGUI extends JPanel {
         panel.setLayout(new GridBagLayout());
         panel.setBorder(new TitledBorder("2: Configuration"));
 
-        languageSelectionLabel = new JLabel("Please select application language:");
+        availableLanguageSelectionLabel = new JLabel("Please select application language:");
 
         LanguageUtil.listEmbeddedLanguages(null);
 
@@ -147,6 +178,18 @@ public class InitialConfigGUI extends JPanel {
         availableLanguagesJList = new JList<>(availableLanguagesArray);
         availableLanguagesJList.setBorder(new LineBorder(Color.BLACK));
 
+        JScrollPane availableLanguagesJListScrollPane = new JScrollPane(availableLanguagesJList);
+        availableLanguagesJListScrollPane.setMinimumSize(new Dimension(300, 30));
+
+        availableConfigurationsInUserDirLabel = new JLabel("Found configurations in user home directory");
+
+        availableConfigurationsInUserDirectoryJList = new JList<String>();
+        availableConfigurationsInUserDirectoryJList.setBorder(new LineBorder(Color.BLACK));
+        availableConfigurationsInUserDirectoryJList.addListSelectionListener(new AvailableConfigurationsInUserDirectoryJListListener());
+
+        JScrollPane availableConfigurationsInUserDirectoryJListScrollPane = new JScrollPane(availableConfigurationsInUserDirectoryJList);
+        availableConfigurationsInUserDirectoryJListScrollPane.setMinimumSize(new Dimension(300, 30));
+
         importConfigLabel = new JLabel("Import configuration from other installation:");
 
         importConfigFileChooserOpenButton = new JButton();
@@ -161,22 +204,87 @@ public class InitialConfigGUI extends JPanel {
 
         importConfigFileChooserOpenButton.addActionListener(new ImportConfigFileChooserOpenButtonListener());
 
+        availableAlternativeConfigurationsLabel = new JLabel("Found Configurations");
+
+        availableAlternativeConfigurationsJList = new JList<String>();
+        availableAlternativeConfigurationsJList.setBorder(new LineBorder(Color.BLACK));
+        availableAlternativeConfigurationsJList.addListSelectionListener(new AvailableAlternativeConfigurationsJListListener());
+
+        JScrollPane availableAlternativeConfigurationsJListScrollPane = new JScrollPane(availableAlternativeConfigurationsJList);
+        availableAlternativeConfigurationsJListScrollPane.setMinimumSize(new Dimension(300, 30));
+
         GBHelper posPanel = new GBHelper();
 
         panel.add(new Gap(5), posPanel);
-        panel.add(languageSelectionLabel, posPanel.nextRow());
+        panel.add(availableLanguageSelectionLabel, posPanel.nextRow());
         panel.add(new Gap(2), posPanel.nextRow());
-        panel.add(availableLanguagesJList, posPanel.nextRow());
+        panel.add(availableLanguagesJListScrollPane, posPanel.nextRow());
+        panel.add(new Gap(15), posPanel.nextRow());
+        panel.add(availableConfigurationsInUserDirLabel, posPanel.nextRow());
+        panel.add(new Gap(2), posPanel.nextRow());
+        panel.add(availableConfigurationsInUserDirectoryJListScrollPane, posPanel.nextRow());
         panel.add(new Gap(15), posPanel.nextRow());
         panel.add(importConfigLabel, posPanel.nextRow());
         panel.add(new Gap(2), posPanel.nextRow());
         panel.add(importConfigFileChooserOpenButton, posPanel.nextRow());
+        panel.add(new Gap(5), posPanel.nextRow());
+        panel.add(availableAlternativeConfigurationsLabel, posPanel.nextRow());
+        panel.add(availableAlternativeConfigurationsJListScrollPane, posPanel.nextRow());
 
         return panel;
     }
 
-    private void searchForOldInstallations(File selectedFile) {
+    private List<File> findJavaPEGConfigurationFiles(File selectedFile) {
+        List<File> javaPegConfigurationFiles = new ArrayList<File>();
 
+        List<File> potentialJavaPEGConfigurationDirectories = DirectoryUtil.findDirectories(selectedFile, "javapeg");
+
+        if (potentialJavaPEGConfigurationDirectories != null) {
+            for (File potentialJavaPEGConfigurationDirectory : potentialJavaPEGConfigurationDirectories) {
+                List<File> potentialJavaPEGConfigurationsFiles = DirectoryUtil.findFiles(potentialJavaPEGConfigurationDirectory, "xml");
+
+                for (File potentialJavaPEGConfigurationsFile : potentialJavaPEGConfigurationsFiles) {
+
+                    for (String schema : SchemaUtil.getSchemas()) {
+                        String configSchemaLocation = C.PATH_SCHEMAS + schema;
+
+                        if (ConfigUtil.isConfigValid(potentialJavaPEGConfigurationsFile, configSchemaLocation).getResult()) {
+                            javaPegConfigurationFiles.add(potentialJavaPEGConfigurationsFile);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return javaPegConfigurationFiles;
+    }
+
+    private void activateImport(boolean activate) {
+        availableLanguageSelectionLabel.setEnabled(!activate);
+        availableLanguagesJList.setEnabled(!activate);
+        availableAlternativeConfigurationsLabel.setEnabled(activate);
+        availableAlternativeConfigurationsJList.setEnabled(activate);
+        availableConfigurationsInUserDirLabel.setEnabled(activate);
+        availableConfigurationsInUserDirectoryJList.setEnabled(activate);
+        importConfigLabel.setEnabled(activate);
+        importConfigFileChooserOpenButton.setEnabled(activate);
+    }
+
+    public boolean isImport() {
+        return importMode.isSelected();
+    }
+
+    public String getImportPath() {
+        if (availableAlternativeConfigurationsJList.isSelectionEmpty()) {
+            return availableConfigurationsInUserDirectoryJList.getSelectedValue();
+        } else {
+            return availableAlternativeConfigurationsJList.getSelectedValue();
+        }
+    }
+
+    public String getLanguage() {
+        return availableLanguagesJList.getSelectedValue();
     }
 
     private class ImportConfigFileChooserOpenButtonListener implements ActionListener {
@@ -188,7 +296,7 @@ public class InitialConfigGUI extends JPanel {
             chooser.setDialogTitle("Import JavaPEG Configuration");
 
             if(chooser.showOpenDialog(InitialConfigGUI.this) == JFileChooser.APPROVE_OPTION) {
-                searchForOldInstallations(chooser.getSelectedFile());
+                populateJList(availableAlternativeConfigurationsJList, findJavaPEGConfigurationFiles(chooser.getSelectedFile()));
             }
         }
     }
@@ -197,10 +305,7 @@ public class InitialConfigGUI extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            languageSelectionLabel.setEnabled(false);
-            availableLanguagesJList.setEnabled(false);
-            importConfigLabel.setEnabled(true);
-            importConfigFileChooserOpenButton.setEnabled(true);
+            activateImport(true);
         }
     }
 
@@ -208,10 +313,31 @@ public class InitialConfigGUI extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            languageSelectionLabel.setEnabled(true);
-            availableLanguagesJList.setEnabled(true);
-            importConfigLabel.setEnabled(false);
-            importConfigFileChooserOpenButton.setEnabled(false);
+            activateImport(false);
+        }
+    }
+
+    private class AvailableAlternativeConfigurationsJListListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!selectionChange) {
+                selectionChange = true;
+                availableConfigurationsInUserDirectoryJList.clearSelection();
+                selectionChange = false;
+            }
+        }
+    }
+
+    private class AvailableConfigurationsInUserDirectoryJListListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!selectionChange) {
+                selectionChange = true;
+                availableAlternativeConfigurationsJList.clearSelection();
+                selectionChange = false;
+            }
         }
     }
 }
