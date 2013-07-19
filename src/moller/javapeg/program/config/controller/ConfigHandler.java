@@ -22,7 +22,6 @@ import javax.xml.xpath.XPathFactory;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.ConfigUtil;
-import moller.javapeg.program.config.VersionToSchema;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.controller.section.GUIConfig;
 import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
@@ -36,6 +35,7 @@ import moller.javapeg.program.config.controller.section.ThumbNailConfig;
 import moller.javapeg.program.config.controller.section.ToolTipsConfig;
 import moller.javapeg.program.config.controller.section.UpdatesCheckerConfig;
 import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -54,7 +54,7 @@ public class ConfigHandler {
 
     public static Configuration load(File configFile) {
 
-        String configSchemaLocation = "resources/schema/" + VersionToSchema.getConfigurationSchema(C.JAVAPEG_VERSION);
+        String configSchemaLocation = C.PATH_SCHEMAS + SchemaUtil.getConfigurationSchemaForVersion(C.JAVAPEG_VERSION);
 
         StringBuilder errorMessage = null;
 

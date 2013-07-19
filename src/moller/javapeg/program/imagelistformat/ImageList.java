@@ -49,7 +49,7 @@ public class ImageList {
          * This check is done to see if an file extension has been entered in
          * the JFileChooser. If it is missing, the extension will be added here
          */
-        if(!FileUtil.isOfType("." + fileExtension, destination)) {
+        if(!FileUtil.isOfType(fileExtension, destination)) {
             destination = new File(destination.getAbsolutePath() + "." + fileExtension);
         }
 

@@ -41,4 +41,6 @@ public class C {
     public final static String ICONFILEPATH_IMAGEVIEWER = "resources/images/imageviewer/";
 
     public final static String UTF8 = "UTF-8";
+
+    public final static String PATH_SCHEMAS = "resources/schema/";
 }
