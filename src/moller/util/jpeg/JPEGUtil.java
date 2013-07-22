@@ -182,31 +182,33 @@ public class JPEGUtil {
 	 * @throws IOException
 	 */
 	public static boolean containsJPEGFiles(File directory) throws FileNotFoundException, IOException {
-	    File[] files = directory.listFiles();
-	    List<File> potentialJPEGFiles = new ArrayList<File>();
-	    List<File> otherFiles = new ArrayList<File>();
+	    if (directory.canRead()) {
+	        File[] files = directory.listFiles();
+	        List<File> potentialJPEGFiles = new ArrayList<File>();
+	        List<File> otherFiles = new ArrayList<File>();
 
+	        if (files != null) {
+	            for (File file : files) {
+	                if (file.getName().toLowerCase().contains("jpg") || file.getName().toLowerCase().contains("jpeg")) {
+	                    potentialJPEGFiles.add(file);
+	                } else {
+	                    otherFiles.add(file);
+	                }
+	            }
 
-	    for (File file : files) {
-	        if (file.getName().toLowerCase().contains("jpg") || file.getName().toLowerCase().contains("jpeg")) {
-	            potentialJPEGFiles.add(file);
-	        } else {
-	            otherFiles.add(file);
+	            for(File file : potentialJPEGFiles) {
+	                if(isJPEG(file)){
+	                    return true;
+	                }
+	            }
+
+	            for(File file : otherFiles) {
+	                if(isJPEG(file)){
+	                    return true;
+	                }
+	            }
 	        }
 	    }
-
-	    for(File file : potentialJPEGFiles) {
-            if(isJPEG(file)){
-                return true;
-            }
-        }
-
-	    for(File file : otherFiles) {
-            if(isJPEG(file)){
-                return true;
-            }
-        }
-
         return false;
 	}
 

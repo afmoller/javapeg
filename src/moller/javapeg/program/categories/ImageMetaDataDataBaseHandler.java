@@ -217,7 +217,7 @@ public class ImageMetaDataDataBaseHandler {
                     XMLUtil.writeElementEnd(w);
                     XMLUtil.writeElement(COMMENT, imddbi.getComment(), w);
                     XMLUtil.writeElement(RATING, Integer.toString(imddbi.getRating()), w);
-                    XMLUtil.writeElement(CATEGORIES, imddbi.getCategories().toString(), w);
+                    XMLUtil.writeElement(CATEGORIES, imddbi.getCategories() == null ? "" : imddbi.getCategories().toString(), w);
 
                     XMLUtil.writeElementEnd(w);
                 }

@@ -82,8 +82,22 @@ public class ImageMetaDataDataBaseItem {
 
 
     public boolean hasChanged(Categories categories, String comment, int rating) {
-        if (!this.getCategories().equals(categories)) {
-            return true;
+        if (this.categories != null) {
+            if (this.categories.getCategories().isEmpty()) {
+                if (categories != null) {
+                    return true;
+                }
+            } else {
+                if (!this.getCategories().equals(categories)) {
+                    return true;
+                }
+            }
+        } else {
+            if (categories != null) {
+                return true;
+            }
+        }
+        if (categories != null) {
         }
         if (!this.getComment().equals(comment)) {
             return true;
