@@ -1869,7 +1869,7 @@ public class MainGUI extends JFrame {
 
         RenameImages renameImages = configuration.getRenameImages();
 
-         subFolderTextField.setText(renameImages.getTemplateSubDirectoryName());
+        subFolderTextField.setText(renameImages.getTemplateSubDirectoryName());
         fileNameTemplateTextField.setText(renameImages.getTemplateFileName());
 
         if(renameImages.getCreateThumbNails()) {
