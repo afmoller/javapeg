@@ -1,5 +1,6 @@
 3.0:
 ====
+- Implement the possibility to import configuration from other installation.
 - Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.
@@ -39,8 +40,4 @@
 - Add backup functionality of image repositories.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add functionality to load latest showed image path at application start.
-- Add functionality to ask for preferred language at first application start.
-- Fix a configuration in which the parameters not change order depending on the parameter value, as the default Java
-  properties implementation does.
-- Fixa s� att config blir context medvetet, s� att inte hela parameternamnet beh�ver anges.
 - Create unittest
