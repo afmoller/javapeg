@@ -10,6 +10,9 @@
  
  3.0 (2013-xx-xx)
  
+ + At the first start of JavaPEG the user will be asked which language to use
+   in the application.
+ 
  + Configuration validation against Schema at application start. If the
    configuration is invalid then the invalid configuration will be stored into
    a "corrupt" directory and the configuration will be restored from a zipped
@@ -87,6 +90,9 @@
  ! If the keyboard was used to change image in the Image Viewer and the change
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in this version.  
+   
+ ~ The JavaPEG configuration file uses now a custom XML format specifically
+   developed for this application.  
    
  ~ The directory selection tree to the left in the main windows is enhanced to
    look like, with icons and content, as the icons in the native file explorer.
