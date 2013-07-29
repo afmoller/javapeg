@@ -33,7 +33,7 @@ public class StartJavaPEG {
 
                 if (supportedOS) {
 
-                    boolean startApplication = false;
+                    boolean startApplication = true;
 
                     if (ApplicationBootUtil.isFirstApplicationLaunch()) {
                         InitialConfigGUI initialConfigGUI = new InitialConfigGUI();
@@ -48,7 +48,13 @@ public class StartJavaPEG {
                             Configuration config = Config.getInstance().get();
 
                             if (initialConfigGUI.isImport()) {
-                                ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
+                                if (initialConfigGUI.getImportPath() == null) {
+                                    JOptionPane.showMessageDialog(null, "No configuration file to import selected, please restart application");
+                                    startApplication = false;
+                                } else {
+                                    ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
+                                }
+
                             } else {
                                 Language language = new Language();
                                 language.setAutomaticSelection(false);
@@ -57,11 +63,12 @@ public class StartJavaPEG {
                                 config.setLanguage(language);
                             }
 
+                            if (startApplication) {
 //                            TODO: Delete the first launch marker file...
-                            startApplication = true;
+                            }
+                        } else {
+                            startApplication = false;
                         }
-                    } else {
-                        startApplication = true;
                     }
 
                     if (startApplication) {

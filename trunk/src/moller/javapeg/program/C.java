@@ -16,6 +16,8 @@ public class C {
 
     public final static String USER_HOME       = System.getProperty("user.home");
     public final static String JAVAPEG_VERSION = "3.0";
+    public final static String PATH_TO_CONFIGURATION_FILE = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "config" + C.FS + "conf.xml";
+
 
     /**
      * This variable  contains a time stamp which is set to when the latest

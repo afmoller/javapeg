@@ -54,7 +54,7 @@ public class ConfigHandler {
 
     public static Configuration load(File configFile) {
 
-        String configSchemaLocation = C.PATH_SCHEMAS + SchemaUtil.getConfigurationSchemaForVersion(C.JAVAPEG_VERSION);
+        String configSchemaLocation = C.PATH_SCHEMAS + SchemaUtil.getConfigurationSchemaForVersion(C.JAVAPEG_VERSION).getSchemaName();
 
         StringBuilder errorMessage = null;
 
