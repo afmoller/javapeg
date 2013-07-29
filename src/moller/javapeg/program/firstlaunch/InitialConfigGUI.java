@@ -32,8 +32,8 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.ConfigUtil;
-import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.enumerations.ConfigurationSchema;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.LanguageUtil;
 import moller.util.DefaultLookAndFeel;
@@ -50,8 +50,8 @@ public class InitialConfigGUI extends JPanel {
     private JLabel availableAlternativeConfigurationsLabel;
 
     private JList<String> availableLanguagesJList;
-    private JList<String> availableConfigurationsInUserDirectoryJList;
-    private JList<String> availableAlternativeConfigurationsJList;
+    private JList<File> availableConfigurationsInUserDirectoryJList;
+    private JList<File> availableAlternativeConfigurationsJList;
 
     private JButton importConfigFileChooserOpenButton;
 
@@ -76,6 +76,10 @@ public class InitialConfigGUI extends JPanel {
 
         List<File> foundConfigurationFilesInUserHome = findJavaPEGConfigurationFiles(new File(SystemProperties.getUserHome()));
 
+        // Do not display the configuration file for the current installation.
+        File configFile = new File(C.PATH_TO_CONFIGURATION_FILE);
+        foundConfigurationFilesInUserHome.remove(configFile);
+
         populateJList(availableConfigurationsInUserDirectoryJList, foundConfigurationFilesInUserHome);
 
         if (foundConfigurationFilesInUserHome != null && !foundConfigurationFilesInUserHome.isEmpty()) {
@@ -85,16 +89,14 @@ public class InitialConfigGUI extends JPanel {
         }
     }
 
-    public void populateJList(JList<String> list, List<File> configurations) {
+    public void populateJList(JList<File> list, List<File> configurations) {
         if (configurations != null && !configurations.isEmpty()) {
-            String[] listData = new String[configurations.size()];
+            File[] listData = new File[configurations.size()];
 
             for (int i = 0; i < configurations.size(); i++) {
-                listData[i] = configurations.get(i).getAbsolutePath();
+                listData[i] = configurations.get(i);
             }
             list.setListData(listData);
-        } else {
-            list.setListData(new String[]{"No older installations found"});
         }
     }
 
@@ -183,7 +185,7 @@ public class InitialConfigGUI extends JPanel {
 
         availableConfigurationsInUserDirLabel = new JLabel("Found configurations in user home directory");
 
-        availableConfigurationsInUserDirectoryJList = new JList<String>();
+        availableConfigurationsInUserDirectoryJList = new JList<File>();
         availableConfigurationsInUserDirectoryJList.setBorder(new LineBorder(Color.BLACK));
         availableConfigurationsInUserDirectoryJList.addListSelectionListener(new AvailableConfigurationsInUserDirectoryJListListener());
 
@@ -206,7 +208,7 @@ public class InitialConfigGUI extends JPanel {
 
         availableAlternativeConfigurationsLabel = new JLabel("Found Configurations");
 
-        availableAlternativeConfigurationsJList = new JList<String>();
+        availableAlternativeConfigurationsJList = new JList<File>();
         availableAlternativeConfigurationsJList.setBorder(new LineBorder(Color.BLACK));
         availableAlternativeConfigurationsJList.addListSelectionListener(new AvailableAlternativeConfigurationsJListListener());
 
@@ -245,8 +247,8 @@ public class InitialConfigGUI extends JPanel {
 
                 for (File potentialJavaPEGConfigurationsFile : potentialJavaPEGConfigurationsFiles) {
 
-                    for (String schema : SchemaUtil.getSchemas()) {
-                        String configSchemaLocation = C.PATH_SCHEMAS + schema;
+                    for (ConfigurationSchema schema : ConfigurationSchema.values()) {
+                        String configSchemaLocation = C.PATH_SCHEMAS + schema.getSchemaName();
 
                         if (ConfigUtil.isConfigValid(potentialJavaPEGConfigurationsFile, configSchemaLocation).getResult()) {
                             javaPegConfigurationFiles.add(potentialJavaPEGConfigurationsFile);
@@ -275,7 +277,7 @@ public class InitialConfigGUI extends JPanel {
         return importMode.isSelected();
     }
 
-    public String getImportPath() {
+    public File getImportPath() {
         if (availableAlternativeConfigurationsJList.isSelectionEmpty()) {
             return availableConfigurationsInUserDirectoryJList.getSelectedValue();
         } else {
