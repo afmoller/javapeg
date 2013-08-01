@@ -10,8 +10,12 @@
  
  3.0 (2013-xx-xx)
  
- + At the first start of JavaPEG the user will be asked which language to use
-   in the application.
+ + At the first start of JavaPEG the user will be shown an application 
+   configuration form, in which it is either possible to set the language to be
+   used by JavaPEG, or to do a full import of a configuration from an 
+   previously made installation. It is possible to import configurations from 
+   JavaPEG versions ranging from 3.0 and forwards. There is no support of
+   importing configurations from an older version.
  
  + Configuration validation against Schema at application start. If the
    configuration is invalid then the invalid configuration will be stored into

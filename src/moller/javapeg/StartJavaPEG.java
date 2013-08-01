@@ -1,12 +1,16 @@
 package moller.javapeg;
 
+import java.io.File;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
+import moller.javapeg.program.C;
 import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.applicationstart.ApplicationBootUtil;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.controller.ConfigHandler;
 import moller.javapeg.program.config.importconfig.ConfigImporter;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.Language;
@@ -52,9 +56,10 @@ public class StartJavaPEG {
                                     JOptionPane.showMessageDialog(null, "No configuration file to import selected, please restart application");
                                     startApplication = false;
                                 } else {
-                                    ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
+                                    Configuration importedConfig = ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
+                                    Config.getInstance().set(importedConfig);
+                                    ConfigHandler.store(importedConfig, new File(C.PATH_TO_CONFIGURATION_FILE));
                                 }
-
                             } else {
                                 Language language = new Language();
                                 language.setAutomaticSelection(false);

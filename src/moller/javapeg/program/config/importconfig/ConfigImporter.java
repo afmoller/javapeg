@@ -12,16 +12,16 @@ import moller.javapeg.program.enumerations.ConfigurationSchema;
 
 public class ConfigImporter {
 
-    public static void doConfigurationImport(File importPath, Configuration config) {
+    public static Configuration doConfigurationImport(File importPath, Configuration config) {
 
         ConfigurationSchema configurationSchema = getConfigurationSchema(importPath);
 
         List<String> transformers = SchemaUtil.getTransformersForSchema(configurationSchema);
 
         if (transformers.isEmpty()) {
-            config = ConfigHandler.load(importPath);
+            return ConfigHandler.load(importPath);
         } else {
-            config = doTransformation();
+            return doTransformation();
         }
     }
 

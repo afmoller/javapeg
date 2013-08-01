@@ -15,7 +15,7 @@ public class Config {
 
     public final static File PATH_TO_CONF_FILE =  new File(C.PATH_TO_CONFIGURATION_FILE);
 
-    private final Configuration configuration;
+    private Configuration configuration;
 
     /**
      * Private constructor.
@@ -42,6 +42,10 @@ public class Config {
 
     public Configuration get() {
         return configuration;
+    }
+
+    public void set(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public void save() {
