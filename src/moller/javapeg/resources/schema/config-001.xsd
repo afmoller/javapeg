@@ -205,6 +205,7 @@
         </xs:sequence>
         <xs:attribute name="displayname" type="xs:string" use="required" />
         <xs:attribute name="javapegclientid" type="xs:string" use="required" />
+        <xs:attribute name="highest-used-id" type="xs:string" use="required" />
     </xs:complexType>
         
     <xs:complexType name="Repository">
