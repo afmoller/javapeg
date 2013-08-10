@@ -22,6 +22,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -61,6 +62,8 @@ public class InitialConfigGUI extends JPanel {
     private int englishIndex;
 
     private boolean selectionChange = false;
+
+    private final InitialConfigGUILanguage language = InitialConfigGUILanguage.getInstance();
 
     public InitialConfigGUI() {
         this.createMainFrame();
@@ -115,15 +118,48 @@ public class InitialConfigGUI extends JPanel {
 
     public JPanel createMainPanel() {
 
+
+        JPanel configurationPanel = new JPanel();
+        configurationPanel.setLayout(new GridBagLayout());
+
+        GBHelper posLeftPanel = new GBHelper();
+
+        configurationPanel.add(this.createConfigurationModePanel(), posLeftPanel);
+        configurationPanel.add(new Gap(10), posLeftPanel.nextRow());
+        configurationPanel.add(this.createConfigurationPanel(), posLeftPanel.nextRow());
+
+        JPanel helpPanel = new JPanel();
+        helpPanel.setLayout(new GridBagLayout());
+
+        GBHelper posRightPanel = new GBHelper();
+
+        helpPanel.add(this.createHelpPanel(), posRightPanel.expandH().expandW());
+
         JPanel mainPanel = new JPanel();
 
         mainPanel.setLayout(new GridBagLayout());
 
         GBHelper posMainPanel = new GBHelper();
 
-        mainPanel.add(this.createConfigurationModePanel(), posMainPanel);
-        mainPanel.add(new Gap(10), posMainPanel.nextRow());
-        mainPanel.add(this.createConfigurationPanel(), posMainPanel.nextRow());
+        mainPanel.add(helpPanel, posMainPanel);
+        mainPanel.add(configurationPanel, posMainPanel.nextCol().expandH().expandW());
+
+        return mainPanel;
+    }
+
+    private JPanel createHelpPanel() {
+
+        JTextArea textarea = new JTextArea();
+        textarea.setText(language.get("help.text"));
+        textarea.setEditable(false);
+        textarea.setColumns(40);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBorder(new TitledBorder(language.get("help.title")));
+
+        GBHelper posMainPanel = new GBHelper();
+
+        mainPanel.add(textarea, posMainPanel.expandH().expandW());
 
         return mainPanel;
     }
@@ -132,12 +168,12 @@ public class InitialConfigGUI extends JPanel {
         JPanel panel = new JPanel();
 
         panel.setLayout(new GridBagLayout());
-        panel.setBorder(new TitledBorder("1: Configuration Mode"));
+        panel.setBorder(new TitledBorder(language.get("configuration.mode.title")));
 
-        noImportMode = new JRadioButton("No Import");
+        noImportMode = new JRadioButton(language.get("configuration.mode.noimport"));
         noImportMode.addActionListener(new NoImportModeListener());
 
-        importMode = new JRadioButton("Import");
+        importMode = new JRadioButton(language.get("configuration.mode.import"));
         importMode.addActionListener(new ImportModeListener());
 
         ButtonGroup group = new ButtonGroup();
@@ -157,9 +193,9 @@ public class InitialConfigGUI extends JPanel {
         JPanel panel = new JPanel();
 
         panel.setLayout(new GridBagLayout());
-        panel.setBorder(new TitledBorder("2: Configuration"));
+        panel.setBorder(new TitledBorder(language.get("configuration.section.title")));
 
-        availableLanguageSelectionLabel = new JLabel("Please select application language:");
+        availableLanguageSelectionLabel = new JLabel(language.get("configuration.section.available.languages"));
 
         LanguageUtil.listEmbeddedLanguages(null);
 
@@ -183,7 +219,7 @@ public class InitialConfigGUI extends JPanel {
         JScrollPane availableLanguagesJListScrollPane = new JScrollPane(availableLanguagesJList);
         availableLanguagesJListScrollPane.setMinimumSize(new Dimension(300, 30));
 
-        availableConfigurationsInUserDirLabel = new JLabel("Found configurations in user home directory");
+        availableConfigurationsInUserDirLabel = new JLabel(language.get("configuration.section.available.configurations.in.user.home"));
 
         availableConfigurationsInUserDirectoryJList = new JList<File>();
         availableConfigurationsInUserDirectoryJList.setBorder(new LineBorder(Color.BLACK));
@@ -192,7 +228,7 @@ public class InitialConfigGUI extends JPanel {
         JScrollPane availableConfigurationsInUserDirectoryJListScrollPane = new JScrollPane(availableConfigurationsInUserDirectoryJList);
         availableConfigurationsInUserDirectoryJListScrollPane.setMinimumSize(new Dimension(300, 30));
 
-        importConfigLabel = new JLabel("Import configuration from other installation:");
+        importConfigLabel = new JLabel(language.get("configuration.section.other.import.location.title"));
 
         importConfigFileChooserOpenButton = new JButton();
 
@@ -206,7 +242,7 @@ public class InitialConfigGUI extends JPanel {
 
         importConfigFileChooserOpenButton.addActionListener(new ImportConfigFileChooserOpenButtonListener());
 
-        availableAlternativeConfigurationsLabel = new JLabel("Found Configurations");
+        availableAlternativeConfigurationsLabel = new JLabel(language.get("configuration.section.other.import.location.found.configurations"));
 
         availableAlternativeConfigurationsJList = new JList<File>();
         availableAlternativeConfigurationsJList.setBorder(new LineBorder(Color.BLACK));
