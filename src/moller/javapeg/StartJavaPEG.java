@@ -15,6 +15,7 @@ import moller.javapeg.program.config.importconfig.ConfigImporter;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.Language;
 import moller.javapeg.program.firstlaunch.InitialConfigGUI;
+import moller.javapeg.program.firstlaunch.InitialConfigGUILanguage;
 import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
 
@@ -43,17 +44,19 @@ public class StartJavaPEG {
                         InitialConfigGUI initialConfigGUI = new InitialConfigGUI();
                         initialConfigGUI.setVisible(true);
 
-                        Object[] options = {"Continue", "Cancel"};
+                        InitialConfigGUILanguage initialLanguage = InitialConfigGUILanguage.getInstance();
+
+                        Object[] options = {initialLanguage.get("button.continue"), initialLanguage.get("button.cancel")};
                         Object initialValue = options[0];
 
-                        int result = JOptionPane.showOptionDialog(null, initialConfigGUI, "Initial Configuration", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, initialValue);
+                        int result = JOptionPane.showOptionDialog(null, initialConfigGUI, initialLanguage.get("window.title"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, initialValue);
 
                         if (result == JOptionPane.YES_OPTION) {
                             Configuration config = Config.getInstance().get();
 
                             if (initialConfigGUI.isImport()) {
                                 if (initialConfigGUI.getImportPath() == null) {
-                                    JOptionPane.showMessageDialog(null, "No configuration file to import selected, please restart application");
+                                    JOptionPane.showMessageDialog(null, initialLanguage.get("configuration.file.missing"));
                                     startApplication = false;
                                 } else {
                                     Configuration importedConfig = ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
