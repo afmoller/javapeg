@@ -1,5 +1,8 @@
 3.0:
 ====
+- Add possibility to save multiple rename templates
+- Add merge functionality from several source directories. in the "rename image" mode.
+- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.
@@ -12,12 +15,10 @@
 
 3.1:
 ====
+- Make the initial configuration part of the izpack installation
 - Make the deserialization of image meta data base files to be running in a separate thread.
 - Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
-- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
-- Add merge functionality from several source directories. in the "rename image" mode.
-- Add possibility to save multiple rename templates
 - Add slide show functionality to Image Viewer.
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
