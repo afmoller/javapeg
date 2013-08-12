@@ -133,7 +133,7 @@ public class InitialConfigGUI extends JPanel {
 
         GBHelper posRightPanel = new GBHelper();
 
-        helpPanel.add(this.createHelpPanel(), posRightPanel.expandH().expandW());
+        helpPanel.add(this.createHelpPanel(), posRightPanel.expandH());
 
         JPanel mainPanel = new JPanel();
 
@@ -141,7 +141,7 @@ public class InitialConfigGUI extends JPanel {
 
         GBHelper posMainPanel = new GBHelper();
 
-        mainPanel.add(helpPanel, posMainPanel);
+        mainPanel.add(helpPanel, posMainPanel.expandH());
         mainPanel.add(configurationPanel, posMainPanel.nextCol().expandH().expandW());
 
         return mainPanel;
@@ -152,14 +152,16 @@ public class InitialConfigGUI extends JPanel {
         JTextArea textarea = new JTextArea();
         textarea.setText(language.get("help.text"));
         textarea.setEditable(false);
-        textarea.setColumns(40);
+        textarea.setColumns(30);
+        textarea.setBorder(new LineBorder(Color.BLACK));
 
         JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBorder(new TitledBorder(language.get("help.title")));
 
         GBHelper posMainPanel = new GBHelper();
 
-        mainPanel.add(textarea, posMainPanel.expandH().expandW());
+        mainPanel.add(textarea, posMainPanel.expandH());
 
         return mainPanel;
     }
