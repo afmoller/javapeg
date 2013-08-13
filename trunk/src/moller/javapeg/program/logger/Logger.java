@@ -38,7 +38,7 @@ public class Logger {
     private final Long    rotateSize;
     private final String logName;
 
-    private final static String BASE_PATH = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION + C.FS + "logs";
+    private final static String BASE_PATH = C.JAVAPEG_HOME + C.FS + "logs";
 
     private Logger() {
 

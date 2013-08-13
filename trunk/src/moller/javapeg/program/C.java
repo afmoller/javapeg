@@ -14,11 +14,11 @@ public class C {
     /**
      * The system dependent line separator
      */
-    public final static String LS              = System.getProperty("line.separator");
+    public final static String LS              = SystemProperties.getLineSeparator();
 
-    public final static String USER_HOME       = System.getProperty("user.home");
+    public final static String USER_HOME       = SystemProperties.getUserHome();
     public final static String JAVAPEG_VERSION = "3.0";
-    public final static String JAVAPEG_HOME = SystemProperties.getUserHome() + C.FS + "javapeg-" + C.JAVAPEG_VERSION;
+    public final static String JAVAPEG_HOME = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION;
     public final static String PATH_TO_CONFIGURATION_FILE = JAVAPEG_HOME + C.FS + "config" + C.FS + "conf.xml";
 
 

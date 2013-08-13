@@ -12,7 +12,7 @@ public class ValidateFileSetup {
 
     public static void check() {
 
-        File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
+        File javaPEGuserHome = new File(C.JAVAPEG_HOME);
 
         File logDirectory = new File(javaPEGuserHome, "logs");
         File configFile   = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");

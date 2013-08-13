@@ -13,7 +13,7 @@ public class TestValidateFileSetup {
 	@Test
 	public void testCheck() {
 
-		File javaPEGuserHome = new File(C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION);
+		File javaPEGuserHome = new File(C.JAVAPEG_HOME);
 
 		File configFile   = new File(javaPEGuserHome, "config" + C.FS + "conf.xml");
 		File logDirectory = new File(javaPEGuserHome, "logs");
