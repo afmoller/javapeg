@@ -1,12 +1,17 @@
 package moller.javapeg.program.applicationstart;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import moller.javapeg.program.C;
 import moller.util.io.DirectoryUtil;
-import moller.util.java.SystemProperties;
 
 public class ApplicationBootUtil {
+
+    private static String FIRST_LAUNCH = "firstLaunch";
+
+    private static File javaPEGHome = new File(C.JAVAPEG_HOME);
 
     /**
      * This method returns whether or not it is the first time this JavaPEG
@@ -17,10 +22,18 @@ public class ApplicationBootUtil {
      *         JavaPEG is started after installation.
      */
     public static boolean isFirstApplicationLaunch() {
+        return DirectoryUtil.containsFile(javaPEGHome, FIRST_LAUNCH);
+    }
 
-        File javaPEGHome = new File(SystemProperties.getUserHome(), "javapeg-" + C.JAVAPEG_VERSION);
+    /**
+     * This method deletes the first application launch marker file.
+     *
+     * @throws IOException
+     */
+    public static void removeFirstApplicationLaunchMarkerFile() throws IOException {
+        File firstLaunchFile = new File(javaPEGHome, FIRST_LAUNCH);
 
-        return DirectoryUtil.containsFile(javaPEGHome, "firstLaunch");
+        Files.delete(firstLaunchFile.toPath());
     }
 
 }
