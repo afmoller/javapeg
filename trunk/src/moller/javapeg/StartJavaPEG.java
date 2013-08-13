@@ -1,6 +1,7 @@
 package moller.javapeg;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -72,7 +73,11 @@ public class StartJavaPEG {
                             }
 
                             if (startApplication) {
-//                            TODO: Delete the first launch marker file...
+                                try {
+                                    ApplicationBootUtil.removeFirstApplicationLaunchMarkerFile();
+                                } catch (IOException e) {
+                                    JOptionPane.showMessageDialog(null, "Could not delete first application launch marker file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         } else {
                             startApplication = false;
