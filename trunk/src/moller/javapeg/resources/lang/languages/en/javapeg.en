@@ -51,7 +51,7 @@ menu.item.about.accelerator                      = A
 # L A B E L S                                                                                                #
 ##############################################################################################################
 labels.sourcePath       = SOURCE DIRECTORY
-labels.destinatonPath   = PATH TO DESTINATION DIRECTORY
+labels.destinationPath  = PATH TO DESTINATION DIRECTORY
 labels.subFolderName    = SUB DIRECTORY NAME TEMPLATE
 labels.fileNameTemplate = FILENAME TEMPLATE
 labels.variables        = VARIABLES
