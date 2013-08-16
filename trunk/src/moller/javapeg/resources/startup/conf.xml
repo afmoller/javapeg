@@ -18,9 +18,9 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <main>
       <xLocation>10</xLocation>
       <yLocation>10</yLocation>
-      <width>1200</width>
+      <width>1280</width>
       <height>768</height>
-      <splitPane id="main">120</splitPane>
+      <splitPane id="main">150</splitPane>
       <splitPane id="vertical">300</splitPane>
       <splitPane id="thumbNailMetaDataPanel">640</splitPane>
       <splitPane id="previewAndComment">160</splitPane>
