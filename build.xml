@@ -45,6 +45,7 @@
 				<include name="**/configviewer.en" />
 				<include name="**/imagerepository.en" />
 				<include name="**/imageviewer.en" />
+				<include name="**/initialgui.en" />
 				<include name="**/javapeg.en" />
 				<include name="**/category.sv" />
 				<include name="**/categoryimportexport.sv" />
@@ -52,11 +53,12 @@
 				<include name="**/configviewer.sv" />
 				<include name="**/imagerepository.sv" />
 				<include name="**/imageviewer.sv" />
+				<include name="**/initialgui.sv" />
 				<include name="**/javapeg.sv" />
 				<include name="**/layout.xml" />
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
-				<include name="**/repository.xsd" />
+				<include name="**/config-001.xsd" />
 				<include name="**/conf.xml" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
