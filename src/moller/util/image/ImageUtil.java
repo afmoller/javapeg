@@ -24,6 +24,8 @@ import javax.swing.ImageIcon;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 
+import org.imgscalr.Scalr;
+
 public class ImageUtil {
 
 	/**
@@ -226,5 +228,15 @@ public class ImageUtil {
 			StreamUtil.close(imageStream, true);
 		}
 		return imageIcon;
+	}
+
+	public static void resizeAndStoreImage(File fileToResize, int width, int height, File destinationDirectory) throws IOException {
+
+	    BufferedImage fileToResizeBufferedImage = ImageIO.read(fileToResize);
+
+	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, width, height);
+
+	    ImageIO.write(resizedBufferedImage, "jpg", new File(destinationDirectory, fileToResize.getName()));
+
 	}
 }

@@ -254,4 +254,22 @@ public class StringUtil {
 
         return true;
     }
+
+    /**
+     * This method removes all non digits from a string.
+     *
+     * @param s is the String to clean from non digits.
+     * @return
+     */
+    public static String removeAllNonDigits(String s) {
+        if (s == null) {
+            return null;
+        }
+
+        if (s.length() == 0) {
+            return s;
+        }
+
+        return s.replaceAll("[^\\d]", "");
+    }
 }

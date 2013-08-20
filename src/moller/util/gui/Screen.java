@@ -44,11 +44,13 @@ public class Screen {
 	 */
 	public static boolean isOnScreen(Point coordinate, List<Rectangle> screens) {
 
-		for (Rectangle screen : screens) {
-			if (screen.width + screen.x >= coordinate.x && screen.height + screen.y >= coordinate.y) {
-				return true;
-			}
-		}
+	    if (coordinate.x > -1 && coordinate.y > -1) {
+	        for (Rectangle screen : screens) {
+	            if (screen.width + screen.x >= coordinate.x && screen.height + screen.y >= coordinate.y) {
+	                return true;
+	            }
+	        }
+	    }
 		return false;
 	}
 
@@ -65,12 +67,6 @@ public class Screen {
 	 *         inside any of the available screens.
 	 */
 	public static boolean isOnScreen(Point coordinate) {
-
-		for (Rectangle screen : getScreens()) {
-			if (screen.width + screen.x >= coordinate.x && screen.height + screen.y >= coordinate.y) {
-				return true;
-			}
-		}
-		return false;
+	    return isOnScreen(coordinate, getScreens());
 	}
 }
