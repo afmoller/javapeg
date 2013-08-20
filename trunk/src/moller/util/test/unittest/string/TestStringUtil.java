@@ -114,4 +114,14 @@ public class TestStringUtil {
 	    Assert.assertFalse(StringUtil.isNotBlank(""));
 	    Assert.assertFalse(StringUtil.isNotBlank(null));
 	}
+
+	@Test
+	public void testRemoveAllNonDigits() {
+	    Assert.assertEquals("123", StringUtil.removeAllNonDigits("123a"));
+	    Assert.assertEquals("1234", StringUtil.removeAllNonDigits("123.4a"));
+	    Assert.assertEquals("123", StringUtil.removeAllNonDigits("a123a"));
+	    Assert.assertEquals(null, StringUtil.removeAllNonDigits(null));
+	    Assert.assertEquals("", StringUtil.removeAllNonDigits(""));
+
+	}
 }
