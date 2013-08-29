@@ -25,6 +25,8 @@ import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
 public class ImageUtil {
 
@@ -234,9 +236,17 @@ public class ImageUtil {
 
 	    BufferedImage fileToResizeBufferedImage = ImageIO.read(fileToResize);
 
-	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, width, height);
+	    Scalr.Mode mode;
+
+	    if (width == 0) {
+	        mode = Mode.FIT_TO_HEIGHT;
+	    } else {
+	        mode = Mode.FIT_TO_WIDTH;
+	    }
+
+	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, Method.SPEED, mode, width, height);
+	    fileToResizeBufferedImage.flush();
 
 	    ImageIO.write(resizedBufferedImage, "jpg", new File(destinationDirectory, fileToResize.getName()));
-
 	}
 }

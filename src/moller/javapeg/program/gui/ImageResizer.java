@@ -3,6 +3,7 @@ package moller.javapeg.program.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -18,13 +19,13 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,7 +49,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.Config;
@@ -62,6 +62,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 import moller.util.gui.Screen;
 import moller.util.image.ImageUtil;
+import moller.util.io.DirectoryUtil;
 
 public class ImageResizer extends JFrame {
 
@@ -81,6 +82,7 @@ public class ImageResizer extends JFrame {
 
     private JButton resizeDestinationPathButton;
     private JButton resizeButton;
+    private JButton cancelResizeButton;
     private JButton removeSelectedImagesButton;
 
     private JLabel imagePreviewLabel;
@@ -92,6 +94,8 @@ public class ImageResizer extends JFrame {
     private CustomizedJTextArea outputTextArea;
 
     private JProgressBar progressBar;
+
+    private ImageResizeWorker irw;
 
     public ImageResizer(List<File> imagesToResize) {
 
@@ -121,6 +125,9 @@ public class ImageResizer extends JFrame {
     private void createMainFrame() {
         GUI gUI = configuration.getgUI();
 
+//        TODO: Remove hard coded string
+        this.setTitle("Image Resizer");
+
         Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
 
         this.setSize(sizeAndLocation.getSize());
@@ -143,7 +150,7 @@ public class ImageResizer extends JFrame {
             logger.logERROR(e);
         }
 
-        InputStream imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Open16.gif");
+        InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
 
         try {
             this.setIconImage(ImageIO.read(imageStream));
@@ -180,7 +187,6 @@ public class ImageResizer extends JFrame {
         backgroundPanel.add(this.createInputPanel(), posBackgroundPanel.nextRow().expandW());
 
         return backgroundPanel;
-
     }
 
     private JPanel createRightPanel() {
@@ -194,8 +200,6 @@ public class ImageResizer extends JFrame {
 
         return backgroundPanel;
     }
-
-
 
     private JPanel createOutputPanel() {
 
@@ -259,8 +263,9 @@ public class ImageResizer extends JFrame {
         removeSelectedImagesButton = new JButton();
         removeSelectedImagesButton.setIcon(removePictureImageIcon);
         removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
-        removeSelectedImagesButton.setPreferredSize(new Dimension(30, 20));
-        removeSelectedImagesButton.setMinimumSize(new Dimension(30, 20));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        buttonPanel.add(removeSelectedImagesButton);
 
         JLabel imageListLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.list"));
         imageListLabel.setForeground(Color.GRAY);
@@ -273,7 +278,7 @@ public class ImageResizer extends JFrame {
         backgroundPanel.add(imageListLabel, posBackground);
         backgroundPanel.add(spImageList, posBackground.nextRow().expandH());
         backgroundPanel.add(new Gap(5), posBackground.nextRow());
-        backgroundPanel.add(new JPanel().add(removeSelectedImagesButton), posBackground.nextRow());
+        backgroundPanel.add(buttonPanel, posBackground.nextRow());
 
         return backgroundPanel;
     }
@@ -341,10 +346,16 @@ public class ImageResizer extends JFrame {
         ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
 //      TODO: Remove hard coded string
-        JCheckBox keepAspectRatio = new JCheckBox("Keep aspect ratio");
-
         resizeButton = new JButton("Resize");
         resizeButton.addActionListener(new ResizeButtonListener());
+
+//      TODO: Remove hard coded string
+        cancelResizeButton = new JButton("Cancel");
+        cancelResizeButton.addActionListener(new CancelResizeButtonListener());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        buttonPanel.add(resizeButton);
+        buttonPanel.add(cancelResizeButton);
 
         GBHelper posBackground = new GBHelper();
 
@@ -361,9 +372,7 @@ public class ImageResizer extends JFrame {
         backgroundPanel.add(heightLabel, posBackground.nextRow());
         backgroundPanel.add(heightTextField, posBackground.nextRow().expandW());
         backgroundPanel.add(new Gap(3), posBackground.nextRow());
-        backgroundPanel.add(keepAspectRatio, posBackground.nextRow());
-        backgroundPanel.add(new Gap(3), posBackground.nextRow());
-        backgroundPanel.add(resizeButton, posBackground.nextRow());
+        backgroundPanel.add(buttonPanel, posBackground.nextRow());
 
         return backgroundPanel;
     }
@@ -397,14 +406,6 @@ public class ImageResizer extends JFrame {
             if(chooser.showOpenDialog(ImageResizer.this) == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = chooser.getSelectedFile();
 
-//                char [] tempArray = temp.toCharArray();
-//
-//                for(int i = 0; i < tempArray.length; i++) {
-//                    if(tempArray[i] == 92) {
-//                        tempArray[i] = '/';
-//                    }
-//                }
-
                 if (!ApplicationContext.getInstance().getSourcePath().equals(selectedFile)) {
 
 //                    ApplicationContext.getInstance().setDestinationPath(String.valueOf(tempArray));
@@ -437,9 +438,9 @@ public class ImageResizer extends JFrame {
     private class ResizeButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            if (!imagesToViewListModel.isEmpty() && !resizeDestinationPathTextField.getText().isEmpty()) {
+            if (!imagesToViewListModel.isEmpty() && !resizeDestinationPathTextField.getText().isEmpty() && (!widthTextField.getText().isEmpty() || !heightTextField.getText().isEmpty()) ) {
                 resizeButton.setEnabled(false);
-                ImageResizeWorker irw = new ImageResizeWorker();
+                irw = new ImageResizeWorker();
                 irw.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(final PropertyChangeEvent event) {
@@ -453,6 +454,12 @@ public class ImageResizer extends JFrame {
                   });
                 irw.execute();
             }
+        }
+    }
+
+    private class CancelResizeButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            irw.cancel(true);
         }
     }
 
@@ -472,28 +479,70 @@ public class ImageResizer extends JFrame {
     {
         @Override
         protected String doInBackground() throws Exception {
-            int width = Integer.parseInt(widthTextField.getText());
-            int height = Integer.parseInt(heightTextField.getText());
+            long startTime = System.currentTimeMillis();
+
+            int width = 0;
+            int height = 0;
+
+            try {
+                width = Integer.parseInt(widthTextField.getText());
+            } catch (Exception e) {
+                // Do nothing, go on with default value;
+            }
+
+            try {
+                height = Integer.parseInt(heightTextField.getText());
+            } catch (Exception e) {
+                // Do nothing, go on with default value;
+            }
 
             File destinationDirectory = new File(resizeDestinationPathTextField.getText(), "resized");
 
+            destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
+
+            publish("Rename process started");
+
             if (!destinationDirectory.mkdirs()) {
 //                TODO: Remove hard coded string
-                JOptionPane.showMessageDialog(ImageResizer.this, "Could not create directory: " + destinationDirectory.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                publish("Could not create directory:" + destinationDirectory.getAbsolutePath());
                 logger.logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
+
+                //              TODO: Remove hard coded string
+                return "Rename process aborted";
             } else {
+                publish("Destination directory created: " + destinationDirectory.getAbsolutePath());
+
                 int size = imagesToViewListModel.getSize();
 
                 for (int index = 0; index < size; index++) {
-                    ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory);
-//                    TODO: Remove hard coded string
-                    publish("Image: " + imagesToViewListModel.get(index).getAbsolutePath() + " resized");
-                    setProgress((index + 1) * 100 / size);
+                    if (!irw.isCancelled()) {
+                        long startTimeImageResize = System.currentTimeMillis();
+                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory);
+                        //                    TODO: Remove hard coded string
+                        publish("Image: " + imagesToViewListModel.get(index).getAbsolutePath() + " resized (" + (System.currentTimeMillis() - startTimeImageResize) + " milliseconds)");
+                        setProgress((index + 1) * 100 / size);
+                    } else {
+//                      TODO: Remove hard coded string
+                        publish("Resize cancelled");
+                        break;
+                    }
                 }
-            }
+
+                if (!irw.isCancelled()) {
+//              TODO: Remove hard coded string
+                    publish("Resize process took: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
 
 //                TODO: Remove hard coded string
-            return "Resize done";
+                    return "Resize done";
+                } else {
+//                  TODO: Remove hard coded string
+                    publish("Resize process cancelled after: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
+
+                    resizeButton.setEnabled(true);
+//                TODO: Remove hard coded string
+                    return "Resize cancelled";
+                }
+            }
         }
 
         @Override
@@ -508,8 +557,11 @@ public class ImageResizer extends JFrame {
             try {
                 JOptionPane.showMessageDialog(ImageResizer.this, get());
                 resizeButton.setEnabled(true);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e.getCause());
+            } catch (InterruptedException e) {
+                resizeButton.setEnabled(true);
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -524,7 +576,6 @@ public class ImageResizer extends JFrame {
         public void insertString(DocumentFilter.FilterBypass fp
                 , int offset, String string, AttributeSet aset)
                                     throws BadLocationException {
-
             // remove non-digits
             fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
         }
@@ -538,5 +589,4 @@ public class ImageResizer extends JFrame {
             fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
         }
     }
-
 }

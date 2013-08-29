@@ -138,6 +138,7 @@ import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.FileTreeCellRenderer;
+import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.HeadingPanel;
 import moller.javapeg.program.gui.ImageResizer;
 import moller.javapeg.program.gui.ImageSearchResultViewer;
@@ -735,16 +736,19 @@ public class MainGUI extends JFrame {
 
         GUIWindow mainGUI = gUI.getMain();
 
-        this.setSize(mainGUI.getSizeAndLocation().getSize());
 
         Point xyFromConfig = mainGUI.getSizeAndLocation().getLocation();
 
-        if(Screen.isOnScreen(xyFromConfig)) {
+        if (Screen.isVisibleOnScreen(mainGUI.getSizeAndLocation())) {
             this.setLocation(xyFromConfig);
+            this.setSize(mainGUI.getSizeAndLocation().getSize());
+
         } else {
-            this.setLocation(0,0);
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             logger.logERROR("Could not set location of Main GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+
+            this.setLocation(0,0);
+            this.setSize(GUIDefaults.MAINGUI_WIDTH, GUIDefaults.MAINGUI_HEIGHT);
         }
 
         try{
@@ -907,6 +911,7 @@ public class MainGUI extends JFrame {
         ImageIcon moveToTopImageIcon = new ImageIcon();
         ImageIcon moveToBottomImageIcon = new ImageIcon();
         ImageIcon copyImageListToClipBoardImageIcon = new ImageIcon();
+        ImageIcon openImageResizerImageIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
@@ -965,9 +970,9 @@ public class MainGUI extends JFrame {
 //            TODO: Remove hard coded string
             copyImageListdButton.setToolTipText("Copy Images in List to System Clipboard");
 
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/copy.gif");
-            copyImageListToClipBoardImageIcon.setImage(ImageIO.read(imageStream));
-            openImageResizerButton.setIcon(copyImageListToClipBoardImageIcon);
+            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
+            openImageResizerImageIcon.setImage(ImageIO.read(imageStream));
+            openImageResizerButton.setIcon(openImageResizerImageIcon);
 //          TODO: Remove hard coded string
             openImageResizerButton.setToolTipText("Open the Image resizer");
 

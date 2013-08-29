@@ -69,4 +69,13 @@ public class Screen {
 	public static boolean isOnScreen(Point coordinate) {
 	    return isOnScreen(coordinate, getScreens());
 	}
+
+	public static boolean isVisibleOnScreen(Rectangle sizeAndLocation) {
+	    for (Rectangle screen : getScreens()) {
+            if (sizeAndLocation.intersects(screen)) {
+                return true;
+            }
+        }
+	    return false;
+	}
 }
