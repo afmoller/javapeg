@@ -305,4 +305,47 @@ public class DirectoryUtil {
 
         return foundDirectories;
 	}
+
+	/**
+	 * This method will return a directory name that is unique within a given
+	 * parent directory.
+	 *
+	 * @param parentDirectory is the directory directory which shall contain
+	 *        the directory that must be unique.
+	 * @param directoryThatMustBeUnique is the directory that must be unique.
+	 *
+	 * @return a unique directory in the context of the directory specified by
+	 *         the parameter parentDirectory. The directory that must be unique
+	 *         is specified by the parameter directoryThatMustBeUnique. If the
+	 *         specified directory is already unique in the parent directory,
+	 *         then the directory is returned unmodified, otherwise a suffix
+	 *         will be added until the directory is unique. The suffix starts
+	 *         at 0 (zero) and is then incremented with 1 until a unique
+	 *         directory name is found.
+	 */
+	public static File getUniqueDirectory(File parentDirectory, File directoryThatMustBeUnique) {
+	    File[] directoryContent = parentDirectory.listFiles();
+
+	    String absolutePath = directoryThatMustBeUnique.getAbsolutePath();
+
+	    boolean notUnique = true;
+	    int suffix = 0;
+
+	    while (notUnique) {
+	        boolean matchFound = false;
+
+	        for (File file : directoryContent) {
+	            if (file.equals(directoryThatMustBeUnique)) {
+	                matchFound = true;
+	                directoryThatMustBeUnique = new File(absolutePath + suffix);
+	                suffix++;
+	                break;
+	            }
+	        }
+	        if (!matchFound) {
+	            notUnique = false;
+	        }
+	    }
+	    return directoryThatMustBeUnique;
+	}
 }
