@@ -1,8 +1,11 @@
 3.0:
 ====
+- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
+    - Implement saving of all input data in the Image Resizer.
+    - Add help section for the image resizer.
+- Implement Context aware menu in the menu bar.
 - Add possibility to save multiple rename templates
 - Add merge functionality from several source directories. in the "rename image" mode.
-- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
 - Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.
@@ -20,6 +23,7 @@
 - Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Add slide show functionality to Image Viewer.
+- Add histogram functionality in the image viewer
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
 - Add support for Linux
