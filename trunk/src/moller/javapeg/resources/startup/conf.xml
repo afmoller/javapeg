@@ -51,6 +51,13 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <width>800</width>
       <height>600</height>
     </helpViewer>
+    <imageResizer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>1280</width>
+      <height>700</height>
+      <splitPane id="vertical">440</splitPane>
+    </imageResizer>
   </gui>
   <updatesChecker>
     <enabled>true</enabled>

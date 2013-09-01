@@ -84,4 +84,5 @@ public class ConfigElement {
     public static final String PREVIEW_COMMENT_CATEGORIES_RATING = "previewCommentCategoriesRating";
     public static final String PREVIEW_AND_COMMENT = "previewAndComment";
     public static final String IMAGE_META_DATA = "imageMetaData";
+    public static final String IMAGE_RESIZER = "imageResizer";
 }

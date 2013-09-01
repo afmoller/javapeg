@@ -736,7 +736,6 @@ public class MainGUI extends JFrame {
 
         GUIWindow mainGUI = gUI.getMain();
 
-
         Point xyFromConfig = mainGUI.getSizeAndLocation().getLocation();
 
         if (Screen.isVisibleOnScreen(mainGUI.getSizeAndLocation())) {

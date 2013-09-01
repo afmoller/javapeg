@@ -17,7 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -232,7 +236,35 @@ public class ImageUtil {
 		return imageIcon;
 	}
 
-	public static void resizeAndStoreImage(File fileToResize, int width, int height, File destinationDirectory) throws IOException {
+	/**
+	 * This method resizes an image and stores the resized image to a specified
+	 * directory. If the
+	 *
+	 * @param fileToResize is the image file to resize.
+	 * @param width is the desired width of the resized image
+	 * @param height is the desired height of the resized image
+	 * @param destinationDirectory is to which directory the resized image
+	 *        shall be stored.
+	 * @param resizeMethod specifies which {@link Scalr.Method} to be used when
+	 *        the image is resized.
+	 * @throws IOException
+	 */
+	public static void resizeAndStoreImage(File fileToResize, int width, int height, File destinationDirectory, float quality) throws IOException {
+
+	    // Check size values
+	    if (width < 1 && height < 1) {
+	        throw new IllegalArgumentException("Both width and height argument may not be lower than 1 (one): " + width + " (width) and " + height + " (height)");
+	    }
+
+	    // Ensure no negative value is sent to Scalr
+	    if (width < 0) {
+	        width = 0;
+	    }
+
+	    // Ensure no negative value is sent to Scalr
+	    if (height < 0) {
+	        height = 0;
+	    }
 
 	    BufferedImage fileToResizeBufferedImage = ImageIO.read(fileToResize);
 
@@ -244,9 +276,56 @@ public class ImageUtil {
 	        mode = Mode.FIT_TO_WIDTH;
 	    }
 
-	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, Method.SPEED, mode, width, height);
+	    // Set best quality as default method
+	    Method resizeMethod = Method.ULTRA_QUALITY;
+
+	    if (quality == 0.25f) {
+	        resizeMethod = Method.SPEED;
+	    } else if (quality == 0.5f) {
+	        resizeMethod = Method.BALANCED;
+	    } else if (quality == 0.75f) {
+            resizeMethod = Method.QUALITY;
+        } else if (quality == 1.0f) {
+            resizeMethod = Method.ULTRA_QUALITY;
+        }
+
+	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, resizeMethod, mode, width, height);
 	    fileToResizeBufferedImage.flush();
 
-	    ImageIO.write(resizedBufferedImage, "jpg", new File(destinationDirectory, fileToResize.getName()));
+	    writeJpeg(resizedBufferedImage, new File(destinationDirectory, fileToResize.getName()), quality);
+
+	}
+
+	/**
+	 * Write a JPEG file setting the compression quality.
+	 *
+	 * @param image
+	 *                a BufferedImage to be saved
+	 * @param destFile
+	 *                destination file (absolute or relative path)
+	 * @param quality
+	 *                a float between 0 and 1, where 1 means uncompressed.
+	 * @throws IOException
+	 *                 in case of problems writing the file
+	 */
+	public static void writeJpeg(BufferedImage image, File destFile, float quality)
+	throws IOException {
+	    ImageWriter writer = null;
+	    FileImageOutputStream output = null;
+	    try {
+	        writer = ImageIO.getImageWritersByFormatName("jpeg").next();
+	        ImageWriteParam param = writer.getDefaultWriteParam();
+	        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+	        param.setCompressionQuality(quality);
+	        output = new FileImageOutputStream(destFile);
+	        writer.setOutput(output);
+	        IIOImage iioImage = new IIOImage(image, null, null);
+	        writer.write(null, iioImage, param);
+	    } catch (IOException ex) {
+	        throw ex;
+	    } finally {
+	        if (writer != null) writer.dispose();
+	        if (output != null) output.close();
+	    }
 	}
 }

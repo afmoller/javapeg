@@ -49,6 +49,7 @@
             <xs:element name="imageSearchResultViewer" type="config:GuiWindow" />
             <xs:element name="configViewer" type="config:GuiWindow" />
             <xs:element name="helpViewer" type="config:GuiWindow" />
+            <xs:element name="imageResizer" type="config:GuiWindow" />
         </xs:all>
     </xs:complexType>
     
