@@ -1,5 +1,6 @@
 3.0:
 ====
+- Apply the fixed isOnScreen test to all windows.
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
     - Implement saving of all input data in the Image Resizer.
     - Add help section for the image resizer.
