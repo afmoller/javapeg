@@ -30,6 +30,7 @@ public class GUIConfig {
         try {
             gui.setConfigViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.CONFIG_VIEWER, gUINode, XPathConstants.NODE), xPath));
             gui.setHelpViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.HELP_VIEWER, gUINode, XPathConstants.NODE), xPath));
+            gui.setImageResizer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_RESIZER, gUINode, XPathConstants.NODE), xPath));
             gui.setImageSearchResultViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_SEARCH_RESULT_VIEWER, gUINode, XPathConstants.NODE), xPath));
             gui.setImageViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_VIEWER, gUINode, XPathConstants.NODE), xPath));
             gui.setMain(createGUIWindow((Node)xPath.evaluate(ConfigElement.MAIN, gUINode, XPathConstants.NODE), xPath));
@@ -139,6 +140,17 @@ public class GUIConfig {
         XMLUtil.writeIndent(xmlsw, baseIndent.value());
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //    HELP VIEWER end
+
+        //    IMAGE RESIZER start
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.IMAGE_RESIZER, Tab.TWO, xmlsw);
+
+        writeSizeAndLocation(gUI.getImageResizer().getSizeAndLocation(), Tab.SIX, xmlsw);
+        writeSplitPanes(gUI.getImageResizer().getGuiWindowSplitPane(), Tab.SIX, xmlsw);
+
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+        //    IMAGE RESIZER end
 
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //  GUI end

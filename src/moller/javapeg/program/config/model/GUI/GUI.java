@@ -7,6 +7,7 @@ public class GUI {
     private GUIWindow imageSearchResultViewer;
     private GUIWindow configViewer;
     private GUIWindow helpViewer;
+    private GUIWindow imageResizer;
 
     public GUIWindow getMain() {
         return main;
@@ -23,6 +24,9 @@ public class GUI {
     public GUIWindow getHelpViewer() {
         return helpViewer;
     }
+    public GUIWindow getImageResizer() {
+        return imageResizer;
+    }
     public void setMain(GUIWindow main) {
         this.main = main;
     }
@@ -37,5 +41,8 @@ public class GUI {
     }
     public void setHelpViewer(GUIWindow helpViewer) {
         this.helpViewer = helpViewer;
+    }
+    public void setImageResizer(GUIWindow imageResizer) {
+        this.imageResizer = imageResizer;
     }
 }

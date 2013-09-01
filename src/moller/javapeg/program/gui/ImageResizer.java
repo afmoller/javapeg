@@ -26,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
@@ -52,8 +54,12 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -78,6 +84,8 @@ public class ImageResizer extends JFrame {
     private JTextField widthTextField;
     private JTextField heightTextField;
 
+    private JComboBox<Integer> qualityComboBox;
+
     private JList<File> imagesToViewList;
 
     private JButton resizeDestinationPathButton;
@@ -96,6 +104,8 @@ public class ImageResizer extends JFrame {
     private JProgressBar progressBar;
 
     private ImageResizeWorker irw;
+
+    private JSplitPane leftAndRightSplitpane;
 
     public ImageResizer(List<File> imagesToResize) {
 
@@ -128,18 +138,20 @@ public class ImageResizer extends JFrame {
 //        TODO: Remove hard coded string
         this.setTitle("Image Resizer");
 
-        Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
+        GUIWindow imageResizer = gUI.getImageResizer();
 
-        this.setSize(sizeAndLocation.getSize());
+        Point xyFromConfig = imageResizer.getSizeAndLocation().getLocation();
 
-        Point xyFromConfig = new Point(sizeAndLocation.getLocation());
-
-        if(Screen.isOnScreen(xyFromConfig)) {
+        if (Screen.isVisibleOnScreen(imageResizer.getSizeAndLocation())) {
             this.setLocation(xyFromConfig);
+            this.setSize(imageResizer.getSizeAndLocation().getSize());
+
         } else {
-            this.setLocation(0,0);
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             logger.logERROR("Could not set location of Image Resizer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+
+            this.setLocation(0,0);
+            this.setSize(GUIDefaults.IMAGE_RESIZER_WIDTH, GUIDefaults.IMAGE_RESIZER_HEIGHT);
         }
 
         try{
@@ -163,8 +175,16 @@ public class ImageResizer extends JFrame {
 
         this.getContentPane().setLayout(new GridBagLayout());
 
-        this.getContentPane().add(this.createLeftPanel(), posBackgroundPanel.expandH());
-        this.getContentPane().add(this.createRightPanel(), posBackgroundPanel.nextCol().expandH().expandW());
+        leftAndRightSplitpane = new JSplitPane();
+        leftAndRightSplitpane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        leftAndRightSplitpane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(imageResizer.getGuiWindowSplitPane(), ConfigElement.VERTICAL));
+        leftAndRightSplitpane.setLeftComponent(this.createLeftPanel());
+        leftAndRightSplitpane.setRightComponent(this.createRightPanel());
+
+        this.getContentPane().add(leftAndRightSplitpane, posBackgroundPanel.expandH().expandW());
+
+//        this.getContentPane().add(this.createLeftPanel(), posBackgroundPanel.expandH());
+//        this.getContentPane().add(this.createRightPanel(), posBackgroundPanel.nextCol().expandH().expandW());
     }
 
     private JPanel createLeftPanel() {
@@ -173,7 +193,7 @@ public class ImageResizer extends JFrame {
 
         GBHelper posImageAndPreviewPanel = new GBHelper();
 
-        imageAndPreviewPanel.add(this.createImageListPanel(), posImageAndPreviewPanel.expandH());
+        imageAndPreviewPanel.add(this.createImageListPanel(), posImageAndPreviewPanel.expandH().expandW());
         imageAndPreviewPanel.add(new Gap(2), posImageAndPreviewPanel.nextCol());
         imageAndPreviewPanel.add(this.createPreviewPanel(), posImageAndPreviewPanel.nextCol().expandH());
 
@@ -182,7 +202,7 @@ public class ImageResizer extends JFrame {
 
         GBHelper posBackgroundPanel= new GBHelper();
 
-        backgroundPanel.add(imageAndPreviewPanel, posBackgroundPanel.expandH());
+        backgroundPanel.add(imageAndPreviewPanel, posBackgroundPanel.expandH().expandW());
         backgroundPanel.add(new Gap(2), posBackgroundPanel.nextRow());
         backgroundPanel.add(this.createInputPanel(), posBackgroundPanel.nextRow().expandW());
 
@@ -276,9 +296,9 @@ public class ImageResizer extends JFrame {
         GBHelper posBackground = new GBHelper();
 
         backgroundPanel.add(imageListLabel, posBackground);
-        backgroundPanel.add(spImageList, posBackground.nextRow().expandH());
+        backgroundPanel.add(spImageList, posBackground.nextRow().expandH().expandW());
         backgroundPanel.add(new Gap(5), posBackground.nextRow());
-        backgroundPanel.add(buttonPanel, posBackground.nextRow());
+        backgroundPanel.add(buttonPanel, posBackground.nextRow().expandW());
 
         return backgroundPanel;
     }
@@ -346,6 +366,15 @@ public class ImageResizer extends JFrame {
         ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
 //      TODO: Remove hard coded string
+        JLabel qualityLabel = new JLabel("Quality");
+
+        qualityComboBox = new JComboBox<Integer>();
+        qualityComboBox.addItem(Integer.valueOf(100));
+        qualityComboBox.addItem(Integer.valueOf(75));
+        qualityComboBox.addItem(Integer.valueOf(50));
+        qualityComboBox.addItem(Integer.valueOf(25));
+
+//      TODO: Remove hard coded string
         resizeButton = new JButton("Resize");
         resizeButton.addActionListener(new ResizeButtonListener());
 
@@ -372,6 +401,9 @@ public class ImageResizer extends JFrame {
         backgroundPanel.add(heightLabel, posBackground.nextRow());
         backgroundPanel.add(heightTextField, posBackground.nextRow().expandW());
         backgroundPanel.add(new Gap(3), posBackground.nextRow());
+        backgroundPanel.add(qualityLabel, posBackground.nextRow());
+        backgroundPanel.add(qualityComboBox, posBackground.nextRow().expandW());
+        backgroundPanel.add(new Gap(3), posBackground.nextRow());
         backgroundPanel.add(buttonPanel, posBackground.nextRow());
 
         return backgroundPanel;
@@ -391,8 +423,19 @@ public class ImageResizer extends JFrame {
     }
 
     private void saveSettings() {
-        // TODO Auto-generated method stub
+        GUI gUI = configuration.getgUI();
 
+        if (this.isVisible()) {
+
+            Rectangle sizeAndLocation = gUI.getImageResizer().getSizeAndLocation();
+
+            sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+            sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
+        }
+
+        List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageResizer().getGuiWindowSplitPane();
+
+        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL, leftAndRightSplitpane.getDividerLocation());
     }
 
     private class ResizeDestinationPathButtonListener implements ActionListener {
@@ -496,6 +539,14 @@ public class ImageResizer extends JFrame {
                 // Do nothing, go on with default value;
             }
 
+            float quality = 10;
+
+            if (qualityComboBox.getItemAt(qualityComboBox.getSelectedIndex()) != null) {
+                quality = qualityComboBox.getItemAt(qualityComboBox.getSelectedIndex());
+            }
+
+            float floatQuality = quality / 100;
+
             File destinationDirectory = new File(resizeDestinationPathTextField.getText(), "resized");
 
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
@@ -517,7 +568,7 @@ public class ImageResizer extends JFrame {
                 for (int index = 0; index < size; index++) {
                     if (!irw.isCancelled()) {
                         long startTimeImageResize = System.currentTimeMillis();
-                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory);
+                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
                         //                    TODO: Remove hard coded string
                         publish("Image: " + imagesToViewListModel.get(index).getAbsolutePath() + " resized (" + (System.currentTimeMillis() - startTimeImageResize) + " milliseconds)");
                         setProgress((index + 1) * 100 / size);
