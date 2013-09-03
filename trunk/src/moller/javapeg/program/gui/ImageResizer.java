@@ -60,6 +60,7 @@ import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
+import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -124,6 +125,26 @@ public class ImageResizer extends JFrame {
 
     private void initiateGUI() {
         imagesToViewList.setSelectedIndex(0);
+
+        ResizeImages resizeImages = configuration.getResizeImages();
+
+        widthTextField.setText(resizeImages.getWidth().equals(-1) ? "" : Integer.toString(resizeImages.getWidth()));
+        heightTextField.setText(resizeImages.getHeight().equals(-1) ? "" : Integer.toString(resizeImages.getHeight()));
+
+        File pathDestination = resizeImages.getPathDestination();
+
+        while (pathDestination != null && !pathDestination.exists()) {
+            pathDestination = pathDestination.getParentFile();
+        }
+
+        resizeDestinationPathTextField.setText(pathDestination == null ? "" : pathDestination.getAbsolutePath());
+
+        Integer selectedQualityIndex = resizeImages.getSelectedQualityIndex();
+
+        if (!(selectedQualityIndex > -1) || !(selectedQualityIndex < qualityComboBox.getItemCount())) {
+            selectedQualityIndex = 0;
+        }
+        qualityComboBox.setSelectedIndex(selectedQualityIndex);
     }
 
     private void addListeners() {
@@ -436,6 +457,14 @@ public class ImageResizer extends JFrame {
         List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageResizer().getGuiWindowSplitPane();
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL, leftAndRightSplitpane.getDividerLocation());
+
+        ResizeImages resizeImages = configuration.getResizeImages();
+
+        resizeImages.setHeight(heightTextField.getText().equals("") ? -1 : Integer.parseInt(heightTextField.getText()));
+        resizeImages.setWidth(widthTextField.getText().equals("") ? -1 : Integer.parseInt(widthTextField.getText()));
+        resizeImages.setPathDestination(resizeDestinationPathTextField.getText().equals("") ? null : new File(resizeDestinationPathTextField.getText()));
+        resizeImages.setSelectedQualityIndex(qualityComboBox.getSelectedIndex());
+
     }
 
     private class ResizeDestinationPathButtonListener implements ActionListener {
@@ -446,14 +475,18 @@ public class ImageResizer extends JFrame {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setDialogTitle(lang.get("fileSelectionDialog.destinationPathFileChooser"));
 
+            if (!resizeDestinationPathTextField.getText().equals("")) {
+                File destinationPath = new File(resizeDestinationPathTextField.getText());
+                if (destinationPath.isDirectory() && destinationPath.canRead()) {
+                    chooser.setCurrentDirectory(destinationPath);
+                }
+            }
+
             if(chooser.showOpenDialog(ImageResizer.this) == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = chooser.getSelectedFile();
 
                 if (!ApplicationContext.getInstance().getSourcePath().equals(selectedFile)) {
-
-//                    ApplicationContext.getInstance().setDestinationPath(String.valueOf(tempArray));
                     resizeDestinationPathTextField.setText(selectedFile.getAbsolutePath());
-
                 } else {
                     JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.sameSourceAndDestination"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
                 }
@@ -502,7 +535,9 @@ public class ImageResizer extends JFrame {
 
     private class CancelResizeButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            irw.cancel(true);
+            if (irw != null && !irw.isCancelled()) {
+                irw.cancel(true);
+            }
         }
     }
 
@@ -518,8 +553,7 @@ public class ImageResizer extends JFrame {
         }
     }
 
-    private class ImageResizeWorker extends SwingWorker<String, String>
-    {
+    private class ImageResizeWorker extends SwingWorker<String, String> {
         @Override
         protected String doInBackground() throws Exception {
             long startTime = System.currentTimeMillis();

@@ -6,6 +6,7 @@ import javax.swing.tree.TreeNode;
 
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
+import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.Repository;
@@ -19,6 +20,7 @@ public class Configuration {
     private UpdatesChecker updatesChecker;
     private Language language;
     private RenameImages renameImages;
+    private ResizeImages resizeImages;
     private TagImages tagImages;
     private ThumbNail thumbNail;
     private ToolTips toolTips;
@@ -43,6 +45,9 @@ public class Configuration {
     }
     public RenameImages getRenameImages() {
         return renameImages;
+    }
+    public ResizeImages getResizeImages() {
+        return resizeImages;
     }
     public TagImages getTagImages() {
         return tagImages;
@@ -79,6 +84,9 @@ public class Configuration {
     }
     public void setRenameImages(RenameImages renameImages) {
         this.renameImages = renameImages;
+    }
+    public void setResizeImages(ResizeImages resizeImages) {
+        this.resizeImages = resizeImages;
     }
     public void setTagImages(TagImages tagImages) {
         this.tagImages = tagImages;

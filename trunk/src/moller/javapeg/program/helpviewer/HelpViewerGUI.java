@@ -30,6 +30,7 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.gui.CustomizedJScrollPane;
+import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
@@ -72,13 +73,17 @@ public class HelpViewerGUI extends JFrame {
 
         Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
-        if(Screen.isOnScreen(xyFromConfig)) {
+        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
             this.setLocation(xyFromConfig);
+            this.setSize(sizeAndLocation.getSize());
         } else {
-            this.setLocation(0,0);
             JOptionPane.showMessageDialog(null, lang.get("helpViewerGUI.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             logger.logERROR("Could not set location of Help Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+
+            this.setLocation(0,0);
+            this.setSize(GUIDefaults.HELP_VIEWER_WIDTH, GUIDefaults.HELP_VIEWER_HEIGHT);
         }
+
         this.setLayout(new BorderLayout());
 
         try{
