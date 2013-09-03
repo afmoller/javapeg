@@ -11,6 +11,7 @@
             <xs:element name="updatesChecker"     type="config:UpdatesChecker" />
             <xs:element name="language"           type="config:Language" />
             <xs:element name="renameImages"       type="config:RenameImages" />
+            <xs:element name="resizeImages"       type="config:ResizeImages" />
             <xs:element name="tagImages"          type="config:TagImages" />
             <xs:element name="thumbNail"          type="config:ThumbNail" />
             <xs:element name="toolTips"           type="config:ToolTips" />
@@ -111,6 +112,22 @@
             <xs:element name="useLastModifiedTime" type="xs:boolean" />
             <xs:element name="cameraModelNameMaximumLength" type="xs:int" />
             <xs:element name="progressLogTimestampFormat" type="xs:string" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ResizeImages">
+        <xs:all>
+            <xs:element name="height" type="xs:int" nillable="true" />
+            <xs:element name="width" type="xs:int" nillable="true" />
+            <xs:element name="pathDestination" type="xs:anyURI" />
+            <xs:element name="selectedQualityIndex">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:minInclusive value="0" />
+                        <xs:maxInclusive value="3" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:all>
     </xs:complexType>
     

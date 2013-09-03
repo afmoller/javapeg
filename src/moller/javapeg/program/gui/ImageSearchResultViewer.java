@@ -109,12 +109,15 @@ public class ImageSearchResultViewer extends JFrame {
 
         Point xyFromConfig = new Point(sizeAndLocation.getLocation());
 
-        if(Screen.isOnScreen(xyFromConfig)) {
+        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
             this.setLocation(xyFromConfig);
+            this.setSize(sizeAndLocation.getSize());
         } else {
-            this.setLocation(0,0);
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             logger.logERROR("Could not set location of Image Search Result Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+
+            this.setLocation(0,0);
+            this.setSize(GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_WIDTH, GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_HEIGHT);
         }
 
         try{

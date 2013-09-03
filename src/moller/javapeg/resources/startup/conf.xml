@@ -81,6 +81,12 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <cameraModelNameMaximumLength>0</cameraModelNameMaximumLength>
     <progressLogTimestampFormat>yyyy-MM-dd' 'HH:mm:ss:SSS</progressLogTimestampFormat>
   </renameImages>
+  <resizeImages>
+    <height>100</height>
+    <width>150</width>
+    <pathDestination/>
+    <selectedQualityIndex>0</selectedQualityIndex>
+  </resizeImages>
   <tagImages>
     <categories>
       <warnWhenRemove>true</warnWhenRemove>

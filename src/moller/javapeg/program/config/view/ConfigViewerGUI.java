@@ -80,6 +80,7 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomCellRenderer;
+import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
@@ -280,13 +281,17 @@ public class ConfigViewerGUI extends JFrame {
 
         Point xyFromConfig = sizeAndLocation.getLocation();
 
-        if(Screen.isOnScreen(xyFromConfig)) {
+        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
             this.setLocation(xyFromConfig);
+            this.setSize(sizeAndLocation.getSize());
         } else {
-            this.setLocation(0,0);
-            JOptionPane.showMessageDialog(null, lang.get("configviewer.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             logger.logERROR("Could not set location of Config Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+            JOptionPane.showMessageDialog(null, lang.get("configviewer.window.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+
+            this.setLocation(0,0);
+            this.setSize(GUIDefaults.CONFIG_VIEWER_WIDTH, GUIDefaults.CONFIG_VIEWER_HEIGHT);
         }
+
         this.setLayout(new BorderLayout());
 
         try{

@@ -30,6 +30,7 @@ import moller.javapeg.program.config.controller.section.LanguageConfig;
 import moller.javapeg.program.config.controller.section.LoggingConfig;
 import moller.javapeg.program.config.controller.section.RenameImagesConfig;
 import moller.javapeg.program.config.controller.section.RepositoryConfig;
+import moller.javapeg.program.config.controller.section.ResizeImagesConfig;
 import moller.javapeg.program.config.controller.section.TagImagesConfig;
 import moller.javapeg.program.config.controller.section.ThumbNailConfig;
 import moller.javapeg.program.config.controller.section.ToolTipsConfig;
@@ -152,6 +153,7 @@ public class ConfigHandler {
             configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig((String)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.JAVAPEG_CLIENT_ID, doc, XPathConstants.STRING)));
             configuration.setLanguage(LanguageConfig.getLanguageConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LANGUAGE, doc, XPathConstants.NODE), xPath));
             configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RENAME_IMAGES, doc, XPathConstants.NODE), xPath));
+            configuration.setResizeImages(ResizeImagesConfig.getResizeImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RESIZE_IMAGES, doc, XPathConstants.NODE), xPath));
             configuration.setRepository(RepositoryConfig.getRepositoryConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.REPOSITORY, doc, XPathConstants.NODE), xPath));
             configuration.setTagImages(TagImagesConfig.getTagImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TAG_IMAGES, doc, XPathConstants.NODE), xPath));
             configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.THUMBNAIL, doc, XPathConstants.NODE), xPath));
@@ -212,6 +214,9 @@ public class ConfigHandler {
 
             // RENAME IMAGES
             RenameImagesConfig.writeRenameImagesConfig(configuration.getRenameImages(), Tab.TWO, w);
+
+            // RESIZE IMAGES
+            ResizeImagesConfig.writeResizeImagesConfig(configuration.getResizeImages(),Tab.TWO, w);
 
             // TAG IMAGES
             TagImagesConfig.writeTagImagesConfig(configuration.getTagImages(), Tab.TWO, w);

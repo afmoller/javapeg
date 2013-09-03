@@ -85,4 +85,6 @@ public class ConfigElement {
     public static final String PREVIEW_AND_COMMENT = "previewAndComment";
     public static final String IMAGE_META_DATA = "imageMetaData";
     public static final String IMAGE_RESIZER = "imageResizer";
+    public static final String RESIZE_IMAGES = "resizeImages";
+    public static final String SELECTED_QUALITY_INDEX = "selectedQualityIndex";
 }
