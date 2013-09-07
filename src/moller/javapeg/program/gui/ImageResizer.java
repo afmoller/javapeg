@@ -156,8 +156,7 @@ public class ImageResizer extends JFrame {
     private void createMainFrame() {
         GUI gUI = configuration.getgUI();
 
-//        TODO: Remove hard coded string
-        this.setTitle("Image Resizer");
+        this.setTitle(lang.get("imageresizer.gui.title"));
 
         GUIWindow imageResizer = gUI.getImageResizer();
 
@@ -249,8 +248,7 @@ public class ImageResizer extends JFrame {
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-//        TODO: remove hard coded string
-        JLabel outputLabel = new JLabel("PROCESS LOG");
+        JLabel outputLabel = new JLabel(lang.get("imageresizer.processlog.title"));
         outputLabel.setForeground(Color.GRAY);
 
         outputTextArea = new CustomizedJTextArea();
@@ -374,20 +372,17 @@ public class ImageResizer extends JFrame {
         resizeDestinationPathButton.setPreferredSize(new Dimension(30, 20));
         resizeDestinationPathButton.setMinimumSize(new Dimension(30, 20));
 
-//        TODO: Remove hard coded string
-        JLabel widthLabel = new JLabel("Width");
+        JLabel widthLabel = new JLabel(lang.get("imageresizer.resize.input.width"));
 
         widthTextField = new JTextField();
         ((AbstractDocument)widthTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
-//      TODO: Remove hard coded string
-        JLabel heightLabel = new JLabel("Height");
+        JLabel heightLabel = new JLabel(lang.get("imageresizer.resize.input.height"));
 
         heightTextField = new JTextField();
         ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
-//      TODO: Remove hard coded string
-        JLabel qualityLabel = new JLabel("Quality");
+        JLabel qualityLabel = new JLabel(lang.get("imageresizer.resize.input.quality"));
 
         qualityComboBox = new JComboBox<Integer>();
         qualityComboBox.addItem(Integer.valueOf(100));
@@ -395,12 +390,10 @@ public class ImageResizer extends JFrame {
         qualityComboBox.addItem(Integer.valueOf(50));
         qualityComboBox.addItem(Integer.valueOf(25));
 
-//      TODO: Remove hard coded string
-        resizeButton = new JButton("Resize");
+        resizeButton = new JButton(lang.get("imageresizer.resize.input.button.resize"));
         resizeButton.addActionListener(new ResizeButtonListener());
 
-//      TODO: Remove hard coded string
-        cancelResizeButton = new JButton("Cancel");
+        cancelResizeButton = new JButton(lang.get("imageresizer.resize.input.button.cancel"));
         cancelResizeButton.addActionListener(new CancelResizeButtonListener());
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -585,17 +578,15 @@ public class ImageResizer extends JFrame {
 
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
 
-            publish("Rename process started");
+            publish(lang.get("imageresizer.resize.process.started"));
 
             if (!destinationDirectory.mkdirs()) {
-//                TODO: Remove hard coded string
-                publish("Could not create directory:" + destinationDirectory.getAbsolutePath());
+                publish(lang.get("imageresizer.resize.process.couldNotCreateDirectory") + ": " + destinationDirectory.getAbsolutePath());
                 logger.logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
 
-                //              TODO: Remove hard coded string
-                return "Rename process aborted";
+                return lang.get("imageresizer.resize.process.aborted");
             } else {
-                publish("Destination directory created: " + destinationDirectory.getAbsolutePath());
+                publish(lang.get("imageresizer.resize.process.destination.directory.created") + " " + destinationDirectory.getAbsolutePath());
 
                 int size = imagesToViewListModel.getSize();
 
@@ -607,8 +598,7 @@ public class ImageResizer extends JFrame {
                         publish("Image: " + imagesToViewListModel.get(index).getAbsolutePath() + " resized (" + (System.currentTimeMillis() - startTimeImageResize) + " milliseconds)");
                         setProgress((index + 1) * 100 / size);
                     } else {
-//                      TODO: Remove hard coded string
-                        publish("Resize cancelled");
+                        publish(lang.get("imageresizer.resize.process.cancelled"));
                         break;
                     }
                 }
@@ -616,16 +606,13 @@ public class ImageResizer extends JFrame {
                 if (!irw.isCancelled()) {
 //              TODO: Remove hard coded string
                     publish("Resize process took: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
-
-//                TODO: Remove hard coded string
-                    return "Resize done";
+                    return lang.get("imageresizer.resize.process.done");
                 } else {
 //                  TODO: Remove hard coded string
                     publish("Resize process cancelled after: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
 
                     resizeButton.setEnabled(true);
-//                TODO: Remove hard coded string
-                    return "Resize cancelled";
+                    return lang.get("imageresizer.resize.process.cancelled");
                 }
             }
         }

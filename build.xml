@@ -44,6 +44,7 @@
 				<include name="**/common.en" />
 				<include name="**/configviewer.en" />
 				<include name="**/imagerepository.en" />
+				<include name="**/imageresizer.en" />
 				<include name="**/imageviewer.en" />
 				<include name="**/initialgui.en" />
 				<include name="**/javapeg.en" />
@@ -52,6 +53,7 @@
 				<include name="**/common.sv" />
 				<include name="**/configviewer.sv" />
 				<include name="**/imagerepository.sv" />
+				<include name="**/imageresizer.sv" />
 				<include name="**/imageviewer.sv" />
 				<include name="**/initialgui.sv" />
 				<include name="**/javapeg.sv" />

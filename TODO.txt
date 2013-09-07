@@ -2,6 +2,7 @@
 ====
 - Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
     - Add help section for the image resizer.
+- Implement image cache for the Image Viewer.    
 - Implement Context aware menu in the menu bar.
 - Add possibility to save multiple rename templates
 - Add merge functionality from several source directories. in the "rename image" mode.
