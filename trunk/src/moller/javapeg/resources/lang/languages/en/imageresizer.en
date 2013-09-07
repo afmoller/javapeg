@@ -1,0 +1,32 @@
+# This is the English language file for the Image resizer part of JavaPEG.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
+imageresizer.gui.title = Image Resizer
+
+imageresizer.processlog.title = PROCESS LOG
+
+imageresizer.resize.input.width   = Width
+imageresizer.resize.input.height  = Height
+imageresizer.resize.input.quality = Quality
+
+imageresizer.resize.input.button.resize = Resize
+imageresizer.resize.input.button.cancel = Cancel
+
+imageresizer.resize.process.destination.directory.created = Destination directory created:
+imageresizer.resize.process.couldNotCreateDirectory       = Could not create directory
+imageresizer.resize.process.started                       = Resize process started
+imageresizer.resize.process.aborted                       = Resize process aborted
+imageresizer.resize.process.cancelled                     = Resize cancelled
+imageresizer.resize.process.done                          = Resize done
