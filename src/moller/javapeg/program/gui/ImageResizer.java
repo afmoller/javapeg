@@ -594,8 +594,8 @@ public class ImageResizer extends JFrame {
                     if (!irw.isCancelled()) {
                         long startTimeImageResize = System.currentTimeMillis();
                         ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
-                        //                    TODO: Remove hard coded string
-                        publish("Image: " + imagesToViewListModel.get(index).getAbsolutePath() + " resized (" + (System.currentTimeMillis() - startTimeImageResize) + " milliseconds)");
+
+                        publish(String.format(lang.get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
                         setProgress((index + 1) * 100 / size);
                     } else {
                         publish(lang.get("imageresizer.resize.process.cancelled"));
@@ -604,12 +604,10 @@ public class ImageResizer extends JFrame {
                 }
 
                 if (!irw.isCancelled()) {
-//              TODO: Remove hard coded string
-                    publish("Resize process took: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
+                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
                     return lang.get("imageresizer.resize.process.done");
                 } else {
-//                  TODO: Remove hard coded string
-                    publish("Resize process cancelled after: " + (System.currentTimeMillis() - startTime) / 1000 + " seconds");
+                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
 
                     resizeButton.setEnabled(true);
                     return lang.get("imageresizer.resize.process.cancelled");
@@ -638,15 +636,28 @@ public class ImageResizer extends JFrame {
         }
     }
 
+    /**
+     * Convenience method for adding a log statement to the process log. After
+     * each log statement there is automatically a newline added, and the log
+     * is automatically scrolled to bottom.
+     *
+     * @param logMessage is the string that shall be added to the log.
+     */
     public void setLogMessage(String logMessage) {
         String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
         outputTextArea.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
     }
 
+    /**
+     * This class makes it possible to restrict the input to integers only when
+     * applied to for instance a {@link JTextField}.
+     *
+     * @author Fredrik
+     *
+     */
     private class IntegerDocumentFilter extends DocumentFilter {
         @Override
-        public void insertString(DocumentFilter.FilterBypass fp
-                , int offset, String string, AttributeSet aset)
+        public void insertString(DocumentFilter.FilterBypass fp, int offset, String string, AttributeSet aset)
                                     throws BadLocationException {
             // remove non-digits
             fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
@@ -654,8 +665,7 @@ public class ImageResizer extends JFrame {
 
 
         @Override
-        public void replace(DocumentFilter.FilterBypass fp, int offset
-                        , int length, String string, AttributeSet aset)
+        public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string, AttributeSet aset)
                                             throws BadLocationException {
          // remove non-digits
             fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
