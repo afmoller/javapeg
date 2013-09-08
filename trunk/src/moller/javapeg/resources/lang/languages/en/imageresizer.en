@@ -16,6 +16,9 @@
 imageresizer.gui.title = Image Resizer
 
 imageresizer.processlog.title = PROCESS LOG
+imageresizer.processlog.image.processed = Image: %s resized (%s) milliseconds)
+imageresizer.processlog.image.resize.done = Resize process took: %s seconds
+imageresizer.processlog.image.resize.done.cancelled = Resize process cancelled after: %s seconds
 
 imageresizer.resize.input.width   = Width
 imageresizer.resize.input.height  = Height
@@ -30,3 +33,4 @@ imageresizer.resize.process.started                       = Resize process start
 imageresizer.resize.process.aborted                       = Resize process aborted
 imageresizer.resize.process.cancelled                     = Resize cancelled
 imageresizer.resize.process.done                          = Resize done
+

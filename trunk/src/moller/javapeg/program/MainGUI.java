@@ -966,14 +966,12 @@ public class MainGUI extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/copy.gif");
             copyImageListToClipBoardImageIcon.setImage(ImageIO.read(imageStream));
             copyImageListdButton.setIcon(copyImageListToClipBoardImageIcon);
-//            TODO: Remove hard coded string
-            copyImageListdButton.setToolTipText("Copy Images in List to System Clipboard");
+            copyImageListdButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.copyImageListToClipboard"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
             openImageResizerImageIcon.setImage(ImageIO.read(imageStream));
             openImageResizerButton.setIcon(openImageResizerImageIcon);
-//          TODO: Remove hard coded string
-            openImageResizerButton.setToolTipText("Open the Image resizer");
+            openImageResizerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageResizer"));
 
 
         } catch (IOException iox) {

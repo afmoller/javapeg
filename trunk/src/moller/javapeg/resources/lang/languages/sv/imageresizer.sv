@@ -16,6 +16,9 @@
 imageresizer.gui.title = Bildstorleksändrare
 
 imageresizer.processlog.title = PROCESSLOGG
+imageresizer.processlog.image.processed = Bild: %s storleksändrad (%s) millisekunder)
+imageresizer.processlog.image.resize.done = Storleksändringsprocessen tog: %s sekunder
+imageresizer.processlog.image.resize.done.cancelled = Storleksändringsprocessen avbruten efter: %s sekunder
 
 imageresizer.resize.input.width   = Bredd
 imageresizer.resize.input.height  = Höjd
