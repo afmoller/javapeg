@@ -566,13 +566,11 @@ public class ImageResizer extends JFrame {
                 // Do nothing, go on with default value;
             }
 
-            float quality = 10;
+            float quality = 100;
 
             if (qualityComboBox.getItemAt(qualityComboBox.getSelectedIndex()) != null) {
                 quality = qualityComboBox.getItemAt(qualityComboBox.getSelectedIndex());
             }
-
-            float floatQuality = quality / 100;
 
             File destinationDirectory = new File(resizeDestinationPathTextField.getText(), "resized");
 
@@ -593,8 +591,9 @@ public class ImageResizer extends JFrame {
                 for (int index = 0; index < size; index++) {
                     if (!irw.isCancelled()) {
                         long startTimeImageResize = System.currentTimeMillis();
-                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
 
+                        float floatQuality = quality / 100;
+                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
                         publish(String.format(lang.get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
                         setProgress((index + 1) * 100 / size);
                     } else {

@@ -268,12 +268,20 @@ public class ImageUtil {
 
 	    BufferedImage fileToResizeBufferedImage = ImageIO.read(fileToResize);
 
+
+	    // When both width and height are given the respect those values,
+	    // otherwise let Scalr calculate the missing value according to the
+	    // images aspect ratio.
 	    Scalr.Mode mode;
 
-	    if (width == 0) {
-	        mode = Mode.FIT_TO_HEIGHT;
+	    if (width > 0 && height > 0) {
+	        mode = Mode.FIT_EXACT;
 	    } else {
-	        mode = Mode.FIT_TO_WIDTH;
+	        if (width == 0) {
+	            mode = Mode.FIT_TO_HEIGHT;
+	        } else {
+	            mode = Mode.FIT_TO_WIDTH;
+	        }
 	    }
 
 	    // Set best quality as default method
