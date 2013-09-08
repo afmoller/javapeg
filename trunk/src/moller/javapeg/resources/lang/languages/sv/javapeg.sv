@@ -256,6 +256,7 @@ helpViewerGUI.tree.programHelpViewImages      = VISA BILDER
 helpViewerGUI.tree.programHelpImagesTag       = TAGGA BILDER
 helpViewerGUI.tree.programHelpImagesSearch    = SÖK BILDER
 helpViewerGUI.tree.programHelpImageViewer     = BILDVISARE
+helpViewerGUI.tree.programHelpImageResizer    = BILDSTORLEKSÄNDRARE
 helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
 helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
 helpViewerGUI.tree.references                 = REFERENSER / TACK TILL

@@ -257,6 +257,7 @@ helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
 helpViewerGUI.tree.programHelpImagesTag       = TAG IMAGES
 helpViewerGUI.tree.programHelpImagesSearch    = SEARCH IMAGES
 helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
+helpViewerGUI.tree.programHelpImageResizer    = IMAGE RESIZER
 helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
 helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
 helpViewerGUI.tree.references                 = REFERENCES / CREDITS

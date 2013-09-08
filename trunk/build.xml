@@ -75,6 +75,7 @@
 				<include name="**/user_manual_image_search" />
 				<include name="**/user_manual_image_tag" />
 				<include name="**/user_manual_imageviewer" />
+				<include name="**/user_manual_imageresizer" />
 				<include name="**/user_manual_overview" />
 				<include name="**/user_manual_rename" />
 				<include name="**/user_manual_viewimages" />
