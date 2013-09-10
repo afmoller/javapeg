@@ -1,10 +1,9 @@
 BILDVISARE<LF>
 ==========<LF>
-JavaPEG har möjlighet att visa bilder. De bilder som kan visas är sådanna som lagts till i "BILDLISTA"-listan i fliken "VISA BILDER". Se hjälpavsnitt för "VISA BILDER" för hjälp med att skapa en bildlista.
+JavaPEG har möjlighet att visa bilder. De bilder som kan visas är sådanna som lagts till i "BILDLISTA"-listan i fliken "SÖK / VISA BILDER". Se hjälpavsnitt för "VISA BILDER" för hjälp med att skapa en bildlista.
 <LF>
 <LF>
-1:<LF>
-Om en lista med bilder skapats enligt ovan så kan knappen "Visa valda bilder i bildvisaren" i tabben "SÖK / VISA BILDER" tryckas på får att få fram bildvisaren, annars skapa en bildlista först.
+Om en lista med bilder skapats enligt ovan så kan knappen "Visa valda bilder i bildvisaren" i tabben "SÖK / VISA BILDER" tryckas på för att få fram bildvisaren, annars skapa en bildlista först.
 <LF>
 <LF>
 Egenskaper för bildvisaren:
