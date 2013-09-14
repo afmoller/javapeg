@@ -7,6 +7,12 @@ import java.nio.file.Files;
 import moller.javapeg.program.C;
 import moller.util.io.DirectoryUtil;
 
+/**
+ * This class contains methods which are used when JavaPEG is booting up.
+ *
+ * @author Fredrik
+ *
+ */
 public class ApplicationBootUtil {
 
     private static String FIRST_LAUNCH = "firstLaunch";

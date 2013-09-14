@@ -10,6 +10,12 @@
  
  3.0 (2013-xx-xx)
  
+ + An image resize functionality has been added to JavaPEG. It can batch resize
+   images into specified sizes and qualities, either by specifying the width 
+   (height will be calculated), height (width will be calculated) or both (the
+   exact given sizes will be used without taking the original images aspect 
+   ratios into consideration) 
+ 
  + At the first start of JavaPEG the user will be shown an application 
    configuration form, in which it is either possible to set the language to be
    used by JavaPEG, or to do a full import of a configuration from an 
@@ -95,7 +101,7 @@
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in this version.  
    
- ~ The JavaPEG configuration file uses now a custom XML format specifically
+ ~ The JavaPEG configuration file now uses a custom XML format specifically
    developed for this application.  
    
  ~ The directory selection tree to the left in the main windows is enhanced to

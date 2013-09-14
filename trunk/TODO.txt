@@ -1,7 +1,5 @@
 3.0:
 ====
-- Make it possible to create scaled versions of images, to fit, for instance in a digital photo frame.
-    - Add help section for the image resizer.
 - Fix the logging configuration page so it looks like all other configuration pages.
 - Align all sections of the the configuration pages so they are aligned top-left.     
 - Implement image cache for the Image Viewer.    

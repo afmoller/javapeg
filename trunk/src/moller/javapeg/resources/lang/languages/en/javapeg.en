@@ -412,6 +412,7 @@ statusbar.message.selectedPath              = Selected Path:
 ##############################################################################################################
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
+tabbedpane.imageMerge  = MERGE IMAGES
 tabbedpane.imageRename = RENAME IMAGES
 tabbedpane.imageView   = SEARCH / VIEW IMAGES
 tabbedpane.imageTag    = TAG IMAGES

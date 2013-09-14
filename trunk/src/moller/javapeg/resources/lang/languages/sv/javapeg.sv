@@ -405,7 +405,6 @@ metadatapanel.tableheader.value    = VÄRDE
 ##############################################################################################################
 # S T A T U S  B A R  M E S S A G E S                                                                        #
 ##############################################################################################################
-
 statusbar.message.amountOfRows              = Antal rader
 statusbar.message.amountOfColumns           = Antal kolumner
 statusbar.message.amountOfImagesInDirectory = Antal bilder i katalogen
@@ -414,6 +413,7 @@ statusbar.message.selectedPath              = Vald sökväg:
 ##############################################################################################################
 # T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
 ##############################################################################################################
+tabbedpane.imageMerge  = SLÅ IHOP BILDER
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
 tabbedpane.imageView   = SÖK / VISA BILDER
 tabbedpane.imageTag    = TAGGA BILDER

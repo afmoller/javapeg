@@ -202,9 +202,6 @@ public class ImageResizer extends JFrame {
         leftAndRightSplitpane.setRightComponent(this.createRightPanel());
 
         this.getContentPane().add(leftAndRightSplitpane, posBackgroundPanel.expandH().expandW());
-
-//        this.getContentPane().add(this.createLeftPanel(), posBackgroundPanel.expandH());
-//        this.getContentPane().add(this.createRightPanel(), posBackgroundPanel.nextCol().expandH().expandW());
     }
 
     private JPanel createLeftPanel() {
