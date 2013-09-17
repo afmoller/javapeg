@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -23,7 +24,9 @@ import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 
 /**
@@ -53,6 +56,7 @@ public class ImageMergeTab extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private static Language lang;
+    private static Logger logger;
 
     private JButton removeSelectedDirectoryButton;
 
@@ -62,9 +66,9 @@ public class ImageMergeTab extends JPanel {
         super();
 
         lang = Language.getInstance();
+        logger = Logger.getInstance();
 
         this.createPanel();
-
 
     }
 
@@ -113,6 +117,8 @@ public class ImageMergeTab extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(directoriesToMergeList);
 
+        DestinationDirectorySelector destinationDirectorySelector = new DestinationDirectorySelector(true);
+
         InputStream imageStream = null;
 
         ImageIcon removePictureImageIcon = new ImageIcon();
@@ -139,12 +145,10 @@ public class ImageMergeTab extends JPanel {
 
         backgroundPanel.add(directoryListLabel, posBackgroundPanel);
         backgroundPanel.add(scrollPane, posBackgroundPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(destinationDirectorySelector, posBackgroundPanel.nextRow().expandH().expandW());
         backgroundPanel.add(buttonPanel, posBackgroundPanel.nextRow().expandW());
 
         return backgroundPanel;
     }
-
-
-
 
 }

@@ -2,7 +2,6 @@ package moller.javapeg.program.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -27,7 +26,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -61,7 +59,7 @@ import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
-import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -81,7 +79,6 @@ public class ImageResizer extends JFrame {
 
     private DefaultListModel<File> imagesToViewListModel;
 
-    private JTextField resizeDestinationPathTextField;
     private JTextField widthTextField;
     private JTextField heightTextField;
 
@@ -89,7 +86,6 @@ public class ImageResizer extends JFrame {
 
     private JList<File> imagesToViewList;
 
-    private JButton resizeDestinationPathButton;
     private JButton resizeButton;
     private JButton cancelResizeButton;
     private JButton removeSelectedImagesButton;
@@ -107,6 +103,8 @@ public class ImageResizer extends JFrame {
     private ImageResizeWorker irw;
 
     private JSplitPane leftAndRightSplitpane;
+
+    private DestinationDirectorySelector destinationDirectorySelector;
 
     public ImageResizer(List<File> imagesToResize) {
 
@@ -137,7 +135,7 @@ public class ImageResizer extends JFrame {
             pathDestination = pathDestination.getParentFile();
         }
 
-        resizeDestinationPathTextField.setText(pathDestination == null ? "" : pathDestination.getAbsolutePath());
+        destinationDirectorySelector.setText(pathDestination == null ? "" : pathDestination.getAbsolutePath());
 
         Integer selectedQualityIndex = resizeImages.getSelectedQualityIndex();
 
@@ -346,28 +344,7 @@ public class ImageResizer extends JFrame {
 
     private JPanel createInputPanel() {
 
-        JLabel resizeDestinationPathLabel = new JLabel(lang.get("labels.destinationPath"));
-        resizeDestinationPathLabel.setForeground(Color.GRAY);
-
-        ImageIcon openPictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif")){
-            openPictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image open.gif");
-            logger.logERROR(iox);
-        }
-
-        resizeDestinationPathTextField = new JTextField();
-        resizeDestinationPathTextField.setEditable(false);
-        resizeDestinationPathTextField.setBackground(Color.WHITE);
-
-        resizeDestinationPathButton = new JButton(openPictureImageIcon);
-        resizeDestinationPathButton.setActionCommand("destinationPathButton");
-        resizeDestinationPathButton.addActionListener(new ResizeDestinationPathButtonListener());
-
-        resizeDestinationPathButton.setToolTipText(lang.get("tooltip.destinationPathButton"));
-        resizeDestinationPathButton.setPreferredSize(new Dimension(30, 20));
-        resizeDestinationPathButton.setMinimumSize(new Dimension(30, 20));
+        destinationDirectorySelector = new DestinationDirectorySelector(false);
 
         JLabel widthLabel = new JLabel(lang.get("imageresizer.resize.input.width"));
 
@@ -402,9 +379,7 @@ public class ImageResizer extends JFrame {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
-        backgroundPanel.add(resizeDestinationPathLabel, posBackground);
-        backgroundPanel.add(resizeDestinationPathTextField, posBackground.nextRow().expandW());
-        backgroundPanel.add(resizeDestinationPathButton, posBackground.nextCol());
+        backgroundPanel.add(destinationDirectorySelector, posBackground);
         backgroundPanel.add(new Gap(3), posBackground.nextRow());
         backgroundPanel.add(widthLabel, posBackground.nextRow());
         backgroundPanel.add(widthTextField, posBackground.nextRow().expandW());
@@ -452,36 +427,9 @@ public class ImageResizer extends JFrame {
 
         resizeImages.setHeight(heightTextField.getText().equals("") ? -1 : Integer.parseInt(heightTextField.getText()));
         resizeImages.setWidth(widthTextField.getText().equals("") ? -1 : Integer.parseInt(widthTextField.getText()));
-        resizeImages.setPathDestination(resizeDestinationPathTextField.getText().equals("") ? null : new File(resizeDestinationPathTextField.getText()));
+        resizeImages.setPathDestination(destinationDirectorySelector.getText().equals("") ? null : new File(destinationDirectorySelector.getText()));
         resizeImages.setSelectedQualityIndex(qualityComboBox.getSelectedIndex());
 
-    }
-
-    private class ResizeDestinationPathButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            chooser.setDialogTitle(lang.get("fileSelectionDialog.destinationPathFileChooser"));
-
-            if (!resizeDestinationPathTextField.getText().equals("")) {
-                File destinationPath = new File(resizeDestinationPathTextField.getText());
-                if (destinationPath.isDirectory() && destinationPath.canRead()) {
-                    chooser.setCurrentDirectory(destinationPath);
-                }
-            }
-
-            if(chooser.showOpenDialog(ImageResizer.this) == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = chooser.getSelectedFile();
-
-                if (!ApplicationContext.getInstance().getSourcePath().equals(selectedFile)) {
-                    resizeDestinationPathTextField.setText(selectedFile.getAbsolutePath());
-                } else {
-                    JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.sameSourceAndDestination"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
     }
 
     private class RemoveSelectedImagesListener implements ActionListener {
@@ -504,7 +452,7 @@ public class ImageResizer extends JFrame {
     private class ResizeButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            if (!imagesToViewListModel.isEmpty() && !resizeDestinationPathTextField.getText().isEmpty() && (!widthTextField.getText().isEmpty() || !heightTextField.getText().isEmpty()) ) {
+            if (!imagesToViewListModel.isEmpty() && !destinationDirectorySelector.getText().isEmpty() && (!widthTextField.getText().isEmpty() || !heightTextField.getText().isEmpty()) ) {
                 resizeButton.setEnabled(false);
                 irw = new ImageResizeWorker();
                 irw.addPropertyChangeListener(new PropertyChangeListener() {
@@ -569,7 +517,7 @@ public class ImageResizer extends JFrame {
                 quality = qualityComboBox.getItemAt(qualityComboBox.getSelectedIndex());
             }
 
-            File destinationDirectory = new File(resizeDestinationPathTextField.getText(), "resized");
+            File destinationDirectory = new File(destinationDirectorySelector.getText(), "resized");
 
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
 
