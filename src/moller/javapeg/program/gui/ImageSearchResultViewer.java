@@ -286,6 +286,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class RightClickMenuListenerSetSelectedToViewList implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             ImagesToViewModel imagesToViewModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 
@@ -298,6 +299,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class RightClickMenuListenerSelectAll implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (jToggleButton.getName().equals("deselected")) {
@@ -309,6 +311,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class RightClickMenuListenerDeSelectAll implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (jToggleButton.getName().equals("selected")) {
@@ -320,6 +323,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class RightClickMenuListenerCopyImageToSystemClipBoard implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             List<File> selectedFiles = new ArrayList<File>();
             selectedFiles.add(new File(e.getActionCommand()));
@@ -330,6 +334,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class RightClickMenuListenerCopyAllImagesToSystemClipBoard implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             List<File> selectedFiles = new ArrayList<File>();
 

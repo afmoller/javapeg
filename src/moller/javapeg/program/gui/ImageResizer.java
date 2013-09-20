@@ -433,6 +433,7 @@ public class ImageResizer extends JFrame {
     }
 
     private class RemoveSelectedImagesListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (!imagesToViewList.isSelectionEmpty()) {
@@ -450,6 +451,7 @@ public class ImageResizer extends JFrame {
     }
 
     private class ResizeButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (!imagesToViewListModel.isEmpty() && !destinationDirectorySelector.getText().isEmpty() && (!widthTextField.getText().isEmpty() || !heightTextField.getText().isEmpty()) ) {
@@ -472,6 +474,7 @@ public class ImageResizer extends JFrame {
     }
 
     private class CancelResizeButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (irw != null && !irw.isCancelled()) {
                 irw.cancel(true);
@@ -481,6 +484,7 @@ public class ImageResizer extends JFrame {
 
     private class ImagesToViewListListener implements ListSelectionListener {
 
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             int selectedIndex = imagesToViewList.getSelectedIndex();
 

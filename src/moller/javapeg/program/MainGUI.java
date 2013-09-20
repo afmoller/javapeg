@@ -336,7 +336,7 @@ public class MainGUI extends JFrame {
     private ThumbNailListener thumbNailListener;
 
     private final DefaultListModel<File> imagesToViewListModel;
-    private final SortedListModel imageRepositoryListModel;
+    private final SortedListModel<ImageRepositoryItem> imageRepositoryListModel;
 
     private JList<File> imagesToViewList;
 
@@ -1680,6 +1680,7 @@ public class MainGUI extends JFrame {
         DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
         TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
+            @Override
             public void valueChanged(TreeSelectionEvent tse){
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode)tse.getPath().getLastPathComponent();
                 showChildren(node);
@@ -1994,13 +1995,12 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_AND_COMMENT, previewAndCommentSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitpane.getDividerLocation());
 
-
-        SortedSet<Object> imageRepositoryItems = imageRepositoryListModel.getModel();
+        SortedSet<ImageRepositoryItem> imageRepositoryItems = imageRepositoryListModel.getModel();
 
         List<File> paths = new ArrayList<File>();
 
-        for (Object imageRepositoryItem : imageRepositoryItems) {
-            paths.add(((ImageRepositoryItem)imageRepositoryItem).getPath());
+        for (ImageRepositoryItem imageRepositoryItem : imageRepositoryItems) {
+            paths.add(imageRepositoryItem.getPath());
         }
 
         RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
@@ -2191,6 +2191,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     // Menylyssnarklass
     private class MenuListener implements ActionListener{
+        @Override
         public void actionPerformed(ActionEvent e){
             String actionCommand = e.getActionCommand();
 
@@ -2226,6 +2227,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     // Knapplyssnarklass
     private class ButtonListener implements ActionListener{
+        @Override
         public void actionPerformed(ActionEvent e){
             String actionCommand = e.getActionCommand();
 
@@ -2377,18 +2379,22 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     private class JTextFieldListener implements DocumentListener {
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateInputInRealtime();
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
             validateInputInRealtime();
         }
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
     }
 
     private class JTabbedPaneListener implements ChangeListener {
 
+        @Override
         public void stateChanged(ChangeEvent evt) {
             if(tabbedPane.getSelectedIndex() == 1) {
                 updatePreviewTable();
@@ -2397,6 +2403,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class CheckBoxListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e){
             String actionCommand = e.getActionCommand();
 
@@ -3014,6 +3021,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class RemoveSelectedImagesListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (!imagesToViewList.isSelectionEmpty()) {
@@ -3032,6 +3040,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class RemoveAllImagesListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (imagesToViewListModel.size() > 0) {
                 imagesToViewListModel.clear();
@@ -3042,6 +3051,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class OpenImageListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
@@ -3113,6 +3123,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class SaveImageListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (imagesToViewListModel.size() > 0) {
@@ -3137,6 +3148,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class MoveImageUpInListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             int selecteIndex = imagesToViewList.getSelectedIndex();
 
@@ -3151,6 +3163,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class MoveImageDownInListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             int selecteIndex = imagesToViewList.getSelectedIndex();
 
@@ -3165,6 +3178,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class MoveImageToTopInListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             int selecteIndex = imagesToViewList.getSelectedIndex();
 
@@ -3177,6 +3191,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class MoveImageToBottomInListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             int selecteIndex = imagesToViewList.getSelectedIndex();
 
@@ -3189,6 +3204,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class OpenImageViewerListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if(!imagesToViewListModel.isEmpty()) {
 
@@ -3211,6 +3227,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class OpenImageResizerListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if(!imagesToViewListModel.isEmpty()) {
 
@@ -3227,6 +3244,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class CopyImageListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if(!imagesToViewListModel.isEmpty()) {
                 List<File> imagesToSetToSystemClipBoard = new ArrayList<File>();
@@ -3241,6 +3259,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class SearchImagesListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
@@ -3257,6 +3276,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class ClearCategoriesSelectionListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             javaPegIdToCheckTreeManager.get(configuration.getJavapegClientId()).getSelectionModel().clearSelection();
         }
@@ -3274,6 +3294,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class ClearAllMetaDataParametersListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (javaPegIdToCheckTreeManager != null) {
@@ -3303,6 +3324,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class ExportImageListListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (imagesToViewListModel.size() > 0) {
@@ -3335,6 +3357,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class AddImageToViewList implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             File image = new File(e.getActionCommand());
@@ -3349,6 +3372,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class CopyImageToSystemClipBoard implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             List<File> selectedFiles = new ArrayList<File>();
             selectedFiles.add(new File(e.getActionCommand()));
@@ -3359,6 +3383,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class CopyAllImagesToSystemClipBoard implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
            Collection<File> jPEGFiles = FileRetriever.getInstance().getJPEGFiles();
 
@@ -3370,6 +3395,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class AddAllImagesToViewList implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             File imageFilePath = ApplicationContext.getInstance().getSourcePath();
@@ -3467,6 +3493,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class RemoveCategory implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
@@ -3498,6 +3525,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class CollapseCategoryTreeStructure implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
@@ -3514,6 +3542,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class ExpandCategoryTreeStructure implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             TreePath selectedPath = ApplicationContext.getInstance().getSelectedCategoryPath();
 
@@ -3531,6 +3560,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     private class ImagesToViewListListener implements ListSelectionListener {
 
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             int selectedIndex = imagesToViewList.getSelectedIndex();
 
@@ -3692,6 +3722,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
     }
 
     private class MainTabbedPaneListener implements ChangeListener {
+        @Override
         public void stateChanged(ChangeEvent e) {
             JPanel selectedComponent = (JPanel)((JTabbedPane)e.getSource()).getSelectedComponent();
 
@@ -3700,6 +3731,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
             ApplicationContext ac = ApplicationContext.getInstance();
 
             switch (mainTabbedPaneComponent) {
+            case MERGE:
             case RENAME:
             case VIEW:
                 if (ac.getMainTabbedPaneComponent() == MainTabbedPaneComponent.CATEGORIZE) {

@@ -98,6 +98,7 @@ public class StatusPanel extends JPanel {
     // Lyssnare till ovan skapade timer.
     // Den rensar fälten
     private class TimerListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent evt) {
             for(int i=0; i<indexArray.length; i++) {
                 if(indexArray[i] == i) {

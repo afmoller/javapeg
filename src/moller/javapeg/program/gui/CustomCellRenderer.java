@@ -20,6 +20,7 @@ public class CustomCellRenderer    extends    JLabel implements ListCellRenderer
         this.setOpaque(true);
     }
 
+    @Override
     public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,
                                                   boolean isSelected, boolean cellHasFocus) {
 

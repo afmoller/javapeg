@@ -233,6 +233,7 @@ public class NewVersionGUI extends JFrame{
     }
 
     private class DownloadButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             alwaysOnTop(false);
@@ -257,6 +258,7 @@ public class NewVersionGUI extends JFrame{
     }
 
     private class CancelButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             closeWindow();
         }
@@ -289,6 +291,7 @@ public class NewVersionGUI extends JFrame{
     }
 
     private class GUIUpdater implements Runnable {
+        @Override
         public void run() {
             progress.setValue(progressValue);
         }

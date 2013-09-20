@@ -154,6 +154,7 @@ public class RenameProcess extends JFrame implements ActionListener {
     public void renameProcessFinished() {
         stopUpdateTask();
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
 
                 setTitle(lang.get("progress.RenameProcess.title.processFinished"));
@@ -191,6 +192,7 @@ public class RenameProcess extends JFrame implements ActionListener {
         setLogMessage(message);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (openDestinationDirectoryButton.equals(source)) {
@@ -206,6 +208,7 @@ public class RenameProcess extends JFrame implements ActionListener {
 
     private class GUIUpdater implements Runnable {
 
+        @Override
         public void run() {
             processProgressBar.setValue(processProgress);
             title.setText(processMessage);
