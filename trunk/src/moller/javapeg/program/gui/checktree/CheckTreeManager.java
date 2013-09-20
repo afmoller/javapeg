@@ -125,6 +125,7 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
         return selectionModel;
     }
 
+    @Override
     public void valueChanged(TreeSelectionEvent e){
         tree.treeDidChange();
     }

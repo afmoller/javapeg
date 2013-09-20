@@ -3,6 +3,9 @@ package moller.javapeg.program.gui.tab;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,7 +18,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -23,10 +25,12 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.MainGUI;
+import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 
 /**
@@ -59,9 +63,16 @@ public class ImageMergeTab extends JPanel {
     private static Logger logger;
 
     private JButton removeSelectedDirectoryButton;
+    private JButton addDirectoryButton;
+    private JButton mergeDirectoryButton;
 
     private CustomizedJTextArea outputTextArea;
 
+    private JList<File> directoriesToMergeList;
+
+    /**
+     * Constructor
+     */
     public ImageMergeTab() {
         super();
 
@@ -69,7 +80,17 @@ public class ImageMergeTab extends JPanel {
         logger = Logger.getInstance();
 
         this.createPanel();
+        this.addListeners();
+    }
 
+    /**
+     * Adds the listeners to the objects that executes actions in this
+     * component.
+     */
+    private void addListeners() {
+        removeSelectedDirectoryButton.addActionListener(new RemoveSelectedDirectoryButtonListener());
+        addDirectoryButton.addActionListener(new AddDirectoryButtonListener());
+        mergeDirectoryButton.addActionListener(new MergeDirectoryButtonListener());
     }
 
     private void createPanel() {
@@ -80,7 +101,7 @@ public class ImageMergeTab extends JPanel {
 
         GBHelper posBackground = new GBHelper();
 
-        this.add(this.createDirectoriesPanel(), posBackground.expandW().expandH());
+        this.add(this.createDirectoriesPanel(), posBackground.expandH());
         this.add(new Gap(2), posBackground.nextCol());
         this.add(this.createProcessLogPanel(), posBackground.nextCol().expandH().expandW());
 
@@ -113,30 +134,60 @@ public class ImageMergeTab extends JPanel {
         JLabel directoryListLabel = new JLabel("DIRECTORIES TO MERGE");
         directoryListLabel.setForeground(Color.GRAY);
 
-        JList<String> directoriesToMergeList = new JList<String>();
+        SortedListModel<File> directoriesModel = new SortedListModel<File>();
+        directoriesToMergeList = new JList<File>(directoriesModel);
+
+        directoriesToMergeList.setModel(directoriesModel);
 
         JScrollPane scrollPane = new JScrollPane(directoriesToMergeList);
 
         DestinationDirectorySelector destinationDirectorySelector = new DestinationDirectorySelector(true);
 
-        InputStream imageStream = null;
-
         ImageIcon removePictureImageIcon = new ImageIcon();
-
-        imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
-        try {
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");){
             removePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image remove.gif");
+            logger.logERROR(iox);
         }
         removeSelectedDirectoryButton = new JButton();
         removeSelectedDirectoryButton.setIcon(removePictureImageIcon);
 //      TODO: Remove hard coded string
-        removeSelectedDirectoryButton.setToolTipText("Remove selectet directory");
+        removeSelectedDirectoryButton.setToolTipText("Remove selected directory");
+
+        JPanel removeSelectedDirectoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        removeSelectedDirectoryButtonPanel.add(removeSelectedDirectoryButton);
+
+
+        ImageIcon addPictureImageIcon = new ImageIcon();
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/plus_16.png")) {
+            addPictureImageIcon.setImage(ImageIO.read(imageStream));
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image plus_16.png");
+            logger.logERROR(iox);
+        }
+
+        addDirectoryButton = new JButton();
+        addDirectoryButton.setIcon(addPictureImageIcon);
+//      TODO: Remove hard coded string
+        addDirectoryButton.setToolTipText("Add currently displayed  directory");
+
+        ImageIcon mergePictureImageIcon = new ImageIcon();
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/arrow_join.png")) {
+            mergePictureImageIcon.setImage(ImageIO.read(imageStream));
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image arrow_join.png");
+            logger.logERROR(iox);
+        }
+
+        mergeDirectoryButton = new JButton();
+        mergeDirectoryButton.setIcon(mergePictureImageIcon);
+//      TODO: Remove hard coded string
+        mergeDirectoryButton.setToolTipText("Merge the images in selected directories");
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        buttonPanel.add(removeSelectedDirectoryButton);
+        buttonPanel.add(addDirectoryButton);
+        buttonPanel.add(mergeDirectoryButton);
 
         JPanel backgroundPanel = new  JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
@@ -145,10 +196,61 @@ public class ImageMergeTab extends JPanel {
 
         backgroundPanel.add(directoryListLabel, posBackgroundPanel);
         backgroundPanel.add(scrollPane, posBackgroundPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(removeSelectedDirectoryButtonPanel, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(destinationDirectorySelector, posBackgroundPanel.nextRow().expandH().expandW());
         backgroundPanel.add(buttonPanel, posBackgroundPanel.nextRow().expandW());
 
         return backgroundPanel;
+    }
+
+    /**
+     * Listener class for the Button used to remove an already selected
+     * directory to merge. It removes a selected entry in the directory to merge
+     * {@link JList} list.
+     *
+     * @author Fredrik
+     *
+     */
+    private class RemoveSelectedDirectoryButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (File selectedValue : directoriesToMergeList.getSelectedValuesList()) {
+                ((SortedListModel<File>)directoriesToMergeList.getModel()).removeElement(selectedValue);
+            }
+        }
+    }
+
+    /**
+     * Listener class for the Button that adds a directory to the {@link JList}
+     * that contains the directories in which the content shall be merged.
+     *
+     * @author Fredrik
+     *
+     */
+    private class AddDirectoryButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            File sourcePath = ApplicationContext.getInstance().getSourcePath();
+            if (sourcePath != null) {
+                ((SortedListModel<File>)directoriesToMergeList.getModel()).add(sourcePath);
+            }
+        }
+    }
+
+    private class MergeDirectoryButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (directoriesToMergeList.getModel().getSize() > 1) {
+                System.out.println("MERGE");
+//                doMerge();
+            }
+            // TODO Auto-generated method stub
+
+        }
+
     }
 
 }

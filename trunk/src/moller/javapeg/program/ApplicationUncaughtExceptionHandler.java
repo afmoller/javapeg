@@ -8,6 +8,7 @@ import moller.javapeg.program.logger.Logger;
 
 public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
+    @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         this.handle(throwable);
     }
@@ -18,6 +19,7 @@ public class ApplicationUncaughtExceptionHandler implements Thread.UncaughtExcep
                 showException(throwable);
             } else {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         showException(throwable);
                     }

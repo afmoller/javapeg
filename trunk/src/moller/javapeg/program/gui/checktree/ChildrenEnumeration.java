@@ -15,20 +15,21 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
+
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  * @author Santhosh Kumar T
  * @email  santhosh@in.fiorano.com
  */
 public class ChildrenEnumeration implements Enumeration<TreePath>{
-    private TreePath path;
-    private TreeModel model;
+    private final TreePath path;
+    private final TreeModel model;
     private int position = 0;
-    private int childCount;
+    private final int childCount;
 
     public ChildrenEnumeration(TreePath path, TreeModel model){
         this.path = path;
@@ -36,10 +37,12 @@ public class ChildrenEnumeration implements Enumeration<TreePath>{
         childCount = model.getChildCount(path.getLastPathComponent());
     }
 
+    @Override
     public boolean hasMoreElements() {
         return position < childCount;
     }
 
+    @Override
     public TreePath nextElement() {
         if(!hasMoreElements())
             throw new NoSuchElementException();

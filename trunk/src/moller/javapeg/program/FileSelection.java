@@ -16,16 +16,19 @@ public class FileSelection implements Transferable {
     }
 
     // Returns the supported flavors of our implementation
+    @Override
     public DataFlavor[] getTransferDataFlavors() {
         return new DataFlavor[] {DataFlavor.javaFileListFlavor};
     }
 
     // Returns true if flavor is supported
+    @Override
     public boolean isDataFlavorSupported(DataFlavor flavor)    {
         return DataFlavor.javaFileListFlavor.equals(flavor);
     }
 
     // Returns Image object housed by Transferable object
+    @Override
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,IOException {
         if (!DataFlavor.javaFileListFlavor.equals(flavor)) {
             throw new UnsupportedFlavorException(flavor);

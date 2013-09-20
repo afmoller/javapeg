@@ -15,18 +15,19 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Stack;
+
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  * @author Santhosh Kumar T
  * @email  santhosh@in.fiorano.com
  */
 public class PreorderEnumeration implements Enumeration<TreePath> {
-    private TreeModel model;
+    private final TreeModel model;
     protected Stack<Enumeration<TreePath>> stack = new Stack<Enumeration<TreePath>>();
 
     public PreorderEnumeration(TreePath path, TreeModel model){
@@ -38,14 +39,16 @@ public class PreorderEnumeration implements Enumeration<TreePath> {
         stack.push(enumer);
     }
 
+    @Override
     public boolean hasMoreElements() {
         return (!stack.empty() &&
-            ((Enumeration<TreePath>)stack.peek()).hasMoreElements());
+            stack.peek().hasMoreElements());
     }
 
+    @Override
     public TreePath nextElement() {
-        Enumeration<TreePath> enumer = (Enumeration<TreePath>)stack.peek();
-        TreePath path = (TreePath)enumer.nextElement();
+        Enumeration<TreePath> enumer = stack.peek();
+        TreePath path = enumer.nextElement();
 
         if(!enumer.hasMoreElements())
             stack.pop();

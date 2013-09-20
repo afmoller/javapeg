@@ -189,7 +189,7 @@ public class ConfigViewerGUI extends JFrame {
     private JList<Object> importedCategoriesList;
     private JList<Object> imageRepositoriesAllwaysAddList;
     private JList<Object> imageRepositoriesNeverAddList;
-    private JList<Object> imageRepositoriesList;
+    private JList<ImageRepositoryItem> imageRepositoriesList;
 
     private JPopupMenu importedCategoriesPopupMenu;
     private ImportedCategories theImportedCategoriesToRenameOrDelete;
@@ -877,7 +877,7 @@ public class ConfigViewerGUI extends JFrame {
             logger.logERROR(iox);
         }
 
-        imageRepositoriesList = new JList<Object>(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
+        imageRepositoriesList = new JList<ImageRepositoryItem>(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
         imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
         imageRepositoriesList.setVisibleRowCount(5);
 
@@ -1446,11 +1446,14 @@ public class ConfigViewerGUI extends JFrame {
 
     private class RotateLogSizeJTextFieldListener implements DocumentListener {
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateLogRotateSize();
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
     }
@@ -1466,44 +1469,56 @@ public class ConfigViewerGUI extends JFrame {
 
     private class  ThumbnailWidthJTextFieldListener implements DocumentListener {
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateThumbnailSize("width");
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
     }
 
     private class  ThumbnailHeightJTextFieldListener implements DocumentListener {
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateThumbnailSize("height");
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
     }
 
     private class  ThumbnailMaxCacheSizeJTextFieldListener implements DocumentListener {
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateThumbnailCacheMaxSize();
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
     }
 
     private class  MaximumLengtOfCameraModelJTextFieldListener implements DocumentListener {
 
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateMaximumLengtOfCameraModel();
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
     }
@@ -1548,22 +1563,27 @@ public class ConfigViewerGUI extends JFrame {
 
     private class LogNameJTextFieldListener implements DocumentListener {
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateLogName(logName.getText());
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
         }
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
     }
 
     private class ManualRadioButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e){
             languageList.setEnabled(true);
         }
     }
 
     private class AutomaticRadioButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e){
             languageList.setEnabled(false);
 
@@ -1576,6 +1596,7 @@ public class ConfigViewerGUI extends JFrame {
     }
 
     private class LanguageListListener implements ListSelectionListener {
+        @Override
         public void valueChanged(ListSelectionEvent lse) {
             if(languageList.getSelectedIndex() > -1) {
                 currentLanguage.setText(languageList.getSelectedValue());
@@ -1633,9 +1654,9 @@ public class ConfigViewerGUI extends JFrame {
     private class RemoveSelectedImagePathsButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            SortedListModel imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
+            SortedListModel<ImageRepositoryItem> imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
-            List<Object> selectedValues = imageRepositoriesList.getSelectedValuesList();
+            List<ImageRepositoryItem> selectedValues = imageRepositoriesList.getSelectedValuesList();
 
             StringBuilder paths = new StringBuilder();
 
@@ -1662,7 +1683,7 @@ public class ConfigViewerGUI extends JFrame {
             int result = displayConfirmDialog(lang.get("configviewer.tag.imageRepositories.label.pathsWillBeRemoved") + C.LS + C.LS + paths.toString(), lang.get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
 
             if (result == 0) {
-                for (Object selectedValue : selectedValues) {
+                for (ImageRepositoryItem selectedValue : selectedValues) {
                     imageRepositroyListModel.removeElement(selectedValue);
                 }
             }

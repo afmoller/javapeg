@@ -647,6 +647,7 @@ public class ImageViewer extends JFrame {
 
                         Thread thread = new Thread(new Runnable() {
 
+                            @Override
                             public void run() {
                                 loadPreviousImageAction.run();
                             }
@@ -661,6 +662,7 @@ public class ImageViewer extends JFrame {
 
                         Thread thread = new Thread(new Runnable() {
 
+                            @Override
                             public void run() {
                                 loadNextImageAction.run();
                             }
@@ -686,30 +688,35 @@ public class ImageViewer extends JFrame {
     }
 
     private class RightClickMenuListenerPrevious implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             previousJButton.doClick();
         }
     }
 
     private class RightClickMenuListenerNext implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             nextJButton.doClick();
         }
     }
 
     private class RightClickMenuListenerAdjustToWindowSize implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             adjustToWindowSizeJButton.doClick();
         }
     }
 
     private class ToolBarButtonPrevious implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             loadAndViewPreviousImage();
         }
     }
 
     private class ToolBarButtonNext implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             loadAndViewNextImage();
         }
@@ -746,6 +753,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class ToolBarButtonRotateLeft implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             ImageIcon icon = (ImageIcon)picture.getIcon();
 
@@ -761,6 +769,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class ToolBarButtonRotateRight implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             ImageIcon icon = (ImageIcon)picture.getIcon();
 
@@ -776,6 +785,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class ToolBarButtonAutomaticRotate implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if(automaticRotateToggleButton.isSelected()) {
                 ImageIcon icon = (ImageIcon)picture.getIcon();
@@ -795,6 +805,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class ToolBarButtonAutomaticAdjustToWindowSize implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
                 Dimension pictureDimensions = picture.getSize();
@@ -817,6 +828,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class ToolBarButtonAdjustToWindowSize implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             Dimension pictureDimensions = picture.getSize();
 
@@ -847,6 +859,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class OverviewMaximizeButton implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             overViewScrollpane.setVisible(true);
             Update.updateComponentTreeUI(overViewBackgroundPanel);
@@ -854,6 +867,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class OverviewMinimizeButton implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             overViewScrollpane.setVisible(false);
             Update.updateComponentTreeUI(overViewBackgroundPanel);
@@ -861,6 +875,7 @@ public class ImageViewer extends JFrame {
     }
 
     private class OverviewButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             imageToViewListIndex = Integer.parseInt(e.getActionCommand());
             currentGUIImageRotation = 0;

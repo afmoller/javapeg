@@ -218,6 +218,7 @@ public class CategoryImportExportPopup extends JDialog {
     }
 
     private class CategoryImportButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             JFileChooser chooser = new JFileChooser();
@@ -246,6 +247,7 @@ public class CategoryImportExportPopup extends JDialog {
     }
 
     private class ActionButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             actionButtonClicked = true;
             dispose();
@@ -253,6 +255,7 @@ public class CategoryImportExportPopup extends JDialog {
     }
 
     private class CancelButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
@@ -260,12 +263,15 @@ public class CategoryImportExportPopup extends JDialog {
 
     private class NameTextFieldListener implements DocumentListener {
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             validateInputInRealtime();
         }
+        @Override
         public void removeUpdate(DocumentEvent e) {
             validateInputInRealtime();
         }
+        @Override
         public void changedUpdate(DocumentEvent e) {
         }
     }

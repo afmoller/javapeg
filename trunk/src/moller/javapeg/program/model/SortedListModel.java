@@ -7,43 +7,64 @@ import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
 
-public class SortedListModel extends AbstractListModel<Object> {
+public class SortedListModel<T extends Object> extends AbstractListModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private final SortedSet<Object> model;
+    private final SortedSet<T> model;
 
     public SortedListModel() {
-        model = new TreeSet<Object>();
+        model = new TreeSet<T>();
     }
 
-    public SortedListModel(Set<Object> values) {
-        model = new TreeSet<Object>();
-        model.addAll(values);
-        fireContentsChanged(this, 0, getSize());
+    public SortedListModel(Set<T> values) {
+        model = new TreeSet<T>();
+        if (model.addAll(values)) {
+            fireContentsChanged(this, 0, getSize());
+        }
     }
 
+    @Override
     public int getSize() {
         return model.size();
     }
 
-    public Object getElementAt(int index) {
-        return model.toArray()[index];
+    @Override
+    public T getElementAt(int index) {
+        Iterator<T> iterator = model.iterator();
+
+        int currentIndex = 0;
+        while (iterator.hasNext()) {
+            T element = iterator.next();
+            if (currentIndex == index) {
+                return element;
+            }
+            currentIndex++;
+        }
+        return null;
     }
 
-    public SortedSet<Object> getModel() {
+    public SortedSet<T> getModel() {
         return model;
     }
 
-    public void add(Object element) {
+    /**
+     * Add an element of type T to the model, if it does not already exists in
+     * the model.
+     *
+     * @param element
+     *            is the object to add to the model.
+     */
+    public void add(T element) {
         if (model.add(element)) {
             fireContentsChanged(this, 0, getSize());
         }
     }
 
-    public void addAll(Set<Object> elements) {
-        model.addAll(elements);
-        fireContentsChanged(this, 0, getSize());
+    public void addAll(Set<T> elements) {
+        if (model.addAll(elements)) {
+            fireContentsChanged(this, 0, getSize());
+        }
     }
 
     public void clear() {
@@ -51,23 +72,23 @@ public class SortedListModel extends AbstractListModel<Object> {
         fireContentsChanged(this, 0, getSize());
     }
 
-    public boolean contains(Object element) {
+    public boolean contains(T element) {
         return model.contains(element);
     }
 
-    public Object firstElement() {
+    public T firstElement() {
         return model.first();
     }
 
-    public Iterator<Object> iterator() {
+    public Iterator<T> iterator() {
         return model.iterator();
     }
 
-    public Object lastElement() {
+    public T lastElement() {
         return model.last();
     }
 
-    public boolean removeElement(Object element) {
+    public boolean removeElement(T element) {
         boolean removed = model.remove(element);
         if (removed) {
             fireContentsChanged(this, 0, getSize());

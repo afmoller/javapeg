@@ -1,5 +1,7 @@
 package moller.javapeg.program.model;
 
+import moller.javapeg.program.imagerepository.ImageRepositoryItem;
+
 public class ModelInstanceLibrary {
 
     /**
@@ -9,7 +11,7 @@ public class ModelInstanceLibrary {
 
     private final MetaDataTableModel metaDataTableModel;
     private final PreviewTableModel  previewTableModel;
-    private final SortedListModel    imageRepositoryListModel;
+    private final SortedListModel<ImageRepositoryItem> imageRepositoryListModel;
     private final ImagesToViewModel  imagesToViewModel;
     private final CategoriesModel    categoriesModel;
 
@@ -20,7 +22,7 @@ public class ModelInstanceLibrary {
         metaDataTableModel       = new MetaDataTableModel();
         previewTableModel        = new PreviewTableModel();
         imagesToViewModel        = new ImagesToViewModel();
-        imageRepositoryListModel = new SortedListModel();
+        imageRepositoryListModel = new SortedListModel<ImageRepositoryItem>();
         categoriesModel          = new CategoriesModel(null);
     }
 
@@ -48,7 +50,7 @@ public class ModelInstanceLibrary {
         return previewTableModel;
     }
 
-    public SortedListModel getImageRepositoryListModel() {
+    public SortedListModel<ImageRepositoryItem> getImageRepositoryListModel() {
         return imageRepositoryListModel;
     }
 

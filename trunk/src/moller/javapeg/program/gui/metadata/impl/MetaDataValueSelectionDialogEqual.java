@@ -199,6 +199,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
         return -1;
     }
 
+    @Override
     public String getResult() {
         return value;
     }
@@ -211,6 +212,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
         }
     }
 
+    @Override
     public void collectSelectedValues() {
         List<Object> selectedValues = values.getSelectedValuesList();
 
@@ -232,7 +234,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
     }
 
     private void setValues(Set<Object> values) {
-        this.values.setModel(new SortedListModel(values));
+        this.values.setModel(new SortedListModel<Object>(values));
     }
 
     private class WindowDestroyer extends WindowAdapter{
@@ -243,6 +245,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
     }
 
     private class OkButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             okButtonClicked = true;
             dispose();
@@ -250,6 +253,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
     }
 
     private class CancelButtonListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             value = oldValue;
             dispose();
@@ -257,6 +261,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
     }
 
     private class ValuesListListener implements ListSelectionListener {
+        @Override
         @SuppressWarnings("unchecked")
         public void valueChanged(ListSelectionEvent e) {
             if(!((JList<Object>)e.getSource()).getSelectionModel().isSelectionEmpty()) {
