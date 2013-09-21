@@ -114,7 +114,7 @@ public class ImageResizer extends JFrame {
         logger = Logger.getInstance();
         lang   = Language.getInstance();
 
-        sdf = Config.getInstance().get().getRenameImages().getProgressLogTimestampFormat();
+        sdf = configuration.getRenameImages().getProgressLogTimestampFormat();
 
         this.createMainFrame();
         this.addListeners();
