@@ -5,9 +5,15 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -15,9 +21,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -25,6 +33,8 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.Gap;
 import moller.javapeg.program.MainGUI;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
@@ -32,6 +42,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.CustomizedJTextArea;
+import moller.util.io.DirectoryUtil;
 
 /**
  * This class constructs a GUI that is to be added to the {@link JTabbedPane}
@@ -59,8 +70,11 @@ public class ImageMergeTab extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
+    private static Configuration configuration;
     private static Language lang;
     private static Logger logger;
+
+    private final SimpleDateFormat sdf;
 
     private JButton removeSelectedDirectoryButton;
     private JButton addDirectoryButton;
@@ -70,14 +84,22 @@ public class ImageMergeTab extends JPanel {
 
     private JList<File> directoriesToMergeList;
 
+    private DestinationDirectorySelector destinationDirectorySelector;
+
+    private ImageMergeWorker imw;
+
     /**
      * Constructor
      */
     public ImageMergeTab() {
         super();
 
+        configuration = Config.getInstance().get();
         lang = Language.getInstance();
         logger = Logger.getInstance();
+
+        sdf = configuration.getRenameImages().getProgressLogTimestampFormat();
+
 
         this.createPanel();
         this.addListeners();
@@ -141,7 +163,7 @@ public class ImageMergeTab extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(directoriesToMergeList);
 
-        DestinationDirectorySelector destinationDirectorySelector = new DestinationDirectorySelector(true);
+        destinationDirectorySelector = new DestinationDirectorySelector(true);
 
         ImageIcon removePictureImageIcon = new ImageIcon();
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");){
@@ -239,18 +261,127 @@ public class ImageMergeTab extends JPanel {
         }
     }
 
+    /**
+     * Listener class for the Button that starts the merge process.
+     *
+     * @author Fredrik
+     *
+     */
     private class MergeDirectoryButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             if (directoriesToMergeList.getModel().getSize() > 1) {
-                System.out.println("MERGE");
-//                doMerge();
+                mergeDirectoryButton.setEnabled(false);
+                imw = new ImageMergeWorker();
+                imw.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent event) {
+                        switch (event.getPropertyName()) {
+                        case "progress":
+//                            progressBar.setIndeterminate(false);
+//                            progressBar.setValue((Integer) event.getNewValue());
+                            break;
+                        }
+                    }
+                });
+                imw.execute();
             }
-            // TODO Auto-generated method stub
-
         }
+    }
+
+    private class CancelMergeButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (imw != null && !imw.isCancelled()) {
+                imw.cancel(true);
+            }
+        }
+    }
+
+    private void doMerge() {
 
     }
 
+    private class ImageMergeWorker extends SwingWorker<String, String> {
+        @Override
+        protected String doInBackground() throws Exception {
+            long startTime = System.currentTimeMillis();
+
+            File destinationDirectory = new File(destinationDirectorySelector.getText(), "merged");
+
+            destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
+
+//            TODO: Fix hard coded string
+            publish(lang.get("Merge Process started"));
+
+            if (!destinationDirectory.mkdirs()) {
+                publish("Could not create directory" + ": " + destinationDirectory.getAbsolutePath());
+                logger.logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
+
+//                TODO: Fix hard coded string
+                return "Merge process aborted";
+            } else {
+                publish("Destination directory created" + " " + destinationDirectory.getAbsolutePath());
+
+//                int size = imagesToViewListModel.getSize();
+
+//                for (int index = 0; index < size; index++) {
+////                    if (!imw.isCancelled()) {
+////                        long startTimeImageResize = System.currentTimeMillis();
+////
+////                        float floatQuality = quality / 100;
+////                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
+////                        publish(String.format(lang.get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
+////                        setProgress((index + 1) * 100 / size);
+////                    } else {
+////                        publish(lang.get("imageresizer.resize.process.cancelled"));
+////                        break;
+////                    }
+//                }
+
+                if (!imw.isCancelled()) {
+                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
+                    return lang.get("imageresizer.resize.process.done");
+                } else {
+                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
+
+                    mergeDirectoryButton.setEnabled(true);
+                    return lang.get("imageresizer.resize.process.cancelled");
+                }
+            }
+        }
+
+        @Override
+        protected void process(List<String> chunks) {
+            for (String chunk : chunks) {
+                setLogMessage(chunk);
+            }
+        }
+
+        @Override
+        protected void done() {
+            try {
+                JOptionPane.showMessageDialog(ImageMergeTab.this, get());
+                mergeDirectoryButton.setEnabled(true);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e.getCause());
+            } catch (InterruptedException e) {
+                mergeDirectoryButton.setEnabled(true);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    /**
+     * Convenience method for adding a log statement to the process log. After
+     * each log statement there is automatically a newline added, and the log
+     * is automatically scrolled to bottom.
+     *
+     * @param logMessage is the string that shall be added to the log.
+     */
+    public void setLogMessage(String logMessage) {
+        String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
+        outputTextArea.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
+    }
 }
