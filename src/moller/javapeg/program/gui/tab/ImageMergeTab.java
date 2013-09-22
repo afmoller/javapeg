@@ -11,8 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
@@ -42,7 +45,9 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.CustomizedJTextArea;
+import moller.util.hash.MD5Calculator;
 import moller.util.io.DirectoryUtil;
+import moller.util.jpeg.JPEGUtil;
 
 /**
  * This class constructs a GUI that is to be added to the {@link JTabbedPane}
@@ -76,9 +81,10 @@ public class ImageMergeTab extends JPanel {
 
     private final SimpleDateFormat sdf;
 
-    private JButton removeSelectedDirectoryButton;
     private JButton addDirectoryButton;
+    private JButton cancelMergeButton;
     private JButton mergeDirectoryButton;
+    private JButton removeSelectedDirectoryButton;
 
     private CustomizedJTextArea outputTextArea;
 
@@ -100,7 +106,6 @@ public class ImageMergeTab extends JPanel {
 
         sdf = configuration.getRenameImages().getProgressLogTimestampFormat();
 
-
         this.createPanel();
         this.addListeners();
     }
@@ -113,6 +118,7 @@ public class ImageMergeTab extends JPanel {
         removeSelectedDirectoryButton.addActionListener(new RemoveSelectedDirectoryButtonListener());
         addDirectoryButton.addActionListener(new AddDirectoryButtonListener());
         mergeDirectoryButton.addActionListener(new MergeDirectoryButtonListener());
+        cancelMergeButton.addActionListener(new CancelMergeButtonListener());
     }
 
     private void createPanel() {
@@ -207,9 +213,26 @@ public class ImageMergeTab extends JPanel {
 //      TODO: Remove hard coded string
         mergeDirectoryButton.setToolTipText("Merge the images in selected directories");
 
+
+
+
+        ImageIcon cancelMergePictureImageIcon = new ImageIcon();
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/cancel.png")) {
+            cancelMergePictureImageIcon.setImage(ImageIO.read(imageStream));
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image arrow_join.png");
+            logger.logERROR(iox);
+        }
+
+        cancelMergeButton = new JButton();
+        cancelMergeButton.setIcon(cancelMergePictureImageIcon);
+//      TODO: Remove hard coded string
+        cancelMergeButton.setToolTipText("Cancel the merge process");
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         buttonPanel.add(addDirectoryButton);
         buttonPanel.add(mergeDirectoryButton);
+        buttonPanel.add(cancelMergeButton);
 
         JPanel backgroundPanel = new  JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
@@ -313,7 +336,7 @@ public class ImageMergeTab extends JPanel {
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
 
 //            TODO: Fix hard coded string
-            publish(lang.get("Merge Process started"));
+            publish("Merge Process started");
 
             if (!destinationDirectory.mkdirs()) {
                 publish("Could not create directory" + ": " + destinationDirectory.getAbsolutePath());
@@ -323,22 +346,29 @@ public class ImageMergeTab extends JPanel {
                 return "Merge process aborted";
             } else {
                 publish("Destination directory created" + " " + destinationDirectory.getAbsolutePath());
+                publish("Searching selected directories for JPEG files");
 
-//                int size = imagesToViewListModel.getSize();
+                List<File> jpegFiles = new ArrayList<File>();
 
-//                for (int index = 0; index < size; index++) {
-////                    if (!imw.isCancelled()) {
-////                        long startTimeImageResize = System.currentTimeMillis();
-////
-////                        float floatQuality = quality / 100;
-////                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
-////                        publish(String.format(lang.get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
-////                        setProgress((index + 1) * 100 / size);
-////                    } else {
-////                        publish(lang.get("imageresizer.resize.process.cancelled"));
-////                        break;
-////                    }
-//                }
+                int nrOfFiles = 0;
+                for (File directory : ((SortedListModel<File>)directoriesToMergeList.getModel()).getModel()) {
+                    jpegFiles.addAll(JPEGUtil.getJPEGFiles(directory));
+                    publish(jpegFiles.size() - nrOfFiles + " " + "JPEG files found in directory: " + directory.getAbsolutePath());
+                    nrOfFiles = jpegFiles.size();
+                }
+
+                Map<String, List<File>> md5ToFileListMap = new HashMap<String, List<File>>();
+                for (File file : jpegFiles) {
+                    String hash = MD5Calculator.calculate(file);
+                    publish("MD5 sum calculated for file: " + file.getAbsolutePath());
+                    if (!md5ToFileListMap.containsKey(hash)) {
+                        List<File> files = new ArrayList<File>();
+                        files.add(file);
+                        md5ToFileListMap.put(hash, files);
+                    } else {
+                        md5ToFileListMap.get(hash).add(file);
+                    }
+                }
 
                 if (!imw.isCancelled()) {
                     publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
