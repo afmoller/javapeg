@@ -144,7 +144,6 @@ public class JPEGThumbNailRetriever {
             }
 
             thumbNail.setThumbNailData(thumbNailData);
-            thumbNail.setThumbNailSize(thumbNailLength);
 
             if(jpgtnc != null && thumbNailCache.getEnabled()) {
                 jpgtnc.add(jpegFile, thumbNail);
