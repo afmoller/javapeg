@@ -49,7 +49,7 @@ public class Logger {
         logName       = logging.getFileName();
         logLevel      = logging.getLevel();
         rotateSize    = logging.getRotateSize();
-        zipLog        =    logging.getRotateZip();
+        zipLog        = logging.getRotateZip();
 
         date = new Date();
         sdf  = logging.getTimeStampFormat();
@@ -188,13 +188,13 @@ public class Logger {
      * @throws IOException
      */
     private void logThrowable(Throwable t, Level l) {
-           if(t instanceof Throwable) {
-               this.log("A Throwable has been thrown", l);
-           } else {
-               this.log("An Exception Has Occurred", l);
-           }
-           this.log("START ==========================================================================", l);
-           this.log("MESSAGE:", l);
+        if(t instanceof Throwable) {
+            this.log("A Throwable has been thrown", l);
+        } else {
+            this.log("An Exception Has Occurred", l);
+        }
+        this.log("START ==========================================================================", l);
+        this.log("MESSAGE:", l);
         this.log(t.getMessage() == null ? "" : t.getMessage(), l);
         this.log("STACKTRACE:", l);
         for(StackTraceElement element : t.getStackTrace()) {
@@ -255,6 +255,9 @@ public class Logger {
         throw new CloneNotSupportedException();
     }
 
+    /**
+     * Flush the log.
+     */
     public void flush() {
         try {
             logWriter.flush();
