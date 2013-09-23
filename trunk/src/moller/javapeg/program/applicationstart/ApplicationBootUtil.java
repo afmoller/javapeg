@@ -41,5 +41,4 @@ public class ApplicationBootUtil {
 
         Files.delete(firstLaunchFile.toPath());
     }
-
 }
