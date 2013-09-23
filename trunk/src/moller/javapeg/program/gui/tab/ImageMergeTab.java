@@ -41,6 +41,8 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
+import moller.javapeg.program.jpeg.JPEGThumbNail;
+import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
@@ -359,14 +361,25 @@ public class ImageMergeTab extends JPanel {
 
                 Map<String, List<File>> md5ToFileListMap = new HashMap<String, List<File>>();
                 for (File file : jpegFiles) {
+                    long startHashCalc = System.currentTimeMillis();
                     String hash = MD5Calculator.calculate(file);
-                    publish("MD5 sum calculated for file: " + file.getAbsolutePath());
+//                    TODO Fix hard coded string
+                    publish("MD5 sum calculated (" + hash + ") for file: " + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - startHashCalc) + " milliseconds");
                     if (!md5ToFileListMap.containsKey(hash)) {
                         List<File> files = new ArrayList<File>();
                         files.add(file);
                         md5ToFileListMap.put(hash, files);
                     } else {
                         md5ToFileListMap.get(hash).add(file);
+                    }
+                }
+
+                for (String key : md5ToFileListMap.keySet()) {
+                    if (md5ToFileListMap.get(key).size() > 1) {
+                        for (File jpegFile : md5ToFileListMap.get(key)) {
+
+                            JPEGThumbNail thumbnail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
+                        }
                     }
                 }
 
