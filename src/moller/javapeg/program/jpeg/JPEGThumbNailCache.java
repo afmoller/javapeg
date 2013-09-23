@@ -27,9 +27,11 @@ public class JPEGThumbNailCache {
      * Private constructor. It creates an LinkedHashMap
      * configured to work as an LRU cache.
      */
-    @SuppressWarnings("serial")
     private JPEGThumbNailCache() {
         thumbNailLRUCache = new LinkedHashMap<File, JPEGThumbNail>(128, 0.75f, true) {
+
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected boolean removeEldestEntry(Map.Entry<File, JPEGThumbNail> entry) {
                 return size() > MAX_ENTRIES;
@@ -82,18 +84,42 @@ public class JPEGThumbNailCache {
         return thumbNailLRUCache.get(jpegFile);
     }
 
+    /**
+     * Answers the question whether or not an thumbnail for an JPEG file is
+     * present in the cahce or not.
+     *
+     * @param jpegFile
+     *            is the file to investigate if the corresponding thumbnail
+     *            exists in the cache or not.
+     * @return true if the corresponding thumbnail for the file which is defined
+     *         by the parameter jpegFile exists in the cache otherwise false.
+     */
     public boolean exists (File jpegFile) {
         return thumbNailLRUCache.containsKey(jpegFile);
     }
 
+    /**
+     * The number of entries in the cache
+     *
+     * @return the number of entries in the cache.
+     */
     public int getCurrentSize() {
         return thumbNailLRUCache.size();
     }
 
+    /**
+     * The maximum number of entries that this cache is configured to keep.
+     *
+     * @return the maximum number of entries that this cache is configured to
+     *         keep.
+     */
     public int getMaxSize() {
         return MAX_ENTRIES;
     }
 
+    /**
+     * Remove all entries in the cache.
+     */
     public void clear() {
         thumbNailLRUCache.clear();
     }
