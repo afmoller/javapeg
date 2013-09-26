@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +32,42 @@ import moller.util.string.StringUtil;
 public class FileUtil {
 
 	private static final String LS = System.getProperty("line.separator");
+
+    /**
+     * This method copies a file to a specified destination directory.
+     *
+     * @param sourceFile
+     *            is the file to copy
+     * @param destinationDirectory
+     *            is the directory to copy the file specified by the sourceFile
+     *            parameter.
+     * @param ensureUniqueName
+     *            if true, the destination file is ensured to be unique in the
+     *            directory. That means. If there already exists a file in the
+     *            destination directory, then there will be a unique suffix
+     *            added to the name of the copied file. The suffix starts with 0
+     *            (zero) and goes on with 1, 2 ,3, ... until a unique suffix is
+     *            found.
+     * @throws IOException
+     */
+	public static void copyFileTodirectory(File sourceFile, File destinationDirectory, boolean ensureUniqueName) throws IOException {
+	    if (destinationDirectory.isFile()) {
+	        throw new IllegalArgumentException("The destination directory may not specify a file: " + destinationDirectory.getAbsolutePath());
+	    }
+
+	    File target = new File(destinationDirectory, sourceFile.getName());
+
+	    if (ensureUniqueName) {
+	        String absolutePath = target.getAbsolutePath();
+
+	        int suffix = 0;
+	        while(target.exists()) {
+	            target = new File(absolutePath + suffix);
+	            suffix++;
+	        }
+	    }
+	    Files.copy(sourceFile.toPath(), target.toPath());
+	}
 
 	/**
 	 * This method copies a file.

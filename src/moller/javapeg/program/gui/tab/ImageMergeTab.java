@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -40,15 +41,15 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.gui.ImageMergeConflictViewer;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
-import moller.javapeg.program.jpeg.JPEGThumbNail;
-import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 import moller.util.hash.MD5Calculator;
 import moller.util.io.DirectoryUtil;
+import moller.util.io.FileUtil;
 import moller.util.jpeg.JPEGUtil;
 
 /**
@@ -296,7 +297,7 @@ public class ImageMergeTab extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (directoriesToMergeList.getModel().getSize() > 1) {
+            if (directoriesToMergeList.getModel().getSize() > 1 && !destinationDirectorySelector.getText().isEmpty()) {
                 mergeDirectoryButton.setEnabled(false);
                 imw = new ImageMergeWorker();
                 imw.addPropertyChangeListener(new PropertyChangeListener() {
@@ -324,10 +325,6 @@ public class ImageMergeTab extends JPanel {
         }
     }
 
-    private void doMerge() {
-
-    }
-
     private class ImageMergeWorker extends SwingWorker<String, String> {
         @Override
         protected String doInBackground() throws Exception {
@@ -350,38 +347,22 @@ public class ImageMergeTab extends JPanel {
                 publish("Destination directory created" + " " + destinationDirectory.getAbsolutePath());
                 publish("Searching selected directories for JPEG files");
 
-                List<File> jpegFiles = new ArrayList<File>();
+                List<File> jpegFiles = findJpegFilesFromSelectedDirectories();
 
-                int nrOfFiles = 0;
-                for (File directory : ((SortedListModel<File>)directoriesToMergeList.getModel()).getModel()) {
-                    jpegFiles.addAll(JPEGUtil.getJPEGFiles(directory));
-                    publish(jpegFiles.size() - nrOfFiles + " " + "JPEG files found in directory: " + directory.getAbsolutePath());
-                    nrOfFiles = jpegFiles.size();
+                Map<String, List<File>> md5ToFileListMap = calculateMD5SumsForFoundJpegFiles(jpegFiles);
+
+                List<File> nonConflictingFiles = getNonConflictingFiles(md5ToFileListMap);
+
+                List<File> selectedFilesFromMergeConflictViwer = getFilesFromConflictViewer(md5ToFileListMap);
+
+                for (File nonConflictingFile : nonConflictingFiles) {
+                    FileUtil.copyFileTodirectory(nonConflictingFile, destinationDirectory, true);
                 }
 
-                Map<String, List<File>> md5ToFileListMap = new HashMap<String, List<File>>();
-                for (File file : jpegFiles) {
-                    long startHashCalc = System.currentTimeMillis();
-                    String hash = MD5Calculator.calculate(file);
-//                    TODO Fix hard coded string
-                    publish("MD5 sum calculated (" + hash + ") for file: " + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - startHashCalc) + " milliseconds");
-                    if (!md5ToFileListMap.containsKey(hash)) {
-                        List<File> files = new ArrayList<File>();
-                        files.add(file);
-                        md5ToFileListMap.put(hash, files);
-                    } else {
-                        md5ToFileListMap.get(hash).add(file);
-                    }
+                for (File selectedFileFromMergeConflictViwer : selectedFilesFromMergeConflictViwer) {
+                    FileUtil.copyFileTodirectory(selectedFileFromMergeConflictViwer, destinationDirectory, true);
                 }
 
-                for (String key : md5ToFileListMap.keySet()) {
-                    if (md5ToFileListMap.get(key).size() > 1) {
-                        for (File jpegFile : md5ToFileListMap.get(key)) {
-
-                            JPEGThumbNail thumbnail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
-                        }
-                    }
-                }
 
                 if (!imw.isCancelled()) {
                     publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
@@ -393,6 +374,103 @@ public class ImageMergeTab extends JPanel {
                     return lang.get("imageresizer.resize.process.cancelled");
                 }
             }
+        }
+
+        /**
+         * Find all files that have a unique MD5 sum.
+         *
+         * @param md5ToFileListMap
+         *            is the {@link Map} that contains all JPEG files grouped by
+         *            their MD5 sum.
+         * @return a {@link List} of {@link File} object for all JPEG files that
+         *         have no conflict.
+         */
+        private List<File> getNonConflictingFiles(Map<String, List<File>> md5ToFileListMap) {
+            List<File> nonConflictingFiles = new ArrayList<File>();
+
+            for (String hash : md5ToFileListMap.keySet()) {
+                if (md5ToFileListMap.get(hash).size() == 1) {
+                    nonConflictingFiles.addAll(md5ToFileListMap.get(hash));
+                }
+            }
+
+            return nonConflictingFiles;
+        }
+
+        /**
+         * Calculates the MD5 sum for JPEG files and puts the result in a
+         * {@link Map} with the MD5 sum as key and the file as part of a
+         * {@link List} of type {@link File} as value in the {@link Map}.
+         *
+         * @param jpegFiles
+         *            is the list of JPEG files to calculate the MD5 sum for.
+         * @return a {@link Map} containing {@link List}:s of {@link File}
+         *         objects (Value) grouped by their MD5 sum (Key).
+         */
+        private Map<String, List<File>> calculateMD5SumsForFoundJpegFiles(List<File> jpegFiles) {
+            Map<String, List<File>> md5ToFileListMap = new HashMap<String, List<File>>();
+            for (File file : jpegFiles) {
+                long startHashCalc = System.currentTimeMillis();
+                String hash = MD5Calculator.calculate(file);
+//                TODO Fix hard coded string
+                publish("MD5 sum calculated (" + hash + ") for file: " + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - startHashCalc) + " milliseconds");
+                if (!md5ToFileListMap.containsKey(hash)) {
+                    List<File> files = new ArrayList<File>();
+                    files.add(file);
+                    md5ToFileListMap.put(hash, files);
+                } else {
+                    md5ToFileListMap.get(hash).add(file);
+                }
+            }
+            return md5ToFileListMap;
+        }
+
+        /**
+         * Finds all JPEG files in the selected directories that shall be
+         * merged.
+         *
+         * @return a {@link List} of {@link File} object for all found JPEG
+         *         files in the specified directories
+         * @throws FileNotFoundException
+         * @throws IOException
+         */
+        private List<File> findJpegFilesFromSelectedDirectories() throws FileNotFoundException, IOException {
+
+            List<File> jpegFiles = new ArrayList<File>();
+
+            int nrOfFiles = 0;
+            for (File directory : ((SortedListModel<File>)directoriesToMergeList.getModel()).getModel()) {
+                jpegFiles.addAll(JPEGUtil.getJPEGFiles(directory));
+//                TODO: Fix hard coded string
+                publish(jpegFiles.size() - nrOfFiles + " " + "JPEG files found in directory: " + directory.getAbsolutePath());
+                nrOfFiles = jpegFiles.size();
+            }
+
+            return jpegFiles;
+        }
+
+        /**
+         * Display an image conflicts viewer in a JDialog window, and let the
+         * user select which images(s) to use when a conflict has been detected.
+         * It is possible to select all conflicting images if wanted.
+         *
+         * @param md5ToFileListMap
+         *            is the {@link Map} that contains all the images from the
+         *            selected directories grouped by their MD5 hash sum.
+         * @return a list of {@link File} objects that the user selected in the
+         *         viewer.
+         */
+        private List<File> getFilesFromConflictViewer(Map<String, List<File>> md5ToFileListMap) {
+            ImageMergeConflictViewer imcv = new ImageMergeConflictViewer(md5ToFileListMap);
+            imcv.setVisible(true);
+
+            List<File> selectedImages = imcv.getSelectedImageFiles();
+
+            for (File selectedImage : selectedImages) {
+                publish(selectedImage.getAbsolutePath());
+            }
+
+            return selectedImages;
         }
 
         @Override
@@ -426,5 +504,6 @@ public class ImageMergeTab extends JPanel {
     public void setLogMessage(String logMessage) {
         String formattedTimeStamp = sdf.format(new Date(System.currentTimeMillis()));
         outputTextArea.appendAndScroll(formattedTimeStamp + ": " + logMessage + "\n");
+        logger.logDEBUG(logMessage);
     }
 }
