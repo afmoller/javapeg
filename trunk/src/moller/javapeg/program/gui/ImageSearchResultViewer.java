@@ -156,11 +156,6 @@ public class ImageSearchResultViewer extends JFrame {
         toolBar = new JToolBar();
         toolBar.setRollover(true);
 
-//        previousJButton = new JButton();
-//        nextJButton = new JButton();
-//        automaticAdjustToWindowSizeJToggleButton = new JToggleButton();
-//        adjustToWindowSizeJButton = new JButton();
-
         InputStream imageStream = null;
 
         ImageIcon previousImageIcon = new ImageIcon();
@@ -171,35 +166,21 @@ public class ImageSearchResultViewer extends JFrame {
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Back16.gif");
             previousImageIcon.setImage(ImageIO.read(imageStream));
-//            previousJButton.setIcon(previousImageIcon);
-//            previousJButton.setToolTipText(lang.get("imageviewer.button.back.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
             nextImageIcon.setImage(ImageIO.read(imageStream));
-//            nextJButton.setIcon(nextImageIcon);
-//            nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "AutoAdjustToWindowSize16.gif");
             automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-//            automaticAdjustToWindowSizeJToggleButton.setIcon(automaticAdjustToWindowSizeImageIcon);
-//            automaticAdjustToWindowSizeJToggleButton.setToolTipText(lang.get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
-//            automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Zoom16.gif");
             adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-//            adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
-//            adjustToWindowSizeJButton.setToolTipText(lang.get("imageviewer.button.adjustToWindowSize.toolTip"));
-//            adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
         }
 
-//        toolBar.add(previousJButton);
-//        toolBar.add(nextJButton);
         toolBar.addSeparator();
-//        toolBar.add(automaticAdjustToWindowSizeJToggleButton);
-//        toolBar.add(adjustToWindowSizeJButton);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
