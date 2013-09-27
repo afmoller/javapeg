@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,7 +58,7 @@ import moller.util.jpeg.JPEGUtil;
  * is possible to merge an unlimited amount of directories into a specified
  * destination directory.
  * <p>
- * The mechanism to detect duplicates are to calculated MD5 sums for each image
+ * The mechanism to detect duplicates are to calculate MD5 sums for each image
  * in the specified directories to merge and all images which have a unique MD5
  * sum will be copied into the destination directory.
  * <p>
@@ -68,7 +66,7 @@ import moller.util.jpeg.JPEGUtil;
  * do: either copy one of the conflicting images, both images (or all if more
  * than one conflict is detected).
  * <p>
- * The user will guided in the selection process by displayed thumbnails for
+ * The user will be guided in the selection process by displayed thumbnails for
  * all images that have a conflicting MD5 sum.
  *
  * @author Fredrik
@@ -135,7 +133,6 @@ public class ImageMergeTab extends JPanel {
         this.add(this.createDirectoriesPanel(), posBackground.expandH());
         this.add(new Gap(2), posBackground.nextCol());
         this.add(this.createProcessLogPanel(), posBackground.nextCol().expandH().expandW());
-
     }
 
     private JPanel createProcessLogPanel() {
@@ -215,9 +212,6 @@ public class ImageMergeTab extends JPanel {
         mergeDirectoryButton.setIcon(mergePictureImageIcon);
 //      TODO: Remove hard coded string
         mergeDirectoryButton.setToolTipText("Merge the images in selected directories");
-
-
-
 
         ImageIcon cancelMergePictureImageIcon = new ImageIcon();
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/cancel.png")) {
@@ -300,17 +294,6 @@ public class ImageMergeTab extends JPanel {
             if (directoriesToMergeList.getModel().getSize() > 1 && !destinationDirectorySelector.getText().isEmpty()) {
                 mergeDirectoryButton.setEnabled(false);
                 imw = new ImageMergeWorker();
-                imw.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(final PropertyChangeEvent event) {
-                        switch (event.getPropertyName()) {
-                        case "progress":
-//                            progressBar.setIndeterminate(false);
-//                            progressBar.setValue((Integer) event.getNewValue());
-                            break;
-                        }
-                    }
-                });
                 imw.execute();
             }
         }
@@ -325,6 +308,13 @@ public class ImageMergeTab extends JPanel {
         }
     }
 
+    /**
+     * Private class that executes the long running merge process in the context
+     * of a SwingWorker.
+     *
+     * @author Fredrik
+     *
+     */
     private class ImageMergeWorker extends SwingWorker<String, String> {
         @Override
         protected String doInBackground() throws Exception {
@@ -344,25 +334,11 @@ public class ImageMergeTab extends JPanel {
 //                TODO: Fix hard coded string
                 return "Merge process aborted";
             } else {
+//              TODO: Fix hard coded string
                 publish("Destination directory created" + " " + destinationDirectory.getAbsolutePath());
-                publish("Searching selected directories for JPEG files");
 
-                List<File> jpegFiles = findJpegFilesFromSelectedDirectories();
-
-                Map<String, List<File>> md5ToFileListMap = calculateMD5SumsForFoundJpegFiles(jpegFiles);
-
-                List<File> nonConflictingFiles = getNonConflictingFiles(md5ToFileListMap);
-
-                List<File> selectedFilesFromMergeConflictViwer = getFilesFromConflictViewer(md5ToFileListMap);
-
-                for (File nonConflictingFile : nonConflictingFiles) {
-                    FileUtil.copyFileTodirectory(nonConflictingFile, destinationDirectory, true);
-                }
-
-                for (File selectedFileFromMergeConflictViwer : selectedFilesFromMergeConflictViwer) {
-                    FileUtil.copyFileTodirectory(selectedFileFromMergeConflictViwer, destinationDirectory, true);
-                }
-
+                // Perform the actual merge process.
+                performMerge(destinationDirectory);
 
                 if (!imw.isCancelled()) {
                     publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
@@ -374,6 +350,75 @@ public class ImageMergeTab extends JPanel {
                     return lang.get("imageresizer.resize.process.cancelled");
                 }
             }
+        }
+
+        /**
+         * This method performs the complete orchestration of the merge task:
+         *
+         * <pre>
+         *  1: Find the JPEG files to merge.
+         *  2: Calculate MD5 sums for the found files.
+         *  3: Let the user select which files to copy if there are conflicts
+         *     found.
+         *  4: Copies the selected files and non conflicting files to the
+         *     destination directory.
+         * </pre>
+         *
+         * @param destinationDirectory
+         *            to which directory the merged files shall be copied.
+         * @throws FileNotFoundException
+         * @throws IOException
+         */
+        private void performMerge(File destinationDirectory) throws FileNotFoundException, IOException {
+//          TODO: Fix hard coded string
+            publish("Searching selected directories for JPEG files");
+
+            // Find all JPEG files...
+            List<File> jpegFiles = findJpegFilesFromSelectedDirectories();
+
+            // ...calculate MD5 sums for the JPEG files and group them
+            // based on their MD5 sum...
+            Map<String, List<File>> md5ToFileListMap = calculateMD5SumsForFoundJpegFiles(jpegFiles);
+
+            // ... sort out all non conflicting JPEG files...
+            List<File> nonConflictingFiles = getNonConflictingFiles(md5ToFileListMap);
+
+            // ... display the conflict viewer and collect the selected
+            // JPEG files...
+            List<File> selectedFilesFromMergeConflictViwer = new ArrayList<File>();
+
+            // ... if the process has not yet been cancelled.
+            if (!imw.isCancelled()) {
+                selectedFilesFromMergeConflictViwer.addAll(getFilesFromConflictViewer(md5ToFileListMap));
+            }
+
+//          TODO: Fix hard coded string
+            publish("Copy process starting");
+
+            // ... copy all non conflicting JPEG files to the destination
+            // directory...
+            for (File nonConflictingFile : nonConflictingFiles) {
+                if (imw.isCancelled()) {
+                    break;
+                }
+                File destinationFile = FileUtil.copyFileTodirectory(nonConflictingFile, destinationDirectory, true);
+//              TODO: Fix hard coded string
+                publish("File: " + nonConflictingFile.getAbsolutePath() + " was copied to the destination directory with the name: " + destinationFile.getName());
+            }
+
+            // ... copy all, from the conflict viewer selected JPEG files
+            // to the destination directory...
+            for (File selectedFileFromMergeConflictViwer : selectedFilesFromMergeConflictViwer) {
+                if (imw.isCancelled()) {
+                    break;
+                }
+                File destinationFile = FileUtil.copyFileTodirectory(selectedFileFromMergeConflictViwer, destinationDirectory, true);
+//              TODO: Fix hard coded string
+                publish("File: " + selectedFileFromMergeConflictViwer.getAbsolutePath() + " was copied to the destination directory with the name: " + destinationFile.getName());
+            }
+
+//          TODO: Fix hard coded string
+            publish("Copy process finished");
         }
 
         /**
@@ -389,6 +434,9 @@ public class ImageMergeTab extends JPanel {
             List<File> nonConflictingFiles = new ArrayList<File>();
 
             for (String hash : md5ToFileListMap.keySet()) {
+                if (imw.isCancelled()) {
+                    break;
+                }
                 if (md5ToFileListMap.get(hash).size() == 1) {
                     nonConflictingFiles.addAll(md5ToFileListMap.get(hash));
                 }
@@ -410,6 +458,9 @@ public class ImageMergeTab extends JPanel {
         private Map<String, List<File>> calculateMD5SumsForFoundJpegFiles(List<File> jpegFiles) {
             Map<String, List<File>> md5ToFileListMap = new HashMap<String, List<File>>();
             for (File file : jpegFiles) {
+                if (imw.isCancelled()) {
+                    break;
+                }
                 long startHashCalc = System.currentTimeMillis();
                 String hash = MD5Calculator.calculate(file);
 //                TODO Fix hard coded string
@@ -440,6 +491,9 @@ public class ImageMergeTab extends JPanel {
 
             int nrOfFiles = 0;
             for (File directory : ((SortedListModel<File>)directoriesToMergeList.getModel()).getModel()) {
+                if (imw.isCancelled()) {
+                    break;
+                }
                 jpegFiles.addAll(JPEGUtil.getJPEGFiles(directory));
 //                TODO: Fix hard coded string
                 publish(jpegFiles.size() - nrOfFiles + " " + "JPEG files found in directory: " + directory.getAbsolutePath());
@@ -467,7 +521,7 @@ public class ImageMergeTab extends JPanel {
             List<File> selectedImages = imcv.getSelectedImageFiles();
 
             for (File selectedImage : selectedImages) {
-                publish(selectedImage.getAbsolutePath());
+                publish("Image: " + selectedImage.getAbsolutePath() + " was selected in the image conflict viewer");
             }
 
             return selectedImages;
