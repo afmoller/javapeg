@@ -32,6 +32,32 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
 
+/**
+ * This class is used in the Image Merge functionality of JavaPEG.
+ * <p>
+ * This class constructs a modal, which makes the current thread execution to
+ * get paused (the application execution is paused and waits for the result from
+ * this class), {@link JDialog} window that displays a matrix with conflicting
+ * JPEG images.
+ * <p>
+ * Each row in the matrix displays thumbnails for the files that have the same
+ * MD5 sum. Along with the thumbnails is also a checkbox for each thumbnail.
+ * <p>
+ * These checkboxes makes it possible to chose which images, based on the
+ * thumbnails, that shall be copied to the destination directory.
+ * <p>
+ * For instance, if three directories are selected to be merged and a file with
+ * the same MD5 sum exists in all three directories, or in the same directory
+ * but with another file name, then will these three files be presented on one
+ * row and in three columns in the matrix.
+ * <p>
+ * The component that creates an instance of this class may also ask for the
+ * selection result via an public method of this class.
+ *
+ *
+ * @author Fredrik
+ *
+ */
 public class ImageMergeConflictViewer extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +66,6 @@ public class ImageMergeConflictViewer extends JDialog {
     private static Logger logger;
     private static Language lang;
 
-
     private GridLayout thumbNailGridLayout;
     private JPanel thumbNailsPanel;
     private JScrollPane scrollpane;
@@ -48,6 +73,15 @@ public class ImageMergeConflictViewer extends JDialog {
 
     private final int maxNrOfConflicts;
 
+    /**
+     * Constructor, creates an initiates this GUI component.
+     *
+     * @param md5ToFileListMap
+     *            is the container that contains JPEG images grouped by their
+     *            MD5 sum. All keys in the {@link Map} that has more than one
+     *            entry in the value {@link List}:s will be displayed by this
+     *            GUI.
+     */
     public ImageMergeConflictViewer(Map<String, List<File>> md5ToFileListMap) {
         configuration = Config.getInstance().get();
         logger = Logger.getInstance();
@@ -61,8 +95,14 @@ public class ImageMergeConflictViewer extends JDialog {
     }
 
     /**
+     * Helper method that puts all conflicting JPEG images as a thumbnail and a
+     * checkbox in a matrix.
      *
      * @param md5ToFileListMap
+     *            is the container that contains JPEG images grouped by their
+     *            MD5 sum. All keys in the {@link Map} that has more than one
+     *            entry in the value {@link List}:s will be displayed by this
+     *            GUI.
      */
     private void initiateGUI(Map<String, List<File>> md5ToFileListMap) {
 
@@ -101,11 +141,13 @@ public class ImageMergeConflictViewer extends JDialog {
                 maxNrOfConflicts = md5ToFileListMap.get(hash).size();
             }
         }
-
         return maxNrOfConflicts;
     }
 
-    // Create Main Window
+    /**
+     * Creates the main window and configures it according to persisted
+     * configuration.
+     */
     public void createMainFrame() {
 
         GUI gUI = configuration.getgUI();
@@ -140,6 +182,12 @@ public class ImageMergeConflictViewer extends JDialog {
         this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
     }
 
+    /**
+     * Helper method to create the thumbnails background area, with a
+     * {@link JScrollPane}.
+     *
+     * @return the created and configured {@link JScrollPane} component.
+     */
     private JScrollPane createThumbNailsBackgroundPanel(){
 
         thumbNailGridLayout = new GridLayout(0, maxNrOfConflicts);
@@ -158,6 +206,10 @@ public class ImageMergeConflictViewer extends JDialog {
         return scrollpane;
     }
 
+    /**
+     * Put the properties of this component that shall be persisted at
+     * application exit to the application {@link Config}
+     */
     private void saveSettings() {
         GUI gUI = configuration.getgUI();
 
@@ -171,6 +223,19 @@ public class ImageMergeConflictViewer extends JDialog {
         this.addWindowListener(new WindowDestroyer());
     }
 
+    /**
+     * Creates one thumbnail checkbox combination as a component surrounded by a
+     * {@link JPanel}
+     *
+     * @param setSelected
+     *            decides whether or not the {@link JCheckBoxWithUserObject}
+     *            shall be selected or not.
+     * @param jpegFile
+     *            is the file that shall be shown as thumbnail in this
+     *            component.
+     * @return a {@link JPanel} that contains a {@link JLabel} with an icon (the
+     *         image thumbnail) and a {@link JCheckBoxWithUserObject}.
+     */
     private JPanel createThumbnailAndCheckBoxContainer(boolean setSelected, File jpegFile) {
         JPanel thumbnailAndCheckBoxPanel = new JPanel(new BorderLayout());
         thumbnailAndCheckBoxPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
@@ -188,13 +253,22 @@ public class ImageMergeConflictViewer extends JDialog {
         return thumbnailAndCheckBoxPanel;
     }
 
+    /**
+     * Helper method that executes the tasks that has to be performed when the
+     * window is to be disposed, call the saveSettings method for instance.
+     */
     private void disposeFrame() {
-//        this.collectSelectedImages();
         this.saveSettings();
         this.setVisible(false);
         this.dispose();
     }
 
+    /**
+     * Listener that is activated when the window is closing.
+     *
+     * @author Fredrik
+     *
+     */
     private class WindowDestroyer extends WindowAdapter {
         @Override
         public void windowClosing (WindowEvent e) {
@@ -202,7 +276,14 @@ public class ImageMergeConflictViewer extends JDialog {
         }
     }
 
-    private List<File> collectSelectedImages() {
+    /**
+     * Returns a {@link List} of {@link File} objects for the images that have
+     * been selected in this window by the user.
+     *
+     * @return a {@link List} with {@link File} objects which contains the
+     *         images that have been selected by the user in this window.
+     */
+    public List<File> getSelectedImageFiles() {
         List<File> selectedFiles = new ArrayList<File>();
 
         for (JCheckBoxWithUserObject<File> checkBox : checkBoxes) {
@@ -211,9 +292,5 @@ public class ImageMergeConflictViewer extends JDialog {
             }
         }
         return selectedFiles;
-    }
-
-    public List<File> getSelectedImageFiles() {
-        return collectSelectedImages();
     }
 }
