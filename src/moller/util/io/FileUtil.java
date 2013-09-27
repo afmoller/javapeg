@@ -48,9 +48,10 @@ public class FileUtil {
      *            added to the name of the copied file. The suffix starts with 0
      *            (zero) and goes on with 1, 2 ,3, ... until a unique suffix is
      *            found.
+     * @return a {@link File} object for the target file.
      * @throws IOException
      */
-	public static void copyFileTodirectory(File sourceFile, File destinationDirectory, boolean ensureUniqueName) throws IOException {
+	public static File copyFileTodirectory(File sourceFile, File destinationDirectory, boolean ensureUniqueName) throws IOException {
 	    if (destinationDirectory.isFile()) {
 	        throw new IllegalArgumentException("The destination directory may not specify a file: " + destinationDirectory.getAbsolutePath());
 	    }
@@ -67,6 +68,8 @@ public class FileUtil {
 	        }
 	    }
 	    Files.copy(sourceFile.toPath(), target.toPath());
+
+	    return target;
 	}
 
 	/**
