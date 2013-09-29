@@ -1,5 +1,6 @@
 3.0:
 ====
+- Rebuild the initial configuration GUI to a modal JDialog
 - Fix the logging configuration page so it looks like all other configuration pages.
 - Align all sections of the the configuration pages so they are aligned top-left.     
 - Implement image cache for the Image Viewer.    

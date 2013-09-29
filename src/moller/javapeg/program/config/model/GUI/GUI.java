@@ -8,6 +8,7 @@ public class GUI {
     private GUIWindow configViewer;
     private GUIWindow helpViewer;
     private GUIWindow imageResizer;
+    private GUIWindow imageConflictViewer;
 
     public GUIWindow getMain() {
         return main;
@@ -27,6 +28,9 @@ public class GUI {
     public GUIWindow getImageResizer() {
         return imageResizer;
     }
+    public GUIWindow getImageConflictViewer() {
+        return imageConflictViewer;
+    }
     public void setMain(GUIWindow main) {
         this.main = main;
     }
@@ -44,5 +48,8 @@ public class GUI {
     }
     public void setImageResizer(GUIWindow imageResizer) {
         this.imageResizer = imageResizer;
+    }
+    public void setImageConflictViewer(GUIWindow imageConflictViewer) {
+        this.imageConflictViewer = imageConflictViewer;
     }
 }

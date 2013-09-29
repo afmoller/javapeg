@@ -156,7 +156,7 @@ public class ImageResizer extends JFrame {
 
         this.setTitle(lang.get("imageresizer.gui.title"));
 
-        GUIWindow imageResizer = gUI.getImageResizer();
+        GUIWindow imageResizer = gUI.getImageConflictViewer();
 
         Point xyFromConfig = imageResizer.getSizeAndLocation().getLocation();
 
@@ -166,10 +166,10 @@ public class ImageResizer extends JFrame {
 
         } else {
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Resizer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+            logger.logERROR("Could not set location of Image Conflict Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
 
             this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_RESIZER_WIDTH, GUIDefaults.IMAGE_RESIZER_HEIGHT);
+            this.setSize(GUIDefaults.IMAGE_CONFLICT_VIEWER_WIDTH, GUIDefaults.IMAGE_CONFLICT_VIEWER_HEIGHT);
         }
 
         try{

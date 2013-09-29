@@ -58,6 +58,12 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <height>700</height>
       <splitPane id="vertical">440</splitPane>
     </imageResizer>
+    <imageConflictViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>300</width>
+      <height>600</height>
+    </imageConflictViewer>
   </gui>
   <updatesChecker>
     <enabled>true</enabled>

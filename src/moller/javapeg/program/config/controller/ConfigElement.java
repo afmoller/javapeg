@@ -87,4 +87,5 @@ public class ConfigElement {
     public static final String IMAGE_RESIZER = "imageResizer";
     public static final String RESIZE_IMAGES = "resizeImages";
     public static final String SELECTED_QUALITY_INDEX = "selectedQualityIndex";
+    public static final String IMAGE_CONFLICT_VIEWER = "imageConflictViewer";
 }

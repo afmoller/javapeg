@@ -323,19 +323,14 @@ public class ImageMergeTab extends JPanel {
             File destinationDirectory = new File(destinationDirectorySelector.getText(), "merged");
 
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
-
-//            TODO: Fix hard coded string
-            publish("Merge Process started");
+            publish(lang.get("imagemerge.process.started"));
 
             if (!destinationDirectory.mkdirs()) {
-                publish("Could not create directory" + ": " + destinationDirectory.getAbsolutePath());
-                logger.logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
+                publish(lang.get("imagemerge.process.destinationdirectory.not.created") + "  " + destinationDirectory.getAbsolutePath());
 
-//                TODO: Fix hard coded string
-                return "Merge process aborted";
+                return lang.get("imagemerge.process.aborted");
             } else {
-//              TODO: Fix hard coded string
-                publish("Destination directory created" + " " + destinationDirectory.getAbsolutePath());
+                publish(lang.get("imagemerge.process.destinationdirectory.created") + " " + destinationDirectory.getAbsolutePath());
 
                 // Perform the actual merge process.
                 performMerge(destinationDirectory);
@@ -463,8 +458,7 @@ public class ImageMergeTab extends JPanel {
                 }
                 long startHashCalc = System.currentTimeMillis();
                 String hash = MD5Calculator.calculate(file);
-//                TODO Fix hard coded string
-                publish("MD5 sum calculated (" + hash + ") for file: " + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - startHashCalc) + " milliseconds");
+                publish(String.format(lang.get("imagemerge.process.md5Sum.calculated"), hash, file.getAbsolutePath(), (System.currentTimeMillis() - startHashCalc)));
                 if (!md5ToFileListMap.containsKey(hash)) {
                     List<File> files = new ArrayList<File>();
                     files.add(file);
