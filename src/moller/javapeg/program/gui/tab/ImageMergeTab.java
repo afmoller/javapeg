@@ -136,13 +136,12 @@ public class ImageMergeTab extends JPanel {
     }
 
     private JPanel createProcessLogPanel() {
-
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        JLabel outputLabel = new JLabel(lang.get("imageresizer.processlog.title"));
+        JLabel outputLabel = new JLabel(lang.get("imagemerge.processlog.title"));
         outputLabel.setForeground(Color.GRAY);
 
         outputTextArea = new CustomizedJTextArea();
@@ -157,9 +156,7 @@ public class ImageMergeTab extends JPanel {
     }
 
     private JPanel createDirectoriesPanel() {
-
-//        TODO: Remove hard coded string
-        JLabel directoryListLabel = new JLabel("DIRECTORIES TO MERGE");
+        JLabel directoryListLabel = new JLabel(lang.get("imagemerge.gui.title"));
         directoryListLabel.setForeground(Color.GRAY);
 
         SortedListModel<File> directoriesModel = new SortedListModel<File>();
@@ -180,12 +177,10 @@ public class ImageMergeTab extends JPanel {
         }
         removeSelectedDirectoryButton = new JButton();
         removeSelectedDirectoryButton.setIcon(removePictureImageIcon);
-//      TODO: Remove hard coded string
-        removeSelectedDirectoryButton.setToolTipText("Remove selected directory");
+        removeSelectedDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.directories.remove"));
 
         JPanel removeSelectedDirectoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         removeSelectedDirectoryButtonPanel.add(removeSelectedDirectoryButton);
-
 
         ImageIcon addPictureImageIcon = new ImageIcon();
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/plus_16.png")) {
@@ -197,8 +192,7 @@ public class ImageMergeTab extends JPanel {
 
         addDirectoryButton = new JButton();
         addDirectoryButton.setIcon(addPictureImageIcon);
-//      TODO: Remove hard coded string
-        addDirectoryButton.setToolTipText("Add currently displayed  directory");
+        addDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.directories.add"));
 
         ImageIcon mergePictureImageIcon = new ImageIcon();
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/arrow_join.png")) {
@@ -210,8 +204,7 @@ public class ImageMergeTab extends JPanel {
 
         mergeDirectoryButton = new JButton();
         mergeDirectoryButton.setIcon(mergePictureImageIcon);
-//      TODO: Remove hard coded string
-        mergeDirectoryButton.setToolTipText("Merge the images in selected directories");
+        mergeDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.process.merge.start"));
 
         ImageIcon cancelMergePictureImageIcon = new ImageIcon();
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/cancel.png")) {
@@ -223,8 +216,7 @@ public class ImageMergeTab extends JPanel {
 
         cancelMergeButton = new JButton();
         cancelMergeButton.setIcon(cancelMergePictureImageIcon);
-//      TODO: Remove hard coded string
-        cancelMergeButton.setToolTipText("Cancel the merge process");
+        cancelMergeButton.setToolTipText(lang.get("imagemerge.tooltip.process.merge.cancel"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         buttonPanel.add(addDirectoryButton);
@@ -246,7 +238,7 @@ public class ImageMergeTab extends JPanel {
     }
 
     /**
-     * Listener class for the Button used to remove an already selected
+     * Listener class for the {@link JButton} used to remove an already selected
      * directory to merge. It removes a selected entry in the directory to merge
      * {@link JList} list.
      *
@@ -264,8 +256,9 @@ public class ImageMergeTab extends JPanel {
     }
 
     /**
-     * Listener class for the Button that adds a directory to the {@link JList}
-     * that contains the directories in which the content shall be merged.
+     * Listener class for the {@link JButton} that adds a directory to the
+     * {@link JList} that contains the directories in which the content shall be
+     * merged.
      *
      * @author Fredrik
      *
@@ -282,7 +275,9 @@ public class ImageMergeTab extends JPanel {
     }
 
     /**
-     * Listener class for the Button that starts the merge process.
+     * Listener class for the {@link JButton} that starts the merge process, if
+     * there is more than one directory selected and there is a desination
+     * directory selected.
      *
      * @author Fredrik
      *
@@ -299,6 +294,13 @@ public class ImageMergeTab extends JPanel {
         }
     }
 
+    /**
+     * Listener class for the {@link JButton} that cancels the merge process, if
+     * started.
+     *
+     * @author Fredrik
+     *
+     */
     private class CancelMergeButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -327,7 +329,6 @@ public class ImageMergeTab extends JPanel {
 
             if (!destinationDirectory.mkdirs()) {
                 publish(lang.get("imagemerge.process.destinationdirectory.not.created") + "  " + destinationDirectory.getAbsolutePath());
-
                 return lang.get("imagemerge.process.aborted");
             } else {
                 publish(lang.get("imagemerge.process.destinationdirectory.created") + " " + destinationDirectory.getAbsolutePath());
@@ -336,13 +337,12 @@ public class ImageMergeTab extends JPanel {
                 performMerge(destinationDirectory);
 
                 if (!imw.isCancelled()) {
-                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
-                    return lang.get("imageresizer.resize.process.done");
+                    publish(String.format(lang.get("imagemerge.process.done"), (System.currentTimeMillis() - startTime) / 1000));
+                    return lang.get("imagemerge.process.done.popup");
                 } else {
-                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
-
+                    publish(String.format(lang.get("imagemerge.process.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
                     mergeDirectoryButton.setEnabled(true);
-                    return lang.get("imageresizer.resize.process.cancelled");
+                    return lang.get("imagemerge.process.done.popup.cancelled");
                 }
             }
         }
@@ -365,8 +365,7 @@ public class ImageMergeTab extends JPanel {
          * @throws IOException
          */
         private void performMerge(File destinationDirectory) throws FileNotFoundException, IOException {
-//          TODO: Fix hard coded string
-            publish("Searching selected directories for JPEG files");
+            publish(lang.get("imagemerge.process.images.searching"));
 
             // Find all JPEG files...
             List<File> jpegFiles = findJpegFilesFromSelectedDirectories();
@@ -387,8 +386,9 @@ public class ImageMergeTab extends JPanel {
                 selectedFilesFromMergeConflictViwer.addAll(getFilesFromConflictViewer(md5ToFileListMap));
             }
 
-//          TODO: Fix hard coded string
-            publish("Copy process starting");
+            if (!imw.isCancelled()) {
+                publish(lang.get("imagemerge.process.images.copy.started"));
+            }
 
             // ... copy all non conflicting JPEG files to the destination
             // directory...
@@ -397,8 +397,7 @@ public class ImageMergeTab extends JPanel {
                     break;
                 }
                 File destinationFile = FileUtil.copyFileTodirectory(nonConflictingFile, destinationDirectory, true);
-//              TODO: Fix hard coded string
-                publish("File: " + nonConflictingFile.getAbsolutePath() + " was copied to the destination directory with the name: " + destinationFile.getName());
+                publish(String.format(lang.get("imagemerge.process.images.copy.image"), nonConflictingFile.getAbsolutePath()) + " " + destinationFile.getName());
             }
 
             // ... copy all, from the conflict viewer selected JPEG files
@@ -408,12 +407,11 @@ public class ImageMergeTab extends JPanel {
                     break;
                 }
                 File destinationFile = FileUtil.copyFileTodirectory(selectedFileFromMergeConflictViwer, destinationDirectory, true);
-//              TODO: Fix hard coded string
-                publish("File: " + selectedFileFromMergeConflictViwer.getAbsolutePath() + " was copied to the destination directory with the name: " + destinationFile.getName());
+                publish(String.format(lang.get("imagemerge.process.images.copy.image"), selectedFileFromMergeConflictViwer.getAbsolutePath()) + " " + destinationFile.getName());
             }
-
-//          TODO: Fix hard coded string
-            publish("Copy process finished");
+            if (!imw.isCancelled()) {
+                publish(lang.get("imagemerge.process.images.copy.finished"));
+            }
         }
 
         /**
@@ -436,7 +434,6 @@ public class ImageMergeTab extends JPanel {
                     nonConflictingFiles.addAll(md5ToFileListMap.get(hash));
                 }
             }
-
             return nonConflictingFiles;
         }
 
@@ -480,7 +477,6 @@ public class ImageMergeTab extends JPanel {
          * @throws IOException
          */
         private List<File> findJpegFilesFromSelectedDirectories() throws FileNotFoundException, IOException {
-
             List<File> jpegFiles = new ArrayList<File>();
 
             int nrOfFiles = 0;
@@ -489,11 +485,9 @@ public class ImageMergeTab extends JPanel {
                     break;
                 }
                 jpegFiles.addAll(JPEGUtil.getJPEGFiles(directory));
-//                TODO: Fix hard coded string
-                publish(jpegFiles.size() - nrOfFiles + " " + "JPEG files found in directory: " + directory.getAbsolutePath());
+                publish(jpegFiles.size() - nrOfFiles + " " + lang.get("imagemerge.process.images.searching.found") + " " + directory.getAbsolutePath());
                 nrOfFiles = jpegFiles.size();
             }
-
             return jpegFiles;
         }
 
@@ -515,9 +509,8 @@ public class ImageMergeTab extends JPanel {
             List<File> selectedImages = imcv.getSelectedImageFiles();
 
             for (File selectedImage : selectedImages) {
-                publish("Image: " + selectedImage.getAbsolutePath() + " was selected in the image conflict viewer");
+                publish(String.format(lang.get("imagemerge.conflict.viewer"), selectedImage.getAbsolutePath()));
             }
-
             return selectedImages;
         }
 

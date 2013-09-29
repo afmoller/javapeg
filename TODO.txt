@@ -1,5 +1,8 @@
 3.0:
 ====
+- Fix unigue name method in FileUtil
+- Add help section for the Image Merge functionality
+- Add persistent configuration of the Image merge destination directory.
 - Rebuild the initial configuration GUI to a modal JDialog
 - Fix the logging configuration page so it looks like all other configuration pages.
 - Align all sections of the the configuration pages so they are aligned top-left.     

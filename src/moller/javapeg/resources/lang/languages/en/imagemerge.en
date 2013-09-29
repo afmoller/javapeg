@@ -13,10 +13,33 @@
 # For more information regarding the rules for the syntax of this file please visit:
 # http://java.sun.com/javase/6/docs/api/java/util/Properties.html
 
+imagemerge.gui.title = DIRECTORIES TO MERGE
+imagemerge.gui.conflict.viewer.title = Merge Conflict Viewer
+
+imagemerge.processlog.title = PROCESS LOG
+
+imagemerge.tooltip.directories.remove   = Remove selected directory
+imagemerge.tooltip.directories.add      = Add currently displayed  directory
+imagemerge.tooltip.process.merge.start  = Merge the images in selected directories
+imagemerge.tooltip.process.merge.cancel = Cancel the merge process
+
 imagemerge.process.md5Sum.calculated = MD5 sum calculated (%s) for file: %s (%s milliseconds)
 
-imagemerge.process.started = Merge process started
-imagemerge.process.aborted = Merge process aborted
+imagemerge.process.started        = Merge process started
+imagemerge.process.aborted        = Merge process aborted
+imagemerge.process.done           = Merge process took: %s seconds
+imagemerge.process.done.cancelled = Merge process cancelled after: %s seconds
+imagemerge.process.done.popup           = Merge finished
+imagemerge.process.done.popup.cancelled = Merge cancelled
 
-imagemerge.process.destinationdirectory.created = Destination directory created:
+imagemerge.process.destinationdirectory.created     = Destination directory created:
 imagemerge.process.destinationdirectory.not.created = Could not create directory:
+
+imagemerge.process.images.searching       = Searching selected directories for JPEG files
+imagemerge.process.images.searching.found = JPEG files found in directory:
+
+imagemerge.process.images.copy.started  = Copy process starting
+imagemerge.process.images.copy.image    = File:  %s was copied to the destination directory with the name:
+imagemerge.process.images.copy.finished = Copy process finished
+
+imagemerge.conflict.viewer = Image: %s was selected in the image conflict viewer
