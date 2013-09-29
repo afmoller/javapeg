@@ -56,10 +56,16 @@ public class FileUtil {
 	        throw new IllegalArgumentException("The destination directory may not specify a file: " + destinationDirectory.getAbsolutePath());
 	    }
 
+	    if (sourceFile.isDirectory()) {
+	        throw new IllegalArgumentException("The source file may not specify a directory: " + sourceFile.getAbsolutePath());
+	    }
+
 	    File target = new File(destinationDirectory, sourceFile.getName());
 
 	    if (ensureUniqueName) {
 	        String absolutePath = target.getAbsolutePath();
+
+
 
 	        int suffix = 0;
 	        while(target.exists()) {
@@ -553,15 +559,37 @@ public class FileUtil {
         return bytes;
     }
 
+    /**
+     * Removes the file suffix from a file name.
+     *
+     * @param file
+     *            is the {@link File} object to remove the file suffix from.
+     * @return the name, as a {@link String} of the file denoted by the
+     *         parameter file, but without the suffix of the file. If the file
+     *         name does not have a suffix, then the name is returned as it is.
+     */
 	public static String removeFileSuffix(File file) {
 	    String fileName = file.getName();
 
 	    if (fileName.indexOf(".") > 0) {
-
 	        return fileName.substring(0, fileName.lastIndexOf("."));
 	    } else {
 	        return fileName;
 	    }
+	}
+
+	/**
+	 * @param file
+	 * @return
+	 */
+	public static String getFileSuffix(File file) {
+	    String fileName = file.getName();
+
+        if (fileName.indexOf(".") > 0) {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } else {
+            return fileName;
+        }
 	}
 
 	public static boolean validFileName(String fileName) {

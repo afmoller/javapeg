@@ -105,7 +105,6 @@ public class ImageMergeConflictViewer extends JDialog {
      *            GUI.
      */
     private void initiateGUI(Map<String, List<File>> md5ToFileListMap) {
-
         checkBoxes = new ArrayList<JCheckBoxWithUserObject<File>>();
 
         for (String hash : md5ToFileListMap.keySet()) {
@@ -152,7 +151,7 @@ public class ImageMergeConflictViewer extends JDialog {
 
         GUI gUI = configuration.getgUI();
 
-        Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
+        Rectangle sizeAndLocation = gUI.getImageConflictViewer().getSizeAndLocation();
 
         this.setSize(sizeAndLocation.getSize());
 
@@ -163,21 +162,20 @@ public class ImageMergeConflictViewer extends JDialog {
             this.setSize(sizeAndLocation.getSize());
         } else {
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Search Result Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
+            logger.logERROR("Could not set location of Image Conflict Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
 
             this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_WIDTH, GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_HEIGHT);
+            this.setSize(GUIDefaults.IMAGE_CONFLICT_VIEWER_WIDTH, GUIDefaults.IMAGE_CONFLICT_VIEWER_HEIGHT);
         }
 
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e){
-            logger.logERROR("Could not set desired Look And Feel for Image Search Result Viewer GUI");
+        } catch (Exception e){
+            logger.logERROR("Could not set desired Look And Feel for Image Conflict Viewer GUI");
             logger.logERROR(e);
         }
 
-        this.setTitle(lang.get("imagesearchresultviewer.title"));
+        this.setTitle(lang.get("imagemerge.gui.conflict.viewer.title"));
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
     }
@@ -189,7 +187,6 @@ public class ImageMergeConflictViewer extends JDialog {
      * @return the created and configured {@link JScrollPane} component.
      */
     private JScrollPane createThumbNailsBackgroundPanel(){
-
         thumbNailGridLayout = new GridLayout(0, maxNrOfConflicts);
         thumbNailsPanel = new JPanel(thumbNailGridLayout);
 
@@ -213,7 +210,7 @@ public class ImageMergeConflictViewer extends JDialog {
     private void saveSettings() {
         GUI gUI = configuration.getgUI();
 
-        Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
+        Rectangle sizeAndLocation = gUI.getImageConflictViewer().getSizeAndLocation();
 
         sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
         sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
