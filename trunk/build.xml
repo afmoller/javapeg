@@ -43,6 +43,7 @@
 				<include name="**/categoryimportexport.en" />
 				<include name="**/common.en" />
 				<include name="**/configviewer.en" />
+				<include name="**/imagemerge.en" />
 				<include name="**/imagerepository.en" />
 				<include name="**/imageresizer.en" />
 				<include name="**/imageviewer.en" />
@@ -52,6 +53,7 @@
 				<include name="**/categoryimportexport.sv" />
 				<include name="**/common.sv" />
 				<include name="**/configviewer.sv" />
+				<include name="**/imagemerge.sv" />
 				<include name="**/imagerepository.sv" />
 				<include name="**/imageresizer.sv" />
 				<include name="**/imageviewer.sv" />

@@ -34,6 +34,7 @@ public class GUIConfig {
             gui.setImageSearchResultViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_SEARCH_RESULT_VIEWER, gUINode, XPathConstants.NODE), xPath));
             gui.setImageViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_VIEWER, gUINode, XPathConstants.NODE), xPath));
             gui.setMain(createGUIWindow((Node)xPath.evaluate(ConfigElement.MAIN, gUINode, XPathConstants.NODE), xPath));
+            gui.setImageConflictViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_CONFLICT_VIEWER, gUINode, XPathConstants.NODE), xPath));
 
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Could not get gui config", e);
@@ -151,6 +152,16 @@ public class GUIConfig {
         XMLUtil.writeIndent(xmlsw, baseIndent.value());
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //    IMAGE RESIZER end
+
+        //    IMAGE CONFLICT VIEWER start
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.IMAGE_CONFLICT_VIEWER, Tab.TWO, xmlsw);
+
+        writeSizeAndLocation(gUI.getImageConflictViewer().getSizeAndLocation(), Tab.SIX, xmlsw);
+
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+        //    IMAGE CONFLICT VIEWER end
 
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //  GUI end
