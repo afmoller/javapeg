@@ -252,6 +252,7 @@ helpViewerGUI.errorMessage         = Could not load help file, see log file for 
 
 helpViewerGUI.tree.content                    = Content
 helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
+helpViewerGUI.tree.programHelpMerge           = MERGE IMAGES
 helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
 helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
 helpViewerGUI.tree.programHelpImagesTag       = TAG IMAGES
