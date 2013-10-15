@@ -251,6 +251,7 @@ helpViewerGUI.errorMessage         = Kunde inte ladda hjälpfil, se loggfil för
 
 helpViewerGUI.tree.content                    = Innehåll
 helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
+helpViewerGUI.tree.programHelpMerge           = SLÅ IHOP BILDER
 helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
 helpViewerGUI.tree.programHelpViewImages      = VISA BILDER
 helpViewerGUI.tree.programHelpImagesTag       = TAGGA BILDER

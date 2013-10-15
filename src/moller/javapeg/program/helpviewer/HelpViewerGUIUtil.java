@@ -16,6 +16,7 @@ public class HelpViewerGUIUtil {
 
         // Create child nodes to the root node.
         DefaultMutableTreeNode programHelpOverView        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
+        DefaultMutableTreeNode programHelpMerge           = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpMerge"), "user_manual_merge"));
         DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
         DefaultMutableTreeNode programHelpViewImages      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpViewImages"), "user_manual_viewimages"));
 
@@ -47,6 +48,7 @@ public class HelpViewerGUIUtil {
 
         // Add nodes to the root node.
         root.add(programHelpOverView);
+        root.add(programHelpMerge);
         root.add(programHelpRename);
         root.add(programHelpViewImages);
         root.add(programHelpTagImages);
