@@ -65,11 +65,18 @@ public class FileUtil {
 	    if (ensureUniqueName) {
 	        String absolutePath = target.getAbsolutePath();
 
-
-
 	        int suffix = 0;
 	        while(target.exists()) {
-	            target = new File(absolutePath + suffix);
+	            String firstPartOfAbsolutePath = absolutePath.substring(0, absolutePath.lastIndexOf("."));
+	            String lastPartOfAbsolutePath = absolutePath.substring(absolutePath.lastIndexOf("."));
+
+	            StringBuilder absolutePathWithSuffix = new StringBuilder();
+	            absolutePathWithSuffix.append(firstPartOfAbsolutePath);
+	            absolutePathWithSuffix.append("_");
+	            absolutePathWithSuffix.append(suffix);
+	            absolutePathWithSuffix.append(lastPartOfAbsolutePath);
+
+	            target = new File(absolutePathWithSuffix.toString());
 	            suffix++;
 	        }
 	    }
