@@ -1,15 +1,11 @@
 3.0:
 ====
 - Add help section for the Image Merge functionality
-- Add persistent configuration of the Image merge destination directory.
 - Rebuild the initial configuration GUI to a modal JDialog
+- Add possibility to save multiple rename templates
+- Make the deserialization of image meta data base files to be running in a separate thread.
 - Fix the logging configuration page so it looks like all other configuration pages.
 - Align all sections of the the configuration pages so they are aligned top-left.     
-- Implement image cache for the Image Viewer.    
-- Implement Context aware menu in the menu bar.
-- Add possibility to save multiple rename templates
-- Add merge functionality from several source directories. in the "rename image" mode.
-- Add list of compatible cameras in the help section of the application.
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
@@ -21,8 +17,10 @@
 
 3.1:
 ====
+- Add list of compatible cameras in the help section of the application.
+- Implement image cache for the Image Viewer.
 - Make the initial configuration part of the izpack installation
-- Make the deserialization of image meta data base files to be running in a separate thread.
+- Implement Context aware menu in the menu bar.
 - Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Add slide show functionality to Image Viewer.
