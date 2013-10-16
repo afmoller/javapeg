@@ -10,6 +10,11 @@
  
  3.0 (2013-xx-xx)
  
+ + A new image merge mode has been added to JavaPEG. This means that it is 
+   possible to merge image files (copy files from different directories into 
+   one destination directory, but without any possible duplicates) from an
+   unlimited amount of source directories.
+ 
  + An image resize functionality has been added to JavaPEG. It can batch resize
    images into specified sizes and qualities, either by specifying the width 
    (height will be calculated), height (width will be calculated) or both (the
