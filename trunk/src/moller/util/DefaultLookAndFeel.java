@@ -6,10 +6,18 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import moller.util.gui.Update;
 
+/**
+ * Utility class which makes it possible to set the Default Look and Feel for an
+ * application.
+ *
+ * @author Fredrik
+ *
+ */
 public class DefaultLookAndFeel {
 
     /**
-     * This method will set the default look and feel if it is not already set.
+     * This method will set the default look and feel if it is not already set
+     * and updates all UI:s associated with the running application.
      *
      * @throws ClassNotFoundException
      * @throws InstantiationException
