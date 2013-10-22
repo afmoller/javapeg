@@ -1,10 +1,12 @@
 package moller.util.gui;
 
+import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,5 +79,33 @@ public class Screen {
             }
         }
 	    return false;
+	}
+
+    /**
+     * This method returns the upper left coordinate that gives an window with
+     * the width and height given as arguments to this method a centered
+     * position in the main monitor (if a multi monitor setup is used)
+     *
+     * @param width
+     *            is the width of the window to be centered.
+     * @param height
+     *            is the height of the window to be centered.
+     * @return an {@link Point} object which specifies the upper left coordinate
+     *         that gives the window with the width and height values as those
+     *         given to this method by the values of the width and height
+     *         parameters a centered position.
+     */
+	public static Point getLeftUpperLocationForCenteredPosition(int width, int height) {
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+	    int screenWidth = (int)screenSize.getWidth();
+	    int screeHeight = (int)screenSize.getHeight();
+
+	    Point location = new Point();
+	    location.x = (screenWidth - width) / 2;
+	    location.y = (screeHeight - height) / 2;
+
+	    return location;
+
 	}
 }
