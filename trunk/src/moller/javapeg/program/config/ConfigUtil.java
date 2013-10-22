@@ -61,10 +61,32 @@ public class ConfigUtil {
         return !value.equals("NOT-DEFINED");
     }
 
+    /**
+     * This method generates a unique id to be used as an identifier for an
+     * installed JavaPEG instance. The id is used to define which meta data xml
+     * files that are created by the running application, to make the
+     * "writable".
+     *
+     * @return a {@link String} representation of an {@link UUID} object.
+     */
     public static String generateClientId() {
         return UUID.randomUUID().toString();
     }
 
+    /**
+     * Utility method which tests if an configuration file (XML) is valid
+     * (checked against an Schema).
+     *
+     * @param configFile
+     *            is the configuration file to check the validity of
+     * @param configSchemaLocation
+     *            is the location of the schema to use for checking the validity
+     *            of the XML file specified by the parameter configFile
+     * @return a {@link ResultObject} indicating whether or not the confiuration
+     *         file is valid against the specified schema. It the configuration
+     *         file is not valid the is the cause of invalidity attached as an
+     *         exception
+     */
     public static ResultObject isConfigValid(File configFile, String configSchemaLocation) {
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
