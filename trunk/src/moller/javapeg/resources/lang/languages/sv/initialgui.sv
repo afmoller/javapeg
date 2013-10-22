@@ -6,8 +6,8 @@ button.continue = Fortsätt
 help.title = Hjälp
 help.text = Detta fönster visas endast första gången JavaPEG startas efter\n \
             installationen. Syftet med fönstret är att kunna göra en inledande\n \
-            konfiguration av JavaPEG applikationen.\n\n \
-            Två möjligheter finns för att konfigurerar applikationen:\n \
+            konfiguration av JavaPEG-applikationen.\n\n \
+            Två möjligheter finns för att konfigurera applikationen:\n \
             (1) Antingen att importera en konfiguration från en tidigare\n \
             installation, eller:\n \
             (2) att specifiera vilket språk som skall användas i applikationen.\n\n \
