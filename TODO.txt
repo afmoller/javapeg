@@ -1,7 +1,6 @@
 3.0:
 ====
 - Add help section for the Image Merge functionality
-- Rebuild the initial configuration GUI to a modal JDialog
 - Add possibility to save multiple rename templates
 - Make the deserialization of image meta data base files to be running in a separate thread.
 - Fix the logging configuration page so it looks like all other configuration pages.
