@@ -4,21 +4,44 @@ import java.io.File;
 
 import moller.util.java.SystemProperties;
 
+/**
+ * This class contains environment or instance information constants that might
+ * be useful in the entire JavaPEG application.
+ *
+ * @author Fredrik
+ *
+ */
 public class C {
 
     /**
      * The system dependent file separator char
      */
-    public final static String FS              = File.separator;
+    public final static String FS  = File.separator;
 
     /**
      * The system dependent line separator
      */
-    public final static String LS              = SystemProperties.getLineSeparator();
+    public final static String LS = SystemProperties.getLineSeparator();
 
-    public final static String USER_HOME       = SystemProperties.getUserHome();
+    /**
+     * The home directory for the current user.
+     */
+    public final static String USER_HOME = SystemProperties.getUserHome();
+
+    /**
+     * JavaPEG version number
+     */
     public final static String JAVAPEG_VERSION = "3.0";
+
+    /**
+     * In which directory the user specific data of JavaPEG is installed;
+     * configuration, logs and so on.
+     */
     public final static String JAVAPEG_HOME = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION;
+
+    /**
+     * Path to the configuration file.
+     */
     public final static String PATH_TO_CONFIGURATION_FILE = JAVAPEG_HOME + C.FS + "config" + C.FS + "conf.xml";
 
     /**
@@ -44,6 +67,9 @@ public class C {
 
     public final static String ICONFILEPATH_IMAGEVIEWER = "resources/images/imageviewer/";
 
+    /**
+     * The file encoding used by JavaPEG when a text based file is created.
+     */
     public final static String UTF8 = "UTF-8";
 
     public final static String PATH_SCHEMAS = "resources/schema/";
