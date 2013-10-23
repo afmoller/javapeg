@@ -21,8 +21,6 @@ public class C {
     public final static String JAVAPEG_HOME = C.USER_HOME + C.FS + "javapeg-" + C.JAVAPEG_VERSION;
     public final static String PATH_TO_CONFIGURATION_FILE = JAVAPEG_HOME + C.FS + "config" + C.FS + "conf.xml";
 
-
-
     /**
      * This variable  contains a time stamp which is set to when the latest
      * release is done. The value is the amount of milliseconds since
