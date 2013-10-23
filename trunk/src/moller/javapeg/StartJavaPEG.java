@@ -20,8 +20,19 @@ import moller.javapeg.program.firstlaunch.InitialConfigGUILanguage;
 import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
 
+/**
+ * This is the entry point class that starts the entire JavaPEG application.
+ *
+ * @author Fredrik
+ *
+ */
 public class StartJavaPEG {
 
+    /**
+     * The main method of this application, the entry point to the application.
+     *
+     * @param args
+     */
     public static void main (String [] args){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -29,69 +40,98 @@ public class StartJavaPEG {
 
                 ApplicationUncaughtExceptionHandler.registerExceptionHandler();
 
-                boolean supportedOS = false;
-
-                String osName = OsUtil.getOsName();
-
-                if (osName.toLowerCase().contains("windows")) {
-                    supportedOS = true;
+                if (!isSupportedOS()) {
+                    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
-                if (supportedOS) {
+                boolean startApplication = true;
 
-                    boolean startApplication = true;
+                // Make an initial application configuration if it is the first
+                // application start after the installation.
+                if (ApplicationBootUtil.isFirstApplicationLaunch()) {
 
-                    if (ApplicationBootUtil.isFirstApplicationLaunch()) {
-                        InitialConfigGUI initialConfigGUI = new InitialConfigGUI();
-                        initialConfigGUI.setVisible(true);
+                    InitialConfigGUI initialConfigGUI = new InitialConfigGUI();
+                    initialConfigGUI.setVisible(true);
 
-                        InitialConfigGUILanguage initialLanguage = InitialConfigGUILanguage.getInstance();
+                    if (initialConfigGUI.isContinueButtonClicked()) {
 
-                        Object[] options = {initialLanguage.get("button.continue"), initialLanguage.get("button.cancel")};
-                        Object initialValue = options[0];
-
-                        int result = JOptionPane.showOptionDialog(null, initialConfigGUI, initialLanguage.get("window.title"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, initialValue);
-
-                        if (result == JOptionPane.YES_OPTION) {
-                            Configuration config = Config.getInstance().get();
-
-                            if (initialConfigGUI.isImport()) {
-                                if (initialConfigGUI.getImportPath() == null) {
-                                    JOptionPane.showMessageDialog(null, initialLanguage.get("configuration.file.missing"));
-                                    startApplication = false;
-                                } else {
-                                    Configuration importedConfig = ConfigImporter.doConfigurationImport(initialConfigGUI.getImportPath(), config);
-                                    Config.getInstance().set(importedConfig);
-                                    ConfigHandler.store(importedConfig, new File(C.PATH_TO_CONFIGURATION_FILE));
-                                }
-                            } else {
-                                Language language = new Language();
-                                language.setAutomaticSelection(false);
-                                language.setgUILanguageISO6391(ISO639.getInstance().getCode(initialConfigGUI.getLanguage()));
-
-                                config.setLanguage(language);
-                            }
-
-                            if (startApplication) {
-                                try {
-                                    ApplicationBootUtil.removeFirstApplicationLaunchMarkerFile();
-                                } catch (IOException e) {
-                                    JOptionPane.showMessageDialog(null, "Could not delete first application launch marker file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                            }
+                        if (initialConfigGUI.isImport()) {
+                            startApplication = performConfigurationImport(initialConfigGUI.getImportPath());
                         } else {
-                            startApplication = false;
+                            setLanguage(initialConfigGUI.getLanguage());
                         }
-                    }
 
-                    if (startApplication) {
-                        MainGUI mainGUI = new MainGUI();
-                        mainGUI.setVisible(true);
+                        if (startApplication) {
+                            try {
+                                ApplicationBootUtil.removeFirstApplicationLaunchMarkerFile();
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(null, "Could not delete first application launch marker file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    } else {
+                        startApplication = false;
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Unsupported operating system" + OsUtil.getOsName() + ".\n\nThe supported operating systems are:\nWindows", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                // Start the application if the configuration import was
+                // successfully performed or if it was not the first application
+                // start after the installation.
+                if (startApplication) {
+                    MainGUI mainGUI = new MainGUI();
+                    mainGUI.setVisible(true);
                 }
             }
         });
+    }
+
+    /**
+     * Determines if the JavaPEG application has been started on a supported
+     * operating system.
+     *
+     * @return true if the JavaPEG application has been started on a supported
+     *         operating system, otherwise false.
+     */
+    private static boolean isSupportedOS() {
+        String osName = OsUtil.getOsName();
+        return osName.toLowerCase().contains("windows");
+    }
+
+    /**
+     * This method makes an configuration import or displays an error message if
+     * the path to the configuration to import is null.
+     *
+     * @param importPath
+     *            specifies which configuration file to import.
+     * @return a boolean value indication whether the configuration import was
+     *         successful or not. True == success, false == failure.
+     */
+    private static boolean performConfigurationImport(File importPath) {
+        if (importPath == null) {
+            InitialConfigGUILanguage initialLanguage = InitialConfigGUILanguage.getInstance();
+            JOptionPane.showMessageDialog(null, initialLanguage.get("configuration.file.missing"));
+            return false;
+        } else {
+            Configuration importedConfig = ConfigImporter.doConfigurationImport(importPath, Config.getInstance().get());
+            Config.getInstance().set(importedConfig);
+            ConfigHandler.store(importedConfig, new File(C.PATH_TO_CONFIGURATION_FILE));
+            return true;
+        }
+    }
+
+    /**
+     * This method configures the language to use as initial language by the
+     * JavaPEG application.
+     *
+     * @param languageString
+     *            is a {@link String} representation of the language to
+     *            configure in the {@link Configuration}.
+     */
+    private static void setLanguage(String languageString) {
+        Language language = new Language();
+        language.setAutomaticSelection(false);
+        language.setgUILanguageISO6391(ISO639.getInstance().getCode(languageString));
+
+        Config.getInstance().get().setLanguage(language);
     }
 }

@@ -1,7 +1,7 @@
 package moller.javapeg.program.firstlaunch;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -38,10 +39,23 @@ import moller.javapeg.program.enumerations.ConfigurationSchema;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.LanguageUtil;
 import moller.util.DefaultLookAndFeel;
+import moller.util.gui.Screen;
 import moller.util.io.DirectoryUtil;
 import moller.util.java.SystemProperties;
 
-public class InitialConfigGUI extends JPanel {
+/**
+ * This class is used to display an initial configuration GUI the first time
+ * JavaPEG is started after it has been installed.
+ * <p>
+ * The user has the possibility to either make an import of an configuration
+ * from an previously done installation, older version or just another
+ * installation or to just specify which language (from an list of available
+ * languages) JavaPEG shall use.
+ *
+ * @author Fredrik
+ *
+ */
+public class InitialConfigGUI extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +76,7 @@ public class InitialConfigGUI extends JPanel {
     private int englishIndex;
 
     private boolean selectionChange = false;
+    private boolean continueButtonClicked = false;
 
     private final InitialConfigGUILanguage language = InitialConfigGUILanguage.getInstance();
 
@@ -92,7 +107,7 @@ public class InitialConfigGUI extends JPanel {
         }
     }
 
-    public void populateJList(JList<File> list, List<File> configurations) {
+    private void populateJList(JList<File> list, List<File> configurations) {
         if (configurations != null && !configurations.isEmpty()) {
             File[] listData = new File[configurations.size()];
 
@@ -106,6 +121,13 @@ public class InitialConfigGUI extends JPanel {
     // Create Main Window
     public void createMainFrame() {
 
+        int width = 900;
+        int height = 720;
+
+        this.setSize(width, height);
+        this.setLocation(Screen.getLeftUpperLocationForCenteredPosition(width, height));
+        this.setTitle(language.get("window.title"));
+
         this.add(this.createMainPanel());
 
         try{
@@ -114,19 +136,20 @@ public class InitialConfigGUI extends JPanel {
         catch (Exception ex){
             // Nothing to do.
         }
+
+        this.setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
-    public JPanel createMainPanel() {
-
+    private JPanel createMainPanel() {
 
         JPanel configurationPanel = new JPanel();
         configurationPanel.setLayout(new GridBagLayout());
 
         GBHelper posLeftPanel = new GBHelper();
 
-        configurationPanel.add(this.createConfigurationModePanel(), posLeftPanel);
+        configurationPanel.add(this.createConfigurationModePanel(), posLeftPanel.expandH().expandW());
         configurationPanel.add(new Gap(10), posLeftPanel.nextRow());
-        configurationPanel.add(this.createConfigurationPanel(), posLeftPanel.nextRow());
+        configurationPanel.add(this.createConfigurationPanel(), posLeftPanel.nextRow().expandH().expandW());
 
         JPanel helpPanel = new JPanel();
         helpPanel.setLayout(new GridBagLayout());
@@ -143,8 +166,25 @@ public class InitialConfigGUI extends JPanel {
 
         mainPanel.add(helpPanel, posMainPanel.expandH());
         mainPanel.add(configurationPanel, posMainPanel.nextCol().expandH().expandW());
+        mainPanel.add(createButtonPanel(), posMainPanel.nextRow().width(2));
 
         return mainPanel;
+    }
+
+    private JPanel createButtonPanel() {
+        JButton continueButton  = new JButton(language.get("button.continue"));
+        continueButton.addActionListener(new ContinueButtonListener());
+
+        JButton cancelButton = new JButton(language.get("button.cancel"));
+        cancelButton.addActionListener(new CancelButtonListener());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBorder(new TitledBorder(""));
+
+        buttonPanel.add(continueButton);
+        buttonPanel.add(cancelButton);
+
+        return buttonPanel;
     }
 
     private JPanel createHelpPanel() {
@@ -152,7 +192,7 @@ public class InitialConfigGUI extends JPanel {
         JTextArea textarea = new JTextArea();
         textarea.setText(language.get("help.text"));
         textarea.setEditable(false);
-        textarea.setColumns(30);
+//        textarea.setColumns(30);
         textarea.setBorder(new LineBorder(Color.BLACK));
 
         JPanel mainPanel = new JPanel();
@@ -219,7 +259,6 @@ public class InitialConfigGUI extends JPanel {
         availableLanguagesJList.setBorder(new LineBorder(Color.BLACK));
 
         JScrollPane availableLanguagesJListScrollPane = new JScrollPane(availableLanguagesJList);
-        availableLanguagesJListScrollPane.setMinimumSize(new Dimension(300, 30));
 
         availableConfigurationsInUserDirLabel = new JLabel(language.get("configuration.section.available.configurations.in.user.home"));
 
@@ -228,11 +267,13 @@ public class InitialConfigGUI extends JPanel {
         availableConfigurationsInUserDirectoryJList.addListSelectionListener(new AvailableConfigurationsInUserDirectoryJListListener());
 
         JScrollPane availableConfigurationsInUserDirectoryJListScrollPane = new JScrollPane(availableConfigurationsInUserDirectoryJList);
-        availableConfigurationsInUserDirectoryJListScrollPane.setMinimumSize(new Dimension(300, 30));
 
         importConfigLabel = new JLabel(language.get("configuration.section.other.import.location.title"));
 
         importConfigFileChooserOpenButton = new JButton();
+
+        JPanel importConfigFileChooserOpenButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        importConfigFileChooserOpenButtonPanel.add(importConfigFileChooserOpenButton);
 
         try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif")) {
             ImageIcon openImageIcon = new ImageIcon();
@@ -251,29 +292,32 @@ public class InitialConfigGUI extends JPanel {
         availableAlternativeConfigurationsJList.addListSelectionListener(new AvailableAlternativeConfigurationsJListListener());
 
         JScrollPane availableAlternativeConfigurationsJListScrollPane = new JScrollPane(availableAlternativeConfigurationsJList);
-        availableAlternativeConfigurationsJListScrollPane.setMinimumSize(new Dimension(300, 30));
 
         GBHelper posPanel = new GBHelper();
 
         panel.add(new Gap(5), posPanel);
         panel.add(availableLanguageSelectionLabel, posPanel.nextRow());
         panel.add(new Gap(2), posPanel.nextRow());
-        panel.add(availableLanguagesJListScrollPane, posPanel.nextRow());
+        panel.add(availableLanguagesJListScrollPane, posPanel.nextRow().expandH().expandW());
         panel.add(new Gap(15), posPanel.nextRow());
         panel.add(availableConfigurationsInUserDirLabel, posPanel.nextRow());
         panel.add(new Gap(2), posPanel.nextRow());
-        panel.add(availableConfigurationsInUserDirectoryJListScrollPane, posPanel.nextRow());
+        panel.add(availableConfigurationsInUserDirectoryJListScrollPane, posPanel.nextRow().expandH().expandW());
         panel.add(new Gap(15), posPanel.nextRow());
         panel.add(importConfigLabel, posPanel.nextRow());
         panel.add(new Gap(2), posPanel.nextRow());
-        panel.add(importConfigFileChooserOpenButton, posPanel.nextRow());
+        panel.add(importConfigFileChooserOpenButtonPanel, posPanel.nextRow());
         panel.add(new Gap(5), posPanel.nextRow());
         panel.add(availableAlternativeConfigurationsLabel, posPanel.nextRow());
-        panel.add(availableAlternativeConfigurationsJListScrollPane, posPanel.nextRow());
+        panel.add(availableAlternativeConfigurationsJListScrollPane, posPanel.nextRow().expandH().expandW());
 
         return panel;
     }
 
+    /**
+     * @param selectedFile
+     * @return
+     */
     private List<File> findJavaPEGConfigurationFiles(File selectedFile) {
         List<File> javaPegConfigurationFiles = new ArrayList<File>();
 
@@ -327,6 +371,14 @@ public class InitialConfigGUI extends JPanel {
         return availableLanguagesJList.getSelectedValue();
     }
 
+    public boolean isContinueButtonClicked() {
+        return continueButtonClicked;
+    }
+
+    public void setContinueButtonClicked(boolean continueButtonClicked) {
+        this.continueButtonClicked = continueButtonClicked;
+    }
+
     private class ImportConfigFileChooserOpenButtonListener implements ActionListener {
 
         @Override
@@ -354,6 +406,40 @@ public class InitialConfigGUI extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             activateImport(false);
+        }
+    }
+
+    /**
+     * Listener class that listens for clicks on the Continue button and if that
+     * happens, the flag "continuebuttonisclicked" is set to true and this
+     * {@link JDialog} is disposed.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ContinueButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setContinueButtonClicked(true);
+            dispose();
+        }
+    }
+
+    /**
+     * Listener class that listens for clicks on the Cancel button and if that
+     * happens, the flag "continuebuttonisclicked" is set to false and this
+     * {@link JDialog} is disposed.
+     *
+     * @author Fredrik
+     *
+     */
+    private class CancelButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setContinueButtonClicked(false);
+            dispose();
         }
     }
 
