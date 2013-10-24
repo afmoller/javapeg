@@ -1,10 +1,9 @@
 3.0:
 ====
+- Remove Gap class and replace with Box
 - Add help section for the Image Merge functionality
 - Add possibility to save multiple rename templates
 - Make the deserialization of image meta data base files to be running in a separate thread.
-- Fix the logging configuration page so it looks like all other configuration pages.
-- Align all sections of the the configuration pages so they are aligned top-left.     
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files

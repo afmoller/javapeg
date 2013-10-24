@@ -106,6 +106,10 @@
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in this version.  
    
+ ~ All sections in all configuration pages in the Configuration GUI have their 
+   configuration content (check boxes, input fields, ...) aligned top-left in
+   their respectively section.
+   
  ~ The JavaPEG configuration file now uses a custom XML format specifically
    developed for this application.  
    
