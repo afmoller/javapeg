@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -381,16 +382,13 @@ public class ConfigViewerGUI extends JFrame {
         logLevels = new JComboBox<Level>(Level.values());
         logLevels.setSelectedItem(logging.getLevel());
 
-        JLabel developerModeLabel = new JLabel(lang.get("configviewer.logging.label.developerMode.text"));
-        developerMode = new JCheckBox();
+        developerMode = new JCheckBox(lang.get("configviewer.logging.label.developerMode.text"));
         developerMode.setSelected(logging.getDeveloperMode());
 
-        JLabel rotateLogLabel = new JLabel(lang.get("configviewer.logging.label.rotateLog.text"));
-        rotateLog = new JCheckBox();
+        rotateLog = new JCheckBox(lang.get("configviewer.logging.label.rotateLog.text"));
         rotateLog.setSelected(logging.getRotate());
 
-        JLabel zipLogLabel = new JLabel(lang.get("configviewer.logging.label.zipLog.text"));
-        zipLog = new JCheckBox();
+        zipLog = new JCheckBox(lang.get("configviewer.logging.label.zipLog.text"));
         zipLog.setSelected(logging.getRotateZip());
 
         JLabel rotateLogSizeLabel = new JLabel(lang.get("configviewer.logging.label.rotateLogSize.text"));
@@ -440,37 +438,25 @@ public class ConfigViewerGUI extends JFrame {
         logEntryTimeStampPreview.setEditable(false);
         this.updatePreviewTimestamp();
 
-        loggingConfigurationPanel.add(developerModeLabel, posLoggingPanel);
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(developerMode, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(rotateLogLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(rotateLog, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(zipLogLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(zipLog, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(developerMode, posLoggingPanel.expandW());
+        loggingConfigurationPanel.add(rotateLog, posLoggingPanel.nextRow().expandW());
+        loggingConfigurationPanel.add(zipLog, posLoggingPanel.nextRow().expandW());
+        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(rotateLogSizeLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(logSizePanel, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(logSizePanel, posLoggingPanel.nextCol().expandW());
+        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logLevelsLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(logLevels, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(logLevels, posLoggingPanel.nextCol().expandW());
+        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logNameLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(logName, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(logName, posLoggingPanel.nextCol().expandW());
+        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampFormatLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(logEntryTimeStampFormats, posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(logEntryTimeStampFormats, posLoggingPanel.nextCol().expandW());
+        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampPreviewLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(new Gap(10), posLoggingPanel.nextCol());
-        loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol());
+        loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol().expandW());
+        loggingConfigurationPanel.add(Box.createVerticalGlue(), posLoggingPanel.nextRow().expandH());
     }
 
     private void createUpdateConfigurationPanel() {
@@ -490,6 +476,7 @@ public class ConfigViewerGUI extends JFrame {
 
         updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.expandW());
         updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextRow().expandW());
+        updatesConfigurationPanel.add(Box.createVerticalGlue(), posUpdatesPanel.nextRow().expandH().expandW());
     }
 
     private void createRenameConfigurationPanel() {
@@ -511,10 +498,10 @@ public class ConfigViewerGUI extends JFrame {
         maximumLengthOfCameraModelValueTextField.setText(Integer.toString(renameImages.getCameraModelNameMaximumLength()));
 
         renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel);
-        renameConfigurationPanel.add(new Gap(10), posRenamePanel.nextCol());
         renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol().expandW());
         renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextRow().expandW());
         renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextRow().expandW());
+        renameConfigurationPanel.add(Box.createVerticalGlue(), posRenamePanel.nextRow().expandW().expandH());
     }
 
     private void createLanguageConfigurationPanel() {
@@ -542,6 +529,7 @@ public class ConfigViewerGUI extends JFrame {
 
         selectionModePanel.add(manualRadioButton, posSelectionMode.expandW());
         selectionModePanel.add(automaticRadioButton, posSelectionMode.nextRow().expandW());
+        selectionModePanel.add(Box.createVerticalGlue(), posSelectionMode.nextRow().expandH());
 
         languageList = new JList<String>(ConfigUtil.listLanguagesFiles());
 
@@ -566,6 +554,7 @@ public class ConfigViewerGUI extends JFrame {
         GBHelper posCurrentLanguage = new GBHelper();
 
         currentLanguagePanel.add(currentLanguage, posCurrentLanguage.expandW());
+        currentLanguagePanel.add(Box.createVerticalGlue(), posCurrentLanguage.nextRow().expandH());
 
         GBHelper posLanguagePanel = new GBHelper();
 
@@ -615,16 +604,14 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.expandW());
         thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailWidthLabel, posThumbnailCreationPanel.nextRow());
-        thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
         thumbnailCreationPanel.add(thumbnailWidth, posThumbnailCreationPanel.nextCol());
         thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailHeightLabel, posThumbnailCreationPanel.nextRow());
-        thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
         thumbnailCreationPanel.add(thumbnailHeight, posThumbnailCreationPanel.nextCol());
-        thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextRow());
+        thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailCreationMode, posThumbnailCreationPanel.nextRow());
-        thumbnailCreationPanel.add(new Gap(10), posThumbnailCreationPanel.nextCol());
         thumbnailCreationPanel.add(thumbnailCreationAlgorithm, posThumbnailCreationPanel.nextCol());
+        thumbnailCreationPanel.add(Box.createVerticalGlue(), posThumbnailCreationPanel.nextRow().expandH());
 
         /**
          * Start of Thumbnail Cache Area
@@ -666,16 +653,14 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
 
         thumbnailCachePanel.add(cacheSizeLabelHeading, posThumbnailCachePanel.nextRow());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
         thumbnailCachePanel.add(cacheSizeLabel, posThumbnailCachePanel.nextCol());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+        thumbnailCachePanel.add(new Gap(5), posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(cacheMaxSizeLabel, posThumbnailCachePanel.nextRow());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
         thumbnailCachePanel.add(maxCacheSize, posThumbnailCachePanel.nextCol());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+        thumbnailCachePanel.add(new Gap(5), posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(clearCachLabel, posThumbnailCachePanel.nextRow());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextCol());
         thumbnailCachePanel.add(clearCacheJButton, posThumbnailCachePanel.nextCol());
+        thumbnailCachePanel.add(Box.createVerticalGlue(), posThumbnailCachePanel.nextRow().expandH());
 
         /**
          * Start of Thumbnail ToolTip Area
@@ -714,6 +699,7 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.expandW());
         thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextRow().expandW());
         thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextRow().expandW());
+        thumbnailToolTipPanel.add(Box.createVerticalGlue(), posThumbnailToolTipPanel.nextRow().expandH());
 
         thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
         thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -750,6 +736,7 @@ public class ConfigViewerGUI extends JFrame {
 
         previewImagePanel.add(useEmbeddedThumbnail, posPreviewImagePanel.expandW());
         previewImagePanel.add(useScaledThumbnail, posPreviewImagePanel.nextRow().expandW());
+        previewImagePanel.add(Box.createVerticalGlue(), posPreviewImagePanel.nextRow().expandH());
 
         TagImagesCategories tagImagesCategories = configuration.getTagImages().getCategories();
 
@@ -768,6 +755,7 @@ public class ConfigViewerGUI extends JFrame {
 
         categoriesPanel.add(warnWhenRemoveCategory, posCategoriesPanel.expandW());
         categoriesPanel.add(warnWhenRemoveCategoryWithSubCategories, posCategoriesPanel.nextRow().expandW());
+        categoriesPanel.add(Box.createVerticalGlue(), posCategoriesPanel.nextRow().expandH());
 
         /**
          * Start of Imported Categories Area
