@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -27,7 +28,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.DefaultLookAndFeel;
@@ -171,7 +171,7 @@ public class CategoryImportExportPopup extends JDialog {
         mainPanel.add(categoryImportExportLabel, positionMainPanel.nextRow().expandW());
         mainPanel.add(categoryImportExportTextField, positionMainPanel.nextRow().expandW());
         mainPanel.add(pathSelectionButton, positionMainPanel.nextCol());
-        mainPanel.add(new Gap(4), positionMainPanel.nextRow());
+        mainPanel.add(Box.createVerticalStrut(4), positionMainPanel.nextRow());
         mainPanel.add(importNameLabel, positionMainPanel.nextRow().expandW());
         mainPanel.add(nameTextField, positionMainPanel.nextRow().expandW());
 

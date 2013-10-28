@@ -1,6 +1,6 @@
-MERGE IMAGES<LF>
-============<LF>
-With JavaPEG it is possible to merge the image files stored in different directories into one destination directory. For every selected directory to merge, all JPEG images are searched and a MD5 hash sum is calculated for every found image. Each image with a unique MD5 hash sum is directly copied into the destination directory. For any conflicting images (two or more images with the same MD5 hash sum) a dialog is displayed, in which the user selects which image(s) to copy to the destination directory.<LF>
+SLÅ IHOP BILDER<LF>
+===============<LF>
+Med JavaPEG it is possible to merge the image files stored in different directories into one destination directory. For every selected directory to merge, all JPEG images are searched and a MD5 hash sum is calculated for every found image. Each image with a unique MD5 hash sum is directly copied into the destination directory. For any conflicting images (two or more images with the same MD5 hash sum) a dialog is displayed, in which the user selects which image(s) to copy to the destination directory.<LF>
 <LF>
 Merge procedure<LF>
 ===============<LF>

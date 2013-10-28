@@ -60,7 +60,6 @@ import javax.swing.event.ListSelectionListener;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
@@ -412,7 +411,7 @@ public class ConfigViewerGUI extends JFrame {
         longToHuman(logSize);
 
         logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
-        logSizePanel.add(new Gap(10), posLogSizePanel.nextCol());
+        logSizePanel.add(Box.createHorizontalStrut(10), posLogSizePanel.nextCol());
         logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
 
         JLabel logNameLabel = new JLabel(lang.get("configviewer.logging.label.logName.text"));
@@ -444,16 +443,16 @@ public class ConfigViewerGUI extends JFrame {
         loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(rotateLogSizeLabel, posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logSizePanel, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logLevelsLabel, posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logLevels, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logNameLabel, posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logName, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampFormatLabel, posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampFormats, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(new Gap(5), posLoggingPanel.nextRow());
+        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampPreviewLabel, posLoggingPanel.nextRow());
         loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol().expandW());
         loggingConfigurationPanel.add(Box.createVerticalGlue(), posLoggingPanel.nextRow().expandH());
@@ -602,13 +601,13 @@ public class ConfigViewerGUI extends JFrame {
         GBHelper posThumbnailCreationPanel = new GBHelper();
 
         thumbnailCreationPanel.add(createThumbnailIfMissingOrCorrupt, posThumbnailCreationPanel.expandW());
-        thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
+        thumbnailCreationPanel.add(Box.createVerticalStrut(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailWidthLabel, posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailWidth, posThumbnailCreationPanel.nextCol());
-        thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
+        thumbnailCreationPanel.add(Box.createVerticalStrut(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailHeightLabel, posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailHeight, posThumbnailCreationPanel.nextCol());
-        thumbnailCreationPanel.add(new Gap(5), posThumbnailCreationPanel.nextRow());
+        thumbnailCreationPanel.add(Box.createVerticalStrut(5), posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailCreationMode, posThumbnailCreationPanel.nextRow());
         thumbnailCreationPanel.add(thumbnailCreationAlgorithm, posThumbnailCreationPanel.nextCol());
         thumbnailCreationPanel.add(Box.createVerticalGlue(), posThumbnailCreationPanel.nextRow().expandH());
@@ -650,14 +649,14 @@ public class ConfigViewerGUI extends JFrame {
         GBHelper posThumbnailCachePanel = new GBHelper();
 
         thumbnailCachePanel.add(enableThumbnailCache, posThumbnailCachePanel.expandW());
-        thumbnailCachePanel.add(new Gap(10), posThumbnailCachePanel.nextRow());
+        thumbnailCachePanel.add(Box.createVerticalStrut(10), posThumbnailCachePanel.nextRow());
 
         thumbnailCachePanel.add(cacheSizeLabelHeading, posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(cacheSizeLabel, posThumbnailCachePanel.nextCol());
-        thumbnailCachePanel.add(new Gap(5), posThumbnailCachePanel.nextRow());
+        thumbnailCachePanel.add(Box.createVerticalStrut(5), posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(cacheMaxSizeLabel, posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(maxCacheSize, posThumbnailCachePanel.nextCol());
-        thumbnailCachePanel.add(new Gap(5), posThumbnailCachePanel.nextRow());
+        thumbnailCachePanel.add(Box.createVerticalStrut(5), posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(clearCachLabel, posThumbnailCachePanel.nextRow());
         thumbnailCachePanel.add(clearCacheJButton, posThumbnailCachePanel.nextCol());
         thumbnailCachePanel.add(Box.createVerticalGlue(), posThumbnailCachePanel.nextRow().expandH());
@@ -885,11 +884,11 @@ public class ConfigViewerGUI extends JFrame {
         imageRepositoriesAdditionModePanel.add(askToAddRadioButton, posImageRepositories.nextRow().expandW());
         imageRepositoriesAdditionModePanel.add(doNotAddRadioButton, posImageRepositories.nextRow().expandW());
 
-        imageRepositoriesAdditionModePanel.add(new Gap(10), posImageRepositories.nextRow());
+        imageRepositoriesAdditionModePanel.add(Box.createVerticalStrut(10), posImageRepositories.nextRow());
         imageRepositoriesAdditionModePanel.add(new JLabel(lang.get("configviewer.tag.imageRepositoriesAdditionMode.allwaysAdd.label")), posImageRepositories.nextRow());
         imageRepositoriesAdditionModePanel.add(imageRepositoriesAllwaysAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
         imageRepositoriesAdditionModePanel.add(removeSelectedAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
-        imageRepositoriesAdditionModePanel.add(new Gap(15), posImageRepositories.nextRow());
+        imageRepositoriesAdditionModePanel.add(Box.createVerticalStrut(15), posImageRepositories.nextRow());
         imageRepositoriesAdditionModePanel.add(new JLabel(lang.get("configviewer.tag.imageRepositoriesAdditionMode.neverAdd.label")), posImageRepositories.nextRow().nextRow());
         imageRepositoriesAdditionModePanel.add(imageRepositoriesNeverAddScrollPane, posImageRepositories.nextRow().expandW().expandH());
         imageRepositoriesAdditionModePanel.add(removeSelectedDoNotAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
@@ -923,7 +922,7 @@ public class ConfigViewerGUI extends JFrame {
         GBHelper posImageRepositoriesContent = new GBHelper();
 
         imageRepositoriesContentPanel.add(imageRepositoriesScrollPane, posImageRepositoriesContent.expandW().expandH());
-        imageRepositoriesContentPanel.add(new Gap(2), posImageRepositoriesContent.nextRow());
+        imageRepositoriesContentPanel.add(Box.createVerticalStrut(2), posImageRepositoriesContent.nextRow());
         imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().align(GridBagConstraints.WEST));
 
         tagConfigurationPanel = new JPanel(new GridBagLayout());

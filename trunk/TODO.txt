@@ -1,7 +1,6 @@
 3.0:
 ====
-- Remove Gap class and replace with Box
-- Add help section for the Image Merge functionality
+- Add help section for the Image Merge functionality (Swedish translation)
 - Add possibility to save multiple rename templates
 - Make the deserialization of image meta data base files to be running in a separate thread.
 - Test with more images from different cameras.

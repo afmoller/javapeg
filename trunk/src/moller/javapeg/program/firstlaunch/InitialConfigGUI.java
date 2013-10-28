@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,7 +33,6 @@ import javax.swing.event.ListSelectionListener;
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.ConfigurationSchema;
@@ -148,7 +148,7 @@ public class InitialConfigGUI extends JDialog {
         GBHelper posLeftPanel = new GBHelper();
 
         configurationPanel.add(this.createConfigurationModePanel(), posLeftPanel.expandH().expandW());
-        configurationPanel.add(new Gap(10), posLeftPanel.nextRow());
+        configurationPanel.add(Box.createVerticalStrut(10), posLeftPanel.nextRow());
         configurationPanel.add(this.createConfigurationPanel(), posLeftPanel.nextRow().expandH().expandW());
 
         JPanel helpPanel = new JPanel();
@@ -295,19 +295,19 @@ public class InitialConfigGUI extends JDialog {
 
         GBHelper posPanel = new GBHelper();
 
-        panel.add(new Gap(5), posPanel);
+        panel.add(Box.createVerticalStrut(5), posPanel);
         panel.add(availableLanguageSelectionLabel, posPanel.nextRow());
-        panel.add(new Gap(2), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(2), posPanel.nextRow());
         panel.add(availableLanguagesJListScrollPane, posPanel.nextRow().expandH().expandW());
-        panel.add(new Gap(15), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(15), posPanel.nextRow());
         panel.add(availableConfigurationsInUserDirLabel, posPanel.nextRow());
-        panel.add(new Gap(2), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(2), posPanel.nextRow());
         panel.add(availableConfigurationsInUserDirectoryJListScrollPane, posPanel.nextRow().expandH().expandW());
-        panel.add(new Gap(15), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(15), posPanel.nextRow());
         panel.add(importConfigLabel, posPanel.nextRow());
-        panel.add(new Gap(2), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(2), posPanel.nextRow());
         panel.add(importConfigFileChooserOpenButtonPanel, posPanel.nextRow());
-        panel.add(new Gap(5), posPanel.nextRow());
+        panel.add(Box.createVerticalStrut(5), posPanel.nextRow());
         panel.add(availableAlternativeConfigurationsLabel, posPanel.nextRow());
         panel.add(availableAlternativeConfigurationsJListScrollPane, posPanel.nextRow().expandH().expandW());
 
