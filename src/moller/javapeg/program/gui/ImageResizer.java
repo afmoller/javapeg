@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,7 +51,6 @@ import javax.swing.text.DocumentFilter;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Configuration;
@@ -209,7 +209,7 @@ public class ImageResizer extends JFrame {
         GBHelper posImageAndPreviewPanel = new GBHelper();
 
         imageAndPreviewPanel.add(this.createImageListPanel(), posImageAndPreviewPanel.expandH().expandW());
-        imageAndPreviewPanel.add(new Gap(2), posImageAndPreviewPanel.nextCol());
+        imageAndPreviewPanel.add(Box.createHorizontalStrut(2), posImageAndPreviewPanel.nextCol());
         imageAndPreviewPanel.add(this.createPreviewPanel(), posImageAndPreviewPanel.nextCol().expandH());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -218,7 +218,7 @@ public class ImageResizer extends JFrame {
         GBHelper posBackgroundPanel= new GBHelper();
 
         backgroundPanel.add(imageAndPreviewPanel, posBackgroundPanel.expandH().expandW());
-        backgroundPanel.add(new Gap(2), posBackgroundPanel.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(2), posBackgroundPanel.nextRow());
         backgroundPanel.add(this.createInputPanel(), posBackgroundPanel.nextRow().expandW());
 
         return backgroundPanel;
@@ -311,7 +311,7 @@ public class ImageResizer extends JFrame {
 
         backgroundPanel.add(imageListLabel, posBackground);
         backgroundPanel.add(spImageList, posBackground.nextRow().expandH().expandW());
-        backgroundPanel.add(new Gap(5), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(5), posBackground.nextRow());
         backgroundPanel.add(buttonPanel, posBackground.nextRow().expandW());
 
         return backgroundPanel;
@@ -380,16 +380,16 @@ public class ImageResizer extends JFrame {
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         backgroundPanel.add(destinationDirectorySelector, posBackground);
-        backgroundPanel.add(new Gap(3), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
         backgroundPanel.add(widthLabel, posBackground.nextRow());
         backgroundPanel.add(widthTextField, posBackground.nextRow().expandW());
-        backgroundPanel.add(new Gap(3), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
         backgroundPanel.add(heightLabel, posBackground.nextRow());
         backgroundPanel.add(heightTextField, posBackground.nextRow().expandW());
-        backgroundPanel.add(new Gap(3), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
         backgroundPanel.add(qualityLabel, posBackground.nextRow());
         backgroundPanel.add(qualityComboBox, posBackground.nextRow().expandW());
-        backgroundPanel.add(new Gap(3), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
         backgroundPanel.add(buttonPanel, posBackground.nextRow());
 
         return backgroundPanel;

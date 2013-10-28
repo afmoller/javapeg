@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.language.Language;
 
 public class VariablesPanel extends JPanel {
@@ -58,7 +58,7 @@ public class VariablesPanel extends JPanel {
         JLabel infoLabelB = new JLabel(lang.get("variable.comment.infoLabelB"));
 
         GBHelper posVariables = new GBHelper();
-        variables.add(new Gap(2), posVariables.nextRow());
+        variables.add(Box.createVerticalStrut(2), posVariables.nextRow());
         variables.add(dateLabelA, posVariables.nextRow());
         variables.add(dateLabelB, posVariables.nextCol());
         variables.add(timeLabelA, posVariables.nextRow());
@@ -85,13 +85,13 @@ public class VariablesPanel extends JPanel {
         information.add(infoLabelB, posInformation.nextRow());
 
         GBHelper posVariablesAndInformation = new GBHelper();
-        variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation);
-        variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextCol());
+        variablesAndInformationBackground.add(Box.createHorizontalStrut(5), posVariablesAndInformation);
+        variablesAndInformationBackground.add(Box.createHorizontalStrut(5), posVariablesAndInformation.nextCol());
         variablesAndInformationBackground.add(variables, posVariablesAndInformation.nextRow().nextCol());
-        variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextRow());
+        variablesAndInformationBackground.add(Box.createVerticalStrut(5), posVariablesAndInformation.nextRow());
         variablesAndInformationBackground.add(information, posVariablesAndInformation.nextRow().nextCol());
-        variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextRow());
-        variablesAndInformationBackground.add(new Gap(5), posVariablesAndInformation.nextCol().nextCol());
+        variablesAndInformationBackground.add(Box.createVerticalStrut(5), posVariablesAndInformation.nextRow());
+        variablesAndInformationBackground.add(Box.createHorizontalStrut(5), posVariablesAndInformation.nextCol().nextCol());
 
         GBHelper posMain = new GBHelper();
         this.add(variablesLabel, posMain);

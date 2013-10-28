@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -29,7 +30,6 @@ import javax.swing.event.ListSelectionListener;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.model.SortedListModel;
@@ -109,7 +109,7 @@ public class MetaDataValueSelectionDialogEqual extends JDialog implements MetaDa
 
         mainPanel.add(selectionModeLabel, positionMainPanel);
         mainPanel.add(this.createOperatorsPanel(), positionMainPanel.nextRow().expandW().align(GridBagConstraints.WEST));
-        mainPanel.add(new Gap(4), positionMainPanel.nextRow());
+        mainPanel.add(Box.createVerticalStrut(4), positionMainPanel.nextRow());
         mainPanel.add(valuesLabel, positionMainPanel.nextRow());
         mainPanel.add(this.createValuesJList(), positionMainPanel.nextRow().expandW());
 

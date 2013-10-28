@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,7 +34,6 @@ import javax.swing.border.TitledBorder;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.Gap;
 import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
@@ -131,7 +131,7 @@ public class ImageMergeTab extends JPanel {
         GBHelper posBackground = new GBHelper();
 
         this.add(this.createDirectoriesPanel(), posBackground.expandH());
-        this.add(new Gap(2), posBackground.nextCol());
+        this.add(Box.createHorizontalStrut(2), posBackground.nextCol());
         this.add(this.createProcessLogPanel(), posBackground.nextCol().expandH().expandW());
     }
 

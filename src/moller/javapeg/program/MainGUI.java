@@ -43,6 +43,7 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -198,6 +199,10 @@ import moller.util.string.ParseVMArguments;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
 
+/**
+ * @author Fredrik
+ *
+ */
 public class MainGUI extends JFrame {
 
     private static final long serialVersionUID = 4478711914847747931L;
@@ -849,7 +854,7 @@ public class MainGUI extends JFrame {
         backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         backgroundJPanel.add(this.createRenameInputPanel(), posBackgroundPanel.nextCol());
-        backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundJPanel.add(this.createInfoPanel(), posBackgroundPanel.nextCol().expandW());
 
         return backgroundJPanel;
@@ -863,7 +868,7 @@ public class MainGUI extends JFrame {
         backgroundJPanel.setName(MainTabbedPaneComponent.VIEW.toString());
         backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         backgroundJPanel.add(this.createFindImageSection(), posBackgroundPanel.expandH().expandW());
-        backgroundJPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.expandH());
 
         return backgroundJPanel;
@@ -1055,11 +1060,11 @@ public class MainGUI extends JFrame {
         backgroundPanel.add(previewLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
         backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH());
 
-        backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
         backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-        backgroundPanel.add(new Gap(3), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
         backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-        backgroundPanel.add(new Gap(3), posBackgroundPanel.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackgroundPanel.nextRow());
         backgroundPanel.add(horisontalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.WEST));
         backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
 
@@ -1082,14 +1087,14 @@ public class MainGUI extends JFrame {
         findInRatingLabel.setForeground(Color.GRAY);
 
         backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
-        backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundPanel.add(findInMetaDataExifLabel, posBackgroundPanel.nextCol());
-        backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundPanel.add(findInRatingLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW().expandH());
-        backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundPanel.add(this.createImageExifMeteDataPanel(), posBackgroundPanel.nextCol().expandH());
-        backgroundPanel.add(new Gap(2), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundPanel.add(this.createRatingCommentAndButtonPanel(), posBackgroundPanel.nextCol().expandH());
 
         return backgroundPanel;
@@ -1155,7 +1160,7 @@ public class MainGUI extends JFrame {
         JPanel categoryTreeAndSelectionModePanel = new JPanel(new GridBagLayout());
 
         categoryTreeAndSelectionModePanel.add(categoriesScrollPane, posCategoryTreeAndSelectionMode.expandH().expandW());
-        categoryTreeAndSelectionModePanel.add(new Gap(2), posCategoryTreeAndSelectionMode.nextRow());
+        categoryTreeAndSelectionModePanel.add(Box.createVerticalStrut(2), posCategoryTreeAndSelectionMode.nextRow());
         categoryTreeAndSelectionModePanel.add(selectionModePanel, posCategoryTreeAndSelectionMode.nextRow());
 
         GBHelper posBackground = new GBHelper();
@@ -1234,7 +1239,7 @@ public class MainGUI extends JFrame {
                 JPanel importedCategoryTreeAndSelectionModePanel = new JPanel(new GridBagLayout());
 
                 importedCategoryTreeAndSelectionModePanel.add(scrollPane, posImportedCategoryTreeAndSelectionMode.expandH().expandW());
-                importedCategoryTreeAndSelectionModePanel.add(new Gap(2), posImportedCategoryTreeAndSelectionMode.nextRow());
+                importedCategoryTreeAndSelectionModePanel.add(Box.createVerticalStrut(2), posImportedCategoryTreeAndSelectionMode.nextRow());
                 importedCategoryTreeAndSelectionModePanel.add(importedSelectionModePanel, posImportedCategoryTreeAndSelectionMode.nextRow());
 
                 categoriesTabbedPane.add(displayName, importedCategoryTreeAndSelectionModePanel);
@@ -1284,34 +1289,34 @@ public class MainGUI extends JFrame {
         final int size = 5;
 
         backgroundPanel.add(yearLabel, posBackgroundPanel);
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(imageSizeLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(yearMetaDataValue, posBackgroundPanel.nextRow().expandH());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(imagesSizeMetaDataValue, posBackgroundPanel.nextCol());
         backgroundPanel.add(monthLabel, posBackgroundPanel.nextRow());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(isoLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(monthMetaDataValue, posBackgroundPanel.nextRow().expandH());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(isoMetaDataValue, posBackgroundPanel.nextCol());
         backgroundPanel.add(dayLabel, posBackgroundPanel.nextRow());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(shutterSpeedLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(dayMetaDataValue, posBackgroundPanel.nextRow().expandH());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(shutterSpeedMetaDataValue, posBackgroundPanel.nextCol());
         backgroundPanel.add(hourLabel, posBackgroundPanel.nextRow());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(apertureValueLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(hourMetaDataValue, posBackgroundPanel.nextRow().expandH());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(apertureValueMetaDataValue, posBackgroundPanel.nextCol());
         backgroundPanel.add(minuteLabel, posBackgroundPanel.nextRow());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(cameraModelLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(minuteMetaDataValue, posBackgroundPanel.nextRow().expandH());
-        backgroundPanel.add(new Gap(size), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(cameraModelMetaDataValue, posBackgroundPanel.nextCol());
         backgroundPanel.add(secondLabel, posBackgroundPanel.nextRow());
         backgroundPanel.add(secondMetaDataValue, posBackgroundPanel.nextRow().expandH());
@@ -1533,10 +1538,10 @@ public class MainGUI extends JFrame {
         inputPanel.add(destinationPathLabel, inputPos);
         inputPanel.add(destinationPathTextField, inputPos.nextRow());
         inputPanel.add(destinationPathButton, inputPos.nextCol());
-        inputPanel.add(new Gap(4), inputPos.nextRow());
+        inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
         inputPanel.add(subFolderLabel, inputPos.nextRow());
         inputPanel.add(subFolderTextField, inputPos.nextRow());
-        inputPanel.add(new Gap(4), inputPos.nextRow());
+        inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
         inputPanel.add(fileNameTemplateLabel, inputPos.nextRow());
         inputPanel.add(fileNameTemplateTextField, inputPos.nextRow());
 
@@ -1544,9 +1549,9 @@ public class MainGUI extends JFrame {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
         backgroundPanel.add(inputPanel, posBackground.align(GridBagConstraints.NORTHWEST));
-        backgroundPanel.add(new Gap(10), posBackground.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackground.nextCol());
         backgroundPanel.add(new VariablesPanel(), posBackground.nextCol());
-        backgroundPanel.add(new Gap(5), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(5), posBackground.nextRow());
         backgroundPanel.add(createThumbNailsCheckBox, inputPos.nextRow().nextCol().nextCol());
         backgroundPanel.add(startProcessButton, inputPos.nextRow().nextCol().nextCol().align(GridBagConstraints.EAST));
 
@@ -1577,9 +1582,9 @@ public class MainGUI extends JFrame {
         posBackground.fill = GridBagConstraints.BOTH;
 
         backgroundPanel.add(categorizeHeading, posBackground);
-        backgroundPanel.add(new Gap(2), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(2), posBackground.nextRow());
         backgroundPanel.add(categoriesScrollPane, posBackground.nextRow().expandH().expandW());
-        backgroundPanel.add(new Gap(2), posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(2), posBackground.nextRow());
         backgroundPanel.add(ratingLabel,posBackground.nextRow().nextRow());
 
         ratingRadioButtons = new JRadioButton[6];
@@ -1648,9 +1653,9 @@ public class MainGUI extends JFrame {
         GBHelper posTop = new GBHelper();
 
         topPanel.add(previewHeading, posTop);
-        topPanel.add(new Gap(2), posTop.nextRow());
+        topPanel.add(Box.createVerticalStrut(2), posTop.nextRow());
         topPanel.add(imageTagPreviewScrollPane, posTop.nextRow().expandH().expandW());
-        topPanel.add(new Gap(2), posTop.nextRow());
+        topPanel.add(Box.createVerticalStrut(2), posTop.nextRow());
 
         JPanel bottomPanel = new JPanel(new GridBagLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -1658,7 +1663,7 @@ public class MainGUI extends JFrame {
         GBHelper posBottom = new GBHelper();
 
         bottomPanel.add(commentHeading, posBottom);
-        bottomPanel.add(new Gap(2), posBottom.nextRow());
+        bottomPanel.add(Box.createVerticalStrut(2), posBottom.nextRow());
         bottomPanel.add(scrollPane, posBottom.nextRow().expandH().expandW());
 
         GUI gUI = configuration.getgUI();
