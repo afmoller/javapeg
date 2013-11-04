@@ -107,13 +107,21 @@
             <xs:element name="pathSource" type="xs:anyURI" />
             <xs:element name="pathDestination" type="xs:anyURI" />
             <xs:element name="templateSubDirectoryName" type="xs:string" />
+            <xs:element name="templatesSubDirectoryName" type="config:RenameTemplates" />
             <xs:element name="templateFileName" type="xs:string" />
+            <xs:element name="templatesFileName" type="config:RenameTemplates" />
             <xs:element name="createThumbNails" type="xs:boolean" />
             <xs:element name="useLastModifiedDate" type="xs:boolean" />
             <xs:element name="useLastModifiedTime" type="xs:boolean" />
             <xs:element name="cameraModelNameMaximumLength" type="xs:int" />
             <xs:element name="progressLogTimestampFormat" type="xs:string" />
         </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="RenameTemplates">
+        <xs:sequence>
+            <xs:element name="template" type="xs:string" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="ResizeImages">
