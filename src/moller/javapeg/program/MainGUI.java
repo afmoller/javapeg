@@ -45,11 +45,13 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -228,6 +230,10 @@ public class MainGUI extends JFrame {
     private JButton searchImagesButton;
     private JButton clearCategoriesSelectionButton;
     private JButton clearAllMetaDataParameters;
+    private JButton saveFileNameTemplateButton;
+    private JButton saveSubFolderTemplateButton;
+    private JButton removeFileNameTemplateButton;
+    private JButton removeSubFolderTemplateButton;
 
     private JLabel amountOfImagesInImageListLabel;
     private JLabel imagePreviewLabel;
@@ -237,6 +243,9 @@ public class MainGUI extends JFrame {
     private JTextField subFolderTextField;
     private JTextField fileNameTemplateTextField;
     private JTextField subFolderNamePreviewTextField;
+
+    private JComboBox<String> fileNameTemplateComboBox;
+    private JComboBox<String> subFolderTemplateComboBox;
 
     private JMenu fileMenu;
     private JMenu helpMenu;
@@ -275,7 +284,6 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuCollapseCategoriesTreeStructure;
     private JMenuItem popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList;
     private JMenuItem popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList;
-
 
     private JPopupMenu rightClickMenuCategories;
     private JPopupMenu rightClickMenuRename;
@@ -1476,10 +1484,15 @@ public class MainGUI extends JFrame {
     }
 
     private JPanel createRenameInputPanel() {
+        RenameImages renameImages = configuration.getRenameImages();
 
         createThumbNailsCheckBox = new JCheckBox(lang.get("checkbox.createThumbNails"));
         createThumbNailsCheckBox.setToolTipText(lang.get("tooltip.createThumbNails"));
         createThumbNailsCheckBox.setActionCommand("createThumbNailsCheckBox");
+
+        if(renameImages.getCreateThumbNails()) {
+            createThumbNailsCheckBox.setSelected(true);
+        }
 
         ImageIcon playPictureImageIcon = new ImageIcon();
         try(InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/play.gif")) {
@@ -1525,6 +1538,7 @@ public class MainGUI extends JFrame {
         subFolderTextField = new JTextField();
         subFolderTextField.setEnabled(false);
         subFolderTextField.setToolTipText(lang.get("tooltip.enableTemplateFields"));
+        subFolderTextField.setText(renameImages.getTemplateSubDirectoryName());
 
         JLabel fileNameTemplateLabel = new JLabel(lang.get("labels.fileNameTemplate"));
         fileNameTemplateLabel.setForeground(Color.GRAY);
@@ -1532,6 +1546,46 @@ public class MainGUI extends JFrame {
         fileNameTemplateTextField = new JTextField();
         fileNameTemplateTextField.setEnabled(false);
         fileNameTemplateTextField.setToolTipText(lang.get("tooltip.enableTemplateFields"));
+        fileNameTemplateTextField.setText(renameImages.getTemplateFileName());
+
+        DefaultComboBoxModel<String> subFolderTemplateComboBoxModel = new DefaultComboBoxModel<String>();
+        for (String template : renameImages.getTemplateSubDirectoryNames()) {
+            subFolderTemplateComboBoxModel.addElement(template);
+        }
+
+        subFolderTemplateComboBox = new JComboBox<String>();
+        subFolderTemplateComboBox.setModel(subFolderTemplateComboBoxModel);
+        subFolderTemplateComboBox.setEnabled(false);
+
+        DefaultComboBoxModel<String> fileNameTemplateComboBoxModel = new DefaultComboBoxModel<String>();
+        for (String template : renameImages.getTemplateFileNameNames()) {
+            fileNameTemplateComboBoxModel.addElement(template);
+        }
+
+        fileNameTemplateComboBox = new JComboBox<String>();
+        fileNameTemplateComboBox.setModel(fileNameTemplateComboBoxModel);
+        fileNameTemplateComboBox.setEnabled(false);
+
+        ImageIcon saveTemplatePictureImageIcon = new ImageIcon();
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif")){
+            saveTemplatePictureImageIcon.setImage(ImageIO.read(imageStream));
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image save.gif");
+            logger.logERROR(iox);
+        }
+
+        ImageIcon removeTemplatePictureImageIcon = new ImageIcon();
+        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif")){
+            removeTemplatePictureImageIcon.setImage(ImageIO.read(imageStream));
+        } catch (IOException iox) {
+            logger.logERROR("Could not open the image remove.gif");
+            logger.logERROR(iox);
+        }
+
+        saveFileNameTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        saveSubFolderTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        removeFileNameTemplateButton = new JButton(removeTemplatePictureImageIcon);
+        removeSubFolderTemplateButton = new JButton(removeTemplatePictureImageIcon);
 
         GBHelper inputPos = new GBHelper();
         JPanel inputPanel = new JPanel(new GridBagLayout());
@@ -1541,9 +1595,17 @@ public class MainGUI extends JFrame {
         inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
         inputPanel.add(subFolderLabel, inputPos.nextRow());
         inputPanel.add(subFolderTextField, inputPos.nextRow());
+        inputPanel.add(saveSubFolderTemplateButton, inputPos.nextCol());
+        inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
+        inputPanel.add(subFolderTemplateComboBox, inputPos.nextRow());
+        inputPanel.add(removeSubFolderTemplateButton, inputPos.nextCol());
         inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
         inputPanel.add(fileNameTemplateLabel, inputPos.nextRow());
         inputPanel.add(fileNameTemplateTextField, inputPos.nextRow());
+        inputPanel.add(saveFileNameTemplateButton, inputPos.nextCol());
+        inputPanel.add(Box.createVerticalStrut(4), inputPos.nextRow());
+        inputPanel.add(fileNameTemplateComboBox, inputPos.nextRow());
+        inputPanel.add(removeFileNameTemplateButton, inputPos.nextCol());
 
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1804,25 +1866,30 @@ public class MainGUI extends JFrame {
         popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList());
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.addActionListener(new AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList());
 
-
         imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
         mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
+
+        saveFileNameTemplateButton.addActionListener(new SaveFileNameTemplateButtonListener());
+        saveSubFolderTemplateButton.addActionListener(new SaveSubFolderTemplateButtonListener());
+        removeFileNameTemplateButton.addActionListener(new RemoveFileNameTemplateButtonListener());
+        removeSubFolderTemplateButton.addActionListener(new RemoveSubFolderTemplateButtonListener());
+
+        fileNameTemplateComboBox.addActionListener(new FileNameTemplateComboBoxListener());
+        subFolderTemplateComboBox.addActionListener(new SubFolderTemplateComboBoxListener());
     }
 
     public void createRightClickMenuMerge() {
 
-popupMenuAddImagePathToImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
-popupMenuRemoveImagePathFromImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
-popupMenuCopyImageToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
-popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
+        popupMenuAddImagePathToImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
+        popupMenuRemoveImagePathFromImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
+        popupMenuCopyImageToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+        popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
 
         rightClickMenuMerge = new JPopupMenu();
         rightClickMenuMerge.add(popupMenuAddImagePathToImageRepositoryMerge);
         rightClickMenuMerge.add(popupMenuRemoveImagePathFromImageRepositoryMerge);
         rightClickMenuMerge.add(popupMenuCopyImageToClipBoardMerge);
         rightClickMenuMerge.add(popupMenuCopyAllImagesToClipBoardMerge);
-
-
     }
 
     public void createRightClickMenuCategories() {
@@ -1892,14 +1959,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     public void initiateProgram(){
 
-        RenameImages renameImages = configuration.getRenameImages();
 
-        subFolderTextField.setText(renameImages.getTemplateSubDirectoryName());
-        fileNameTemplateTextField.setText(renameImages.getTemplateFileName());
-
-        if(renameImages.getCreateThumbNails()) {
-            createThumbNailsCheckBox.setSelected(true);
-        }
         Update.updateAllUIs();
     }
 
@@ -1973,6 +2033,19 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
         renameImages.setTemplateSubDirectoryName(subFolderTextField.getText());
         renameImages.setTemplateFileName(fileNameTemplateTextField.getText());
+
+        TreeSet<String> fileNameTemplates = new TreeSet<String>();
+        for (int index = 0; index < fileNameTemplateComboBox.getModel().getSize(); index++) {
+            fileNameTemplates.add(fileNameTemplateComboBox.getModel().getElementAt(index));
+        }
+        renameImages.setTemplateFileNameNames(fileNameTemplates);
+
+        TreeSet<String> subDirectoryTemplates = new TreeSet<String>();
+        for (int index = 0; index < subFolderTemplateComboBox.getModel().getSize(); index++) {
+            subDirectoryTemplates.add(subFolderTemplateComboBox.getModel().getElementAt(index));
+        }
+        renameImages.setTemplateSubDirectoryNames(subDirectoryTemplates);
+
         renameImages.setCreateThumbNails(createThumbNailsCheckBox.isSelected());
 
         TagImages tagImages = configuration.getTagImages();
@@ -2025,7 +2098,7 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
 
     private void validateInputInRealtime() {
 
-        if (subFolderTextField.isFocusOwner() || fileNameTemplateTextField.isFocusOwner()) {
+
             ApplicationContext ac = ApplicationContext.getInstance();
             ac.setTemplateFileName(fileNameTemplateTextField.getText());
             ac.setTemplateSubFolderName(subFolderTextField.getText());
@@ -2037,14 +2110,15 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
             } else {
                 JOptionPane.showMessageDialog(null,vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             }
-        }
     }
 
     private void setInputsEnabled(boolean state) {
         destinationPathButton.setEnabled(state);
         openDestinationFileChooserJMenuItem.setEnabled(state);
         fileNameTemplateTextField.setEnabled(state);
+        fileNameTemplateComboBox.setEnabled(state);
         subFolderTextField.setEnabled(state);
+        subFolderTemplateComboBox.setEnabled(state);
         createThumbNailsCheckBox.setEnabled(state);
         startProcessButton.setEnabled(state);
         startProcessJMenuItem.setEnabled(state);
@@ -2390,10 +2464,13 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
         }
         @Override
         public void removeUpdate(DocumentEvent e) {
-            validateInputInRealtime();
+           if (fileNameTemplateTextField.hasFocus() || subFolderTextField.hasFocus()) {
+               validateInputInRealtime();
+           }
         }
         @Override
         public void changedUpdate(DocumentEvent e) {
+
         }
     }
 
@@ -3840,6 +3917,171 @@ popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupme
         @Override
         public void actionPerformed(ActionEvent ae) {
             Config.getInstance().get().getRepository().getExceptions().getNeverAdd().add(new File(ae.getActionCommand()));
+        }
+    }
+
+    /**
+     * Listener class for the "save a new file name template" button.
+     *
+     * @author Fredrik
+     *
+     */
+    private class SaveFileNameTemplateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            addTemplateToModel(fileNameTemplateComboBox, fileNameTemplateTextField);
+        }
+    }
+
+    /**
+     * Listener class for the "save a new sub directory template" button.
+     *
+     * @author Fredrik
+     *
+     */
+    private class SaveSubFolderTemplateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            addTemplateToModel(subFolderTemplateComboBox, subFolderTextField);
+        }
+    }
+
+    /**
+     * This method will add a template, a String defining a template used by the
+     * rename functionality, to the {@link JComboBox} that is referenced by the
+     * parameter comboBox. A template will be added to the list of already
+     * existing templates, or be the first, if the entered text is not an empty
+     * string or already existing in the list of templates.
+     *
+     * @param comboBox
+     *            is the {@link JComboBox} that will have new template added.
+     * @param textField
+     *            contains the new temlate.
+     */
+    private void addTemplateToModel(JComboBox<String> comboBox, JTextField textField) {
+        String templateString = textField.getText();
+        templateString = templateString.trim();
+
+        if (StringUtil.isNotBlank(templateString)) {
+            DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) comboBox
+                    .getModel();
+
+            for (int index = 0; index < model.getSize(); index++) {
+                String item = model.getElementAt(index);
+
+                if (item.equals(templateString)) {
+                    return;
+                }
+            }
+            model.addElement(templateString);
+        }
+    }
+
+    /**
+     * This method removes an already stored template from one of the template
+     * {@link JComboBox} lists: File name or Subdirectory. It will only remove
+     * an item if there is one selected. And after successfull removal, then is
+     * the selection cleared, meaning, the {@link JComboBox} has no selected
+     * value.
+     *
+     * @param comboBox
+     *            specifies which {@link JComboBox} to remove an template from.
+     */
+    private void removeTemplateFromModel(JComboBox<String> comboBox) {
+        Object selectedItem = comboBox.getModel().getSelectedItem();
+
+        if (selectedItem != null) {
+            comboBox.removeItem(selectedItem);
+            comboBox.getEditor().setItem(null);
+        }
+    }
+
+    /**
+     * Listener class for the "remove an existing file name template" button.
+     *
+     * @author Fredrik
+     *
+     */
+    private class RemoveFileNameTemplateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            removeTemplateFromModel(fileNameTemplateComboBox);
+        }
+    }
+
+    /**
+     * Listener class for the "remove an existing sub directory template"
+     * button.
+     *
+     * @author Fredrik
+     *
+     */
+    private class RemoveSubFolderTemplateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            removeTemplateFromModel(subFolderTemplateComboBox);
+        }
+    }
+
+    /**
+     * Listener class for the file name template {@link JComboBox}. When an
+     * entry in the list is selected then the value is set to the file name
+     * template {@link JTextField}
+     *
+     * @author Fredrik
+     *
+     */
+    private class FileNameTemplateComboBoxListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setSelectedValueToJTextField(e, fileNameTemplateTextField);
+        }
+    }
+
+    /**
+     * Listener class for the sub folder template {@link JComboBox}. When an
+     * entry in the list is selected then the value is set to the sub folder
+     * template {@link JTextField}
+     *
+     * @author Fredrik
+     *
+     */
+    private class SubFolderTemplateComboBoxListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setSelectedValueToJTextField(e, subFolderTextField);
+        }
+    }
+
+    /**
+     * Helper method to get the text from an selected entry in a
+     * {@link JComboBox} and put the text onto a {@link JTextField}
+     *
+     * @param e
+     *            is an {@link ActionEvent} fired from an {@link JComboBox} when
+     *            an selection is changed.
+     * @param destinationTextField
+     *            is to which {@link JTextField} to set the text that is
+     *            selected by the {@link JComboBox} that fired the
+     *            {@link ActionEvent} contained by the parameter e.
+     */
+    private void setSelectedValueToJTextField(ActionEvent e, JTextField destinationTextField) {
+        JComboBox<?> source = null;
+
+        if (e.getSource() instanceof JComboBox<?>) {
+            source = (JComboBox<?>)e.getSource();
+        }
+
+        if (source != null) {
+            int selectedIndex = source.getSelectedIndex();
+            if (selectedIndex > -1) {
+                Object selectedElement = source.getModel().getElementAt(selectedIndex);
+                if (selectedElement instanceof String) {
+                    destinationTextField.setText((String)selectedElement);
+                }
+            }
         }
     }
 

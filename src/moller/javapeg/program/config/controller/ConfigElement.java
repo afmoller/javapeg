@@ -41,7 +41,10 @@ public class ConfigElement {
     public static final String PATH_SOURCE = "pathSource";
     public static final String PROGRESS_LOG_TIMESTAMP_FORMAT = "progressLogTimestampFormat";
     public static final String TEMPLATE_FILE_NAME = "templateFileName";
+    public static final String TEMPLATES_FILE_NAME = "templatesFileName";
+    public static final String TEMPLATE = "template";
     public static final String TEMPLATE_SUB_DIRECTORY_NAME = "templateSubDirectoryName";
+    public static final String TEMPLATES_SUB_DIRECTORY_NAME = "templatesSubDirectoryName";
     public static final String USE_LAST_MODIFIED_DATE = "useLastModifiedDate";
     public static final String USE_LAST_MODIFIED_TIME = "useLastModifiedTime";
     public static final String EXCEPTIONS = "exceptions";

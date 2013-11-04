@@ -80,7 +80,13 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <pathSource/>
     <pathDestination/>
     <templateSubDirectoryName>Images %d%</templateSubDirectoryName>
+    <templatesSubDirectoryName>
+      <template>Images %d%</template>
+    </templatesSubDirectoryName>
     <templateFileName>Image %d% Time %t%</templateFileName>
+    <templatesFileName>
+      <template>Image %d% Time %t%</template>
+    </templatesFileName>
     <createThumbNails>true</createThumbNails>
     <useLastModifiedDate>true</useLastModifiedDate>
     <useLastModifiedTime>true</useLastModifiedTime>

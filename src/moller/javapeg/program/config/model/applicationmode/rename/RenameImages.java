@@ -2,6 +2,7 @@ package moller.javapeg.program.config.model.applicationmode.rename;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 public class RenameImages {
 
@@ -14,6 +15,8 @@ public class RenameImages {
     private Boolean useLastModifiedTime;
     private Integer cameraModelNameMaximumLength;
     private SimpleDateFormat progressLogTimestampFormat;
+    private Set<String> templateSubDirectoryNames;
+    private Set<String> templateFileNameNames;
 
     public File getPathSource() {
         return pathSource;
@@ -42,6 +45,12 @@ public class RenameImages {
     public SimpleDateFormat getProgressLogTimestampFormat() {
         return progressLogTimestampFormat;
     }
+    public Set<String> getTemplateSubDirectoryNames() {
+        return templateSubDirectoryNames;
+    }
+    public Set<String> getTemplateFileNameNames() {
+        return templateFileNameNames;
+    }
     public void setPathSource(File pathSource) {
         this.pathSource = pathSource;
     }
@@ -69,5 +78,11 @@ public class RenameImages {
     public void setProgressLogTimestampFormat(
             SimpleDateFormat progressLogTimestampFormat) {
         this.progressLogTimestampFormat = progressLogTimestampFormat;
+    }
+    public void setTemplateSubDirectoryNames(Set<String> templateSubDirectoryNames) {
+        this.templateSubDirectoryNames = templateSubDirectoryNames;
+    }
+    public void setTemplateFileNameNames(Set<String> templateFileNameNames) {
+        this.templateFileNameNames = templateFileNameNames;
     }
 }
