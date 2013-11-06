@@ -10,6 +10,11 @@
  
  3.0 (2013-xx-xx)
  
+ + It is possible to save an unlimited amount of File name and Sub folder
+   rename templates. Any saved template will end up in a drop down box and when
+   selected, it will be used as the current template used by the rename 
+   functionality.
+ 
  + A new image merge mode has been added to JavaPEG. This means that it is 
    possible to merge image files (copy files from different directories into 
    one destination directory, but without any possible duplicates) from an

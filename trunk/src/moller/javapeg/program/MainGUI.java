@@ -1583,9 +1583,20 @@ public class MainGUI extends JFrame {
         }
 
         saveFileNameTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        saveFileNameTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
+        saveFileNameTemplateButton.setEnabled(false);
+
         saveSubFolderTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        saveSubFolderTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
+        saveSubFolderTemplateButton.setEnabled(false);
+
         removeFileNameTemplateButton = new JButton(removeTemplatePictureImageIcon);
+        removeFileNameTemplateButton.setToolTipText(lang.get("tooltip.deleteTemplateFromTemplateList"));
+        removeFileNameTemplateButton.setEnabled(false);
+
         removeSubFolderTemplateButton = new JButton(removeTemplatePictureImageIcon);
+        removeSubFolderTemplateButton.setToolTipText(lang.get("tooltip.deleteTemplateFromTemplateList"));
+        removeSubFolderTemplateButton.setEnabled(false);
 
         GBHelper inputPos = new GBHelper();
         JPanel inputPanel = new JPanel(new GridBagLayout());
@@ -2097,19 +2108,17 @@ public class MainGUI extends JFrame {
     }
 
     private void validateInputInRealtime() {
+        ApplicationContext ac = ApplicationContext.getInstance();
+        ac.setTemplateFileName(fileNameTemplateTextField.getText());
+        ac.setTemplateSubFolderName(subFolderTextField.getText());
 
+        ValidatorStatus vs = FileAndSubDirectoryTemplate.getInstance().test();
 
-            ApplicationContext ac = ApplicationContext.getInstance();
-            ac.setTemplateFileName(fileNameTemplateTextField.getText());
-            ac.setTemplateSubFolderName(subFolderTextField.getText());
-
-            ValidatorStatus vs = FileAndSubDirectoryTemplate.getInstance().test();
-
-            if(vs.isValid()) {
-                updatePreviewTable();
-            } else {
-                JOptionPane.showMessageDialog(null,vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            }
+        if(vs.isValid()) {
+            updatePreviewTable();
+        } else {
+            JOptionPane.showMessageDialog(null,vs.getStatusMessage(), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void setInputsEnabled(boolean state) {
@@ -2123,6 +2132,10 @@ public class MainGUI extends JFrame {
         startProcessButton.setEnabled(state);
         startProcessJMenuItem.setEnabled(state);
         tree.setEnabled(state);
+        saveFileNameTemplateButton.setEnabled(state);
+        saveSubFolderTemplateButton.setEnabled(state);
+        removeFileNameTemplateButton.setEnabled(state);
+        removeSubFolderTemplateButton.setEnabled(state);
     }
 
     private void closeApplication(int exitValue) {
