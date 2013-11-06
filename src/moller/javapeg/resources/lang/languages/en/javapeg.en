@@ -105,7 +105,8 @@ tooltip.selectSourceDirectoryWithImages                        = Select a direct
 tooltip.selectDestinationDirectory                             = Select a destination directory
 tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Select a directory with images and a destination directory
 tooltip.enableTemplateFields                                   = To enable, select a destination directory
-
+tooltip.saveTemplateToTemplatesList                            = Save template to the list of available templates
+tooltip.deleteTemplateFromTemplateList                         = Remove the selected template from the list of saved templates
 ##############################################################################################################
 # F I L E  S E L E C T I O N  D I A L O G S                                                                  #
 ##############################################################################################################
