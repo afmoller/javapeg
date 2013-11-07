@@ -1,25 +1,25 @@
 SLÅ IHOP BILDER<LF>
 ===============<LF>
-Med JavaPEG it is possible to merge the image files stored in different directories into one destination directory. For every selected directory to merge, all JPEG images are searched and a MD5 hash sum is calculated for every found image. Each image with a unique MD5 hash sum is directly copied into the destination directory. For any conflicting images (two or more images with the same MD5 hash sum) a dialog is displayed, in which the user selects which image(s) to copy to the destination directory.<LF>
+Med JavaPEG är det möjligt att slå ihop innehållet från olika kataloger till en destinationskatalog. För varje vald katalog att slå ihop, så kommer alla filer av JPEG-typ som finns i dessa kataloger, att få sin MD5-summa beräknad. Varje bild med en unik MD5-summa kommer direkt att kopieras till destinationskatalogen. För varje bild med en konflikt (två eller fler bilder med samma MD5-summa), så kommer en dialog att visas, i vilken samtliga bildkonflikter kommer att visas. Användaren väljer i denna dialog vilka bilder som skall kopieras till destinationskatalogen.<LF> 
 <LF>
-Merge procedure<LF>
-===============<LF>
+Ihopslagningsprocess<LF>
+====================<LF>
 <LF>
 1:<LF>
-Select a directory with images in the tree structure to the left and add it to the list of directories to merge with a click on the button with a "plus"-sign.<LF>
+Välj en katalog med bilder i trädstrukturen till vänster och lägg till den till listan med kataloger att slå ihop genom att klicka på knappen med ett "plus"-tecken.<LF>
 <LF>
 2:<LF>
-Repeat step 1 until all desired directories to merge have been selected.<LF>
+Upprepa steg 1 tills alla önskade kataloger att slå ihop har blivit valda.<LF>
 <LF>
 3:<LF>
-Select a destination directory with the directory selector that is displayed when the destination directory selector button is clicked.<LF>
+Välj destinationskatalog med katalogväljaren som visas när destinationskatalogsknappen klickas.<LF>
 <LF>
 4:<LF>
-Start the merge process by clicking on the "merge" button.<LF>
+Starta sammanslagningsprocessen genom att klicka på "sammanslagnings"-knappen.<LF>
 <LF>
 5:<LF>
-If there is a conflict found, a dialog is displayed in which all the conflicting images are displayed. Each row in the dialog displays the images with the same MD5 hash sum. The merge process continues when the user has selected which images to copy, by marking the select box by every desired image, and closed the merge dialog.<LF>
+Om en konflikt hittas, så visas en dialog där alla bildkonfliker visas. Varje rad i dialogen visar bilder med samma MD5-summa. Sammanslagningsprocessen fortsätter när användaren har valt, genom att klicka på kryssrutan som finns vid varje bild, vilka bilder som skall kopieras och när sammanslagningsdialogen stängts.<LF> 
 <LF>
-What is merged?<LF>
-===============<LF>
-What is going to be merged is all files of type JPEG which are directly found in the selected directories. This means that any other file or image files inside a sub directory will not be taken under consideration by the merge process. Merge means, a process to eliminate duplicate copies of images by comparing them with each other and only copy one occurrence of the conflicting images.
+Vad slås samman?<LF>
+================<LF>
+Vad som slås samman är all filer av JPEG-typ som ligger sparade direkt i de valda katalogerna. Detta betyder att varje annan filtyp eller bildfiler inuti underkataloger ej kommer att hanteras av sammanslagningsprocessen. Sammanslagning betyder i JavaPEG, en process för att eliminera duplikat genom att jämföra bilderna med varandra och bara kopiera en bild när flera med konfliktande MD5-summa hittas. 
