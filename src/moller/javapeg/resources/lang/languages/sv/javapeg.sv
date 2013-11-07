@@ -69,15 +69,15 @@ variable.shutterSpeedVariable  = e
 variable.shutterSpeed          = Exponeringstid
 variable.isoValueVariable      = i
 variable.isoValue              = ISO-värde
-variable.pictureWidthVariable  = b
+variable.pictureWidthVariable  = w
 variable.pictureWidth          = Bildbredd i pixlar
 variable.pictureHeightVariable = h
 variable.pictureHeight         = Bildhöjd i pixlar
-variable.apertureValueVariable = bl
+variable.apertureValueVariable = f
 variable.apertureValue         = Bländartal
-variable.dateOftodayVariable   = dd
+variable.dateOftodayVariable   = td
 variable.dateOftoday           = Dagens datum
-variable.sourceNameVariable    = f
+variable.sourceNameVariable    = sn
 variable.sourceName            = Ursprungligt filnamn
 
 ##############################################################################################################
