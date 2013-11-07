@@ -1,15 +1,15 @@
 package moller.javapeg.program.config.controller;
 
-import java.awt.Color;
+import java.awt.Dialog.ModalityType;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.swing.JOptionPane;
+import javax.swing.JDialog;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -40,6 +40,7 @@ import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.util.gui.Screen;
 import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.io.ZipUtil;
@@ -165,6 +166,21 @@ public class ConfigHandler {
         return configuration;
     }
 
+    /**
+     * This method stores the JavaPEG configuration to an XML file. It does also
+     * store a zipped version of the configuration, which is used as a source to
+     * restore the last configuration, if the normal XML configuration file has
+     * been corrupted (incorrectly manually edited) between two application
+     * sessions.
+     *
+     * @param configuration
+     *            is the configuration to store into an XML file
+     * @param configurationFile
+     *            is the file to which the {@link Configuration} object shall be
+     *            stored.
+     * @return a boolean value indication whether the store action was
+     *         successful or not. True means success and false failure.
+     */
     public static boolean store(Configuration configuration, File configurationFile) {
 
         OutputStream os = null;
@@ -266,18 +282,31 @@ public class ConfigHandler {
                 System.exit(1);
             }
         }
-
         return true;
     }
 
+    /**
+     * If there is an error message to display, that is shown in an modal
+     * {@link JDialog}
+     *
+     * @param message
+     *            is the error message to display.
+     * @param title
+     *            contains the string to be used as {@link JDialog} title.
+     */
     private static void displayErrorMessage(String message, String title) {
         JTextArea textArea = new JTextArea();
         textArea.setText(message);
         textArea.setEditable(false);
-        textArea.setColumns(80);
         textArea.setLineWrap(true);
-        textArea.setBorder(new LineBorder(Color.BLACK));
+        textArea.setWrapStyleWord(true);
 
-        JOptionPane.showMessageDialog(null, textArea, title, JOptionPane.ERROR_MESSAGE);
+        JDialog errorMessageDialog = new JDialog();
+        errorMessageDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+        errorMessageDialog.getContentPane().add(textArea);
+        errorMessageDialog.setSize(new Dimension(600, 300));
+        errorMessageDialog.setLocation(Screen.getLeftUpperLocationForCenteredPosition(600, 300));
+        errorMessageDialog.setTitle(title);
+        errorMessageDialog.setVisible(true);
     }
 }
