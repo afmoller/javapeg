@@ -1,6 +1,5 @@
 3.0:
 ====
-- Add help section for the Image Merge functionality (Swedish translation)
 - Rewrite the corrupt config file dialog to use a modal JDialog instead of a JOptionPane
 - Make the deserialization of image meta data base files to be running in a separate thread.
 - Test with more images from different cameras.
