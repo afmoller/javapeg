@@ -289,13 +289,6 @@ public class ImageMetaDataContextUtil {
 
         if(repositoryPaths != null) {
             for (File repositoryPath : repositoryPaths.getPaths()) {
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
                 ImageRepositoryItem iri = new ImageRepositoryItem();
 
                 iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
