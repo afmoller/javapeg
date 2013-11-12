@@ -74,6 +74,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -121,7 +122,6 @@ import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
-import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
@@ -187,7 +187,6 @@ import moller.util.gui.Table;
 import moller.util.gui.TreeUtil;
 import moller.util.gui.Update;
 import moller.util.image.ImageUtil;
-import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
 import moller.util.io.PathUtil;
 import moller.util.io.Status;
@@ -307,7 +306,6 @@ public class MainGUI extends JFrame {
     private MetaDataValue hourMetaDataValue;
     private MetaDataValue minuteMetaDataValue;
     private MetaDataValue secondMetaDataValue;
-
     private MetaDataValue imagesSizeMetaDataValue;
     private MetaDataValue isoMetaDataValue;
     private MetaDataValue shutterSpeedMetaDataValue;
@@ -399,6 +397,10 @@ public class MainGUI extends JFrame {
         this.printSystemProperties();
         this.overrideSwingUIProperties();
 
+        logger.logDEBUG("Check Available Memory Started");
+        this.checkAvailableMemory();
+        logger.logDEBUG("Check Available Memory Finished");
+
         // Check if JavaPEG client id is set, otherwise generate one and set it
         // to the configuration.
         if (!ConfigUtil.isClientIdSet(configuration.getJavapegClientId())) {
@@ -413,8 +415,14 @@ public class MainGUI extends JFrame {
             logger.logDEBUG("Application Update Check Finished");
         }
         logger.logDEBUG("Image Meta Data Context initialization Started");
-        this.initiateImageMetaDataContext();
-        logger.logDEBUG("Image Meta Data Context initialization Finished");
+
+        ImageMetaDataContextLoader imdcl = new  ImageMetaDataContextLoader();
+        imdcl.execute();
+
+        if (ApplicationContext.getInstance().isRestartNeeded()) {
+            displayInformationMessage(lang.get("common.application.restart.needed"));
+        }
+
         logger.logDEBUG("Creation of Main Frame Started");
         this.createMainFrame();
         logger.logDEBUG("Creation of Main Frame Finished");
@@ -436,14 +444,9 @@ public class MainGUI extends JFrame {
         logger.logDEBUG("Application initialization Started");
         this.initiateProgram();
         logger.logDEBUG("Application initialization Finished");
-        logger.logDEBUG("Check Available Memory Started");
-        this.checkAvailableMemory();
-        logger.logDEBUG("Check Available Memory Finished");
         logger.logDEBUG("Application Context initialization Started");
         this.initiateApplicationContext();
         logger.logDEBUG("Application Context initialization Finished");
-
-
     }
 
     private void printSystemProperties() {
@@ -1280,19 +1283,28 @@ public class MainGUI extends JFrame {
         JLabel shutterSpeedLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.EXPOSURE_TIME.toString()));
         JLabel apertureValueLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.APERTURE_VALUE.toString()));
 
-        MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
-
-        yearMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.YEAR.toString());
-        monthMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MONTH.toString());
-        dayMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.DAY.toString());
-        hourMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.HOUR.toString());
-        minuteMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.MINUTE.toString());
-        secondMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.SECOND.toString());
-        imagesSizeMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.IMAGE_SIZE.toString());
-        isoMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.ISO.toString());
-        shutterSpeedMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.EXPOSURE_TIME.toString());
-        apertureValueMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.APERTURE_VALUE.toString());
-        cameraModelMetaDataValue = new MetaDataValue(mdtl, MetaDataValueFieldName.CAMERA_MODEL.toString());
+        yearMetaDataValue = new MetaDataValue(MetaDataValueFieldName.YEAR.toString());
+        yearMetaDataValue.setEnabled(false);
+        monthMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MONTH.toString());
+        monthMetaDataValue.setEnabled(false);
+        dayMetaDataValue = new MetaDataValue(MetaDataValueFieldName.DAY.toString());
+        dayMetaDataValue.setEnabled(false);
+        hourMetaDataValue = new MetaDataValue(MetaDataValueFieldName.HOUR.toString());
+        hourMetaDataValue.setEnabled(false);
+        minuteMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MINUTE.toString());
+        minuteMetaDataValue.setEnabled(false);
+        secondMetaDataValue = new MetaDataValue(MetaDataValueFieldName.SECOND.toString());
+        secondMetaDataValue.setEnabled(false);
+        imagesSizeMetaDataValue = new MetaDataValue(MetaDataValueFieldName.IMAGE_SIZE.toString());
+        imagesSizeMetaDataValue.setEnabled(false);
+        isoMetaDataValue = new MetaDataValue(MetaDataValueFieldName.ISO.toString());
+        isoMetaDataValue.setEnabled(false);
+        shutterSpeedMetaDataValue = new MetaDataValue(MetaDataValueFieldName.EXPOSURE_TIME.toString());
+        shutterSpeedMetaDataValue.setEnabled(false);
+        apertureValueMetaDataValue = new MetaDataValue(MetaDataValueFieldName.APERTURE_VALUE.toString());
+        apertureValueMetaDataValue.setEnabled(false);
+        cameraModelMetaDataValue = new MetaDataValue(MetaDataValueFieldName.CAMERA_MODEL.toString());
+        cameraModelMetaDataValue.setEnabled(false);
 
         final int size = 5;
 
@@ -1436,6 +1448,7 @@ public class MainGUI extends JFrame {
 
         searchImagesButton = new JButton();
         searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
+        searchImagesButton.setEnabled(false);
 
         try {
             searchImagesButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif"), true));
@@ -1969,55 +1982,10 @@ public class MainGUI extends JFrame {
     }
 
     public void initiateProgram(){
-
-
         Update.updateAllUIs();
     }
 
-    public void initiateImageMetaDataContext() {
-        RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
 
-        if(repositoryPaths != null) {
-            TagImages tagImages = configuration.getTagImages();
-
-            TagImagesPaths tagImagesPaths = tagImages.getImagesPaths();
-
-            boolean automaticallyRemoveNonExistingImagePath = tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath();
-
-            for (File repositoryPath : repositoryPaths.getPaths()) {
-                ImageRepositoryItem iri = new ImageRepositoryItem();
-
-                iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
-                iri.setPath(repositoryPath);
-
-                switch (iri.getPathStatus()) {
-                case EXISTS:
-                    File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
-                    if (imageMetaDataDataBaseFile.exists()) {
-                        ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);
-                        imageRepositoryListModel.add(iri);
-                    } else {
-                        if (!automaticallyRemoveNonExistingImagePath) {
-                            imageRepositoryListModel.add(iri);
-                        }
-                    }
-                    break;
-                case NOT_AVAILABLE:
-                    imageRepositoryListModel.add(iri);
-                    break;
-                case DOES_NOT_EXIST:
-                    if (!automaticallyRemoveNonExistingImagePath) {
-                        imageRepositoryListModel.add(iri);
-                    }
-                    break;
-                }
-            }
-
-            if (ApplicationContext.getInstance().isRestartNeeded()) {
-              displayInformationMessage(lang.get("common.application.restart.needed"));
-          }
-        }
-    }
 
     public void initiateApplicationContext() {
         ApplicationContext ac = ApplicationContext.getInstance();
@@ -4257,6 +4225,55 @@ public class MainGUI extends JFrame {
                 rightClickMenuCategories.add(popupMenuAddCategory);
                 break;
             }
+        }
+    }
+
+    /**
+     * This class extends the {@link SwingWorker} and performs the long running
+     * task of loading all the configured image meta data repository files in a
+     * separate thread. When the loading is done, then the "search image" button
+     * is set to enabled, and thereby is it possible to perform searches in the
+     * image meta data repository.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ImageMetaDataContextLoader extends SwingWorker<Boolean, String> {
+        @Override
+        protected Boolean doInBackground() throws Exception {
+            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath(), imageRepositoryListModel, logger);
+        }
+
+        @Override
+        protected void done() {
+            searchImagesButton.setEnabled(true);
+
+            MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
+
+            yearMetaDataValue.setEnabled(true);
+            yearMetaDataValue.setMouseListener(mdtl);
+            monthMetaDataValue.setEnabled(true);
+            monthMetaDataValue.setMouseListener(mdtl);
+            dayMetaDataValue.setEnabled(true);
+            dayMetaDataValue.setMouseListener(mdtl);
+            hourMetaDataValue.setEnabled(true);
+            hourMetaDataValue.setMouseListener(mdtl);
+            minuteMetaDataValue.setEnabled(true);
+            minuteMetaDataValue.setMouseListener(mdtl);
+            secondMetaDataValue.setEnabled(true);
+            secondMetaDataValue.setMouseListener(mdtl);
+            imagesSizeMetaDataValue.setEnabled(true);
+            imagesSizeMetaDataValue.setMouseListener(mdtl);
+            isoMetaDataValue.setEnabled(true);
+            isoMetaDataValue.setMouseListener(mdtl);
+            shutterSpeedMetaDataValue.setEnabled(true);
+            shutterSpeedMetaDataValue.setMouseListener(mdtl);
+            apertureValueMetaDataValue.setEnabled(true);
+            apertureValueMetaDataValue.setMouseListener(mdtl);
+            cameraModelMetaDataValue.setEnabled(true);
+            cameraModelMetaDataValue.setMouseListener(mdtl);
+
+            logger.logDEBUG("Image Meta Data Context initialization Finished");
         }
     }
 }

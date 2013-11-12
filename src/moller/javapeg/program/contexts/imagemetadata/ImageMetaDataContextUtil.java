@@ -8,7 +8,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
+import moller.javapeg.program.config.model.repository.RepositoryPaths;
+import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.imagerepository.ImageRepositoryItem;
+import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.SortedListModel;
+import moller.util.io.DirectoryUtil;
 
 public class ImageMetaDataContextUtil {
 
@@ -254,5 +263,68 @@ public class ImageMetaDataContextUtil {
             returnValues.addAll(doubleCollectionWithValuesToFetch.get(javaPegId).keySet());
         }
         return returnValues;
+    }
+
+    /**
+     * This method loads (de-serializes) any available and configured image meta
+     * data file into the {@link ImageMetaDataContext}.
+     *
+     * @param repositoryPaths
+     *            contains the paths to all image meta data files that must be
+     *            de-serialized.
+     * @param automaticallyRemoveNonExistingImagePath
+     *            if the path does not longer exist, then it will be
+     *            automatically removed from the list of configured repository
+     *            paths.
+     * @param imageRepositoryListModel
+     *            to which model the the {@link ImageRepositoryItem} objects
+     *            shall be added.
+     * @param logger
+     *            is the logger to log to.
+     * @return a boolean value indicating whether or not the application needs
+     *         to be restarted after the de-serialization of all image meta data
+     *         files.
+     */
+    public static boolean initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+
+        if(repositoryPaths != null) {
+            for (File repositoryPath : repositoryPaths.getPaths()) {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                ImageRepositoryItem iri = new ImageRepositoryItem();
+
+                iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
+                iri.setPath(repositoryPath);
+
+                switch (iri.getPathStatus()) {
+                case EXISTS:
+                    File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
+                    if (imageMetaDataDataBaseFile.exists()) {
+                        logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+                        ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);
+                        imageRepositoryListModel.add(iri);
+                    } else {
+                        if (!automaticallyRemoveNonExistingImagePath) {
+                            imageRepositoryListModel.add(iri);
+                        }
+                    }
+                    break;
+                case NOT_AVAILABLE:
+                    imageRepositoryListModel.add(iri);
+                    break;
+                case DOES_NOT_EXIST:
+                    if (!automaticallyRemoveNonExistingImagePath) {
+                        imageRepositoryListModel.add(iri);
+                    }
+                    break;
+                }
+            }
+        }
+        return ApplicationContext.getInstance().isRestartNeeded();
     }
 }
