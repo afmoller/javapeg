@@ -27,12 +27,11 @@ public class MetaDataValue extends JPanel {
 
     private final JButton clearTextFieldButton;
 
-    public MetaDataValue(MouseListener mouseListener, String name) {
+    public MetaDataValue(String name) {
         super();
 
         textField = new JTextField();
         textField.setEditable(false);
-        textField.addMouseListener(mouseListener);
         textField.setName(name);
         textField.setMinimumSize(new Dimension(50, textField.getSize().height));
         textField.setPreferredSize(new Dimension(200, textField.getSize().height));
@@ -77,5 +76,15 @@ public class MetaDataValue extends JPanel {
     public void clearValue() {
         textField.setText("");
         textField.setToolTipText("");
+    }
+
+    public void setMouseListener(MouseListener mouseListener) {
+        textField.addMouseListener(mouseListener);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        textField.setEnabled(enabled);
+
     }
 }
