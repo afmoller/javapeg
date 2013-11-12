@@ -1447,7 +1447,7 @@ public class MainGUI extends JFrame {
         }
 
         searchImagesButton = new JButton();
-        searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
+        searchImagesButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
         searchImagesButton.setEnabled(false);
 
         try {
@@ -4247,6 +4247,7 @@ public class MainGUI extends JFrame {
         @Override
         protected void done() {
             searchImagesButton.setEnabled(true);
+            searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
 
             MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 
