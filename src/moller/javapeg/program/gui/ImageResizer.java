@@ -604,19 +604,17 @@ public class ImageResizer extends JFrame {
      *
      */
     private class IntegerDocumentFilter extends DocumentFilter {
+        // Regular expression which finds all non digits
+        private final String NON_INTEGER_REGEXP = "\\D++";
+
         @Override
-        public void insertString(DocumentFilter.FilterBypass fp, int offset, String string, AttributeSet aset)
-                                    throws BadLocationException {
-            // remove non-digits
-            fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
+        public void insertString(DocumentFilter.FilterBypass fp, int offset, String string, AttributeSet aset) throws BadLocationException {
+            fp.insertString(offset, string.replaceAll(NON_INTEGER_REGEXP, ""), aset);
         }
 
-
         @Override
-        public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string, AttributeSet aset)
-                                            throws BadLocationException {
-         // remove non-digits
-            fp.insertString(offset, string.replaceAll("\\D++", ""), aset);
+        public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string, AttributeSet aset) throws BadLocationException {
+            fp.insertString(offset, string.replaceAll(NON_INTEGER_REGEXP, ""), aset);
         }
     }
 }
