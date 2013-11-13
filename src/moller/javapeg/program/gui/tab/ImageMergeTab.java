@@ -231,7 +231,7 @@ public class ImageMergeTab extends JPanel {
         backgroundPanel.add(directoryListLabel, posBackgroundPanel);
         backgroundPanel.add(scrollPane, posBackgroundPanel.nextRow().expandH().expandW());
         backgroundPanel.add(removeSelectedDirectoryButtonPanel, posBackgroundPanel.nextRow().expandW());
-        backgroundPanel.add(destinationDirectorySelector, posBackgroundPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(destinationDirectorySelector, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(buttonPanel, posBackgroundPanel.nextRow().expandW());
 
         return backgroundPanel;

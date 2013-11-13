@@ -76,7 +76,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -627,7 +626,7 @@ public class MainGUI extends JFrame {
 
         // Skapa övergripande panel som håller innehåller för övrigt innehåll.
         JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 1, 2)));
+        infoPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 1, 2)));
 
         JLabel infoPanelLabel = new JLabel(lang.get("information.panel.informationLabel"));
         infoPanelLabel.setForeground(Color.GRAY);
@@ -841,7 +840,7 @@ public class MainGUI extends JFrame {
     private JPanel createTreePanel() {
 
         JPanel treePanelBackground = new JPanel(new BorderLayout());
-        treePanelBackground.setBorder(BorderFactory.createCompoundBorder((new EtchedBorder(EtchedBorder.LOWERED)), new EmptyBorder(2, 2, 2, 2)));
+        treePanelBackground.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         JLabel inputLabel = new JLabel(lang.get("labels.sourcePath"));
         inputLabel.setForeground(Color.GRAY);
@@ -850,7 +849,7 @@ public class MainGUI extends JFrame {
         treePanelBackground.add(this.initiateJTree(), BorderLayout.CENTER);
 
         JPanel borderPanel = new JPanel(new BorderLayout());
-        borderPanel.setBorder(BorderFactory.createCompoundBorder((new BevelBorder(BevelBorder.LOWERED)), new EmptyBorder(2, 2, 0, 2)));
+        borderPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));
         borderPanel.add(treePanelBackground, BorderLayout.CENTER);
 
         return borderPanel;
@@ -864,9 +863,9 @@ public class MainGUI extends JFrame {
         backgroundJPanel.setName(MainTabbedPaneComponent.RENAME.toString());
         backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        backgroundJPanel.add(this.createRenameInputPanel(), posBackgroundPanel.nextCol());
+        backgroundJPanel.add(this.createRenameInputPanel(), posBackgroundPanel.nextCol().expandH());
         backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
-        backgroundJPanel.add(this.createInfoPanel(), posBackgroundPanel.nextCol().expandW());
+        backgroundJPanel.add(this.createInfoPanel(), posBackgroundPanel.nextCol().expandW().expandH());
 
         return backgroundJPanel;
     }
@@ -1633,13 +1632,14 @@ public class MainGUI extends JFrame {
 
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""),new EmptyBorder(2, 2, 2, 2)));
         backgroundPanel.add(inputPanel, posBackground.align(GridBagConstraints.NORTHWEST));
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackground.nextCol());
         backgroundPanel.add(new VariablesPanel(), posBackground.nextCol());
         backgroundPanel.add(Box.createVerticalStrut(5), posBackground.nextRow());
         backgroundPanel.add(createThumbNailsCheckBox, inputPos.nextRow().nextCol().nextCol());
         backgroundPanel.add(startProcessButton, inputPos.nextRow().nextCol().nextCol().align(GridBagConstraints.EAST));
+        backgroundPanel.add(Box.createVerticalGlue(), inputPos.nextRow().expandH());
 
         return backgroundPanel;
     }
@@ -1663,7 +1663,7 @@ public class MainGUI extends JFrame {
 
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""),new EmptyBorder(2, 2, 2, 2)));
 
         posBackground.fill = GridBagConstraints.BOTH;
 
@@ -1722,7 +1722,7 @@ public class MainGUI extends JFrame {
         imageTagPreviewScrollPane = new JScrollPane(imageTagPreviewPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         JLabel commentHeading = new JLabel(lang.get("findimage.comment.label"));
         commentHeading.setForeground(Color.GRAY);
