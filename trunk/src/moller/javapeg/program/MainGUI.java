@@ -2287,9 +2287,9 @@ public class MainGUI extends JFrame {
                 new HelpViewerGUI().setVisible(true);
             } else if (actionCommand.equals(lang.get("menu.item.configuration"))) {
                 new ConfigViewerGUI().setVisible(true);
-            } else if (actionCommand.equals("Export categories")) {
+            } else if (actionCommand.equals(lang.get("categoryimportexport.export.long.title"))) {
                 exportCategories();
-            } else if (actionCommand.equals("Import categories")) {
+            } else if (actionCommand.equals(lang.get("categoryimportexport.import.long.title"))) {
                 importCategories();
             }
         }
