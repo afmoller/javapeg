@@ -849,7 +849,7 @@ public class MainGUI extends JFrame {
         treePanelBackground.add(this.initiateJTree(), BorderLayout.CENTER);
 
         JPanel borderPanel = new JPanel(new BorderLayout());
-        borderPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));
+        borderPanel.setBorder(BorderFactory.createEmptyBorder(5, 2, 0, 2));
         borderPanel.add(treePanelBackground, BorderLayout.CENTER);
 
         return borderPanel;
@@ -861,7 +861,7 @@ public class MainGUI extends JFrame {
 
         JPanel backgroundJPanel = new JPanel(new GridBagLayout());
         backgroundJPanel.setName(MainTabbedPaneComponent.RENAME.toString());
-        backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         backgroundJPanel.add(this.createRenameInputPanel(), posBackgroundPanel.nextCol().expandH());
         backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
@@ -876,10 +876,10 @@ public class MainGUI extends JFrame {
 
         JPanel backgroundJPanel = new JPanel(new GridBagLayout());
         backgroundJPanel.setName(MainTabbedPaneComponent.VIEW.toString());
-        backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         backgroundJPanel.add(this.createFindImageSection(), posBackgroundPanel.expandH().expandW());
         backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
-        backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.expandH());
+        backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.nextCol().expandH());
 
         return backgroundJPanel;
     }
@@ -898,7 +898,6 @@ public class MainGUI extends JFrame {
 
         JPanel backgroundJPanel = new JPanel(new GridBagLayout());
         backgroundJPanel.setName(MainTabbedPaneComponent.CATEGORIZE.toString());
-        backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         backgroundJPanel.add(previewCommentCategoriesRatingSplitpane, posBackgroundPanel.expandH().expandW());
 
         this.setRatingCommentAndCategoryEnabled(false);
@@ -1014,7 +1013,7 @@ public class MainGUI extends JFrame {
         imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
+        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         GBHelper posVerticalButtonPanel = new GBHelper();
 
@@ -1057,14 +1056,11 @@ public class MainGUI extends JFrame {
         imagePreviewLabel = new JLabel();
 
         JPanel previewPanel = new JPanel();
-        previewPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        previewPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         previewPanel.add(imagePreviewLabel);
 
         previewBackgroundPanel.add(previewPanel, posPreviewPanel);
-
-        JPanel imageListPanel = new JPanel();
-        imageListPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 
         backgroundPanel.add(imageListLabel, posBackgroundPanel);
         backgroundPanel.add(previewLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
@@ -1083,24 +1079,9 @@ public class MainGUI extends JFrame {
 
     private JPanel createFindImageSection() {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.LOWERED), new EmptyBorder(2, 2, 2, 2)));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        JLabel findInCategoriesLabel = new JLabel(lang.get("findimage.categories.label"));
-        findInCategoriesLabel.setForeground(Color.GRAY);
-
-        JLabel findInMetaDataExifLabel = new JLabel(lang.get("findimage.imagemetadata.label"));
-        findInMetaDataExifLabel.setForeground(Color.GRAY);
-
-        JLabel findInRatingLabel = new JLabel(lang.get("findimage.rating.label"));
-        findInRatingLabel.setForeground(Color.GRAY);
-
-        backgroundPanel.add(findInCategoriesLabel, posBackgroundPanel);
-        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
-        backgroundPanel.add(findInMetaDataExifLabel, posBackgroundPanel.nextCol());
-        backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
-        backgroundPanel.add(findInRatingLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(this.createCategoriesPanel(), posBackgroundPanel.nextRow().expandW().expandH());
         backgroundPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
         backgroundPanel.add(this.createImageExifMeteDataPanel(), posBackgroundPanel.nextCol().expandH());
@@ -1173,9 +1154,13 @@ public class MainGUI extends JFrame {
         categoryTreeAndSelectionModePanel.add(Box.createVerticalStrut(2), posCategoryTreeAndSelectionMode.nextRow());
         categoryTreeAndSelectionModePanel.add(selectionModePanel, posCategoryTreeAndSelectionMode.nextRow());
 
+        JLabel findInCategoriesLabel = new JLabel(lang.get("findimage.categories.label"));
+        findInCategoriesLabel.setForeground(Color.GRAY);
+
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+        backgroundPanel.add(findInCategoriesLabel, posBackground);
 
         posBackground.fill = GridBagConstraints.BOTH;
 
@@ -1254,9 +1239,9 @@ public class MainGUI extends JFrame {
 
                 categoriesTabbedPane.add(displayName, importedCategoryTreeAndSelectionModePanel);
             }
-            backgroundPanel.add(categoriesTabbedPane, posBackground.expandH().expandW());
+            backgroundPanel.add(categoriesTabbedPane, posBackground.nextRow().expandH().expandW());
         } else {
-            backgroundPanel.add(categoryTreeAndSelectionModePanel, posBackground.expandH().expandW());
+            backgroundPanel.add(categoryTreeAndSelectionModePanel, posBackground.nextRow().expandH().expandW());
         }
 
         return backgroundPanel;
@@ -1307,7 +1292,11 @@ public class MainGUI extends JFrame {
 
         final int size = 5;
 
-        backgroundPanel.add(yearLabel, posBackgroundPanel);
+        JLabel findInMetaDataExifLabel = new JLabel(lang.get("findimage.imagemetadata.label"));
+        findInMetaDataExifLabel.setForeground(Color.GRAY);
+
+        backgroundPanel.add(findInMetaDataExifLabel, posBackgroundPanel);
+        backgroundPanel.add(yearLabel, posBackgroundPanel.nextRow());
         backgroundPanel.add(Box.createHorizontalStrut(size), posBackgroundPanel.nextCol());
         backgroundPanel.add(imageSizeLabel, posBackgroundPanel.nextCol());
         backgroundPanel.add(yearMetaDataValue, posBackgroundPanel.nextRow().expandH());
@@ -1401,15 +1390,19 @@ public class MainGUI extends JFrame {
 
     private JPanel createRatingCommentAndButtonPanel() {
 
+        JLabel findInRatingLabel = new JLabel(lang.get("findimage.rating.label"));
+        findInRatingLabel.setForeground(Color.GRAY);
+
         GBHelper posRatingPanel = new GBHelper();
         JPanel ratingPanel = new JPanel(new GridBagLayout());
         ratingPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+        ratingPanel.add(findInRatingLabel, posRatingPanel);
 
         ratingCheckBoxes = new JCheckBox[6];
 
         for (int i = 0; i < ratingCheckBoxes.length; i++) {
             if (i == 0) {
-                ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(lang.get("findimage.rating.label.unrated")), posRatingPanel);
+                ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(lang.get("findimage.rating.label.unrated")), posRatingPanel.nextRow());
             } else {
                 ratingPanel.add(ratingCheckBoxes[i] = new JCheckBox(Integer.toString(i)), posRatingPanel.nextCol());
             }
@@ -1421,6 +1414,7 @@ public class MainGUI extends JFrame {
         GBHelper posCommentPanel = new GBHelper();
         JPanel commentPanel = new JPanel(new GridBagLayout());
         commentPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+        commentPanel.add(commentLabel, posCommentPanel);
 
         commentTextArea = new JTextArea();
         commentTextArea.setLineWrap(true);
@@ -1464,8 +1458,7 @@ public class MainGUI extends JFrame {
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
 
-        backgroundPanel.add(ratingPanel, posBackground);
-        backgroundPanel.add(commentLabel, posBackground.nextRow());
+        backgroundPanel.add(ratingPanel, posBackground.nextRow());
         backgroundPanel.add(commentPanel, posBackground.nextRow().expandH());
         backgroundPanel.add(buttonPanel, posBackground.nextRow());
 
@@ -1703,7 +1696,13 @@ public class MainGUI extends JFrame {
 
         backgroundPanel.add(ratingButtonPanel, posBackground.nextRow());
 
-        return backgroundPanel;
+        GBHelper posBorderPanel = new GBHelper();
+
+        JPanel borderPanel = new JPanel(new GridBagLayout());
+        borderPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
+        borderPanel.add(backgroundPanel, posBorderPanel.expandH().expandW());
+
+        return borderPanel;
     }
 
     private JPanel createPreviweAndCommentPanel() {
@@ -1722,7 +1721,6 @@ public class MainGUI extends JFrame {
         imageTagPreviewScrollPane = new JScrollPane(imageTagPreviewPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         JLabel commentHeading = new JLabel(lang.get("findimage.comment.label"));
         commentHeading.setForeground(Color.GRAY);
@@ -1734,7 +1732,7 @@ public class MainGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(imageCommentTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JPanel topPanel = new JPanel(new GridBagLayout());
-        topPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        topPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         GBHelper posTop = new GBHelper();
 
@@ -1743,8 +1741,14 @@ public class MainGUI extends JFrame {
         topPanel.add(imageTagPreviewScrollPane, posTop.nextRow().expandH().expandW());
         topPanel.add(Box.createVerticalStrut(2), posTop.nextRow());
 
+        GBHelper posBackgroundTop = new GBHelper();
+
+        JPanel backgroundTopPanel = new JPanel(new GridBagLayout());
+        backgroundTopPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
+        backgroundTopPanel.add(topPanel, posBackgroundTop.expandH().expandW());
+
         JPanel bottomPanel = new JPanel(new GridBagLayout());
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        bottomPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
         GBHelper posBottom = new GBHelper();
 
@@ -1752,12 +1756,18 @@ public class MainGUI extends JFrame {
         bottomPanel.add(Box.createVerticalStrut(2), posBottom.nextRow());
         bottomPanel.add(scrollPane, posBottom.nextRow().expandH().expandW());
 
+        GBHelper posBackgroundBottom = new GBHelper();
+
+        JPanel backgroundBottomPanel = new JPanel(new GridBagLayout());
+        backgroundBottomPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
+        backgroundBottomPanel.add(bottomPanel, posBackgroundBottom.expandH().expandW());
+
         GUI gUI = configuration.getgUI();
 
         previewAndCommentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         previewAndCommentSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUI.getMain().getGuiWindowSplitPane(), ConfigElement.PREVIEW_AND_COMMENT));
-        previewAndCommentSplitPane.setTopComponent(topPanel);
-        previewAndCommentSplitPane.setBottomComponent(bottomPanel);
+        previewAndCommentSplitPane.setTopComponent(backgroundTopPanel);
+        previewAndCommentSplitPane.setBottomComponent(backgroundBottomPanel);
 
         backgroundPanel.add(previewAndCommentSplitPane, posBackground.expandH().expandW());
 
