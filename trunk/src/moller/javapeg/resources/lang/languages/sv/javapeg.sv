@@ -118,10 +118,10 @@ fileSelectionDialog.destinationPathFileChooser = Välj destinationsmapp
 ##############################################################################################################
 aboutDialog.Label    = Om JavaPEG 3.0
 aboutDialog.TextRowA = JavaPEG, ver: 3.0
-aboutDialog.TextRowB = Copyright © 2005 - 2012
+aboutDialog.TextRowB = Copyright © 2005 - 2013
 aboutDialog.TextRowC = Detta program är programmerat i Java (JDK 1.7).
-aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2011-**-**.
-aboutDialog.TextRowE = Version 3.0 släppt 2011-**-**.
+aboutDialog.TextRowD = Programmerat mellan 2005-05-24 - 2013-**-**.
+aboutDialog.TextRowE = Version 3.0 släppt 2013-**-**.
 aboutDialog.TextRowF = Utvecklare:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________

@@ -117,10 +117,10 @@ fileSelectionDialog.destinationPathFileChooser = Choose destination folder
 ##############################################################################################################
 aboutDialog.Label    = About JavaPEG 3.0
 aboutDialog.TextRowA = JavaPEG, ver: 3.0
-aboutDialog.TextRowB = Copyright © 2005 - 2012
+aboutDialog.TextRowB = Copyright © 2005 - 2013
 aboutDialog.TextRowC = This program is coded in Java (JDK 1.7).
-aboutDialog.TextRowD = Programmed between 2005-05-24 - 2012-**-**.
-aboutDialog.TextRowE = Version 3.0 released 2012-**-**.
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2013-**-**.
+aboutDialog.TextRowE = Version 3.0 released 2013-**-**.
 aboutDialog.TextRowF = Developer:
 aboutDialog.TextRowG = Fredrik Möller
 aboutDialog.TextRowH = _______________________________________
