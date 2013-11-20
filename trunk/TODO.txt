@@ -13,7 +13,6 @@
 ====
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
-- Make the initial configuration part of the izpack installation
 - Implement Context aware menu in the menu bar.
 - Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
