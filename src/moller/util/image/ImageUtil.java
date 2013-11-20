@@ -26,7 +26,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import moller.util.io.StreamUtil;
-import moller.util.jpeg.JPEGScaleAlgorithm;
 
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
@@ -38,11 +37,10 @@ public class ImageUtil {
 	 * @param jpegFile
 	 * @param availableWidth
 	 * @param availableHeight
-	 * @param algorithm
 	 * @return
 	 * @throws IOException
 	 */
-	public static Image createThumbNailAdaptedToAvailableSpace(File jpegFile, int availableWidth, int availableHeight, JPEGScaleAlgorithm algorithm) throws IOException {
+	public static Image createThumbNailAdaptedToAvailableSpace(File jpegFile, int availableWidth, int availableHeight) throws IOException {
 
 		BufferedImage img = ImageIO.read(jpegFile);
 		int imageWidth = img.getWidth();
@@ -50,21 +48,17 @@ public class ImageUtil {
 
 		Dimension scaledImage = calculateScaledImageWidthAndHeight(availableWidth, availableHeight, imageWidth, imageHeight);
 
-		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
-		scaledBufferedImage.createGraphics().drawImage(ImageIO.read(jpegFile).getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
-
-		return scaledBufferedImage;
+		return Scalr.resize(img, Method.SPEED, Mode.FIT_EXACT, scaledImage.width, scaledImage.height);
 	}
 
 	/**
 	 * @param jpegFile
 	 * @param availableWidth
 	 * @param availableHeight
-	 * @param algorithm
 	 * @return
 	 * @throws IOException
 	 */
-	public static Image createThumbNailAdaptedToAvailableSpace(byte[] jpegData, int availableWidth, int availableHeight, JPEGScaleAlgorithm algorithm) throws IOException {
+	public static Image createThumbNailAdaptedToAvailableSpace(byte[] jpegData, int availableWidth, int availableHeight) throws IOException {
 
 		InputStream in = new ByteArrayInputStream(jpegData);
 		BufferedImage img = ImageIO.read(in);
@@ -73,10 +67,7 @@ public class ImageUtil {
 
 		Dimension scaledImage = calculateScaledImageWidthAndHeight(availableWidth, availableHeight, imageWidth, imageHeight);
 
-		BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.width, scaledImage.height, BufferedImage.TYPE_INT_RGB);
-		scaledBufferedImage.createGraphics().drawImage(img.getScaledInstance(scaledImage.width, scaledImage.height, algorithm == JPEGScaleAlgorithm.SMOOTH ? Image.SCALE_SMOOTH : Image.SCALE_FAST),0,0,null);
-
-		return scaledBufferedImage;
+		return Scalr.resize(img, Method.SPEED, Mode.FIT_EXACT, scaledImage.width, scaledImage.height);
 	}
 
 	/**

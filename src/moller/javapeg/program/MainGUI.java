@@ -191,7 +191,6 @@ import moller.util.io.PathUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.java.SystemProperties;
-import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.os.OsUtil;
@@ -2935,14 +2934,14 @@ public class MainGUI extends JFrame {
                         if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
                             thumbNailIcon = null;
 
-                            scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height, JPEGScaleAlgorithm.SMOOTH);
+                            scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
                             imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
                         } else {
                             imageTagPreviewLabel.setIcon(new ImageIcon(thumbnail.getThumbNailData()));
                         }
 
                     } else {
-                        scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height, JPEGScaleAlgorithm.SMOOTH);
+                        scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);
                         imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
                     }
 
