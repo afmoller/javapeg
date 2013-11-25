@@ -1,5 +1,6 @@
 3.0:
 ====
+- Implement name check of files against the names in the the meta data xml files at application start. 
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files

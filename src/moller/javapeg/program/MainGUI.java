@@ -1709,17 +1709,14 @@ public class MainGUI extends JFrame {
         JLabel previewHeading = new JLabel(lang.get("findimage.preview.label"));
         previewHeading.setForeground(Color.GRAY);
 
-        GBHelper posBackground = new GBHelper();
-
         imageTagPreviewLabel = new JLabel();
 
-        JPanel imageTagPreviewPanel = new JPanel(new BorderLayout());
-        imageTagPreviewPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        imageTagPreviewPanel.add(imageTagPreviewLabel, BorderLayout.CENTER);
+        GBHelper posImageTagPreviewPanel = new GBHelper();
+        JPanel imageTagPreviewPanel = new JPanel(new GridBagLayout());
 
-        imageTagPreviewScrollPane = new JScrollPane(imageTagPreviewPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        imageTagPreviewPanel.add(imageTagPreviewLabel, posImageTagPreviewPanel.expandH().expandW());
 
-        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        imageTagPreviewScrollPane = new JScrollPane(imageTagPreviewPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JLabel commentHeading = new JLabel(lang.get("findimage.comment.label"));
         commentHeading.setForeground(Color.GRAY);
@@ -1768,6 +1765,8 @@ public class MainGUI extends JFrame {
         previewAndCommentSplitPane.setTopComponent(backgroundTopPanel);
         previewAndCommentSplitPane.setBottomComponent(backgroundBottomPanel);
 
+        GBHelper posBackground = new GBHelper();
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.add(previewAndCommentSplitPane, posBackground.expandH().expandW());
 
         return backgroundPanel;
@@ -1909,6 +1908,7 @@ public class MainGUI extends JFrame {
 
         fileNameTemplateComboBox.addActionListener(new FileNameTemplateComboBoxListener());
         subFolderTemplateComboBox.addActionListener(new SubFolderTemplateComboBoxListener());
+        imageTagPreviewScrollPane.addComponentListener(new ImageTagPreviewScrollPaneListener());
     }
 
     public void createRightClickMenuMerge() {
@@ -2893,6 +2893,68 @@ public class MainGUI extends JFrame {
         }
     }
 
+    private class ImageTagPreviewScrollPaneListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+            File currentlySelectedImage = irc.getCurrentlySelectedImage();
+
+            if (currentlySelectedImage != null) {
+                try {
+                    loadScaleIfNeededAndDisplayPreviewThumbnail(currentlySelectedImage);
+                } catch (IOException iox) {
+                    logger.logERROR("Could not create a resized preview image of image: " + currentlySelectedImage.getAbsolutePath());
+                    logger.logERROR(iox);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method loads an preview image either from the thumbnail cache, if
+     * that is specified by the application settings, or from the orginal image
+     * file. If the preview area is smaller than the loaded thumbnail, or the
+     * original image, then will the image be scaled to fit the available space
+     * in the preview area.
+     *
+     * @param jpegImage
+     *            is the image to load an preview for.
+     * @throws IOException
+     *             is thrown if it is not possible to create the thumbnail.
+     */
+    private void loadScaleIfNeededAndDisplayPreviewThumbnail(File jpegImage) throws IOException {
+        TagImages tagImages = configuration.getTagImages();
+
+        TagImagesPreview tagImagesPreview = tagImages.getPreview();
+
+        JPEGThumbNail thumbnail = null;
+
+        if(tagImagesPreview.getUseEmbeddedThumbnail()) {
+            JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
+            thumbnail = jtc.get(jpegImage);
+        }
+
+        int width = imageTagPreviewScrollPane.getViewport().getSize().width;
+        int height = imageTagPreviewScrollPane.getViewport().getSize().height;
+
+        Image scaledImage = null;
+        if (thumbnail != null) {
+            Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
+
+            if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
+                thumbNailIcon = null;
+
+                scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
+                imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+            } else {
+                imageTagPreviewLabel.setIcon(thumbNailIcon);
+            }
+        } else {
+            scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);
+            imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+        }
+    }
+
     private class ThumbNailListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -2911,39 +2973,8 @@ public class MainGUI extends JFrame {
             MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
 
             if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
-//                TODO: Fix -10 workaround to something generic
-                int width = imageTagPreviewScrollPane.getViewportBorderBounds().width - 10;
-                int height = imageTagPreviewScrollPane.getViewportBorderBounds().height - 10;
-
                 try {
-                    Image scaledImage = null;
-                    JPEGThumbNail thumbnail = null;
-
-                    TagImages tagImages = configuration.getTagImages();
-
-                    TagImagesPreview tagImagesPreview = tagImages.getPreview();
-
-                    if(tagImagesPreview.getUseEmbeddedThumbnail()) {
-                        JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
-                        thumbnail = jtc.get(jpegImage);
-                    }
-
-                    if (thumbnail != null) {
-                        Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
-
-                        if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
-                            thumbNailIcon = null;
-
-                            scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
-                            imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
-                        } else {
-                            imageTagPreviewLabel.setIcon(new ImageIcon(thumbnail.getThumbNailData()));
-                        }
-
-                    } else {
-                        scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);
-                        imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
-                    }
+                    loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
 
                     storeCurrentlySelectedImageData();
 
