@@ -1,6 +1,7 @@
 package moller.javapeg.program.categories;
 
 import java.awt.Rectangle;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,7 +42,6 @@ import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.util.hash.MD5Calculator;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.xml.XMLUtil;
@@ -68,7 +68,6 @@ public class ImageMetaDataDataBaseHandler {
     private static final String CAMERA_MODEL = "camera-model";
     private static final String F_NUMBER = "f-number";
     private static final String EXIF_META_DATA = "exif-meta-data";
-    private static final String MD5 = "md5";
     private static Configuration configuration = Config.getInstance().get();
 
     /**
@@ -155,12 +154,16 @@ public class ImageMetaDataDataBaseHandler {
 
     public static boolean createImageMetaDataDataBaseFileIn(File imageRepository) {
         Logger logger = Logger.getInstance();
+        logger.logDEBUG("Starting to create image meta data file for files in directory: " + imageRepository.getAbsolutePath());
 
         try {
+            logger.logDEBUG("Starting to find JPEG files in directory: " + imageRepository.getAbsolutePath());
             List<File> jpegFiles = JPEGUtil.getJPEGFiles(imageRepository);
+            logger.logDEBUG("Finished to find JPEG files in directory: " + imageRepository.getAbsolutePath());
 
             Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
 
+            logger.logDEBUG("Starting to store JPEG Meta data for files in directory: " + imageRepository.getAbsolutePath());
             for (File jpegFile : jpegFiles) {
                 ImageMetaDataDataBaseItem imddbi = new ImageMetaDataDataBaseItem();
 
@@ -172,7 +175,14 @@ public class ImageMetaDataDataBaseHandler {
 
                 imageMetaDataDataBaseItems.put(jpegFile, imddbi);
             }
-            return updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository, ImageMetaDataContextAction.ADD);
+            logger.logDEBUG("Finished to store JPEG Meta data for files in directory: " + imageRepository.getAbsolutePath());
+
+            logger.logDEBUG("Starting to persist JPEG Meta data for files in directory: " + imageRepository.getAbsolutePath());
+            boolean result = updateDataBaseFile(imageMetaDataDataBaseItems, imageRepository, ImageMetaDataContextAction.ADD);
+            logger.logDEBUG("Finished to persist JPEG Meta data for files in directory: " + imageRepository.getAbsolutePath());
+            logger.logDEBUG("Finished to create image meta data file for files in directory: " + imageRepository.getAbsolutePath());
+
+            return result;
         } catch (IOException iox) {
             logger.logERROR("Could not find file: " + imageRepository.getAbsolutePath());
             logger.logERROR(iox);
@@ -190,8 +200,9 @@ public class ImageMetaDataDataBaseHandler {
                 String encoding = C.UTF8;
 
                 os = new FileOutputStream(new File(destination, C.JAVAPEG_IMAGE_META_NAME));
+                BufferedOutputStream bos = new BufferedOutputStream(os);
                 XMLOutputFactory factory = XMLOutputFactory.newInstance();
-                XMLStreamWriter w = factory.createXMLStreamWriter(os, encoding);
+                XMLStreamWriter w = factory.createXMLStreamWriter(bos, encoding);
 
                 XMLUtil.writeStartDocument(encoding, "1.0", w);
                 XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
@@ -200,12 +211,13 @@ public class ImageMetaDataDataBaseHandler {
                 XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
                 XMLUtil.writeElement(JAVAPEG_ID, configuration.getJavapegClientId(), w);
 
+                logger.logDEBUG("Start writing image elements");
                 for(File image : imageMetaDataDataBaseItems.keySet()) {
                     ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
                     CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
+                    logger.logDEBUG("Start writing image detail elements for image: " + image.getAbsolutePath());
                     XMLUtil.writeElementStart(IMAGE, FILE, imddbi.getImage().getName(), w);
-                    XMLUtil.writeElement(MD5, MD5Calculator.calculate(image), w);
                     XMLUtil.writeElementStart(EXIF_META_DATA, w);
                     XMLUtil.writeElement(F_NUMBER, Double.toString(ciemd.getFNumber()), w);
                     XMLUtil.writeElement(CAMERA_MODEL  , ciemd.getCameraModel()  , w);
@@ -220,10 +232,14 @@ public class ImageMetaDataDataBaseHandler {
                     XMLUtil.writeElement(CATEGORIES, imddbi.getCategories() == null ? "" : imddbi.getCategories().toString(), w);
 
                     XMLUtil.writeElementEnd(w);
+                    logger.logDEBUG("Finished writing image detail elements for image: " + image.getAbsolutePath());
+
                 }
                 XMLUtil.writeElementEnd(w);
+                logger.logDEBUG("Finished writing image elements");
+                logger.logDEBUG("Started xml writer flush");
                 w.flush();
-
+                logger.logDEBUG("Finished xml writer flush");
                 logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has been updated with the changes made to the content");
 
                 switch (imageMetaDataContextAction) {
@@ -326,15 +342,12 @@ public class ImageMetaDataDataBaseHandler {
 
                 CategoryImageExifMetaData imageExifMetaData = null;
                 String comment = "";
-                String md5 = "";
                 int rating = 0;
                 Categories categories = new Categories();
 
                 for (int j = 0; j < content.getLength(); j++) {
                     Node node = content.item(j);
-                    if (MD5.equals(node.getNodeName())) {
-                        md5 = node.getTextContent();
-                    } else if (EXIF_META_DATA.equals(node.getNodeName())) {
+                    if (EXIF_META_DATA.equals(node.getNodeName())) {
                         imageExifMetaData = createImageExifMetaData(node.getChildNodes());
                     } else if(COMMENT.equals(node.getNodeName())) {
                         comment = node.getTextContent();
@@ -389,7 +402,7 @@ public class ImageMetaDataDataBaseHandler {
 
                 switch (context) {
                 case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-                    ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, md5, imageExifMetaData, comment, rating, categories);
+                    ImageMetaDataDataBaseItem iMDDBI = new ImageMetaDataDataBaseItem(image, imageExifMetaData, comment, rating, categories);
                     imageMetaDataDataBaseItems.put(image, iMDDBI);
                     break;
 
