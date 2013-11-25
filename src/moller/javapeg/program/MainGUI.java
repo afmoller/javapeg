@@ -72,6 +72,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
@@ -3462,15 +3463,8 @@ public class MainGUI extends JFrame {
     private class AddImageToViewList implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-
             File image = new File(e.getActionCommand());
-
-            imagesToViewListModel.addElement(image);
-            setNrOfImagesLabels();
-
-            if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
-                imageViewer.addImage(image);
-            }
+            handleAddImageToImageList(image);
         }
     }
 
@@ -3768,6 +3762,28 @@ public class MainGUI extends JFrame {
         checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
     }
 
+    /**
+     * This method adds an image to the image view list {@link ListModel} and if
+     * it is the first image added, then that image is set as the selected
+     * image. It also updates the label that displays the amount of images in
+     * the list. It also adds the image to the {@link ImageViewer} if that one
+     * is displayed.
+     *
+     * @param image
+     *            is the image to add.
+     */
+    private void handleAddImageToImageList(File image) {
+        imagesToViewListModel.addElement(image);
+        if (imagesToViewList.getSelectedIndex() == -1) {
+            imagesToViewList.setSelectedIndex(0);
+        }
+
+        setNrOfImagesLabels();
+        if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
+            imageViewer.addImage(image);
+        }
+    }
+
     private class MouseButtonListener extends MouseAdapter{
         @Override
         public void mouseReleased(MouseEvent e){
@@ -3814,12 +3830,7 @@ public class MainGUI extends JFrame {
                 rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
             } else if ((!e.isPopupTrigger()) && (e.getClickCount() == 2) && (mainTabbedPane.getSelectedIndex() == 3)) {
                 File image = new File(((JButton)e.getComponent()).getActionCommand());
-
-                imagesToViewListModel.addElement(image);
-                setNrOfImagesLabels();
-                if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
-                    imageViewer.addImage(image);
-                }
+                handleAddImageToImageList(image);
             }
         }
     }
