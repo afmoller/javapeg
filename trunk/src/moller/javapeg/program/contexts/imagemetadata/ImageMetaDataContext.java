@@ -196,7 +196,7 @@ public class ImageMetaDataContext {
     }
 
     public void addCategory(String javaPegId, String categoryId, String imagePath) {
-         if (!javaPegIdToCategories.containsKey(javaPegId)) {
+        if (!javaPegIdToCategories.containsKey(javaPegId)) {
             Map<String, Set<Integer>> categoryIdToIndex = new HashMap<String, Set<Integer>>();
 
             categoryIdToIndex.put(categoryId, new HashSet<Integer>());
