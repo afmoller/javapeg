@@ -495,38 +495,80 @@ public class ImageMetaDataDataBaseHandler {
         }
     }
 
+    /**
+     * This method updates the rating meta data base in the image meta data
+     * base. If the rating has changed for an image, then the rating meta data
+     * base will be updated to reflect this change.
+     *
+     * @param javaPegIdValue
+     *            defines for which part of the rating meta data base to do an
+     *            update .
+     * @param image
+     *            defines for which image the update shall be done.
+     * @param rating
+     *            is the rating to set
+     * @param imdc
+     *            is the {@link ImageMetaDataContext} which holds all meta data
+     *            base information
+     * @param ipai
+     *            is the repository of image paths to index mappings.
+     */
     private static void updateImageRating(String javaPegIdValue, File image, int rating, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
         Map<Integer, Set<Integer>> ratings = imdc.getRatings(javaPegIdValue);
 
-        int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
-
         /**
-         *  Initial test to see whether the rating has changed or not. If no
-         *  change do not do anything, otherwise search thru the entire list of
-         *  ratings.
+         * Only do null safe operations.
          */
-        if (!ratings.get(rating).contains(imageIndex)) {
-            search:
-            for (int index = 0; index < ratings.size(); index++) {
-                /**
-                 * Do not search in the already searched index set
-                 */
-                if (index != rating) {
+        if (ratings != null && ratings.get(rating) != null) {
+            int imageIndex = ipai.getIndexForImagePath(image.getAbsolutePath());
+
+            /**
+             *  Initial test to see whether the rating has changed or not. If no
+             *  change do not do anything, otherwise search thru the entire list of
+             *  ratings.
+             */
+            if (!ratings.get(rating).contains(imageIndex)) {
+                search:
+                for (int index = 0; index < ratings.size(); index++) {
                     /**
-                     * If a match is found remove that the imageIndex for that
-                     * rating and add the new rating value to the
-                     * ImageMetaDataContext.
+                     * Do not search in the already searched index set
                      */
-                    if (ratings.get(index).contains(imageIndex)) {
-                        ratings.get(index).remove(imageIndex);
-                        imdc.addRating(javaPegIdValue, rating, image.getAbsolutePath());
-                        break search;
+                    if (index != rating) {
+                        /**
+                         * If a match is found remove that the imageIndex for that
+                         * rating and add the new rating value to the
+                         * ImageMetaDataContext.
+                         */
+                        if (ratings.get(index).contains(imageIndex)) {
+                            ratings.get(index).remove(imageIndex);
+                            imdc.addRating(javaPegIdValue, rating, image.getAbsolutePath());
+                            break search;
+                        }
                     }
                 }
             }
+        } else {
+            imdc.addRating(javaPegIdValue, rating, image.getAbsolutePath());
         }
     }
 
+    /**
+     * This method updates the category image meta data base. It removes any
+     * deselected categories and adds newly selected categories for the image
+     * that comes to this method as the image parameter into the category meta
+     * data base.
+     *
+     * @param image
+     *            is the image to update the categories for.
+     * @param categories
+     *            are the currently selected categories for the image specifies
+     *            by the parameter image
+     * @param imdc
+     *            is the {@link ImageMetaDataContext} which holds all meta data
+     *            base information
+     * @param ipai
+     *            is the repository of image paths to index mappings.
+     */
     private static void updateImageCategories(File image, Categories categories, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
         Map<String, Map<String, Set<Integer>>> javaPegIdToCategoriesMap = imdc.getCategories();
 
@@ -536,8 +578,10 @@ public class ImageMetaDataDataBaseHandler {
 
          Map<String, Set<Integer>> categoriesMap = javaPegIdToCategoriesMap.get(configuration.getJavapegClientId());
 
-         // Only do this if there are any categories defined for this
-         // JavapegClientId.
+         /**
+          * Only do this if there are any categories defined for this
+          * JavapegClientId.
+          */
          if (categoriesMap != null) {
              /**
               * Remove any unselected categories from the ImageMetaDataContext
@@ -546,7 +590,7 @@ public class ImageMetaDataDataBaseHandler {
                  Set<Integer> indices = categoriesMap.get(category);
 
                  if (indices.contains(imageIndex)) {
-                     if (!categories.getCategories().contains(category)) {
+                     if (categories == null || !categories.getCategories().contains(category)) {
                          indices.remove(imageIndex);
                          if(indices.size() == 0) {
                              categoriesToRemove.add(category);
@@ -561,14 +605,25 @@ public class ImageMetaDataDataBaseHandler {
              for (String categoryToRemove : categoriesToRemove) {
                  javaPegIdToCategoriesMap.remove(categoryToRemove);
              }
+         }
 
-             /**
-              * Add any newly selected categories to the ImageMetaDataContext
-              */
+         /**
+          * Add any newly selected categories to the ImageMetaDataContext
+          */
+         if (categories != null) {
              for (String category : categories.getCategories()) {
-                 Set<Integer> indices = categoriesMap.get(category);
+                 if (categoriesMap != null) {
+                     Set<Integer> indices = categoriesMap.get(category);
 
-                 if (indices == null || !indices.contains(imageIndex)) {
+                     if (indices == null || !indices.contains(imageIndex)) {
+                         imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
+                     }
+                 } else {
+                     /**
+                      * This will only happen the first time a meta data file is
+                      * created and when categories are added without an
+                      * application restart in between.
+                      */
                      imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
                  }
              }
