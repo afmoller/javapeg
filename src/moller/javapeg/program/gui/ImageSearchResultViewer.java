@@ -88,14 +88,15 @@ public class ImageSearchResultViewer extends JFrame {
         logger = Logger.getInstance();
         lang   = Language.getInstance();
 
+        // Must be set before the executeLoadThumbnailsProcess method is called
+        nrOfImagesToView = imagesToView.size();
+
         this.createMainFrame();
         this.createToolBar();
         this.createRightClickMenu();
         this.createStatusPanel();
         this.addListeners();
         this.executeLoadThumbnailsProcess(imagesToView);
-
-        nrOfImagesToView = imagesToView.size();
     }
 
     // Create Main Window
@@ -388,6 +389,15 @@ public class ImageSearchResultViewer extends JFrame {
         setStatusMessages();
     }
 
+    /**
+     * This class listens for size changes of the Search result main GUI. When a
+     * resize is performed, the number of columns in the GridLayout used to lay
+     * out the thumnails, is adapted to have as many columns as possible,
+     * without any horizontal scrollbar visible.
+     *
+     * @author Fredrik
+     *
+     */
     private class ComponentListener extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
@@ -397,9 +407,8 @@ public class ImageSearchResultViewer extends JFrame {
                 scrollbarWidth = scrollpane.getVerticalScrollBar().getWidth();
             }
 
-            if (((thumbNailsPanel.getWidth() - scrollbarWidth - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
-
-                int columns = (thumbNailsPanel.getWidth() - scrollbarWidth - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
+            if (((scrollpane.getViewport().getSize().width - scrollbarWidth - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
+                int columns = (scrollpane.getViewport().getSize().width - scrollbarWidth - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
 
                 thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
                 thumbNailsPanel.invalidate();
