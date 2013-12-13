@@ -3496,7 +3496,7 @@ public class MainGUI extends JFrame {
             for (File file : imageFilePath.listFiles()) {
                 try {
                     if (JPEGUtil.isJPEG(file)) {
-                        imagesToViewListModel.addElement(file);
+                        handleAddImageToImageList(file);
                     }
                 } catch (FileNotFoundException fnfex) {
                     JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
@@ -3508,7 +3508,6 @@ public class MainGUI extends JFrame {
                     logger.logERROR(iox);
                 }
             }
-            setNrOfImagesLabels();
         }
     }
 
