@@ -1,6 +1,7 @@
 package moller.javapeg.program.config.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -166,9 +167,15 @@ public class ConfigViewerGUI extends JFrame {
     private JLabel cacheSizeLabel;
     private JCheckBox enableThumbnailCache;
 
-    private JRadioButton toolTipDisabled;
-    private JRadioButton toolTipEnabled;
-    private JRadioButton toolTipExtended;
+    private JRadioButton overviewToolTipDisabled;
+    private JRadioButton overviewToolTipEnabled;
+    private JRadioButton overviewToolTipExtended;
+    private JRadioButton imageSearchResultToolTipDisabled;
+    private JRadioButton imageSearchResultToolTipEnabled;
+    private JRadioButton imageSearchResultToolTipExtended;
+    private JRadioButton overviewImageViewerToolTipDisabled;
+    private JRadioButton overviewImageViewerToolTipEnabled;
+    private JRadioButton overviewImageViewerToolTipExtended;
 
     /**
      * Variables for the tag panel
@@ -186,7 +193,7 @@ public class ConfigViewerGUI extends JFrame {
     private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
     private JButton removeSelectedImagePathsButton;
 
-    private JList<Object> importedCategoriesList;
+    private JList<ImportedCategories> importedCategoriesList;
     private JList<Object> imageRepositoriesAllwaysAddList;
     private JList<Object> imageRepositoriesNeverAddList;
     private JList<ImageRepositoryItem> imageRepositoriesList;
@@ -209,7 +216,9 @@ public class ConfigViewerGUI extends JFrame {
     private JPEGScaleAlgorithm CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
     private Integer THUMBNAIL_MAX_CACHE_SIZE;
     private Integer MAXIMUM_LENGTH_OF_CAMERA_MODEL;
-    private String THUMBNAIL_TOOLTIP_STATE;
+    private String OVERVIEW_THUMBNAIL_TOOLTIP_STATE;
+    private String IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE;
+    private String OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE;
     private Integer ADD_TO_IMAGEREPOSITOY_POLICY;
 
     private boolean DEVELOPER_MODE;
@@ -244,7 +253,6 @@ public class ConfigViewerGUI extends JFrame {
     }
 
     private void setStartupConfig() {
-
         LOG_LEVEL = configuration.getLogging().getLevel();
         DEVELOPER_MODE = configuration.getLogging().getDeveloperMode();
         LOG_ROTATE = configuration.getLogging().getRotate();
@@ -266,7 +274,9 @@ public class ConfigViewerGUI extends JFrame {
         THUMBNAIL_MAX_CACHE_SIZE = configuration.getThumbNail().getCache().getMaxSize();
         ENABLE_THUMBNAIL_CACHE = configuration.getThumbNail().getCache().getEnabled();
         USE_EMBEDDED_THUMBNAIL = configuration.getTagImages().getPreview().getUseEmbeddedThumbnail();
-        THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getState();
+        OVERVIEW_THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getOverviewState();
+        IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getImageSearchResultState();
+        OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getOverviewImageViewerState();
         WARN_WHEN_REMOVE_CATEGORY = configuration.getTagImages().getCategories().getWarnWhenRemove();
         WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = configuration.getTagImages().getCategories().getWarnWhenRemoveWithSubCategories();
         AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath();
@@ -274,7 +284,6 @@ public class ConfigViewerGUI extends JFrame {
     }
 
     private void initiateWindow() {
-
         Rectangle sizeAndLocation = configuration.getgUI().getConfigViewer().getSizeAndLocation();
 
         this.setSize(sizeAndLocation.getSize());
@@ -664,41 +673,117 @@ public class ConfigViewerGUI extends JFrame {
         /**
          * Start of Thumbnail ToolTip Area
          */
+        String disabled = lang.get("configviewer.thumbnail.tooltip.label.disabled");
+        String enabled = lang.get("configviewer.thumbnail.tooltip.label.enabled");
+        String extended = lang.get("configviewer.thumbnail.tooltip.label.extended");
 
-        toolTipDisabled = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.disabled"));
-        toolTipDisabled.setName("0");
-        toolTipEnabled = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.enabled"));
-        toolTipEnabled.setName("1");
-        toolTipExtended = new JRadioButton(lang.get("configviewer.thumbnail.tooltip.label.extended"));
-        toolTipExtended.setName("2");
+        overviewToolTipDisabled = new JRadioButton(disabled);
+        overviewToolTipDisabled.setName("0");
+        overviewToolTipEnabled = new JRadioButton(enabled);
+        overviewToolTipEnabled.setName("1");
+        overviewToolTipExtended = new JRadioButton(extended);
+        overviewToolTipExtended.setName("2");
 
-        ButtonGroup group = new ButtonGroup();
+        ButtonGroup overviewGroup = new ButtonGroup();
 
-        group.add(toolTipDisabled);
-        group.add(toolTipEnabled);
-        group.add(toolTipExtended);
+        overviewGroup.add(overviewToolTipDisabled);
+        overviewGroup.add(overviewToolTipEnabled);
+        overviewGroup.add(overviewToolTipExtended);
+
+        imageSearchResultToolTipDisabled = new JRadioButton(disabled);
+        imageSearchResultToolTipDisabled.setName("0");
+        imageSearchResultToolTipEnabled = new JRadioButton(enabled);
+        imageSearchResultToolTipEnabled.setName("1");
+        imageSearchResultToolTipExtended = new JRadioButton(extended);
+        imageSearchResultToolTipExtended.setName("2");
+
+        ButtonGroup imageSearchResultGroup = new ButtonGroup();
+
+        imageSearchResultGroup.add(imageSearchResultToolTipDisabled);
+        imageSearchResultGroup.add(imageSearchResultToolTipEnabled);
+        imageSearchResultGroup.add(imageSearchResultToolTipExtended);
+
+        overviewImageViewerToolTipDisabled = new JRadioButton(disabled);
+        overviewImageViewerToolTipDisabled.setName("0");
+        overviewImageViewerToolTipEnabled = new JRadioButton(enabled);
+        overviewImageViewerToolTipEnabled.setName("1");
+        overviewImageViewerToolTipExtended = new JRadioButton(extended);
+        overviewImageViewerToolTipExtended.setName("2");
+
+        ButtonGroup overviewImageViewerGroup = new ButtonGroup();
+
+        overviewImageViewerGroup.add(overviewImageViewerToolTipDisabled);
+        overviewImageViewerGroup.add(overviewImageViewerToolTipEnabled);
+        overviewImageViewerGroup.add(overviewImageViewerToolTipExtended);
 
         ToolTips toolTips = configuration.getToolTips();
 
-        String toolTipState = toolTips.getState();
+        String imageSearcResultToolTipState = toolTips.getImageSearchResultState();
+        String overviewImageViewerToolTipState = toolTips.getOverviewImageViewerState();
+        String overviewToolTipState = toolTips.getOverviewState();
 
-        if (toolTipState.equalsIgnoreCase(toolTipDisabled.getName())) {
-            toolTipDisabled.setSelected(true);
-        } else if (toolTipState.equalsIgnoreCase(toolTipExtended.getName())) {
-            toolTipExtended.setSelected(true);
+        if (imageSearcResultToolTipState.equalsIgnoreCase(imageSearchResultToolTipDisabled.getName())) {
+            imageSearchResultToolTipDisabled.setSelected(true);
+        } else if (imageSearcResultToolTipState.equalsIgnoreCase(imageSearchResultToolTipExtended.getName())) {
+            imageSearchResultToolTipExtended.setSelected(true);
         } else {
-            toolTipEnabled.setSelected(true);
+            imageSearchResultToolTipEnabled.setSelected(true);
         }
+
+        if (overviewImageViewerToolTipState.equalsIgnoreCase(overviewImageViewerToolTipDisabled.getName())) {
+            overviewImageViewerToolTipDisabled.setSelected(true);
+        } else if (overviewImageViewerToolTipState.equalsIgnoreCase(overviewImageViewerToolTipExtended.getName())) {
+            overviewImageViewerToolTipExtended.setSelected(true);
+        } else {
+            overviewImageViewerToolTipEnabled.setSelected(true);
+        }
+
+        if (overviewToolTipState.equalsIgnoreCase(overviewToolTipDisabled.getName())) {
+            overviewToolTipDisabled.setSelected(true);
+        } else if (overviewToolTipState.equalsIgnoreCase(overviewToolTipExtended.getName())) {
+            overviewToolTipExtended.setSelected(true);
+        } else {
+            overviewToolTipEnabled.setSelected(true);
+        }
+
+        GBHelper posThumbnailOverviewPanel = new GBHelper();
+        JPanel thumbnailOverview = new JPanel(new GridBagLayout());
+        thumbnailOverview.setBorder(BorderFactory.createTitledBorder("Main Window"));
+        thumbnailOverview.setPreferredSize(new Dimension(180, 120));
+
+        thumbnailOverview.add(overviewToolTipDisabled, posThumbnailOverviewPanel);
+        thumbnailOverview.add(overviewToolTipEnabled, posThumbnailOverviewPanel.nextRow().expandW());
+        thumbnailOverview.add(overviewToolTipExtended, posThumbnailOverviewPanel.nextRow().expandW());
+        thumbnailOverview.add(Box.createVerticalGlue(), posThumbnailOverviewPanel.nextRow().expandH());
+
+        GBHelper posThumbnailImageSearchResultPanel = new GBHelper();
+        JPanel thumbnailImageSerachResult = new JPanel(new GridBagLayout());
+        thumbnailImageSerachResult.setBorder(BorderFactory.createTitledBorder("Image Search Result Window"));
+        thumbnailImageSerachResult.setPreferredSize(new Dimension(180, 120));
+
+        thumbnailImageSerachResult.add(imageSearchResultToolTipDisabled, posThumbnailImageSearchResultPanel.expandW());
+        thumbnailImageSerachResult.add(imageSearchResultToolTipEnabled, posThumbnailImageSearchResultPanel.nextRow().expandW());
+        thumbnailImageSerachResult.add(imageSearchResultToolTipExtended, posThumbnailImageSearchResultPanel.nextRow().expandW());
+        thumbnailImageSerachResult.add(Box.createVerticalGlue(), posThumbnailImageSearchResultPanel.nextRow().expandH());
+
+        GBHelper posThumbnailOverviewImageViewer = new GBHelper();
+        JPanel thumbnailOverviewImageViewer = new JPanel(new GridBagLayout());
+        thumbnailOverviewImageViewer.setBorder(BorderFactory.createTitledBorder("Image Viever Window"));
+        thumbnailOverviewImageViewer.setPreferredSize(new Dimension(180, 120));
+
+        thumbnailOverviewImageViewer.add(overviewImageViewerToolTipDisabled, posThumbnailOverviewImageViewer.expandW());
+        thumbnailOverviewImageViewer.add(overviewImageViewerToolTipEnabled, posThumbnailOverviewImageViewer.nextRow().expandW());
+        thumbnailOverviewImageViewer.add(overviewImageViewerToolTipExtended, posThumbnailOverviewImageViewer.nextRow().expandW());
+        thumbnailOverviewImageViewer.add(Box.createVerticalGlue(), posThumbnailOverviewImageViewer.nextRow().expandH());
 
         JPanel thumbnailToolTipPanel = new JPanel(new GridBagLayout());
         thumbnailToolTipPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.tooltip.label")));
 
         GBHelper posThumbnailToolTipPanel = new GBHelper();
 
-        thumbnailToolTipPanel.add(toolTipDisabled, posThumbnailToolTipPanel.expandW());
-        thumbnailToolTipPanel.add(toolTipEnabled, posThumbnailToolTipPanel.nextRow().expandW());
-        thumbnailToolTipPanel.add(toolTipExtended, posThumbnailToolTipPanel.nextRow().expandW());
-        thumbnailToolTipPanel.add(Box.createVerticalGlue(), posThumbnailToolTipPanel.nextRow().expandH());
+        thumbnailToolTipPanel.add(thumbnailOverview, posThumbnailToolTipPanel.expandH());
+        thumbnailToolTipPanel.add(thumbnailImageSerachResult, posThumbnailToolTipPanel.nextCol().expandH());
+        thumbnailToolTipPanel.add(thumbnailOverviewImageViewer, posThumbnailToolTipPanel.nextCol().expandH().expandW());
 
         thumbnailConfigurationPanel = new JPanel(new GridBagLayout());
         thumbnailConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -710,7 +795,6 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailConfigurationPanel.add(thumbnailToolTipPanel, posThumbnailPanel.nextRow().expandW().expandH());
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void createTagConfigurationPanel() {
 
         TagImagesPreview tagImagesPreview = configuration.getTagImages().getPreview();
@@ -766,7 +850,7 @@ public class ConfigViewerGUI extends JFrame {
             importedCategoriesListModel.addElement(importedCategory);
         }
 
-        importedCategoriesList = new JList(importedCategoriesListModel);
+        importedCategoriesList = new JList<ImportedCategories>(importedCategoriesListModel);
         importedCategoriesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         importedCategoriesList.addMouseListener(new RightClickMouseListener());
 
@@ -966,7 +1050,7 @@ public class ConfigViewerGUI extends JFrame {
     private boolean updateConfiguration() {
 
         if(!validateLogName(logName.getText())) {
-            return  false;
+            return false;
         }
         if(!validateLogRotateSize()) {
             return false;
@@ -1046,7 +1130,10 @@ public class ConfigViewerGUI extends JFrame {
         /***
          * Update ToolTips configuration
          */
-        configuration.getToolTips().setState(getToolTipState());
+        ToolTips toolTips = configuration.getToolTips();
+        toolTips.setImageSearchResultState(getImageSearchResultTooltipState());
+        toolTips.setOverviewImageViewerState(getOverviewImageViewerTooltipState());
+        toolTips.setOverviewState(getOverviewToolTipState());
 
         /**
          * Update Tag Configuration
@@ -1075,13 +1162,33 @@ public class ConfigViewerGUI extends JFrame {
         return true;
     }
 
-    private String getToolTipState() {
-        if (toolTipDisabled.isSelected()) {
-            return toolTipDisabled.getName();
-        } else if (toolTipEnabled.isSelected()) {
-            return toolTipEnabled.getName();
+    private String getOverviewToolTipState() {
+        if (overviewToolTipDisabled.isSelected()) {
+            return overviewToolTipDisabled.getName();
+        } else if (overviewToolTipEnabled.isSelected()) {
+            return overviewToolTipEnabled.getName();
         } else {
-            return toolTipExtended.getName();
+            return overviewToolTipExtended.getName();
+        }
+    }
+
+    private String getImageSearchResultTooltipState() {
+        if (imageSearchResultToolTipDisabled.isSelected()) {
+            return imageSearchResultToolTipDisabled.getName();
+        } else if (imageSearchResultToolTipEnabled.isSelected()) {
+            return imageSearchResultToolTipEnabled.getName();
+        } else {
+            return imageSearchResultToolTipExtended.getName();
+        }
+    }
+
+    private String getOverviewImageViewerTooltipState() {
+        if (overviewImageViewerToolTipDisabled.isSelected()) {
+            return overviewImageViewerToolTipDisabled.getName();
+        } else if (overviewImageViewerToolTipEnabled.isSelected()) {
+            return overviewImageViewerToolTipEnabled.getName();
+        } else {
+            return overviewImageViewerToolTipExtended.getName();
         }
     }
 
@@ -1189,42 +1296,53 @@ public class ConfigViewerGUI extends JFrame {
             }
         }
 
-        if(!THUMBNAIL_TOOLTIP_STATE.equals(getToolTipState())) {
+        if(!OVERVIEW_THUMBNAIL_TOOLTIP_STATE.equals(getOverviewToolTipState())) {
             int previousThumbNailToolTipState = -1;
-            String previous = "";
 
             try {
-                previousThumbNailToolTipState = Integer.parseInt(THUMBNAIL_TOOLTIP_STATE);
+                previousThumbNailToolTipState = Integer.parseInt(OVERVIEW_THUMBNAIL_TOOLTIP_STATE);
             } catch (NumberFormatException nfex) {
                 previousThumbNailToolTipState = 1;
             }
 
-            switch (previousThumbNailToolTipState) {
-            case 0:
-                previous = lang.get("configviewer.thumbnail.tooltip.label.disabled");
-                break;
-            case 1:
-                previous = lang.get("configviewer.thumbnail.tooltip.label.enabled");
-                break;
-            case 2:
-                previous = lang.get("configviewer.thumbnail.tooltip.label.extended");
-                break;
+            int currentThumbNailToolTipState = Integer.parseInt(getOverviewToolTipState());
+
+            String previous = getTooltipStateAsLocalizedString(previousThumbNailToolTipState);
+            String current = getTooltipStateAsLocalizedString(currentThumbNailToolTipState);
+
+            displayMessage.append(lang.get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
+        }
+
+        if(!IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE.equals(getImageSearchResultTooltipState())) {
+            int previousThumbNailToolTipState = -1;
+
+            try {
+                previousThumbNailToolTipState = Integer.parseInt(IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE);
+            } catch (NumberFormatException nfex) {
+                previousThumbNailToolTipState = 1;
             }
 
-            int currentThumbNailToolTipState = Integer.parseInt(getToolTipState());
-            String current = "";
+            int currentThumbNailToolTipState = Integer.parseInt(getImageSearchResultTooltipState());
 
-            switch (currentThumbNailToolTipState) {
-            case 0:
-                current = lang.get("configviewer.thumbnail.tooltip.label.disabled");
-                break;
-            case 1:
-                current = lang.get("configviewer.thumbnail.tooltip.label.enabled");
-                break;
-            case 2:
-                current = lang.get("configviewer.thumbnail.tooltip.label.extended");
-                break;
+            String previous = getTooltipStateAsLocalizedString(previousThumbNailToolTipState);
+            String current = getTooltipStateAsLocalizedString(currentThumbNailToolTipState);
+
+            displayMessage.append(lang.get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
+        }
+
+        if(!OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE.equals(getOverviewImageViewerTooltipState())) {
+            int previousThumbNailToolTipState = -1;
+
+            try {
+                previousThumbNailToolTipState = Integer.parseInt(OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE);
+            } catch (NumberFormatException nfex) {
+                previousThumbNailToolTipState = 1;
             }
+
+            int currentThumbNailToolTipState = Integer.parseInt(getOverviewImageViewerTooltipState());
+
+            String previous = getTooltipStateAsLocalizedString(previousThumbNailToolTipState);
+            String current = getTooltipStateAsLocalizedString(currentThumbNailToolTipState);
 
             displayMessage.append(lang.get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
         }
@@ -1277,6 +1395,30 @@ public class ConfigViewerGUI extends JFrame {
         if(displayMessage.length() > 0) {
             JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    /**
+     * This method returns a localized textual representation of an selected
+     * thumbnail tooltip state.
+     *
+     * @param thumbNailToolTipState
+     *            is the state to return as a localized string.
+     * @return a localized textual representation of an int tooltip state.
+     */
+    private String getTooltipStateAsLocalizedString(int thumbNailToolTipState) {
+        String disabled = lang.get("configviewer.thumbnail.tooltip.label.disabled");
+        String enabled = lang.get("configviewer.thumbnail.tooltip.label.enabled");
+        String extended = lang.get("configviewer.thumbnail.tooltip.label.extended");
+
+        switch (thumbNailToolTipState) {
+        case 0:
+            return disabled;
+        case 1:
+            return enabled;
+        case 2:
+            return extended;
+        }
+        return enabled;
     }
 
     private boolean validateLogName(String logName) {
@@ -1397,6 +1539,9 @@ public class ConfigViewerGUI extends JFrame {
         return true;
     }
 
+    /**
+     * Performs the needed actions to be performed when the window is closing
+     */
     private void closeWindow() {
         updateWindowLocationAndSize();
         this.setVisible(false);
@@ -1418,7 +1563,7 @@ public class ConfigViewerGUI extends JFrame {
             for (String key : importedCategoriesMap.keySet()) {
                 if (importedCategoriesMap.get(key).equals(selectedValue)) {
                     keysToRemove.add(key);
-                    ((DefaultListModel<Object>)importedCategoriesList.getModel()).removeElement(selectedValue);
+                    ((DefaultListModel<ImportedCategories>)importedCategoriesList.getModel()).removeElement(selectedValue);
                 }
             }
         }

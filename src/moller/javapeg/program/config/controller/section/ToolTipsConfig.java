@@ -19,7 +19,9 @@ public class ToolTipsConfig {
         ToolTips toolTips = new ToolTips();
 
         try {
-            toolTips.setState((String)xPath.evaluate(ConfigElement.STATE, toolTipsNode, XPathConstants.STRING));
+            toolTips.setOverviewState((String)xPath.evaluate(ConfigElement.OVERVIEW_STATE, toolTipsNode, XPathConstants.STRING));
+            toolTips.setImageSearchResultState((String)xPath.evaluate(ConfigElement.IMAGE_SEARCH_RESULT_STATE, toolTipsNode, XPathConstants.STRING));
+            toolTips.setOverviewImageViewerState((String)xPath.evaluate(ConfigElement.OVERVIEW_IMAGE_VIEWER_STATE, toolTipsNode, XPathConstants.STRING));
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Could not get tooltips config", e);
         }
@@ -30,7 +32,9 @@ public class ToolTipsConfig {
         //  TOOL TIPS start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.TOOL_TIPS, baseIndent, xmlsw);
 
-        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.STATE, Tab.FOUR, toolTips.getState(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.OVERVIEW_STATE, Tab.FOUR, toolTips.getOverviewState(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.IMAGE_SEARCH_RESULT_STATE, Tab.FOUR, toolTips.getImageSearchResultState(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.OVERVIEW_IMAGE_VIEWER_STATE, Tab.FOUR, toolTips.getOverviewImageViewerState(), xmlsw);
 
         //  TOOL TIPS end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);

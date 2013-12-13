@@ -201,7 +201,9 @@
     
     <xs:complexType name="ToolTips">
         <xs:all>
-            <xs:element name="state" type="xs:int" />
+            <xs:element name="overviewState" type="xs:int" />
+            <xs:element name="imageSearchResultState" type="xs:int" />
+            <xs:element name="overviewImageViewerState" type="xs:int" />
         </xs:all>
     </xs:complexType>
     
