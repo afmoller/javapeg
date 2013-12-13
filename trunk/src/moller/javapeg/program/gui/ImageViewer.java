@@ -315,7 +315,7 @@ public class ImageViewer extends JFrame {
         imageOverViewPanel.add(imageButton);
 
         if (updateGUI) {
-            Update.updateAllUIs();
+            Update.updateWindowUI(this);
         }
     }
 
