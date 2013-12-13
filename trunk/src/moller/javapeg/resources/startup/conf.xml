@@ -126,7 +126,9 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     </creation>
   </thumbNail>
   <toolTips>
-    <state>2</state>
+    <overviewState>1</overviewState>
+    <imageSearchResultState>1</imageSearchResultState>
+    <overviewImageViewerState>1</overviewImageViewerState>
   </toolTips>
   <categories highest-used-id="0">
   </categories>

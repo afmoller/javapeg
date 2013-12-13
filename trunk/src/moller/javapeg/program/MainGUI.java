@@ -1798,7 +1798,6 @@ public class MainGUI extends JFrame {
                     node.add(new DefaultMutableTreeNode(file));
                 }
             }
-            //
         }
 
         tree = new JTree(treeModel);
@@ -1948,7 +1947,6 @@ public class MainGUI extends JFrame {
         rightClickMenuRename.add(popupMenuRemoveImagePathFromImageRepositoryRename);
         rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
         rightClickMenuRename.add(popupMenuCopyAllImagesToClipBoardRename);
-
     }
 
     public void createRightClickMenuView(){
@@ -1994,8 +1992,6 @@ public class MainGUI extends JFrame {
     public void initiateProgram(){
         Update.updateAllUIs();
     }
-
-
 
     public void initiateApplicationContext() {
         ApplicationContext ac = ApplicationContext.getInstance();
@@ -2531,8 +2527,8 @@ public class MainGUI extends JFrame {
 
                         ToolTips toolTips = configuration.getToolTips();
 
-                        if (!toolTips.getState().equals("0")) {
-                            thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile));
+                        if (!toolTips.getOverviewState().equals("0")) {
+                            thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile, toolTips.getOverviewState()));
                         }
                         thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
                         thumbContainer.addActionListener(thumbNailListener);

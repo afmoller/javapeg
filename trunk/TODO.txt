@@ -36,7 +36,6 @@
 
 3.x:
 ====
-- Add backup functionality of image repositories.
 - Add parameter to open windows centered to the main GUI or in the position they had the last time.
 - Add functionality to load latest showed image path at application start.
 - Create unittest

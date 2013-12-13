@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import moller.javapeg.program.config.Config;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 
@@ -19,7 +18,21 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 
 public class MetaDataUtil {
 
-    public static String getToolTipText(File jpgFile) {
+    /**
+     * This method creates a string which is supposed to be displayed as an tool
+     * tip when a thumbnail is hovered. This method produces two different tool
+     * tips: a standard and an extended. The standard displays the name of the
+     * file and the extended version displays an HTML table with various meta
+     * data about the image file.
+     *
+     * @param jpgFile
+     *            is the file to display information about in the tool tip.
+     * @param state
+     *            defines the type of tool tip: standard or extended.
+     * @return a string representing a tool tip for the file specified in the
+     *         jpgFile parameter to this method.
+     */
+    public static String getToolTipText(File jpgFile, String state) {
 
         Language lang = Language.getInstance();
 
@@ -27,7 +40,7 @@ public class MetaDataUtil {
 
         String noValue = lang.get("common.missing.value");
 
-        if (Config.getInstance().get().getToolTips().getState().equals("2")) {
+        if (state.equals("2")) {
             return "<html>" +
              "<table>" +
                createTableRow(lang.get("variable.comment.fileName"), jpgFile.getName()) +

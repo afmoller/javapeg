@@ -66,7 +66,9 @@ public class ConfigElement {
     public static final String IF_MISSING_OR_CORRUPT = "ifMissingOrCorrupt";
     public static final String ENABLED = "enabled";
     public static final String MAX_SIZE = "maxSize";
-    public static final String STATE = "state";
+    public static final String OVERVIEW_STATE = "overviewState";
+    public static final String IMAGE_SEARCH_RESULT_STATE = "imageSearchResultState";
+    public static final String OVERVIEW_IMAGE_VIEWER_STATE = "overviewImageViewerState";
     public static final String ATTACH_VERSION_INFORMATION = "attachVersionInformation";
     public static final String TIMEOUT = "timeout";
     public static final String URL_VERSION = "urlVersion";

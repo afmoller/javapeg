@@ -10,6 +10,12 @@
  
  3.0 (2013-xx-xx)
  
+ + The tooltip state: disabled, enabled or extended is from now on possible to
+   configure independendently for the thumbnails in the main application 
+   window, image search result viewer and the image viewer. This means that it
+   is possible to have different tooltips in the different parts of the JavaPEG
+   application. 
+ 
  + When the first image is added to the image view list, then is this image 
    also automatically selected and thereby displayed in the preview area.
  
