@@ -187,6 +187,7 @@ import moller.util.gui.Table;
 import moller.util.gui.TreeUtil;
 import moller.util.gui.Update;
 import moller.util.image.ImageUtil;
+import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
 import moller.util.io.PathUtil;
 import moller.util.io.Status;
@@ -2584,7 +2585,10 @@ public class MainGUI extends JFrame {
         ApplicationContext ac = ApplicationContext.getInstance();
 
         ac.setSourcePath(sourcePath);
-        ac.setNrOfFilesInSourcePath(sourcePath.listFiles().length);
+
+        final File[] filesInSourcePath = DirectoryUtil.listFilesInAscendingDateOrder(sourcePath);
+
+        ac.setNrOfFilesInSourcePath(filesInSourcePath.length);
 
         RenameImages renameImages = configuration.getRenameImages();
 
@@ -2597,7 +2601,7 @@ public class MainGUI extends JFrame {
             public void run() {
                 if(sourcePath.isDirectory()) {
                     try {
-                        FileRetriever.getInstance().loadFilesFromDisk(Arrays.asList(sourcePath.listFiles()));
+                        FileRetriever.getInstance().loadFilesFromDisk(Arrays.asList(filesInSourcePath));
                     } catch (Throwable sex) {
                         logger.logERROR("Can not list files in directory: " + sourcePath.getAbsolutePath());
                         logger.logERROR(sex);
@@ -3487,13 +3491,24 @@ public class MainGUI extends JFrame {
         }
     }
 
+    /**
+     * This listener class adds all images that are shown in the main GUI to the
+     * "image viewer" list and to the image viewer, if that one is displayed.
+     * The images are added in dateorder, (file last changed date) and the
+     * oldest first.
+     *
+     * @author Fredrik
+     *
+     */
     private class AddAllImagesToViewList implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
             File imageFilePath = ApplicationContext.getInstance().getSourcePath();
 
-            for (File file : imageFilePath.listFiles()) {
+            File[] files = DirectoryUtil.listFilesInAscendingDateOrder(imageFilePath);
+
+            for (File file : files) {
                 try {
                     if (JPEGUtil.isJPEG(file)) {
                         handleAddImageToImageList(file);
