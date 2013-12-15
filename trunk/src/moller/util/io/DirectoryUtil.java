@@ -2,7 +2,11 @@ package moller.util.io;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DirectoryUtil {
 
@@ -347,5 +351,40 @@ public class DirectoryUtil {
 	        }
 	    }
 	    return directoryThatMustBeUnique;
+	}
+
+    /**
+     * Returns an {@link File} Array with all files in an directory, sorted by
+     * the last modified time stamp in ascending order.
+     *
+     * @param directory
+     *            is the directory to return all files in,
+     * @return an array of {@link File} object sorted by the last modified time
+     *         stamp in ascending order.
+     */
+	public static File[] listFilesInAscendingDateOrder(File directory) {
+	    if (directory.isFile()) {
+	        throw new IllegalArgumentException("The object: " + directory.getAbsolutePath() + " is not a directory");
+	    }
+
+	    // Find all files.
+	    File[] files = directory.listFiles();
+
+	    // Create a mapping between file an time stamps to avoid a changing
+	    // time stamp in the middle of the sort process.
+	    final Map<File, Long> staticLastModifiedTimes = new HashMap<File,Long>();
+	    for(final File f : files) {
+	        staticLastModifiedTimes.put(f, f.lastModified());
+	    }
+
+	    // Sort the files.
+	    Arrays.sort(files, new Comparator<File>() {
+	        @Override
+	        public int compare(final File f1, final File f2) {
+	            return staticLastModifiedTimes.get(f1).compareTo(staticLastModifiedTimes.get(f2));
+	        }
+	    });
+
+	    return files;
 	}
 }
