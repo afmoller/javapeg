@@ -120,6 +120,9 @@
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in this version.  
    
+ ~ The thumbnails in the main GUI are explicitly loaded in date order (oldest
+   first) and not as it was before, in unspecified order.   
+   
  ~ The rename parameters have been aligned between the English and Swedish
    translations. This will avoid having "incorrect" rename parameters in any
    stored template, if the language is changed.  
