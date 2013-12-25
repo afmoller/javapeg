@@ -3124,12 +3124,30 @@ public class MainGUI extends JFrame {
         }
     }
 
+    /**
+     * This class implementents the actions that is taking place when the
+     * "Remove image button from image view list" is clicked.
+     *
+     * The selected images are removed and the image after in the list is set
+     * as the selected image and the preview image is set to this newly selected
+     * image.
+     *
+     * If there is only one image left after the removal then this image is set
+     * to the selected image independent of it was before or after the removed
+     * image in image view list.
+     *
+     * If the last image is removed then the preview image is cleared.
+     *
+     * @author Fredrik
+     *
+     */
     private class RemoveSelectedImagesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
             if (!imagesToViewList.isSelectionEmpty()) {
 
+                int firstSelectedIndex = imagesToViewList.getSelectedIndex();
                 int [] selectedIndices = imagesToViewList.getSelectedIndices();
 
                 // Remove all the selected indices
@@ -3137,7 +3155,22 @@ public class MainGUI extends JFrame {
                     imagesToViewListModel.remove(selectedIndices[0]);
                     selectedIndices = imagesToViewList.getSelectedIndices();
                 }
-                imagePreviewLabel.setIcon(null);
+
+                if (imagesToViewListModel.isEmpty()) {
+                    // All images have been removed, clear the preview image
+                    imagePreviewLabel.setIcon(null);
+                } else {
+                    if (firstSelectedIndex == 0) {
+                        // If the first image was removed
+                        imagesToViewList.setSelectedIndex(firstSelectedIndex);
+                    } else if (firstSelectedIndex >= imagesToViewListModel.getSize()) {
+                        // The last image was removed
+                        imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
+                    } else  {
+                        // An image inbetween the first and last was removed
+                        imagesToViewList.setSelectedIndex(firstSelectedIndex);
+                    }
+                }
                 setNrOfImagesLabels();
             }
         }
@@ -3773,20 +3806,18 @@ public class MainGUI extends JFrame {
     }
 
     /**
-     * This method adds an image to the image view list {@link ListModel} and if
-     * it is the first image added, then that image is set as the selected
-     * image. It also updates the label that displays the amount of images in
-     * the list. It also adds the image to the {@link ImageViewer} if that one
-     * is displayed.
+     * This method adds an image to the image view list {@link ListModel} and
+     * set this image is also set as the selected image. It also updates the
+     * label that displays the amount of images in the list. It also adds the
+     * image to the {@link ImageViewer} if that one is displayed.
      *
      * @param image
      *            is the image to add.
      */
     private void handleAddImageToImageList(File image) {
         imagesToViewListModel.addElement(image);
-        if (imagesToViewList.getSelectedIndex() == -1) {
-            imagesToViewList.setSelectedIndex(0);
-        }
+        imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
+        imagesToViewList.ensureIndexIsVisible(imagesToViewList.getSelectedIndex());
 
         setNrOfImagesLabels();
         if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
