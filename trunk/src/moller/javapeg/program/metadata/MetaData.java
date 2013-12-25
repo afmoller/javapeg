@@ -139,22 +139,4 @@ public class MetaData {
     public void setFileObject(File fileObject) {
         this.fileObject = fileObject;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("fileName: "); sb.append(fileName); sb.append("\n");
-        sb.append("exifDateTime: "); sb.append(exifDateTime); sb.append("\n");
-        sb.append("exifCameraModel: "); sb.append(exifCameraModel); sb.append("\n");
-        sb.append("exifExposureTime: "); sb.append(exifExposureTime); sb.append("\n");
-        sb.append("exifISOValue: "); sb.append(exifISOValue); sb.append("\n");
-        sb.append("exifPictureWidth: "); sb.append(exifPictureWidth); sb.append("\n");
-        sb.append("exifPictureHeight: "); sb.append(exifPictureHeight); sb.append("\n");
-        sb.append("exifFNumber: "); sb.append(exifFNumber); sb.append("\n");
-        sb.append("thumbNailOffset: "); sb.append(thumbNailOffset); sb.append("\n");
-        sb.append("thumbNailLength: "); sb.append(thumbNailLength); sb.append("\n");
-        sb.append("fileObject: "); sb.append(fileObject);
-
-        return sb.toString();
-    }
 }
