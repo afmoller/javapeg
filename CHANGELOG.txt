@@ -10,14 +10,19 @@
  
  3.0 (2013-xx-xx)
  
+ + When an image is removed from the image view list then the preview image is
+   automatically updated to the newly (automatically) selected image in the 
+   image view list.
+ 
  + The tooltip state: disabled, enabled or extended is from now on possible to
    configure independendently for the thumbnails in the main application 
    window, image search result viewer and the image viewer. This means that it
    is possible to have different tooltips in the different parts of the JavaPEG
    application. 
  
- + When the first image is added to the image view list, then is this image 
-   also automatically selected and thereby displayed in the preview area.
+ + When an image is added to the image view list, then this image is also 
+   automatically selected in the list and thereby displayed in the preview 
+   area.
  
  + It is possible to save an unlimited amount of File name and Sub folder
    rename templates. Any saved template will end up in a drop down box and when
