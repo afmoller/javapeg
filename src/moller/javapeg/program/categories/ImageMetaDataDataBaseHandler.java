@@ -23,6 +23,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
@@ -54,6 +58,8 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 
+    private static final String DELIMITER = "/";
+    private static final String JAVAPEG_IMAGE_META_DATA_DATA_BASE = "/javapeg-image-meta-data-data-base/";
     private static final String FILE = "file";
     private static final String IMAGE = "image";
     private static final String JAVAPEG_ID = "javapeg-id";
@@ -310,9 +316,10 @@ public class ImageMetaDataDataBaseHandler {
             doc = db.parse(imageMetaDataDataBase);
             doc.getDocumentElement().normalize();
 
-            NodeList javaPegId = doc.getElementsByTagName(JAVAPEG_ID);
-            Node javaPegIdNode = javaPegId.item(0);
-            String javaPegIdValue = javaPegIdNode.getTextContent();
+            XPathFactory xPathFactory = XPathFactory.newInstance();
+            XPath xPath = xPathFactory.newXPath();
+
+            String javaPegIdValue = (String)xPath.evaluate(DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER + JAVAPEG_ID, doc, XPathConstants.STRING);
 
             ApplicationContext ac = ApplicationContext.getInstance();
             ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(configuration.getJavapegClientId().equals(javaPegIdValue));
@@ -324,7 +331,15 @@ public class ImageMetaDataDataBaseHandler {
                 }
             }
 
-            NodeList imageTags = doc.getElementsByTagName(IMAGE);
+
+            NodeList imageTags = (NodeList)xPath.evaluate(DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER + IMAGE, doc, XPathConstants.NODESET);
+
+            if (checkReferencedFilesExistence(imageTags, xPath, imageMetaDataDataBase.getParentFile()).size() > 0) {
+
+            }
+
+
+
 
             int nrOfTags = imageTags.getLength();
 
@@ -338,66 +353,52 @@ public class ImageMetaDataDataBaseHandler {
 
                 File image = new File(imageMetaDataDataBase.getParentFile(), file.getNodeValue());
 
-                NodeList content = imageTag.getChildNodes();
+                CategoryImageExifMetaData imageExifMetaData = createImageExifMetaData((Node)xPath.evaluate(EXIF_META_DATA, imageTag, XPathConstants.NODE), xPath);
+                String comment = (String)xPath.evaluate(COMMENT, imageTag, XPathConstants.STRING);
 
-                CategoryImageExifMetaData imageExifMetaData = null;
-                String comment = "";
                 int rating = 0;
+                try {
+                    rating = Integer.parseInt((String)xPath.evaluate(RATING, imageTag, XPathConstants.STRING));
+                } catch (NumberFormatException nfex) {
+                    logger.logINFO("Could not parse rating value. Rating value is: \"" + (String)xPath.evaluate(RATING, imageTag, XPathConstants.STRING) + "\". Value set to 0 (zero)");
+                    logger.logINFO(nfex);
+                }
+
+                String categoriesString = (String)xPath.evaluate(CATEGORIES, imageTag, XPathConstants.STRING);
                 Categories categories = new Categories();
+                categories.addCategories(categoriesString);
 
-                for (int j = 0; j < content.getLength(); j++) {
-                    Node node = content.item(j);
-                    if (EXIF_META_DATA.equals(node.getNodeName())) {
-                        imageExifMetaData = createImageExifMetaData(node.getChildNodes());
-                    } else if(COMMENT.equals(node.getNodeName())) {
-                        comment = node.getTextContent();
-                    } else if(RATING.equals(node.getNodeName())) {
-                        try {
-                            rating = Integer.parseInt(node.getTextContent());
-                        } catch (NumberFormatException nfex) {
-                            logger.logINFO("Could not parse rating value. Rating value is: \"" + node.getTextContent() + "\". Value set to 0 (zero)");
-                            logger.logINFO(nfex);
-                            rating = 0;
-                        }
-                    } else if(CATEGORIES.equals(node.getNodeName())) {
-                        String categoriesString = node.getTextContent();
-                        categories.addCategories(categoriesString);
+                switch (context) {
+                case IMAGE_META_DATA_CONTEXT:
+                    // Do nothing here.
+                    break;
 
-                        switch (context) {
-                        case IMAGE_META_DATA_CONTEXT:
-                            // Do nothing here.
-                            break;
+                case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
+                    // If there are no categories set to the current image,
+                    // then there is no need to do anything from here...
+                    if (categoriesString != null && categoriesString.length() > 0) {
+                        ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 
-                        case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-                            // If there are no categories set to the current image,
-                            // then there is no need to do anything from here...
-                            if (categoriesString != null && categoriesString.length() > 0) {
-                                ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+                        Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
 
-                                Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
+                        Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
 
-                                Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
+                        // If there are no categories defined for current
+                        // JavaPeg Id, then do not do anything here...
+                        if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
 
-                                // If there are no categories defined for current
-                                // JavaPeg Id, then do not do anything here...
-                                if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
+                            Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
 
-                                    Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
-
-                                    for (String categoryId : categories.getCategories()) {
-                                        if (!categoryIdsForJavePegId.contains(categoryId)) {
-                                            if (0 == JOptionPane.showConfirmDialog(null, String.format(Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile"), imageMetaDataDataBase.getAbsolutePath()), Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile.label"), JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
-                                                showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
-                                            }
-                                        }
+                            for (String categoryId : categories.getCategories()) {
+                                if (!categoryIdsForJavePegId.contains(categoryId)) {
+                                    if (0 == JOptionPane.showConfirmDialog(null, String.format(Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile"), imageMetaDataDataBase.getAbsolutePath()), Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile.label"), JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+                                        showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
                                     }
                                 }
                             }
-
-                            break;
                         }
-
                     }
+                    break;
                 }
 
                 switch (context) {
@@ -432,8 +433,44 @@ public class ImageMetaDataDataBaseHandler {
             logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBase.getAbsolutePath());
             logger.logERROR(iox);
             return false;
+        } catch (XPathExpressionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         return true;
+    }
+
+    /**
+     * Tests whether or not a list of files exists or not.
+     *
+     * @param imageTags
+     *            are the list with XML nodes which contain a file attribute.
+     * @param xPath
+     *            the object used to query the XML node
+     * @param parentDirectory
+     *            is the directory to which the file name in the imageTag
+     *            element belongs-
+     * @return a list with {@link File} objects that does not exist. If all
+     *         {@link File} objects exist the an empty {@link List} is returned.
+     * @throws XPathExpressionException
+     */
+    private static List<File> checkReferencedFilesExistence(NodeList imageTags, XPath xPath, File parentDirectory) throws XPathExpressionException {
+        Logger logger = Logger.getInstance();
+        logger.logDEBUG("Start of checking file consistency for meta data XML file found in: " + parentDirectory.getAbsolutePath());
+
+        List<File> nonExistingFiles = new ArrayList<File>();
+
+        int lenght = imageTags.getLength();
+        for (int index = 0; index < lenght ; index++) {
+            String fileName = (String)xPath.evaluate("@" + FILE, imageTags.item(index), XPathConstants.STRING);
+
+            File referencedFile = new File(parentDirectory, fileName);
+            if (!referencedFile.exists()) {
+                nonExistingFiles.add(referencedFile);
+            }
+        }
+        logger.logDEBUG("Ended the checking file consistency. Found: " + nonExistingFiles.size() + " inconsistencies (missing files) in the total of " + lenght + " referenced files");
+        return nonExistingFiles;
     }
 
     private static void populateImageMetaDataContext(String javaPegIdValue, File image, CategoryImageExifMetaData imageExifMetaData, String comment, int rating, Categories categories) {
@@ -630,46 +667,39 @@ public class ImageMetaDataDataBaseHandler {
          }
     }
 
-    private static CategoryImageExifMetaData createImageExifMetaData(NodeList exifMetaData) {
+    private static CategoryImageExifMetaData createImageExifMetaData(Node exifMetaData, XPath xPath) throws NumberFormatException, XPathExpressionException {
         Logger logger = Logger.getInstance();
 
         CategoryImageExifMetaData imageExifMetaData = new CategoryImageExifMetaData();
 
-        int listLength = exifMetaData.getLength();
+        imageExifMetaData.setFNumber(Double.parseDouble((String)xPath.evaluate(F_NUMBER, exifMetaData, XPathConstants.STRING)));
+        imageExifMetaData.setCameraModel((String)xPath.evaluate(CAMERA_MODEL, exifMetaData, XPathConstants.STRING));
 
-        for (int index = 0; index < listLength; index++) {
-            String nodeName  = exifMetaData.item(index).getNodeName();
-            String nodeValue = exifMetaData.item(index).getTextContent();
+        String dateTime = (String)xPath.evaluate(DATE_TIME, exifMetaData, XPathConstants.STRING);
 
-            if(F_NUMBER.equals(nodeName)) {
-                imageExifMetaData.setFNumber(Double.parseDouble(nodeValue));
-            } else if(CAMERA_MODEL.equals(nodeName)) {
-                imageExifMetaData.setCameraModel(nodeValue);
-            } else if(DATE_TIME.equals(nodeName)) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-                try {
-                    imageExifMetaData.setDateTime(sdf.parse(nodeValue));
-                } catch (ParseException pex) {
-                    imageExifMetaData.setDateTime(null);
-                    logger.logERROR("Could not parse date string: \"" + nodeValue + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
-                    logger.logERROR(pex);
-                }
-            } else if(ISO_VALUE.equals(nodeName)) {
-                imageExifMetaData.setIsoValue(Integer.parseInt(nodeValue));
-            } else if(PICTURE_HEIGHT.equals(nodeName)) {
-                imageExifMetaData.setPictureHeight(Integer.parseInt(nodeValue));
-            } else if(PICTURE_WIDTH.equals(nodeName)) {
-                imageExifMetaData.setPictureWidth(Integer.parseInt(nodeValue));
-            } else if(EXPOSURE_TIME.equals(nodeName)) {
-                try {
-                    imageExifMetaData.setExposureTime(new ExposureTime(nodeValue));
-                } catch (ExposureTimeException etex) {
-                    imageExifMetaData.setExposureTime(null);
-                    logger.logERROR("Could not create a ExposureTime object from string value: " + nodeValue);
-                    logger.logERROR(etex);
-                }
-            }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        try {
+            imageExifMetaData.setDateTime(sdf.parse(dateTime));
+        } catch (ParseException pex) {
+            imageExifMetaData.setDateTime(null);
+            logger.logERROR("Could not parse date string: \"" + dateTime + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
+            logger.logERROR(pex);
         }
+
+        imageExifMetaData.setIsoValue(Integer.parseInt((String)xPath.evaluate(ISO_VALUE, exifMetaData, XPathConstants.STRING)));
+        imageExifMetaData.setPictureHeight(Integer.parseInt((String)xPath.evaluate(PICTURE_HEIGHT, exifMetaData, XPathConstants.STRING)));
+        imageExifMetaData.setPictureWidth(Integer.parseInt((String)xPath.evaluate(PICTURE_WIDTH, exifMetaData, XPathConstants.STRING)));
+
+        String exposureTime = (String)xPath.evaluate(EXPOSURE_TIME, exifMetaData, XPathConstants.STRING);
+
+        try {
+            imageExifMetaData.setExposureTime(new ExposureTime(exposureTime));
+        } catch (ExposureTimeException etex) {
+            imageExifMetaData.setExposureTime(null);
+            logger.logERROR("Could not create a ExposureTime object from string value: " + exposureTime);
+            logger.logERROR(etex);
+        }
+
         return imageExifMetaData;
     }
 }
