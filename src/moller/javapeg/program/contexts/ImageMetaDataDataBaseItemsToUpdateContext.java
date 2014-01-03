@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItem;
+import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 
 public class ImageMetaDataDataBaseItemsToUpdateContext {
 
@@ -13,7 +13,7 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
      */
     private static ImageMetaDataDataBaseItemsToUpdateContext instance;
 
-    private Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems;
+    private Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems;
 
     private File repositoryPath;
     private File currentlySelectedImage;
@@ -24,7 +24,7 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
      * Private constructor.
      */
     private ImageMetaDataDataBaseItemsToUpdateContext() {
-        imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+        imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataItem>();
         repositoryPath = null;
     }
 
@@ -67,25 +67,25 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
         return repositoryPath;
     }
 
-    public void setImageMetaDataBaseItems(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems) {
+    public void setImageMetaDataBaseItems(Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems) {
         this.imageMetaDataDataBaseItems = imageMetaDataDataBaseItems;
     }
 
-    public Map<File, ImageMetaDataDataBaseItem> getImageMetaDataBaseItems() {
+    public Map<File, ImageMetaDataItem> getImageMetaDataBaseItems() {
         return imageMetaDataDataBaseItems;
     }
 
     /**
-     * This method will return an {@link ImageMetaDataDataBaseItem} or null if
+     * This method will return an {@link ImageMetaDataItem} or null if
      * the requested jpegImage does not exist in the collection of
-     * {@link ImageMetaDataDataBaseItem} objects.
+     * {@link ImageMetaDataItem} objects.
      *
      * @param jpegImage is the image to retrieve the
-     *        {@link ImageMetaDataDataBaseItem} object for.
+     *        {@link ImageMetaDataItem} object for.
      *
-     * @return an {@link ImageMetaDataDataBaseItem} object or null.
+     * @return an {@link ImageMetaDataItem} object or null.
      */
-    public ImageMetaDataDataBaseItem getImageMetaDataBaseItem(File jpegImage) {
+    public ImageMetaDataItem getImageMetaDataBaseItem(File jpegImage) {
         return imageMetaDataDataBaseItems.get(jpegImage);
     }
 
@@ -93,7 +93,7 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
      * @param jpegFile
      * @param imageMetaDataDataBaseItem
      */
-    public void setImageMetaDatadataBaseItem(File jpegImage, ImageMetaDataDataBaseItem imageMetaDataDataBaseItem) {
+    public void setImageMetaDatadataBaseItem(File jpegImage, ImageMetaDataItem imageMetaDataDataBaseItem) {
         imageMetaDataDataBaseItems.put(jpegImage, imageMetaDataDataBaseItem);
     }
 

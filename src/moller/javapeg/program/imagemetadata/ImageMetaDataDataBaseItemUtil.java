@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * This class contains various utility methods related to the
- * {@link ImageMetaDataDataBaseItem} object.
+ * {@link ImageMetaDataItem} object.
  *
  * @author Fredrik
  *
@@ -36,7 +36,7 @@ public class ImageMetaDataDataBaseItemUtil {
     }
 
     /**
-     * This method creates and returns an {@link ImageMetaDataDataBaseItem}
+     * This method creates and returns an {@link ImageMetaDataItem}
      * object with the input from a meta data base XML file. This object
      * corresponds to the image tag in the XML file.
      *
@@ -49,7 +49,7 @@ public class ImageMetaDataDataBaseItemUtil {
      * @return
      * @throws XPathExpressionException
      */
-    public static ImageMetaDataDataBaseItem createFromXML(Node imageTag, File imageDirectory, XPath xPath) throws XPathExpressionException {
+    public static ImageMetaDataItem createFromXML(Node imageTag, File imageDirectory, XPath xPath) throws XPathExpressionException {
         // Fetch the values from the XML section
         Categories categories = getCategories(xPath, imageTag);
         String comment = getComment(xPath, imageTag);
@@ -59,7 +59,7 @@ public class ImageMetaDataDataBaseItemUtil {
 
         // Create and populate the ImageMetaDataDataBaseItem with the values
         // fetched from the XML section.
-        ImageMetaDataDataBaseItem imddbi = new ImageMetaDataDataBaseItem();
+        ImageMetaDataItem imddbi = new ImageMetaDataItem();
 
         imddbi.setCategories(categories);
         imddbi.setComment(comment);
@@ -209,7 +209,7 @@ public class ImageMetaDataDataBaseItemUtil {
 
     /**
      * This method creates and returns a {@link List} of
-     * {@link ImageMetaDataDataBaseItem} objects which are unmarshalled from the
+     * {@link ImageMetaDataItem} objects which are unmarshalled from the
      * image tags found in an image metadata data base XML file.
      *
      * @param imageTags
@@ -220,13 +220,13 @@ public class ImageMetaDataDataBaseItemUtil {
      *            found.
      * @param xPath
      *            used to query the {@link Node} objects
-     * @return a {@link List} with {@link ImageMetaDataDataBaseItem} objects
+     * @return a {@link List} with {@link ImageMetaDataItem} objects
      *         which are constructed from the content found in an image meta
      *         data base XML file.
      * @throws XPathExpressionException
      */
-    public static List<ImageMetaDataDataBaseItem> getImageMetaDataDataBaseItemsFromXML(NodeList imageTags, File imageDirectory, XPath xPath) throws XPathExpressionException {
-        List<ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new ArrayList<ImageMetaDataDataBaseItem>();
+    public static List<ImageMetaDataItem> getImageMetaDataDataBaseItemsFromXML(NodeList imageTags, File imageDirectory, XPath xPath) throws XPathExpressionException {
+        List<ImageMetaDataItem> imageMetaDataDataBaseItems = new ArrayList<ImageMetaDataItem>();
 
         int nrOfTags = imageTags.getLength();
         for (int i = 0; i < nrOfTags; i++) {
@@ -249,13 +249,13 @@ public class ImageMetaDataDataBaseItemUtil {
      *         {@link File} objects exist the an empty {@link List} is returned.
      * @throws XPathExpressionException
      */
-    public static List<File> checkReferencedFilesExistence(List<ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems) {
+    public static List<File> checkReferencedFilesExistence(List<ImageMetaDataItem> imageMetaDataDataBaseItems) {
         Logger logger = Logger.getInstance();
         logger.logDEBUG("Start of checking file consistency for meta data XML content");
 
         List<File> nonExistingFiles = new ArrayList<File>();
 
-        for (ImageMetaDataDataBaseItem imageMetaDataDataBaseItem : imageMetaDataDataBaseItems) {
+        for (ImageMetaDataItem imageMetaDataDataBaseItem : imageMetaDataDataBaseItems) {
 
             File referencedFile = imageMetaDataDataBaseItem.getImage();
             if (!referencedFile.exists()) {

@@ -156,7 +156,7 @@ import moller.javapeg.program.gui.tab.ImageMergeTab;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItem;
+import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
@@ -2983,7 +2983,7 @@ public class MainGUI extends JFrame {
 
                     // Load the selected image
                     irc.setCurrentlySelectedImage(jpegImage);
-                    ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
+                    ImageMetaDataItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
 
                     imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
                     setRatingValue(imageMetaDataDataBaseItem.getRating());
@@ -3105,7 +3105,7 @@ public class MainGUI extends JFrame {
 
         // Store changes to the currently loaded image.
         if(currentlySelectedImage != null) {
-            ImageMetaDataDataBaseItem imageMetaDataDataBaseItem = null;
+            ImageMetaDataItem imageMetaDataDataBaseItem = null;
 
             Categories categories = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
             String comment = imageCommentTextArea.getText();
@@ -3713,7 +3713,7 @@ public class MainGUI extends JFrame {
 
     /**
      * This method flushes out all changes to the currently loaded set of
-     * {@link ImageMetaDataDataBaseItem} objects to disk.
+     * {@link ImageMetaDataItem} objects to disk.
      */
     private void flushImageMetaDataBaseToDisk() {
         ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
@@ -3894,10 +3894,10 @@ public class MainGUI extends JFrame {
 
                     ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 
-                    Map<File, ImageMetaDataDataBaseItem> imageMetaDataBaseItems = imddbituc.getImageMetaDataBaseItems();
+                    Map<File, ImageMetaDataItem> imageMetaDataBaseItems = imddbituc.getImageMetaDataBaseItems();
 
                     for (File image : imageMetaDataBaseItems.keySet()) {
-                        ImageMetaDataDataBaseItem imddbi = imageMetaDataBaseItems.get(image);
+                        ImageMetaDataItem imddbi = imageMetaDataBaseItems.get(image);
                         ImageMetaDataDataBaseHandler.updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
                     }
                 }

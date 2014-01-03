@@ -150,11 +150,11 @@ public class ImageMetaDataDataBaseHandler {
             List<File> jpegFiles = JPEGUtil.getJPEGFiles(imageRepository);
             logger.logDEBUG("Finished to find JPEG files in directory: " + imageRepository.getAbsolutePath());
 
-            Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+            Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataItem>();
 
             logger.logDEBUG("Starting to store JPEG Meta data for files in directory: " + imageRepository.getAbsolutePath());
             for (File jpegFile : jpegFiles) {
-                ImageMetaDataDataBaseItem imddbi = new ImageMetaDataDataBaseItem();
+                ImageMetaDataItem imddbi = new ImageMetaDataItem();
 
                 imddbi.setImage(jpegFile);
                 imddbi.setImageExifMetaData(new CategoryImageExifMetaData(jpegFile));
@@ -179,7 +179,7 @@ public class ImageMetaDataDataBaseHandler {
         }
     }
 
-    public static boolean updateDataBaseFile(Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems, File destination, ImageMetaDataContextAction imageMetaDataContextAction) {
+    public static boolean updateDataBaseFile(Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems, File destination, ImageMetaDataContextAction imageMetaDataContextAction) {
         Logger logger = Logger.getInstance();
 
         OutputStream os = null;
@@ -202,7 +202,7 @@ public class ImageMetaDataDataBaseHandler {
 
                 logger.logDEBUG("Start writing image elements");
                 for(File image : imageMetaDataDataBaseItems.keySet()) {
-                    ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+                    ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
                     CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
                     logger.logDEBUG("Start writing image detail elements for image: " + image.getAbsolutePath());
@@ -234,13 +234,13 @@ public class ImageMetaDataDataBaseHandler {
                 switch (imageMetaDataContextAction) {
                 case ADD:
                     for(File image : imageMetaDataDataBaseItems.keySet()) {
-                        ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+                        ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
                         populateImageMetaDataContext(configuration.getJavapegClientId(), imddbi);
                     }
                     break;
                 case UPDATE:
                     for(File image : imageMetaDataDataBaseItems.keySet()) {
-                        ImageMetaDataDataBaseItem imddbi = imageMetaDataDataBaseItems.get(image);
+                        ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
                         updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
                     }
                     break;
@@ -306,7 +306,7 @@ public class ImageMetaDataDataBaseHandler {
              *  Get all the image tags as ImageMetaDataDataBaseItem objects.
              */
             NodeList imageTags = (NodeList)xPath.evaluate(DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER + ImageMetaDataDataBaseItemElement.IMAGE, doc, XPathConstants.NODESET);
-            List<ImageMetaDataDataBaseItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(imageTags, imageMetaDataDataBase.getParentFile(), xPath);
+            List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(imageTags, imageMetaDataDataBase.getParentFile(), xPath);
 
             /**
              * Check the existence of the referenced files
@@ -322,9 +322,9 @@ public class ImageMetaDataDataBaseHandler {
 
                 showCategoryImportDialogIfNeeded(imageMetaDataDataBase, javaPegIdValue);
 
-                Map<File, ImageMetaDataDataBaseItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataDataBaseItem>();
+                Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataItem>();
 
-                for (ImageMetaDataDataBaseItem imageMetaDataDataBaseItemFromImageTag : imageMetaDataDataBaseItemsFromXML) {
+                for (ImageMetaDataItem imageMetaDataDataBaseItemFromImageTag : imageMetaDataDataBaseItemsFromXML) {
                     switch (context) {
                     case IMAGE_META_DATA_CONTEXT:
                         // Do nothing here.
@@ -420,7 +420,7 @@ public class ImageMetaDataDataBaseHandler {
         }
     }
 
-    private static void populateImageMetaDataContext(String javaPegIdValue, ImageMetaDataDataBaseItem imageMetaDataDataBaseItemFromImageTag) {
+    private static void populateImageMetaDataContext(String javaPegIdValue, ImageMetaDataItem imageMetaDataDataBaseItemFromImageTag) {
         ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
         final String imagePath = imageMetaDataDataBaseItemFromImageTag.getImage().getAbsolutePath();
 
