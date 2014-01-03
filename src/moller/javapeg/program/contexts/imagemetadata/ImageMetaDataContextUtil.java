@@ -10,10 +10,10 @@ import java.util.TreeSet;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;

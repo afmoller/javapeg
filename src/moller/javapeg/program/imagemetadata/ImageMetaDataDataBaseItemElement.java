@@ -1,4 +1,4 @@
-package moller.javapeg.program.categories;
+package moller.javapeg.program.imagemetadata;
 
 public class ImageMetaDataDataBaseItemElement {
 
