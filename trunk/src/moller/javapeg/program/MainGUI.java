@@ -105,8 +105,6 @@ import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.categories.CategoryUtil;
-import moller.javapeg.program.categories.ImageMetaDataDataBaseHandler;
-import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.categories.ImportedCategoryTreeAndDisplayJavaPegID;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
@@ -157,6 +155,8 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLess
 import moller.javapeg.program.gui.tab.ImageMergeTab;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItem;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;

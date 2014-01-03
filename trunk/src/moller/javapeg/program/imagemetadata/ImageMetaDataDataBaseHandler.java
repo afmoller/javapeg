@@ -1,4 +1,4 @@
-package moller.javapeg.program.categories;
+package moller.javapeg.program.imagemetadata;
 
 import java.awt.Rectangle;
 import java.io.BufferedOutputStream;
@@ -27,6 +27,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.program.C;
+import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.categories.CategoryImageExifMetaData;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;

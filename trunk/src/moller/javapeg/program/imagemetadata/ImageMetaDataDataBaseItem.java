@@ -1,6 +1,9 @@
-package moller.javapeg.program.categories;
+package moller.javapeg.program.imagemetadata;
 
 import java.io.File;
+
+import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.categories.CategoryImageExifMetaData;
 
 public class ImageMetaDataDataBaseItem {
 

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import moller.javapeg.program.categories.ImageMetaDataDataBaseItem;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItem;
 
 public class ImageMetaDataDataBaseItemsToUpdateContext {
 

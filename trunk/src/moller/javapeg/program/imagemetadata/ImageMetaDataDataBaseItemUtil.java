@@ -1,4 +1,4 @@
-package moller.javapeg.program.categories;
+package moller.javapeg.program.imagemetadata;
 
 import java.io.File;
 import java.text.ParseException;
@@ -10,6 +10,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
+import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.categories.CategoryImageExifMetaData;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.logger.Logger;
