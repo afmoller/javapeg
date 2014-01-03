@@ -5,7 +5,7 @@ import java.io.File;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.categories.CategoryImageExifMetaData;
 
-public class ImageMetaDataDataBaseItem {
+public class ImageMetaDataItem {
 
     private File image;
     private CategoryImageExifMetaData imageExifMetaData;
@@ -13,7 +13,7 @@ public class ImageMetaDataDataBaseItem {
     private int rating;
     private Categories categories;
 
-    public ImageMetaDataDataBaseItem(File image, CategoryImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
+    public ImageMetaDataItem(File image, CategoryImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
         this.image = image;
         this.imageExifMetaData = imageExifMetaData;
         this.comment = comment;
@@ -21,7 +21,7 @@ public class ImageMetaDataDataBaseItem {
         this.categories = categories;
     }
 
-    public ImageMetaDataDataBaseItem() {
+    public ImageMetaDataItem() {
         this.image = null;
         this.imageExifMetaData = null;
         this.comment = null;
@@ -72,7 +72,20 @@ public class ImageMetaDataDataBaseItem {
         this.categories = categories;
     }
 
-
+    /**
+     * This method returns a boolean value indicating whether the user entered
+     * part of this object has changed.
+     *
+     * @param categories
+     *            is the {@link Categories} object to compare this objects
+     *            categories object with.
+     * @param comment
+     *            is the comment to compare this objects comment with.
+     * @param rating
+     *            is the rating to compare this objects rating to.
+     * @return true if any of the incoming parameters are unequal to the
+     *         parameters of this object, otherwise false.
+     */
     public boolean hasChanged(Categories categories, String comment, int rating) {
         if (this.categories != null) {
             if (this.categories.getCategories().isEmpty()) {
@@ -88,8 +101,6 @@ public class ImageMetaDataDataBaseItem {
             if (categories != null) {
                 return true;
             }
-        }
-        if (categories != null) {
         }
         if (!this.getComment().equals(comment)) {
             return true;
