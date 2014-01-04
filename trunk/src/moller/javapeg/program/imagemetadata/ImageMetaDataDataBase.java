@@ -56,5 +56,4 @@ public class ImageMetaDataDataBase {
             imageMetaDataItems.add(imageMetaDataItem);
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package moller.javapeg.program.contexts.imagemetadata;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,16 +9,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
 import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
 import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.enumerations.Context;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
 import moller.util.io.DirectoryUtil;
+
+import org.xml.sax.SAXException;
 
 public class ImageMetaDataContextUtil {
 
@@ -298,8 +304,32 @@ public class ImageMetaDataContextUtil {
                 case EXISTS:
                     File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
                     if (imageMetaDataDataBaseFile.exists()) {
-                        logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
-                        ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile, Context.IMAGE_META_DATA_CONTEXT);
+
+                        try {
+                            // TODO: check imageMetaDataDataBaseFile against schema
+                            ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                            String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
+                            // TODO: check file consistency:
+                            // 1: amount of referenced files
+                            // 2: The names of referenced files.
+
+                            ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
+                            ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
+                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+
+                        } catch (XPathExpressionException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (ParserConfigurationException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (SAXException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                         imageRepositoryListModel.add(iri);
                     } else {
                         if (!automaticallyRemoveNonExistingImagePath) {
