@@ -286,6 +286,51 @@ public class ImageMetaDataDataBaseHandler {
         }
     }
 
+    /**
+     * This method constructs an {@link ImageMetaDataDataBase} object from an
+     * the XML file specified by the parameter imageMetaDataDataBase.
+     *
+     * @param imageMetaDataDataBase
+     *            specifies which XML file to create an
+     *            {@link ImageMetaDataDataBase} object of.
+     * @return an {@link ImageMetaDataDataBase} object from the XML file
+     *         specified by the input parameter imageMetaDataDataBase.
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws XPathExpressionException
+     */
+    public static ImageMetaDataDataBase deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(imageMetaDataDataBase);
+        doc.getDocumentElement().normalize();
+
+        XPathFactory xPathFactory = XPathFactory.newInstance();
+        XPath xPath = xPathFactory.newXPath();
+
+        String xPathPrefix = DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER;
+
+        /**
+         *  Get all the image tags as ImageMetaDataDataBaseItem objects.
+         */
+        NodeList imageTags = (NodeList)xPath.evaluate(xPathPrefix + ImageMetaDataDataBaseItemElement.IMAGE, doc, XPathConstants.NODESET);
+        List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(imageTags, imageMetaDataDataBase.getParentFile(), xPath);
+
+        /**
+         * Get the JavaPEGId
+         */
+        String javaPegIdValue = (String)xPath.evaluate(xPathPrefix + ImageMetaDataDataBaseItemElement.JAVAPEG_ID, doc, XPathConstants.STRING);
+
+        /**
+         * Construct the java representation of the XML file.
+         */
+        ImageMetaDataDataBase imddb = new ImageMetaDataDataBase();
+        imddb.setImageMetaDataItems(imageMetaDataDataBaseItemsFromXML);
+        imddb.setJavaPEGId(javaPegIdValue);
+
+        return imddb;
+    }
 
     public static boolean deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase, Context context) {
         Logger logger = Logger.getInstance();
@@ -409,13 +454,25 @@ public class ImageMetaDataDataBaseHandler {
      *            specifies which JavaPEG client that has created the filed
      *            defined in the parameter imageMetaDataDataBase.
      */
-    private static void showCategoryImportDialogIfNeeded(File imageMetaDataDataBase, String javaPegIdValue) {
+    public static void showCategoryImportDialogIfNeeded(File imageMetaDataDataBase, String javaPegIdValue) {
         ApplicationContext ac = ApplicationContext.getInstance();
         ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(configuration.getJavapegClientId().equals(javaPegIdValue));
 
         if (!ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
             if (!configuration.getImportedCategoriesConfig().containsKey(javaPegIdValue)) {
                 showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
+            }
+        }
+    }
+
+    /**
+     * @param javaPegIdValue
+     * @param imageMetaDataItems
+     */
+    public static void populateImageMetaDataContext(String javaPegIdValue, List<ImageMetaDataItem> imageMetaDataItems) {
+        if (imageMetaDataItems != null && javaPegIdValue != null) {
+            for (ImageMetaDataItem imageMetaDataItem : imageMetaDataItems) {
+                populateImageMetaDataContext(javaPegIdValue, imageMetaDataItem);
             }
         }
     }
