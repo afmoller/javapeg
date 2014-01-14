@@ -2,6 +2,7 @@ package moller.javapeg.program.contexts;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
@@ -67,8 +68,14 @@ public class ImageMetaDataDataBaseItemsToUpdateContext {
         return repositoryPath;
     }
 
-    public void setImageMetaDataBaseItems(Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems) {
-        this.imageMetaDataDataBaseItems = imageMetaDataDataBaseItems;
+    public void setImageMetaDataItems(List<ImageMetaDataItem> imageMetaDataItems) {
+        if (imageMetaDataItems == null) {
+            this.imageMetaDataDataBaseItems = null;
+        } else {
+            for (ImageMetaDataItem imageMetaDataItem : imageMetaDataItems) {
+                this.imageMetaDataDataBaseItems.put(imageMetaDataItem.getImage(), imageMetaDataItem);
+            }
+        }
     }
 
     public Map<File, ImageMetaDataItem> getImageMetaDataBaseItems() {

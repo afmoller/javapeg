@@ -18,9 +18,6 @@ import moller.util.image.ImageUtil;
 
 public class HeadingPanel extends JPanel {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private final JLabel label;
@@ -68,6 +65,10 @@ public class HeadingPanel extends JPanel {
         icon.addActionListener(actionListener);
     }
 
+    /**
+     * Removes any listener which are associated with the icon {@link JButton}
+     * member of this class.
+     */
     public void removeListeners() {
         ActionListener[] actionListeners = icon.getActionListeners();
 

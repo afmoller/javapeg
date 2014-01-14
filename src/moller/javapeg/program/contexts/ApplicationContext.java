@@ -345,7 +345,6 @@ public class ApplicationContext {
         this.imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance = imageMetaDataDataBaseFileCreatedByThisJavaPEGInstance;
     }
 
-
     public void setRestartNeeded() {
         restartNeeded = true;
     }
