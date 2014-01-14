@@ -1,5 +1,6 @@
 package moller.javapeg.program.imagemetadata;
 
+import java.awt.Component;
 import java.awt.Rectangle;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -39,7 +40,6 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
@@ -70,7 +70,7 @@ public class ImageMetaDataDataBaseHandler {
      *         means that the path shall be added to the image meta data
      *         repository.
      */
-    public static boolean addPathToRepositoryAccordingToPolicy(File path) {
+    public static boolean addPathToRepositoryAccordingToPolicy(Component parentComponent, File path) {
 
         Integer policy = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
 
@@ -101,16 +101,16 @@ public class ImageMetaDataDataBaseHandler {
             return true;
         // Ask first if addition shall be done.
         case 1:
-            return addPathToImageRepository(path);
+            return addPathToImageRepository(parentComponent, path);
         // Do not add.
         case 2:
             return false;
         default:
-            return addPathToImageRepository(path);
+            return addPathToImageRepository(parentComponent, path);
         }
     }
 
-    private static boolean addPathToImageRepository(File directory) {
+    private static boolean addPathToImageRepository(Component parentComponent, File directory) {
         Language lang = Language.getInstance();
 
         JCheckBox rememberSelectionCheckBox = new JCheckBox(lang.get("category.rememberMySelection"));
@@ -118,14 +118,14 @@ public class ImageMetaDataDataBaseHandler {
         Object[] array = { lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo") + "\n\n",
                            rememberSelectionCheckBox };
 
-        int result = JOptionPane.showConfirmDialog(null, array, lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(parentComponent, array, lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
 
         if (rememberSelectionCheckBox.isSelected()) {
            Integer checkBoxState = null;
 
-           if (result == 0) {
+           if (result == JOptionPane.YES_OPTION) {
                checkBoxState = 0;
-           } else if (result == 1) {
+           } else if (result == JOptionPane.NO_OPTION) {
                checkBoxState = 2;
            }
 
@@ -134,7 +134,7 @@ public class ImageMetaDataDataBaseHandler {
            }
         }
 
-        if (result == 0) {
+        if (result == JOptionPane.YES_OPTION) {
             return true;
         } else {
             return false;
@@ -330,116 +330,6 @@ public class ImageMetaDataDataBaseHandler {
         imddb.setJavaPEGId(javaPegIdValue);
 
         return imddb;
-    }
-
-    public static boolean deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase, Context context) {
-        Logger logger = Logger.getInstance();
-
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db;
-        Document doc;
-
-        try {
-            db = dbf.newDocumentBuilder();
-            doc = db.parse(imageMetaDataDataBase);
-            doc.getDocumentElement().normalize();
-
-            XPathFactory xPathFactory = XPathFactory.newInstance();
-            XPath xPath = xPathFactory.newXPath();
-
-            /**
-             *  Get all the image tags as ImageMetaDataDataBaseItem objects.
-             */
-            NodeList imageTags = (NodeList)xPath.evaluate(DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER + ImageMetaDataDataBaseItemElement.IMAGE, doc, XPathConstants.NODESET);
-            List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(imageTags, imageMetaDataDataBase.getParentFile(), xPath);
-
-            /**
-             * Check the existence of the referenced files
-             */
-            if (ImageMetaDataDataBaseItemUtil.checkReferencedFilesExistence(imageMetaDataDataBaseItemsFromXML).size() > 0) {
-                // TODO: Log and notify user of inconsistency.
-            }
-            /**
-             * If everything is OK, then go on with the deserialization process.
-             */
-            else {
-                String javaPegIdValue = (String)xPath.evaluate(DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER + ImageMetaDataDataBaseItemElement.JAVAPEG_ID, doc, XPathConstants.STRING);
-
-                showCategoryImportDialogIfNeeded(imageMetaDataDataBase, javaPegIdValue);
-
-                Map<File, ImageMetaDataItem> imageMetaDataDataBaseItems = new HashMap<File, ImageMetaDataItem>();
-
-                for (ImageMetaDataItem imageMetaDataDataBaseItemFromImageTag : imageMetaDataDataBaseItemsFromXML) {
-                    switch (context) {
-                    case IMAGE_META_DATA_CONTEXT:
-                        // Do nothing here.
-                        break;
-
-                    case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-                        // If there are no categories set to the current image,
-                        // then there is no need to do anything from here...
-                        if (imageMetaDataDataBaseItemFromImageTag.getCategories() != null && imageMetaDataDataBaseItemFromImageTag.getCategories().size() > 0) {
-                            ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
-
-                            Map<String, Map<String, Set<Integer>>> javaPegIdToCategories = imdc.getCategories();
-
-                            Map<String, Set<Integer>> categoryIdsAndImageIdsForJavaPegIdValue = javaPegIdToCategories.get(javaPegIdValue);
-
-                            // If there are no categories defined for current
-                            // JavaPeg Id, then do not do anything here...
-                            if (categoryIdsAndImageIdsForJavaPegIdValue != null) {
-
-                                Set<String> categoryIdsForJavePegId = categoryIdsAndImageIdsForJavaPegIdValue.keySet();
-
-                                for (String categoryId : imageMetaDataDataBaseItemFromImageTag.getCategories().getCategories()) {
-                                    if (!categoryIdsForJavePegId.contains(categoryId)) {
-                                        if (0 == JOptionPane.showConfirmDialog(null, String.format(Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile"), imageMetaDataDataBase.getAbsolutePath()), Language.getInstance().get("categoryimportexport.newerVersionExistsForThisFile.label"), JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
-                                            showCategoryImportPopup(imageMetaDataDataBase, javaPegIdValue);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    }
-
-                    switch (context) {
-                    case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-                        imageMetaDataDataBaseItems.put(imageMetaDataDataBaseItemFromImageTag.getImage(), imageMetaDataDataBaseItemFromImageTag);
-                        break;
-
-                    case IMAGE_META_DATA_CONTEXT:
-                        populateImageMetaDataContext(javaPegIdValue, imageMetaDataDataBaseItemFromImageTag);
-                        break;
-                    }
-                }
-                switch (context) {
-                case IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT:
-                    ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
-                    imddbituc.setImageMetaDataBaseItems(imageMetaDataDataBaseItems);
-                    break;
-                case IMAGE_META_DATA_CONTEXT:
-                    break;
-                }
-            }
-        } catch (ParserConfigurationException pcex) {
-            logger.logERROR("Could not create a DocumentBuilder");
-            logger.logERROR(pcex);
-            return false;
-        } catch (SAXException sex) {
-            logger.logERROR("Could not parse file: " + imageMetaDataDataBase.getAbsolutePath());
-            logger.logERROR(sex);
-            return false;
-        } catch (IOException iox) {
-            logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBase.getAbsolutePath());
-            logger.logERROR(iox);
-            return false;
-        } catch (XPathExpressionException xpee) {
-            logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBase.getAbsolutePath());
-            logger.logERROR(xpee);
-            return false;
-        }
-        return true;
     }
 
     /**

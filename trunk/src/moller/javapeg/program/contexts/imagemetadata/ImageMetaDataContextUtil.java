@@ -316,19 +316,18 @@ public class ImageMetaDataContextUtil {
                             ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
                             ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
                             logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
-
-                        } catch (XPathExpressionException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (ParserConfigurationException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (SAXException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                        } catch (ParserConfigurationException pcex) {
+                            logger.logERROR("Could not create a DocumentBuilder");
+                            logger.logERROR(pcex);
+                        } catch (SAXException sex) {
+                            logger.logERROR("Could not parse file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                            logger.logERROR(sex);
+                        } catch (IOException iox) {
+                            logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                            logger.logERROR(iox);
+                        } catch (XPathExpressionException xpee) {
+                            logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                            logger.logERROR(xpee);
                         }
                         imageRepositoryListModel.add(iri);
                     } else {
