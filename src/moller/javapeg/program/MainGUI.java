@@ -96,9 +96,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
@@ -132,7 +134,6 @@ import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchP
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
 import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.enumerations.CategoryMenueType;
-import moller.javapeg.program.enumerations.Context;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
@@ -155,6 +156,7 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLess
 import moller.javapeg.program.gui.tab.ImageMergeTab;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
@@ -199,6 +201,8 @@ import moller.util.os.OsUtil;
 import moller.util.string.ParseVMArguments;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
+
+import org.xml.sax.SAXException;
 
 /**
  * @author Fredrik
@@ -328,7 +332,7 @@ public class MainGUI extends JFrame {
     private JTree tree;
     private JTree categoriesTree;
 
-    private Mouselistener mouseListener;
+    private FileSystemDirectoryTreeMouselistener mouseListener;
     private MouseButtonListener mouseRightClickButtonListener;
     private CategoriesMouseButtonListener categoriesMouseButtonListener;
     private ActionListener addSelecetedPathToImageRepository;
@@ -1805,7 +1809,7 @@ public class MainGUI extends JFrame {
         tree.setRootVisible(false);
         tree.addTreeSelectionListener(treeSelectionListener);
         tree.setCellRenderer(new FileTreeCellRenderer());
-        tree.addMouseListener(mouseListener = new Mouselistener());
+        tree.addMouseListener(mouseListener = new FileSystemDirectoryTreeMouselistener());
         tree.setShowsRootHandles (true);
         tree.expandRow(0);
 
@@ -2626,95 +2630,57 @@ public class MainGUI extends JFrame {
     }
 
     /**
-     * Mouse listener
+     * Performs a check to see if the current executing is poart of the
+     * supported operating systems, if not, an {@link RuntimeException} is
+     * thrown.
      */
-    private class Mouselistener extends MouseAdapter {
+    private void checkIfOperatingSystemIsSupported() {
+        if (!OsUtil.getOsName().toLowerCase().contains("windows")) {
+            throw new RuntimeException("Unsupported Operating system: " + OsUtil.getOsName());
+        }
+    }
+
+    /**
+     * This listener class listens for mouse clicks made on the
+     * FilesSystemDirectory three and performs the appropiate actions depending
+     * on if it was a "right click" or "left click" with the mouse.
+     */
+    private class FileSystemDirectoryTreeMouselistener extends MouseAdapter {
 
         @Override
-        public void mouseReleased(MouseEvent e){
-
-            if(tree.getRowForLocation(e.getX(), e.getY()) == -1) {
+        public void mouseReleased(MouseEvent event){
+            // If no row in the tree structure is clicked, then do nothing...
+            if(tree.getRowForLocation(event.getX(), event.getY()) == -1) {
                 return;
             }
 
-            String totalPath;
+            // Abort if the current operating system is unsupported.
+            checkIfOperatingSystemIsSupported();
 
-            if (OsUtil.getOsName().toLowerCase().contains("windows")) {
-                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-                File selectedFile = (File)selectedNode.getUserObject();
-                try {
-                    totalPath = selectedFile.getCanonicalPath();
-                } catch (IOException e1) {
-                    // If an exception is thrown then it means that a "special"
-                    // folder such as "Computer" or "Network" has been
-                    // selected. Thoose folders are no real directories and
-                    // will therefore cause an exception to be thrown when the
-                    // cannonical path is asked. And this is the thereby the
-                    // mechanism to decide wether an folder shall be
-                    // investigated for images or not.
-                    return;
-                }
-            } else {
-                throw new RuntimeException("Unsupported Operating system: " + OsUtil.getOsName());
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+            File selectedFile = (File)selectedNode.getUserObject();
+            String totalPath;
+            try {
+                totalPath = selectedFile.getCanonicalPath();
+            } catch (IOException iox) {
+                logger.logDEBUG("Exception was thrown when getCanonicaPath of File object: " + selectedFile.getAbsolutePath() + " was called. See stacktrace for more details");
+                logger.logDEBUG(iox);
+                // If an exception is thrown then it means that a "special"
+                // folder such as "Computer" or "Network" has been
+                // selected. Thoose folders are no real directories and
+                // will therefore cause an exception to be thrown when the
+                // cannonical path is asked. And this is the thereby the
+                // mechanism to decide wether an folder shall be
+                // investigated for images or not.
+                return;
             }
 
-            if (e.isPopupTrigger()) {
-                File selectedPath = new File(totalPath);
-
-                if (!imageRepositoryListModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
-
-                    RepositoryExceptions repositoryExceptions = Config.getInstance().get().getRepository().getExceptions();
-
-                    boolean isParent = false;
-                    boolean allwaysAdd = false;
-
-                    for (File addAutomatically : repositoryExceptions.getAllwaysAdd()) {
-                        if (selectedPath.getAbsolutePath().equals((addAutomatically).getAbsolutePath())) {
-                            allwaysAdd = true;
-                            break;
-                        } else {
-                            if (PathUtil.isChild(selectedPath, addAutomatically)) {
-                                allwaysAdd = true;
-                                break;
-                            } else if (PathUtil.isParent(selectedPath, addAutomatically)) {
-                                isParent = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    boolean neverAdd = false;
-
-                    for (File doNotAddAutomatically : repositoryExceptions.getNeverAdd()) {
-                        if (selectedPath.getAbsolutePath().equals((doNotAddAutomatically).getAbsolutePath())) {
-                            neverAdd = true;
-                            break;
-                        } else {
-                            if (PathUtil.isChild(selectedPath, doNotAddAutomatically)) {
-                                neverAdd = true;
-                                break;
-                            } else if (PathUtil.isParent(selectedPath, doNotAddAutomatically)) {
-                                isParent = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!allwaysAdd && !neverAdd && !isParent) {
-                        popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
-                        popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
-                        rightClickMenuDirectoryTree.show(e.getComponent(), e.getX(), e.getY());
-                    } else {
-                        if (allwaysAdd) {
-                            displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.allways.add"));
-                        } else if (neverAdd) {
-                            displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.never.add"));
-                        } else {
-                            displayInformationMessage(lang.get("imagerepository.directory.is.parent.to.already.added.directory"));
-                        }
-                    }
-                }
-            } else {
+            // Right click with the mouse...
+            if (event.isPopupTrigger()) {
+                handleRightClickOnFileTreeItem(totalPath, event);
+            }
+            // ... or a left click.
+            else {
                 thumbNailsPanelHeading.removeIcon();
                 thumbNailsPanelHeading.removeListeners();
 
@@ -2746,8 +2712,8 @@ public class MainGUI extends JFrame {
                     setRatingCommentAndCategoryEnabled(false);
 
                     if (repositoryPathContainsJPEGFiles) {
-                        // Reset the flag indicating that an image mete data
-                        // base file has been loaded to no loaded, since we are
+                        // Reset the flag indicating that an image meta data
+                        // base file has been loaded to not loaded, since we are
                         // in the scope of potentially loading a new one.
                         ac.setImageMetaDataDataBaseFileLoaded(false);
 
@@ -2757,74 +2723,225 @@ public class MainGUI extends JFrame {
 
                         File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 
-                        //
                         ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
+
+                        ImageMetaDataDataBase imageMetaDataDataBase = null;
 
                         if (!imageRepositoryListModel.contains(iri)) {
                             // If the selected path shall not be added to the
                             // image meta data repository, according to policy
                             // and answer then just do nothing
-                            if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(repositoryPath)) {
+                            if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(getThis(), repositoryPath)) {
                                 thumbNailsPanelHeading.setIcon("resources/images/db_add.png", lang.get("imagerepository.directory.not.added"));
                                 thumbNailsPanelHeading.setListener(addSelecetedPathToImageRepository);
                                 return;
                             }
 
-                            // If the there exists no image meta data file at
-                            // the selected path then such kind of file shall
-                            // be created.
-                            if (!imageMetaDataDataBaseFile.exists()) {
-                                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
-                                    return;
+                            try {
+                                /**
+                                 * If an image meta data base file already exists in the
+                                 * selected directory, then deserialize that file and make some
+                                 * validity testing.
+                                 */
+                                if (imageMetaDataDataBaseFile.exists()) {
+                                    // TODO: add schema validation of the imageMetaDataDataBaseFile
+                                    imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                                    // TODO: check file consistency:
+                                    // 1: amount of referenced files
+                                    // 2: The names of referenced files.
+
+                                    ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                                 }
+                                /**
+                                 * Create the image meta data base file if not already
+                                 * existing.
+                                 */
+                                else {
+                                    if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
+                                        return;
+                                    }
+                                    imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                                }
+
+                                /**
+                                 * Populate the image meta data context with content form the
+                                 * deserialized XML file.
+                                 */
+                                ImageMetaDataDataBaseHandler.populateImageMetaDataContext(imageMetaDataDataBase.getJavaPEGId(), imageMetaDataDataBase.getImageMetaDataItems());
+
+                                /**
+                                 * Add the path to the configuration, so the entry will be
+                                 * persisted upon application exit.
+                                 */
+                                configuration.getRepository().getPaths().getPaths().add(repositoryPath);
+                            } catch (ParserConfigurationException pcex) {
+                                logger.logERROR("Could not create a DocumentBuilder");
+                                logger.logERROR(pcex);
+                            } catch (SAXException sex) {
+                                logger.logERROR("Could not parse file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                logger.logERROR(sex);
+                            } catch (IOException iox) {
+                                logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                logger.logERROR(iox);
+                            } catch (XPathExpressionException xpee) {
+                                logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                logger.logERROR(xpee);
                             }
-                        }
-
-                        // Deserialize a newly created or an already existing
-                        // image meta data file.
-                        boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
-
-                        Logger logger = Logger.getInstance();
-
-                        if (result) {
-                            ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
-
-                            // Populate the image repository model with any
-                            // unpopulated paths.
-                            if(!imageRepositoryListModel.contains(iri)) {
-                                imageRepositoryListModel.add(iri);
-                            }
-                            logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
                         } else {
-                            logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                        }
-                        ac.setImageMetaDataDataBaseFileLoaded(result);
 
-                        // 1: If the image meta data base file is created by this
-                        // JavaPEG instance, then it should be possible to edit the file...
-                        if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance()) {
+                            /**
+                             * If an image meta data base file already exists in the
+                             * selected directory, then deserialize that file and make some
+                             * validity testing.
+                             */
+                            if (imageMetaDataDataBaseFile.exists()) {
+                                // TODO: add schema validation of the imageMetaDataDataBaseFile
+                                try {
+                                    imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                                    // TODO: check file consistency:
+                                    // 1: amount of referenced files
+                                    // 2: The names of referenced files.
 
-                            // 1.1: ...if the image date base file is not write protected.
-                            boolean canWrite = imageMetaDataDataBaseFile.canWrite();
-                            ac.setImageMetaDataDataBaseFileWritable(canWrite);
-                            if (canWrite) {
-                                thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                                    ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
+                                } catch (XPathExpressionException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch (ParserConfigurationException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch (SAXException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                //                                    TODO: Fix hard coded string
+                                displayErrorMessage("The metadata base file: " + imageMetaDataDataBaseFile.getAbsolutePath() + " is missing");
+                                logger.logERROR("The metadata base file: " + imageMetaDataDataBaseFile.getAbsolutePath() + " is missing");
+                                return;
                             }
-                            // 1.2: ...otherwise display the write protected icon.
-                            else {
-                                thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
-                            }
-                        // 2: If the image meta data base file is not created
-                        // by this JavaPEG instance then display the write
-                        // protected icon.
-                        } else {
-                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.notCreatedByThisInstance"));
                         }
+
+                        /**
+                         * If the meta data base file is created by this JavaPEG
+                         * instance then it shall be possible to make changes to it, if
+                         * the file is writable for the current user.
+                         */
+                        boolean canWrite = imageMetaDataDataBaseFile.canWrite();
+
+                        if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && canWrite) {
+                            imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+                            imddbituc.setRepositoryPath(repositoryPath);
+                            imddbituc.setImageMetaDataItems(imageMetaDataDataBase.getImageMetaDataItems());
+
+                            ac.setImageMetaDataDataBaseFileLoaded(true);
+                        }
+
+                        /**
+                         * Populate the image repository model with any
+                         * unpopulated paths.
+                         */
+                        if(!imageRepositoryListModel.contains(iri)) {
+                            imageRepositoryListModel.add(iri);
+                        }
+
+                        ac.setImageMetaDataDataBaseFileWritable(canWrite);
+
+                        if (canWrite) {
+                            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                        }
+                        else {
+                            thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+                        }
+
+                        thumbNailsPanelHeading.removeListeners();
 
                         if (ac.isRestartNeeded()) {
-                          displayInformationMessage(lang.get("common.application.restart.needed"));
+                            displayInformationMessage(lang.get("common.application.restart.needed"));
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * When an item, row, in the file selection tree is clicked with the "right
+     * click" mouse button, then this method is called, and as result one of the
+     * actions take place:
+     * <p/>
+     * 1: a context menu is displayed, in which the possibility to add the
+     * selected row (a file path) to the list of directories in which all
+     * directories which contains JPEG images shall automatically be added to
+     * the meta data base repository when such kind of directory is selected in
+     * the file tree or the file path shall be added to a list whith directories
+     * in which any directory containing JPEG images will not be automatically
+     * added to the repository of image meta data files.
+     * <p/>
+     * 2: An popup, saying that the selected path is already part of one of the
+     * lists described in point 1.
+     *
+     * @param totalPath
+     *            is the selected path in the file tree
+     * @param event
+     *            is the {@link MouseEvent} that was fired when the tree was
+     *            clicked.
+     */
+    private void handleRightClickOnFileTreeItem(String totalPath, MouseEvent event) {
+        File selectedPath = new File(totalPath);
+
+        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
+
+            RepositoryExceptions repositoryExceptions = Config.getInstance().get().getRepository().getExceptions();
+
+            boolean isParent = false;
+            boolean allwaysAdd = false;
+
+            for (File addAutomatically : repositoryExceptions.getAllwaysAdd()) {
+                if (selectedPath.getAbsolutePath().equals((addAutomatically).getAbsolutePath())) {
+                    allwaysAdd = true;
+                    break;
+                } else {
+                    if (PathUtil.isChild(selectedPath, addAutomatically)) {
+                        allwaysAdd = true;
+                        break;
+                    } else if (PathUtil.isParent(selectedPath, addAutomatically)) {
+                        isParent = true;
+                        break;
+                    }
+                }
+            }
+
+            boolean neverAdd = false;
+
+            for (File doNotAddAutomatically : repositoryExceptions.getNeverAdd()) {
+                if (selectedPath.getAbsolutePath().equals((doNotAddAutomatically).getAbsolutePath())) {
+                    neverAdd = true;
+                    break;
+                } else {
+                    if (PathUtil.isChild(selectedPath, doNotAddAutomatically)) {
+                        neverAdd = true;
+                        break;
+                    } else if (PathUtil.isParent(selectedPath, doNotAddAutomatically)) {
+                        isParent = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!allwaysAdd && !neverAdd && !isParent) {
+                popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
+                popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
+                rightClickMenuDirectoryTree.show(event.getComponent(), event.getX(), event.getY());
+            } else {
+                if (allwaysAdd) {
+                    displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.allways.add"));
+                } else if (neverAdd) {
+                    displayInformationMessage(totalPath + " " + lang.get("imagerepository.directory.already.added.to.never.add"));
+                } else {
+                    displayInformationMessage(lang.get("imagerepository.directory.is.parent.to.already.added.directory"));
                 }
             }
         }
@@ -3917,6 +4034,60 @@ public class MainGUI extends JFrame {
         }
     }
 
+//    private class AddSelecetedPathToImageRepository implements ActionListener {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//
+//            ApplicationContext ac = ApplicationContext.getInstance();
+//
+//            File repositoryPath = ac.getSourcePath();
+//
+//            File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
+//
+//            // If the there exists no image meta data file at
+//            // the selected path then such kind of file shall
+//            // be created.
+//            if (!imageMetaDataDataBaseFile.exists()) {
+//                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
+//                    return;
+//                }
+//            }
+//
+//            // Deserialize a newly created or an already existing
+//            // image meta data file.
+//            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_CONTEXT);
+//
+//            Logger logger = Logger.getInstance();
+//
+//            if (result) {
+//                ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
+//                ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+//
+//                // Populate the image repository model with the currently selected
+//                // path.
+//                ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
+//                imageRepositoryListModel.add(iri);
+//
+//                // Add the path to the configuration, so the entry will be
+//                // persisted upon application exit.
+//                configuration.getRepository().getPaths().getPaths().add(repositoryPath);
+//
+//                logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
+//            } else {
+//                logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
+//            }
+//            ac.setImageMetaDataDataBaseFileLoaded(result);
+//            ac.setImageMetaDataDataBaseFileWritable(true);
+//
+//            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+//            thumbNailsPanelHeading.removeListeners();
+//
+//            if (ac.isRestartNeeded()) {
+//                displayInformationMessage(lang.get("common.application.restart.needed"));
+//            }
+//        }
+//    }
+
     private class AddSelecetedPathToImageRepository implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -3927,48 +4098,106 @@ public class MainGUI extends JFrame {
 
             File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
 
-            // If the there exists no image meta data file at
-            // the selected path then such kind of file shall
-            // be created.
-            if (!imageMetaDataDataBaseFile.exists()) {
-                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
-                    return;
+            try {
+                ImageMetaDataDataBase imageMetaDataDataBase;
+
+                /**
+                 * If an image meta data base file already exists in the
+                 * selected directory, then deserialize that file and make some
+                 * validity testing.
+                 */
+                if (imageMetaDataDataBaseFile.exists()) {
+                    // TODO: add schema validation of the imageMetaDataDataBaseFile
+                    imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                    // TODO: check file consistency:
+                    // 1: amount of referenced files
+                    // 2: The names of referenced files.
+
+                    ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                 }
-            }
+                /**
+                 * Create the image meta data base file if not already
+                 * existing.
+                 */
+                else {
+                    if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
+                        return;
+                    }
+                    imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                }
 
-            // Deserialize a newly created or an already existing
-            // image meta data file.
-            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_CONTEXT);
+                /**
+                 * Populate the image meta data context with content form the
+                 * deserialized XML file.
+                 */
+                ImageMetaDataDataBaseHandler.populateImageMetaDataContext(imageMetaDataDataBase.getJavaPEGId(), imageMetaDataDataBase.getImageMetaDataItems());
 
-            Logger logger = Logger.getInstance();
+                /**
+                 * If the meta data base file is created by this JavaPEG
+                 * instance then shall it be possible to make changes to it, if
+                 * the file is writable for the current user.
+                 */
+                boolean canWrite = imageMetaDataDataBaseFile.canWrite();
 
-            if (result) {
-                ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
-                ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
+                if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && canWrite) {
+                    ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 
-                // Populate the image repository model with the currently selected
-                // path.
+                    imddbituc.setRepositoryPath(repositoryPath);
+                    imddbituc.setImageMetaDataItems(imageMetaDataDataBase.getImageMetaDataItems());
+
+                    ac.setImageMetaDataDataBaseFileLoaded(true);
+                }
+
+                /**
+                 * Populate the image repository model with the currently
+                 * selected path.
+                 */
                 ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
                 imageRepositoryListModel.add(iri);
 
-                // Add the path to the configuration, so the entry will be
-                // persisted upon application exit.
+                /**
+                 * Add the path to the configuration, so the entry will be
+                 * persisted upon application exit.
+                 */
                 configuration.getRepository().getPaths().getPaths().add(repositoryPath);
 
+                ac.setImageMetaDataDataBaseFileWritable(canWrite);
+
+                if (canWrite) {
+                    thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                }
+                else {
+                    thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+                }
+
+                thumbNailsPanelHeading.removeListeners();
+
+                if (ac.isRestartNeeded()) {
+                    displayInformationMessage(lang.get("common.application.restart.needed"));
+                }
+
                 logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
-            } else {
-                logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
-            }
-            ac.setImageMetaDataDataBaseFileLoaded(result);
-            ac.setImageMetaDataDataBaseFileWritable(true);
-
-            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
-            thumbNailsPanelHeading.removeListeners();
-
-            if (ac.isRestartNeeded()) {
-                displayInformationMessage(lang.get("common.application.restart.needed"));
+            } catch (ParserConfigurationException pcex) {
+                logger.logERROR("Could not create a DocumentBuilder");
+                logger.logERROR(pcex);
+            } catch (SAXException sex) {
+                logger.logERROR("Could not parse file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                logger.logERROR(sex);
+            } catch (IOException iox) {
+                logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                logger.logERROR(iox);
+            } catch (XPathExpressionException xpee) {
+                logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                logger.logERROR(xpee);
             }
         }
+    }
+
+    /**
+     * @return the instance of this Class.
+     */
+    private Component getThis() {
+        return this;
     }
 
     private class RemoveSelecetedPathFromImageRepository implements ActionListener {
