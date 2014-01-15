@@ -1,6 +1,9 @@
 3.0:
 ====
-- Implement name check of files against the names in the the meta data xml files at application start. 
+- Implement name check of files against the names in the the meta data xml files at application start.
+- Add help section which describes how to make an inconsistent meta data base file consistent.
+- Remove the "Automatically delete image repository items when they do not exist" from Configuration.
+- Add test against schema before the meta data base file deserialization takes place.  
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
