@@ -12,6 +12,14 @@ import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.language.Language;
 import moller.util.io.Status;
 
+/**
+ * This Rendered class is used in the Configurations GUI and specifically by the
+ * {@link JList} that contains all the configured {@link ImageRepositoryItem}
+ * objects.
+ *
+ * @author Fredrik
+ *
+ */
 public class CustomCellRenderer    extends    JLabel implements ListCellRenderer<Object> {
 
     private static final long serialVersionUID = 1L;
@@ -44,14 +52,17 @@ public class CustomCellRenderer    extends    JLabel implements ListCellRenderer
             this.setBackground(new Color(251,231,128));
             this.setToolTipText(lang.get("category.categoriesModel.repositoryNotAvailable"));
             break;
+        case INCONSISTENT:
+            this.setBackground(new Color(255,0,51));
+            this.setToolTipText(lang.get("category.categoriesModel.repositoryInconsistent"));
+            break;
+        default:
+            break;
         }
 
         if(isSelected) {
-            this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-        } else {
-            this.setBorder(null);
-
+            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            this.setBackground(new Color(127,127,127));
         }
         return this;
     }

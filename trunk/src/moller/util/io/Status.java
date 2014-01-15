@@ -3,5 +3,6 @@ package moller.util.io;
 public enum Status {
 	EXISTS,
 	NOT_AVAILABLE,
-	DOES_NOT_EXIST
+	DOES_NOT_EXIST,
+	INCONSISTENT;
 }
