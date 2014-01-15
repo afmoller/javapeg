@@ -36,16 +36,6 @@ public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
         this.pathStatus = pathStatus;
     }
 
-    public void setPathStatus(String pathStatus) {
-        if(pathStatus.equals("EXISTS")) {
-            this.pathStatus = Status.EXISTS;
-        } else if(pathStatus.equals("NOT_AVAILABLE")) {
-            this.pathStatus = Status.NOT_AVAILABLE;
-        } else if(pathStatus.equals("DOES_NOT_EXIST")) {
-            this.pathStatus = Status.DOES_NOT_EXIST;
-        }
-    }
-
     @Override
     public int compareTo(ImageRepositoryItem iri) {
         return this.path.compareTo(iri.getPath());
