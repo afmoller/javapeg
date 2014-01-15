@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
@@ -198,6 +199,7 @@ import moller.util.java.SystemProperties;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.os.OsUtil;
+import moller.util.result.ResultObject;
 import moller.util.string.ParseVMArguments;
 import moller.util.string.StringUtil;
 import moller.util.version.containers.VersionInformation;
@@ -2746,9 +2748,10 @@ public class MainGUI extends JFrame {
                                 if (imageMetaDataDataBaseFile.exists()) {
                                     // TODO: add schema validation of the imageMetaDataDataBaseFile
                                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
-                                    // TODO: check file consistency:
-                                    // 1: amount of referenced files
-                                    // 2: The names of referenced files.
+
+                                    if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                        // TODO: Display error message and return.
+                                    }
 
                                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                                 }
@@ -4109,9 +4112,10 @@ public class MainGUI extends JFrame {
                 if (imageMetaDataDataBaseFile.exists()) {
                     // TODO: add schema validation of the imageMetaDataDataBaseFile
                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
-                    // TODO: check file consistency:
-                    // 1: amount of referenced files
-                    // 2: The names of referenced files.
+
+                    if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                        // TODO: Display error message and return.
+                    }
 
                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                 }
@@ -4559,9 +4563,9 @@ public class MainGUI extends JFrame {
      * @author Fredrik
      *
      */
-    private class ImageMetaDataContextLoader extends SwingWorker<Boolean, String> {
+    private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String>, String> {
         @Override
-        protected Boolean doInBackground() throws Exception {
+        protected ResultObject<String> doInBackground() throws Exception {
             return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath(), imageRepositoryListModel, logger);
         }
 
@@ -4595,6 +4599,27 @@ public class MainGUI extends JFrame {
             cameraModelMetaDataValue.setEnabled(true);
             cameraModelMetaDataValue.setMouseListener(mdtl);
 
+            try {
+                ResultObject<String> result = get();
+
+                if (result.getObject() != null) {
+                    StringBuilder errorMessage = new StringBuilder();
+                    // TODO: Remove hard coded string
+                    errorMessage.append("The following meta data files are inconsistent with the content on disk, and until they are consistent, the will be ignored by JavaPEG");
+                    errorMessage.append(C.LS);
+                    errorMessage.append(C.LS);
+                    errorMessage.append(result.getObject());
+                    errorMessage.append(C.LS);
+                    // TODO: Remove hard coded string
+                    errorMessage.append("Please consult the JavaPEG help section to get tips on how to make the meta data file(s) consistent");
+
+                    displayErrorMessage(errorMessage.toString());
+                }
+            } catch (InterruptedException e) {
+                logger.logERROR(e);
+            } catch (ExecutionException e) {
+                logger.logERROR(e);
+            }
             logger.logDEBUG("Image Meta Data Context initialization Finished");
         }
     }

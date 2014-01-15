@@ -22,6 +22,8 @@ import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
 import moller.util.io.DirectoryUtil;
+import moller.util.io.Status;
+import moller.util.result.ResultObject;
 
 import org.xml.sax.SAXException;
 
@@ -291,7 +293,10 @@ public class ImageMetaDataContextUtil {
      *         to be restarted after the de-serialization of all image meta data
      *         files.
      */
-    public static boolean initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+    public static ResultObject<String> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+
+        ResultObject<String> result = null;
+        StringBuilder errorMessage = new StringBuilder();
 
         if(repositoryPaths != null) {
             for (File repositoryPath : repositoryPaths.getPaths()) {
@@ -309,13 +314,17 @@ public class ImageMetaDataContextUtil {
                             // TODO: check imageMetaDataDataBaseFile against schema
                             ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                             String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
-                            // TODO: check file consistency:
-                            // 1: amount of referenced files
-                            // 2: The names of referenced files.
 
-                            ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
-                            ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
-                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+                            if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
+                                ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
+                                logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+                            } else {
+                                errorMessage.append(imageMetaDataDataBaseFile);
+                                errorMessage.append(C.LS);
+                                logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is incosistent with the content in directory: " + repositoryPath);
+                                iri.setPathStatus(Status.INCONSISTENT);
+                            }
                         } catch (ParserConfigurationException pcex) {
                             logger.logERROR("Could not create a DocumentBuilder");
                             logger.logERROR(pcex);
@@ -344,9 +353,17 @@ public class ImageMetaDataContextUtil {
                         imageRepositoryListModel.add(iri);
                     }
                     break;
+                case INCONSISTENT:
+                    // Do nothing here, since this status can only be set after
+                    // an validation process.
+                    break;
+                default:
+                    break;
                 }
             }
         }
-        return ApplicationContext.getInstance().isRestartNeeded();
+
+        result = new ResultObject<String>(ApplicationContext.getInstance().isRestartNeeded(), errorMessage.toString().length() > 0 ? errorMessage.toString() : null);
+        return result;
     }
 }
