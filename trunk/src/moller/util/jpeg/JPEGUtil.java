@@ -64,6 +64,15 @@ public class JPEGUtil {
 		}
 	}
 
+    /**
+     * This method test whether or not an {@link File} object containing a JPEG
+     * file is possible for the Java Runtime to decode.
+     *
+     * @param jpegFile
+     *            specifies a {@link File} object that contains a JPEG file.
+     * @return true if it is possible to decode the JPEG file referenced by the
+     *         jpegFile parameter.
+     */
 	private static boolean canDecodeJPEGFile(File jpegFile) {
 	    try {
             return ImageIO.read(jpegFile) == null ? false : true;
@@ -167,7 +176,6 @@ public class JPEGUtil {
 		}
 		return jpegFiles;
 	}
-
 
 	/**
 	 * This method returns a boolean value indicating whether a directory
