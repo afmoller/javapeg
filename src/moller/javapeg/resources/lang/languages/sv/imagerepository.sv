@@ -38,3 +38,9 @@ imagerepository.directory.not.added            = Vald katalog är inte en del av
 imagerepository.directory.already.added.to.allways.add         = har redan blivit tillagd i listan av kataloger för vilka\n bilder alltid kommer att läggas till automatiskt till bilddatabasen.
 imagerepository.directory.already.added.to.never.add           = har redan blivit tillagd i listan av kataloger för vilka\n bilder aldrig kommer att läggas till automatiskt till bilddatabasen.
 imagerepository.directory.is.parent.to.already.added.directory = En underkatalog har redan blivit tillagd i listan av kataloger\n för vilka bilder alltid kommer att läggas till automatiskt \ntill bilddatabasen eller i listan av kataloger för vilka bilder\n aldrig kommer att läggas till automatiskt till bilddatabasen.\n\nSe JavaPEGs inställningar för detaljer.
+
+imagerepository.missing = Bilddatabasfilen: %s saknas
+imagerepository.repository.inconsistent = Åtgärden abröts eftersom en bilddatabasfil redan existerar i den valda katalogen\nmen den kunde inte läggas till i listan med bilddatabasfiler, eftersom den är inkonsistent med innehållet\ni den valda katalogen\n\nVänligen titta i JavaPEG-hjälpen för att få tips på om hur bilddatabasfilen kan göras konsistent
+
+imagerepository.repositories.inconsistent = Följande bilddatabasfil(er) är inkonsistenta med innehållet på disk och de kommer att ignoreras av JavaPEG tills de är konsistenta.
+imagerepository.repositories.inconsistent.repair = Vänligen titta i JavaPEG-hjälpen för att få tips på om hur en bilddatabasfil kan göras konsistent

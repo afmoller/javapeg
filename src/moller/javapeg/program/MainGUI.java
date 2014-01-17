@@ -2749,15 +2749,16 @@ public class MainGUI extends JFrame {
                                     // TODO: add schema validation of the imageMetaDataDataBaseFile
                                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
 
-                                    if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
-                                        // TODO: Display error message and return.
+                                    if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                        displayErrorMessage(lang.get("imagerepository.repository.inconsistent"));
+                                        return;
                                     }
 
                                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                                 }
                                 /**
-                                 * Create the image meta data base file if not already
-                                 * existing.
+                                 * Create the image meta data base file if it is
+                                 * not already existing.
                                  */
                                 else {
                                     if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
@@ -2801,28 +2802,28 @@ public class MainGUI extends JFrame {
                                 // TODO: add schema validation of the imageMetaDataDataBaseFile
                                 try {
                                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
-                                    // TODO: check file consistency:
-                                    // 1: amount of referenced files
-                                    // 2: The names of referenced files.
+                                    if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                        displayErrorMessage(lang.get("imagerepository.repository.inconsistent"));
+                                        return;
+                                    }
 
                                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
-                                } catch (XPathExpressionException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                } catch (ParserConfigurationException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                } catch (SAXException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
+                                } catch (ParserConfigurationException pcex) {
+                                    logger.logERROR("Could not create a DocumentBuilder");
+                                    logger.logERROR(pcex);
+                                } catch (SAXException sex) {
+                                    logger.logERROR("Could not parse file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                    logger.logERROR(sex);
+                                } catch (IOException iox) {
+                                    logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                    logger.logERROR(iox);
+                                } catch (XPathExpressionException xpee) {
+                                    logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
+                                    logger.logERROR(xpee);
                                 }
                             } else {
-                                //                                    TODO: Fix hard coded string
                                 displayErrorMessage("The metadata base file: " + imageMetaDataDataBaseFile.getAbsolutePath() + " is missing");
-                                logger.logERROR("The metadata base file: " + imageMetaDataDataBaseFile.getAbsolutePath() + " is missing");
+                                logger.logERROR(String.format(lang.get("imagerepository.missing"), imageMetaDataDataBaseFile.getAbsolutePath()));
                                 return;
                             }
                         }
@@ -4037,60 +4038,6 @@ public class MainGUI extends JFrame {
         }
     }
 
-//    private class AddSelecetedPathToImageRepository implements ActionListener {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//
-//            ApplicationContext ac = ApplicationContext.getInstance();
-//
-//            File repositoryPath = ac.getSourcePath();
-//
-//            File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
-//
-//            // If the there exists no image meta data file at
-//            // the selected path then such kind of file shall
-//            // be created.
-//            if (!imageMetaDataDataBaseFile.exists()) {
-//                if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
-//                    return;
-//                }
-//            }
-//
-//            // Deserialize a newly created or an already existing
-//            // image meta data file.
-//            boolean result = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_CONTEXT);
-//
-//            Logger logger = Logger.getInstance();
-//
-//            if (result) {
-//                ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setRepositoryPath(repositoryPath);
-//                ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME), Context.IMAGE_META_DATA_DATA_BASE_ITEMS_TO_UPDATE_CONTEXT);
-//
-//                // Populate the image repository model with the currently selected
-//                // path.
-//                ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
-//                imageRepositoryListModel.add(iri);
-//
-//                // Add the path to the configuration, so the entry will be
-//                // persisted upon application exit.
-//                configuration.getRepository().getPaths().getPaths().add(repositoryPath);
-//
-//                logger.logDEBUG("Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " was successfully de serialized");
-//            } else {
-//                logger.logERROR("Could not deserialize Image Meta Data Base File: " + imageMetaDataDataBaseFile.getAbsolutePath());
-//            }
-//            ac.setImageMetaDataDataBaseFileLoaded(result);
-//            ac.setImageMetaDataDataBaseFileWritable(true);
-//
-//            thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
-//            thumbNailsPanelHeading.removeListeners();
-//
-//            if (ac.isRestartNeeded()) {
-//                displayInformationMessage(lang.get("common.application.restart.needed"));
-//            }
-//        }
-//    }
-
     private class AddSelecetedPathToImageRepository implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -4113,8 +4060,9 @@ public class MainGUI extends JFrame {
                     // TODO: add schema validation of the imageMetaDataDataBaseFile
                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
 
-                    if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
-                        // TODO: Display error message and return.
+                    if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                        displayErrorMessage(lang.get("imagerepository.repository.inconsistent"));
+                        return;
                     }
 
                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
@@ -4604,14 +4552,12 @@ public class MainGUI extends JFrame {
 
                 if (result.getObject() != null) {
                     StringBuilder errorMessage = new StringBuilder();
-                    // TODO: Remove hard coded string
-                    errorMessage.append("The following meta data files are inconsistent with the content on disk, and until they are consistent, the will be ignored by JavaPEG");
+                    errorMessage.append(lang.get("imagerepository.repositories.inconsistent"));
                     errorMessage.append(C.LS);
                     errorMessage.append(C.LS);
                     errorMessage.append(result.getObject());
                     errorMessage.append(C.LS);
-                    // TODO: Remove hard coded string
-                    errorMessage.append("Please consult the JavaPEG help section to get tips on how to make the meta data file(s) consistent");
+                    errorMessage.append(lang.get("imagerepository.repositories.inconsistent.repair"));
 
                     displayErrorMessage(errorMessage.toString());
                 }

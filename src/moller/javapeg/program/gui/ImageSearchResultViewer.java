@@ -361,30 +361,32 @@ public class ImageSearchResultViewer extends JFrame {
         MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
 
         for (File image : images) {
-            JPEGThumbNail tn =    JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
+            if (image.exists()) {
+                JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
 
-            JToggleButton thumbContainer = new JToggleButton();
-            thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-            thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-            if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
-                thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
+                JToggleButton thumbContainer = new JToggleButton();
+                thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+                thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+                if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
+                    thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
+                }
+                thumbContainer.setActionCommand(image.getAbsolutePath());
+                thumbContainer.setName("deselected");
+                thumbContainer.addActionListener(thumbNailListener);
+                thumbContainer.addMouseListener(mouseRightClickButtonListener);
+
+                columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+                columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+
+                int width = thumbContainer.getIcon().getIconWidth();
+
+                if (width > iconWidth) {
+                    iconWidth = width;
+                }
+
+                thumbNailsPanel.add(thumbContainer);
+                thumbNailsPanel.updateUI();
             }
-            thumbContainer.setActionCommand(image.getAbsolutePath());
-            thumbContainer.setName("deselected");
-            thumbContainer.addActionListener(thumbNailListener);
-            thumbContainer.addMouseListener(mouseRightClickButtonListener);
-
-            columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
-            columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
-
-            int width = thumbContainer.getIcon().getIconWidth();
-
-            if (width > iconWidth) {
-                iconWidth = width;
-            }
-
-            thumbNailsPanel.add(thumbContainer);
-            thumbNailsPanel.updateUI();
         }
         setStatusMessages();
     }

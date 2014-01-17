@@ -290,9 +290,9 @@ public class ImageResizer extends JFrame {
         imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
         try {
             removePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException iox) {
+            logger.logERROR("Could not load image: resources/images/viewtab/remove.gif, see stacktrace for details");
+            logger.logERROR(iox);
         }
         removeSelectedImagesButton = new JButton();
         removeSelectedImagesButton.setIcon(removePictureImageIcon);

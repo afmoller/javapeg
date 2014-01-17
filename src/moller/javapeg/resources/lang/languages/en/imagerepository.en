@@ -38,3 +38,9 @@ imagerepository.directory.not.added            = Selected directory is not part 
 imagerepository.directory.already.added.to.allways.add         = has already been added to the list of directories for which\n images always will be automatically added to the image repository
 imagerepository.directory.already.added.to.never.add           = has already been added to the list of directories for which\n images never will be automatically added to the image repository
 imagerepository.directory.is.parent.to.already.added.directory = A sub directory has already been added to either the list of\n directories for which images always will be automatically added to \nthe image repository or to the list of directories for which images never \nwill be automatically added to the image repository\n\nSee JavaPEGs configuration for details.
+
+imagerepository.missing = The metadata base file: %s is missing
+imagerepository.repository.inconsistent = Action aborted because an meta data base file already exists in the selected directory\nbut it could not be added to the list of image meta data base files, since the file is inconsistent\nwith the content in the selected directory\n\nPlease consult the JavaPEG help to get tips on how to make the meta data file consistent
+
+imagerepository.repositories.inconsistent = The following meta data files are inconsistent with the content on disk, and until they are consistent, the will be ignored by JavaPEG
+imagerepository.repositories.inconsistent.repair = Please consult the JavaPEG help to get tips on how to make the meta data file(s) consistent
