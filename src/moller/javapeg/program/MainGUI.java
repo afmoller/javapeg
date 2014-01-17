@@ -31,6 +31,8 @@ import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -3524,8 +3526,17 @@ public class MainGUI extends JFrame {
 
             Set<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
 
-            if (foundImages.size() > 0) {
-                ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImages);
+            List<File> foundImagesAsList = new ArrayList<File>(foundImages);
+            Collections.sort(foundImagesAsList, new Comparator<File>() {
+                @Override
+                public int compare(File f1, File f2)
+                {
+                    return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+                }
+            });
+
+            if (foundImagesAsList.size() > 0) {
+                ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImagesAsList);
                 imagesearchResultViewer.setVisible(true);
             } else {
                 displayInformationMessage(lang.get("findimage.searchImages.result"));
