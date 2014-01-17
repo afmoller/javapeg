@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -82,7 +81,7 @@ public class ImageSearchResultViewer extends JFrame {
     private JPanel thumbNailsPanel;
     private JScrollPane scrollpane;
 
-    public ImageSearchResultViewer(Set<File> imagesToView) {
+    public ImageSearchResultViewer(List<File> imagesToView) {
 
         configuration = Config.getInstance().get();
         logger = Logger.getInstance();
@@ -355,7 +354,7 @@ public class ImageSearchResultViewer extends JFrame {
         toggleButton.setName("deselected");
     }
 
-    private void executeLoadThumbnailsProcess(Set<File> images) {
+    private void executeLoadThumbnailsProcess(List<File> images) {
 
         ThumbNailListener thumbNailListener = new ThumbNailListener();
         MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
