@@ -82,12 +82,12 @@ public class ConfigUtil {
      * @param configSchemaLocation
      *            is the location of the schema to use for checking the validity
      *            of the XML file specified by the parameter configFile
-     * @return a {@link ResultObject} indicating whether or not the confiuration
+     * @return a {@link ResultObject} indicating whether or not the configuration
      *         file is valid against the specified schema. It the configuration
      *         file is not valid the is the cause of invalidity attached as an
      *         exception
      */
-    public static ResultObject isConfigValid(File configFile, String configSchemaLocation) {
+    public static ResultObject<Exception> isConfigValid(File configFile, String configSchemaLocation) {
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
@@ -97,9 +97,9 @@ public class ConfigUtil {
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(configFile));
 
-            return new ResultObject(true, null);
+            return new ResultObject<Exception>(true, null);
         } catch (SAXException | IOException exception) {
-            return new ResultObject(false, exception);
+            return new ResultObject<Exception>(false, exception);
         }
     }
 
@@ -132,12 +132,12 @@ public class ConfigUtil {
         }
     }
 
-    public static ResultObject restoreConfigurationFromBackup(File configurationBackupFile) {
+    public static ResultObject<Exception> restoreConfigurationFromBackup(File configurationBackupFile) {
         try {
             ZipUtil.unzip(configurationBackupFile, configurationBackupFile.getParentFile());
         } catch (IOException iox) {
-            return new ResultObject(false, iox);
+            return new ResultObject<Exception>(false, iox);
         }
-        return new ResultObject(true, null);
+        return new ResultObject<Exception>(true, null);
     }
 }

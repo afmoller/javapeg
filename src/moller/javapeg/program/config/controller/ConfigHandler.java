@@ -60,9 +60,9 @@ public class ConfigHandler {
 
         StringBuilder errorMessage = null;
 
-        ResultObject validationResult = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+        ResultObject<Exception> validationResult = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
         Boolean couldStoreCorruptConfiguration = false;
-        ResultObject restoreResult = null;
+        ResultObject<Exception> restoreResult = null;
 
         if (!validationResult.getResult()) {
 
@@ -98,7 +98,7 @@ public class ConfigHandler {
             }
 
             if (restoreResult.getResult()) {
-                ResultObject validationResultForRestoredConfiguration = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+                ResultObject<Exception> validationResultForRestoredConfiguration = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
 
                 if (!validationResultForRestoredConfiguration.getResult()) {
                     errorMessage.append(C.LS);

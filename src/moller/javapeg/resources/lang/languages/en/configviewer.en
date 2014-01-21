@@ -98,6 +98,7 @@ configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Automa
 configviewer.tag.imageRepositories.label.exists                         = Exists
 configviewer.tag.imageRepositories.label.notAvailable                   = Not Available
 configviewer.tag.imageRepositories.label.doesNotExist                   = Does not exist
+configviewer.tag.imageRepositories.label.inconsistent                   = Inconsistent
 configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = The following path(s) will be removed from the image repository:
 configviewer.tag.imageRepositories.label.addAutomatically               = Add directory with non added images automatically to image repository
 configviewer.tag.imageRepositories.label.askToAdd                       = Ask to add directory with non added images to image repository 

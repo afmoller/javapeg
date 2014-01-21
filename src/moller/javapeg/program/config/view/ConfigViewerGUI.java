@@ -1807,6 +1807,11 @@ public class ConfigViewerGUI extends JFrame {
                 case DOES_NOT_EXIST:
                     status = lang.get("configviewer.tag.imageRepositories.label.doesNotExist");
                     break;
+                case INCONSISTENT:
+                    status = lang.get("configviewer.tag.imageRepositories.label.inconsistent");
+                    break;
+                default:
+                    break;
                 }
                 paths.append(iri.getPath() + " (" + status + ")");
                 paths.append(C.LS);

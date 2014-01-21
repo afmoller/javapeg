@@ -46,6 +46,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
+import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
@@ -197,7 +198,14 @@ public class ImageMetaDataDataBaseHandler {
                 XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
                                      "files that exists in the directory where this XML file is to be found." + C.LS +
                                      "The content of this file is used and modified by the application JavaPEG", w);
-                XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", "version", C.IMAGE_META_DATA_DATA_BASE_VERSION, w);
+
+                XMLAttribute[] xmlAttributes = new XMLAttribute[4];
+                xmlAttributes[0] = new XMLAttribute("version", C.IMAGE_META_DATA_DATA_BASE_VERSION);
+                xmlAttributes[1] = new XMLAttribute("xmlns", "http://moller.javapeg.metadata.com");
+                xmlAttributes[2] = new XMLAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                xmlAttributes[3] = new XMLAttribute("xsi:schemaLocation", "http://moller.javapeg.metadata.com metadata.xsd");
+
+                XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", xmlAttributes, w);
                 XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.JAVAPEG_ID, configuration.getJavapegClientId(), w);
 
                 logger.logDEBUG("Start writing image elements");
