@@ -98,6 +98,7 @@ configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip = Ta aut
 configviewer.tag.imageRepositories.label.exists                         = Existerar
 configviewer.tag.imageRepositories.label.notAvailable                   = Inte Tillgänglig
 configviewer.tag.imageRepositories.label.doesNotExist                   = Existerar inte
+configviewer.tag.imageRepositories.label.inconsistent                   = Inkonsistent
 configviewer.tag.imageRepositories.label.pathsWillBeRemoved             = Följande sökväg(ar) kommer att tas bort från bilddatabasen:
 configviewer.tag.imageRepositories.label.addAutomatically               = Lägg automatiskt till en katalog med icke tillagda bilder till bilddatabasen
 configviewer.tag.imageRepositories.label.askToAdd                       = Fråga för att lägga till katalog med icke tillagda bilder till bilddatabasen 
