@@ -4,27 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import moller.javapeg.program.enumerations.ConfigurationSchema;
+import moller.javapeg.program.enumerations.MetaDataSchema;
 
 public class SchemaUtil {
 
-//    private static String CONFIG_001_XSD = "config-001.xsd";
+    public static ConfigurationSchema getConfigurationSchemaForVersion(String javapegVersion) {
 
-//    private static String[] schemas = new String[]{CONFIG_001_XSD};
-
-    public static ConfigurationSchema getConfigurationSchemaForVersion(String version) {
-
-        switch (version) {
+        switch (javapegVersion) {
         case "3.0":
             return ConfigurationSchema.CONFIG_001_XSD;
 
         default:
-            throw new IllegalArgumentException("Unsupported version: " + version);
+            throw new IllegalArgumentException("Unsupported version: " + javapegVersion);
         }
     }
-
-//    public static String[] getSchemas() {
-//        return schemas;
-//    }
 
     public static List<String> getTransformersForSchema(ConfigurationSchema configurationSchema) {
 
@@ -40,6 +33,15 @@ public class SchemaUtil {
         }
 
         return transformers;
+    }
 
+    public static MetaDataSchema getMetaDataSchemaForVersion(String javapegVersion) {
+        switch (javapegVersion) {
+        case "3.0":
+            return MetaDataSchema.META_DATA_001_XSD;
+
+        default:
+            throw new IllegalArgumentException("Unsupported version: " + javapegVersion);
+        }
     }
 }

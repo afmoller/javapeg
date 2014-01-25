@@ -20,6 +20,7 @@ category.categoriesModel.repositoryExists       = Bilddatabassökväg existerar.
 category.categoriesModel.repositoryNotExists    = Bilddatabassökväg existerar inte.
 category.categoriesModel.repositoryNotAvailable = Bilddatabassökväg inte tillgänglig.
 category.categoriesModel.repositoryInconsistent = Bilddatabas är inkonsistent.
+category.categoriesModel.repositoryCorrupt      = Bilddatabas är korrupt.
 
 category.metadatavalue.selection.mode   = URVALSMETOD
 category.metadatavalue.selection.values = VÄRDEN

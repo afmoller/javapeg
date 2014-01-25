@@ -1810,6 +1810,9 @@ public class ConfigViewerGUI extends JFrame {
                 case INCONSISTENT:
                     status = lang.get("configviewer.tag.imageRepositories.label.inconsistent");
                     break;
+                case CORRUPT:
+                    status = lang.get("configviewer.tag.imageRepositories.label.corrupt");
+                    break;
                 default:
                     break;
                 }

@@ -56,6 +56,11 @@ public class CustomCellRenderer    extends    JLabel implements ListCellRenderer
             this.setBackground(new Color(255,0,51));
             this.setToolTipText(lang.get("category.categoriesModel.repositoryInconsistent"));
             break;
+        case CORRUPT:
+            this.setBackground(new Color(255,0,51));
+            this.setToolTipText(lang.get("category.categoriesModel.repositoryCorrupt"));
+            break;
+
         default:
             break;
         }

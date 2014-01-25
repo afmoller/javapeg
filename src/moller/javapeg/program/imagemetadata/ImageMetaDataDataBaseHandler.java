@@ -22,11 +22,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.categories.CategoryImageExifMetaData;
@@ -35,6 +37,7 @@ import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
+import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
@@ -46,6 +49,7 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
+import moller.util.result.ResultObject;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
@@ -623,5 +627,23 @@ public class ImageMetaDataDataBaseHandler {
             logger.logERROR(iox);
             return false;
         }
+    }
+
+    /**
+     * Utility method which tests if an meta data base file (XML) is valid
+     * (checked against an Schema).
+     *
+     * @param metaDataBaseFile
+     *            is the meta data base file to check the validity of
+     * @return a {@link ResultObject} indicating whether or not the meta data
+     *         base file is valid against the specified schema. If the meta data
+     *         base file is not valid then is the cause of invalidity attached
+     *         as an exception
+     */
+    public static ResultObject<Exception> isMetaDataBaseValid(File metaDataBaseFile) {
+        String configSchemaLocation = C.PATH_SCHEMA_META_DATA + SchemaUtil.getMetaDataSchemaForVersion(C.JAVAPEG_VERSION).getSchemaName();
+        StreamSource configSchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(configSchemaLocation));
+
+        return XMLUtil.validate(metaDataBaseFile, configSchema);
     }
 }

@@ -2748,7 +2748,11 @@ public class MainGUI extends JFrame {
                                  * validity testing.
                                  */
                                 if (imageMetaDataDataBaseFile.exists()) {
-                                    // TODO: add schema validation of the imageMetaDataDataBaseFile
+                                    if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
+                                        displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
+                                        return;
+                                    }
+
                                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
 
                                     if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
@@ -2801,7 +2805,10 @@ public class MainGUI extends JFrame {
                              * validity testing.
                              */
                             if (imageMetaDataDataBaseFile.exists()) {
-                                // TODO: add schema validation of the imageMetaDataDataBaseFile
+                                if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
+                                    displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
+                                    return;
+                                }
                                 try {
                                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                                     if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
@@ -4068,7 +4075,10 @@ public class MainGUI extends JFrame {
                  * validity testing.
                  */
                 if (imageMetaDataDataBaseFile.exists()) {
-                    // TODO: add schema validation of the imageMetaDataDataBaseFile
+                    if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
+                        displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
+                        return;
+                    }
                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
 
                     if (!ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
@@ -4522,9 +4532,9 @@ public class MainGUI extends JFrame {
      * @author Fredrik
      *
      */
-    private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String>, String> {
+    private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String[]>, String> {
         @Override
-        protected ResultObject<String> doInBackground() throws Exception {
+        protected ResultObject<String[]> doInBackground() throws Exception {
             return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath(), imageRepositoryListModel, logger);
         }
 
@@ -4559,17 +4569,32 @@ public class MainGUI extends JFrame {
             cameraModelMetaDataValue.setMouseListener(mdtl);
 
             try {
-                ResultObject<String> result = get();
+                ResultObject<String[]> result = get();
 
-                if (result.getObject() != null) {
+                String[] errorMessages = result.getObject();
+
+                if (errorMessages[0] != null || errorMessages[1] != null) {
                     StringBuilder errorMessage = new StringBuilder();
-                    errorMessage.append(lang.get("imagerepository.repositories.inconsistent"));
-                    errorMessage.append(C.LS);
-                    errorMessage.append(C.LS);
-                    errorMessage.append(result.getObject());
-                    errorMessage.append(C.LS);
-                    errorMessage.append(lang.get("imagerepository.repositories.inconsistent.repair"));
 
+                    if (errorMessages[0] != null) {
+                        errorMessage.append(lang.get("imagerepository.repositories.inconsistent"));
+                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS);
+                        errorMessage.append(errorMessages[0]);
+                        errorMessage.append(C.LS);
+                        errorMessage.append(lang.get("imagerepository.repositories.inconsistent.repair"));
+                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS);
+                    }
+
+                    if (errorMessages[1] != null) {
+                        errorMessage.append(lang.get("imagerepository.repositories.corrupt"));
+                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS);
+                        errorMessage.append(errorMessages[1]);
+                        errorMessage.append(C.LS);
+                        errorMessage.append(lang.get("imagerepository.repositories.corrupt.repair"));
+                    }
                     displayErrorMessage(errorMessage.toString());
                 }
             } catch (InterruptedException e) {

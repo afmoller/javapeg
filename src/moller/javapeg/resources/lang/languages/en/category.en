@@ -20,6 +20,7 @@ category.categoriesModel.repositoryExists       = Image Repository path exists.
 category.categoriesModel.repositoryNotExists    = Image Repository path does not exist.
 category.categoriesModel.repositoryNotAvailable = Image Repository is not available.
 category.categoriesModel.repositoryInconsistent = Image Repository is inconsistent.
+category.categoriesModel.repositoryCorrupt      = Image Repository is corrupt.
 
 category.metadatavalue.selection.mode   = SELECTION MODE
 category.metadatavalue.selection.values = VALUES
