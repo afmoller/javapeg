@@ -41,6 +41,10 @@ imagerepository.directory.is.parent.to.already.added.directory = A sub directory
 
 imagerepository.missing = The metadata base file: %s is missing
 imagerepository.repository.inconsistent = Action aborted because an meta data base file already exists in the selected directory\nbut it could not be added to the list of image meta data base files, since the file is inconsistent\nwith the content in the selected directory\n\nPlease consult the JavaPEG help to get tips on how to make the meta data file consistent
+imagerepository.repository.corrupt = Action aborted because an meta data base file already exists in the selected directory\nbut it could not be added to the list of image meta data base files, since the file is corrupt\n\nPlease consult the JavaPEG help to get tips on how to make the meta data file valid
 
 imagerepository.repositories.inconsistent = The following meta data files are inconsistent with the content on disk, and until they are consistent, the will be ignored by JavaPEG
 imagerepository.repositories.inconsistent.repair = Please consult the JavaPEG help to get tips on how to make the meta data file(s) consistent
+
+imagerepository.repositories.corrupt = The following meta data files are corrupt, and until they are valid, the will be ignored by JavaPEG
+imagerepository.repositories.corrupt.repair = Please consult the JavaPEG help to get tips on how to make the meta data file(s) valid.

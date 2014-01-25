@@ -8,21 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.util.io.FileUtil;
 import moller.util.io.ZipUtil;
 import moller.util.result.ResultObject;
-
-import org.xml.sax.SAXException;
 
 public class ConfigUtil {
 
@@ -71,36 +62,6 @@ public class ConfigUtil {
      */
     public static String generateClientId() {
         return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Utility method which tests if an configuration file (XML) is valid
-     * (checked against an Schema).
-     *
-     * @param configFile
-     *            is the configuration file to check the validity of
-     * @param configSchemaLocation
-     *            is the location of the schema to use for checking the validity
-     *            of the XML file specified by the parameter configFile
-     * @return a {@link ResultObject} indicating whether or not the configuration
-     *         file is valid against the specified schema. It the configuration
-     *         file is not valid the is the cause of invalidity attached as an
-     *         exception
-     */
-    public static ResultObject<Exception> isConfigValid(File configFile, String configSchemaLocation) {
-        try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-            StreamSource repositorySchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(configSchemaLocation));
-            Schema schema = factory.newSchema(repositorySchema);
-
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(configFile));
-
-            return new ResultObject<Exception>(true, null);
-        } catch (SAXException | IOException exception) {
-            return new ResultObject<Exception>(false, exception);
-        }
     }
 
     /**

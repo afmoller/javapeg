@@ -73,4 +73,5 @@ public class C {
     public final static String UTF8 = "UTF-8";
 
     public final static String PATH_SCHEMAS = "resources/schema/";
+    public final static String PATH_SCHEMA_META_DATA = "resources/schema/metadata/";
 }

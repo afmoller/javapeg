@@ -293,10 +293,11 @@ public class ImageMetaDataContextUtil {
      *         to be restarted after the de-serialization of all image meta data
      *         files.
      */
-    public static ResultObject<String> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
 
-        ResultObject<String> result = null;
-        StringBuilder errorMessage = new StringBuilder();
+        ResultObject<String[]> result = null;
+        StringBuilder inconsistenceErrorMessage = new StringBuilder();
+        StringBuilder corruptErrorMessage = new StringBuilder();
 
         if(repositoryPaths != null) {
             for (File repositoryPath : repositoryPaths.getPaths()) {
@@ -311,19 +312,28 @@ public class ImageMetaDataContextUtil {
                     if (imageMetaDataDataBaseFile.exists()) {
 
                         try {
-                            // TODO: check imageMetaDataDataBaseFile against schema
-                            ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
-                            String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
+                            ResultObject<Exception> metaDataBaseValidation = ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile);
 
-                            if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
-                                ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
-                                ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
-                                logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+                            if (!metaDataBaseValidation.getResult()) {
+                                inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
+                                inconsistenceErrorMessage.append(C.LS);
+                                logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is corrupt");
+                                logger.logERROR(metaDataBaseValidation.getObject());
+                                iri.setPathStatus(Status.CORRUPT);
                             } else {
-                                errorMessage.append(imageMetaDataDataBaseFile);
-                                errorMessage.append(C.LS);
-                                logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is incosistent with the content in directory: " + repositoryPath);
-                                iri.setPathStatus(Status.INCONSISTENT);
+                                ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
+                                String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
+
+                                if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                    ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
+                                    ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
+                                    logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
+                                } else {
+                                    inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
+                                    inconsistenceErrorMessage.append(C.LS);
+                                    logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is incosistent with the content in directory: " + repositoryPath);
+                                    iri.setPathStatus(Status.INCONSISTENT);
+                                }
                             }
                         } catch (ParserConfigurationException pcex) {
                             logger.logERROR("Could not create a DocumentBuilder");
@@ -363,7 +373,17 @@ public class ImageMetaDataContextUtil {
             }
         }
 
-        result = new ResultObject<String>(ApplicationContext.getInstance().isRestartNeeded(), errorMessage.toString().length() > 0 ? errorMessage.toString() : null);
+        String[] errorMessages = new String[2];
+
+        if (!inconsistenceErrorMessage.toString().isEmpty()) {
+            errorMessages[0] = inconsistenceErrorMessage.toString();
+        }
+
+        if (!corruptErrorMessage.toString().isEmpty()) {
+            errorMessages[1] = corruptErrorMessage.toString();
+        }
+
+        result = new ResultObject<String[]>(ApplicationContext.getInstance().isRestartNeeded(), errorMessages);
         return result;
     }
 }

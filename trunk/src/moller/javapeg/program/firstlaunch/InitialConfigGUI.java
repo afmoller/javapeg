@@ -29,11 +29,11 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.xml.transform.stream.StreamSource;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.ConfigurationSchema;
 import moller.javapeg.program.language.ISO639;
@@ -42,6 +42,7 @@ import moller.util.DefaultLookAndFeel;
 import moller.util.gui.Screen;
 import moller.util.io.DirectoryUtil;
 import moller.util.java.SystemProperties;
+import moller.util.xml.XMLUtil;
 
 /**
  * This class is used to display an initial configuration GUI the first time
@@ -331,8 +332,9 @@ public class InitialConfigGUI extends JDialog {
 
                     for (ConfigurationSchema schema : ConfigurationSchema.values()) {
                         String configSchemaLocation = C.PATH_SCHEMAS + schema.getSchemaName();
+                        StreamSource configSchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(configSchemaLocation));
 
-                        if (ConfigUtil.isConfigValid(potentialJavaPEGConfigurationsFile, configSchemaLocation).getResult()) {
+                        if (XMLUtil.validate(potentialJavaPEGConfigurationsFile, configSchema).getResult()) {
                             javaPegConfigurationFiles.add(potentialJavaPEGConfigurationsFile);
                             break;
                         }

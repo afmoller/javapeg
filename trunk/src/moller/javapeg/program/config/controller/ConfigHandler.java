@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -57,10 +58,11 @@ public class ConfigHandler {
     public static Configuration load(File configFile) {
 
         String configSchemaLocation = C.PATH_SCHEMAS + SchemaUtil.getConfigurationSchemaForVersion(C.JAVAPEG_VERSION).getSchemaName();
+        StreamSource configSchema = new StreamSource(StartJavaPEG.class.getResourceAsStream(configSchemaLocation));
 
         StringBuilder errorMessage = null;
 
-        ResultObject<Exception> validationResult = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+        ResultObject<Exception> validationResult = XMLUtil.validate(configFile, configSchema);
         Boolean couldStoreCorruptConfiguration = false;
         ResultObject<Exception> restoreResult = null;
 
@@ -98,7 +100,8 @@ public class ConfigHandler {
             }
 
             if (restoreResult.getResult()) {
-                ResultObject<Exception> validationResultForRestoredConfiguration = ConfigUtil.isConfigValid(configFile, configSchemaLocation);
+
+                ResultObject<Exception> validationResultForRestoredConfiguration = XMLUtil.validate(configFile, configSchema);
 
                 if (!validationResultForRestoredConfiguration.getResult()) {
                     errorMessage.append(C.LS);

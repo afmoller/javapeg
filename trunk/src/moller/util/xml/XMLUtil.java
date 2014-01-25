@@ -1,9 +1,20 @@
 package moller.util.xml;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import moller.util.result.ResultObject;
 import moller.util.string.Tab;
+
+import org.xml.sax.SAXException;
 
 public class XMLUtil {
 
@@ -230,7 +241,31 @@ public class XMLUtil {
         xmlsw.writeCharacters(indent);
     }
 
+    /**
+     * Utility method which tests if an configuration file (XML) is valid
+     * (checked against an Schema).
+     *
+     * @param configFile
+     *            is the configuration file to check the validity of
+     * @param configSchemaLocation
+     *            is the location of the schema to use for checking the validity
+     *            of the XML file specified by the parameter configFile
+     * @return a {@link ResultObject} indicating whether or not the configuration
+     *         file is valid against the specified schema. It the configuration
+     *         file is not valid the is the cause of invalidity attached as an
+     *         exception
+     */
+    public static ResultObject<Exception> validate(File xmlFileToValidate,  StreamSource schemaToValidateAgainst) {
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(schemaToValidateAgainst);
 
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(xmlFileToValidate));
 
-
+            return new ResultObject<Exception>(true, null);
+        } catch (SAXException | IOException exception) {
+            return new ResultObject<Exception>(false, exception);
+        }
+    }
 }

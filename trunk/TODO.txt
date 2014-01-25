@@ -1,6 +1,5 @@
 3.0:
 ====
-- Add test against schema before the meta data base file deserialization takes place.  
 - Add help section which describes how to make an inconsistent meta data base file consistent.
 - Remove the "Automatically delete image repository items when they do not exist" from Configuration.
 - Test with more images from different cameras.
