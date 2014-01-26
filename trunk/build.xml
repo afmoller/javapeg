@@ -43,6 +43,7 @@
 				<include name="**/categoryimportexport.en" />
 				<include name="**/common.en" />
 				<include name="**/configviewer.en" />
+				<include name="**/helpviewer.en" />
 				<include name="**/imagemerge.en" />
 				<include name="**/imagerepository.en" />
 				<include name="**/imageresizer.en" />
@@ -53,6 +54,7 @@
 				<include name="**/categoryimportexport.sv" />
 				<include name="**/common.sv" />
 				<include name="**/configviewer.sv" />
+				<include name="**/helpviewer.sv" />
 				<include name="**/imagemerge.sv" />
 				<include name="**/imagerepository.sv" />
 				<include name="**/imageresizer.sv" />
@@ -63,6 +65,7 @@
 				<include name="**/layout.xsd" />
 				<include name="**/style.css" />
 				<include name="**/config-001.xsd" />
+				<include name="**/meta-data-001.xsd" />
 				<include name="**/conf.xml" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
@@ -72,6 +75,8 @@
 				<include name="**/configuration_tag" />
 				<include name="**/configuration_thumbnail" />
 				<include name="**/configuration_updates" />
+				<include name="**/help_metadatabase_corrupt" />
+				<include name="**/help_metadatabase_inconsistent" />
 				<include name="**/references" />
 				<include name="**/thumbnail_overview" />
 				<include name="**/user_manual_image_search" />
@@ -91,7 +96,7 @@
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
-				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar" />
+				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar lib/imgscalr-lib-4.2.jar" />
 			</manifest>
 			<fileset dir="build">
 				<exclude name="**/util/**" />
@@ -174,6 +179,7 @@
 	                <include name="TODO.txt" />
 	                <include name="libraries/metadata-extractor-2.6.4.jar" />
 	            	<include name="libraries/xmpcore.jar" />
+	            	<include name="libraries/imgscalr-lib-4.2.jar" />
 	            </fileset>
 	        </zip>
 	    </target>

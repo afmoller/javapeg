@@ -76,6 +76,7 @@ public class Language {
         InputStreamReader langFileCommon               = null;
         InputStreamReader langFileConfigViewer         = null;
         InputStreamReader langFileCategory             = null;
+        InputStreamReader langFileHelpViewer           = null;
         InputStreamReader langFileImageRepository      = null;
         InputStreamReader langFileImageResizer         = null;
         InputStreamReader langFileCategoryImportExport = null;
@@ -106,6 +107,7 @@ public class Language {
             langFileCommon               = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/common."               + languageCode), C.UTF8);
             langFileConfigViewer         = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/configviewer."         + languageCode), C.UTF8);
             langFileCategory             = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/category."             + languageCode), C.UTF8);
+            langFileHelpViewer           = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/helpviewer."           + languageCode), C.UTF8);
             langFileImageRepository      = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagerepository."      + languageCode), C.UTF8);
             langFileImageResizer         = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageresizer."         + languageCode), C.UTF8);
             langFileCategoryImportExport = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/categoryimportexport." + languageCode), C.UTF8);
@@ -116,6 +118,7 @@ public class Language {
             loadAndLog("common." + languageCode, langFileCommon);
             loadAndLog("configviewer." + languageCode, langFileConfigViewer);
             loadAndLog("category." + languageCode, langFileCategory);
+            loadAndLog("helpviewer." + languageCode, langFileHelpViewer);
             loadAndLog("imagerepository." + languageCode, langFileImageRepository);
             loadAndLog("imageresizer." + languageCode, langFileImageResizer);
             loadAndLog("categoryimportexport." + languageCode, langFileCategoryImportExport);
@@ -134,6 +137,7 @@ public class Language {
             StreamUtil.close(langFileCommon, true);
             StreamUtil.close(langFileConfigViewer, true);
             StreamUtil.close(langFileCategory, true);
+            StreamUtil.close(langFileHelpViewer, true);
             StreamUtil.close(langFileImageRepository, true);
             StreamUtil.close(langFileImageResizer, true);
             StreamUtil.close(langFileImageMerge, true);

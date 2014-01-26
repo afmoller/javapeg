@@ -122,6 +122,7 @@
             <file src="../lib/Util.jar"                           targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
             <file src="../libraries/metadata-extractor-2.6.4.jar" targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
             <file src="../libraries/xmpcore.jar"                  targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/imgscalr-lib-4.2.jar"         targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
             <file src="firstLaunch/firstLaunch"                   targetdir="${USER_HOME}${FILE_SEPARATOR}javapeg-${APP_VER}"/>
         </pack>
     </packs>
