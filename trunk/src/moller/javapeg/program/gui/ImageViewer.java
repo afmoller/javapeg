@@ -13,6 +13,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -48,6 +50,7 @@ import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.ImageViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
@@ -142,6 +145,20 @@ public class ImageViewer extends JFrame {
         this.createStatusPanel();
         this.addListeners();
         this.createImage(imagesToView.get(0).getAbsolutePath());
+        this.initiateButtonStates();
+    }
+
+    /**
+     * This method sets the persisted states of the toggle buttons found in the
+     * ImageViewer.
+     */
+    private void initiateButtonStates() {
+        if (configuration.getImageViewerState().isAutomaticallyResizeImages()) {
+            automaticAdjustToWindowSizeJToggleButton.setSelected(true);
+        }
+        if (configuration.getImageViewerState().isAutomaticallyRotateImages()) {
+            automaticRotateToggleButton.doClick();
+        }
     }
 
     // Create Main Window
@@ -428,6 +445,7 @@ public class ImageViewer extends JFrame {
 
     private void addListeners() {
         this.addWindowListener(new WindowDestroyer());
+        imageBackground.addComponentListener(new ImageBackgroundResizeListener());
         previousJButton.addActionListener(new ToolBarButtonPrevious());
         nextJButton.addActionListener(new ToolBarButtonNext());
         adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
@@ -455,6 +473,11 @@ public class ImageViewer extends JFrame {
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerSize());
+
+        ImageViewerState imageViewerState = configuration.getImageViewerState();
+
+        imageViewerState.setAutomaticallyResizeImages(automaticAdjustToWindowSizeJToggleButton.isSelected());
+        imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
     }
 
     private void removeCustomKeyEventDispatcher() {
@@ -495,6 +518,7 @@ public class ImageViewer extends JFrame {
 
         // Rotate image if necessary and automatic rotation is selected.
         if(automaticRotateToggleButton.isSelected()) {
+            currentGUIImageRotation = 0;
             img = rotateAccordingToExif(thePicture, img);
         }
 
@@ -628,6 +652,12 @@ public class ImageViewer extends JFrame {
             }
         }
         return image;
+    }
+
+    public void resizeImage() {
+        if (this.isVisible()) {
+            adjustToWindowSizeJButton.doClick();
+        }
     }
 
     private class WindowDestroyer extends WindowAdapter {
@@ -916,6 +946,24 @@ public class ImageViewer extends JFrame {
 
         public synchronized boolean isRunning() {
             return isRunning;
+        }
+    }
+
+    /**
+     * Listener class that listens to size changes of the image background
+     * {@link JPanel} and automatically adjusts the displayed image if the
+     * "automatic resize" button is selected.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ImageBackgroundResizeListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+
+            if (automaticAdjustToWindowSizeJToggleButton.isSelected()) {
+                createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+            }
         }
     }
 }

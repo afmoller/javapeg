@@ -12,6 +12,7 @@
             <xs:element name="language"           type="config:Language" />
             <xs:element name="renameImages"       type="config:RenameImages" />
             <xs:element name="resizeImages"       type="config:ResizeImages" />
+            <xs:element name="imageViewerState"   type="config:ImageViewerState" />
             <xs:element name="tagImages"          type="config:TagImages" />
             <xs:element name="thumbNail"          type="config:ThumbNail" />
             <xs:element name="toolTips"           type="config:ToolTips" />
@@ -139,6 +140,14 @@
             </xs:element>
         </xs:all>
     </xs:complexType>
+    
+    <xs:complexType name="ImageViewerState">
+        <xs:all>
+            <xs:element name="automaticallyRotateImages" type="xs:boolean" />
+            <xs:element name="automaticallyResizeImages" type="xs:boolean" />
+        </xs:all>
+    </xs:complexType>
+    
     
     <xs:complexType name="TagImages">
         <xs:all>

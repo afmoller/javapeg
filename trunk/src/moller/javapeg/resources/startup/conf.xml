@@ -99,6 +99,10 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <pathDestination/>
     <selectedQualityIndex>0</selectedQualityIndex>
   </resizeImages>
+  <imageViewerState>
+    <automaticallyRotateImages>false</automaticallyRotateImages>
+    <automaticallyResizeImages>false</automaticallyResizeImages>
+  </imageViewerState>
   <tagImages>
     <categories>
       <warnWhenRemove>true</warnWhenRemove>

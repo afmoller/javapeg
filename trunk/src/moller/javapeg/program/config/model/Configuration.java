@@ -21,6 +21,7 @@ public class Configuration {
     private Language language;
     private RenameImages renameImages;
     private ResizeImages resizeImages;
+    private ImageViewerState imageViewerState;
     private TagImages tagImages;
     private ThumbNail thumbNail;
     private ToolTips toolTips;
@@ -48,6 +49,9 @@ public class Configuration {
     }
     public ResizeImages getResizeImages() {
         return resizeImages;
+    }
+    public ImageViewerState getImageViewerState() {
+        return imageViewerState;
     }
     public TagImages getTagImages() {
         return tagImages;
@@ -87,6 +91,9 @@ public class Configuration {
     }
     public void setResizeImages(ResizeImages resizeImages) {
         this.resizeImages = resizeImages;
+    }
+    public void setImageViewerState(ImageViewerState imageViewerState) {
+        this.imageViewerState = imageViewerState;
     }
     public void setTagImages(TagImages tagImages) {
         this.tagImages = tagImages;
