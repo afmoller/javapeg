@@ -158,7 +158,6 @@
     
     <xs:complexType name="TagImagesPaths">
         <xs:all>
-            <xs:element name="automaticallyRemoveNonExistingImagePath" type="xs:boolean" />
             <xs:element name="addToRepositoryPolicy" type="xs:int" />
         </xs:all>
     </xs:complexType>

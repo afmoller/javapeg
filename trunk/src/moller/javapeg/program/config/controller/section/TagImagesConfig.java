@@ -48,7 +48,6 @@ public class TagImagesConfig {
 
         try {
             tagImagesPaths.setAddToRepositoryPolicy(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.ADD_TO_REPOSITORY_POLICY, pathsNode, XPathConstants.STRING), 1));
-            tagImagesPaths.setAutomaticallyRemoveNonExistingImagePath(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATH, pathsNode, XPathConstants.STRING)));
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Could not get image paths", e);
         }
@@ -96,7 +95,6 @@ public class TagImagesConfig {
         //  PATHS start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.PATHS, baseIndent, xmlsw);
 
-        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATH, Tab.SIX, Boolean.toString(tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ADD_TO_REPOSITORY_POLICY, Tab.SIX, Integer.toString(tagImagesPaths.getAddToRepositoryPolicy()), xmlsw);
 
         //  PATHS end

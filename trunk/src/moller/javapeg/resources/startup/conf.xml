@@ -106,7 +106,6 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <orRadioButtonIsSelected>true</orRadioButtonIsSelected>
     </categories>
     <paths>
-      <automaticallyRemoveNonExistingImagePath>false</automaticallyRemoveNonExistingImagePath>
       <addToRepositoryPolicy>2</addToRepositoryPolicy>
     </paths>
     <preview>

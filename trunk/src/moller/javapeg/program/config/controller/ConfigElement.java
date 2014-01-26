@@ -56,7 +56,6 @@ public class ConfigElement {
     public static final String PREVIEW = "preview";
     public static final String USE_EMBEDDED_THUMBNAIL = "useEmbeddedThumbnail";
     public static final String ADD_TO_REPOSITORY_POLICY = "addToRepositoryPolicy";
-    public static final String AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATH = "automaticallyRemoveNonExistingImagePath";
     public static final String OR_RADIO_BUTTON_IS_SELECTED = "orRadioButtonIsSelected";
     public static final String WARN_WHEN_REMOVE = "warnWhenRemove";
     public static final String WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES = "warnWhenRemoveWithSubCategories";
