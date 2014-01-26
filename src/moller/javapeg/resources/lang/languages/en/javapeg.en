@@ -245,33 +245,6 @@ information.window.versionInformationWindowTitle = Version information
 picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
 
 ##############################################################################################################
-# H E L P  V I E W E R                                                                                       #
-##############################################################################################################
-helpViewerGUI.window.locationError = Could not set window location according to settings. See logs for details 
-helpViewerGUI.window.title         = Help
-helpViewerGUI.errorMessage         = Could not load help file, see log file for details.
-
-helpViewerGUI.tree.content                    = Content
-helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
-helpViewerGUI.tree.programHelpMerge           = MERGE IMAGES
-helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
-helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
-helpViewerGUI.tree.programHelpImagesTag       = TAG IMAGES
-helpViewerGUI.tree.programHelpImagesSearch    = SEARCH IMAGES
-helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
-helpViewerGUI.tree.programHelpImageResizer    = IMAGE RESIZER
-helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
-helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
-helpViewerGUI.tree.references                 = REFERENCES / CREDITS
-helpViewerGUI.tree.configuration              = Configuration
-helpViewerGUI.tree.logging                    = LOGGING
-helpViewerGUI.tree.updates                    = UPDATES
-helpViewerGUI.tree.rename                     = RENAME
-helpViewerGUI.tree.language                   = LANGUAGE
-helpViewerGUI.tree.thumbnail                  = THUMBNAIL
-helpViewerGUI.tree.tag                        = TAG
-
-##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
 ##############################################################################################################
 information.panel.informationLabel   = INFORMATION

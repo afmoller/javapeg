@@ -245,33 +245,6 @@ information.window.versionInformationWindowTitle = Versionsinformation
 picture.panel.pictureLabel = BILDER I VALD MAPP
 
 ##############################################################################################################
-# H E L P  V I E W E R                                                                                       #
-##############################################################################################################
-helpViewerGUI.window.locationError = Kunde inte sätta fönsterposition enligt konfigurationen. Se loggfil för detaljer.
-helpViewerGUI.window.title         = Hjälp
-helpViewerGUI.errorMessage         = Kunde inte ladda hjälpfil, se loggfil för detaljer.
-
-helpViewerGUI.tree.content                    = Innehåll
-helpViewerGUI.tree.programHelpOverView        = PROGRAMBESKRIVNING
-helpViewerGUI.tree.programHelpMerge           = SLÅ IHOP BILDER
-helpViewerGUI.tree.programHelpRename          = BYT NAMN PÅ BILDER
-helpViewerGUI.tree.programHelpViewImages      = VISA BILDER
-helpViewerGUI.tree.programHelpImagesTag       = TAGGA BILDER
-helpViewerGUI.tree.programHelpImagesSearch    = SÖK BILDER
-helpViewerGUI.tree.programHelpImageViewer     = BILDVISARE
-helpViewerGUI.tree.programHelpImageResizer    = BILDSTORLEKSÄNDRARE
-helpViewerGUI.tree.programHelpOverviewCreator = SKAPA TUMNAGELÖVERSIKT
-helpViewerGUI.tree.versionInformation         = VERSIONSINFORMATION
-helpViewerGUI.tree.references                 = REFERENSER / TACK TILL
-helpViewerGUI.tree.configuration              = Inställningar
-helpViewerGUI.tree.logging                    = LOGGNING
-helpViewerGUI.tree.updates                    = UPPDATERINGAR
-helpViewerGUI.tree.rename                     = NAMNBYTE
-helpViewerGUI.tree.language                   = SPRÅK
-helpViewerGUI.tree.thumbnail                  = TUMNAGEL
-helpViewerGUI.tree.tag                        = TAGGAR
-
-##############################################################################################################
 # I N F O R M A T I O N  P A N E L                                                                           #
 ##############################################################################################################
 information.panel.informationLabel   = INFORMATION
