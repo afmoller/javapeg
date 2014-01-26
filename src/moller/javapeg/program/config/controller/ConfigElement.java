@@ -92,4 +92,7 @@ public class ConfigElement {
     public static final String RESIZE_IMAGES = "resizeImages";
     public static final String SELECTED_QUALITY_INDEX = "selectedQualityIndex";
     public static final String IMAGE_CONFLICT_VIEWER = "imageConflictViewer";
+    public static final String AUTOMATICALLY_ROTATE_IMAGES = "automaticallyRotateImages";
+    public static final String AUTOMATICALLY_RESIZE_IMAGES = "automaticallyResizeImages";
+    public static final String IMAGE_VIEWER_STATE = "imageViewerState";
 }

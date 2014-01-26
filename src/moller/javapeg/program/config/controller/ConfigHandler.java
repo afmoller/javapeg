@@ -25,6 +25,7 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.controller.section.GUIConfig;
+import moller.javapeg.program.config.controller.section.ImageViewerStateConfig;
 import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
 import moller.javapeg.program.config.controller.section.JavapegClientIdConfig;
 import moller.javapeg.program.config.controller.section.LanguageConfig;
@@ -158,6 +159,7 @@ public class ConfigHandler {
             configuration.setLanguage(LanguageConfig.getLanguageConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LANGUAGE, doc, XPathConstants.NODE), xPath));
             configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RENAME_IMAGES, doc, XPathConstants.NODE), xPath));
             configuration.setResizeImages(ResizeImagesConfig.getResizeImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RESIZE_IMAGES, doc, XPathConstants.NODE), xPath));
+            configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.IMAGE_VIEWER_STATE, doc, XPathConstants.NODE), xPath));
             configuration.setRepository(RepositoryConfig.getRepositoryConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.REPOSITORY, doc, XPathConstants.NODE), xPath));
             configuration.setTagImages(TagImagesConfig.getTagImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TAG_IMAGES, doc, XPathConstants.NODE), xPath));
             configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.THUMBNAIL, doc, XPathConstants.NODE), xPath));
@@ -236,6 +238,9 @@ public class ConfigHandler {
 
             // RESIZE IMAGES
             ResizeImagesConfig.writeResizeImagesConfig(configuration.getResizeImages(),Tab.TWO, w);
+
+            // IMAGE VIEWER STATE
+            ImageViewerStateConfig.writeImageViewerStateConfig(configuration.getImageViewerState(),Tab.TWO, w);
 
             // TAG IMAGES
             TagImagesConfig.writeTagImagesConfig(configuration.getTagImages(), Tab.TWO, w);

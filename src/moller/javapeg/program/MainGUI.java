@@ -3487,6 +3487,15 @@ public class MainGUI extends JFrame {
 
                     imageViewer = new ImageViewer(imagesToView);
                     imageViewer.setVisible(true);
+
+                    // This can only be done when the image viewer is visible
+                    // and with an image loaded, otherwise does nothing happen
+                    // since the image is of size 0 pixels before the window is
+                    // displayed.
+                    if (configuration.getImageViewerState().isAutomaticallyResizeImages()) {
+                        imageViewer.resizeImage();
+                    }
+
                     ac.setImageViewerDisplayed(true);
                 }
             }
