@@ -190,7 +190,6 @@ public class ConfigViewerGUI extends JFrame {
     private JCheckBox warnWhenRemoveCategory;
     private JCheckBox warnWhenRemoveCategoryWithSubCategories;
 
-    private JCheckBox automaticallyRemoveNonExistingImagePathsCheckBox;
     private JButton removeSelectedImagePathsButton;
 
     private JList<ImportedCategories> importedCategoriesList;
@@ -234,7 +233,6 @@ public class ConfigViewerGUI extends JFrame {
     private boolean USE_EMBEDDED_THUMBNAIL;
     private boolean WARN_WHEN_REMOVE_CATEGORY;
     private boolean WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES;
-    private boolean AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX;
 
     public ConfigViewerGUI() {
         configuration = Config.getInstance().get();
@@ -279,7 +277,6 @@ public class ConfigViewerGUI extends JFrame {
         OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE = configuration.getToolTips().getOverviewImageViewerState();
         WARN_WHEN_REMOVE_CATEGORY = configuration.getTagImages().getCategories().getWarnWhenRemove();
         WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = configuration.getTagImages().getCategories().getWarnWhenRemoveWithSubCategories();
-        AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX = configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath();
         ADD_TO_IMAGEREPOSITOY_POLICY = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
     }
 
@@ -958,10 +955,6 @@ public class ConfigViewerGUI extends JFrame {
         JPanel imageRepositoriesAdditionModePanel = new JPanel(new GridBagLayout());
         imageRepositoriesAdditionModePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label")));
 
-        automaticallyRemoveNonExistingImagePathsCheckBox = new JCheckBox(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths"));
-        automaticallyRemoveNonExistingImagePathsCheckBox.setSelected(tagImagesPaths.getAutomaticallyRemoveNonExistingImagePath());
-        automaticallyRemoveNonExistingImagePathsCheckBox.setToolTipText(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths.tooltip"));
-
         GBHelper posImageRepositories = new GBHelper();
 
         imageRepositoriesAdditionModePanel.add(addAutomaticallyRadioButton, posImageRepositories.expandW());
@@ -1001,7 +994,6 @@ public class ConfigViewerGUI extends JFrame {
         GBHelper posButtonPanel = new GBHelper();
 
         buttonPanel.add(removeSelectedImagePathsButton, posButtonPanel.align(GridBagConstraints.WEST));
-        buttonPanel.add(automaticallyRemoveNonExistingImagePathsCheckBox, posButtonPanel.nextRow());
 
         GBHelper posImageRepositoriesContent = new GBHelper();
 
@@ -1148,7 +1140,6 @@ public class ConfigViewerGUI extends JFrame {
         TagImagesPaths tagImagesPaths = tagImages.getImagesPaths();
 
         tagImagesPaths.setAddToRepositoryPolicy(Integer.parseInt(getAddToRepositoryPolicy()));
-        tagImagesPaths.setAutomaticallyRemoveNonExistingImagePath(automaticallyRemoveNonExistingImagePathsCheckBox.isSelected());
 
         TagImagesPreview tagImagesPreview = tagImages.getPreview();
 
@@ -1386,10 +1377,6 @@ public class ConfigViewerGUI extends JFrame {
 
         if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
             displayMessage.append(lang.get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories") + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
-        }
-
-        if(AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX != automaticallyRemoveNonExistingImagePathsCheckBox.isSelected()) {
-            displayMessage.append(lang.get("configviewer.tag.imageRepositories.label.removeNonExistingPaths") + ": " + automaticallyRemoveNonExistingImagePathsCheckBox.isSelected() + " (" + AUTOMATICALLY_REMOVE_NON_EXISTING_IMAGE_PATHS_CHECKBOX + ")\n");
         }
 
         if(displayMessage.length() > 0) {

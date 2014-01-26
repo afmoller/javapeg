@@ -1,7 +1,7 @@
 3.0:
 ====
 - Add help section which describes how to make an inconsistent meta data base file consistent.
-- Remove the "Automatically delete image repository items when they do not exist" from Configuration.
+- Persist the state of the automatically rotate and resize buttons in the imageviewer
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files

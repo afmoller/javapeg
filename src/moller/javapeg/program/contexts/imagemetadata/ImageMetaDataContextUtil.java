@@ -293,7 +293,7 @@ public class ImageMetaDataContextUtil {
      *         to be restarted after the de-serialization of all image meta data
      *         files.
      */
-    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, boolean automaticallyRemoveNonExistingImagePath, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
 
         ResultObject<String[]> result = null;
         StringBuilder inconsistenceErrorMessage = new StringBuilder();
@@ -350,18 +350,14 @@ public class ImageMetaDataContextUtil {
                         }
                         imageRepositoryListModel.add(iri);
                     } else {
-                        if (!automaticallyRemoveNonExistingImagePath) {
-                            imageRepositoryListModel.add(iri);
-                        }
+                        imageRepositoryListModel.add(iri);
                     }
                     break;
                 case NOT_AVAILABLE:
                     imageRepositoryListModel.add(iri);
                     break;
                 case DOES_NOT_EXIST:
-                    if (!automaticallyRemoveNonExistingImagePath) {
-                        imageRepositoryListModel.add(iri);
-                    }
+                    imageRepositoryListModel.add(iri);
                     break;
                 case INCONSISTENT:
                     // Do nothing here, since this status can only be set after

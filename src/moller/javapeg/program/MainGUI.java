@@ -4535,7 +4535,7 @@ public class MainGUI extends JFrame {
     private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String[]>, String> {
         @Override
         protected ResultObject<String[]> doInBackground() throws Exception {
-            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), configuration.getTagImages().getImagesPaths().getAutomaticallyRemoveNonExistingImagePath(), imageRepositoryListModel, logger);
+            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), imageRepositoryListModel, logger);
         }
 
         @Override
