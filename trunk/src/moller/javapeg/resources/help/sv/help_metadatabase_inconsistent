@@ -1,0 +1,11 @@
+INKONSISTENT BILDDATABASFIL<LF>
+===========================<LF>
+En bilddatabasfil kan vara inkosstent på två sätt:<LF>
+<LF>
+1: Antalet bildfile som listas i bilddatabasfilen stämmer inte överrens med antalet bildfiler som verkligen finns i den katalog i vilken bilddatabasfilen är sparad.<LF> 
+<LF>
+2: Namnen på bildfilerna som listas i bilddatabasen stämmer inte överrens med namnen på de bildfiler som verkligen finns i den katalog i vilken bilddatabasfilen är sparad.<LF>
+<LF>
+LÖSNING<LF>
+=======<LF>
+Den inkonsistenta bilddatabasfilen måste öppnas i en texteditor och ändras så att den överrenstämmer med antalet bildfiler och namn på dessa, som finns in den katalog i vilken bilddatabasfilen är sparad.

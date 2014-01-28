@@ -1,0 +1,8 @@
+BILDDATABASFIL KORRUPT<LF>
+======================<LF>
+En bilddatabasfil är korrupt när dess innehåll inte följer det format som specifierats av JavaPEG (XML Schems (.xsd)). Om en bilddatabasfil är korrupt så betyder det att JavaPEG inte har möjligheten att läsa innehållet i bilddatabasfilen.<LF>
+<LF>
+Såvida bilddatabasfilen inte är manuellt ändrad, utanför JavaPEG, så skall inte detta kunna hända, och om det trots det händer är det förmodligen en defekt i JavaPEG.<LF>
+LÖSNING<LF>
+=======<LF>
+Om en bilddatabasfil är korrupt, så loggas anledningen till att den är korrupt i JavaPEGs loggfil. Öppna loggfilen i en texteditor och leta upp felmeddelandet och gör vad felmeddelandet beskriver om felmeddelandet kan relateras till en manuell ändring av bilddatabasfilen. Skapa annars en buggrapport genom att skicka ett meddelande på följande webbadress: https://sourceforge.net/users/fredrik_m  

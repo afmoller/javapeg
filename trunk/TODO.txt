@@ -1,6 +1,6 @@
 3.0:
 ====
-- Add help section which describes how to make an inconsistent meta data base file consistent.
+- Fix all compiler warnings
 - Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
