@@ -14,34 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.helpviewer;
+package moller.javapeg.program.datatype;
 
-public class UserObject {
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+
+import org.imgscalr.Scalr.Method;
+
+/**
+ * This class maps a {@link Method} object with a {@link String}. Typical use
+ * case is to add this kind of object to an {@link ComboBoxModel} and the add
+ * that {@link ComboBoxModel} to a {@link JComboBox}. In the {@link JComboBox}
+ * will the property {@link #displayString} be displayed.
+ *
+ * @author Fredrik
+ *
+ */
+public class ResizeQualityAndDisplayString {
 
     private String displayString;
-    private String identityString;
+    private Method method;
 
-    public UserObject(String displayString, String identityString) {
+    public ResizeQualityAndDisplayString(String displayString, Method method) {
+        super();
         this.displayString = displayString;
-        this.identityString = identityString;
+        this.method = method;
     }
-
     public String getDisplayString() {
         return displayString;
     }
-
-    public String getIdentityString() {
-        return identityString;
-    }
-
     public void setDisplayString(String displayString) {
         this.displayString = displayString;
     }
-
-    public void setIdentityString(String identityString) {
-        this.identityString = identityString;
+    public Method getMethod() {
+        return method;
     }
-
+    public void setMethod(Method method) {
+        this.method = method;
+    }
     @Override
     public String toString() {
         return displayString;

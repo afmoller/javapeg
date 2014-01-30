@@ -1,5 +1,6 @@
 3.0:
 ====
+- Add possibility to set the scale algorithm to use by the ImageViewer.
 - Fix all compiler warnings
 - Test with more images from different cameras.
 - Test all functionality.
@@ -12,6 +13,7 @@
 
 3.1:
 ====
+- Add meta data base statistics
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
 - Implement Context aware menu in the menu bar.

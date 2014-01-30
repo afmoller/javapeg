@@ -58,3 +58,12 @@ imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Add selected imag
 imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Copy selected image to system clip board
 imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Copy all images to system clip board
 imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Amount of images in search result
+
+##############################################################################################################
+# I M A G E  R E S I Z E  Q U A L I T Y                                                                      #
+##############################################################################################################
+imageviewer.combobox.resize.quality.automatic    = Automatic
+imageviewer.combobox.resize.quality.speed        = Speed
+imageviewer.combobox.resize.quality.balanced     = Balanced
+imageviewer.combobox.resize.quality.quality      = Quality
+imageviewer.combobox.resize.quality.ultraquality = Ultra quality
