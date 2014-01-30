@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) JavaPEG developers
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package moller.javapeg.program.gui;
 
 import java.awt.BorderLayout;
@@ -5,12 +21,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -20,6 +34,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,8 +42,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -55,6 +73,7 @@ import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.datatype.ResizeQualityAndDisplayString;
 import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -65,6 +84,10 @@ import moller.util.gui.Update;
 import moller.util.image.ImageUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
 public class ImageViewer extends JFrame {
 
@@ -97,6 +120,8 @@ public class ImageViewer extends JFrame {
     private JButton maximizeButton;
     private JButton minimizeButton;
 
+    private JComboBox<ResizeQualityAndDisplayString> resizeQuality;
+
     private JSplitPane imageMetaDataSplitPane;
 
     private JScrollPane overViewScrollpane;
@@ -124,8 +149,6 @@ public class ImageViewer extends JFrame {
 
     private OverviewButtonListener overviewButtonListener;
 
-    private final Toolkit toolkit;
-
     public ImageViewer(List<File> imagesToView) {
 
         configuration = Config.getInstance().get();
@@ -136,8 +159,6 @@ public class ImageViewer extends JFrame {
 
         imageToViewListIndex = 0;
         imagesToViewListSize = imagesToView.size();
-
-        toolkit = Toolkit.getDefaultToolkit();
 
         this.createMainFrame();
         this.createToolBar();
@@ -349,6 +370,24 @@ public class ImageViewer extends JFrame {
         rotateLeftButton = new JButton();
         rotateRightButton = new JButton();
 
+        ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
+        ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
+        ResizeQualityAndDisplayString three = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.balanced"), Method.BALANCED);
+        ResizeQualityAndDisplayString four = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.quality"), Method.QUALITY);
+        ResizeQualityAndDisplayString five = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.ultraquality"), Method.ULTRA_QUALITY);
+
+        ResizeQualityAndDisplayString[] qualityAndDisplayStrings = new ResizeQualityAndDisplayString[5];
+        qualityAndDisplayStrings[0] = one;
+        qualityAndDisplayStrings[1] = two;
+        qualityAndDisplayStrings[2] = three;
+        qualityAndDisplayStrings[3] = four;
+        qualityAndDisplayStrings[4] = five;
+
+        ComboBoxModel<ResizeQualityAndDisplayString> model = new DefaultComboBoxModel<ResizeQualityAndDisplayString>(qualityAndDisplayStrings);
+
+        resizeQuality = new JComboBox<ResizeQualityAndDisplayString>(model);
+        resizeQuality.setMaximumSize(resizeQuality.getPreferredSize());
+
         InputStream imageStream = null;
 
         ImageIcon previousImageIcon = new ImageIcon();
@@ -409,6 +448,7 @@ public class ImageViewer extends JFrame {
         toolBar.addSeparator();
         toolBar.add(automaticAdjustToWindowSizeJToggleButton);
         toolBar.add(adjustToWindowSizeJButton);
+        toolBar.add(resizeQuality);
         toolBar.addSeparator();
         toolBar.add(rotateLeftButton);
         toolBar.add(rotateRightButton);
@@ -504,53 +544,51 @@ public class ImageViewer extends JFrame {
         logger.logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
         logger.logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
 
-        // Load image from disk
-        Image img = toolkit.createImage(imagePath);
-
-        while (img.getWidth(null) < 0 || img.getHeight(null) < 0) {
-            try {
-                Thread.sleep(10);
-            } catch(InterruptedException ie) {
+        try {
+            // Load image from disk
+            thePicture = new File(imagePath);
+            BufferedImage img = ImageIO.read(thePicture);
+            // Rotate image if necessary and automatic rotation is selected.
+            if(automaticRotateToggleButton.isSelected()) {
+                currentGUIImageRotation = 0;
+                img = rotateAccordingToExif(thePicture, img);
             }
-        }
 
-        thePicture = new File(imagePath);
+            int imageWidth  = img.getWidth(null);
+            int imageHeight = img.getHeight(null);
 
-        // Rotate image if necessary and automatic rotation is selected.
-        if(automaticRotateToggleButton.isSelected()) {
-            currentGUIImageRotation = 0;
-            img = rotateAccordingToExif(thePicture, img);
-        }
+            setStatusMessages(imagePath, thePicture.length(), imageWidth, imageHeight);
 
-        int imageWidth  = img.getWidth(null);
-        int imageHeight = img.getHeight(null);
+            metaDataPanel.setMetaData(thePicture);
 
-        setStatusMessages(imagePath, thePicture.length(), imageWidth, imageHeight);
+            // Resize the image if necessary and automatic resizing is selected
+            if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
+                Rectangle visibleImageBackgroundRectangle = imageBackground.getVisibleRect();
 
-        metaDataPanel.setMetaData(thePicture);
+                double backgroundWidth = visibleImageBackgroundRectangle.getWidth();
+                double backgroundHeight = visibleImageBackgroundRectangle.getHeight();
 
-        // Resize the image if necessary and automatic resizing is selected
-        if(automaticAdjustToWindowSizeJToggleButton.isSelected()) {
-            Rectangle visibleImageBackgroundRectangle = imageBackground.getVisibleRect();
-
-            double backgroundWidth = visibleImageBackgroundRectangle.getWidth();
-            double backgroundHeight = visibleImageBackgroundRectangle.getHeight();
-
-            if((imageWidth > visibleImageBackgroundRectangle.getWidth())||(imageHeight > visibleImageBackgroundRectangle.getHeight())){
-                img = this.resizeImage(img, backgroundWidth, backgroundHeight, imageWidth, imageHeight);
+                if((imageWidth > visibleImageBackgroundRectangle.getWidth())||(imageHeight > visibleImageBackgroundRectangle.getHeight())){
+                    img = this.resizeImage(img, backgroundWidth, backgroundHeight, imageWidth, imageHeight);
+                }
             }
+
+            // Display the loaded and possibly rotated and resized image.
+            ImageIcon icon = new ImageIcon();
+            icon.setImage(img);
+
+            picture.setIcon(null);
+            picture.setIcon(icon);
+
+            imageBackground.removeAll();
+            imageBackground.updateUI();
+            imageBackground.add(picture, BorderLayout.CENTER);
+        } catch (IOException iox) {
+            logger.logERROR("Could not read the image: " + thePicture.getAbsolutePath());
+            logger.logERROR(iox);
+//            TODO: fix hard coded string
+            JOptionPane.showMessageDialog(this, "Could not read the image: " + thePicture.getAbsolutePath() + " See logfile for error details", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Display the loaded and possibly rotated and resized image.
-        ImageIcon icon = new ImageIcon();
-        icon.setImage(img);
-
-        picture.setIcon(null);
-        picture.setIcon(icon);
-
-        imageBackground.removeAll();
-        imageBackground.updateUI();
-        imageBackground.add(picture, BorderLayout.CENTER);
     }
 
     /**
@@ -570,7 +608,7 @@ public class ImageViewer extends JFrame {
      * @param img
      * @return
      */
-    private Image rotateAccordingToExif(File imageFile, Image img) {
+    private BufferedImage rotateAccordingToExif(File imageFile, BufferedImage img) {
         int rotationAccordingToExif;
 
         switch (MetaDataUtil.getOrientationTag(imageFile)) {
@@ -627,12 +665,15 @@ public class ImageViewer extends JFrame {
         logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
     }
 
-    private Image resizeImage(Image image, double backgroundWidth, double backgroundHeight, int imageWidth, int imageHeight) {
+    private BufferedImage resizeImage(BufferedImage image, double backgroundWidth, double backgroundHeight, int imageWidth, int imageHeight) {
+
+        Method resizeMethod = resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod();
+        System.out.println(resizeMethod);
 
         if((imageWidth > backgroundWidth) && (imageHeight <= backgroundHeight)) {
-            image = image.getScaledInstance((int)backgroundWidth, (int)(imageHeight/(imageWidth/backgroundWidth)), Image.SCALE_FAST);
+            image = Scalr.resize(image, resizeMethod, Mode.FIT_EXACT, (int)backgroundWidth, (int)(imageHeight/(imageWidth/backgroundWidth)));
         } else if((imageWidth <= backgroundWidth)&&(imageHeight>backgroundHeight)) {
-            image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)), (int)backgroundHeight, Image.SCALE_FAST);
+            image = Scalr.resize(image, resizeMethod, Mode.FIT_EXACT, (int)(imageWidth/(imageHeight/backgroundHeight)), (int)backgroundHeight);
         } else if((imageWidth>backgroundWidth)&&(imageHeight>backgroundHeight)) {
 
             int scrollBarPaddingHeight = 0;
@@ -646,9 +687,9 @@ public class ImageViewer extends JFrame {
             }
 
             if((imageWidth/backgroundWidth)>(imageHeight/backgroundHeight)) {
-                image = image.getScaledInstance((int)backgroundWidth + scrollBarPaddingWidth, (int)(imageHeight/(imageWidth/backgroundWidth)) + scrollBarPaddingWidth, Image.SCALE_FAST);
+                image = Scalr.resize(image, resizeMethod, Mode.FIT_EXACT, (int)backgroundWidth + scrollBarPaddingWidth, (int)(imageHeight/(imageWidth/backgroundWidth)) + scrollBarPaddingWidth);
             } else {
-                image = image.getScaledInstance((int)(imageWidth/(imageHeight/backgroundHeight)) + scrollBarPaddingHeight, (int)backgroundHeight + scrollBarPaddingHeight, Image.SCALE_FAST);
+                image = Scalr.resize(image, resizeMethod, Mode.FIT_EXACT, (int)(imageWidth/(imageHeight/backgroundHeight)) + scrollBarPaddingHeight, (int)backgroundHeight + scrollBarPaddingHeight);
             }
         }
         return image;
@@ -752,7 +793,7 @@ public class ImageViewer extends JFrame {
         }
     }
 
-    private Image rotateImageAccordingToExifAndCurrentGUIRotation(int rotationAccordingToExif, Image img) {
+    private BufferedImage rotateImageAccordingToExifAndCurrentGUIRotation(int rotationAccordingToExif, BufferedImage img) {
         if (currentGUIImageRotation == rotationAccordingToExif) {
             return img;
         }
@@ -765,7 +806,7 @@ public class ImageViewer extends JFrame {
         return rotateImage(img, angleToRotate);
     }
 
-    private Image rotateImage(Image image, int angle) {
+    private BufferedImage rotateImage(BufferedImage image, int angle) {
         updateCurrentGUIImageRotation(angle);
         return ImageUtil.rotateImage(image, angle);
     }
@@ -787,7 +828,7 @@ public class ImageViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImageIcon icon = (ImageIcon)picture.getIcon();
 
-            icon.setImage(rotateImage(icon.getImage(), -90));
+            icon.setImage(rotateImage((BufferedImage)icon.getImage(), -90));
 
             picture.setIcon(null);
             picture.setIcon(icon);
@@ -803,7 +844,7 @@ public class ImageViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImageIcon icon = (ImageIcon)picture.getIcon();
 
-            icon.setImage(rotateImage(icon.getImage(), 90));
+            icon.setImage(rotateImage((BufferedImage)icon.getImage(), 90));
 
             picture.setIcon(null);
             picture.setIcon(icon);
@@ -820,7 +861,7 @@ public class ImageViewer extends JFrame {
             if(automaticRotateToggleButton.isSelected()) {
                 ImageIcon icon = (ImageIcon)picture.getIcon();
 
-                Image img = rotateAccordingToExif(thePicture, icon.getImage());
+                BufferedImage img = rotateAccordingToExif(thePicture, (BufferedImage)icon.getImage());
 
                 icon.setImage(img);
 
@@ -871,7 +912,7 @@ public class ImageViewer extends JFrame {
             double backgroundHeight = imageBackgroundRectangle.getHeight();
 
             if((pictureWidth > backgroundWidth)||(pictureHeight > backgroundHeight)) {
-                Image tempImage = ((ImageIcon)picture.getIcon()).getImage();
+                BufferedImage tempImage = (BufferedImage)((ImageIcon)picture.getIcon()).getImage();
 
                 tempImage = resizeImage(tempImage, backgroundWidth, backgroundHeight, pictureWidth, pictureHeight);
 

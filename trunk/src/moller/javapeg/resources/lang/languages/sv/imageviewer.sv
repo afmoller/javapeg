@@ -58,3 +58,12 @@ imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Lägg valda bilde
 imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Kopiera valda bilder till systemets urklippshanterare
 imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Kopiera alla bilder till systemets urklippshanterare
 imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Antal bilder i sökresultatet
+
+##############################################################################################################
+# I M A G E  R E S I Z E  Q U A L I T Y                                                                      #
+##############################################################################################################
+imageviewer.combobox.resize.quality.automatic    = Automatisk
+imageviewer.combobox.resize.quality.speed        = Snabb
+imageviewer.combobox.resize.quality.balanced     = Balanserd
+imageviewer.combobox.resize.quality.quality      = Kvalitet
+imageviewer.combobox.resize.quality.ultraquality = Ultrakvalitet
