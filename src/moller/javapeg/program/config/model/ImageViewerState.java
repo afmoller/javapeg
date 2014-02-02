@@ -16,6 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model;
 
+import org.imgscalr.Scalr.Method;
+
 /**
  * This class represents the persisted states of the image viewer in the JavaPEG
  * application.
@@ -28,6 +30,9 @@ package moller.javapeg.program.config.model;
  * automatically resize image button shall be activated or not when the image
  * viewer is opened.
  *
+ * 3: resizeQuality: Holds the state of which {@link Method} quality to use when
+ * an image is resized in the image viewer.
+ *
  * @author Fredrik
  *
  */
@@ -35,6 +40,7 @@ public class ImageViewerState {
 
     private boolean automaticallyRotateImages;
     private boolean automaticallyResizeImages;
+    private Method resizeQuality;
 
     public boolean isAutomaticallyRotateImages() {
         return automaticallyRotateImages;
@@ -47,5 +53,11 @@ public class ImageViewerState {
     }
     public void setAutomaticallyResizeImages(boolean automaticallyResizeImages) {
         this.automaticallyResizeImages = automaticallyResizeImages;
+    }
+    public Method getResizeQuality() {
+        return resizeQuality;
+    }
+    public void setResizeQuality(Method resizeQuality) {
+        this.resizeQuality = resizeQuality;
     }
 }

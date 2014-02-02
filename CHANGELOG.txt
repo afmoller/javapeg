@@ -10,6 +10,11 @@
  
  3.0 (2014-xx-xx)
  
+ + It is possible to select which scaling method JavaPEG shall use when an 
+   image in the ImageViewer is to be scaled. This way it is possible to select
+   the quality and thereby the speed of scaling an image (higher quality 
+   requires longer scaling time.) 
+ 
  + When an image is removed from the image view list then the preview image is
    automatically updated to the newly (automatically) selected image in the 
    image view list.

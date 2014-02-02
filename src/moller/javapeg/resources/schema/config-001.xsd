@@ -145,9 +145,19 @@
         <xs:all>
             <xs:element name="automaticallyRotateImages" type="xs:boolean" />
             <xs:element name="automaticallyResizeImages" type="xs:boolean" />
+            <xs:element name="resizeQuality">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="AUTOMATIC" />
+                        <xs:enumeration value="SPEED" />
+                        <xs:enumeration value="BALANCED" />
+                        <xs:enumeration value="QUALITY" />
+                        <xs:enumeration value="ULTRA_QUALITY" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
         </xs:all>
     </xs:complexType>
-    
     
     <xs:complexType name="TagImages">
         <xs:all>
