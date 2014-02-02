@@ -167,6 +167,26 @@ public class ImageViewer extends JFrame {
         this.addListeners();
         this.createImage(imagesToView.get(0).getAbsolutePath());
         this.initiateButtonStates();
+        this.initiateResizeQuality();
+    }
+
+    /**
+     * This method finds the correct resize Method (from the persisted
+     * configuration) and selects the appropriate element in the
+     * {@link JComboBox} or the first element if no matching element is found.
+     */
+    private void initiateResizeQuality() {
+        Method resizeQualityMethod = configuration.getImageViewerState().getResizeQuality();
+
+        for (int index = 0; index < resizeQuality.getItemCount(); index++) {
+            if (resizeQuality.getModel().getElementAt(index).getMethod() == resizeQualityMethod) {
+                resizeQuality.setSelectedIndex(index);
+                return;
+            }
+        }
+
+        // If no match found, then set the first item as default.
+        resizeQuality.setSelectedIndex(0);
     }
 
     /**
@@ -518,6 +538,7 @@ public class ImageViewer extends JFrame {
 
         imageViewerState.setAutomaticallyResizeImages(automaticAdjustToWindowSizeJToggleButton.isSelected());
         imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
+        imageViewerState.setResizeQuality(resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
     }
 
     private void removeCustomKeyEventDispatcher() {

@@ -27,6 +27,7 @@ import moller.javapeg.program.config.model.ImageViewerState;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
+import org.imgscalr.Scalr.Method;
 import org.w3c.dom.Node;
 
 public class ImageViewerStateConfig {
@@ -37,8 +38,9 @@ public class ImageViewerStateConfig {
         try {
             imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_RESIZE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
             imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get image viewer state config", e);
+            imageViewerState.setResizeQuality(getMethodFromResizeQualityString((String)xPath.evaluate(ConfigElement.RESIZE_QUALITY, imageViewerStateNode, XPathConstants.STRING)));
+        } catch (XPathExpressionException xpex) {
+            throw new RuntimeException("Could not get image viewer state config", xpex);
         }
         return imageViewerState;
     }
@@ -49,8 +51,16 @@ public class ImageViewerStateConfig {
 
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_RESIZE_IMAGES, Tab.FOUR, Boolean.toString(imageViewerState.isAutomaticallyResizeImages()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, Tab.FOUR, Boolean.toString(imageViewerState.isAutomaticallyRotateImages()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.RESIZE_QUALITY, Tab.FOUR, imageViewerState.getResizeQuality().name(), xmlsw);
 
         //  IMAGE VIEWER STATE end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+    }
+
+    private static Method getMethodFromResizeQualityString(String resizeQualityString) {
+
+        Method valueOf = Method.valueOf(resizeQualityString);
+
+        return valueOf;
     }
 }
