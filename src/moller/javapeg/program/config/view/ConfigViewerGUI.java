@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (c) JavaPEG developers
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -761,7 +761,7 @@ public class ConfigViewerGUI extends JFrame {
 
         GBHelper posThumbnailOverviewPanel = new GBHelper();
         JPanel thumbnailOverview = new JPanel(new GridBagLayout());
-        thumbnailOverview.setBorder(BorderFactory.createTitledBorder("Main Window"));
+        thumbnailOverview.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.mainWindow.label")));
         thumbnailOverview.setPreferredSize(new Dimension(180, 120));
 
         thumbnailOverview.add(overviewToolTipDisabled, posThumbnailOverviewPanel);
@@ -771,7 +771,7 @@ public class ConfigViewerGUI extends JFrame {
 
         GBHelper posThumbnailImageSearchResultPanel = new GBHelper();
         JPanel thumbnailImageSerachResult = new JPanel(new GridBagLayout());
-        thumbnailImageSerachResult.setBorder(BorderFactory.createTitledBorder("Image Search Result Window"));
+        thumbnailImageSerachResult.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.imageSearchResultWindow.label")));
         thumbnailImageSerachResult.setPreferredSize(new Dimension(180, 120));
 
         thumbnailImageSerachResult.add(imageSearchResultToolTipDisabled, posThumbnailImageSearchResultPanel.expandW());
@@ -781,7 +781,7 @@ public class ConfigViewerGUI extends JFrame {
 
         GBHelper posThumbnailOverviewImageViewer = new GBHelper();
         JPanel thumbnailOverviewImageViewer = new JPanel(new GridBagLayout());
-        thumbnailOverviewImageViewer.setBorder(BorderFactory.createTitledBorder("Image Viever Window"));
+        thumbnailOverviewImageViewer.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.imageViewerWindow.label")));
         thumbnailOverviewImageViewer.setPreferredSize(new Dimension(180, 120));
 
         thumbnailOverviewImageViewer.add(overviewImageViewerToolTipDisabled, posThumbnailOverviewImageViewer.expandW());
