@@ -79,6 +79,9 @@ configviewer.thumbnail.tooltip.label.disabled          = Disabled:
 configviewer.thumbnail.tooltip.label.enabled           = Enabled:
 configviewer.thumbnail.tooltip.label.extended          = Extended:
 configviewer.thumbnail.tooltip.label                   = Thumbnail Tooltips
+configviewer.thumbnail.mainWindow.label              = Main Window
+configviewer.thumbnail.imageSearchResultWindow.label = Image Search Result Window
+configviewer.thumbnail.imageViewerWindow.label       = Image Viever Window
 
 ##############################################################################################################
 # T A G                                                                                                      #

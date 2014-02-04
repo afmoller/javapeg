@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui;
+package moller.javapeg.program.imageviewer;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -75,6 +75,9 @@ import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.datatype.ResizeQualityAndDisplayString;
 import moller.javapeg.program.enumerations.Direction;
+import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.MetaDataPanel;
+import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -689,7 +692,6 @@ public class ImageViewer extends JFrame {
     private BufferedImage resizeImage(BufferedImage image, double backgroundWidth, double backgroundHeight, int imageWidth, int imageHeight) {
 
         Method resizeMethod = resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod();
-        System.out.println(resizeMethod);
 
         if((imageWidth > backgroundWidth) && (imageHeight <= backgroundHeight)) {
             image = Scalr.resize(image, resizeMethod, Mode.FIT_EXACT, (int)backgroundWidth, (int)(imageHeight/(imageWidth/backgroundWidth)));

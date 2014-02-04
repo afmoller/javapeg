@@ -79,6 +79,9 @@ configviewer.thumbnail.tooltip.label.disabled          = Avaktiverad:
 configviewer.thumbnail.tooltip.label.enabled           = Aktiverad:
 configviewer.thumbnail.tooltip.label.extended          = Utökad:
 configviewer.thumbnail.tooltip.label                   = Tumnagel Tooltips
+configviewer.thumbnail.mainWindow.label              = Huvudfönster
+configviewer.thumbnail.imageSearchResultWindow.label = Bildsökresultatsfönster
+configviewer.thumbnail.imageViewerWindow.label       = Bildvisarfönster
 
 ##############################################################################################################
 # T A G                                                                                                      #
