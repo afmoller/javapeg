@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -37,10 +38,13 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -86,9 +90,12 @@ public class InitialConfigGUI extends JDialog {
     private JList<File> availableAlternativeConfigurationsJList;
 
     private JButton importConfigFileChooserOpenButton;
+    private JButton continueButton;
 
     private JRadioButton noImportMode;
     private JRadioButton importMode;
+
+    private JProgressBar progressBar;
 
     private int englishIndex;
 
@@ -109,19 +116,8 @@ public class InitialConfigGUI extends JDialog {
             availableLanguagesJList.setSelectedIndex(englishIndex);
         }
 
-        List<File> foundConfigurationFilesInUserHome = findJavaPEGConfigurationFiles(new File(SystemProperties.getUserHome()));
-
-        // Do not display the configuration file for the current installation.
-        File configFile = new File(C.PATH_TO_CONFIGURATION_FILE);
-        foundConfigurationFilesInUserHome.remove(configFile);
-
-        populateJList(availableConfigurationsInUserDirectoryJList, foundConfigurationFilesInUserHome);
-
-        if (foundConfigurationFilesInUserHome != null && !foundConfigurationFilesInUserHome.isEmpty()) {
-            importMode.doClick();
-        } else {
-            noImportMode.doClick();
-        }
+        FindJavaPEGConfigurationFilesInUserHomeWorker fjcfiuh = new  FindJavaPEGConfigurationFilesInUserHomeWorker(new File(SystemProperties.getUserHome()));
+        fjcfiuh.execute();
     }
 
     private void populateJList(JList<File> list, List<File> configurations) {
@@ -168,29 +164,32 @@ public class InitialConfigGUI extends JDialog {
         configurationPanel.add(Box.createVerticalStrut(10), posLeftPanel.nextRow());
         configurationPanel.add(this.createConfigurationPanel(), posLeftPanel.nextRow().expandH().expandW());
 
+        progressBar = new JProgressBar();
+        progressBar.setVisible(false);
+
         JPanel helpPanel = new JPanel();
         helpPanel.setLayout(new GridBagLayout());
 
         GBHelper posRightPanel = new GBHelper();
-
         helpPanel.add(this.createHelpPanel(), posRightPanel.expandH());
 
         JPanel mainPanel = new JPanel();
-
         mainPanel.setLayout(new GridBagLayout());
 
         GBHelper posMainPanel = new GBHelper();
 
         mainPanel.add(helpPanel, posMainPanel.expandH());
         mainPanel.add(configurationPanel, posMainPanel.nextCol().expandH().expandW());
+        mainPanel.add(progressBar, posMainPanel.nextRow().width(2));
         mainPanel.add(createButtonPanel(), posMainPanel.nextRow().width(2));
 
         return mainPanel;
     }
 
     private JPanel createButtonPanel() {
-        JButton continueButton  = new JButton(language.get("button.continue"));
+        continueButton  = new JButton(language.get("button.continue"));
         continueButton.addActionListener(new ContinueButtonListener());
+        continueButton.setEnabled(false);
 
         JButton cancelButton = new JButton(language.get("button.cancel"));
         cancelButton.addActionListener(new CancelButtonListener());
@@ -209,7 +208,6 @@ public class InitialConfigGUI extends JDialog {
         JTextArea textarea = new JTextArea();
         textarea.setText(language.get("help.text"));
         textarea.setEditable(false);
-//        textarea.setColumns(30);
         textarea.setBorder(new LineBorder(Color.BLACK));
 
         JPanel mainPanel = new JPanel();
@@ -403,10 +401,14 @@ public class InitialConfigGUI extends JDialog {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser(SystemProperties.getUserHome());
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//            TODO: Fix hard coded string
             chooser.setDialogTitle("Import JavaPEG Configuration");
 
             if(chooser.showOpenDialog(InitialConfigGUI.this) == JFileChooser.APPROVE_OPTION) {
-                populateJList(availableAlternativeConfigurationsJList, findJavaPEGConfigurationFiles(chooser.getSelectedFile()));
+                FindJavaPEGConfigurationFilesInUserHomeWorker fjcfiuh = new  FindJavaPEGConfigurationFilesInUserHomeWorker(chooser.getSelectedFile());
+                fjcfiuh.execute();
+
+//                populateJList(availableAlternativeConfigurationsJList, findJavaPEGConfigurationFiles(chooser.getSelectedFile()));
             }
         }
     }
@@ -481,6 +483,64 @@ public class InitialConfigGUI extends JDialog {
                 selectionChange = true;
                 availableAlternativeConfigurationsJList.clearSelection();
                 selectionChange = false;
+            }
+        }
+    }
+
+    /**
+     * This class extends the {@link SwingWorker} and performs the long running
+     * task of finding all JavaPEG configuration files in a specified path.
+     *
+     * @author Fredrik
+     *
+     */
+    private class FindJavaPEGConfigurationFilesInUserHomeWorker extends SwingWorker<List<File>, String> {
+
+        File directoryToSearchIn;
+
+        public FindJavaPEGConfigurationFilesInUserHomeWorker(File directoryToSearchIn) {
+            this.directoryToSearchIn = directoryToSearchIn;
+        }
+
+        @Override
+        protected List<File> doInBackground() throws Exception {
+            progressBar.setVisible(true);
+            progressBar.setIndeterminate(true);
+            progressBar.setToolTipText("Searching for configuration files in: " + directoryToSearchIn.getAbsolutePath());
+            return findJavaPEGConfigurationFiles(directoryToSearchIn);
+        }
+
+        @Override
+        protected void done() {
+
+            try {
+                List<File> foundConfigurationFilesInUserHome = get();
+                // Do not display the configuration file for the current installation.
+                File configFile = new File(C.PATH_TO_CONFIGURATION_FILE);
+                foundConfigurationFilesInUserHome.remove(configFile);
+
+                populateJList(availableConfigurationsInUserDirectoryJList, foundConfigurationFilesInUserHome);
+
+                progressBar.setVisible(false);
+                continueButton.setEnabled(true);
+
+                if (foundConfigurationFilesInUserHome != null && !foundConfigurationFilesInUserHome.isEmpty()) {
+                    importMode.doClick();
+//                    TODO: Fix hard coded string
+                    JOptionPane.showMessageDialog(InitialConfigGUI.this, "Configuration file(s) found in directory: " + directoryToSearchIn.getAbsolutePath());
+                } else {
+                    if (!importMode.isSelected()) {
+                        noImportMode.doClick();
+                    }
+//                  TODO: Fix hard coded string
+                    JOptionPane.showMessageDialog(InitialConfigGUI.this, "No configuration file(s) found in directory: " + directoryToSearchIn.getAbsolutePath());
+                }
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
     }
