@@ -21,6 +21,7 @@ common.button.no.label = Nej
 
 common.confirmation = Bekräftelse
 common.information = Information
+common.error = Fel
 
 common.message.error.invalidFileName            = Filnamnet kan inte innehålla tecknet:
 common.message.error.canNotListFilesInDirectory = Kan inte lista filer i katalog:

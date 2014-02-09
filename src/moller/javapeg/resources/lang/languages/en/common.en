@@ -21,6 +21,7 @@ common.button.no.label = No
 
 common.confirmation = Confirmation
 common.information = Information
+common.error = Error
 
 common.message.error.invalidFileName            = The file name can not contain the character:
 common.message.error.canNotListFilesInDirectory = Can not list files in directory:

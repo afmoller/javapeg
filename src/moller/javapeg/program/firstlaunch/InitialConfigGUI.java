@@ -401,14 +401,11 @@ public class InitialConfigGUI extends JDialog {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser(SystemProperties.getUserHome());
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//            TODO: Fix hard coded string
-            chooser.setDialogTitle("Import JavaPEG Configuration");
+            chooser.setDialogTitle(language.get("configuration.search.filechooser.title"));
 
             if(chooser.showOpenDialog(InitialConfigGUI.this) == JFileChooser.APPROVE_OPTION) {
                 FindJavaPEGConfigurationFilesInUserHomeWorker fjcfiuh = new  FindJavaPEGConfigurationFilesInUserHomeWorker(chooser.getSelectedFile());
                 fjcfiuh.execute();
-
-//                populateJList(availableAlternativeConfigurationsJList, findJavaPEGConfigurationFiles(chooser.getSelectedFile()));
             }
         }
     }
@@ -504,9 +501,14 @@ public class InitialConfigGUI extends JDialog {
 
         @Override
         protected List<File> doInBackground() throws Exception {
+            // Avoid making it possible to trigger two concurrent searches.
+            if (importMode.isSelected()) {
+                importConfigFileChooserOpenButton.setEnabled(false);
+            }
+
             progressBar.setVisible(true);
             progressBar.setIndeterminate(true);
-            progressBar.setToolTipText("Searching for configuration files in: " + directoryToSearchIn.getAbsolutePath());
+            progressBar.setToolTipText(language.get("configuration.search.in.directory") + " " + directoryToSearchIn.getAbsolutePath());
             return findJavaPEGConfigurationFiles(directoryToSearchIn);
         }
 
@@ -515,7 +517,8 @@ public class InitialConfigGUI extends JDialog {
 
             try {
                 List<File> foundConfigurationFilesInUserHome = get();
-                // Do not display the configuration file for the current installation.
+                // Do not display the configuration file for the current
+                // installation.
                 File configFile = new File(C.PATH_TO_CONFIGURATION_FILE);
                 foundConfigurationFilesInUserHome.remove(configFile);
 
@@ -524,23 +527,23 @@ public class InitialConfigGUI extends JDialog {
                 progressBar.setVisible(false);
                 continueButton.setEnabled(true);
 
+                if (importMode.isSelected()) {
+                    importConfigFileChooserOpenButton.setEnabled(true);
+                }
+
                 if (foundConfigurationFilesInUserHome != null && !foundConfigurationFilesInUserHome.isEmpty()) {
                     importMode.doClick();
-//                    TODO: Fix hard coded string
-                    JOptionPane.showMessageDialog(InitialConfigGUI.this, "Configuration file(s) found in directory: " + directoryToSearchIn.getAbsolutePath());
+                    JOptionPane.showMessageDialog(InitialConfigGUI.this, language.get("configuration.search.found.configurationfiles") + " " + directoryToSearchIn.getAbsolutePath());
                 } else {
                     if (!importMode.isSelected()) {
                         noImportMode.doClick();
                     }
-//                  TODO: Fix hard coded string
-                    JOptionPane.showMessageDialog(InitialConfigGUI.this, "No configuration file(s) found in directory: " + directoryToSearchIn.getAbsolutePath());
+                    JOptionPane.showMessageDialog(InitialConfigGUI.this, language.get("configuration.search.no.found.configurationfiles") + " " + directoryToSearchIn.getAbsolutePath());
                 }
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (InterruptedException iex) {
+                JOptionPane.showMessageDialog(InitialConfigGUI.this, language.get("configuration.search.aborted") + " " + iex, language.get("lable.information"), JOptionPane.INFORMATION_MESSAGE);
+            } catch (ExecutionException eex) {
+                JOptionPane.showMessageDialog(InitialConfigGUI.this, language.get("configuration.search.aborted") + " " + eex.getCause(), language.get("lable.information"), JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }

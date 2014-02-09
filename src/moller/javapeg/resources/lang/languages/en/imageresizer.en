@@ -33,4 +33,3 @@ imageresizer.resize.process.started                       = Resize process start
 imageresizer.resize.process.aborted                       = Resize process aborted
 imageresizer.resize.process.cancelled                     = Resize cancelled
 imageresizer.resize.process.done                          = Resize done
-

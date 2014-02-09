@@ -1,7 +1,24 @@
+# This is the English language file for the Initial configuration GUI.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
 window.title = Initial Configuration
 
 button.cancel = Cancel
 button.continue = Continue
+
+lable.information = Information
 
 help.title = Help
 help.text = This window will be displayed only the first time JavaPEG is started\n\
@@ -41,3 +58,9 @@ configuration.section.other.import.location.title = Import configuration from ot
 configuration.section.other.import.location.found.configurations = Found Configurations
 
 configuration.file.missing = No configuration file to import selected, please restart the application
+
+configuration.search.in.directory = Searching for configuration files in:
+configuration.search.found.configurationfiles = Configuration file(s) found in directory:
+configuration.search.no.found.configurationfiles = No configuration file(s) found in directory:
+configuration.search.aborted = The configuration file search was aborted
+configuration.search.filechooser.title = Import JavaPEG Configuration
