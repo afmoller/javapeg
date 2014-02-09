@@ -610,8 +610,7 @@ public class ImageViewer extends JFrame {
         } catch (IOException iox) {
             logger.logERROR("Could not read the image: " + thePicture.getAbsolutePath());
             logger.logERROR(iox);
-//            TODO: fix hard coded string
-            JOptionPane.showMessageDialog(this, "Could not read the image: " + thePicture.getAbsolutePath() + " See logfile for error details", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format(lang.get("imageviewer.could.nor.read.image"), thePicture.getAbsolutePath()), lang.get("common.error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

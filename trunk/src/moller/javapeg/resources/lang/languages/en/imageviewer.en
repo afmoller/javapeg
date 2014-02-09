@@ -67,3 +67,8 @@ imageviewer.combobox.resize.quality.speed        = Speed
 imageviewer.combobox.resize.quality.balanced     = Balanced
 imageviewer.combobox.resize.quality.quality      = Quality
 imageviewer.combobox.resize.quality.ultraquality = Ultra quality
+
+##############################################################################################################
+# E R R O R  M E S S A G E S                                                                                 #
+##############################################################################################################
+imageviewer.could.nor.read.image = Could not read the image: %s See logfile for error details

@@ -67,3 +67,8 @@ imageviewer.combobox.resize.quality.speed        = Snabb
 imageviewer.combobox.resize.quality.balanced     = Balanserd
 imageviewer.combobox.resize.quality.quality      = Kvalitet
 imageviewer.combobox.resize.quality.ultraquality = Ultrakvalitet
+
+##############################################################################################################
+# E R R O R  M E S S A G E S                                                                                 #
+##############################################################################################################
+imageviewer.could.nor.read.image = Kunde in läsa bildfilen: %s Se loggfil för feldetaljer
