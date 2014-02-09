@@ -80,7 +80,8 @@ public class ConfigHandler {
         StringBuilder errorMessage = null;
 
         ResultObject<Exception> validationResult = XMLUtil.validate(configFile, configSchema);
-        Boolean couldStoreCorruptConfiguration = false;
+        ResultObject<Exception> storeCorruptConfigurationResult = new ResultObject<Exception>(true, null);
+
         ResultObject<Exception> restoreResult = null;
 
         if (!validationResult.getResult()) {
@@ -91,15 +92,22 @@ public class ConfigHandler {
             errorMessage.append(validationResult.getObject());
             errorMessage.append(C.LS);
 
-            couldStoreCorruptConfiguration = ConfigUtil.storeCorruptConfiguration(configFile);
+            try {
+                ConfigUtil.storeCorruptConfiguration(configFile);
+            } catch (IOException iox) {
+                storeCorruptConfigurationResult.setResult(false);
+                storeCorruptConfigurationResult.setObject(iox);
+            }
 
             errorMessage.append(C.LS);
-            if (couldStoreCorruptConfiguration) {
+            if (storeCorruptConfigurationResult.getResult()) {
                 errorMessage.append("The corrupt configuration file is stored in the directory: ");
                 errorMessage.append(C.LS);
                 errorMessage.append(configFile.getParentFile().getAbsolutePath() + C.FS + "corrupt");
             } else {
                 errorMessage.append("The corrupt configuration file could not be stored into a \"corrupt\" directory");
+                errorMessage.append(C.LS);
+                errorMessage.append(storeCorruptConfigurationResult.getObject());
             }
 
             File configurationBackupFile = new File(configFile.getParentFile(), configFile.getName() + ".zip");

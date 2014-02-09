@@ -241,23 +241,22 @@ public class ImageUtil {
 	 *                 in case of problems writing the file
 	 */
 	public static void writeJpeg(BufferedImage image, File destFile, float quality)
-	throws IOException {
+	        throws IOException {
 	    ImageWriter writer = null;
-	    FileImageOutputStream output = null;
 	    try {
 	        writer = ImageIO.getImageWritersByFormatName("jpeg").next();
 	        ImageWriteParam param = writer.getDefaultWriteParam();
 	        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 	        param.setCompressionQuality(quality);
-	        output = new FileImageOutputStream(destFile);
-	        writer.setOutput(output);
-	        IIOImage iioImage = new IIOImage(image, null, null);
-	        writer.write(null, iioImage, param);
+	        try (FileImageOutputStream output = new FileImageOutputStream(destFile)) {
+	            writer.setOutput(output);
+	            IIOImage iioImage = new IIOImage(image, null, null);
+	            writer.write(null, iioImage, param);
+	        }
 	    } catch (IOException ex) {
 	        throw ex;
 	    } finally {
 	        if (writer != null) writer.dispose();
-	        if (output != null) output.close();
 	    }
 	}
 }

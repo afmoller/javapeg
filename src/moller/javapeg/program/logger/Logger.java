@@ -210,8 +210,10 @@ public class Logger {
             this.log("An Exception Has Occurred", l);
         }
         this.log("START ==========================================================================", l);
+        this.log("CAUSE", l);
+        this.log(t.getCause() == null ? "No cause" : t.getCause().getMessage() == null ? "No cause message" : t.getCause().getMessage() , l);
         this.log("MESSAGE:", l);
-        this.log(t.getMessage() == null ? "" : t.getMessage(), l);
+        this.log(t.getMessage() == null ? "No exception message" : t.getMessage(), l);
         this.log("STACKTRACE:", l);
         for(StackTraceElement element : t.getStackTrace()) {
             this.log(element.toString(), l);
