@@ -4121,6 +4121,7 @@ public class MainGUI extends JFrame {
                     if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
                         return;
                     }
+                    ac.setImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance(true);
                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                 }
 
@@ -4135,9 +4136,9 @@ public class MainGUI extends JFrame {
                  * instance then shall it be possible to make changes to it, if
                  * the file is writable for the current user.
                  */
-                boolean canWrite = imageMetaDataDataBaseFile.canWrite();
+                ac.setImageMetaDataDataBaseFileWritable(imageMetaDataDataBaseFile.canWrite());
 
-                if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && canWrite) {
+                if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && ac.isImageMetaDataDataBaseFileWritable()) {
                     ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 
                     imddbituc.setRepositoryPath(repositoryPath);
@@ -4159,9 +4160,7 @@ public class MainGUI extends JFrame {
                  */
                 configuration.getRepository().getPaths().getPaths().add(repositoryPath);
 
-                ac.setImageMetaDataDataBaseFileWritable(canWrite);
-
-                if (canWrite) {
+                if (ac.isImageMetaDataDataBaseFileWritable()) {
                     thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
                 }
                 else {

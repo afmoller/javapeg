@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (c) JavaPEG developers
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -63,6 +63,7 @@ import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
 import moller.util.result.ResultObject;
@@ -101,15 +102,19 @@ public class ImageMetaDataDataBaseHandler {
         // additions policy.
         switch (policy) {
         case 0:
-            if (repositoryExceptions.getNeverAdd().contains(path)) {
-                policy = 2;
+            for (File neverAdd : repositoryExceptions.getNeverAdd()) {
+                if (PathUtil.isChild(path, neverAdd)) {
+                    policy = 2;
+                    break;
+                }
             }
-            break;
         case 2:
-            if (repositoryExceptions.getAllwaysAdd().contains(path)) {
-                policy = 0;
+            for (File allwaysAdd : repositoryExceptions.getAllwaysAdd()) {
+                if (PathUtil.isChild(path, allwaysAdd)) {
+                    policy = 0;
+                    break;
+                }
             }
-            break;
         default:
             // Do nothing
             break;
