@@ -51,18 +51,10 @@ public class JPEGUtil {
 			byte [] ffd8 = new byte [2];
 			byte [] ffd9 = new byte [2];
 
-			FileInputStream fis = null;
-
-			try {
-				fis = new FileInputStream(file);
-
+			try (FileInputStream fis = new FileInputStream(file)) {
 				fis.read(ffd8);
 				fis.skip(file.length() - 2 - 2);
 				fis.read(ffd9);
-			} finally {
-				 if(fis != null) {
-					 fis.close();
-				 }
 			}
 
 			String fileName = file.getName();

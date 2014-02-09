@@ -1,6 +1,5 @@
 3.0:
 ====
-- Add possibility to set the scale algorithm to use by the ImageViewer.
 - Fix all compiler warnings
 - Test with more images from different cameras.
 - Test all functionality.

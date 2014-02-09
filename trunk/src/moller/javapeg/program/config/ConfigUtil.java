@@ -18,6 +18,7 @@ package moller.javapeg.program.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,6 @@ import java.util.UUID;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
-import moller.util.io.FileUtil;
 import moller.util.io.ZipUtil;
 import moller.util.result.ResultObject;
 
@@ -88,8 +88,9 @@ public class ConfigUtil {
      *
      * @return a boolean value indication whether or not the storage of the
      * configuration file was successful or not.
+     * @throws IOException
      */
-    public static boolean storeCorruptConfiguration(File configFile) {
+    public static void storeCorruptConfiguration(File configFile) throws IOException {
         File path = configFile.getParentFile();
         File parentPath = null;
 
@@ -103,9 +104,9 @@ public class ConfigUtil {
             File corruptPath = new File(parentPath, "corrupt");
             File corruptFile = new File(corruptPath, fileName + ".corrupt");
 
-            return FileUtil.copyFile(configFile, corruptFile);
+            Files.copy(configFile.toPath(), corruptFile.toPath());
         } else {
-            return false;
+            throw new IllegalArgumentException("Missing parent to directory: " + path.getAbsolutePath());
         }
     }
 

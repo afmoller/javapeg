@@ -105,7 +105,7 @@ tooltip.selectSourceDirectoryWithImages                        = Välj en katalo
 tooltip.selectDestinationDirectory                             = Välj en destinationskatalog
 tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Välj en källkatalog med bilder och en destinationskatalog
 tooltip.enableTemplateFields                                   = För att aktivera, välj en destinationskatalog
-tooltip.saveTemplateToTemplatesList                            = Spara mall till listan av tilgängliga mallar
+tooltip.saveTemplateToTemplatesList                            = Spara mall till listan av tillgängliga mallar
 tooltip.deleteTemplateFromTemplateList                         = Ta bort mallen från listan med sparade mallar
 
 ##############################################################################################################

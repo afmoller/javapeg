@@ -114,64 +114,11 @@ public class FileUtil {
 	    return target;
 	}
 
-	/**
-	 * This method copies a file.
-	 *
-	 * @param sourceFile is the file that shall be copied
-	 * @param destinationFile is to which folder and name
-	 *        the the sourceFile will be copied.
-	 *
-	 * @return a boolean value indication whether the file
-	 *         copy was successful or not (true == success,
-	 *         false == failure).
-	 */
-	public static boolean copyFile(File sourceFile, File destinationFile) {
-
-		boolean copySuccessfull = false;
-
-		FileChannel source = null;
-		FileChannel destination = null;
-		try {
-		    if (!destinationFile.getParentFile().exists()) {
-		        destinationFile.getParentFile().mkdirs();
-		    }
-
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destinationFile).getChannel();
-			long transferedBytes = destination.transferFrom(source, 0, source.size());
-
-			copySuccessfull = transferedBytes == source.size() ? true : false;
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if(source != null) {
-				try {
-					source.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if(destination != null) {
-				try {
-					destination.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return copySuccessfull;
-	}
-
 	public static boolean copyFile(byte [] data, File destinationFile) {
 
 		boolean copySuccessfull = false;
 
-		FileChannel destination = null;
-		try {
-			destination = new FileOutputStream(destinationFile).getChannel();
+		try (FileChannel destination = new FileOutputStream(destinationFile).getChannel()) {
 
 			long transferedBytes = destination.write(ByteBuffer.wrap(data));
 
@@ -181,14 +128,6 @@ public class FileUtil {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if(destination != null) {
-				try {
-					destination.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return copySuccessfull;
 	}
@@ -318,9 +257,9 @@ public class FileUtil {
 	 *         some other reason is impossible to write to.
 	 */
 	public static void writeToFile(File f, String text, boolean append) throws IOException {
-		BufferedWriter bw = new  BufferedWriter(new FileWriter(f, append));
-		bw.write(text);
-		bw.close();
+		try (BufferedWriter bw = new  BufferedWriter(new FileWriter(f, append))) {
+		    bw.write(text);
+		}
 	}
 
 	/**
@@ -513,18 +452,13 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	public static List<String> readFromFile(File file) throws IOException {
-
 		List<String> content = new ArrayList<String>(32);
 		String line = null;
 
-		BufferedReader input =  new BufferedReader(new FileReader(file));
-
-		try {
+		try (BufferedReader input =  new BufferedReader(new FileReader(file))) {
 			while((line = input.readLine()) != null) {
 				content.add(line);
 			}
-		} finally {
-			input.close();
 		}
 		return content;
 	}
@@ -570,11 +504,9 @@ public class FileUtil {
 
 	public static byte[] getBytesFromFile(File file) throws IOException {
 
-		InputStream is = null;
 		byte[] bytes;
 
-		try {
-			is = new FileInputStream(file);
+		try (InputStream is = new FileInputStream(file)) {
 
 			bytes = new byte[(int)file.length()];
 
@@ -585,12 +517,8 @@ public class FileUtil {
 			}
 
 			if (offset < bytes.length) {
-				throw new IOException("Could not completely read file "+file.getName());
+				throw new IOException("Could not completely read file " + file.getName());
 			}
-        } finally {
-        	if (is != null) {
-        		is.close();
-        	}
         }
         return bytes;
     }

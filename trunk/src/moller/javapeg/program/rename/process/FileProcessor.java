@@ -18,6 +18,7 @@ package moller.javapeg.program.rename.process;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -118,15 +119,17 @@ public class FileProcessor {
 
         Map<File, File> allJPEGFileNameMappings = rpc.getAllJPEGFileNameMappings();
 
-        if (FileUtil.createFiles(allJPEGFileNameMappings.values())) {
-            for (File source : allJPEGFileNameMappings.keySet()) {
-                FileUtil.copyFile(source, allJPEGFileNameMappings.get(source));
+        for (File source : allJPEGFileNameMappings.keySet()) {
+            try {
+                Files.copy(source.toPath(), allJPEGFileNameMappings.get(source).toPath());
                 rp.setLogMessage(lang.get("rename.FileProcessor.renameFromLabel") + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
                 logger.logDEBUG("File: " + source.getName() + " Renamed To: " + allJPEGFileNameMappings.get(source).getName());
+            } catch (IOException iox) {
+                //                    TODO: remove hard coded string
+                rp.setLogMessage("Could not rename file: " + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
+                logger.logERROR("File: " + source.getName() + " could not be renamed To: " + allJPEGFileNameMappings.get(source).getName());
+                logger.logERROR(iox);
             }
-        } else {
-            logger.logERROR("All JPEG files could not be created");
-            return false;
         }
         rp.incProcessProgress();
 
@@ -226,8 +229,15 @@ public class FileProcessor {
     }
 
     private void copyFileAndSetLogMessage (File sourceFile, File destinationFile, RenameProcess rp, Logger logger) {
-        FileUtil.copyFile(sourceFile, destinationFile);
-        rp.setLogMessage(sourceFile.getAbsolutePath());
-        logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
+        try {
+            Files.copy(sourceFile.toPath(), destinationFile.toPath());
+            rp.setLogMessage(sourceFile.getAbsolutePath());
+            logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
+        } catch (IOException iox) {
+//            TODO:fix hard coded string
+            rp.setLogMessage("Could not copy file: " + sourceFile.getAbsolutePath());
+            logger.logERROR("Copy not copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
+            logger.logERROR(iox);
+        }
     }
 }

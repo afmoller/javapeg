@@ -227,20 +227,14 @@ public class ThumbNailOverViewCreator {
         File html = new File(destPath + File.separator + subDirName + File.separator + thumbDirName + File.separator +  "index.html");
 
         if(FileUtil.createFile(html)) {
-            Writer writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(html));
+            try (
+                Writer writer = new BufferedWriter(new FileWriter(html))) {
                 writer.write(xHTML.toString());
             } catch (IOException iox) {
                 JOptionPane.showMessageDialog(null, lang.get("thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
                 logger.logERROR("Could not access HTML file. See stack trace below for details.");
                 for(StackTraceElement element : iox.getStackTrace()) {
                     logger.logERROR(element.toString());
-                }
-            } finally {
-                try {
-                    writer.close();
-                } catch (IOException e) {
                 }
             }
         } else {

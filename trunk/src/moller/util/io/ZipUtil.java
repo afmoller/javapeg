@@ -36,19 +36,19 @@ public class ZipUtil {
         byte[] buf = new byte[8096];
 
         File zipFile = new File(theFileToZip.getParent(), theFileToZip.getName() + ".zip");
-        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
 
-        FileInputStream fis = new FileInputStream(theFileToZip);
+            try(FileInputStream fis = new FileInputStream(theFileToZip)) {
 
-        zos.putNextEntry(new ZipEntry(theFileToZip.getName()));
+                zos.putNextEntry(new ZipEntry(theFileToZip.getName()));
 
-        int lenght;
-        while ((lenght = fis.read(buf)) > 0) {
-        	zos.write(buf, 0, lenght);
+                int lenght;
+                while ((lenght = fis.read(buf)) > 0) {
+                    zos.write(buf, 0, lenght);
+                }
+                zos.closeEntry();
+            }
         }
-        zos.closeEntry();
-        fis.close();
-        zos.close();
     }
 
     public static void unzip(File fileToUnzip, File destinationDirectory) throws IOException {
@@ -75,15 +75,15 @@ public class ZipUtil {
                 //else you will hit FileNotFoundException for compressed folder
                 newFile.getParentFile().mkdirs();
 
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile));
+                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
 
-                byte[] buffer = new byte[2048];
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    bos.write(buffer, 0, len);
+                    byte[] buffer = new byte[2048];
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        bos.write(buffer, 0, len);
+                    }
                 }
 
-                bos.close();
                 zis.closeEntry();
                 ze = zis.getNextEntry();
             }
