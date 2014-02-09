@@ -83,7 +83,7 @@ public class RepositoryConfig {
             NodeList allwaysAddNodeList = (NodeList)xPath.evaluate(ConfigElement.ALLWAYS_ADD, exceptionsNode, XPathConstants.NODESET);
 
             for (int index = 0; index < allwaysAddNodeList.getLength(); index++) {
-                String path = allwaysAddNodeList.item(index).getTextContent();
+                String path = (String)xPath.evaluate(ConfigElement.PATH, allwaysAddNodeList.item(index), XPathConstants.STRING);
 
                 if (StringUtil.isNotBlank(path)) {
                     allwaysAdd.add(new File(path));
@@ -99,7 +99,7 @@ public class RepositoryConfig {
             NodeList neverAddNodeList = (NodeList)xPath.evaluate(ConfigElement.NEVER_ADD, exceptionsNode, XPathConstants.NODESET);
 
             for (int index = 0; index < neverAddNodeList.getLength(); index++) {
-                String path = neverAddNodeList.item(index).getTextContent();
+                String path = (String)xPath.evaluate(ConfigElement.PATH, neverAddNodeList.item(index), XPathConstants.STRING);
 
                 if (StringUtil.isNotBlank(path)) {
                     neverAdd.add(new File(path));
