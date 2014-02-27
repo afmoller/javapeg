@@ -293,17 +293,19 @@ public class NavigableImagePanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (scale > 0.0) {
-                    if (isFullImageInPanel()) {
-                        centerImage();
-                    } else if (isImageEdgeInPanel()) {
-                        scaleOrigin();
-                    }
-                    if (isNavigationImageEnabled()) {
-                        createNavigationImage(image);
-                    }
-                    repaint();
-                }
+                scale = 0.0;
+                repaint();
+//                if (scale > 0.0) {
+//                    if (isFullImageInPanel()) {
+//                        centerImage();
+//                    } else if (isImageEdgeInPanel()) {
+//                        scaleOrigin();
+//                    }
+//                    if (isNavigationImageEnabled()) {
+//                        createNavigationImage(image);
+//                    }
+//                    repaint();
+//                }
                 previousPanelSize = getSize();
             }
         });
@@ -949,5 +951,17 @@ public class NavigableImagePanel extends JPanel {
         if (currentImageRotation >= 360) {
             currentImageRotation -= 360;
         }
+    }
+
+    public void rotateLeft() {
+        image = rotateImage(image, -90);
+        createNavigationImage(image);
+        repaint();
+    }
+
+    public void rotateRight() {
+        image = rotateImage(image, 90);
+        createNavigationImage(image);
+        repaint();
     }
 }

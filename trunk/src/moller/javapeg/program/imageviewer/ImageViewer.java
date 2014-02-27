@@ -27,8 +27,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -123,10 +121,6 @@ public class ImageViewer extends JFrame {
     private JSplitPane imageMetaDataSplitPane;
 
     private JScrollPane overViewScrollpane;
-    private JScrollPane scrollpane;
-
-    private JScrollBar hSB;
-    private JScrollBar vSB;
 
     private MetaDataPanel metaDataPanel;
 
@@ -244,16 +238,6 @@ public class ImageViewer extends JFrame {
 
         imageBackground = new NavigableImagePanel();
         imageBackground.setHighQualityRenderingEnabled(true);
-
-        hSB = new JScrollBar(JScrollBar.HORIZONTAL);
-        vSB = new JScrollBar(JScrollBar.VERTICAL);
-
-        hSB.setUnitIncrement(40);
-        vSB.setUnitIncrement(40);
-
-        scrollpane = new JScrollPane(imageBackground, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollpane.setHorizontalScrollBar(hSB);
-        scrollpane.setVerticalScrollBar(vSB);
 
         thePicture = new File(imagesToView.get(0).getAbsolutePath());
 
@@ -501,7 +485,6 @@ public class ImageViewer extends JFrame {
 
     private void addListeners() {
         this.addWindowListener(new WindowDestroyer());
-        imageBackground.addComponentListener(new ImageBackgroundResizeListener());
         previousJButton.addActionListener(new ToolBarButtonPrevious());
         nextJButton.addActionListener(new ToolBarButtonNext());
         adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
@@ -566,10 +549,7 @@ public class ImageViewer extends JFrame {
             thePicture = new File(imagePath);
             BufferedImage img = ImageIO.read(thePicture);
 
-            int imageWidth  = img.getWidth(null);
-            int imageHeight = img.getHeight(null);
-
-            setStatusMessages(imagePath, thePicture.length(), imageWidth, imageHeight);
+            setStatusMessages(imagePath, thePicture.length(), img.getWidth(null), img.getHeight(null));
 
             metaDataPanel.setMetaData(thePicture);
 
@@ -625,7 +605,6 @@ public class ImageViewer extends JFrame {
             if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
                 if (KeyEvent.VK_LEFT == e.getKeyCode()) {
                     if (!loadPreviousImageAction.isRunning()) {
-
                         Thread thread = new Thread(new Runnable() {
 
                             @Override
@@ -640,7 +619,6 @@ public class ImageViewer extends JFrame {
                 }
                 if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
                     if (!loadNextImageAction.isRunning()) {
-
                         Thread thread = new Thread(new Runnable() {
 
                             @Override
@@ -654,7 +632,6 @@ public class ImageViewer extends JFrame {
                     return true;
                 }
             }
-
             return true;
         }
     }
@@ -671,14 +648,14 @@ public class ImageViewer extends JFrame {
     private class RightClickMenuListenerPrevious implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            previousJButton.doClick();
+            loadAndViewPreviousImage();
         }
     }
 
     private class RightClickMenuListenerNext implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            nextJButton.doClick();
+            loadAndViewNextImage();
         }
     }
 
@@ -706,33 +683,14 @@ public class ImageViewer extends JFrame {
     private class ToolBarButtonRotateLeft implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            ImageIcon icon = (ImageIcon)picture.getIcon();
-//
-//
-//            icon.setImage(rotateImage((BufferedImage)icon.getImage(), -90));
-//
-//            picture.setIcon(null);
-//            picture.setIcon(icon);
-//
-//            imageBackground.removeAll();
-//            imageBackground.updateUI();
-//            imageBackground.add(picture, BorderLayout.CENTER);
+            imageBackground.rotateLeft();
         }
     }
 
     private class ToolBarButtonRotateRight implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            ImageIcon icon = (ImageIcon)picture.getIcon();
-//
-//            icon.setImage(rotateImage((BufferedImage)icon.getImage(), 90));
-//
-//            picture.setIcon(null);
-//            picture.setIcon(icon);
-//
-//            imageBackground.removeAll();
-//            imageBackground.updateUI();
-//            imageBackground.add(picture, BorderLayout.CENTER);
+            imageBackground.rotateRight();
         }
     }
 
@@ -753,31 +711,7 @@ public class ImageViewer extends JFrame {
     private class ToolBarButtonAdjustToWindowSize implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            Dimension pictureDimensions = picture.getSize();
-//
-//            int pictureWidth  = pictureDimensions.width;
-//            int pictureHeight = pictureDimensions.height;
-//
-//            Rectangle imageBackgroundRectangle = imageBackground.getVisibleRect();
-//
-//            double backgroundWidth = imageBackgroundRectangle.getWidth();
-//            double backgroundHeight = imageBackgroundRectangle.getHeight();
-//
-//            if((pictureWidth > backgroundWidth)||(pictureHeight > backgroundHeight)) {
-//                BufferedImage tempImage = (BufferedImage)((ImageIcon)picture.getIcon()).getImage();
-//
-//                tempImage = resizeImage(tempImage, backgroundWidth, backgroundHeight, pictureWidth, pictureHeight);
-//
-//                ImageIcon icon = new ImageIcon();
-//                icon.setImage(tempImage);
-//
-//                picture.setIcon(null);
-//                picture.setIcon(icon);
-//
-//                imageBackground.removeAll();
-//                imageBackground.updateUI();
-//                imageBackground.add(picture, BorderLayout.CENTER);
-//            }
+            imageBackground.setShowNonScaled(false);
         }
     }
 
@@ -838,24 +772,6 @@ public class ImageViewer extends JFrame {
 
         public synchronized boolean isRunning() {
             return isRunning;
-        }
-    }
-
-    /**
-     * Listener class that listens to size changes of the image background
-     * {@link JPanel} and automatically adjusts the displayed image if the
-     * "automatic resize" button is selected.
-     *
-     * @author Fredrik
-     *
-     */
-    private class ImageBackgroundResizeListener extends ComponentAdapter {
-        @Override
-        public void componentResized(ComponentEvent e) {
-
-//            if (automaticAdjustToWindowSizeJToggleButton.isSelected()) {
-//                createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
-//            }
         }
     }
 }
