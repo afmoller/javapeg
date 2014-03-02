@@ -27,6 +27,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -157,8 +159,8 @@ public class ImageViewer extends JFrame {
         this.createStatusPanel();
         this.addListeners();
         this.initiateButtonStates();
-        this.createImage(imagesToView.get(0).getAbsolutePath());
         this.initiateResizeQuality();
+        this.createImage(imagesToView.get(0).getAbsolutePath());
     }
 
     /**
@@ -498,6 +500,7 @@ public class ImageViewer extends JFrame {
         rotateLeftButton.addActionListener(new ToolBarButtonRotateLeft());
         rotateRightButton.addActionListener(new ToolBarButtonRotateRight());
         automaticRotateToggleButton.addActionListener(new ToolBarButtonAutomaticRotate());
+        resizeQuality.addItemListener(new ResizeQualityChangeListener());
     }
 
     private void saveSettings() {
@@ -553,7 +556,7 @@ public class ImageViewer extends JFrame {
 
             metaDataPanel.setMetaData(thePicture);
 
-            imageBackground.setImage(img, thePicture, !automaticAdjustToWindowSizeJToggleButton.isSelected(), automaticRotateToggleButton.isSelected());
+            imageBackground.setImage(img, thePicture, !automaticAdjustToWindowSizeJToggleButton.isSelected(), automaticRotateToggleButton.isSelected(), resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
         } catch (IOException iox) {
             logger.logERROR("Could not read the image: " + thePicture.getAbsolutePath());
             logger.logERROR(iox);
@@ -772,6 +775,26 @@ public class ImageViewer extends JFrame {
 
         public synchronized boolean isRunning() {
             return isRunning;
+        }
+    }
+
+    /**
+     * Listens for selection changes of the scale quality {@link Method}
+     * {@link JComboBox} and if a change is detected, this change is propagated
+     * to the {@link NavigableImagePanel} and the displayed image is newly
+     * rendered with the selected quality method.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ResizeQualityChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent ie) {
+            if (ie.getStateChange() == ItemEvent.SELECTED) {
+                ResizeQualityAndDisplayString resizeQualityAndDisplayString = (ResizeQualityAndDisplayString)ie.getItem();
+                imageBackground.setHighQualityScalingMethodToUse(resizeQualityAndDisplayString.getMethod());
+            }
         }
     }
 }
