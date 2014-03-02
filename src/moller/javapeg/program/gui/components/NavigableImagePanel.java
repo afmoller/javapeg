@@ -184,6 +184,12 @@ public class NavigableImagePanel extends JPanel {
      */
     private int currentImageRotation;
 
+    /**
+     * Defines which scaling {@link Method} to use for a high quality scaling.
+     * Default is {@link Method#QUALITY}.
+     */
+    private Method highQualityScalingMethodToUse = Method.QUALITY;
+
     private WheelZoomDevice wheelZoomDevice = null;
     private ButtonZoomDevice buttonZoomDevice = null;
 
@@ -346,9 +352,9 @@ public class NavigableImagePanel extends JPanel {
      * <p>Creates a new navigable image panel with the specified image
      * and the mouse scroll wheel as the zooming device.</p>
      */
-    public NavigableImagePanel(BufferedImage image, File imageFile, boolean showNonScaled, boolean rotateAccordingExifAtImageLoad) throws IOException {
+    public NavigableImagePanel(BufferedImage image, File imageFile, boolean showNonScaled, boolean rotateAccordingExifAtImageLoad, Method highQualityScalingMethodToUse) throws IOException {
         this();
-        setImage(image, imageFile, showNonScaled, rotateAccordingExifAtImageLoad);
+        setImage(image, imageFile, showNonScaled, rotateAccordingExifAtImageLoad, highQualityScalingMethodToUse);
     }
 
     private void addWheelZoomDevice() {
@@ -454,13 +460,15 @@ public class NavigableImagePanel extends JPanel {
      *
      * @param image an image to be set in the panel
      * @param imageFile
+     * @param method
      */
-    public void setImage(BufferedImage image, File imageFile, boolean showNonScaled, boolean rotateAccordingExifAtImageLoad) {
+    public void setImage(BufferedImage image, File imageFile, boolean showNonScaled, boolean rotateAccordingExifAtImageLoad, Method highQualityScalingMethodToUse) {
         BufferedImage oldImage = this.image;
         this.image = image;
         this.imageFile = imageFile;
         this.showNonScaled = showNonScaled;
         this.rotateImageAccordingToExif = rotateAccordingExifAtImageLoad;
+        this.highQualityScalingMethodToUse = highQualityScalingMethodToUse;
         //Reset scale so that initializeParameters() is called in paintComponent()
         //for the new image.
         scale = 0.0;
@@ -798,7 +806,7 @@ public class NavigableImagePanel extends JPanel {
         Method method;
 
         if (isHighQualityRendering()) {
-            method = Method.QUALITY;
+            method = highQualityScalingMethodToUse;
         } else {
             method = Method.SPEED;
         }
@@ -962,6 +970,11 @@ public class NavigableImagePanel extends JPanel {
     public void rotateRight() {
         image = rotateImage(image, 90);
         createNavigationImage(image);
+        repaint();
+    }
+
+    public void setHighQualityScalingMethodToUse(Method highQualityScalingMethodToUse) {
+        this.highQualityScalingMethodToUse = highQualityScalingMethodToUse;
         repaint();
     }
 }
