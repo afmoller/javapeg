@@ -30,10 +30,8 @@ import moller.util.string.StringUtil;
 package moller.util.io;
 
 import java.awt.Point;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -118,8 +116,8 @@ public class FileUtil {
 
 		boolean copySuccessfull = false;
 
-		try (FileChannel destination = new FileOutputStream(destinationFile).getChannel()) {
-
+		try (FileInputStream fis = new FileInputStream(destinationFile)) {
+		    FileChannel destination = fis.getChannel();
 			long transferedBytes = destination.write(ByteBuffer.wrap(data));
 
 			copySuccessfull = transferedBytes == data.length ? true : false;
@@ -130,36 +128,6 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 		return copySuccessfull;
-	}
-
-	/**
-	 * This method copies the content of a InputStream to a file.
-	 *
-	 * @param source is the InputStream that has the content that shall be
-	 *        copied.
-	 * @param destinationFile is to which folder and name
-	 *        the the source InputStream will be copied.
-	 *
-	 * @return a boolean value indicating whether the file
-	 *         copy was successful or not (true == success,
-	 *         false == failure).
-	 *
-	 * @throws IOException is thrown if it is not possible to read from the
-	 *         BufferedInputStream.
-	 */
-	public static boolean copy(InputStream source, File destinationFile) throws IOException {
-
-		BufferedInputStream bis = new BufferedInputStream(source);
-		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-
-		byte [] buffer = new byte [8096];
-
-		int result = bis.read(buffer);
-		while(result != -1) {
-			buf.write(buffer, 0, result);
-			result = bis.read(buffer);
-		}
-		return copyFile(buf.toByteArray(), destinationFile);
 	}
 
 	/**

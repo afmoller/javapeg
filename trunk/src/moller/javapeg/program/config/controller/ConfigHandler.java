@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 import javax.swing.JDialog;
 import javax.swing.JTextArea;
@@ -59,7 +60,6 @@ import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
-import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.io.ZipUtil;
 import moller.util.result.ResultObject;
@@ -131,7 +131,8 @@ public class ConfigHandler {
                 if (!validationResultForRestoredConfiguration.getResult()) {
                     errorMessage.append(C.LS);
                     try {
-                        FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
+                        Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath());
+//                        FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
 
                         errorMessage.append("Configuration restored from default configuration");
                     } catch (IOException iox) {
@@ -144,7 +145,8 @@ public class ConfigHandler {
                 }
             } else {
                 try {
-                    FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
+                    Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath());
+//                    FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
 
                     errorMessage.append("Configuration restored from default configuration");
                 } catch (IOException iox) {
