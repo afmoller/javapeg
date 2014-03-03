@@ -635,7 +635,7 @@ public class ImageViewer extends JFrame {
                     return true;
                 }
             }
-            return true;
+            return false;
         }
     }
 
