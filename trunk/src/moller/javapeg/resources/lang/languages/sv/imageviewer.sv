@@ -28,8 +28,8 @@ imageviewer.button.rotateLeft.toolTip                   = Rotera bild vänster (
 imageviewer.button.rotateRight.toolTip                  = Rotera bild höger (Alt + Högerpil)
 imageviewer.button.rotateAutomatic                      = Rotera bild automatiskt (Alt + Pil Upp)
 
-imageviewer.popupmenu.back.text               = (Alt-Z) Föregående
-imageviewer.popupmenu.forward.text            = (Alt-X) Nästa
+imageviewer.popupmenu.back.text               = (Vänsterpil) Föregående
+imageviewer.popupmenu.forward.text            = (Högerpil) Nästa
 imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Anpassa till fönsterstorlek
 
 imageviewer.statusbar.pathToPicture    = Sökväg till bildfilen
