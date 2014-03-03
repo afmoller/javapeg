@@ -2,7 +2,6 @@ package moller.javapeg.program.gui.components;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -156,7 +155,6 @@ public class NavigableImagePanel extends JPanel {
     private int originX = 0;
     private int originY = 0;
     private Point mousePosition;
-    private Dimension previousPanelSize;
     private boolean navigationImageEnabled = true;
     private boolean highQualityRenderingEnabled = true;
 
@@ -301,18 +299,6 @@ public class NavigableImagePanel extends JPanel {
             public void componentResized(ComponentEvent e) {
                 scale = 0.0;
                 repaint();
-//                if (scale > 0.0) {
-//                    if (isFullImageInPanel()) {
-//                        centerImage();
-//                    } else if (isImageEdgeInPanel()) {
-//                        scaleOrigin();
-//                    }
-//                    if (isNavigationImageEnabled()) {
-//                        createNavigationImage(image);
-//                    }
-//                    repaint();
-//                }
-                previousPanelSize = getSize();
             }
         });
 
@@ -526,16 +512,6 @@ public class NavigableImagePanel extends JPanel {
             && p.y < getScreenNavImageHeight());
     }
 
-    //Used when the image is resized.
-    private boolean isImageEdgeInPanel() {
-        if (previousPanelSize == null) {
-            return false;
-        }
-
-        return (originX > 0 && originX < previousPanelSize.width
-            || originY > 0 && originY < previousPanelSize.height);
-    }
-
     //Tests whether the image is displayed in its entirety in the panel.
     private boolean isFullImageInPanel() {
         return (originX >= 0 && (originX + getScreenImageWidth()) < getWidth()
@@ -564,8 +540,7 @@ public class NavigableImagePanel extends JPanel {
      //than the original image. In other words,
      //when image decimation stops and interpolation starts.
     private boolean isHighQualityRendering() {
-        return (highQualityRenderingEnabled
-            && scale > HIGH_QUALITY_RENDERING_SCALE_THRESHOLD);
+        return (highQualityRenderingEnabled && scale > HIGH_QUALITY_RENDERING_SCALE_THRESHOLD);
     }
 
     /**
@@ -586,13 +561,6 @@ public class NavigableImagePanel extends JPanel {
      */
     public void setNavigationImageEnabled(boolean enabled) {
         navigationImageEnabled = enabled;
-        repaint();
-    }
-
-    //Used when the panel is resized
-    private void scaleOrigin() {
-        originX = originX * getWidth() / previousPanelSize.width;
-        originY = originY * getHeight() / previousPanelSize.height;
         repaint();
     }
 

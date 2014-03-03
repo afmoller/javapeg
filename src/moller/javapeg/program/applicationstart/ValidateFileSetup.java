@@ -18,6 +18,7 @@ package moller.javapeg.program.applicationstart;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
@@ -124,7 +125,8 @@ public class ValidateFileSetup {
         }
 
         try {
-            FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
+            Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate.toPath());
+//            FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
         } catch (IOException e) {
             if (log(fileToCreate.getName())) {
                 Logger logger = Logger.getInstance();
