@@ -1,5 +1,8 @@
 3.0:
 ====
+- Find a center image button image. 
+- Make it possible to hide and view the navigation image in the image viewer.
+- Move the navigation image to lower right corner.
 - Fix all compiler warnings
 - Test with more images from different cameras.
 - Test all functionality.
@@ -16,7 +19,6 @@
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
 - Implement Context aware menu in the menu bar.
-- Make it possible to drag images with mouse in the image viewer.
 - Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Add slide show functionality to Image Viewer.
 - Add histogram functionality in the image viewer

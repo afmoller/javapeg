@@ -37,3 +37,15 @@ Det finns stöd för följande aktiviteter i bildvisaren:
 <LF>
 <LF>
 * Rotera visad bild 90 grader moturs.
+<LF>
+<LF>
+* Använda dag och släpp for att flytta på bilden.
+<LF>
+<LF>
+* Klicka i en mindre version av den visade bilden, för att centrera den visade bilden vid den klickade punkten.
+<LF>
+<LF>
+* Förstora eller förminska den visade bilden med mushjulet.
+<LF>
+<LF>
+* Det är möjligt att centrera bilden med ett knapptryck.

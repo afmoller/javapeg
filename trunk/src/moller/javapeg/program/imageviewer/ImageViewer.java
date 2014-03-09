@@ -114,6 +114,7 @@ public class ImageViewer extends JFrame {
     private JButton adjustToWindowSizeJButton;
     private JButton rotateLeftButton;
     private JButton rotateRightButton;
+    private JButton centerButton;
 
     private JButton maximizeButton;
     private JButton minimizeButton;
@@ -371,6 +372,7 @@ public class ImageViewer extends JFrame {
         adjustToWindowSizeJButton = new JButton();
         rotateLeftButton = new JButton();
         rotateRightButton = new JButton();
+        centerButton = new JButton();
 
         ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
         ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
@@ -440,6 +442,9 @@ public class ImageViewer extends JFrame {
             automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
             automaticRotateToggleButton.setToolTipText(lang.get("imageviewer.button.rotateAutomatic"));
             automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
+
+//            TODO: add icon
+            centerButton.setText("Center");
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
@@ -455,6 +460,7 @@ public class ImageViewer extends JFrame {
         toolBar.add(rotateLeftButton);
         toolBar.add(rotateRightButton);
         toolBar.add(automaticRotateToggleButton);
+        toolBar.add(centerButton);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
@@ -501,6 +507,7 @@ public class ImageViewer extends JFrame {
         rotateRightButton.addActionListener(new ToolBarButtonRotateRight());
         automaticRotateToggleButton.addActionListener(new ToolBarButtonAutomaticRotate());
         resizeQuality.addItemListener(new ResizeQualityChangeListener());
+        centerButton.addActionListener(new CenterButton());
     }
 
     private void saveSettings() {
@@ -795,6 +802,22 @@ public class ImageViewer extends JFrame {
                 ResizeQualityAndDisplayString resizeQualityAndDisplayString = (ResizeQualityAndDisplayString)ie.getItem();
                 imageBackground.setHighQualityScalingMethodToUse(resizeQualityAndDisplayString.getMethod());
             }
+        }
+    }
+
+    /**
+     * Listens for clicks of the center image button. When this button is
+     * clicked then must the displayed image being centered.
+     *
+     * @author Fredrik
+     *
+     */
+    private class CenterButton implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            imageBackground.centerImage();
+            imageBackground.repaint();
         }
     }
 }
