@@ -38,3 +38,15 @@ There is support for following activities in the Image Viewer:
 <LF>
 <LF>
 * Rotate the displayed image 90 degrees counterclockwise.
+<LF>
+<LF>
+* Using drag and drop to move the image.
+<LF>
+<LF>
+* Click into a smaller version of the displayed image, to center the displayed image at the clicked point.
+<LF>
+<LF>
+* Zoom the image with the mouse wheel
+<LF>
+<LF>
+* It is possible to center an image with a button click.

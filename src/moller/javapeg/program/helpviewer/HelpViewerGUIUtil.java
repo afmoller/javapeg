@@ -27,7 +27,6 @@ public class HelpViewerGUIUtil {
 
         Language lang = Language.getInstance();
 
-
         // Create children for the functionality node
         DefaultMutableTreeNode programHelpMerge           = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpMerge"), "user_manual_merge"));
         DefaultMutableTreeNode programHelpRename          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpRename"), "user_manual_rename"));
@@ -69,9 +68,9 @@ public class HelpViewerGUIUtil {
         configuration.add(tag);
 
         // Create child nodes to the root node.
-        DefaultMutableTreeNode programHelpOverView        = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
-        DefaultMutableTreeNode versionInformation         = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
-        DefaultMutableTreeNode references                 = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.references"), "references"));
+        DefaultMutableTreeNode programHelpOverView = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.programHelpOverView"), "user_manual_overview"));
+        DefaultMutableTreeNode versionInformation  = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.versionInformation"), "version_information"));
+        DefaultMutableTreeNode references          = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.references"), "references"));
 
 
         DefaultMutableTreeNode metaDataBaseCorrupt      = new DefaultMutableTreeNode(new UserObject(lang.get("helpViewerGUI.tree.corrupt"), "help_metadatabase_corrupt"));

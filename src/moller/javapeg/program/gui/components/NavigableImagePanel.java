@@ -420,13 +420,18 @@ public class NavigableImagePanel extends JPanel {
         }
     }
 
-    //Centers the current image in the panel.
-    private void centerImage() {
+    /**
+     * Centers the current image in the panel.
+     */
+    public void centerImage() {
         originX = (getWidth() - getScreenImageWidth()) / 2;
         originY = (getHeight() - getScreenImageHeight()) / 2;
     }
 
-    //Creates and renders the navigation image in the upper let corner of the panel.
+    /**
+     * Creates and renders the navigation image in the upper let corner of the panel.
+     * @param image
+     */
     private void createNavigationImage(BufferedImage image) {
         //We keep the original navigation image larger than initially
         //displayed to allow for zooming into it without pixellation effect.
@@ -434,8 +439,7 @@ public class NavigableImagePanel extends JPanel {
         navImageHeight = navImageWidth * image.getHeight() / image.getWidth();
         int scrNavImageWidth = (int)(getWidth() * SCREEN_NAV_IMAGE_FACTOR);
         navScale = (double)scrNavImageWidth / navImageWidth;
-        navigationImage = new BufferedImage(navImageWidth, navImageHeight,
-            image.getType());
+        navigationImage = new BufferedImage(navImageWidth, navImageHeight, image.getType());
         Graphics2D g2 = navigationImage.createGraphics();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         g2.drawImage(image, 0, 0, navImageWidth, navImageHeight, null);
