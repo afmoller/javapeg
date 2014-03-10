@@ -27,10 +27,11 @@ imageviewer.button.help.mnemonic                        = H
 imageviewer.button.rotateLeft.toolTip                   = Rotate image left (Alt + Left Arrow)
 imageviewer.button.rotateRight.toolTip                  = Rotate image right (Alt + Right Arrow)
 imageviewer.button.rotateAutomatic                      = Automatically rotate image (Alt + Up Arrow)
+imageviewer.button.center.toolTip                       = Center image
 
 imageviewer.popupmenu.back.text               = (Left-Arrow) Previous
 imageviewer.popupmenu.forward.text            = (Right-Arrow) Next
-imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Adjust to window size
+imageviewer.popupmenu.adjustToWindowSize.text = (Alt + A) Adjust to window size
 
 imageviewer.statusbar.pathToPicture    = Path to image file
 imageviewer.statusbar.sizeLabel        = S:
