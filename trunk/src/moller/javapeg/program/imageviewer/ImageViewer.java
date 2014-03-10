@@ -401,6 +401,7 @@ public class ImageViewer extends JFrame {
         ImageIcon rotateLeftImageIcon = new ImageIcon();
         ImageIcon rotateRightImageIcon = new ImageIcon();
         ImageIcon automaticRotateImageIcon = new ImageIcon();
+        ImageIcon centerImageIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -443,8 +444,10 @@ public class ImageViewer extends JFrame {
             automaticRotateToggleButton.setToolTipText(lang.get("imageviewer.button.rotateAutomatic"));
             automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
 
-//            TODO: add icon
-            centerButton.setText("Center");
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Center16.png");
+            centerImageIcon.setImage(ImageIO.read(imageStream));
+            centerButton.setIcon(centerImageIcon);
+            centerButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
