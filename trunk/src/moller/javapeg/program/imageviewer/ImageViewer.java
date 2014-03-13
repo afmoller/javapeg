@@ -129,6 +129,8 @@ public class ImageViewer extends JFrame {
 
     private JToggleButton automaticAdjustToWindowSizeJToggleButton;
     private JToggleButton automaticRotateToggleButton;
+    private JToggleButton toggleNavigationImageButton;
+
     private File thePicture;
 
     private final List<File> imagesToView;
@@ -194,6 +196,8 @@ public class ImageViewer extends JFrame {
         if (configuration.getImageViewerState().isAutomaticallyRotateImages()) {
             automaticRotateToggleButton.doClick();
         }
+
+//        TODO: set the state of the navigationimagebutton
     }
 
     // Create Main Window
@@ -373,6 +377,7 @@ public class ImageViewer extends JFrame {
         rotateLeftButton = new JButton();
         rotateRightButton = new JButton();
         centerButton = new JButton();
+        toggleNavigationImageButton = new JToggleButton();
 
         ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
         ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
@@ -402,6 +407,7 @@ public class ImageViewer extends JFrame {
         ImageIcon rotateRightImageIcon = new ImageIcon();
         ImageIcon automaticRotateImageIcon = new ImageIcon();
         ImageIcon centerImageIcon = new ImageIcon();
+        ImageIcon navigationImageIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -448,6 +454,17 @@ public class ImageViewer extends JFrame {
             centerImageIcon.setImage(ImageIO.read(imageStream));
             centerButton.setIcon(centerImageIcon);
             centerButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+
+
+//            TODO: Fix correct icon
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Center16.png");
+            navigationImageIcon.setImage(ImageIO.read(imageStream));
+            toggleNavigationImageButton.setIcon(navigationImageIcon);
+
+            // TODO: FIx correct tooltip
+            toggleNavigationImageButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+
+
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
@@ -456,14 +473,16 @@ public class ImageViewer extends JFrame {
         toolBar.add(previousJButton);
         toolBar.add(nextJButton);
         toolBar.addSeparator();
+        toolBar.add(rotateLeftButton);
+        toolBar.add(rotateRightButton);
+        toolBar.add(automaticRotateToggleButton);
+        toolBar.addSeparator();
         toolBar.add(automaticAdjustToWindowSizeJToggleButton);
         toolBar.add(adjustToWindowSizeJButton);
         toolBar.add(resizeQuality);
         toolBar.addSeparator();
-        toolBar.add(rotateLeftButton);
-        toolBar.add(rotateRightButton);
-        toolBar.add(automaticRotateToggleButton);
         toolBar.add(centerButton);
+        toolBar.add(toggleNavigationImageButton);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
@@ -511,6 +530,7 @@ public class ImageViewer extends JFrame {
         automaticRotateToggleButton.addActionListener(new ToolBarButtonAutomaticRotate());
         resizeQuality.addItemListener(new ResizeQualityChangeListener());
         centerButton.addActionListener(new CenterButton());
+        toggleNavigationImageButton.addActionListener(new ToggleNavigationImageButton());
     }
 
     private void saveSettings() {
@@ -531,6 +551,7 @@ public class ImageViewer extends JFrame {
         imageViewerState.setAutomaticallyResizeImages(automaticAdjustToWindowSizeJToggleButton.isSelected());
         imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
         imageViewerState.setResizeQuality(resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
+//        TODO: Save the state of the navigationimagebuttons
     }
 
     private void removeCustomKeyEventDispatcher() {
@@ -821,6 +842,22 @@ public class ImageViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             imageBackground.centerImage();
             imageBackground.repaint();
+        }
+    }
+
+    /**
+     * Listens for changes in state of the {@link JToggleButton} that specifies
+     * whether or not the navigation image shall be visible or not in the
+     * displayed image.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ToggleNavigationImageButton implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            imageBackground.setNavigationImageEnabled(toggleNavigationImageButton.isSelected());
         }
     }
 }
