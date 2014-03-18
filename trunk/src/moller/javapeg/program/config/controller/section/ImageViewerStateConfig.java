@@ -38,6 +38,7 @@ public class ImageViewerStateConfig {
         try {
             imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_RESIZE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
             imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
+            imageViewerState.setShowNavigationImage(Boolean.valueOf((String)xPath.evaluate(ConfigElement.SHOW_NAVIGATION_IMAGE, imageViewerStateNode, XPathConstants.STRING)));
             imageViewerState.setResizeQuality(getMethodFromResizeQualityString((String)xPath.evaluate(ConfigElement.RESIZE_QUALITY, imageViewerStateNode, XPathConstants.STRING)));
         } catch (XPathExpressionException xpex) {
             throw new RuntimeException("Could not get image viewer state config", xpex);
@@ -51,6 +52,7 @@ public class ImageViewerStateConfig {
 
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_RESIZE_IMAGES, Tab.FOUR, Boolean.toString(imageViewerState.isAutomaticallyResizeImages()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, Tab.FOUR, Boolean.toString(imageViewerState.isAutomaticallyRotateImages()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.SHOW_NAVIGATION_IMAGE, Tab.FOUR, Boolean.toString(imageViewerState.isShowNavigationImage()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.RESIZE_QUALITY, Tab.FOUR, imageViewerState.getResizeQuality().name(), xmlsw);
 
         //  IMAGE VIEWER STATE end

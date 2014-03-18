@@ -112,4 +112,5 @@ public class ConfigElement {
     public static final String AUTOMATICALLY_RESIZE_IMAGES = "automaticallyResizeImages";
     public static final String IMAGE_VIEWER_STATE = "imageViewerState";
     public static final String RESIZE_QUALITY = "resizeQuality";
+    public static final String SHOW_NAVIGATION_IMAGE = "showNavigationImage";
 }

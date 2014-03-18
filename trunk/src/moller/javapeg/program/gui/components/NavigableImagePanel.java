@@ -441,7 +441,7 @@ public class NavigableImagePanel extends JPanel {
         navScale = (double)scrNavImageWidth / navImageWidth;
         navigationImage = new BufferedImage(navImageWidth, navImageHeight, image.getType());
         Graphics2D g2 = navigationImage.createGraphics();
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
         g2.drawImage(image, 0, 0, navImageWidth, navImageHeight, null);
     }
 
@@ -565,6 +565,12 @@ public class NavigableImagePanel extends JPanel {
      */
     public void setNavigationImageEnabled(boolean enabled) {
         navigationImageEnabled = enabled;
+
+        if (enabled) {
+            if (image != null) {
+                createNavigationImage(image);
+            }
+        }
         repaint();
     }
 

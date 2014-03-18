@@ -33,6 +33,9 @@ import org.imgscalr.Scalr.Method;
  * 3: resizeQuality: Holds the state of which {@link Method} quality to use when
  * an image is resized in the image viewer.
  *
+ * 4: showNavigationImage: Defines whether or not an navigation image shall be
+ * displayed in the image in the image viewer.
+ *
  * @author Fredrik
  *
  */
@@ -41,6 +44,7 @@ public class ImageViewerState {
     private boolean automaticallyRotateImages;
     private boolean automaticallyResizeImages;
     private Method resizeQuality;
+    private boolean showNavigationImage;
 
     public boolean isAutomaticallyRotateImages() {
         return automaticallyRotateImages;
@@ -59,5 +63,11 @@ public class ImageViewerState {
     }
     public void setResizeQuality(Method resizeQuality) {
         this.resizeQuality = resizeQuality;
+    }
+    public boolean isShowNavigationImage() {
+        return showNavigationImage;
+    }
+    public void setShowNavigationImage(boolean showNavigationImage) {
+        this.showNavigationImage = showNavigationImage;
     }
 }
