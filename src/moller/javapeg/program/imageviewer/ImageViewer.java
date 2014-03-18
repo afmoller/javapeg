@@ -190,14 +190,9 @@ public class ImageViewer extends JFrame {
      * ImageViewer.
      */
     private void initiateButtonStates() {
-        if (configuration.getImageViewerState().isAutomaticallyResizeImages()) {
-            automaticAdjustToWindowSizeJToggleButton.setSelected(true);
-        }
-        if (configuration.getImageViewerState().isAutomaticallyRotateImages()) {
-            automaticRotateToggleButton.doClick();
-        }
-
-//        TODO: set the state of the navigationimagebutton
+        automaticAdjustToWindowSizeJToggleButton.setSelected(configuration.getImageViewerState().isAutomaticallyResizeImages());
+        automaticRotateToggleButton.setSelected(configuration.getImageViewerState().isAutomaticallyRotateImages());
+        toggleNavigationImageButton.setSelected(configuration.getImageViewerState().isShowNavigationImage());
     }
 
     // Create Main Window
@@ -245,6 +240,7 @@ public class ImageViewer extends JFrame {
 
         imageBackground = new NavigableImagePanel();
         imageBackground.setHighQualityRenderingEnabled(true);
+        imageBackground.setNavigationImageEnabled(configuration.getImageViewerState().isShowNavigationImage());
 
         thePicture = new File(imagesToView.get(0).getAbsolutePath());
 
@@ -551,7 +547,7 @@ public class ImageViewer extends JFrame {
         imageViewerState.setAutomaticallyResizeImages(automaticAdjustToWindowSizeJToggleButton.isSelected());
         imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
         imageViewerState.setResizeQuality(resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
-//        TODO: Save the state of the navigationimagebuttons
+        imageViewerState.setShowNavigationImage(toggleNavigationImageButton.isSelected());
     }
 
     private void removeCustomKeyEventDispatcher() {

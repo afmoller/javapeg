@@ -102,6 +102,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
   <imageViewerState>
     <automaticallyRotateImages>false</automaticallyRotateImages>
     <automaticallyResizeImages>false</automaticallyResizeImages>
+    <showNavigationImage>true</showNavigationImage>
     <resizeQuality>QUALITY</resizeQuality>
   </imageViewerState>
   <tagImages>

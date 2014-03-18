@@ -145,6 +145,7 @@
         <xs:all>
             <xs:element name="automaticallyRotateImages" type="xs:boolean" />
             <xs:element name="automaticallyResizeImages" type="xs:boolean" />
+            <xs:element name="showNavigationImage" type="xs:boolean" />
             <xs:element name="resizeQuality">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
