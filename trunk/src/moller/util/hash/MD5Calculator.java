@@ -42,15 +42,14 @@ public class MD5Calculator {
     						digest.update(buffer, 0, read);
     					}
     					hashValue = StringUtil.convertToHexString(digest.digest());
-    				} catch(IOException e) {
-    					throw new RuntimeException("Unable to process file for MD5", e);
+    				} catch(IOException iox) {
+    					throw new RuntimeException("Unable to process file for MD5", iox);
     				}
-				} catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+				} catch (IOException iox) {
+				    throw new RuntimeException("Unable to process file for MD5", iox);
                 }
-			} catch (NoSuchAlgorithmException e1) {
-				e1.printStackTrace();
+			} catch (NoSuchAlgorithmException nsaex) {
+			    throw new RuntimeException("Unable to process file for MD5", nsaex);
 			}
 		}
 		return hashValue;
