@@ -403,7 +403,8 @@ public class ImageViewer extends JFrame {
         ImageIcon rotateRightImageIcon = new ImageIcon();
         ImageIcon automaticRotateImageIcon = new ImageIcon();
         ImageIcon centerImageIcon = new ImageIcon();
-        ImageIcon navigationImageIcon = new ImageIcon();
+        ImageIcon navigationImageEnabledIcon = new ImageIcon();
+        ImageIcon navigationImageDisabledIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -451,16 +452,15 @@ public class ImageViewer extends JFrame {
             centerButton.setIcon(centerImageIcon);
             centerButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
 
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageEnabled16.png");
+            navigationImageEnabledIcon.setImage(ImageIO.read(imageStream));
 
-//            TODO: Fix correct icon
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Center16.png");
-            navigationImageIcon.setImage(ImageIO.read(imageStream));
-            toggleNavigationImageButton.setIcon(navigationImageIcon);
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageDisabled16.png");
+            navigationImageDisabledIcon.setImage(ImageIO.read(imageStream));
 
-            // TODO: FIx correct tooltip
-            toggleNavigationImageButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
-
-
+            toggleNavigationImageButton.setIcon(navigationImageEnabledIcon);
+            toggleNavigationImageButton.setSelectedIcon(navigationImageDisabledIcon);
+            toggleNavigationImageButton.setToolTipText(lang.get("imageviewer.button.toggleNavigationImage.toolTip"));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
