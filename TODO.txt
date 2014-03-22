@@ -1,20 +1,15 @@
 3.0:
 ====
-- Find a center image button image. 
-- Make it possible to hide and view the navigation image in the image viewer.
-- Move the navigation image to lower right corner.
 - Fix all compiler warnings
-- Test with more images from different cameras.
 - Test all functionality.
 - Update version numbers in language files
-- Update version information files (Program help (version_information))
 - Update info files in the internal resources directory.
-- Enter values to the change log.
 - Enter change log entries to the change log files on the update server.
 - Enter correct URL to latest JavaPEG version in the versionInformation file on the update server.
 
 3.1:
 ====
+- Move the navigation image to lower right corner.
 - Add meta data base statistics
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
