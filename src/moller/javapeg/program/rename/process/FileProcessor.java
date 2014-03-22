@@ -125,8 +125,7 @@ public class FileProcessor {
                 rp.setLogMessage(lang.get("rename.FileProcessor.renameFromLabel") + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
                 logger.logDEBUG("File: " + source.getName() + " Renamed To: " + allJPEGFileNameMappings.get(source).getName());
             } catch (IOException iox) {
-                //                    TODO: remove hard coded string
-                rp.setLogMessage("Could not rename file: " + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
+                rp.setLogMessage(lang.get("rename.FileProcessor.renameFailed") + " " + source.getName() + " " + lang.get("rename.FileProcessor.renameToLabel") + " " + allJPEGFileNameMappings.get(source).getName());
                 logger.logERROR("File: " + source.getName() + " could not be renamed To: " + allJPEGFileNameMappings.get(source).getName());
                 logger.logERROR(iox);
             }
@@ -234,8 +233,7 @@ public class FileProcessor {
             rp.setLogMessage(sourceFile.getAbsolutePath());
             logger.logDEBUG("Copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
         } catch (IOException iox) {
-//            TODO:fix hard coded string
-            rp.setLogMessage("Could not copy file: " + sourceFile.getAbsolutePath());
+            rp.setLogMessage(Language.getInstance().get("rename.FileProcessor.copyFailed") + " " + sourceFile.getAbsolutePath());
             logger.logERROR("Copy not copy: " + sourceFile.getAbsolutePath() + " to: " + destinationFile.getAbsolutePath());
             logger.logERROR(iox);
         }
