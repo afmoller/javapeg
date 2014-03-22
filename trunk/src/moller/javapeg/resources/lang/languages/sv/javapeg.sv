@@ -281,6 +281,8 @@ rename.FileProcessor.createThumbNails                       = Skapande Av Tumnag
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Kopiering Av Icke JPEG Filer
 rename.FileProcessor.renameFromLabel                        = Fil:
 rename.FileProcessor.renameToLabel                          = Omdöpt till:
+rename.FileProcessor.renameFailed                           = Kunde inte döpa om fil:
+rename.FileProcessor.copyFailed                             = Kunde inte kopiera fil:
 
 rename.PostFileProcessor.integrityCheck.starting = Integritetskontroll Av Filer Startad
 rename.PostFileProcessor.integrityCheck.finished = Integritetskontroll Av Filer Avslutad

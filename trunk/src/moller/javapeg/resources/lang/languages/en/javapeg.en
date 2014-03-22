@@ -281,6 +281,8 @@ rename.FileProcessor.createThumbNails                       = Thumb Nails Creati
 rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Copy Non JPEG Files
 rename.FileProcessor.renameFromLabel                        = File:
 rename.FileProcessor.renameToLabel                          = Renamed To:
+rename.FileProcessor.renameFailed                           = Could not rename file:
+rename.FileProcessor.copyFailed                             = Could not copy file:
 
 rename.PostFileProcessor.integrityCheck.starting = File Integrity Check Started
 rename.PostFileProcessor.integrityCheck.finished = File Integrity Check Finished
