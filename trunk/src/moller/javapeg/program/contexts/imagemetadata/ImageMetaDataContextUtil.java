@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
@@ -328,7 +327,9 @@ public class ImageMetaDataContextUtil {
                     if (imageMetaDataDataBaseFile.exists()) {
 
                         try {
+                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " START CHECK against schema");
                             ResultObject<Exception> metaDataBaseValidation = ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile);
+                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " FINISHED CHECK against schema");
 
                             if (!metaDataBaseValidation.getResult()) {
                                 inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
@@ -340,14 +341,16 @@ public class ImageMetaDataContextUtil {
                                 ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                                 String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
 
+                                logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " START CHECK consistency");
                                 if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
+                                    logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " FINISHED CHECK consistency");
                                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
                                     ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
                                     logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
                                 } else {
                                     inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
                                     inconsistenceErrorMessage.append(C.LS);
-                                    logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is incosistent with the content in directory: " + repositoryPath);
+                                    logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is inconsistent with the content in directory: " + repositoryPath);
                                     iri.setPathStatus(Status.INCONSISTENT);
                                 }
                             }
@@ -360,9 +363,6 @@ public class ImageMetaDataContextUtil {
                         } catch (IOException iox) {
                             logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
                             logger.logERROR(iox);
-                        } catch (XPathExpressionException xpee) {
-                            logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                            logger.logERROR(xpee);
                         }
                         imageRepositoryListModel.add(iri);
                     } else {

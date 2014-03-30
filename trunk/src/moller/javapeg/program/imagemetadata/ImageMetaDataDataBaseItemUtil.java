@@ -22,8 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.categories.Categories;
@@ -32,6 +30,7 @@ import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 import moller.javapeg.program.logger.Logger;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -44,6 +43,9 @@ import org.w3c.dom.NodeList;
  */
 public class ImageMetaDataDataBaseItemUtil {
 
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+
+    private static Logger logger = Logger.getInstance();
     /**
      * Private constructor, do not instantiate this utility class.
      */
@@ -60,18 +62,40 @@ public class ImageMetaDataDataBaseItemUtil {
      *            is the corresponding XML tag to unmarshal
      * @param imageDirectory
      *            is in which directory the XML file resides.
-     * @param xPath
-     *            is the XPath object to use, when querying the XML
      * @return
-     * @throws XPathExpressionException
      */
-    public static ImageMetaDataItem createFromXML(Node imageTag, File imageDirectory, XPath xPath) throws XPathExpressionException {
+    public static ImageMetaDataItem createFromXML(Node imageTag, File imageDirectory) {
+        NodeList childNodes = imageTag.getChildNodes();
+
+        CategoryImageExifMetaData imageExifMetaData = null;
+        String comment = null;
+        int rating = 0;
+        Categories categories = null;
+
         // Fetch the values from the XML section
-        Categories categories = getCategories(xPath, imageTag);
-        String comment = getComment(xPath, imageTag);
-        File image = getFile(xPath, imageTag, imageDirectory);
-        CategoryImageExifMetaData imageExifMetaData = getCategoryImageExifMetaData(xPath, imageTag);
-        int rating = getRating(xPath, imageTag);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ImageMetaDataDataBaseItemElement.EXIF_META_DATA:
+                imageExifMetaData = createImageExifMetaData(node);
+                break;
+            case ImageMetaDataDataBaseItemElement.COMMENT:
+                comment = node.getTextContent();
+                break;
+            case ImageMetaDataDataBaseItemElement.RATING:
+                rating = getRating(node);
+                break;
+            case ImageMetaDataDataBaseItemElement.CATEGORIES:
+                categories = getCategories(node);
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        File image = getFile(imageTag, imageDirectory);
 
         // Create and populate the ImageMetaDataDataBaseItem with the values
         // fetched from the XML section.
@@ -95,56 +119,25 @@ public class ImageMetaDataDataBaseItemUtil {
      *            is in which directory the XML file resides. Used to construct
      *            the absolute file path
      * @return the referenced image as a {@link File} object.
-     * @throws XPathExpressionException
      */
-    private static File getFile(XPath xPath, Node imageTag, File imageDirectory) throws XPathExpressionException {
-        String fileName = (String)xPath.evaluate("@" + ImageMetaDataDataBaseItemElement.FILE, imageTag, XPathConstants.STRING);
+    private static File getFile(Node imageTag, File imageDirectory) {
+        NamedNodeMap attributes = imageTag.getAttributes();
+        Node fileAttribute = attributes.getNamedItem(ImageMetaDataDataBaseItemElement.FILE);
+        String fileName = fileAttribute.getTextContent();
+
         return new File(imageDirectory, fileName);
-    }
-
-    /**
-     * Get the image Exif meta data as a {@link CategoryImageExifMetaData}
-     * object from the XML tag
-     *
-     * @param xPath
-     *            is the XPath object to use, when querying the XML
-     * @param imageTag
-     *            is the corresponding XML tag to unmarshal
-     * @return
-     * @throws NumberFormatException
-     * @throws XPathExpressionException
-     */
-    private static CategoryImageExifMetaData getCategoryImageExifMetaData(XPath xPath, Node imageTag) throws NumberFormatException, XPathExpressionException {
-        return createImageExifMetaData((Node)xPath.evaluate(ImageMetaDataDataBaseItemElement.EXIF_META_DATA, imageTag, XPathConstants.NODE), xPath);
-    }
-
-    /**
-     * Get the image comment as a {@link String} object from the XML tag
-     *
-     * @param xPath
-     *            is the XPath object to use, when querying the XML
-     * @param imageTag
-     *            is the corresponding XML tag to unmarshal
-     * @return
-     * @throws XPathExpressionException
-     */
-    private static String getComment(XPath xPath, Node imageTag) throws XPathExpressionException {
-        return (String)xPath.evaluate(ImageMetaDataDataBaseItemElement.COMMENT, imageTag, XPathConstants.STRING);
     }
 
     /**
      * Get the assigned image categories as a {@link Categories} object from the
      * XML tag
      *
-     * @param xPath
-     *            is the XPath object to use, when querying the XML
-     * @param imageTag
+     * @param categoriesTag
      *            is the corresponding XML tag to unmarshal
      * @return
-     * @throws XPathExpressionException
      */
-    private static Categories getCategories(XPath xPath, Node imageTag) throws XPathExpressionException {
-        String categoriesString = (String)xPath.evaluate(ImageMetaDataDataBaseItemElement.CATEGORIES, imageTag, XPathConstants.STRING);
+    private static Categories getCategories(Node categoriesTag) {
+        String categoriesString = categoriesTag.getTextContent();
         Categories categories = new Categories();
         categories.addCategories(categoriesString);
 
@@ -154,20 +147,19 @@ public class ImageMetaDataDataBaseItemUtil {
     /**
      * Get the assigned image rating as an int value from the XML tag
      *
-     * @param xPath
-     *            is the XPath object to use, when querying the XML
-     * @param imageTag
+     * @param ratingNode
      *            is the corresponding XML tag to unmarshal
      * @return
-     * @throws XPathExpressionException
      */
-    private static int getRating(XPath xPath, Node imageTag) throws XPathExpressionException {
+    private static int getRating(Node ratingNode){
         int rating = 0;
+        String ratingString = "";
         try {
-            rating = Integer.parseInt((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.RATING, imageTag, XPathConstants.STRING));
+            ratingString = ratingNode.getTextContent();
+            rating = Integer.parseInt(ratingString);
         } catch (NumberFormatException nfex) {
             Logger logger = Logger.getInstance();
-            logger.logINFO("Could not parse rating value. Rating value is: \"" + (String)xPath.evaluate(ImageMetaDataDataBaseItemElement.RATING, imageTag, XPathConstants.STRING) + "\". Value set to 0 (zero)");
+            logger.logINFO("Could not parse rating value. Rating value is: \"" + ratingString + "\". Value set to 0 (zero)");
             logger.logINFO(nfex);
         }
         return rating;
@@ -186,40 +178,66 @@ public class ImageMetaDataDataBaseItemUtil {
      * @return a {@link CategoryImageExifMetaData} object constructed from the
      *         information found in the given {@link Node} object.
      * @throws NumberFormatException
-     * @throws XPathExpressionException
      */
-    private static CategoryImageExifMetaData createImageExifMetaData(Node exifMetaData, XPath xPath) throws NumberFormatException, XPathExpressionException {
-        Logger logger = Logger.getInstance();
+    private static CategoryImageExifMetaData createImageExifMetaData(Node exifMetaData) throws NumberFormatException {
 
         CategoryImageExifMetaData imageExifMetaData = new CategoryImageExifMetaData();
 
-        imageExifMetaData.setFNumber(Double.parseDouble((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.F_NUMBER, exifMetaData, XPathConstants.STRING)));
-        imageExifMetaData.setCameraModel((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.CAMERA_MODEL, exifMetaData, XPathConstants.STRING));
+        NodeList childNodes = exifMetaData.getChildNodes();
 
-        String dateTime = (String)xPath.evaluate(ImageMetaDataDataBaseItemElement.DATE_TIME, exifMetaData, XPathConstants.STRING);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        try {
-            imageExifMetaData.setDateTime(sdf.parse(dateTime));
-        } catch (ParseException pex) {
-            imageExifMetaData.setDateTime(null);
-            logger.logERROR("Could not parse date string: \"" + dateTime + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
-            logger.logERROR(pex);
+            switch (node.getNodeName()) {
+            case ImageMetaDataDataBaseItemElement.F_NUMBER:
+                imageExifMetaData.setFNumber(Double.parseDouble(node.getTextContent()));
+                break;
+
+            case ImageMetaDataDataBaseItemElement.CAMERA_MODEL:
+                imageExifMetaData.setCameraModel(node.getTextContent());
+                break;
+
+            case ImageMetaDataDataBaseItemElement.DATE_TIME:
+                String dateTime = node.getTextContent();
+
+                try {
+                    imageExifMetaData.setDateTime(sdf.parse(dateTime));
+                } catch (ParseException pex) {
+                    imageExifMetaData.setDateTime(null);
+                    logger.logERROR("Could not parse date string: \"" + dateTime + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
+                    logger.logERROR(pex);
+                }
+                break;
+
+            case ImageMetaDataDataBaseItemElement.ISO_VALUE:
+                imageExifMetaData.setIsoValue(Integer.parseInt(node.getTextContent()));
+                break;
+
+            case ImageMetaDataDataBaseItemElement.PICTURE_HEIGHT:
+                imageExifMetaData.setPictureHeight(Integer.parseInt(node.getTextContent()));
+                break;
+
+            case ImageMetaDataDataBaseItemElement.PICTURE_WIDTH:
+                imageExifMetaData.setPictureWidth(Integer.parseInt(node.getTextContent()));
+                break;
+
+            case ImageMetaDataDataBaseItemElement.EXPOSURE_TIME:
+                String exposureTime = node.getTextContent();
+
+                try {
+                    imageExifMetaData.setExposureTime(new ExposureTime(exposureTime));
+                } catch (ExposureTimeException etex) {
+                    imageExifMetaData.setExposureTime(null);
+                    logger.logERROR("Could not create a ExposureTime object from string value: " + exposureTime);
+                    logger.logERROR(etex);
+                }
+                break;
+
+            default:
+                break;
+            }
         }
 
-        imageExifMetaData.setIsoValue(Integer.parseInt((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.ISO_VALUE, exifMetaData, XPathConstants.STRING)));
-        imageExifMetaData.setPictureHeight(Integer.parseInt((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.PICTURE_HEIGHT, exifMetaData, XPathConstants.STRING)));
-        imageExifMetaData.setPictureWidth(Integer.parseInt((String)xPath.evaluate(ImageMetaDataDataBaseItemElement.PICTURE_WIDTH, exifMetaData, XPathConstants.STRING)));
-
-        String exposureTime = (String)xPath.evaluate(ImageMetaDataDataBaseItemElement.EXPOSURE_TIME, exifMetaData, XPathConstants.STRING);
-
-        try {
-            imageExifMetaData.setExposureTime(new ExposureTime(exposureTime));
-        } catch (ExposureTimeException etex) {
-            imageExifMetaData.setExposureTime(null);
-            logger.logERROR("Could not create a ExposureTime object from string value: " + exposureTime);
-            logger.logERROR(etex);
-        }
         return imageExifMetaData;
     }
 
@@ -234,19 +252,16 @@ public class ImageMetaDataDataBaseItemUtil {
      * @param imageDirectory
      *            is the directory where the image meta data base file is to be
      *            found.
-     * @param xPath
-     *            used to query the {@link Node} objects
      * @return a {@link List} with {@link ImageMetaDataItem} objects
      *         which are constructed from the content found in an image meta
      *         data base XML file.
-     * @throws XPathExpressionException
      */
-    public static List<ImageMetaDataItem> getImageMetaDataDataBaseItemsFromXML(NodeList imageTags, File imageDirectory, XPath xPath) throws XPathExpressionException {
+    public static List<ImageMetaDataItem> getImageMetaDataDataBaseItemsFromXML(NodeList imageTags, File imageDirectory) {
         List<ImageMetaDataItem> imageMetaDataDataBaseItems = new ArrayList<ImageMetaDataItem>();
 
         int nrOfTags = imageTags.getLength();
         for (int i = 0; i < nrOfTags; i++) {
-            imageMetaDataDataBaseItems.add(createFromXML(imageTags.item(i), imageDirectory, xPath));
+            imageMetaDataDataBaseItems.add(createFromXML(imageTags.item(i), imageDirectory));
         }
         return imageMetaDataDataBaseItems;
     }
@@ -266,7 +281,6 @@ public class ImageMetaDataDataBaseItemUtil {
      * @throws XPathExpressionException
      */
     public static List<File> checkReferencedFilesExistence(List<ImageMetaDataItem> imageMetaDataDataBaseItems) {
-        Logger logger = Logger.getInstance();
         logger.logDEBUG("Start of checking file consistency for meta data XML content");
 
         List<File> nonExistingFiles = new ArrayList<File>();
