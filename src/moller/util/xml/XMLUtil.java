@@ -34,6 +34,12 @@ import org.xml.sax.SAXException;
 
 public class XMLUtil {
 
+    private static SchemaFactory factory;
+
+    static {
+        factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    }
+
 	/**
 	 * @param encoding
 	 * @param version
@@ -273,7 +279,6 @@ public class XMLUtil {
      */
     public static ResultObject<Exception> validate(File xmlFileToValidate,  StreamSource schemaToValidateAgainst) {
         try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(schemaToValidateAgainst);
 
             Validator validator = schema.newValidator();

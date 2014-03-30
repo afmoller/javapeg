@@ -39,10 +39,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
@@ -76,8 +72,20 @@ import org.xml.sax.SAXException;
 
 public class ImageMetaDataDataBaseHandler {
 
-    private static final String DELIMITER = "/";
-    private static final String JAVAPEG_IMAGE_META_DATA_DATA_BASE = "/javapeg-image-meta-data-data-base/";
+    private static DocumentBuilder db;
+
+    static {
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+             db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            Logger logger = Logger.getInstance();
+            logger.logFATAL("Could not get an DocumentBuilder");
+            logger.logFATAL(e);
+            System.exit(-1);
+        }
+    }
 
     private static Configuration configuration = Config.getInstance().get();
 
@@ -331,29 +339,29 @@ public class ImageMetaDataDataBaseHandler {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws XPathExpressionException
      */
-    public static ImageMetaDataDataBase deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+    public static ImageMetaDataDataBase deserializeImageMetaDataDataBaseFile(File imageMetaDataDataBase) throws ParserConfigurationException, SAXException, IOException {
+        Logger logger = Logger.getInstance();
+        logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBase.getAbsolutePath() + " START DESERIALIZATION");
         Document doc = db.parse(imageMetaDataDataBase);
         doc.getDocumentElement().normalize();
-
-        XPathFactory xPathFactory = XPathFactory.newInstance();
-        XPath xPath = xPathFactory.newXPath();
-
-        String xPathPrefix = DELIMITER + JAVAPEG_IMAGE_META_DATA_DATA_BASE + DELIMITER;
 
         /**
          *  Get all the image tags as ImageMetaDataDataBaseItem objects.
          */
-        NodeList imageTags = (NodeList)xPath.evaluate(xPathPrefix + ImageMetaDataDataBaseItemElement.IMAGE, doc, XPathConstants.NODESET);
-        List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(imageTags, imageMetaDataDataBase.getParentFile(), xPath);
+        NodeList allImageTags = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.IMAGE);
+
+        List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(allImageTags, imageMetaDataDataBase.getParentFile());
 
         /**
          * Get the JavaPEGId
          */
-        String javaPegIdValue = (String)xPath.evaluate(xPathPrefix + ImageMetaDataDataBaseItemElement.JAVAPEG_ID, doc, XPathConstants.STRING);
+        String javaPegIdValue = "";
+
+        NodeList javaPegIdValueNodeList = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.JAVAPEG_ID);
+        if (javaPegIdValueNodeList.getLength() > 0) {
+            javaPegIdValue = javaPegIdValueNodeList.item(0).getTextContent();
+        }
 
         /**
          * Construct the java representation of the XML file.
@@ -362,6 +370,7 @@ public class ImageMetaDataDataBaseHandler {
         imddb.setImageMetaDataItems(imageMetaDataDataBaseItemsFromXML);
         imddb.setJavaPEGId(javaPegIdValue);
 
+        logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBase.getAbsolutePath() + " FINISHED DESERIALIZATION");
         return imddb;
     }
 
