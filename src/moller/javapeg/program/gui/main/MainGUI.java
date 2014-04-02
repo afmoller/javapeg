@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program;
+package moller.javapeg.program.gui.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -60,7 +60,9 @@ import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -89,6 +91,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
@@ -119,9 +122,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
+import moller.javapeg.program.FileRetriever;
+import moller.javapeg.program.FileSelection;
+import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.categories.CategoryUserObject;
@@ -151,8 +157,8 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchParameters;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
-import moller.javapeg.program.enumerations.Action;
 import moller.javapeg.program.enumerations.CategoryMenueType;
+import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
@@ -286,6 +292,10 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuCopyImageToClipBoardMerge;
     private JMenuItem popupMenuCopyImageToClipBoardView;
     private JMenuItem popupMenuCopyImageToClipBoardTag;
+    private JMenuItem popupMenuCopySelectedImagesToClipBoardRename;
+    private JMenuItem popupMenuCopySelectedImagesToClipBoardMerge;
+    private JMenuItem popupMenuCopySelectedImagesToClipBoardView;
+    private JMenuItem popupMenuCopySelectedImagesToClipBoardTag;
     private JMenuItem popupMenuCopyAllImagesToClipBoardRename;
     private JMenuItem popupMenuCopyAllImagesToClipBoardMerge;
     private JMenuItem popupMenuCopyAllImagesToClipBoardView;
@@ -393,7 +403,13 @@ public class MainGUI extends JFrame {
 
     private HeadingPanel thumbNailsPanelHeading;
 
-    private ArrayList<ButtonGroup> importedButtonGroups;
+    private List<ButtonGroup> importedButtonGroups;
+
+    /**
+     * This object keeps track on which thumbnails that are selected in the
+     * thumbnailoverview part of this GUI.
+     */
+    private final SelectedThumbnails selectedThmbnailButtons = new SelectedThumbnails();
 
     /** Provides nice icons and names for files. */
     private final FileSystemView fileSystemView;
@@ -1905,6 +1921,14 @@ public class MainGUI extends JFrame {
         popupMenuCopyAllImagesToClipBoardMerge.addActionListener(new CopyAllImagesToSystemClipBoard());
         popupMenuCopyAllImagesToClipBoardView.addActionListener(new CopyAllImagesToSystemClipBoard());
         popupMenuCopyAllImagesToClipBoardTag.addActionListener(new CopyAllImagesToSystemClipBoard());
+
+        CopySelectedImagesAction copySelectedImagesAction = new CopySelectedImagesAction();
+        copySelectedImagesAction.putValue(Action.NAME, lang.get("maingui.popupmenu.copySelectedToSystemClipboard"));
+        popupMenuCopySelectedImagesToClipBoardRename.setAction(copySelectedImagesAction);
+        popupMenuCopySelectedImagesToClipBoardMerge.setAction(copySelectedImagesAction);
+        popupMenuCopySelectedImagesToClipBoardView.setAction(copySelectedImagesAction);
+        popupMenuCopySelectedImagesToClipBoardTag.setAction(copySelectedImagesAction);
+
         popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
         popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
         popupMenuAddCategory.addActionListener(new AddCategory());
@@ -1936,17 +1960,33 @@ public class MainGUI extends JFrame {
         imageTagPreviewScrollPane.addComponentListener(new ImageTagPreviewScrollPaneListener());
     }
 
+    private class CopySelectedImagesAction extends AbstractAction {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (selectedThmbnailButtons.size() > 0) {
+                FileSelection fileSelection = new FileSelection(selectedThmbnailButtons.getAsFiles());
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+            }
+        }
+    }
+
     public void createRightClickMenuMerge() {
 
         popupMenuAddImagePathToImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuCopyImageToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+        popupMenuCopySelectedImagesToClipBoardMerge = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
 
         rightClickMenuMerge = new JPopupMenu();
         rightClickMenuMerge.add(popupMenuAddImagePathToImageRepositoryMerge);
         rightClickMenuMerge.add(popupMenuRemoveImagePathFromImageRepositoryMerge);
+        rightClickMenuMerge.addSeparator();
         rightClickMenuMerge.add(popupMenuCopyImageToClipBoardMerge);
+        rightClickMenuMerge.add(popupMenuCopySelectedImagesToClipBoardMerge);
         rightClickMenuMerge.add(popupMenuCopyAllImagesToClipBoardMerge);
     }
 
@@ -1964,18 +2004,21 @@ public class MainGUI extends JFrame {
         popupMenuAddImagePathToImageRepositoryRename = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryRename = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuCopyImageToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+        popupMenuCopySelectedImagesToClipBoardRename = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
-
 
         rightClickMenuRename = new JPopupMenu();
         rightClickMenuRename.add(popupMenuAddImagePathToImageRepositoryRename);
         rightClickMenuRename.add(popupMenuRemoveImagePathFromImageRepositoryRename);
+        rightClickMenuRename.addSeparator();
         rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
+        rightClickMenuRename.add(popupMenuCopySelectedImagesToClipBoardRename);
         rightClickMenuRename.add(popupMenuCopyAllImagesToClipBoardRename);
     }
 
     public void createRightClickMenuView(){
         popupMenuCopyImageToClipBoardView = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+        popupMenuCopySelectedImagesToClipBoardView = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardView = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
         popupMenuAddImagePathToImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
@@ -1985,7 +2028,9 @@ public class MainGUI extends JFrame {
         rightClickMenuView = new JPopupMenu();
         rightClickMenuView.add(popupMenuAddImagePathToImageRepositoryView);
         rightClickMenuView.add(popupMenuRemoveImagePathFromImageRepositoryView);
+        rightClickMenuView.addSeparator();
         rightClickMenuView.add(popupMenuCopyImageToClipBoardView);
+        rightClickMenuView.add(popupMenuCopySelectedImagesToClipBoardView);
         rightClickMenuView.add(popupMenuCopyAllImagesToClipBoardView);
         rightClickMenuView.addSeparator();
         rightClickMenuView.add(popupMenuAddImageToViewList);
@@ -1996,12 +2041,15 @@ public class MainGUI extends JFrame {
         popupMenuAddImagePathToImageRepositoryTag = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryTag = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuCopyImageToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
+        popupMenuCopySelectedImagesToClipBoardTag = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
 
         rightClickMenuTag = new JPopupMenu();
         rightClickMenuTag.add(popupMenuAddImagePathToImageRepositoryTag);
         rightClickMenuTag.add(popupMenuRemoveImagePathFromImageRepositoryTag);
+        rightClickMenuTag.addSeparator();
         rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
+        rightClickMenuTag.add(popupMenuCopySelectedImagesToClipBoardTag);
         rightClickMenuTag.add(popupMenuCopyAllImagesToClipBoardTag);
     }
 
@@ -2098,7 +2146,7 @@ public class MainGUI extends JFrame {
         Config.getInstance().save();
     }
 
-    private void addThumbnail(JButton thumbNail) {
+    private void addThumbnail(JToggleButton thumbNail) {
         thumbNailsPanel.add(thumbNail);
     }
 
@@ -2540,13 +2588,13 @@ public class MainGUI extends JFrame {
 
                     ApplicationContext ac = ApplicationContext.getInstance();
 
-                    final File jpegFile = ac.handleJpegFileLoadBuffer(null, Action.RETRIEVE);
+                    final File jpegFile = ac.handleJpegFileLoadBuffer(null, FileLoadingAction.RETRIEVE);
 
                     if(jpegFile != null) {
 
                         JPEGThumbNail tn =    JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 
-                        JButton thumbContainer = new JButton();
+                        JToggleButton thumbContainer = new JToggleButton();
                         thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
                         thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
@@ -2701,11 +2749,11 @@ public class MainGUI extends JFrame {
             }
             // ... or a left click.
             else {
-                thumbNailsPanelHeading.removeIcon();
-                thumbNailsPanelHeading.removeListeners();
-
                 ApplicationContext ac = ApplicationContext.getInstance();
                 if(!new File(totalPath).equals(ac.getSourcePath())) {
+                    thumbNailsPanelHeading.removeIcon();
+                    thumbNailsPanelHeading.removeListeners();
+
                     ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
                     if(imddbituc.getLoadedRepositoryPath() != null) {
                         storeCurrentlySelectedImageData();
@@ -2809,9 +2857,6 @@ public class MainGUI extends JFrame {
                             } catch (IOException iox) {
                                 logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
                                 logger.logERROR(iox);
-                            } catch (XPathExpressionException xpee) {
-                                logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                                logger.logERROR(xpee);
                             }
                         } else {
 
@@ -2842,9 +2887,6 @@ public class MainGUI extends JFrame {
                                 } catch (IOException iox) {
                                     logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
                                     logger.logERROR(iox);
-                                } catch (XPathExpressionException xpee) {
-                                    logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                                    logger.logERROR(xpee);
                                 }
                             } else {
                                 displayErrorMessage("The metadata base file: " + imageMetaDataDataBaseFile.getAbsolutePath() + " is missing");
@@ -3005,7 +3047,7 @@ public class MainGUI extends JFrame {
     }
 
     private void setStatusMessages() {
-        int nrOfImages =  FileRetriever.getInstance().handleNrOfJpegImages(Action.RETRIEVE);
+        int nrOfImages =  FileRetriever.getInstance().handleNrOfJpegImages(FileLoadingAction.RETRIEVE);
 
         if (nrOfImages > 0) {
             int nrOfColumns = thumbNailGridLayout.getColumns();
@@ -3114,6 +3156,26 @@ public class MainGUI extends JFrame {
             }
 
             File jpegImage = new File(e.getActionCommand());
+
+            Object source = e.getSource();
+
+            if (source instanceof JToggleButton) {
+                JToggleButton toggleButton = (JToggleButton)source;
+
+                if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
+                    if (toggleButton.isSelected()) {
+                        selectedThmbnailButtons.addSelection(toggleButton);
+                    } else {
+                        selectedThmbnailButtons.removeSelection(toggleButton);
+                    }
+                } else {
+                    if (toggleButton.isSelected()) {
+                        selectedThmbnailButtons.set(toggleButton);
+                    } else {
+                        selectedThmbnailButtons.clearSelections();
+                    }
+                }
+            }
 
             imageMetaDataPanel.setMetaData(jpegImage);
 
@@ -4000,7 +4062,7 @@ public class MainGUI extends JFrame {
                     popupMenuAddImagePathToImageRepositoryMerge.setVisible(true);
                     popupMenuRemoveImagePathFromImageRepositoryMerge.setVisible(false);
                 }
-                popupMenuCopyImageToClipBoardMerge.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+                popupMenuCopyImageToClipBoardMerge.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuMerge.show(e.getComponent(),e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
                 if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
@@ -4010,7 +4072,7 @@ public class MainGUI extends JFrame {
                     popupMenuAddImagePathToImageRepositoryRename.setVisible(true);
                     popupMenuRemoveImagePathFromImageRepositoryRename.setVisible(false);
                 }
-                popupMenuCopyImageToClipBoardRename.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+                popupMenuCopyImageToClipBoardRename.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuRename.show(e.getComponent(),e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
                 if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
@@ -4020,7 +4082,7 @@ public class MainGUI extends JFrame {
                     popupMenuAddImagePathToImageRepositoryTag.setVisible(true);
                     popupMenuRemoveImagePathFromImageRepositoryTag.setVisible(false);
                 }
-                popupMenuCopyImageToClipBoardTag.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+                popupMenuCopyImageToClipBoardTag.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 3)) {
                 if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
@@ -4030,11 +4092,11 @@ public class MainGUI extends JFrame {
                     popupMenuAddImagePathToImageRepositoryView.setVisible(true);
                     popupMenuRemoveImagePathFromImageRepositoryView.setVisible(false);
                 }
-                popupMenuAddImageToViewList.setActionCommand(((JButton)e.getComponent()).getActionCommand());
-                popupMenuCopyImageToClipBoardView.setActionCommand(((JButton)e.getComponent()).getActionCommand());
+                popupMenuAddImageToViewList.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
+                popupMenuCopyImageToClipBoardView.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
             } else if ((!e.isPopupTrigger()) && (e.getClickCount() == 2) && (mainTabbedPane.getSelectedIndex() == 3)) {
-                File image = new File(((JButton)e.getComponent()).getActionCommand());
+                File image = new File(((JToggleButton)e.getComponent()).getActionCommand());
                 handleAddImageToImageList(image);
             }
         }
@@ -4183,9 +4245,6 @@ public class MainGUI extends JFrame {
             } catch (IOException iox) {
                 logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
                 logger.logERROR(iox);
-            } catch (XPathExpressionException xpee) {
-                logger.logERROR("XPathExpression exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                logger.logERROR(xpee);
             }
         }
     }

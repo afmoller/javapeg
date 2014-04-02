@@ -28,7 +28,7 @@ import java.util.TreeSet;
 import javax.swing.JOptionPane;
 
 import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.enumerations.Action;
+import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.jpeg.JPEGUtil;
@@ -107,8 +107,8 @@ public class FileRetriever {
                 if(JPEGUtil.isJPEG(file)) {
                     logger.logDEBUG("File: " + file.getAbsolutePath() + " added to list of JPEG Files");
                     jpegFileNameFileObjectMap.put(file.getName(), file);
-                    handleNrOfJpegImages(Action.SET);
-                    ac.handleJpegFileLoadBuffer(file, Action.ADD);
+                    handleNrOfJpegImages(FileLoadingAction.SET);
+                    ac.handleJpegFileLoadBuffer(file, FileLoadingAction.ADD);
                 } else {
                     logger.logDEBUG("File: " + file.getAbsolutePath() + " added to list of non JPEG Files");
                     nonJpegFileNameFileObjectMap.put(file.getName(), file);
@@ -125,7 +125,7 @@ public class FileRetriever {
         }
     }
 
-    public synchronized int handleNrOfJpegImages(Action action) {
+    public synchronized int handleNrOfJpegImages(FileLoadingAction action) {
         switch (action) {
         case RETRIEVE:
             return nrOfJpegImages;

@@ -24,7 +24,7 @@ import java.util.Set;
 
 import javax.swing.tree.TreePath;
 
-import moller.javapeg.program.enumerations.Action;
+import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.metadata.MetaData;
 
@@ -320,7 +320,7 @@ public class ApplicationContext {
         jpegFileLoadBuffer.clear();
     }
 
-    public synchronized File handleJpegFileLoadBuffer(File image, Action action) {
+    public synchronized File handleJpegFileLoadBuffer(File image, FileLoadingAction action) {
         switch (action) {
         case ADD:
             jpegFileLoadBuffer.add(image);

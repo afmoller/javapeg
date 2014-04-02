@@ -231,6 +231,7 @@ maingui.popupmenu.addAllImagesToList                 = Add all images to image l
 maingui.popupmenu.addImagePathToImageRepository      = Add directory to image repository
 maingui.popupmenu.removeImagePathFromImageRepository = Remove directory from image repository
 maingui.popupmenu.copyToSystemClipboard              = Copy image to System Clipboard
+maingui.popupmenu.copySelectedToSystemClipboard      = Copy selected image(s) to System Clipboard
 maingui.popupmenu.copyAllToSystemClipboard           = Copy all images to System Clipboard
 
 ##############################################################################################################
