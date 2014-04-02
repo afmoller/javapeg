@@ -24,7 +24,6 @@ import javax.swing.SwingUtilities;
 
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
 import moller.javapeg.program.C;
-import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.applicationstart.ApplicationBootUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigHandler;
@@ -33,6 +32,7 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.Language;
 import moller.javapeg.program.firstlaunch.InitialConfigGUI;
 import moller.javapeg.program.firstlaunch.InitialConfigGUILanguage;
+import moller.javapeg.program.gui.main.MainGUI;
 import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
 

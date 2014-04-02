@@ -1,8 +1,4 @@
-*******************************************************************************<LF>
-*                                J a v a P E G                                * <LF>
-*******************************************************************************<LF>
-*                    V E R S I O N   I N F O R M A T I O N                    *<LF>
-*******************************************************************************<LF>
+VERSION INFORMATION<LF>
 <LF>
  + = Additions since previous version<LF>
  ! = Bug fixes since previous version<LF>
@@ -10,74 +6,34 @@
 <LF>
  3.0 (2014-xx-xx)<LF>
 <LF>
- + It is possible to zoom an displayed image in the Image Viewer. It is also<LF>
-   possible to move the image by dragging it with the mouse. If wanted it is<LF>
-   also possible to display an "Navigation image" a small variant of the <LF>
-   displayed image in which it is possible to click and the large image will<LF>
-   then be centered at the clicked position. It is also possible to center<LF>
-   a displayed image.<LF>
+ + It is possible to zoom an displayed image in the Image Viewer. It is also possible to move the image by dragging it with the mouse. If wanted it is also possible to display an "Navigation image" a small variant of the displayed image in which it is possible to click and the large image will then be centered at the clicked position. It is also possible to center a displayed image.<LF>
 <LF>
- + It is possible to select which scaling method JavaPEG shall use when an<LF> 
-   image in the ImageViewer is to be scaled. This way it is possible to select<LF>
-   the quality and thereby the speed of scaling an image (higher quality<LF>
-   requires longer scaling time.)<LF>
+ + It is possible to select which scaling method JavaPEG shall use when an image in the ImageViewer is to be scaled. This way it is possible to select the quality and thereby the speed of scaling an image (higher quality requires longer scaling time.)<LF>
 <LF>
- + When an image is removed from the image view list then the preview image is<LF>
-   automatically updated to the newly (automatically) selected image in the<LF>
-   image view list.<LF>
+ + When an image is removed from the image view list then the preview image is automatically updated to the newly (automatically) selected image in the image view list.<LF>
 <LF>
- + When an image is added to the image view list, then this image is also<LF> 
-   automatically selected in the list and thereby displayed in the preview<LF> 
-   area.<LF>
-<LF> 
- + It is possible to save an unlimited amount of File name and Sub folder<LF>
-   rename templates. Any saved template will end up in a drop down box and when<LF>
-   selected, it will be used as the current template used by the rename<LF> 
-   functionality.<LF>
-<LF> 
- + A new image merge mode has been added to JavaPEG. This means that it is<LF> 
-   possible to merge image files (copy files from different directories into<LF> 
-   one destination directory, but without any possible duplicates) from an<LF>
-   unlimited amount of source directories.<LF>
-<LF> 
- + An image resize functionality has been added to JavaPEG. It can batch resize<LF>
-   images into specified sizes and qualities, either by specifying the width<LF> 
-   (height will be calculated), height (width will be calculated) or both (the<LF>
-   exact given sizes will be used without taking the original images aspect<LF> 
-   ratios into consideration)<LF> 
-<LF> 
- + At the first start of JavaPEG the user will be shown an application<LF> 
-   configuration form, in which it is either possible to set the language to be<LF>
-   used by JavaPEG, or to do a full import of a configuration from an<LF> 
-   previously made installation. It is possible to import configurations from<LF> 
-   JavaPEG versions ranging from 3.0 and forwards. There is no support of<LF>
-   importing configurations from an older version.<LF>
-<LF> 
- + Configuration validation against Schema at application start. If the<LF>
-   configuration is invalid then the invalid configuration will be stored into<LF>
-   a "corrupt" directory and the configuration will be restored from a zipped<LF>
-   backup. If that backup also is corrupt, then the configuration will be<LF> 
-   restored from a built in fall back configuration.<LF>
-<LF>  
+ + When an image is added to the image view list, then this image is also automatically selected in the list and thereby displayed in the preview area.<LF>
+<LF>
+ + It is possible to save an unlimited amount of File name and Sub folder rename templates. Any saved template will end up in a drop down box and when selected, it will be used as the current template used by the rename functionality.<LF>
+<LF>
+ + A new image merge mode has been added to JavaPEG. This means that it is possible to merge image files (copy files from different directories into one destination directory, but without any possible duplicates) from an unlimited amount of source directories.<LF>
+<LF>
+ + An image resize functionality has been added to JavaPEG. It can batch resize images into specified sizes and qualities, either by specifying the width (height will be calculated), height (width will be calculated) or both (the exact given sizes will be used without taking the original images aspect ratios into consideration)<LF>
+<LF>
+ + At the first start of JavaPEG the user will be shown an application configuration form, in which it is either possible to set the language to be used by JavaPEG, or to do a full import of a configuration from an previously made installation. It is possible to import configurations from JavaPEG versions ranging from 3.0 and forwards. There is no support of importing configurations from an older version.<LF>
+<LF>
+ + Configuration validation against Schema at application start. If the configuration is invalid then the invalid configuration will be stored into a "corrupt" directory and the configuration will be restored from a zipped backup. If that backup also is corrupt, then the configuration will be restored from a built in fall back configuration.<LF>
+<LF>
  + Row sorting, by column, added to the meta data tables.<LF>
-<LF> 
- + Possible to reorder columns and sort the rows by any column in the METADATA<LF>
-   and PREVIEW tables in the RENAME IMAGES mode.<LF> 
-<LF> 
- + If the Automatic Image Resize button is selected in the ImageViewer then a<LF>
-   deselection of this button will resize a loaded image to the original size.<LF>
-<LF> 
- + If an image thumbnail is double clicked when JavaPEG is in<LF>
-   SEARCH / VIEW IMAGE mode the image will be added to the end of the image<LF>
-   list. If the Image Viewer is displayed the image will also be added to the<LF>
-   collection of viewable images in the Image Viewer.<LF>
-<LF> 
- + An image tagging functionality has been implemented. It is possible to tag<LF>
-   an image with an unlimited amount of categories, set an image rating between<LF>
-   1 and 5 and to enter a comment. This meta data and additional image specific<LF>
-   data, such as ISO rating, exposure data and time, shutterspeed,... is<LF> 
-   persistently stored in xml files.<LF>
-<LF>      
+<LF>
+ + Possible to reorder columns and sort the rows by any column in the METADATA and PREVIEW tables in the RENAME IMAGES mode.<LF>
+<LF>
+ + If the Automatic Image Resize button is selected in the ImageViewer then a deselection of this button will resize a loaded image to the original size.<LF>
+<LF>
+ + If an image thumbnail is double clicked when JavaPEG is in SEARCH / VIEW IMAGE mode the image will be added to the end of the image list. If the Image Viewer is displayed the image will also be added to the collection of viewable images in the Image Viewer.<LF>
+<LF>
+ + An image tagging functionality has been implemented. It is possible to tag an image with an unlimited amount of categories, set an image rating between 1 and 5 and to enter a comment. This meta data and additional image specific data, such as ISO rating, exposure data and time, shutterspeed,... is persistently stored in xml files.<LF>
+<LF>
  + A search engine that searches in an in memory database compiled by all<LF> 
    existing xml meta data files mentioned in the section above.<LF>   
 <LF> 
@@ -99,11 +55,7 @@
    means that it is possible to have different tooltips in the different parts<LF>
    of the JavaPEG application.<LF> 
 <LF> 
- + Added the possibility to copy image(s) to system clipboard. It is either<LF>
-   possible to copy one image to clipboard or all images in a selected directory<LF>
-   via popup menu or to copy a list of images at once, by populating an image<LF> 
-   list in the SEARCH / VIEW IMAGES tab and click on the copy image list to<LF> 
-   system clipboard button.<LF> 
+ + Added the possibility to copy image(s) to system clipboard. It is either possible to copy one image to clipboard or all images in a selected directory via popup menu or to copy a list of images at once, by populating an image list in the SEARCH / VIEW IMAGES tab and click on the copy image list to system clipboard button or by selecting images in the thumbnail overview by clicking on each image to copy and at the same time holding down the Ctrl button and then selecting the "Copy selected image(s) to system clipboard" menu item in the context menu.<LF> 
 <LF> 
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds<LF>
    corrupt information about where the thumbnail is stored and JavaPEG does not<LF>

@@ -10,6 +10,8 @@
  
  3.0 (2014-xx-xx)
  
+ + It is possible to copy a se 
+ 
  + It is possible to zoom an displayed image in the Image Viewer. It is also
    possible to move the image by dragging it with the mouse. If wanted it is
    also possible to display an "Navigation image" a small variant of the 
@@ -103,7 +105,10 @@
    possible to copy one image to clipboard or all images in a selected directory
    via popup menu or to copy a list of images at once, by populating an image 
    list in the SEARCH / VIEW IMAGES tab and click on the copy image list to 
-   system clipboard button. 
+   system clipboard button or by selecting images in the thumbnail overview by
+   clicking on each image to copy and at the same time holding down the Ctrl
+   button and then selecting the "Copy selected image(s) to system clipboard"
+   menu item in the context menu. 
  
  + If a JPEG file is missing an embedded thumbnail or if the exif data holds
    corrupt information about where the thumbnail is stored and JavaPEG does not
@@ -383,7 +388,6 @@
 
  + For potential error that can occur, there is logging to file.
 
-
  1.01 (2007-02-02)
 
  ! Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect 
@@ -394,7 +398,6 @@
    present if there was white spaces first or last in templates. Besides from 
    this there was a correction of two error messages which was mixed up in the 
    English language file.
-
 
  1.0 (2006-11-27)
 

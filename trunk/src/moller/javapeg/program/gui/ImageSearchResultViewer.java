@@ -19,7 +19,6 @@ package moller.javapeg.program.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -31,8 +30,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +38,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -299,9 +295,9 @@ public class ImageSearchResultViewer extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
-                if (jToggleButton.getName().equals("deselected")) {
-                    setSelectedThumbNailImage(jToggleButton);
+                if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
+                    ButtonIconUtil.setSelectedThumbNailImage(jToggleButton);
                 }
             }
         }
@@ -311,8 +307,8 @@ public class ImageSearchResultViewer extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
-                if (jToggleButton.getName().equals("selected")) {
-                    setDeSelectedThumbNailImage(jToggleButton);
+                if (jToggleButton.isSelected()) {
+                    ButtonIconUtil.setDeSelectedThumbNailImage(jToggleButton);
                     jToggleButton.setSelected(false);
                 }
             }
@@ -354,20 +350,6 @@ public class ImageSearchResultViewer extends JFrame {
             }
         }
         return jToggleButtons;
-    }
-
-    private void setSelectedThumbNailImage(JToggleButton toggleButton) {
-        GrayFilter filter = new GrayFilter(true, 35);
-        ImageProducer prod = new FilteredImageSource(((ImageIcon)toggleButton.getIcon()).getImage().getSource(), filter);
-        Image disabledImage = Toolkit.getDefaultToolkit().createImage(prod);
-
-        toggleButton.setIcon(new ImageIcon(disabledImage));
-        toggleButton.setName("selected");
-    }
-
-    private void setDeSelectedThumbNailImage(JToggleButton toggleButton) {
-        toggleButton.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(new File(toggleButton.getActionCommand())).getThumbNailData()));
-        toggleButton.setName("deselected");
     }
 
     private void executeLoadThumbnailsProcess(List<File> images) {
@@ -441,10 +423,10 @@ public class ImageSearchResultViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JToggleButton toggleButton = (JToggleButton)e.getSource();
 
-            if (toggleButton.getName().equals("deselected")) {
-                setSelectedThumbNailImage(toggleButton);
+            if (toggleButton.isSelected()) {
+                ButtonIconUtil.setSelectedThumbNailImage(toggleButton);
             } else {
-                setDeSelectedThumbNailImage(toggleButton);
+                ButtonIconUtil.setDeSelectedThumbNailImage(toggleButton);
             }
         }
     }

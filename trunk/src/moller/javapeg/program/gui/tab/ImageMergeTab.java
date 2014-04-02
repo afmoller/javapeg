@@ -50,13 +50,13 @@ import javax.swing.border.TitledBorder;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.MainGUI;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.gui.ImageMergeConflictViewer;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
+import moller.javapeg.program.gui.main.MainGUI;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;

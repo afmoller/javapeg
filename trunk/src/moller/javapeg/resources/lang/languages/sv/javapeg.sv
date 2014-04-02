@@ -231,6 +231,7 @@ maingui.popupmenu.addAllImagesToList                 = Lägg till alla bilder ti
 maingui.popupmenu.addImagePathToImageRepository      = Lägg till katalog till bilddatabasen
 maingui.popupmenu.removeImagePathFromImageRepository = Ta bort katalog från bilddatabasen
 maingui.popupmenu.copyToSystemClipboard              = Kopiera bild till urklipp
+maingui.popupmenu.copySelectedToSystemClipboard      = Kopiera vald(a) bild(er) till urklipp
 maingui.popupmenu.copyAllToSystemClipboard           = Kopiera alla bilder till urklipp
 
 ##############################################################################################################
