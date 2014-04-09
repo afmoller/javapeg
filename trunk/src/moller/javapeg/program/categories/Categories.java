@@ -44,7 +44,6 @@ public class Categories {
         }
     }
 
-
     public void addCategories(String categoriesString) {
         String[] categories = categoriesString.split(",");
         for (String category : categories) {
@@ -103,5 +102,20 @@ public class Categories {
             }
         }
         return false;
+    }
+
+    /**
+     * Adds a set of categories to the already, if any, set categories
+     * 
+     * @param categoriesToAdd
+     *            is the {@link Set} of categories to add to the existing
+     *            {@link Set} of categories.
+     * @return a boolean value indicating if any category was added to the set
+     *         or not. True means that atleast one of the categories in the
+     *         parameter to this method was added to the {@link Set} of already
+     *         existing categories.
+     */
+    public boolean addCategories(Set<String> categoriesToAdd) {
+        return categories.addAll(categoriesToAdd);
     }
 }

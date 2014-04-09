@@ -44,6 +44,12 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
+/**
+ * This class encapsulates a table which displays image Exif meta data.
+ *
+ * @author Fredrik
+ *
+ */
 public class MetaDataPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -91,26 +97,43 @@ public class MetaDataPanel extends JPanel {
         this.add(scrollpane, BorderLayout.CENTER);
     }
 
+    /**
+     * Displays the Exif meta data which is embedded in the image that is
+     * specified by the parameter jpegFile. If the jpegFile parameter is null
+     * then an empty container is displayed.
+     *
+     * @param jpegFile
+     *            is the image whose Exif meta data to display.
+     */
     public void setMetaData(File jpegFile) {
-        try{
-            Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
+        if (jpegFile == null) {
+            clearMetaData();
+        } else {
+            try{
+                Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
 
-            metaDataTableModel.setRowCount(0);
+                metaDataTableModel.setRowCount(0);
 
-            for (Vector<String> rowData : getImageTagsInfo(metadata)) {
-                metaDataTableModel.addRow(rowData);
+                for (Vector<String> rowData : getImageTagsInfo(metadata)) {
+                    metaDataTableModel.addRow(rowData);
+                }
+
+                Table.packColumns(table, 15);
+                titleLabel.setText(titleLabelDefaultText + " " + jpegFile.getName());
+            } catch (JpegProcessingException jpex) {
+                logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
+                logger.logERROR(jpex);
+            } catch (IOException iox) {
+                logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
+                logger.logERROR(iox);
             }
-
-            Table.packColumns(table, 15);
-            titleLabel.setText(titleLabelDefaultText + " " + jpegFile.getName());
-        } catch (JpegProcessingException jpex) {
-            logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
-            logger.logERROR(jpex);
-        } catch (IOException iox) {
-            logger.logERROR("Could not read meta data from file: " + jpegFile.getAbsolutePath() + ". See stacktrace below for details:");
-            logger.logERROR(iox);        }
+        }
     }
 
+    /**
+     * Removes all the rows in the meta data table an displays then an empty
+     * container.
+     */
     public void clearMetaData() {
         metaDataTableModel.setRowCount(0);
         Table.packColumns(table, 15);

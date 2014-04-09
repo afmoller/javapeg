@@ -313,6 +313,7 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuAddCategory;
     private JMenuItem popupMenuRenameCategory;
     private JMenuItem popupMenuRemoveCategory;
+    private JMenuItem popupMenuSaveSelectedCategoriesToSelectedImages;
     private JMenuItem popupMenuExpandCategoriesTreeStructure;
     private JMenuItem popupMenuCollapseCategoriesTreeStructure;
     private JMenuItem popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList;
@@ -1934,6 +1935,7 @@ public class MainGUI extends JFrame {
         popupMenuAddCategory.addActionListener(new AddCategory());
         popupMenuRenameCategory.addActionListener(new RenameCategory());
         popupMenuRemoveCategory.addActionListener(new RemoveCategory());
+        popupMenuSaveSelectedCategoriesToSelectedImages.addActionListener(new SaveSelectedCategoriesToSelectedImages());
         popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
         popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
         popupMenuAddImagePathToImageRepositoryRename.addActionListener(addSelecetedPathToImageRepository = new AddSelecetedPathToImageRepository());
@@ -1998,6 +2000,7 @@ public class MainGUI extends JFrame {
         rightClickMenuCategories.add(popupMenuAddCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuRenameCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
+        rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages = new JMenuItem());
     }
 
     public void createRightClickMenuRename() {
@@ -3147,58 +3150,68 @@ public class MainGUI extends JFrame {
     private class ThumbNailListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            ApplicationContext ac = ApplicationContext.getInstance();
-
-            if (ac.isImageMetaDataDataBaseFileLoaded() &&
-                ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() &&
-                ac.isImageMetaDataDataBaseFileWritable()) {
-                setRatingCommentAndCategoryEnabled(true);
-            }
-
-            File jpegImage = new File(e.getActionCommand());
 
             Object source = e.getSource();
 
             if (source instanceof JToggleButton) {
                 JToggleButton toggleButton = (JToggleButton)source;
 
-                if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                    if (toggleButton.isSelected()) {
+                // An image is selected
+                if (toggleButton.isSelected()) {
+                    ApplicationContext ac = ApplicationContext.getInstance();
+
+                    if (ac.isImageMetaDataDataBaseFileLoaded() &&
+                            ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() &&
+                            ac.isImageMetaDataDataBaseFileWritable()) {
+                        setRatingCommentAndCategoryEnabled(true);
+                    }
+
+                    if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
                         selectedThmbnailButtons.addSelection(toggleButton);
                     } else {
-                        selectedThmbnailButtons.removeSelection(toggleButton);
-                    }
-                } else {
-                    if (toggleButton.isSelected()) {
                         selectedThmbnailButtons.set(toggleButton);
+                    }
+
+                    File jpegImage = new File(e.getActionCommand());
+
+                    imageMetaDataPanel.setMetaData(jpegImage);
+
+                    MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
+
+                    if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
+                        try {
+                            loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
+
+                            storeCurrentlySelectedImageData();
+
+                            ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+
+                            // Load the selected image
+                            irc.setCurrentlySelectedImage(jpegImage);
+                            ImageMetaDataItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
+
+                            imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
+                            setRatingValue(imageMetaDataDataBaseItem.getRating());
+                            setCategories(imageMetaDataDataBaseItem.getCategories());
+                        } catch (IOException iox) {
+                            logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
+                            logger.logERROR(iox);
+                        }
+                    }
+                }
+                // An image is deselected
+                else {
+                    if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
+                        selectedThmbnailButtons.removeSelection(toggleButton);
                     } else {
                         selectedThmbnailButtons.clearSelections();
                     }
-                }
-            }
-
-            imageMetaDataPanel.setMetaData(jpegImage);
-
-            MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
-
-            if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
-                try {
-                    loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
 
                     storeCurrentlySelectedImageData();
-
-                    ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
-
-                    // Load the selected image
-                    irc.setCurrentlySelectedImage(jpegImage);
-                    ImageMetaDataItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
-
-                    imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
-                    setRatingValue(imageMetaDataDataBaseItem.getRating());
-                    setCategories(imageMetaDataDataBaseItem.getCategories());
-                } catch (IOException iox) {
-                    logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
-                    logger.logERROR(iox);
+                    ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setCurrentlySelectedImage(null);
+                    clearTagTab();
+                    setRatingCommentAndCategoryEnabled(false);
+                    imageMetaDataPanel.clearMetaData();
                 }
             }
         }
@@ -3890,6 +3903,45 @@ public class MainGUI extends JFrame {
         }
     }
 
+    /**
+     * This listener class adds the currently selected categories to every
+     * selected image in the thumbnail overview.
+     *
+     * @author Fredrik
+     *
+     */
+    private class SaveSelectedCategoriesToSelectedImages implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            List<File> selectedThmbnailButtonsAsFiles = selectedThmbnailButtons.getAsFiles();
+
+            // Only do this if any image is selected...
+            if (selectedThmbnailButtonsAsFiles != null && !selectedThmbnailButtonsAsFiles.isEmpty()) {
+
+                Categories selectedCategoriesFromTreeModel = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
+
+                // ... and there are any categories selected.
+                if (selectedCategoriesFromTreeModel.size() > 0) {
+                    ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+
+                    for (File selectedImageFile : selectedThmbnailButtonsAsFiles) {
+                        ImageMetaDataItem imageMetaDataBaseItem = imddbituc.getImageMetaDataBaseItem(selectedImageFile);
+
+                        if (imageMetaDataBaseItem != null) {
+                            Categories currentlyStoredCategories = imageMetaDataBaseItem.getCategories();
+
+                            if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
+                                imddbituc.setFlushNeeded(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private class CollapseCategoryTreeStructure implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -4456,6 +4508,7 @@ public class MainGUI extends JFrame {
                     String addCategory = "";
                     String renameCategory = "";
                     String removeCategory = "";
+                    String saveSelectedCategoriesToSelectedImages = "";
 
                     DefaultMutableTreeNode treeNode = null;
 
@@ -4474,6 +4527,7 @@ public class MainGUI extends JFrame {
                         renameCategory = lang.get("findimage.categories.renameSelectedCategory") + " " + value;
                         removeCategory = lang.get("findimage.categories.removeSelectedCategory") + " " + value;
                     }
+                    saveSelectedCategoriesToSelectedImages = lang.get("findimage.categories.saveSelectedCategoriesToSelectedImages");
 
                     popupMenuAddCategory.setText(addCategory);
                     popupMenuRenameCategory.setText(renameCategory);
@@ -4481,6 +4535,8 @@ public class MainGUI extends JFrame {
 
                     popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
                     popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
+
+                    popupMenuSaveSelectedCategoriesToSelectedImages.setText(saveSelectedCategoriesToSelectedImages);
 
                     JTree categoryTree = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
@@ -4602,6 +4658,12 @@ public class MainGUI extends JFrame {
                 rightClickMenuCategories.add(popupMenuAddCategory);
                 break;
             }
+
+            // Add this menu item if there is more than one selected image.
+            if (selectedThmbnailButtons.size() > 1) {
+                rightClickMenuCategories.addSeparator();
+                rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
+            }
         }
     }
 
@@ -4609,7 +4671,7 @@ public class MainGUI extends JFrame {
      * This class extends the {@link SwingWorker} and performs the long running
      * task of loading all the configured image meta data repository files in a
      * separate thread. When the loading is done, then the "search image" button
-     * is set to enabled, and thereby is it possible to perform searches in the
+     * is set to enabled, and thereby it is possible to perform searches in the
      * image meta data repository.
      *
      * @author Fredrik
