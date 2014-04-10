@@ -192,6 +192,7 @@
         <xs:all>
             <xs:element name="cache" type="config:Cache" />
             <xs:element name="creation" type="config:Creation" />
+            <xs:element name="grayfilter" type="config:GrayFilter" />
         </xs:all>
     </xs:complexType>
     
@@ -215,6 +216,13 @@
             </xs:element>
             <xs:element name="width" type="xs:int" />
             <xs:element name="height" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="GrayFilter">
+        <xs:all>
+            <xs:element name="pixelsBrightened" type="xs:boolean" />
+            <xs:element name="percentage" type="xs:int" />
         </xs:all>
     </xs:complexType>
     

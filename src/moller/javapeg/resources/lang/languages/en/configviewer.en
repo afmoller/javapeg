@@ -82,6 +82,8 @@ configviewer.thumbnail.tooltip.label                   = Thumbnail Tooltips
 configviewer.thumbnail.mainWindow.label              = Main Window
 configviewer.thumbnail.imageSearchResultWindow.label = Image Search Result Window
 configviewer.thumbnail.imageViewerWindow.label       = Image Viever Window
+configviewer.thumbnail.grayfilter.transparency.label = Transparency
+configviewer.thumbnail.grayfilter.increase.contrast.label = Increase contrast
 
 ##############################################################################################################
 # T A G                                                                                                      #

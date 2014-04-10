@@ -151,6 +151,7 @@ import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.config.view.ConfigViewerGUI;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
@@ -3166,10 +3167,14 @@ public class MainGUI extends JFrame {
                         setRatingCommentAndCategoryEnabled(true);
                     }
 
+                    ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                    boolean pixelsBrightened = grayFilter.isPixelsBrightened();
+                    int percentage = grayFilter.getPercentage();
+
                     if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        selectedThmbnailButtons.addSelection(toggleButton);
+                        selectedThmbnailButtons.addSelection(toggleButton, pixelsBrightened, percentage);
                     } else {
-                        selectedThmbnailButtons.set(toggleButton);
+                        selectedThmbnailButtons.set(toggleButton, pixelsBrightened, percentage);
                     }
 
                     File jpegImage = new File(e.getActionCommand());

@@ -16,9 +16,9 @@ public class SelectedThumbnails extends ArrayList<JToggleButton> {
      */
     private static final long serialVersionUID = 6281196769790574197L;
 
-    public void set(JToggleButton jToggleButton) {
+    public void set(JToggleButton jToggleButton, boolean brightened, int percentage) {
         clearSelections();
-        addSelection(jToggleButton);
+        addSelection(jToggleButton, brightened, percentage);
     }
 
     public void clearSelections() {
@@ -33,8 +33,8 @@ public class SelectedThumbnails extends ArrayList<JToggleButton> {
         clear();
     }
 
-    public void addSelection(JToggleButton jToggleButton) {
-        ButtonIconUtil.setSelectedThumbNailImage(jToggleButton);
+    public void addSelection(JToggleButton jToggleButton, boolean brightened, int percentage) {
+        ButtonIconUtil.setSelectedThumbNailImage(jToggleButton, brightened, percentage);
         add(jToggleButton);
     }
 
