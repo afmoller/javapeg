@@ -19,6 +19,7 @@ package moller.javapeg.program.gui.main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -3116,36 +3117,42 @@ public class MainGUI extends JFrame {
      *             is thrown if it is not possible to create the thumbnail.
      */
     private void loadScaleIfNeededAndDisplayPreviewThumbnail(File jpegImage) throws IOException {
-        TagImages tagImages = configuration.getTagImages();
+        try {
+            getThis().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            TagImages tagImages = configuration.getTagImages();
 
-        TagImagesPreview tagImagesPreview = tagImages.getPreview();
+            TagImagesPreview tagImagesPreview = tagImages.getPreview();
 
-        JPEGThumbNail thumbnail = null;
+            JPEGThumbNail thumbnail = null;
 
-        if(tagImagesPreview.getUseEmbeddedThumbnail()) {
-            JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
-            thumbnail = jtc.get(jpegImage);
-        }
-
-        int width = imageTagPreviewScrollPane.getViewport().getSize().width;
-        int height = imageTagPreviewScrollPane.getViewport().getSize().height;
-
-        Image scaledImage = null;
-        if (thumbnail != null) {
-            Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
-
-            if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
-                thumbNailIcon = null;
-
-                scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
-                imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
-            } else {
-                imageTagPreviewLabel.setIcon(thumbNailIcon);
+            if(tagImagesPreview.getUseEmbeddedThumbnail()) {
+                JPEGThumbNailCache jtc = JPEGThumbNailCache.getInstance();
+                thumbnail = jtc.get(jpegImage);
             }
-        } else {
-            scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);
-            imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+
+            int width = imageTagPreviewScrollPane.getViewport().getSize().width;
+            int height = imageTagPreviewScrollPane.getViewport().getSize().height;
+
+            Image scaledImage = null;
+            if (thumbnail != null) {
+                Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
+
+                if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
+                    thumbNailIcon = null;
+
+                    scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
+                    imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+                } else {
+                    imageTagPreviewLabel.setIcon(thumbNailIcon);
+                }
+            } else {
+                scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);
+                imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
+            }
+        } finally {
+            getThis().setCursor(Cursor.getDefaultCursor());
         }
+
     }
 
     private class ThumbNailListener implements ActionListener {
@@ -3177,31 +3184,37 @@ public class MainGUI extends JFrame {
                         selectedThmbnailButtons.set(toggleButton, pixelsBrightened, percentage);
                     }
 
-                    File jpegImage = new File(e.getActionCommand());
+                    final File jpegImage = new File(e.getActionCommand());
 
                     imageMetaDataPanel.setMetaData(jpegImage);
 
                     MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
 
                     if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
-                        try {
-                            loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
+                        Thread loadScaleIfNeededAndDisplayPreviewThumbnailThread = new Thread() {
+                            @Override
+                            public void run() {
+                                try {
+                                    loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
+                                } catch (IOException iox) {
+                                    logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
+                                    logger.logERROR(iox);
+                                }
+                            }
+                        };
+                        loadScaleIfNeededAndDisplayPreviewThumbnailThread.start();
 
-                            storeCurrentlySelectedImageData();
+                        storeCurrentlySelectedImageData();
 
-                            ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+                        ImageMetaDataDataBaseItemsToUpdateContext irc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 
-                            // Load the selected image
-                            irc.setCurrentlySelectedImage(jpegImage);
-                            ImageMetaDataItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
+                        // Load the selected image
+                        irc.setCurrentlySelectedImage(jpegImage);
+                        ImageMetaDataItem imageMetaDataDataBaseItem = irc.getImageMetaDataBaseItem(jpegImage);
 
-                            imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
-                            setRatingValue(imageMetaDataDataBaseItem.getRating());
-                            setCategories(imageMetaDataDataBaseItem.getCategories());
-                        } catch (IOException iox) {
-                            logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
-                            logger.logERROR(iox);
-                        }
+                        imageCommentTextArea.setText(imageMetaDataDataBaseItem.getComment());
+                        setRatingValue(imageMetaDataDataBaseItem.getRating());
+                        setCategories(imageMetaDataDataBaseItem.getCategories());
                     }
                 }
                 // An image is deselected
