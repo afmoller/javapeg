@@ -55,6 +55,7 @@ import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -297,7 +298,8 @@ public class ImageSearchResultViewer extends JFrame {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
-                    ButtonIconUtil.setSelectedThumbNailImage(jToggleButton);
+                    ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                    ButtonIconUtil.setSelectedThumbNailImage(jToggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
                 }
             }
         }
@@ -424,7 +426,8 @@ public class ImageSearchResultViewer extends JFrame {
             JToggleButton toggleButton = (JToggleButton)e.getSource();
 
             if (toggleButton.isSelected()) {
-                ButtonIconUtil.setSelectedThumbNailImage(toggleButton);
+                ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                ButtonIconUtil.setSelectedThumbNailImage(toggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
             } else {
                 ButtonIconUtil.setDeSelectedThumbNailImage(toggleButton);
             }

@@ -129,6 +129,10 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <width>160</width>
       <height>120</height>
     </creation>
+    <grayfilter>
+      <pixelsBrightened>true</pixelsBrightened>
+      <percentage>35</percentage>
+    </grayfilter>
   </thumbNail>
   <toolTips>
     <overviewState>1</overviewState>

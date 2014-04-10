@@ -20,6 +20,7 @@ public class ThumbNail {
 
     private ThumbNailCache cache;
     private ThumbNailCreation creation;
+    private ThumbNailGrayFilter grayFilter;
 
     public ThumbNailCache getCache() {
         return cache;
@@ -27,10 +28,16 @@ public class ThumbNail {
     public ThumbNailCreation getCreation() {
         return creation;
     }
+    public ThumbNailGrayFilter getGrayFilter() {
+        return grayFilter;
+    }
     public void setCache(ThumbNailCache cache) {
         this.cache = cache;
     }
     public void setCreation(ThumbNailCreation creation) {
         this.creation = creation;
+    }
+    public void setGrayFilter(ThumbNailGrayFilter grayFilter) {
+        this.grayFilter = grayFilter;
     }
 }

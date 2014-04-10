@@ -59,6 +59,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -95,6 +96,7 @@ import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomCellRenderer;
 import moller.javapeg.program.gui.GUIDefaults;
@@ -182,6 +184,8 @@ public class ConfigViewerGUI extends JFrame {
     private JButton clearCacheJButton;
     private JLabel cacheSizeLabel;
     private JCheckBox enableThumbnailCache;
+    private JSlider percentageSlider;
+    private JCheckBox brightenedCheckBox;
 
     private JRadioButton overviewToolTipDisabled;
     private JRadioButton overviewToolTipEnabled;
@@ -235,6 +239,8 @@ public class ConfigViewerGUI extends JFrame {
     private String IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE;
     private String OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE;
     private Integer ADD_TO_IMAGEREPOSITOY_POLICY;
+    private Integer PERCENTAGE_SLIDER;
+    private Boolean BRIGHTENED_CHECKBOX;
 
     private boolean DEVELOPER_MODE;
     private boolean LOG_ROTATE;
@@ -294,6 +300,8 @@ public class ConfigViewerGUI extends JFrame {
         WARN_WHEN_REMOVE_CATEGORY = configuration.getTagImages().getCategories().getWarnWhenRemove();
         WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = configuration.getTagImages().getCategories().getWarnWhenRemoveWithSubCategories();
         ADD_TO_IMAGEREPOSITOY_POLICY = configuration.getTagImages().getImagesPaths().getAddToRepositoryPolicy();
+        PERCENTAGE_SLIDER = configuration.getThumbNail().getGrayFilter().getPercentage();
+        BRIGHTENED_CHECKBOX = configuration.getThumbNail().getGrayFilter().isPixelsBrightened();
     }
 
     private void initiateWindow() {
@@ -684,6 +692,31 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailCachePanel.add(Box.createVerticalGlue(), posThumbnailCachePanel.nextRow().expandH());
 
         /**
+         * Start of Thumbnail Grayfilter Area
+         */
+        JLabel percentSliderLabel = new JLabel(lang.get("configviewer.thumbnail.grayfilter.transparency.label"));
+
+        percentageSlider = new JSlider(0, 100);
+        percentageSlider.setLabelTable(percentageSlider.createStandardLabels(10));
+        percentageSlider.setPaintLabels(true);
+        percentageSlider.setValue(thumbNail.getGrayFilter().getPercentage());
+
+        brightenedCheckBox = new JCheckBox(lang.get("configviewer.thumbnail.grayfilter.increase.contrast.label"));
+        brightenedCheckBox.setSelected(thumbNail.getGrayFilter().isPixelsBrightened());
+
+        JPanel thumbnailGrayFilterPanel = new JPanel(new GridBagLayout());
+//        TODO: Remove hard coded string
+        thumbnailGrayFilterPanel.setBorder(BorderFactory.createTitledBorder("Markerad tumnagel"));
+
+        GBHelper posThumbnailGrayFilterPanel = new GBHelper();
+
+
+        thumbnailGrayFilterPanel.add(percentSliderLabel, posThumbnailGrayFilterPanel);
+        thumbnailGrayFilterPanel.add(percentageSlider, posThumbnailGrayFilterPanel.nextCol().expandW());
+        thumbnailGrayFilterPanel.add(brightenedCheckBox, posThumbnailGrayFilterPanel.nextRow());
+        thumbnailGrayFilterPanel.add(Box.createVerticalGlue(), posThumbnailGrayFilterPanel.nextRow().expandH());
+
+        /**
          * Start of Thumbnail ToolTip Area
          */
         String disabled = lang.get("configviewer.thumbnail.tooltip.label.disabled");
@@ -805,6 +838,7 @@ public class ConfigViewerGUI extends JFrame {
 
         thumbnailConfigurationPanel.add(thumbnailCreationPanel, posThumbnailPanel.expandW().expandH());
         thumbnailConfigurationPanel.add(thumbnailCachePanel, posThumbnailPanel.nextRow().expandW().expandH());
+        thumbnailConfigurationPanel.add(thumbnailGrayFilterPanel, posThumbnailPanel.nextRow().expandW().expandH());
         thumbnailConfigurationPanel.add(thumbnailToolTipPanel, posThumbnailPanel.nextRow().expandW().expandH());
     }
 
@@ -1135,6 +1169,11 @@ public class ConfigViewerGUI extends JFrame {
         thumbNailCreation.setIfMissingOrCorrupt(createThumbnailIfMissingOrCorrupt.isSelected());
         thumbNailCreation.setWidth(Integer.parseInt(thumbnailWidth.getText()));
 
+        ThumbNailGrayFilter thumbNailGrayFilter = thumbNail.getGrayFilter();
+
+        thumbNailGrayFilter.setPercentage(percentageSlider.getValue());
+        thumbNailGrayFilter.setPixelsBrightened(brightenedCheckBox.isSelected());
+
         /***
          * Update ToolTips configuration
          */
@@ -1393,6 +1432,14 @@ public class ConfigViewerGUI extends JFrame {
 
         if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
             displayMessage.append(lang.get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories") + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
+        }
+
+        if(!PERCENTAGE_SLIDER.equals(percentageSlider.getValue())) {
+            displayMessage.append(lang.get("configviewer.thumbnail.grayfilter.transparency.label") + ": " + percentageSlider.getValue() + " (" + PERCENTAGE_SLIDER + ")\n");
+        }
+
+        if(BRIGHTENED_CHECKBOX != brightenedCheckBox.isSelected()) {
+            displayMessage.append(lang.get("configviewer.thumbnail.grayfilter.increase.contrast.label") + ": " + brightenedCheckBox.isSelected() + " (" + BRIGHTENED_CHECKBOX + ")\n");
         }
 
         if(displayMessage.length() > 0) {

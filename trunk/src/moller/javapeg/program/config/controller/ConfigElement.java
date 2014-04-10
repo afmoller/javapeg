@@ -113,4 +113,7 @@ public class ConfigElement {
     public static final String IMAGE_VIEWER_STATE = "imageViewerState";
     public static final String RESIZE_QUALITY = "resizeQuality";
     public static final String SHOW_NAVIGATION_IMAGE = "showNavigationImage";
+    public static final String GRAYFILTER = "grayfilter";
+    public static final String PERCENTAGE = "percentage";
+    public static final String PIXELS_BRIGHTENED = "pixelsBrightened";
 }

@@ -82,6 +82,8 @@ configviewer.thumbnail.tooltip.label                   = Tumnagel Tooltips
 configviewer.thumbnail.mainWindow.label              = Huvudfönster
 configviewer.thumbnail.imageSearchResultWindow.label = Bildsökresultatsfönster
 configviewer.thumbnail.imageViewerWindow.label       = Bildvisarfönster
+configviewer.thumbnail.grayfilter.transparency.label = Genomskinlighet
+configviewer.thumbnail.grayfilter.increase.contrast.label = Öka kontrast
 
 ##############################################################################################################
 # T A G                                                                                                      #

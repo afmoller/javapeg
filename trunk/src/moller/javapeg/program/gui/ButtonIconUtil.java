@@ -15,8 +15,8 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 
 public class ButtonIconUtil {
 
-    public static void setSelectedThumbNailImage(AbstractButton button) {
-        GrayFilter filter = new GrayFilter(true, 35);
+    public static void setSelectedThumbNailImage(AbstractButton button, boolean brightened, int percentage) {
+        GrayFilter filter = new GrayFilter(brightened, percentage);
         ImageProducer prod = new FilteredImageSource(((ImageIcon)button.getIcon()).getImage().getSource(), filter);
         Image disabledImage = Toolkit.getDefaultToolkit().createImage(prod);
 

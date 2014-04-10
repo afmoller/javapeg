@@ -26,6 +26,7 @@ import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
@@ -41,6 +42,7 @@ public class ThumbNailConfig {
         try {
             thumbNail.setCache(getCache((Node)xPath.evaluate(ConfigElement.CACHE, thumbNailNode, XPathConstants.NODE), xPath));
             thumbNail.setCreation(getCreation((Node)xPath.evaluate(ConfigElement.CREATION, thumbNailNode, XPathConstants.NODE), xPath));
+            thumbNail.setGrayFilter(getGrayFilter((Node)xPath.evaluate(ConfigElement.GRAYFILTER, thumbNailNode, XPathConstants.NODE), xPath));
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Could not get thumbnail config", e);
         }
@@ -73,12 +75,25 @@ public class ThumbNailConfig {
         return thumbNailCache;
     }
 
+    private static ThumbNailGrayFilter getGrayFilter(Node grayfilterNode, XPath xPath) {
+        ThumbNailGrayFilter thumbNailGrayFilter = new ThumbNailGrayFilter();
+
+        try {
+            thumbNailGrayFilter.setPercentage(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.PERCENTAGE, grayfilterNode, XPathConstants.STRING), 35));
+            thumbNailGrayFilter.setPixelsBrightened(Boolean.valueOf((String)xPath.evaluate(ConfigElement.PIXELS_BRIGHTENED, grayfilterNode, XPathConstants.STRING)));
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException("Could not get grayfilter", e);
+        }
+        return thumbNailGrayFilter;
+    }
+
     public static void writeThumbNailConfig(ThumbNail thumbNail, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
         //  THUMB NAIL start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.THUMBNAIL, baseIndent, xmlsw);
 
         writeCacheConfig(thumbNail.getCache(), Tab.FOUR, xmlsw);
         writeCreationConfig(thumbNail.getCreation(), Tab.FOUR, xmlsw);
+        writeGrayFilterConfig(thumbNail.getGrayFilter(), Tab.FOUR, xmlsw);
 
         //  THUMB NAIL end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
@@ -105,6 +120,17 @@ public class ThumbNailConfig {
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.HEIGHT, Tab.SIX, Integer.toString(thumbNailCreation.getHeight()), xmlsw);
 
         //  CREATION end
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+    }
+
+    private static void writeGrayFilterConfig(ThumbNailGrayFilter thumbNailGrayFilter, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        //  GRAYFILTER start
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.GRAYFILTER, baseIndent, xmlsw);
+
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.PERCENTAGE, Tab.SIX, Integer.toString(thumbNailGrayFilter.getPercentage()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.PIXELS_BRIGHTENED, Tab.SIX, Boolean.toString(thumbNailGrayFilter.isPixelsBrightened()), xmlsw);
+
+        //  GRAYFILTER end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 }
