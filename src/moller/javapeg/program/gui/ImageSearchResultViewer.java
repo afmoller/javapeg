@@ -30,6 +30,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,10 +46,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
 import moller.javapeg.StartJavaPEG;
@@ -93,6 +97,7 @@ public class ImageSearchResultViewer extends JFrame {
 
     private JPanel thumbNailsPanel;
     private JScrollPane scrollpane;
+    private JProgressBar thumbNailLoadingProgressBar;
 
     public ImageSearchResultViewer(List<File> imagesToView) {
 
@@ -108,7 +113,24 @@ public class ImageSearchResultViewer extends JFrame {
         this.createRightClickMenu();
         this.createStatusPanel();
         this.addListeners();
-        this.executeLoadThumbnailsProcess(imagesToView);
+
+        ImageSearhResultLoader imageSearhResultLoader = new ImageSearhResultLoader(imagesToView);
+        imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
+        imageSearhResultLoader.execute();
+    }
+
+    private class ImageSearhResultLoaderPropertyListener implements PropertyChangeListener {
+
+        /**
+         * Invoked when task's progress property changes.
+         */
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if ("progress" == evt.getPropertyName()) {
+                int progress = (Integer) evt.getNewValue();
+                thumbNailLoadingProgressBar.setValue(progress);
+            }
+        }
     }
 
     // Create Main Window
@@ -142,7 +164,16 @@ public class ImageSearchResultViewer extends JFrame {
         }
 
         this.setTitle(lang.get("imagesearchresultviewer.title"));
-        this.getContentPane().add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
+
+        thumbNailLoadingProgressBar = new JProgressBar();
+        thumbNailLoadingProgressBar.setStringPainted(true);
+        thumbNailLoadingProgressBar.setVisible(true);
+
+        JPanel backgroundPanel = new JPanel(new BorderLayout());
+        backgroundPanel.add(this.createThumbNailsBackgroundPanel(), BorderLayout.CENTER);
+        backgroundPanel.add(thumbNailLoadingProgressBar, BorderLayout.SOUTH);
+
+        this.getContentPane().add(backgroundPanel, BorderLayout.CENTER);
     }
 
     private JScrollPane createThumbNailsBackgroundPanel(){
@@ -232,7 +263,6 @@ public class ImageSearchResultViewer extends JFrame {
         popupMenuDeSelectAll.addActionListener(new RightClickMenuListenerDeSelectAll());
         popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
         popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
-
     }
 
     private void saveSettings() {
@@ -354,42 +384,6 @@ public class ImageSearchResultViewer extends JFrame {
         return jToggleButtons;
     }
 
-    private void executeLoadThumbnailsProcess(List<File> images) {
-
-        ThumbNailListener thumbNailListener = new ThumbNailListener();
-        MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
-
-        for (File image : images) {
-            if (image.exists()) {
-                JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
-
-                JToggleButton thumbContainer = new JToggleButton();
-                thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-                thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-                if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
-                    thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
-                }
-                thumbContainer.setActionCommand(image.getAbsolutePath());
-                thumbContainer.setName("deselected");
-                thumbContainer.addActionListener(thumbNailListener);
-                thumbContainer.addMouseListener(mouseRightClickButtonListener);
-
-                columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
-                columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
-
-                int width = thumbContainer.getIcon().getIconWidth();
-
-                if (width > iconWidth) {
-                    iconWidth = width;
-                }
-
-                thumbNailsPanel.add(thumbContainer);
-                thumbNailsPanel.updateUI();
-            }
-        }
-        setStatusMessages();
-    }
-
     /**
      * This class listens for size changes of the Search result main GUI. When a
      * resize is performed, the number of columns in the GridLayout used to lay
@@ -408,14 +402,16 @@ public class ImageSearchResultViewer extends JFrame {
                 scrollbarWidth = scrollpane.getVerticalScrollBar().getWidth();
             }
 
-            if (((scrollpane.getViewport().getSize().width - scrollbarWidth - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
-                int columns = (scrollpane.getViewport().getSize().width - scrollbarWidth - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
+            if (thumbNailGridLayout.getColumns() > 0 && iconWidth > 0) {
+                if (((scrollpane.getViewport().getSize().width - scrollbarWidth - (columnMargin * thumbNailGridLayout.getColumns())) / iconWidth) != thumbNailGridLayout.getColumns()) {
+                    int columns = (scrollpane.getViewport().getSize().width - scrollbarWidth - ((thumbNailGridLayout.getHgap() * thumbNailGridLayout.getColumns()) + columnMargin * thumbNailGridLayout.getColumns())) / iconWidth;
 
-                thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
-                thumbNailsPanel.invalidate();
-                thumbNailsPanel.repaint();
-                thumbNailsPanel.updateUI();
-                setStatusMessages();
+                    thumbNailGridLayout.setColumns(columns > 0 ? columns : 1);
+                    thumbNailsPanel.invalidate();
+                    thumbNailsPanel.repaint();
+                    thumbNailsPanel.updateUI();
+                    setStatusMessages();
+                }
             }
         }
     }
@@ -431,6 +427,71 @@ public class ImageSearchResultViewer extends JFrame {
             } else {
                 ButtonIconUtil.setDeSelectedThumbNailImage(toggleButton);
             }
+        }
+    }
+
+    /**
+     * This class extends the {@link SwingWorker} and performs the long running
+     * task of loading all thumbnails and showing them.
+     *
+     * @author Fredrik
+     *
+     */
+    private class ImageSearhResultLoader extends SwingWorker<Void, String> {
+
+        List<File> images;
+
+        public ImageSearhResultLoader(List<File> images) {
+            this.images = images;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+
+            ThumbNailListener thumbNailListener = new ThumbNailListener();
+            MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
+
+            setStatusMessages();
+
+            double progress = 0;
+            double nrOfImages = images.size();
+
+            for (File image : images) {
+                if (image.exists()) {
+                    JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
+
+                    JToggleButton thumbContainer = new JToggleButton();
+                    thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+                    thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+                    if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
+                        thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
+                    }
+                    String absolutePath = image.getAbsolutePath();
+                    thumbContainer.setActionCommand(absolutePath);
+                    thumbContainer.addActionListener(thumbNailListener);
+                    thumbContainer.addMouseListener(mouseRightClickButtonListener);
+
+                    columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+                    columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+
+                    int width = thumbContainer.getIcon().getIconWidth();
+
+                    if (width > iconWidth) {
+                        iconWidth = width;
+                    }
+
+                    thumbNailsPanel.add(thumbContainer);
+                    thumbNailsPanel.updateUI();
+                }
+
+                setProgress((int)((progress++ / nrOfImages) * 100));
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            thumbNailLoadingProgressBar.setVisible(false);
         }
     }
 }
