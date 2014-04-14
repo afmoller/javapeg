@@ -1056,8 +1056,8 @@ public class ConfigViewerGUI extends JFrame {
 
         GBHelper posTagPanel = new GBHelper();
 
-        tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW().expandH());
-        tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW().expandH());
+        tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW());
+        tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW());
         tagConfigurationPanel.add(importedCategoriesPanel, posTagPanel.nextRow().expandW().expandH());
         tagConfigurationPanel.add(imageRepositoriesAdditionModePanel, posTagPanel.nextRow().expandW().expandH());
         tagConfigurationPanel.add(imageRepositoriesContentPanel, posTagPanel.nextRow().expandW().expandH());
