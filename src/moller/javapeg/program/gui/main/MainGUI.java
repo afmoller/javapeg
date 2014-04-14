@@ -457,14 +457,6 @@ public class MainGUI extends JFrame {
             this.checkApplicationUpdates();
             logger.logDEBUG("Application Update Check Finished");
         }
-        logger.logDEBUG("Image Meta Data Context initialization Started");
-
-        ImageMetaDataContextLoader imdcl = new  ImageMetaDataContextLoader();
-        imdcl.execute();
-
-        if (ApplicationContext.getInstance().isRestartNeeded()) {
-            displayInformationMessage(lang.get("common.application.restart.needed"));
-        }
 
         logger.logDEBUG("Creation of Main Frame Started");
         this.createMainFrame();
@@ -490,6 +482,10 @@ public class MainGUI extends JFrame {
         logger.logDEBUG("Application Context initialization Started");
         this.initiateApplicationContext();
         logger.logDEBUG("Application Context initialization Finished");
+
+        logger.logDEBUG("Image Meta Data Context initialization Started");
+        ImageMetaDataContextLoader imdcl = new  ImageMetaDataContextLoader();
+        imdcl.execute();
     }
 
     private void printSystemProperties() {
@@ -4759,6 +4755,10 @@ public class MainGUI extends JFrame {
                         errorMessage.append(lang.get("imagerepository.repositories.corrupt.repair"));
                     }
                     displayErrorMessage(errorMessage.toString());
+                }
+
+                if (ApplicationContext.getInstance().isRestartNeeded()) {
+                    displayInformationMessage(lang.get("common.application.restart.needed"));
                 }
             } catch (InterruptedException e) {
                 logger.logERROR(e);
