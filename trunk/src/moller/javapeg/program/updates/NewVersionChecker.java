@@ -17,6 +17,7 @@
 package moller.javapeg.program.updates;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -100,7 +101,9 @@ public class NewVersionChecker {
             errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlVersion.toString() + ")";
             logger.logERROR(e);
         } catch (IOException e) {
-            errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlVersion.toString() + ")";
+            if (e.getMessage().equals(Integer.toString(HttpURLConnection.HTTP_NOT_FOUND))) {
+                errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlVersion.toString() + ")";
+            }
             logger.logERROR(e);
         } catch (SAXException e) {
             errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlVersion.toString() + ")";
@@ -131,7 +134,9 @@ public class NewVersionChecker {
             errorMessage = lang.get("updatechecker.errormessage.networkTimeOut") + "\n(" + urlChangeLog.toString() + ")";
             logger.logERROR(e);
         } catch (IOException e) {
-            errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlChangeLog.toString() + ")";
+            if (e.getMessage().equals(Integer.toString(HttpURLConnection.HTTP_NOT_FOUND))) {
+                errorMessage = lang.get("updatechecker.errormessage.uRLWrong") + "\n(" + urlChangeLog.toString() + ")";
+            }
             logger.logERROR(e);
         } catch (SAXException e) {
             errorMessage = lang.get("updatechecker.errormessage.parseException") + "\n(" + urlChangeLog.toString() + ")";
