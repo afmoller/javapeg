@@ -90,6 +90,22 @@ public class UpdateChecker {
 		return vim;
 	}
 
+    /**
+     * Returns the document found at the specified url parameter as an
+     * {@link Document} object. If the responsecode for the url is anything else
+     * than {@link HttpURLConnection#HTTP_OK} then this method throws an
+     * {@link IOException} with the string representation of response code as
+     * message.
+     *
+     * @param url
+     * @param applicationVersion
+     * @param addHeader
+     * @param timeOut
+     * @return
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
 	private static Document getDocument(URL url, String applicationVersion, boolean addHeader, int timeOut) throws IOException, ParserConfigurationException, SAXException {
 
 		HttpURLConnection huc = (HttpURLConnection) url.openConnection();
@@ -103,8 +119,9 @@ public class UpdateChecker {
 		int code = huc.getResponseCode();
 
 		if (code != HttpURLConnection.HTTP_OK) {
-			throw new IOException("Invaild HTTP response: " + code);
+			throw new IOException(Integer.toString(code));
 		}
+
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
