@@ -419,16 +419,27 @@ public class MainGUI extends JFrame {
 
     public MainGUI(){
 
+        // Make pre configured logging, logging...
+        long startTestWriteAccess = System.currentTimeMillis();
         if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
             JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
         }
+        long finishedTestWriteAccess = System.currentTimeMillis();
 
+        long startValidateFileSetup = System.currentTimeMillis();
         ValidateFileSetup.check();
+        long finishedValidateFileSetup = System.currentTimeMillis();
 
+        long startGetConfiguration = System.currentTimeMillis();
         configuration = Config.getInstance().get();
+        long finishedGetConfiguration = System.currentTimeMillis();
 
         logger = Logger.getInstance();
         logger.logDEBUG("JavaPEG is starting");
+
+        logger.logDEBUG("testWriteAccess took: " + (finishedTestWriteAccess - startTestWriteAccess) + " milliseconds");
+        logger.logDEBUG("validateFileSetup took: " + (finishedValidateFileSetup - startValidateFileSetup) + " milliseconds");
+        logger.logDEBUG("getConfiguration took: " + (finishedGetConfiguration - startGetConfiguration) + " milliseconds");
 
         lang = Language.getInstance();
 
@@ -437,7 +448,7 @@ public class MainGUI extends JFrame {
         imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
         imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
 
-        this.printSystemProperties();
+        this.printSystemPropertiesToLogFile();
         this.overrideSwingUIProperties();
 
         logger.logDEBUG("Check Available Memory Started");
@@ -488,7 +499,7 @@ public class MainGUI extends JFrame {
         imdcl.execute();
     }
 
-    private void printSystemProperties() {
+    private void printSystemPropertiesToLogFile() {
         logger.logDEBUG("##### System Properties Start #####");
         logger.logDEBUG("File Encoding......: " + SystemProperties.getFileEncoding());
         logger.logDEBUG("File Encoding PKG..: " + SystemProperties.getFileEncodingPkg());
