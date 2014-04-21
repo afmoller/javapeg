@@ -1,5 +1,8 @@
 3.0:
 ====
+- Improve the configuration parsing at application startup.
+- The select all menu in image result viewer must run asynchron.
+- Add a one size queue for the images to be scaled as preview images in the tagging tab.
 - Fix all compiler warnings
 - Test all functionality.
 - Update version numbers in language files

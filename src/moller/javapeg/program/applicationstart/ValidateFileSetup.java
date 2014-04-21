@@ -20,13 +20,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import javax.swing.JOptionPane;
+
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
-import moller.javapeg.program.logger.Logger;
-import moller.util.io.FileUtil;
 
 public class ValidateFileSetup {
 
+    /**
+     * Performs an existence check of the, for JavaPEG, necessary files. If an
+     * file is missing. An attempt is done to replace the missing file with an
+     * default file. If this process fails, then an error message is displayed
+     * for the user and JavaPEG is exited.
+     */
     public static void check() {
 
         File javaPEGuserHome = new File(C.JAVAPEG_HOME);
@@ -42,105 +48,99 @@ public class ValidateFileSetup {
         checkFileObject(styleInfo);
     }
 
+    /**
+     * Performs a check of an file object. If the {@link File} object to check
+     * does not exist and can not be created (restored from an default file)
+     * then that error is displayed to the user in an {@link JOptionPane} and
+     * thereafter is JavaPEG exited.
+     *
+     * @param fileToCheck
+     *            is the {@link File} object to check the existence for.
+     */
     private static void checkFileObject (File fileToCheck) {
 
-        Logger logger = null;
         String fileNameToCheck = fileToCheck.getName();
 
-        if (log(fileNameToCheck)) {
-            logger = Logger.getInstance();
-        }
-
-        File parent = fileToCheck.getParentFile();
-        String parentPath = parent.getAbsolutePath();
-
         if (!fileToCheck.exists()) {
+
+            File parent = fileToCheck.getParentFile();
+
+            // If the parent is missing, then create parent first...
             if (!parent.exists()) {
-                if (log(fileNameToCheck)) {
-                    logger.logDEBUG("The necessary directory: " + parentPath + " does not exist");
-                    logger.logDEBUG("Try to create direcotry: " + parentPath);
-                }
                 if (!parent.mkdirs()) {
-                    if (log(fileNameToCheck)) {
-                        logger.logFATAL("Could not create directory: " + parent.getAbsolutePath());
-                        logger.flush();
-                    }
+                    displayErrorMessage("Could not create parent directory: " + parent.getAbsolutePath());
                     System.exit(1);
                 } else {
-                    if (log(fileNameToCheck)) {
-                        logger.logDEBUG("Directory: " + parent.getAbsolutePath() + " has been created");
-                    }
+                    displayInformationMessage("Missing parent directory: " + parent.getAbsolutePath() + " has been created");
                 }
-                if (fileNameToCheck.equals("logs")) {
-                    if(!fileToCheck.mkdir()) {
-                        System.exit(1);
-                    } else {
-                        if (log(fileNameToCheck)) {
-                            logger.logDEBUG("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
-                        }
-                    }
+            }
+
+            // ... then create the actually missing resource.
+            if (fileNameToCheck.equals("logs")) {
+                if(!fileToCheck.mkdir()) {
+                    displayErrorMessage("Could not create directory: " + fileToCheck.getAbsolutePath());
+                    System.exit(1);
                 } else {
-                    if(!createFile(fileToCheck)) {
-                        if (log(fileNameToCheck)) {
-                            logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
-                            logger.flush();
-                        }
-                        System.exit(1);
-                    } else {
-                        if (log(fileNameToCheck)) {
-                            logger.logDEBUG("File: " + fileToCheck.getAbsolutePath() + " has been created");
-                        }
-                    }
+                    displayInformationMessage("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
                 }
             } else {
-                if (fileNameToCheck.equals("logs")) {
-                    if(!fileToCheck.mkdir()) {
-                        System.exit(1);
-                    } else {
-                        if (log(fileNameToCheck)) {
-                            logger.logDEBUG("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
-                        }
-                    }
+                if(!createFile(fileToCheck)) {
+                    displayErrorMessage("Could not create file: " + fileToCheck.getAbsolutePath());
+                    System.exit(1);
                 } else {
-                    if(!createFile(fileToCheck)) {
-                        if (log(fileNameToCheck)) {
-                            logger.logFATAL("Could not create file: " + fileToCheck.getAbsolutePath());
-                            logger.flush();
-                        }
-                        System.exit(1);
-                    } else {
-                        if (log(fileNameToCheck)) {
-                            logger.logDEBUG("File: " + fileToCheck.getAbsolutePath() + " has been created");
-                        }
-                    }
+                    displayInformationMessage("File: " + fileToCheck.getAbsolutePath() + " has been created");
                 }
             }
         }
     }
 
+    /**
+     * Tries to create an missing file by "replacing" the missing file with an
+     * application bundled default file.
+     *
+     * @param fileToCreate
+     *            is the file to replace with an application default file.
+     * @return true if it was possible to replace the missing file with an
+     *         application default file.
+     */
     private static boolean createFile(File fileToCreate) {
-
-        if(!FileUtil.createFile(fileToCreate)) {
-            return false;
-        }
-
         try {
             Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate.toPath());
-//            FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/" + fileToCreate.getName()), fileToCreate);
-        } catch (IOException e) {
-            if (log(fileToCreate.getName())) {
-                Logger logger = Logger.getInstance();
-                logger.logFATAL("Could not write to file: " + fileToCreate);
-                for(StackTraceElement element : e.getStackTrace()) {
-                    logger.logFATAL(element.toString());
-                }
-            }
+        } catch (IOException iox) {
+            displayErrorMessage("Could not create file: " + fileToCreate + " (" + iox.getMessage() + ")");
             return false;
         }
         return true;
     }
 
-    private static boolean log(String fileName) {
-        return fileName.equals("conf.xml") || fileName.equals("logs") ? false : true;
+    /**
+     * Displays an {@link JOptionPane} dialog with an error message.
+     *
+     * @param message is the message to display.
+     */
+    private static void displayErrorMessage(String message) {
+        displayMessageWithType(message, JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Displays an {@link JOptionPane} dialog with an information message.
+     *
+     * @param message is the message to display.
+     */
+    private static void displayInformationMessage(String message) {
+        displayMessageWithType(message, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Displays an {@link JOptionPane} dialog with an specified message and
+     * title.
+     *
+     * @param message
+     *            is the message to display.
+     * @param type
+     *            is the type of the {@link JOptionPane} to display.
+     */
+    private static void displayMessageWithType(String message, int type) {
+        JOptionPane.showMessageDialog(null, message, type == JOptionPane.ERROR_MESSAGE ? "Error" : "Information", type);
     }
 }

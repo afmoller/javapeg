@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -611,11 +612,8 @@ public class ImageMetaDataDataBaseHandler {
      * This method checks if an {@link ImageMetaDataDataBase} object which
      * contains an parsed representation of an image meta data XML file is
      * consistent with the files contained in the directory where the file is
-     * stored. </p> Consistent means: </p> 1: That the amount of
-     * {@link ImageMetaDataItem} objects in the {@link ImageMetaDataDataBase}
-     * object are the same as the amount of JPEG files in the directory where
-     * the meta data base XML file is stored. </p> 2: That all referenced
-     * {@link File} object in the {@link ImageMetaDataItem} objects also must
+     * stored. </p> Consistent means: </p> 1:  That all referenced
+     * {@link File} object in the {@link ImageMetaDataItem} objects also
      * exist in the directory where the meta data base XML file is stored.
      *
      * @param imageMetaDataDataBase
@@ -624,39 +622,22 @@ public class ImageMetaDataDataBaseHandler {
      * @param directory
      *            is the directory in which the meta data base XML file is
      *            stored and, where the related JPEG files are stored.
-     * @return true is both point above are true, otherwise false.
+     * @return true point 1 above is true, otherwise false.
      */
     public static boolean isConsistent(ImageMetaDataDataBase imageMetaDataDataBase, File directory) {
-        Logger logger = Logger.getInstance();
 
-        try {
-            List<File> jpegFilesInDirectory = JPEGUtil.getJPEGFiles(directory);
+        List<File> jpegFilesInDirectory = Arrays.asList(directory.listFiles());
 
-            // If the amount of files on disk differs from the amount in the
-            // meta data base file, then return false.
-            if (jpegFilesInDirectory.size() != imageMetaDataDataBase.getImageMetaDataItems().size()) {
+        // If not exactly the same files are referenced in the meta data
+        // base file as exist on disk, then return false.
+        for (ImageMetaDataItem imageMetaDataItem : imageMetaDataDataBase.getImageMetaDataItems()) {
+            if (!jpegFilesInDirectory.contains(imageMetaDataItem.getImage())) {
                 return false;
             }
-
-            // If not exactly the same files are referenced in the meta data
-            // base file as exist on disk, then return false.
-            for (ImageMetaDataItem imageMetaDataItem : imageMetaDataDataBase.getImageMetaDataItems()) {
-                if (!jpegFilesInDirectory.contains(imageMetaDataItem.getImage())) {
-                    return false;
-                }
-            }
-
-            // Everything OK, return true.
-            return true;
-        } catch (FileNotFoundException fnfex) {
-            logger.logERROR("Could not find a directory with the path: " + directory.getAbsolutePath());
-            logger.logERROR(fnfex);
-            return false;
-        } catch (IOException iox) {
-            logger.logERROR("Could not list the files in the directory with the path: " + directory.getAbsolutePath());
-            logger.logERROR(iox);
-            return false;
         }
+
+        // Everything OK, return true.
+        return true;
     }
 
     /**
