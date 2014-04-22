@@ -22,9 +22,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.GUI.GUI;
@@ -35,71 +32,120 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class GUIConfig {
 
-    public static GUI getGUIConfig(Node gUINode, XPath xPath) {
+    public static GUI getGUIConfig(Node gUINode) {
         GUI gui = new GUI();
 
-        try {
-            gui.setConfigViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.CONFIG_VIEWER, gUINode, XPathConstants.NODE), xPath));
-            gui.setHelpViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.HELP_VIEWER, gUINode, XPathConstants.NODE), xPath));
-            gui.setImageResizer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_RESIZER, gUINode, XPathConstants.NODE), xPath));
-            gui.setImageSearchResultViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_SEARCH_RESULT_VIEWER, gUINode, XPathConstants.NODE), xPath));
-            gui.setImageViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_VIEWER, gUINode, XPathConstants.NODE), xPath));
-            gui.setMain(createGUIWindow((Node)xPath.evaluate(ConfigElement.MAIN, gUINode, XPathConstants.NODE), xPath));
-            gui.setImageConflictViewer(createGUIWindow((Node)xPath.evaluate(ConfigElement.IMAGE_CONFLICT_VIEWER, gUINode, XPathConstants.NODE), xPath));
+        NodeList childNodes = gUINode.getChildNodes();
 
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get gui config", e);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.CONFIG_VIEWER:
+                gui.setConfigViewer(createGUIWindow(node));
+                break;
+
+            case ConfigElement.HELP_VIEWER:
+                gui.setHelpViewer(createGUIWindow(node));
+                break;
+
+            case ConfigElement.IMAGE_RESIZER:
+                gui.setImageResizer(createGUIWindow(node));
+                break;
+
+            case ConfigElement.IMAGE_SEARCH_RESULT_VIEWER:
+                gui.setImageSearchResultViewer(createGUIWindow(node));
+                break;
+
+            case ConfigElement.IMAGE_VIEWER:
+                gui.setImageViewer(createGUIWindow(node));
+                break;
+
+            case ConfigElement.MAIN:
+                gui.setMain(createGUIWindow(node));
+                break;
+            case ConfigElement.IMAGE_CONFLICT_VIEWER:
+                gui.setImageConflictViewer(createGUIWindow(node));
+                break;
+            default:
+                break;
+            }
         }
+
         return gui;
     }
 
-    private static GUIWindow createGUIWindow(Node windowNode, XPath xPath) {
+    private static GUIWindow createGUIWindow(Node windowNode) {
         GUIWindow guiWindow = new GUIWindow();
+        List<GUIWindowSplitPane> guiWindowSplitPanes = new ArrayList<GUIWindowSplitPane>();
 
         Rectangle sizeAndLocation = new Rectangle();
 
-        try {
-            sizeAndLocation.x = StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.X_LOCATION, windowNode, XPathConstants.STRING), 1);
-            sizeAndLocation.y = StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.Y_LOCATION, windowNode, XPathConstants.STRING), 1);
-            sizeAndLocation.width = StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.WIDTH, windowNode, XPathConstants.STRING), 100);
-            sizeAndLocation.height = StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.HEIGHT, windowNode, XPathConstants.STRING), 100);
+        NodeList childNodes = windowNode.getChildNodes();
 
-            guiWindow.setSizeAndLocation(sizeAndLocation);
-            guiWindow.setGuiWindowSplitPane(createGUIWindowSplitPane((NodeList)xPath.evaluate(ConfigElement.SPLIT_PANE, windowNode, XPathConstants.NODESET), xPath));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not create gui window", e);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.X_LOCATION:
+                sizeAndLocation.x = StringUtil.getIntValue(node.getTextContent(), 1);
+                break;
+
+            case ConfigElement.Y_LOCATION:
+                sizeAndLocation.y = StringUtil.getIntValue(node.getTextContent(), 1);
+                break;
+
+            case ConfigElement.WIDTH:
+                sizeAndLocation.width = StringUtil.getIntValue(node.getTextContent(), 100);
+                break;
+
+            case ConfigElement.HEIGHT:
+                sizeAndLocation.height = StringUtil.getIntValue(node.getTextContent(), 100);
+                break;
+
+            case ConfigElement.SPLIT_PANE:
+                guiWindowSplitPanes.add(createGUIWindowSplitPane(node));
+                break;
+            default:
+                break;
+            }
         }
+
+        guiWindow.setSizeAndLocation(sizeAndLocation);
+        guiWindow.setGuiWindowSplitPane(guiWindowSplitPanes);
+
         return guiWindow;
     }
 
-    private static List<GUIWindowSplitPane> createGUIWindowSplitPane(NodeList splitPaneNodeList, XPath xPath) {
-        List<GUIWindowSplitPane> guiWindowSplitPanes = new ArrayList<GUIWindowSplitPane>();
+    private static GUIWindowSplitPane createGUIWindowSplitPane(Node splitPaneNode) {
 
-        for (int index = 0; index < splitPaneNodeList.getLength(); index++) {
-            try {
-                GUIWindowSplitPane guiWindowSplitPane = new GUIWindowSplitPane();
+        GUIWindowSplitPane guiWindowSplitPane = new GUIWindowSplitPane();
 
-                Node splitPaneNode = splitPaneNodeList.item(index);
+        guiWindowSplitPane.setLocation(StringUtil.getIntValue(splitPaneNode.getTextContent(), 1));
 
-                guiWindowSplitPane.setLocation(StringUtil.getIntValue(splitPaneNode.getTextContent(), 1));
+        NamedNodeMap attributes = splitPaneNode.getAttributes();
+        Node idAttribute = attributes.getNamedItem(ConfigElement.ID);
+        String id = idAttribute.getTextContent();
 
-                String id = (String)xPath.evaluate("@" + ConfigElement.ID, splitPaneNode, XPathConstants.STRING);
-                String width = (String)xPath.evaluate("@" + ConfigElement.WIDTH, splitPaneNode, XPathConstants.STRING);
+        Node widthAttribute = attributes.getNamedItem(ConfigElement.WIDTH);
+        String width = "";
 
-                guiWindowSplitPane.setId(id);
-                guiWindowSplitPane.setWidth(width.equals("") ? null : Integer.parseInt(width));
-
-                guiWindowSplitPanes.add(guiWindowSplitPane);
-            } catch (XPathExpressionException e) {
-                throw new RuntimeException("Could not create gui window split pane config", e);
-            }
+        // The width attribute is an optional attribute, therefore it is
+        // necessary with an null check.
+        if (widthAttribute != null) {
+            width = widthAttribute.getTextContent();
         }
-        return guiWindowSplitPanes;
+
+        guiWindowSplitPane.setId(id);
+        guiWindowSplitPane.setWidth(width.equals("") ? null : Integer.parseInt(width));
+
+        return guiWindowSplitPane;
     }
 
     public static void writeGUIConfig(GUI gUI, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {

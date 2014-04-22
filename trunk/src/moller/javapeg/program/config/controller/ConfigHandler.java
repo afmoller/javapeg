@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import javax.swing.JDialog;
 import javax.swing.JTextArea;
@@ -131,9 +132,8 @@ public class ConfigHandler {
                 if (!validationResultForRestoredConfiguration.getResult()) {
                     errorMessage.append(C.LS);
                     try {
-                        Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath());
-//                        FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
 
+                        Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         errorMessage.append("Configuration restored from default configuration");
                     } catch (IOException iox) {
                         errorMessage.append("Could not restore configuration from default configuration:");
@@ -145,9 +145,7 @@ public class ConfigHandler {
                 }
             } else {
                 try {
-                    Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath());
-//                    FileUtil.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile);
-
+                    Files.copy(StartJavaPEG.class.getResourceAsStream("resources/startup/conf.xml"), configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     errorMessage.append("Configuration restored from default configuration");
                 } catch (IOException iox) {
                     errorMessage.append("Could not restore configuration from default configuration:");
@@ -177,10 +175,10 @@ public class ConfigHandler {
             XPath xPath = xPathFactory.newXPath();
 
             configuration = new Configuration();
-            configuration.setLogging(LoggingConfig.getLoggingConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LOGGING, doc, XPathConstants.NODE), xPath));
+            configuration.setLogging(LoggingConfig.getLoggingConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LOGGING, doc, XPathConstants.NODE)));
             configuration.setCategories(CategoriesConfig.getCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.CATEGORIES, doc, XPathConstants.NODE), xPath));
             configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.IMPORTEDCATEGORIES, doc, XPathConstants.NODE), xPath));
-            configuration.setgUI(GUIConfig.getGUIConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.GUI, doc, XPathConstants.NODE), xPath));
+            configuration.setgUI(GUIConfig.getGUIConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.GUI, doc, XPathConstants.NODE)));
             configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig((String)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.JAVAPEG_CLIENT_ID, doc, XPathConstants.STRING)));
             configuration.setLanguage(LanguageConfig.getLanguageConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LANGUAGE, doc, XPathConstants.NODE), xPath));
             configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RENAME_IMAGES, doc, XPathConstants.NODE), xPath));
