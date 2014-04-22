@@ -20,9 +20,6 @@ import java.text.SimpleDateFormat;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Logging;
@@ -31,28 +28,54 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class LoggingConfig {
 
     /**
      * @param loggingNode
-     * @param xPath
      * @return
      */
-    public static Logging getLoggingConfig(Node loggingNode, XPath xPath) {
+    public static Logging getLoggingConfig(Node loggingNode) {
         Logging logging = new Logging();
 
-        try {
-            logging.setFileName((String)xPath.evaluate(ConfigElement.FILE_NAME, loggingNode, XPathConstants.STRING));
-            logging.setDeveloperMode(Boolean.valueOf((String)xPath.evaluate(ConfigElement.DEVELOPER_MODE, loggingNode, XPathConstants.STRING)));
-            logging.setLevel(Level.valueOf((String)xPath.evaluate(ConfigElement.LEVEL, loggingNode, XPathConstants.STRING)));
-            logging.setRotate(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ROTATE, loggingNode, XPathConstants.STRING)));
-            logging.setRotateSize(new Long((String)xPath.evaluate(ConfigElement.ROTATE_SIZE, loggingNode, XPathConstants.STRING)));
-            logging.setRotateZip(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ROTATE_ZIP, loggingNode, XPathConstants.STRING)));
-            logging.setTimeStampFormat(new SimpleDateFormat((String)xPath.evaluate(ConfigElement.TIMESTAMP_FORMAT, loggingNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get logging config", e);
+        NodeList childNodes = loggingNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.FILE_NAME:
+                logging.setFileName(node.getTextContent());
+                break;
+
+            case ConfigElement.DEVELOPER_MODE:
+                logging.setDeveloperMode(Boolean.valueOf(node.getTextContent()));
+                break;
+
+            case ConfigElement.LEVEL:
+                logging.setLevel(Level.valueOf(node.getTextContent()));
+                break;
+
+            case ConfigElement.ROTATE:
+                logging.setRotate(Boolean.valueOf(node.getTextContent()));
+                break;
+
+            case ConfigElement.ROTATE_SIZE:
+                logging.setRotateSize(Long.valueOf(node.getTextContent()));
+                break;
+
+            case ConfigElement.ROTATE_ZIP:
+                logging.setRotateZip(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.TIMESTAMP_FORMAT:
+                logging.setTimeStampFormat(new SimpleDateFormat(node.getTextContent()));
+                break;
+            default:
+                break;
+            }
         }
+
         return logging;
     }
 
