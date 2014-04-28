@@ -48,23 +48,18 @@ public class LoggingConfig {
             case ConfigElement.FILE_NAME:
                 logging.setFileName(node.getTextContent());
                 break;
-
             case ConfigElement.DEVELOPER_MODE:
                 logging.setDeveloperMode(Boolean.valueOf(node.getTextContent()));
                 break;
-
             case ConfigElement.LEVEL:
                 logging.setLevel(Level.valueOf(node.getTextContent()));
                 break;
-
             case ConfigElement.ROTATE:
                 logging.setRotate(Boolean.valueOf(node.getTextContent()));
                 break;
-
             case ConfigElement.ROTATE_SIZE:
                 logging.setRotateSize(Long.valueOf(node.getTextContent()));
                 break;
-
             case ConfigElement.ROTATE_ZIP:
                 logging.setRotateZip(Boolean.valueOf(node.getTextContent()));
                 break;
@@ -75,7 +70,6 @@ public class LoggingConfig {
                 break;
             }
         }
-
         return logging;
     }
 

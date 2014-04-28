@@ -23,9 +23,6 @@ import java.util.TreeSet;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
@@ -38,53 +35,81 @@ import org.w3c.dom.NodeList;
 
 public class RenameImagesConfig {
 
-    public static RenameImages getRenameImagesConfig(Node renameImagesNode, XPath xPath) {
+    public static RenameImages getRenameImagesConfig(Node renameImagesNode) {
         RenameImages renameImages = new RenameImages();
 
-        try {
-            renameImages.setCameraModelNameMaximumLength(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.CAMERA_MODEL_NAME_MAXIMUM_LENGTH, renameImagesNode, XPathConstants.STRING), 0));
-            renameImages.setCreateThumbNails(Boolean.valueOf((String)xPath.evaluate(ConfigElement.CREATE_THUMBNAILS, renameImagesNode, XPathConstants.STRING)));
+        NodeList childNodes = renameImagesNode.getChildNodes();
 
-            String destination = (String)xPath.evaluate(ConfigElement.PATH_DESTINATION, renameImagesNode, XPathConstants.STRING);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
-            if (StringUtil.isNotBlank(destination)) {
-                renameImages.setPathDestination(new File(destination));
+            switch (node.getNodeName()) {
+            case ConfigElement.CAMERA_MODEL_NAME_MAXIMUM_LENGTH:
+                renameImages.setCameraModelNameMaximumLength(StringUtil.getIntValue(node.getTextContent(), 0));
+                break;
+            case ConfigElement.CREATE_THUMBNAILS:
+                renameImages.setCreateThumbNails(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.PATH_DESTINATION:
+                String destination = node.getTextContent();
+
+                if (StringUtil.isNotBlank(destination)) {
+                    renameImages.setPathDestination(new File(destination));
+                }
+                break;
+            case ConfigElement.PATH_SOURCE:
+                String source = node.getTextContent();
+
+                if (StringUtil.isNotBlank(source)) {
+                    renameImages.setPathSource(new File(source));
+                }
+                break;
+            case ConfigElement.PROGRESS_LOG_TIMESTAMP_FORMAT:
+                renameImages.setProgressLogTimestampFormat(new SimpleDateFormat(node.getTextContent()));
+                break;
+            case ConfigElement.TEMPLATE_FILE_NAME:
+                renameImages.setTemplateFileName(node.getTextContent());
+                break;
+            case ConfigElement.TEMPLATE_SUB_DIRECTORY_NAME:
+                renameImages.setTemplateSubDirectoryName(node.getTextContent());
+                break;
+            case ConfigElement.TEMPLATES_FILE_NAME:
+                renameImages.setTemplateFileNameNames(getTemplates(node));
+                break;
+            case ConfigElement.TEMPLATES_SUB_DIRECTORY_NAME:
+                renameImages.setTemplateSubDirectoryNames(getTemplates(node));
+                break;
+            case ConfigElement.USE_LAST_MODIFIED_DATE:
+                renameImages.setUseLastModifiedDate(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.USE_LAST_MODIFIED_TIME:
+                renameImages.setUseLastModifiedTime(Boolean.valueOf(node.getTextContent()));
+                break;
+            default:
+                break;
             }
-
-            String source = (String)xPath.evaluate(ConfigElement.PATH_SOURCE, renameImagesNode, XPathConstants.STRING);
-
-            if (StringUtil.isNotBlank(destination)) {
-                renameImages.setPathSource(new File(source));
-            }
-
-            renameImages.setProgressLogTimestampFormat(new SimpleDateFormat((String)xPath.evaluate(ConfigElement.PROGRESS_LOG_TIMESTAMP_FORMAT, renameImagesNode, XPathConstants.STRING)));
-            renameImages.setTemplateFileName((String)xPath.evaluate(ConfigElement.TEMPLATE_FILE_NAME, renameImagesNode, XPathConstants.STRING));
-            renameImages.setTemplateSubDirectoryName((String)xPath.evaluate(ConfigElement.TEMPLATE_SUB_DIRECTORY_NAME, renameImagesNode, XPathConstants.STRING));
-            renameImages.setTemplateFileNameNames(getTemplates((Node)xPath.evaluate(ConfigElement.TEMPLATES_FILE_NAME, renameImagesNode, XPathConstants.NODE), xPath));
-            renameImages.setTemplateSubDirectoryNames(getTemplates((Node)xPath.evaluate(ConfigElement.TEMPLATES_SUB_DIRECTORY_NAME, renameImagesNode, XPathConstants.NODE), xPath));
-            renameImages.setUseLastModifiedDate(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_LAST_MODIFIED_DATE, renameImagesNode, XPathConstants.STRING)));
-            renameImages.setUseLastModifiedTime(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_LAST_MODIFIED_TIME, renameImagesNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get rename images config", e);
         }
         return renameImages;
     }
 
-    private static Set<String> getTemplates(Node renameImagesNode, XPath xPath) {
+    private static Set<String> getTemplates(Node templatesNode) {
         Set<String> templates = new TreeSet<String>();
 
-        try {
-            NodeList templateNodeList = (NodeList)xPath.evaluate(ConfigElement.TEMPLATE, renameImagesNode, XPathConstants.NODESET);
+        NodeList childNodes = templatesNode.getChildNodes();
 
-            for (int index = 0; index < templateNodeList.getLength(); index++) {
-                String template = templateNodeList.item(index).getTextContent();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
+            switch (node.getNodeName()) {
+            case ConfigElement.TEMPLATE:
+                String template = node.getTextContent();
                 if (StringUtil.isNotBlank(template)) {
                     templates.add(template);
                 }
+                break;
+            default:
+                break;
             }
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get templates", e);
         }
         return templates;
     }
