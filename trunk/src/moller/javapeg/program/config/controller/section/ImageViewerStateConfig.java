@@ -18,9 +18,6 @@ package moller.javapeg.program.config.controller.section;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.ImageViewerState;
@@ -29,19 +26,34 @@ import moller.util.xml.XMLUtil;
 
 import org.imgscalr.Scalr.Method;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ImageViewerStateConfig {
 
-    public static ImageViewerState getImageViewerStateConfig(Node imageViewerStateNode, XPath xPath) {
+    public static ImageViewerState getImageViewerStateConfig(Node imageViewerStateNode) {
         ImageViewerState imageViewerState = new ImageViewerState();
 
-        try {
-            imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_RESIZE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
-            imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, imageViewerStateNode, XPathConstants.STRING)));
-            imageViewerState.setShowNavigationImage(Boolean.valueOf((String)xPath.evaluate(ConfigElement.SHOW_NAVIGATION_IMAGE, imageViewerStateNode, XPathConstants.STRING)));
-            imageViewerState.setResizeQuality(getMethodFromResizeQualityString((String)xPath.evaluate(ConfigElement.RESIZE_QUALITY, imageViewerStateNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException xpex) {
-            throw new RuntimeException("Could not get image viewer state config", xpex);
+        NodeList childNodes = imageViewerStateNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.AUTOMATICALLY_RESIZE_IMAGES:
+                imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.AUTOMATICALLY_ROTATE_IMAGES:
+                imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.SHOW_NAVIGATION_IMAGE:
+                imageViewerState.setShowNavigationImage(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.RESIZE_QUALITY:
+                imageViewerState.setResizeQuality(getMethodFromResizeQualityString(node.getTextContent()));
+                break;
+            default:
+                break;
+            }
         }
         return imageViewerState;
     }
@@ -60,9 +72,7 @@ public class ImageViewerStateConfig {
     }
 
     private static Method getMethodFromResizeQualityString(String resizeQualityString) {
-
         Method valueOf = Method.valueOf(resizeQualityString);
-
         return valueOf;
     }
 }

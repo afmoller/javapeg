@@ -20,9 +20,6 @@ import java.io.File;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
@@ -31,25 +28,37 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ResizeImagesConfig {
 
-    public static ResizeImages getResizeImagesConfig(Node resizeImagesNode, XPath xPath) {
+    public static ResizeImages getResizeImagesConfig(Node resizeImagesNode) {
         ResizeImages resizeImages = new ResizeImages();
 
-        try {
-            resizeImages.setHeight(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.HEIGHT, resizeImagesNode, XPathConstants.STRING), 100));
-            resizeImages.setWidth(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.WIDTH, resizeImagesNode, XPathConstants.STRING), 150));
+        NodeList childNodes = resizeImagesNode.getChildNodes();
 
-            String destination = (String)xPath.evaluate(ConfigElement.PATH_DESTINATION, resizeImagesNode, XPathConstants.STRING);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
-            if (StringUtil.isNotBlank(destination)) {
-                resizeImages.setPathDestination(new File(destination));
+            switch (node.getNodeName()) {
+            case ConfigElement.HEIGHT:
+                resizeImages.setHeight(StringUtil.getIntValue(node.getTextContent(), 100));
+                break;
+            case ConfigElement.WIDTH:
+                resizeImages.setWidth(StringUtil.getIntValue(node.getTextContent(), 150));
+                break;
+            case ConfigElement.PATH_DESTINATION:
+                String destination = node.getTextContent();
+                if (StringUtil.isNotBlank(destination)) {
+                    resizeImages.setPathDestination(new File(destination));
+                }
+                break;
+            case ConfigElement.SELECTED_QUALITY_INDEX:
+                resizeImages.setSelectedQualityIndex(StringUtil.getIntValue(node.getTextContent(), 0));
+                break;
+            default:
+                break;
             }
-
-            resizeImages.setSelectedQualityIndex(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.SELECTED_QUALITY_INDEX, resizeImagesNode, XPathConstants.STRING), 0));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get resize images config", e);
         }
         return resizeImages;
     }
@@ -71,5 +80,4 @@ public class ResizeImagesConfig {
         //  RESIZE IMAGES end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
-
 }

@@ -50,23 +50,18 @@ public class GUIConfig {
             case ConfigElement.CONFIG_VIEWER:
                 gui.setConfigViewer(createGUIWindow(node));
                 break;
-
             case ConfigElement.HELP_VIEWER:
                 gui.setHelpViewer(createGUIWindow(node));
                 break;
-
             case ConfigElement.IMAGE_RESIZER:
                 gui.setImageResizer(createGUIWindow(node));
                 break;
-
             case ConfigElement.IMAGE_SEARCH_RESULT_VIEWER:
                 gui.setImageSearchResultViewer(createGUIWindow(node));
                 break;
-
             case ConfigElement.IMAGE_VIEWER:
                 gui.setImageViewer(createGUIWindow(node));
                 break;
-
             case ConfigElement.MAIN:
                 gui.setMain(createGUIWindow(node));
                 break;
@@ -77,7 +72,6 @@ public class GUIConfig {
                 break;
             }
         }
-
         return gui;
     }
 
@@ -96,19 +90,15 @@ public class GUIConfig {
             case ConfigElement.X_LOCATION:
                 sizeAndLocation.x = StringUtil.getIntValue(node.getTextContent(), 1);
                 break;
-
             case ConfigElement.Y_LOCATION:
                 sizeAndLocation.y = StringUtil.getIntValue(node.getTextContent(), 1);
                 break;
-
             case ConfigElement.WIDTH:
                 sizeAndLocation.width = StringUtil.getIntValue(node.getTextContent(), 100);
                 break;
-
             case ConfigElement.HEIGHT:
                 sizeAndLocation.height = StringUtil.getIntValue(node.getTextContent(), 100);
                 break;
-
             case ConfigElement.SPLIT_PANE:
                 guiWindowSplitPanes.add(createGUIWindowSplitPane(node));
                 break;

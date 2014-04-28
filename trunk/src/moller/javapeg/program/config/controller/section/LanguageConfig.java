@@ -18,9 +18,6 @@ package moller.javapeg.program.config.controller.section;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Language;
@@ -28,17 +25,26 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class LanguageConfig {
 
-    public static Language getLanguageConfig(Node languageNode, XPath xPath) {
+    public static Language getLanguageConfig(Node languageNode) {
         Language language = new Language();
 
-        try {
-            language.setAutomaticSelection(Boolean.valueOf((String)xPath.evaluate(ConfigElement.AUTOMATIC_SELECTION, languageNode, XPathConstants.STRING)));
-            language.setgUILanguageISO6391((String)xPath.evaluate(ConfigElement.GUI_LANGUAGE_ISO_6391, languageNode, XPathConstants.STRING));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get language config", e);
+        NodeList childNodes = languageNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.AUTOMATIC_SELECTION:
+                language.setAutomaticSelection(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.GUI_LANGUAGE_ISO_6391:
+                language.setgUILanguageISO6391(node.getTextContent());
+                break;
+            }
         }
         return language;
     }
