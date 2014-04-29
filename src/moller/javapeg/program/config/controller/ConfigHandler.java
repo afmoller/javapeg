@@ -35,7 +35,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.StartJavaPEG;
@@ -70,6 +69,7 @@ import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ConfigHandler {
 
@@ -175,20 +175,66 @@ public class ConfigHandler {
             XPath xPath = xPathFactory.newXPath();
 
             configuration = new Configuration();
-            configuration.setLogging(LoggingConfig.getLoggingConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LOGGING, doc, XPathConstants.NODE)));
-            configuration.setCategories(CategoriesConfig.getCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.CATEGORIES, doc, XPathConstants.NODE), xPath));
-            configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.IMPORTEDCATEGORIES, doc, XPathConstants.NODE), xPath));
-            configuration.setgUI(GUIConfig.getGUIConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.GUI, doc, XPathConstants.NODE)));
-            configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig((String)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.JAVAPEG_CLIENT_ID, doc, XPathConstants.STRING)));
-            configuration.setLanguage(LanguageConfig.getLanguageConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.LANGUAGE, doc, XPathConstants.NODE)));
-            configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RENAME_IMAGES, doc, XPathConstants.NODE)));
-            configuration.setResizeImages(ResizeImagesConfig.getResizeImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.RESIZE_IMAGES, doc, XPathConstants.NODE)));
-            configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.IMAGE_VIEWER_STATE, doc, XPathConstants.NODE)));
-            configuration.setRepository(RepositoryConfig.getRepositoryConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.REPOSITORY, doc, XPathConstants.NODE), xPath));
-            configuration.setTagImages(TagImagesConfig.getTagImagesConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TAG_IMAGES, doc, XPathConstants.NODE), xPath));
-            configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.THUMBNAIL, doc, XPathConstants.NODE), xPath));
-            configuration.setToolTips(ToolTipsConfig.getToolTipsConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.TOOL_TIPS, doc, XPathConstants.NODE), xPath));
-            configuration.setUpdatesChecker(UpdatesCheckerConfig.getUpdatesCheckerConfig((Node)xPath.evaluate("/" + ConfigElement.CONFIG + "/" + ConfigElement.UPDATES_CHECKER, doc, XPathConstants.NODE), xPath));
+
+            NodeList configElementsByTagName = doc.getElementsByTagName(ConfigElement.CONFIG);
+
+            if (configElementsByTagName != null && configElementsByTagName.getLength() == 1) {
+                Node configNode = configElementsByTagName.item(0);
+                NodeList configNodeChildNodes = configNode.getChildNodes();
+
+                for (int i = 0; i < configNodeChildNodes.getLength(); i++) {
+                    Node node = configNodeChildNodes.item(i);
+
+                    switch (node.getNodeName()) {
+                    case ConfigElement.LOGGING:
+                        configuration.setLogging(LoggingConfig.getLoggingConfig(node));
+                        break;
+                    case ConfigElement.CATEGORIES:
+                        configuration.setCategories(CategoriesConfig.getCategoriesConfig(node, xPath));
+                        break;
+                    case ConfigElement.IMPORTEDCATEGORIES:
+                        configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig(node, xPath));
+                        break;
+                    case ConfigElement.GUI:
+                        configuration.setgUI(GUIConfig.getGUIConfig(node));
+                        break;
+                    case ConfigElement.JAVAPEG_CLIENT_ID:
+                        configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig(node.getTextContent()));
+                        break;
+                    case ConfigElement.LANGUAGE:
+                        configuration.setLanguage(LanguageConfig.getLanguageConfig(node));
+                        break;
+                    case ConfigElement.RENAME_IMAGES:
+                        configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig(node));
+                        break;
+                    case ConfigElement.RESIZE_IMAGES:
+                        configuration.setResizeImages(ResizeImagesConfig.getResizeImagesConfig(node));
+                        break;
+                    case ConfigElement.IMAGE_VIEWER_STATE:
+                        configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig(node));
+                        break;
+                    case ConfigElement.REPOSITORY:
+                        configuration.setRepository(RepositoryConfig.getRepositoryConfig(node, xPath));
+                        break;
+                    case ConfigElement.TAG_IMAGES:
+                        configuration.setTagImages(TagImagesConfig.getTagImagesConfig(node, xPath));
+                        break;
+                    case ConfigElement.THUMBNAIL:
+                        configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig(node, xPath));
+                        break;
+                    case ConfigElement.TOOL_TIPS:
+                        configuration.setToolTips(ToolTipsConfig.getToolTipsConfig(node));
+                        break;
+                    case ConfigElement.UPDATES_CHECKER:
+                        configuration.setUpdatesChecker(UpdatesCheckerConfig.getUpdatesCheckerConfig(node));
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            } else {
+                throw new RuntimeException("Could not load configuration");
+            }
         } catch (Exception ex) {
             throw new RuntimeException("Could not load configuration", ex);
         }
