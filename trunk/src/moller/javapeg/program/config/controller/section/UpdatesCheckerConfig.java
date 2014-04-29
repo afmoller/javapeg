@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.UpdatesChecker;
@@ -30,20 +29,41 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class UpdatesCheckerConfig {
 
-    public static UpdatesChecker getUpdatesCheckerConfig(Node updatesCheckerNode, XPath xPath) {
+    public static UpdatesChecker getUpdatesCheckerConfig(Node updatesCheckerNode) {
         UpdatesChecker updatesChecker = new UpdatesChecker();
 
+        NodeList childNodes = updatesCheckerNode.getChildNodes();
+
         try {
-            updatesChecker.setAttachVersionInformation(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ATTACH_VERSION_INFORMATION, updatesCheckerNode, XPathConstants.STRING)));
-            updatesChecker.setEnabled(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ENABLED, updatesCheckerNode, XPathConstants.STRING)));
-            updatesChecker.setTimeOut(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.TIMEOUT, updatesCheckerNode, XPathConstants.STRING), 60));
-            updatesChecker.setUrlVersion(new URL((String)xPath.evaluate(ConfigElement.URL_VERSION, updatesCheckerNode, XPathConstants.STRING)));
-            updatesChecker.setUrlVersionInformation(new URL((String)xPath.evaluate(ConfigElement.URL_VERSION_INFORMATION, updatesCheckerNode, XPathConstants.STRING)));
-        } catch (Exception e) {
-            throw new RuntimeException("Could not get updates checker config", e);
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node node = childNodes.item(i);
+
+                switch (node.getNodeName()) {
+                case ConfigElement.ATTACH_VERSION_INFORMATION:
+                    updatesChecker.setAttachVersionInformation(Boolean.valueOf(node.getTextContent()));
+                    break;
+                case ConfigElement.ENABLED:
+                    updatesChecker.setEnabled(Boolean.valueOf(node.getTextContent()));
+                    break;
+                case ConfigElement.TIMEOUT:
+                    updatesChecker.setTimeOut(StringUtil.getIntValue(node.getTextContent(), 60));
+                    break;
+                case ConfigElement.URL_VERSION:
+                    updatesChecker.setUrlVersion(new URL(node.getTextContent()));
+                    break;
+                case ConfigElement.URL_VERSION_INFORMATION:
+                    updatesChecker.setUrlVersionInformation(new URL(node.getTextContent()));
+                    break;
+                default:
+                    break;
+                }
+            }
+        } catch (MalformedURLException mURLE) {
+            throw new RuntimeException("Could not get updates checker config", mURLE);
         }
         return updatesChecker;
     }

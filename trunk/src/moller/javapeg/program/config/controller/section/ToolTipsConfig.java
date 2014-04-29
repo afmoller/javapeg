@@ -18,9 +18,6 @@ package moller.javapeg.program.config.controller.section;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.ToolTips;
@@ -28,18 +25,31 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ToolTipsConfig {
 
-    public static ToolTips getToolTipsConfig(Node toolTipsNode, XPath xPath) {
+    public static ToolTips getToolTipsConfig(Node toolTipsNode) {
         ToolTips toolTips = new ToolTips();
 
-        try {
-            toolTips.setOverviewState((String)xPath.evaluate(ConfigElement.OVERVIEW_STATE, toolTipsNode, XPathConstants.STRING));
-            toolTips.setImageSearchResultState((String)xPath.evaluate(ConfigElement.IMAGE_SEARCH_RESULT_STATE, toolTipsNode, XPathConstants.STRING));
-            toolTips.setOverviewImageViewerState((String)xPath.evaluate(ConfigElement.OVERVIEW_IMAGE_VIEWER_STATE, toolTipsNode, XPathConstants.STRING));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get tooltips config", e);
+        NodeList childNodes = toolTipsNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.OVERVIEW_STATE:
+                toolTips.setOverviewState(node.getTextContent());
+                break;
+            case ConfigElement.IMAGE_SEARCH_RESULT_STATE:
+                toolTips.setImageSearchResultState(node.getTextContent());
+                break;
+            case ConfigElement.OVERVIEW_IMAGE_VIEWER_STATE:
+                toolTips.setOverviewImageViewerState(node.getTextContent());
+                break;
+            default:
+                break;
+            }
         }
         return toolTips;
     }
