@@ -18,9 +18,6 @@ package moller.javapeg.program.config.controller.section;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
@@ -33,56 +30,103 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ThumbNailConfig {
 
-    public static ThumbNail getThumbNailConfig(Node thumbNailNode, XPath xPath) {
+    public static ThumbNail getThumbNailConfig(Node thumbNailNode) {
         ThumbNail thumbNail = new ThumbNail();
 
-        try {
-            thumbNail.setCache(getCache((Node)xPath.evaluate(ConfigElement.CACHE, thumbNailNode, XPathConstants.NODE), xPath));
-            thumbNail.setCreation(getCreation((Node)xPath.evaluate(ConfigElement.CREATION, thumbNailNode, XPathConstants.NODE), xPath));
-            thumbNail.setGrayFilter(getGrayFilter((Node)xPath.evaluate(ConfigElement.GRAYFILTER, thumbNailNode, XPathConstants.NODE), xPath));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get thumbnail config", e);
+        NodeList childNodes = thumbNailNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.CACHE:
+                thumbNail.setCache(getCache(node));
+                break;
+            case ConfigElement.CREATION:
+                thumbNail.setCreation(getCreation(node));
+                break;
+            case ConfigElement.GRAYFILTER:
+                thumbNail.setGrayFilter(getGrayFilter(node));
+                break;
+            default:
+                break;
+            }
         }
         return thumbNail;
     }
 
-    private static ThumbNailCreation getCreation(Node creationNode, XPath xPath) {
+    private static ThumbNailCreation getCreation(Node creationNode) {
         ThumbNailCreation thumbNailCreation = new ThumbNailCreation();
 
-        try {
-            thumbNailCreation.setAlgorithm(JPEGScaleAlgorithm.valueOf((String)xPath.evaluate(ConfigElement.ALGORITHM, creationNode, XPathConstants.STRING)));
-            thumbNailCreation.setHeight(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.HEIGHT, creationNode, XPathConstants.STRING), 120));
-            thumbNailCreation.setIfMissingOrCorrupt(Boolean.valueOf((String)xPath.evaluate(ConfigElement.IF_MISSING_OR_CORRUPT, creationNode, XPathConstants.STRING)));
-            thumbNailCreation.setWidth(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.WIDTH, creationNode, XPathConstants.STRING), 160));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get creation", e);
+        NodeList childNodes = creationNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.ALGORITHM:
+                thumbNailCreation.setAlgorithm(JPEGScaleAlgorithm.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.HEIGHT:
+                thumbNailCreation.setHeight(StringUtil.getIntValue(node.getTextContent(), 120));
+                break;
+            case ConfigElement.IF_MISSING_OR_CORRUPT:
+                thumbNailCreation.setIfMissingOrCorrupt(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.WIDTH:
+                thumbNailCreation.setWidth(StringUtil.getIntValue(node.getTextContent(), 160));
+                break;
+            default:
+                break;
+            }
         }
         return thumbNailCreation;
     }
 
-    private static ThumbNailCache getCache(Node cacheNode, XPath xPath) {
+    private static ThumbNailCache getCache(Node cacheNode) {
         ThumbNailCache thumbNailCache = new ThumbNailCache();
 
-        try {
-            thumbNailCache.setEnabled(Boolean.valueOf((String)xPath.evaluate(ConfigElement.ENABLED, cacheNode, XPathConstants.STRING)));
-            thumbNailCache.setMaxSize(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.MAX_SIZE, cacheNode, XPathConstants.STRING), 1000));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get cache", e);
+        NodeList childNodes = cacheNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.ENABLED:
+                thumbNailCache.setEnabled(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.MAX_SIZE:
+                thumbNailCache.setMaxSize(StringUtil.getIntValue(node.getTextContent(), 1000));
+                break;
+            default:
+                break;
+            }
         }
         return thumbNailCache;
     }
 
-    private static ThumbNailGrayFilter getGrayFilter(Node grayfilterNode, XPath xPath) {
+    private static ThumbNailGrayFilter getGrayFilter(Node grayfilterNode) {
         ThumbNailGrayFilter thumbNailGrayFilter = new ThumbNailGrayFilter();
 
-        try {
-            thumbNailGrayFilter.setPercentage(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.PERCENTAGE, grayfilterNode, XPathConstants.STRING), 35));
-            thumbNailGrayFilter.setPixelsBrightened(Boolean.valueOf((String)xPath.evaluate(ConfigElement.PIXELS_BRIGHTENED, grayfilterNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get grayfilter", e);
+        NodeList childNodes = grayfilterNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.PERCENTAGE:
+                thumbNailGrayFilter.setPercentage(StringUtil.getIntValue(node.getTextContent(), 35));
+                break;
+            case ConfigElement.PIXELS_BRIGHTENED:
+                thumbNailGrayFilter.setPixelsBrightened(Boolean.valueOf(node.getTextContent()));
+                break;
+            default:
+                break;
+            }
         }
         return thumbNailGrayFilter;
     }

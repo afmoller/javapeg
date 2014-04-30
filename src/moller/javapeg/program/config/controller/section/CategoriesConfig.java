@@ -27,7 +27,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.program.categories.CategoryUserObject;
@@ -40,23 +39,19 @@ import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class CategoriesConfig {
 
-    public static TreeNode getCategoriesConfig(Node categoriesNode, XPath xPath) {
+    public static TreeNode getCategoriesConfig(Node categoriesNode) {
+        NamedNodeMap attributes = categoriesNode.getAttributes();
+        Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID);
 
-        DefaultMutableTreeNode root = null;
+        ApplicationContext.getInstance().setHighestUsedCategoryID(Integer.parseInt(highestUsedIdAttribute.getTextContent()));
 
-        try {
-            String id = (String)xPath.evaluate("@" + ConfigElement.HIGHEST_USED_ID, categoriesNode, XPathConstants.STRING);
-            ApplicationContext.getInstance().setHighestUsedCategoryID(Integer.parseInt(id));
-
-            root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
-            ConfigHandlerUtil.populateTreeModelFromNode(categoriesNode, root, xPath);
-        } catch (XPathExpressionException xpee) {
-            throw new RuntimeException("Could not get categories config", xpee);
-        }
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
+        ConfigHandlerUtil.populateTreeModelFromNode(categoriesNode, root);
 
         return root;
     }
@@ -81,7 +76,7 @@ public class CategoriesConfig {
             Node instanceNode = (Node)xPath.evaluate("/" + ConfigElement.INSTANCE, doc, XPathConstants.NODE);
 
             root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
-            ConfigHandlerUtil.populateTreeModelFromNode(instanceNode, root, xPath);
+            ConfigHandlerUtil.populateTreeModelFromNode(instanceNode, root);
 
             importedCategories = new ImportedCategories();
             importedCategories.setJavaPegId((String)xPath.evaluate("@" + ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE, instanceNode, XPathConstants.STRING));

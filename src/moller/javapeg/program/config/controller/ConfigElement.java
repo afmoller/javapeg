@@ -116,4 +116,5 @@ public class ConfigElement {
     public static final String GRAYFILTER = "grayfilter";
     public static final String PERCENTAGE = "percentage";
     public static final String PIXELS_BRIGHTENED = "pixelsBrightened";
+    public static final String CATEGORY = "category";
 }
