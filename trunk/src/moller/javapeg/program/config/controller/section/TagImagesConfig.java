@@ -18,9 +18,6 @@ package moller.javapeg.program.config.controller.section;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
@@ -32,53 +29,94 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class TagImagesConfig {
 
-    public static TagImages getTagImagesConfig(Node tagImagesNode, XPath xPath) {
+    public static TagImages getTagImagesConfig(Node tagImagesNode) {
         TagImages tagImages = new TagImages();
 
-        try {
-            tagImages.setCategories(getCategories((Node)xPath.evaluate(ConfigElement.CATEGORIES, tagImagesNode, XPathConstants.NODE), xPath));
-            tagImages.setImagesPaths(getImagesPaths((Node)xPath.evaluate(ConfigElement.PATHS, tagImagesNode, XPathConstants.NODE), xPath));
-            tagImages.setPreview(getPreview((Node)xPath.evaluate(ConfigElement.PREVIEW, tagImagesNode, XPathConstants.NODE), xPath));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get tag images config", e);
+        NodeList childNodes = tagImagesNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.CATEGORIES:
+                tagImages.setCategories(getCategories(node));
+                break;
+            case ConfigElement.PATHS:
+                tagImages.setImagesPaths(getImagesPaths(node));
+                break;
+            case ConfigElement.PREVIEW:
+                tagImages.setPreview(getPreview(node));
+                break;
+            default:
+                break;
+            }
         }
         return tagImages;
     }
 
-    private static TagImagesPreview getPreview(Node previewNode, XPath xPath) {
+    private static TagImagesPreview getPreview(Node previewNode) {
         TagImagesPreview tagImagesPreview = new TagImagesPreview();
 
-        try {
-            tagImagesPreview.setUseEmbeddedThumbnail(Boolean.valueOf((String)xPath.evaluate(ConfigElement.USE_EMBEDDED_THUMBNAIL, previewNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get tag images preview", e);
+        NodeList childNodes = previewNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.USE_EMBEDDED_THUMBNAIL:
+                tagImagesPreview.setUseEmbeddedThumbnail(Boolean.valueOf(node.getTextContent()));
+                break;
+            default:
+                break;
+            }
         }
         return tagImagesPreview;
     }
 
-    private static TagImagesPaths getImagesPaths(Node pathsNode, XPath xPath) {
+    private static TagImagesPaths getImagesPaths(Node pathsNode) {
         TagImagesPaths tagImagesPaths = new TagImagesPaths();
 
-        try {
-            tagImagesPaths.setAddToRepositoryPolicy(StringUtil.getIntValue((String)xPath.evaluate(ConfigElement.ADD_TO_REPOSITORY_POLICY, pathsNode, XPathConstants.STRING), 1));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get image paths", e);
+        NodeList childNodes = pathsNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.ADD_TO_REPOSITORY_POLICY:
+                tagImagesPaths.setAddToRepositoryPolicy(StringUtil.getIntValue(node.getTextContent(), 1));
+                break;
+            default:
+                break;
+            }
         }
         return tagImagesPaths;
     }
 
-    private static TagImagesCategories getCategories(Node categoriesNode, XPath xPath) {
+    private static TagImagesCategories getCategories(Node categoriesNode) {
         TagImagesCategories tagImagesCategories = new TagImagesCategories();
 
-        try {
-            tagImagesCategories.setOrRadioButtonIsSelected(Boolean.valueOf((String)xPath.evaluate(ConfigElement.OR_RADIO_BUTTON_IS_SELECTED, categoriesNode, XPathConstants.STRING)));
-            tagImagesCategories.setWarnWhenRemove(Boolean.valueOf((String)xPath.evaluate(ConfigElement.WARN_WHEN_REMOVE, categoriesNode, XPathConstants.STRING)));
-            tagImagesCategories.setWarnWhenRemoveWithSubCategories(Boolean.valueOf((String)xPath.evaluate(ConfigElement.WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES, categoriesNode, XPathConstants.STRING)));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get categories", e);
+        NodeList childNodes = categoriesNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.OR_RADIO_BUTTON_IS_SELECTED:
+                tagImagesCategories.setOrRadioButtonIsSelected(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.WARN_WHEN_REMOVE:
+                tagImagesCategories.setWarnWhenRemove(Boolean.valueOf(node.getTextContent()));
+                break;
+            case ConfigElement.WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES:
+                tagImagesCategories.setWarnWhenRemoveWithSubCategories(Boolean.valueOf(node.getTextContent()));
+                break;
+            default:
+                break;
+            }
         }
         return tagImagesCategories;
     }

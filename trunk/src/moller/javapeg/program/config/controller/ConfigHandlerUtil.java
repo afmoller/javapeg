@@ -21,55 +21,59 @@ import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.categories.CategoryUserObject;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ConfigHandlerUtil {
 
-    public static void populateTreeModelFromNode(Node categoriesElement, DefaultMutableTreeNode root, XPath xPath) {
+    public static void populateTreeModelFromNode(Node categoriesElement, DefaultMutableTreeNode root) {
 
-        try {
-            NodeList categoryElements = (NodeList)xPath.evaluate("category", categoriesElement, XPathConstants.NODESET);
-            if (categoryElements.getLength() > 0) {
-                for (int i = 0; i < categoryElements.getLength(); i++) {
-                    populateNodeBranch(root, categoryElements.item(i), xPath);
-                }
+        NodeList childNodes = categoriesElement.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.CATEGORY:
+                populateNodeBranch(root, node);
+            default:
+                break;
             }
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not populate tree model from node", e);
         }
     }
 
-    private static void populateNodeBranch(DefaultMutableTreeNode node, Node category, XPath xPath ) {
+    private static void populateNodeBranch(DefaultMutableTreeNode treeNode, Node category) {
+        NamedNodeMap attributes = category.getAttributes();
+        Node nameAttribute = attributes.getNamedItem("name");
+        Node idAttribute = attributes.getNamedItem("id");
 
-        try {
-            String displayString = (String)xPath.evaluate("@name", category, XPathConstants.STRING);
-            String identityString = (String)xPath.evaluate("@id", category, XPathConstants.STRING);
+        String displayString = nameAttribute.getTextContent();
+        String identityString = idAttribute.getTextContent();
 
-            CategoryUserObject cuo = new CategoryUserObject(displayString, identityString);
+        CategoryUserObject cuo = new CategoryUserObject(displayString, identityString);
 
-            DefaultMutableTreeNode mtn = new DefaultMutableTreeNode(cuo);
+        DefaultMutableTreeNode mtn = new DefaultMutableTreeNode(cuo);
 
-            node.add(mtn);
+        treeNode.add(mtn);
 
-            NodeList categoryChildren = (NodeList)xPath.evaluate("category", category, XPathConstants.NODESET);
+        NodeList childNodes = category.getChildNodes();
 
-            if (categoryChildren.getLength() > 0) {
-                for (int i = 0; i < categoryChildren.getLength(); i++) {
-                    populateNodeBranch(mtn, categoryChildren.item(i), xPath);
-                }
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.CATEGORY:
+                populateNodeBranch(mtn, node);
+            default:
+                break;
             }
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not node branch", e);
         }
     }
 

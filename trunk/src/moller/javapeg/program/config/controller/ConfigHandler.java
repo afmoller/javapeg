@@ -34,8 +34,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
@@ -171,9 +169,6 @@ public class ConfigHandler {
             doc = db.parse(configFile);
             doc.getDocumentElement().normalize();
 
-            XPathFactory xPathFactory = XPathFactory.newInstance();
-            XPath xPath = xPathFactory.newXPath();
-
             configuration = new Configuration();
 
             NodeList configElementsByTagName = doc.getElementsByTagName(ConfigElement.CONFIG);
@@ -190,10 +185,10 @@ public class ConfigHandler {
                         configuration.setLogging(LoggingConfig.getLoggingConfig(node));
                         break;
                     case ConfigElement.CATEGORIES:
-                        configuration.setCategories(CategoriesConfig.getCategoriesConfig(node, xPath));
+                        configuration.setCategories(CategoriesConfig.getCategoriesConfig(node));
                         break;
                     case ConfigElement.IMPORTEDCATEGORIES:
-                        configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig(node, xPath));
+                        configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig(node));
                         break;
                     case ConfigElement.GUI:
                         configuration.setgUI(GUIConfig.getGUIConfig(node));
@@ -214,13 +209,13 @@ public class ConfigHandler {
                         configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig(node));
                         break;
                     case ConfigElement.REPOSITORY:
-                        configuration.setRepository(RepositoryConfig.getRepositoryConfig(node, xPath));
+                        configuration.setRepository(RepositoryConfig.getRepositoryConfig(node));
                         break;
                     case ConfigElement.TAG_IMAGES:
-                        configuration.setTagImages(TagImagesConfig.getTagImagesConfig(node, xPath));
+                        configuration.setTagImages(TagImagesConfig.getTagImagesConfig(node));
                         break;
                     case ConfigElement.THUMBNAIL:
-                        configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig(node, xPath));
+                        configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig(node));
                         break;
                     case ConfigElement.TOOL_TIPS:
                         configuration.setToolTips(ToolTipsConfig.getToolTipsConfig(node));

@@ -22,9 +22,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.repository.Repository;
@@ -39,76 +36,110 @@ import org.w3c.dom.NodeList;
 
 public class RepositoryConfig {
 
-    public static Repository getRepositoryConfig(Node repositoryNode, XPath xPath) {
+    public static Repository getRepositoryConfig(Node repositoryNode) {
         Repository repository = new Repository();
 
-        try {
-            repository.setExceptions(getRepositoryExceptions((Node)xPath.evaluate(ConfigElement.EXCEPTIONS, repositoryNode, XPathConstants.NODE), xPath));
-            repository.setPaths(getRepositoryPaths((Node)xPath.evaluate(ConfigElement.PATHS, repositoryNode, XPathConstants.NODE), xPath));
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get repository config", e);
+        NodeList childNodes = repositoryNode.getChildNodes();
+
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
+
+            switch (node.getNodeName()) {
+            case ConfigElement.EXCEPTIONS:
+                repository.setExceptions(getRepositoryExceptions(node));
+                break;
+            case ConfigElement.PATHS:
+                repository.setPaths(getRepositoryPaths(node));
+                break;
+            default:
+                break;
+            }
         }
         return repository;
     }
 
-    private static RepositoryPaths getRepositoryPaths(Node repositoryNode, XPath xPath) {
-        RepositoryPaths repositoryPaths = new RepositoryPaths();
-
+    private static RepositoryPaths getRepositoryPaths(Node pathsNode) {
         List<File> paths = new ArrayList<File>();
 
-        try {
-            NodeList pathNodeList = (NodeList)xPath.evaluate(ConfigElement.PATH, repositoryNode, XPathConstants.NODESET);
+        NodeList childNodes = pathsNode.getChildNodes();
 
-            for (int index = 0; index < pathNodeList.getLength(); index++) {
-                String path = pathNodeList.item(index).getTextContent();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
+            switch (node.getNodeName()) {
+            case ConfigElement.PATH:
+                String path = node.getTextContent();
                 if (StringUtil.isNotBlank(path)) {
                     paths.add(new File(path));
                 }
+                break;
+            default:
+                break;
             }
-            repositoryPaths.setPaths(paths);
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get repository paths", e);
         }
+
+        RepositoryPaths repositoryPaths = new RepositoryPaths();
+        repositoryPaths.setPaths(paths);
+
         return repositoryPaths;
     }
 
-    private static RepositoryExceptions getRepositoryExceptions(Node exceptionsNode, XPath xPath) {
+    private static RepositoryExceptions getRepositoryExceptions(Node exceptionsNode) {
         RepositoryExceptions repositoryExceptions = new RepositoryExceptions();
 
         List<File> allwaysAdd = new ArrayList<File>();
         List<File> neverAdd = new ArrayList<File>();
 
-        try {
-            NodeList allwaysAddNodeList = (NodeList)xPath.evaluate(ConfigElement.ALLWAYS_ADD, exceptionsNode, XPathConstants.NODESET);
+        NodeList childNodes = exceptionsNode.getChildNodes();
 
-            for (int index = 0; index < allwaysAddNodeList.getLength(); index++) {
-                String path = (String)xPath.evaluate(ConfigElement.PATH, allwaysAddNodeList.item(index), XPathConstants.STRING);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
-                if (StringUtil.isNotBlank(path)) {
-                    allwaysAdd.add(new File(path));
+            switch (node.getNodeName()) {
+            case ConfigElement.ALLWAYS_ADD:
+
+                NodeList allwaysAddChildNodes= node.getChildNodes();
+
+                for (int j = 0; j < allwaysAddChildNodes.getLength(); j++) {
+                    Node allwaysAddChildNode = allwaysAddChildNodes.item(j);
+
+                    switch (allwaysAddChildNode.getNodeName()) {
+                    case ConfigElement.PATH:
+                        String path = allwaysAddChildNode.getTextContent();
+                        if (StringUtil.isNotBlank(path)) {
+                            allwaysAdd.add(new File(path));
+                        }
+                        break;
+                    default:
+                        break;
+                    }
                 }
-            }
-            repositoryExceptions.setAllwaysAdd(allwaysAdd);
+                repositoryExceptions.setAllwaysAdd(allwaysAdd);
+                break;
 
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get repository exceptions allways add", e);
-        }
+            case ConfigElement.NEVER_ADD:
 
-        try {
-            NodeList neverAddNodeList = (NodeList)xPath.evaluate(ConfigElement.NEVER_ADD, exceptionsNode, XPathConstants.NODESET);
+                NodeList neverAddChildNodes= node.getChildNodes();
 
-            for (int index = 0; index < neverAddNodeList.getLength(); index++) {
-                String path = (String)xPath.evaluate(ConfigElement.PATH, neverAddNodeList.item(index), XPathConstants.STRING);
+                for (int j = 0; j < neverAddChildNodes.getLength(); j++) {
+                    Node neverAddChildNode = neverAddChildNodes.item(j);
 
-                if (StringUtil.isNotBlank(path)) {
-                    neverAdd.add(new File(path));
+                    switch (neverAddChildNode.getNodeName()) {
+                    case ConfigElement.PATH:
+                        String path = neverAddChildNode.getTextContent();
+                        if (StringUtil.isNotBlank(path)) {
+                            neverAdd.add(new File(path));
+                        }
+                        break;
+                    default:
+                        break;
+                    }
                 }
+                repositoryExceptions.setNeverAdd(neverAdd);
+                break;
+            default:
+                break;
             }
-            repositoryExceptions.setNeverAdd(neverAdd);
-
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get repository exceptions never add", e);
         }
         return repositoryExceptions;
     }

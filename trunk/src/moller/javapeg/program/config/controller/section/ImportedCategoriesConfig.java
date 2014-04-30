@@ -23,9 +23,6 @@ import java.util.Map;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 
 import moller.javapeg.program.categories.CategoryUserObject;
 import moller.javapeg.program.config.controller.ConfigElement;
@@ -35,29 +32,35 @@ import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ImportedCategoriesConfig {
 
-    public static Map<String, ImportedCategories> getImportedCategoriesConfig(Node importedCategoriesNode, XPath xPath) {
+    public static Map<String, ImportedCategories> getImportedCategoriesConfig(Node importedCategoriesNode) {
+        Map<String, ImportedCategories> importedCategoriesConfig = new HashMap<String, ImportedCategories>();
 
-        Map<String, ImportedCategories> importedCategoriesConfig = null;
+        NodeList childNodes = importedCategoriesNode.getChildNodes();
 
-        try {
-            NodeList instancesNodeList = (NodeList)xPath.evaluate(ConfigElement.INSTANCE, importedCategoriesNode, XPathConstants.NODESET);
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.item(i);
 
-            importedCategoriesConfig = new HashMap<String, ImportedCategories>();
+            switch (node.getNodeName()) {
+            case ConfigElement.INSTANCE:
+                NamedNodeMap attributes = node.getAttributes();
 
-            for (int index = 0; index < instancesNodeList.getLength(); index++) {
-                Node instanceNode = instancesNodeList.item(index);
-                String javapegClientId = (String)xPath.evaluate("@" + ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE, instanceNode, XPathConstants.STRING);
-                String displayName = (String)xPath.evaluate("@" + ConfigElement.DISPLAY_NAME, instanceNode, XPathConstants.STRING);
-                Integer highestUsedId = Integer.parseInt((String)xPath.evaluate("@" + ConfigElement.HIGHEST_USED_ID, instanceNode, XPathConstants.STRING));
+                Node javaPegClientAttribute = attributes.getNamedItem(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE);
+                Node displayNameAttribute = attributes.getNamedItem(ConfigElement.DISPLAY_NAME);
+                Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID);
+
+                String javapegClientId = javaPegClientAttribute.getTextContent();
+                String displayName = displayNameAttribute.getTextContent();
+                Integer highestUsedId = Integer.parseInt(highestUsedIdAttribute.getTextContent());
 
                 DefaultMutableTreeNode root = new DefaultMutableTreeNode(new CategoryUserObject("root", "-1"));
 
-                ConfigHandlerUtil.populateTreeModelFromNode(instanceNode, root, xPath);
+                ConfigHandlerUtil.populateTreeModelFromNode(node, root);
 
                 ImportedCategories importedCategories = new ImportedCategories();
                 importedCategories.setDisplayName(displayName);
@@ -66,9 +69,10 @@ public class ImportedCategoriesConfig {
                 importedCategories.setRoot(root);
 
                 importedCategoriesConfig.put(javapegClientId, importedCategories);
+                break;
+            default:
+                break;
             }
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException("Could not get imported categories config", e);
         }
         return importedCategoriesConfig;
     }
