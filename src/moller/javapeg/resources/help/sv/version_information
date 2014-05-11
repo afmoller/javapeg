@@ -1,8 +1,4 @@
-*******************************************************************************<LF>
-*                                J a v a P E G                                * <LF>
-*******************************************************************************<LF>
-*                    V E R S I O N   I N F O R M A T I O N                    *<LF>
-*******************************************************************************<LF>
+VERSION INFORMATION<LF>
 <LF>
  + = Additions since previous version<LF>
  ! = Bug fixes since previous version<LF>
@@ -10,412 +6,201 @@
 <LF>
  3.0 (2014-xx-xx)<LF>
 <LF>
- + It is possible to zoom an displayed image in the Image Viewer. It is also<LF>
-   possible to move the image by dragging it with the mouse. If wanted it is<LF>
-   also possible to display an "Navigation image" a small variant of the <LF>
-   displayed image in which it is possible to click and the large image will<LF>
-   then be centered at the clicked position. It is also possible to center<LF>
-   a displayed image.<LF>
+ + It is possible to zoom an displayed image in the Image Viewer. It is also possible to move the image by dragging it with the mouse. If wanted it is also possible to display an "Navigation image" a small variant of the displayed image in which it is possible to click and the large image will then be centered at the clicked position. It is also possible to center a displayed image.<LF>
 <LF>
- + It is possible to select which scaling method JavaPEG shall use when an<LF> 
-   image in the ImageViewer is to be scaled. This way it is possible to select<LF>
-   the quality and thereby the speed of scaling an image (higher quality<LF>
-   requires longer scaling time.)<LF>
+ + It is possible to select which scaling method JavaPEG shall use when an image in the ImageViewer is to be scaled. This way it is possible to select the quality and thereby the speed of scaling an image (higher quality requires longer scaling time.)<LF>
 <LF>
- + When an image is removed from the image view list then the preview image is<LF>
-   automatically updated to the newly (automatically) selected image in the<LF>
-   image view list.<LF>
+ + When an image is removed from the image view list then the preview image is automatically updated to the newly (automatically) selected image in the image view list.<LF>
 <LF>
- + When an image is added to the image view list, then this image is also<LF> 
-   automatically selected in the list and thereby displayed in the preview<LF> 
-   area.<LF>
-<LF> 
- + It is possible to save an unlimited amount of File name and Sub folder<LF>
-   rename templates. Any saved template will end up in a drop down box and when<LF>
-   selected, it will be used as the current template used by the rename<LF> 
-   functionality.<LF>
-<LF> 
- + A new image merge mode has been added to JavaPEG. This means that it is<LF> 
-   possible to merge image files (copy files from different directories into<LF> 
-   one destination directory, but without any possible duplicates) from an<LF>
-   unlimited amount of source directories.<LF>
-<LF> 
- + An image resize functionality has been added to JavaPEG. It can batch resize<LF>
-   images into specified sizes and qualities, either by specifying the width<LF> 
-   (height will be calculated), height (width will be calculated) or both (the<LF>
-   exact given sizes will be used without taking the original images aspect<LF> 
-   ratios into consideration)<LF> 
-<LF> 
- + At the first start of JavaPEG the user will be shown an application<LF> 
-   configuration form, in which it is either possible to set the language to be<LF>
-   used by JavaPEG, or to do a full import of a configuration from an<LF> 
-   previously made installation. It is possible to import configurations from<LF> 
-   JavaPEG versions ranging from 3.0 and forwards. There is no support of<LF>
-   importing configurations from an older version.<LF>
-<LF> 
- + Configuration validation against Schema at application start. If the<LF>
-   configuration is invalid then the invalid configuration will be stored into<LF>
-   a "corrupt" directory and the configuration will be restored from a zipped<LF>
-   backup. If that backup also is corrupt, then the configuration will be<LF> 
-   restored from a built in fall back configuration.<LF>
-<LF>  
+ + When an image is added to the image view list, then this image is also automatically selected in the list and thereby displayed in the preview area.<LF>
+<LF>
+ + It is possible to save an unlimited amount of File name and Sub folder rename templates. Any saved template will end up in a drop down box and when selected, it will be used as the current template used by the rename functionality.<LF>
+<LF>
+ + A new image merge mode has been added to JavaPEG. This means that it is possible to merge image files (copy files from different directories into one destination directory, but without any possible duplicates) from an unlimited amount of source directories.<LF>
+<LF>
+ + An image resize functionality has been added to JavaPEG. It can batch resize images into specified sizes and qualities, either by specifying the width (height will be calculated), height (width will be calculated) or both (the exact given sizes will be used without taking the original images aspect ratios into consideration)<LF>
+<LF>
+ + At the first start of JavaPEG the user will be shown an application configuration form, in which it is either possible to set the language to be used by JavaPEG, or to do a full import of a configuration from an previously made installation. It is possible to import configurations from JavaPEG versions ranging from 3.0 and forwards. There is no support of importing configurations from an older version.<LF>
+<LF>
+ + Configuration validation against Schema at application start. If the configuration is invalid then the invalid configuration will be stored into a "corrupt" directory and the configuration will be restored from a zipped backup. If that backup also is corrupt, then the configuration will be restored from a built in fall back configuration.<LF>
+<LF>
  + Row sorting, by column, added to the meta data tables.<LF>
+<LF>
+ + Possible to reorder columns and sort the rows by any column in the METADATA and PREVIEW tables in the RENAME IMAGES mode.<LF>
+<LF>
+ + If the Automatic Image Resize button is selected in the ImageViewer then a deselection of this button will resize a loaded image to the original size.<LF>
+<LF>
+ + If an image thumbnail is double clicked when JavaPEG is in SEARCH / VIEW IMAGE mode the image will be added to the end of the image list. If the Image Viewer is displayed the image will also be added to the collection of viewable images in the Image Viewer.<LF>
+<LF>
+ + An image tagging functionality has been implemented. It is possible to tag an image with an unlimited amount of categories, set an image rating between 1 and 5 and to enter a comment. This meta data and additional image specific data, such as ISO rating, exposure data and time, shutterspeed,... is persistently stored in xml files.<LF>
+<LF>
+ + A search engine that searches in an in memory database compiled by all existing xml meta data files mentioned in the section above.<LF>   
 <LF> 
- + Possible to reorder columns and sort the rows by any column in the METADATA<LF>
-   and PREVIEW tables in the RENAME IMAGES mode.<LF> 
+ + It is possible to have the images automatically rotated in the ImageViewer. The rotation is done according to the stored orientation meta data in each image. If there is no such information stored in the image, the image can not be rotated automatically.<LF>
 <LF> 
- + If the Automatic Image Resize button is selected in the ImageViewer then a<LF>
-   deselection of this button will resize a loaded image to the original size.<LF>
+ + It is possible to rotate the images in the ImageViewer, counterwise or clockwise in steps of 90 degrees.<LF>
 <LF> 
- + If an image thumbnail is double clicked when JavaPEG is in<LF> 
-   SEARCH / VIEW IMAGE mode the image will be added to the end of the image<LF> 
-   list. If the Image Viewer is displayed the image will also be added to the<LF> 
-   collection of viewable images in the Image Viewer.<LF>   
+ + It is possible to set the detail level of the thumbnail tooltips. Three levels exists: Disabled, Enabled and Extended, where Disabled; means no tooltips at all, Enabled; the file name of the image is shown and Extended; is the file name and some other meta data of the image (the same as it was in the tooltip in earlier versions of JavaPEG. It is also possible to configure the tooltips independendently for the thumbnails in the main application window, image search result viewer and the image viewer. This means that it is possible to have different tooltips in the different parts of the JavaPEG application.<LF> 
 <LF> 
- + An image tagging functionality has been implemented. It is possible to tag<LF>
-   an image with an unlimited amount of categories, set an image rating between<LF>
-   1 and 5 and to enter a comment. This meta data and additional image specific<LF>
-   data, such as ISO rating, exposure data and time, shutterspeed,... is<LF> 
-   persistently stored in xml files.<LF>
-<LF>      
- + A search engine that searches in an in memory database compiled by all<LF> 
-   existing xml meta data files mentioned in the section above.<LF>   
+ + Added the possibility to copy image(s) to system clipboard. It is either possible to copy one image to clipboard or all images in a selected directory via popup menu or to copy a list of images at once, by populating an image list in the SEARCH / VIEW IMAGES tab and click on the copy image list to system clipboard button or by selecting images in the thumbnail overview by clicking on each image to copy and at the same time holding down the Ctrl button and then selecting the "Copy selected image(s) to system clipboard" menu item in the context menu.<LF> 
 <LF> 
- + It is possible to have the images automatically rotated in the ImageViewer.<LF>
-   The rotation is done according to the stored orientation meta data in each<LF>
-   image. If there is no such information stored in the image, the image can<LF>
-   not be rotated automatically.<LF>
-<LF> 
- + It is possible to rotate the images in the ImageViewer, counterwise or<LF> 
-   clockwise in steps of 90 degrees.<LF>
-<LF> 
- + It is possible to set the detail level of the thumbnail tooltips. Three<LF> 
-   levels exists: Disabled, Enabled and Extended, where Disabled; means no<LF>
-   tooltips at all, Enabled; the file name of the image is shown and Extended;<LF>
-   is the file name and some other meta data of the image (the same as it was<LF>
-   in the tooltip in earlier versions of JavaPEG. It is also possible to<LF> 
-   configure the tooltips independendently for the thumbnails in the main<LF> 
-   application window, image search result viewer and the image viewer. This<LF>
-   means that it is possible to have different tooltips in the different parts<LF>
-   of the JavaPEG application.<LF> 
-<LF> 
- + Added the possibility to copy image(s) to system clipboard. It is either<LF>
-   possible to copy one image to clipboard or all images in a selected directory<LF>
-   via popup menu or to copy a list of images at once, by populating an image<LF> 
-   list in the SEARCH / VIEW IMAGES tab and click on the copy image list to<LF> 
-   system clipboard button.<LF> 
-<LF> 
- + If a JPEG file is missing an embedded thumbnail or if the exif data holds<LF>
-   corrupt information about where the thumbnail is stored and JavaPEG does not<LF>
-   find it by scanning the entire JPEG file or if the stored thumbnail is<LF> 
-   corrupt, then it is possible to let JavaPEG create a thumbnail to be used by<LF>
-   JavaPEG. The original JPEG file will not be updated with the created<LF> 
-   thumbnail.<LF>
+ + If a JPEG file is missing an embedded thumbnail or if the exif data holds corrupt information about where the thumbnail is stored and JavaPEG does not find it by scanning the entire JPEG file or if the stored thumbnail is corrupt, then it is possible to let JavaPEG create a thumbnail to be used by JavaPEG. The original JPEG file will not be updated with the created thumbnail.<LF>
 <LF>   
- + It is possible to enable and disable the thumbnail cache that JavaPEG uses<LF>
-   internally. It is also possible to set the max size (number of thumbnails to<LF>
-   cache) of the cache and to entirely clear the cache from thumbnails.<LF>   
+ + It is possible to enable and disable the thumbnail cache that JavaPEG uses internally. It is also possible to set the max size (number of thumbnails to cache) of the cache and to entirely clear the cache from thumbnails.<LF>   
 <LF> 
- ! If a file was copied incorrect when it was renamed the, rename process log<LF> 
-   window did incorrectly state that the file was both copied correct and with<LF>
-   failure.<LF>
+ ! If a file was copied incorrect when it was renamed the, rename process log window did incorrectly state that the file was both copied correct and with failure.<LF>
 <LF> 
- ! If time and, or date was missing in the Exif data the time and, or date was<LF>
-   not used from file time stamp even if the configuration was set to do that.<LF>
+ ! If time and, or date was missing in the Exif data the time and, or date was not used from file time stamp even if the configuration was set to do that.<LF>
 <LF>  
- ! JavaPEG did crash as a result of a null pointer exception when a directory<LF>
-   without read access, for the current user, was browsed in the tree view.<LF>
-   Bug seen in Windows 7, but is probably existing in any Operating system with<LF>
-   user access control.<LF> 
+ ! JavaPEG did crash as a result of a null pointer exception when a directory without read access, for the current user, was browsed in the tree view. Bug seen in Windows 7, but is probably existing in any Operating system with user access control.<LF> 
 <LF> 
- ! In the thumbnail tooltips the swedish string "Filnamn", (File name) was hard<LF> 
-   coded.<LF>
+ ! In the thumbnail tooltips the swedish string "Filnamn", (File name) was hard coded.<LF>
 <LF>   
- ! If the keyboard was used to change image in the Image Viewer and the change<LF>
-   image key was held down, then the change of images did not stop at once when<LF>
-   the key was released. This has been fixed in this version.<LF>  
+ ! If the keyboard was used to change image in the Image Viewer and the change image key was held down, then the change of images did not stop at once when the key was released. This has been fixed in this version.<LF>  
 <LF>   
- ~ The thumbnails in the main GUI are explicitly loaded in date order (oldest<LF>
-   first) and not as it was before, in unspecified order.<LF>   
+ ~ The thumbnails in the main GUI are explicitly loaded in date order (oldest first) and not as it was before, in unspecified order.<LF>   
    
- ~ The rename parameters have been aligned between the English and Swedish<LF>
-   translations. This will avoid having "incorrect" rename parameters in any<LF>
-   stored template, if the language is changed.<LF>  
+ ~ The rename parameters have been aligned between the English and Swedish translations. This will avoid having "incorrect" rename parameters in any stored template, if the language is changed.<LF>  
 <LF>   
- ~ All sections in all configuration pages in the Configuration GUI have their<LF> 
-   configuration content (check boxes, input fields, ...) aligned top-left in<LF>
-   their respectively section.<LF>
+ ~ All sections in all configuration pages in the Configuration GUI have their configuration content (check boxes, input fields, ...) aligned top-left in their respectively section.<LF>
 <LF>   
- ~ The JavaPEG configuration file now uses a custom XML format specifically<LF>
-   developed for this application.<LF>  
+ ~ The JavaPEG configuration file now uses a custom XML format specifically developed for this application.<LF>  
 <LF>   
- ~ The directory selection tree to the left in the main windows is enhanced to<LF>
-   look like, with icons and content, as the icons in the native file explorer.<LF>
-   For instance the Desktop and Computer folders are displayed in an Windows<LF>
-   environment.<LF> 
+ ~ The directory selection tree to the left in the main windows is enhanced to look like, with icons and content, as the icons in the native file explorer. For instance the Desktop and Computer folders are displayed in an Windows environment.<LF> 
 <LF>   
- ~ Made the JPEG filtering a little bit more relaxed. All images with the<LF> 
-   suffixes (case insensitive) JPG or JPEG that is able to be loaded by the<LF> 
-   JAVA Virtual Machine is treated as JPEG files that shall be handles as<LF> 
-   images by JavaPEG, for instance in the rename mode of JavaPEG. This change<LF>
-   makes it possible to load images which have some garbage bytes in the file,<LF> 
-   but which are possible to load by the JAVA Virtual Machine.<LF>  
+ ~ Made the JPEG filtering a little bit more relaxed. All images with the suffixes (case insensitive) JPG or JPEG that is able to be loaded by the JAVA Virtual Machine is treated as JPEG files that shall be handles as images by JavaPEG, for instance in the rename mode of JavaPEG. This change makes it possible to load images which have some garbage bytes in the file, but which are possible to load by the JAVA Virtual Machine.<LF>  
 <LF>   
- ~ The help content can now be opened by just pushing F1 button instead of<LF> 
-   Ctrl + Alt + F1.<LF>   
+ ~ The help content can now be opened by just pushing F1 button instead of Ctrl + Alt + F1.<LF>   
 <LF>   
- ~ The possibility to override the application embedded language and help files<LF>
-   has been removed.<LF>  
+ ~ The possibility to override the application embedded language and help files has been removed.<LF>  
 <LF>   
- ~ The progress bar displayed when loading images has been changed from being a<LF>
-   separate window to be integrated in the thumbnail display area.<LF> 
+ ~ The progress bar displayed when loading images has been changed from being a separate window to be integrated in the thumbnail display area.<LF> 
 <LF>   
- ~ The error message that is displayed if the configuration file is missing or<LF>
-   corrupt has been improved by not only saying that the file is missing it<LF> 
-   also says that the file might be corrupt.<LF>  
+ ~ The error message that is displayed if the configuration file is missing or corrupt has been improved by not only saying that the file is missing it also says that the file might be corrupt.<LF>  
 <LF>   
- ~ The value of the Exif Picture Width and Exif Picture Height was stripped<LF> 
-   from any occurrences of non integer characters. In for instance some of the<LF>
-   Canon cameras the value of any of the above was: "2592 pixels". From now on<LF>
-   the value is only "2592"<LF> 
+ ~ The value of the Exif Picture Width and Exif Picture Height was stripped from any occurrences of non integer characters. In for instance some of the Canon cameras the value of any of the above was: "2592 pixels". From now on the value is only "2592"<LF> 
 <LF> 
- ~ The length of the Exif parameter: Camera Model was hard coded to a maximum<LF>
-   of 15 characters. That has been changed to instead being a configurable<LF> 
-   length. The configuration is made in the configuration GUI. A value of 0<LF> 
-   (zero) means unlimited length.<LF>
+ ~ The length of the Exif parameter: Camera Model was hard coded to a maximum of 15 characters. That has been changed to instead being a configurable length. The configuration is made in the configuration GUI. A value of 0 (zero) means unlimited length.<LF>
 <LF>  
- ~ The Exif parameter shutter speed has been changed to the Exif parameter<LF>
-   exposure time, since that is what was meant from the beginning. The<LF>
-   exposure time parameter gives values which corresponds to them seen in the<LF>
-   camera during a photo session and the shutter speed values are slightly<LF>
-   different. See Exif standard for details.<LF>
+ ~ The Exif parameter shutter speed has been changed to the Exif parameter exposure time, since that is what was meant from the beginning. The exposure time parameter gives values which corresponds to them seen in the camera during a photo session and the shutter speed values are slightly different. See Exif standard for details.<LF>
 <LF>   
- ~ The Exif parameter aperture value has been changed to the Exif parameter<LF>
-   F-Number, since that is what was meant from the beginning. The<LF>
-   F-Number parameter gives values which corresponds to them seen in the<LF>
-   camera during a photo session and the aperture values are slightly<LF>
-   different. See Exif standard for details.<LF>  
+ ~ The Exif parameter aperture value has been changed to the Exif parameter F-Number, since that is what was meant from the beginning. The F-Number parameter gives values which corresponds to them seen in the camera during a photo session and the aperture values are slightly different. See Exif standard for details.<LF>  
 <LF>    
  2.4 (2009-11-17)<LF>
 <LF> 
- + Possible to create customized help files. Either by overriding an existing<LF> 
-   language or to create help files for a new language (to match a new not<LF>
-   embedded language file)<LF> 
+ + Possible to create customized help files. Either by overriding an existing language or to create help files for a new language (to match a new not embedded language file)<LF> 
 <LF>  
- + Added move to top and bottom buttons for the images in the Image List at the<LF>
-   VIEW IMAGES tab.<LF>
+ + Added move to top and bottom buttons for the images in the Image List at the VIEW IMAGES tab.<LF>
 <LF> 
  + It is possible to let JavaPEG compress the rotated log files in zip-files.<LF>
 <LF> 
- + A graphical user interface for the configuration parameters has been added.<LF>
-   This removes the insecure way of manually changing (Although it is still<LF> 
-   possible if wanted) the parameter values in the conf.xml file.<LF>
+ + A graphical user interface for the configuration parameters has been added. This removes the insecure way of manually changing (Although it is still possible if wanted) the parameter values in the conf.xml file.<LF>
 <LF> 
- + For statistical purposes it is possible to let JavaPEG attach the version<LF> 
-   number to the version update check request made to the version update<LF> 
-   server. The only information sent is which version of JavaPEG that is making<LF> 
-   the version update check. In other words this is totally anonymous, no<LF> 
-   system unique information is sent.<LF>
+ + For statistical purposes it is possible to let JavaPEG attach the version number to the version update check request made to the version update server. The only information sent is which version of JavaPEG that is making the version update check. In other words this is totally anonymous, no system unique information is sent.<LF>
 <LF>   
- + It is possible (by configuration parameters) to let JavaPEG use the latest<LF> 
-   modified timestamp for the image files to populate the date and time<LF> 
-   variables if they are missing in the Exif meta data.<LF>  
+ + It is possible (by configuration parameters) to let JavaPEG use the latest modified timestamp for the image files to populate the date and time variables if they are missing in the Exif meta data.<LF>  
 <LF>      
- + A new Image List format has been added. It is from now on possible to export<LF>
-   image lists supported by the XnView image viewer.<LF>
+ + A new Image List format has been added. It is from now on possible to export image lists supported by the XnView image viewer.<LF>
 <LF>   
    XnView (http://www.xnview.com/)<LF>
 <LF>   
- + An ImageViewer has been added. It is opened from the "VIEW IMAGES"<LF> 
-   (Previous "CREATE IMAGE LISTS" tab) tab and it will show all the images that<LF>
-   has been selected and added to the IMAGE LIST The Image Viewer opens in a<LF> 
-   separate window.<LF>
+ + An ImageViewer has been added. It is opened from the "VIEW IMAGES" (Previous "CREATE IMAGE LISTS" tab) tab and it will show all the images that has been selected and added to the IMAGE LIST The Image Viewer opens in a separate window.<LF>
 <LF>   
- + As a bonus for the fix of the bug described below, with wrong help files<LF> 
-   (possibly non existing) being loaded there is now support for creating<LF> 
-   localized help files in the same manner as for the language files.<LF>   
+ + As a bonus for the fix of the bug described below, with wrong help files (possibly non existing) being loaded there is now support for creating localized help files in the same manner as for the language files.<LF>   
 <LF>   
- ! If the automatic rotation of log file was disabled, then the log was<LF> 
-   rotated for each entry written to log, resulting in a lot of log files with<LF>
-   only one log entry in each log file.<LF>
+ ! If the automatic rotation of log file was disabled, then the log was rotated for each entry written to log, resulting in a lot of log files with only one log entry in each log file.<LF>
 <LF>   
- ! If a new language file was created (with a new language) then the help file<LF>
-   management tried to load help files for that language. The solution was to<LF>
-   load default language help files if desired files does not exist.<LF>   
+ ! If a new language file was created (with a new language) then the help file management tried to load help files for that language. The solution was to load default language help files if desired files does not exist.<LF>   
 <LF>         
- ~ The Language selection GUI has been removed and all settings that was made<LF> 
-   via that interface has been moved to the new graphical configuration<LF> 
-   interface.<LF>
+ ~ The Language selection GUI has been removed and all settings that was made via that interface has been moved to the new graphical configuration interface.<LF>
 <LF>   
- ~ The image loading (When selecting a directory in the tree structure to the<LF>
-   left) has been improved by reducing the initial lag when a directory was<LF> 
-   selected. The lag was linear to the amount of images in selected directory<LF>
+ ~ The image loading (When selecting a directory in the tree structure to the left) has been improved by reducing the initial lag when a directory was selected. The lag was linear to the amount of images in selected directory<LF>
 <LF>  
- ~ In Windows Vista, Windows 7 or other Operating system that restricts file<LF>
-   access according to user rights there where problems with JavaPEG. All files<LF>
-   and directories that are dynamic have been moved from the application<LF> 
-   installation directory to a directory named<LF> 
-   "javapeg-<JAVEPEG_VERSION_NUMBER>" in the home directory for the user that<LF>
-   starts JavaPEG. For instance: C:\Users\Fredrik\javapeg-2.4 in a Windows<LF> 
-   Vista or Windows 7 environment.<LF>   
+ ~ In Windows Vista, Windows 7 or other Operating system that restricts file access according to user rights there where problems with JavaPEG. All files and directories that are dynamic have been moved from the application installation directory to a directory named "javapeg-<JAVEPEG_VERSION_NUMBER>" in the home directory for the user that starts JavaPEG. For instance: C:\Users\Fredrik\javapeg-2.4 in a Windows Vista or Windows 7 environment.<LF>   
 <LF>      
  2.3 (2009-08-03)<LF>
 <LF> 
- ! The embedded download functionality which downloads the latest version<LF> 
-   JavaPEG was broken and still is in all prior versions to this version, which<LF>
-   supports version check against a version server (2.1 & 2.2). The reason for<LF> 
-   this bug to arise was that SourceForge made changes to the format of the URL<LF>
-   to the released files. And unfortunately JavaPEG of earlier versions was not<LF>
-   generic enough to handle that change.<LF>
+ ! The embedded download functionality which downloads the latest version JavaPEG was broken and still is in all prior versions to this version, which supports version check against a version server (2.1 & 2.2). The reason for this bug to arise was that SourceForge made changes to the format of the URL to the released files. And unfortunately JavaPEG of earlier versions was not generic enough to handle that change.<LF>
 <LF> 
  2.2 (2009-08-02)<LF>
 <LF> 
  + Spanish translation added. The translation was performed by: Angel Bueno<LF>
 <LF> 
- + A new variable has been added to the set of variables. The new variable<LF> 
-   gives access to the original file name. So by using this new variable in the<LF>
-   file name template the original file name except the suffix will be inserted<LF>
-   at the position of the variable. The code for this new variable was written<LF>
-   by: Angel Bueno<LF>
+ + A new variable has been added to the set of variables. The new variable gives access to the original file name. So by using this new variable in the file name template the original file name except the suffix will be inserted at the position of the variable. The code for this new variable was written by: Angel Bueno<LF>
 <LF> 
- + A new mode to the application has been added. It is from now on possible to<LF>
-   create images lists to be used in external applications. Lists compatible<LF> 
-   with the following applications are possible to create:<LF>
+ + A new mode to the application has been added. It is from now on possible to create images lists to be used in external applications. Lists compatible with the following applications are possible to create:<LF>
 <LF>   
    PolyView  (http://www.polybytes.com/)<LF>
    IrfanView (http://www.irfanview.com/)<LF>
 <LF>   
-   It is also possible to save lists in JavaPEG format which later on can be<LF>
-   exported to a supported 3rd party list format or having images added or<LF> 
-   removed.<LF>
+   It is also possible to save lists in JavaPEG format which later on can be exported to a supported 3rd party list format or having images added or removed.<LF>
 <LF> 
- + Status bar added to the bottom of the GUI, displaying selected directory,<LF>
-   number of images in selected directory and number of columns and rows in the<LF> 
-   thumbnail grid.<LF>
+ + Status bar added to the bottom of the GUI, displaying selected directory, number of images in selected directory and number of columns and rows in the thumbnail grid.<LF>
 <LF> 
- + Detailed meta data information is available in a panel next to the<LF> 
-   thumbnails panel for each image shown. The meta data for a specific image<LF>
-   is shown when the thumbnail is clicked.<LF>  
+ + Detailed meta data information is available in a panel next to the thumbnails panel for each image shown. The meta data for a specific image is shown when the thumbnail is clicked.<LF>  
 <LF> 
- + At application start the Main GUI sets it size to the size it had when it<LF> 
-   was shut down the the previous time.<LF> 
+ + At application start the Main GUI sets it size to the size it had when it was shut down the the previous time.<LF> 
 <LF> 
- ~ Main GUI is from now on resizable and the layout is handled by layout<LF> 
-   managers.<LF>
+ ~ Main GUI is from now on resizable and the layout is handled by layout managers.<LF>
 <LF>   
- ~ The file chooser GUI, as a separate window, has been replaced by an always<LF>
-   visible and accessible tree structure in the main GUI.<LF>
+ ~ The file chooser GUI, as a separate window, has been replaced by an always visible and accessible tree structure in the main GUI.<LF>
 <LF>   
- ! The progress bar for loading thumbnails was not always centered to the main<LF>
-   GUI window when thumbnails was loading.<LF>        
+ ! The progress bar for loading thumbnails was not always centered to the main GUI window when thumbnails was loading.<LF>        
 <LF>
  2.1 (2009-05-21)<LF>
 <LF> 
- + Detailed information about the JPEG rename process, process of copy any non<LF>
-   JPEG files and the file integrity after the rename and file copy to the<LF>
-   rename process progress window.<LF> 
+ + Detailed information about the JPEG rename process, process of copy any non JPEG files and the file integrity after the rename and file copy to the rename process progress window.<LF> 
 <LF>
- + JavaPEG can from now, do an optional (configurable) version check at<LF> 
-   application start. It does it against an version server. If there is a new<LF>
-   version available, the changes for that version compared to the current used<LF>
-   version is presented. It is also possible to download the new version<LF> 
-   through JavaPEG<LF> 
+ + JavaPEG can from now, do an optional (configurable) version check at application start. It does it against an version server. If there is a new version available, the changes for that version compared to the current used version is presented. It is also possible to download the new version through JavaPEG<LF> 
 <LF>     
- + Validation of the content in any existing external layout.xml file against<LF>
-   a schema.<LF> 
+ + Validation of the content in any existing external layout.xml file against a schema.<LF> 
 <LF>   
- ! Fixed the problems with the accelerator keys for menu items and buttons.<LF> 
-   The where collisions between globally defined accelerator keys and JavaPEG<LF>
-   defined.<LF>
+ ! Fixed the problems with the accelerator keys for menu items and buttons. The where collisions between globally defined accelerator keys and JavaPEG defined.<LF>
 <LF>   
- ~ GUI behavior changed after a rename process has finished. It was changed<LF> 
-   from being cleared from all inputs, as it is at application start, to not be<LF>
-   cleared at all.<LF>  
+ ~ GUI behavior changed after a rename process has finished. It was changed from being cleared from all inputs, as it is at application start, to not be cleared at all.<LF>  
 <LF>
  2.0 (2009-05-05)<LF>
 <LF>
- Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x<LF>
- versions. Despite this the concept is still the same: A simple to use and<LF> 
- secure tool to rename images created by a digital camera.<LF>
+ Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x versions. Despite this the concept is still the same: A simple to use and secure tool to rename images created by a digital camera.<LF>
 <LF>
- The application still need a path to a source directory with images. When the<LF>
- source directory has been chosen the destination directory must be selected.<LF> 
- After this a file name and sub directory template must be provided. As a last<LF> 
- step before the actual rename process can begin, it is possible to select<LF> 
- whether a thumb nail overview shall be created or not.<LF>
+ The application still need a path to a source directory with images. When the source directory has been chosen the destination directory must be selected. After this a file name and sub directory template must be provided. As a last step before the actual rename process can begin, it is possible to select whether a thumb nail overview shall be created or not.<LF>
 <LF>
- A major difference with this version compared to the 1.x versions it that this<LF> 
- version only supports renaming of copied image files. The reason for this is<LF> 
- to minimize the risk for data losses.<LF>
+ A major difference with this version compared to the 1.x versions it that this version only supports renaming of copied image files. The reason for this is to minimize the risk for data losses.<LF>
 <LF>
- + The file chooser used to find the directory containing the images that shall<LF> 
-   be renamed will show thumb nail versions of the images in the selected<LF> 
-   directory. This will ease up the work with finding the images to rename.<LF>
+ + The file chooser used to find the directory containing the images that shall be renamed will show thumb nail versions of the images in the selected directory. This will ease up the work with finding the images to rename.<LF>
 <LF>
- + Thumb nails will be shown in the main application window, when a directory<LF> 
-   with images has been selected in the file chooser and the Ok button has been<LF> 
-   clicked.<LF> 
+ + Thumb nails will be shown in the main application window, when a directory with images has been selected in the file chooser and the Ok button has been clicked.<LF> 
 <LF>
- + There is an instant preview of the resulting file names when the templates<LF> 
-   for either the file name or the sub directory has been changed.<LF>
+ + There is an instant preview of the resulting file names when the templates for either the file name or the sub directory has been changed.<LF>
 <LF>
- + There is an instant errormessage shown if an illegal variable or an illegal<LF> 
-   character is used in the templates or the maximum path length has been<LF> 
-   exceeded for the resulting file names in the selected destination directory.<LF>
+ + There is an instant errormessage shown if an illegal variable or an illegal character is used in the templates or the maximum path length has been exceeded for the resulting file names in the selected destination directory.<LF>
 <LF>
- + Before the rename process starts there is a validation process which makes<LF> 
-   sure that: all input is valid, that maximum path length has not been<LF> 
-   exceeded, that the sub directory does not exist in the destination<LF> 
-   directory, that there is enough space to store the copied files in the<LF> 
-   destination directory and that it is possible to create all the files in the<LF> 
-   destination directory that exists in the source directory.<LF>
+ + Before the rename process starts there is a validation process which makes sure that: all input is valid, that maximum path length has not been exceeded, that the sub directory does not exist in the destination directory, that there is enough space to store the copied files in the destination directory and that it is possible to create all the files in the destination directory that exists in the source directory.<LF>
 <LF>
- + A validation takes place after the rename process has finished. This<LF> 
-   validation will check that all files that has been copied from the source<LF> 
-   directory to the destination directory has been given the correct name and<LF> 
-   has the exact same content.<LF>
+ + A validation takes place after the rename process has finished. This validation will check that all files that has been copied from the source directory to the destination directory has been given the correct name and has the exact same content.<LF>
 <LF>
- + Under the rename process, there is a status window showing the progress of<LF> 
-   the rename process.<LF>
+ + Under the rename process, there is a status window showing the progress of the rename process.<LF>
 <LF>
- + It is possible to change the look and layout of the optional thumb nail<LF> 
-   overview.<LF>
+ + It is possible to change the look and layout of the optional thumb nail overview.<LF>
 <LF>
  + For potential error that can occur, there is logging to file.<LF>
 <LF>
 <LF>
  1.01 (2007-02-02)<LF>
 <LF>
- ! Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect<LF> 
-   behavior in rename engine and a problem with wrong error message.<LF>
+ ! Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect behavior in rename engine and a problem with wrong error message.<LF>
 <LF>
-   The program hang if a dot was present as first or last character in file<LF> 
-   name template or sub folder name template. The exact same problem was also<LF> 
-   present if there was white spaces first or last in templates. Besides from<LF> 
-   this there was a correction of two error messages which was mixed up in the<LF> 
-   English language file.<LF>
+   The program hang if a dot was present as first or last character in file name template or sub folder name template. The exact same problem was also present if there was white spaces first or last in templates. Besides from this there was a correction of two error messages which was mixed up in the English language file.<LF>
 <LF>
 <LF>
  1.0 (2006-11-27)<LF>
 <LF>
- + Version 1.0 of JavaPEG has the possibility to rename image files of type jpeg<LF> 
-   if they have embedded Exif-information.<LF>
+ + Version 1.0 of JavaPEG has the possibility to rename image files of type jpeg if they have embedded Exif-information.<LF>
 <LF>
-   The program will rename the files according to a, in the field<LF> 
-   "FILENAME TEMPLATE", by the user, given template. There is a couple of<LF> 
-   variables available and they can be found in the window with heading<LF> 
-   "VARABLES".<LF>
+   The program will rename the files according to a, in the field "FILENAME TEMPLATE", by the user, given template. There is a couple of variables available and they can be found in the window with heading "VARABLES".<LF>
 <LF>
-   The user has the possibility to choose whether to rename the original files<LF> 
-   or copies of them, which will be saved in the same directory as original<LF> 
-   files, or in another directory or in a sub directory in another directory<LF> 
-   than original directory. It is possible to give the sub directory a name in<LF> 
-   the same way as the files, in other words: by using variables.<LF> 
+   The user has the possibility to choose whether to rename the original files or copies of them, which will be saved in the same directory as original files, or in another directory or in a sub directory in another directory than original directory. It is possible to give the sub directory a name in the same way as the files, in other words: by using variables.<LF> 
 <LF>
-   Before rename process starts the user has the possibility to choose whether<LF> 
-   JavaPEG shall create any thumb nails of renamed images. If there will be any<LF> 
-   thumb nails there will also be a HTML file created, which will show all the<LF> 
-   created thumb nails and the thumb nails will link to the full size images.<LF> 
+   Before rename process starts the user has the possibility to choose whether JavaPEG shall create any thumb nails of renamed images. If there will be any thumb nails there will also be a HTML file created, which will show all the created thumb nails and the thumb nails will link to the full size images.<LF> 
 <LF>
-   As last option, it is also possible to instruct the program to open<LF> 
-   destination directory after finished rename process.<LF>
+   As last option, it is also possible to instruct the program to open destination directory after finished rename process.<LF>
