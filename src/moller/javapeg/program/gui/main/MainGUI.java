@@ -409,10 +409,10 @@ public class MainGUI extends JFrame {
     private List<ButtonGroup> importedButtonGroups;
 
     /**
-     * This object keeps track on which thumbnails that are selected in the
-     * thumbnailoverview part of this GUI.
+     * This object keeps track on which thumbnails that are loaded and selected
+     * in the thumbnailoverview part of this GUI.
      */
-    private final SelectedThumbnails selectedThmbnailButtons = new SelectedThumbnails();
+    private final LoadedThumbnails loadedThumbnailButtons = new LoadedThumbnails();
 
     /** Provides nice icons and names for files. */
     private final FileSystemView fileSystemView;
@@ -1977,8 +1977,8 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (selectedThmbnailButtons.size() > 0) {
-                FileSelection fileSelection = new FileSelection(selectedThmbnailButtons.getAsFiles());
+            if (loadedThumbnailButtons.size() > 0) {
+                FileSelection fileSelection = new FileSelection(loadedThumbnailButtons.getSelectedAsFileObjects());
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
             }
         }
@@ -2588,6 +2588,11 @@ public class MainGUI extends JFrame {
 
         metaDataTableModel.setColumnCount(0);
         metaDataTableModel.setRowCount(0);
+
+        // Remove all references of any old selected thumbnail buttons and
+        // finally clear the entire list of the selected buttons.
+        loadedThumbnailButtons.clearSelections();
+        loadedThumbnailButtons.clear();
     }
 
     private void executeLoadThumbnailsProcess() {
@@ -2638,6 +2643,7 @@ public class MainGUI extends JFrame {
                         updateGUI();
                         thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath() - FileRetriever.getInstance().getNonJPEGFiles().size());
                         thumbnailLoadingProgressBar.setValue(thumbnailLoadingProgressBar.getValue() + 1);
+                        loadedThumbnailButtons.add(thumbContainer);
                     } else if (!loadFilesThread.isAlive()){
                         bufferContainsImages = false;
                     }
@@ -3186,9 +3192,9 @@ public class MainGUI extends JFrame {
                     int percentage = grayFilter.getPercentage();
 
                     if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        selectedThmbnailButtons.addSelection(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnailButtons.addSelection(toggleButton, pixelsBrightened, percentage);
                     } else {
-                        selectedThmbnailButtons.set(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnailButtons.set(toggleButton, pixelsBrightened, percentage);
                     }
 
                     final File jpegImage = new File(e.getActionCommand());
@@ -3226,11 +3232,12 @@ public class MainGUI extends JFrame {
                 }
                 // An image is deselected
                 else {
-                    if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        selectedThmbnailButtons.removeSelection(toggleButton);
-                    } else {
-                        selectedThmbnailButtons.clearSelections();
+                    // if the Ctrl key is NOT pressed, the clear all selection.
+                    if (!((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)) {
+                        loadedThumbnailButtons.clearSelections();
                     }
+
+                    loadedThumbnailButtons.removeSelection(toggleButton);
 
                     storeCurrentlySelectedImageData();
                     ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setCurrentlySelectedImage(null);
@@ -3761,7 +3768,7 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             File image = new File(e.getActionCommand());
-            handleAddImageToImageList(image);
+            handleAddImageToImageList(image, true);
         }
     }
 
@@ -3791,8 +3798,9 @@ public class MainGUI extends JFrame {
     /**
      * This listener class adds all images that are shown in the main GUI to the
      * "image viewer" list and to the image viewer, if that one is displayed.
-     * The images are added in dateorder, (file last changed date) and the
-     * oldest first.
+     * The images are added in the same order as they are displayed in the main
+     * GUI beginning at the top left corner of the table and then working right
+     * and down.
      *
      * @author Fredrik
      *
@@ -3801,23 +3809,15 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            File imageFilePath = ApplicationContext.getInstance().getSourcePath();
+            List<File> allDisplayedThumbnailsAsFileObjects = loadedThumbnailButtons.getAllAsFileObjects();
 
-            File[] files = DirectoryUtil.listFilesInAscendingDateOrder(imageFilePath);
+            int size = allDisplayedThumbnailsAsFileObjects.size();
 
-            for (File file : files) {
-                try {
-                    if (JPEGUtil.isJPEG(file)) {
-                        handleAddImageToImageList(file);
-                    }
-                } catch (FileNotFoundException fnfex) {
-                    JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotFindFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                    logger.logERROR("Could not find file:");
-                    logger.logERROR(fnfex);
-                } catch (IOException iox) {
-                    JOptionPane.showMessageDialog(null, lang.get("fileretriever.canNotReadFromFile") + "\n(" + file.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                    logger.logERROR("Can not read from file:");
-                    logger.logERROR(iox);
+            for (int index = 0; index < size; index++) {
+                if (index == size -1) {
+                    handleAddImageToImageList(allDisplayedThumbnailsAsFileObjects.get(index), true);
+                } else {
+                    handleAddImageToImageList(allDisplayedThumbnailsAsFileObjects.get(index), false);
                 }
             }
         }
@@ -3940,7 +3940,7 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            List<File> selectedThmbnailButtonsAsFiles = selectedThmbnailButtons.getAsFiles();
+            List<File> selectedThmbnailButtonsAsFiles = loadedThumbnailButtons.getSelectedAsFileObjects();
 
             // Only do this if any image is selected...
             if (selectedThmbnailButtonsAsFiles != null && !selectedThmbnailButtonsAsFiles.isEmpty()) {
@@ -4116,13 +4116,20 @@ public class MainGUI extends JFrame {
      *
      * @param image
      *            is the image to add.
+     * @param addMetaData
+     *            specifies if the meta data that is associated to the images to
+     *            view list should be updated or not.
      */
-    private void handleAddImageToImageList(File image) {
+    private void handleAddImageToImageList(File image, boolean addMetaData) {
         imagesToViewListModel.addElement(image);
-        imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
-        imagesToViewList.ensureIndexIsVisible(imagesToViewList.getSelectedIndex());
 
-        setNrOfImagesLabels();
+        if (addMetaData) {
+            imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
+            imagesToViewList.ensureIndexIsVisible(imagesToViewList.getSelectedIndex());
+
+            setNrOfImagesLabels();
+        }
+
         if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
             imageViewer.addImage(image);
         }
@@ -4174,7 +4181,7 @@ public class MainGUI extends JFrame {
                 rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
             } else if ((!e.isPopupTrigger()) && (e.getClickCount() == 2) && (mainTabbedPane.getSelectedIndex() == 3)) {
                 File image = new File(((JToggleButton)e.getComponent()).getActionCommand());
-                handleAddImageToImageList(image);
+                handleAddImageToImageList(image, true);
             }
         }
     }
@@ -4685,7 +4692,7 @@ public class MainGUI extends JFrame {
             }
 
             // Add this menu item if there is more than one selected image.
-            if (selectedThmbnailButtons.size() > 1) {
+            if (loadedThumbnailButtons.size() > 1) {
                 rightClickMenuCategories.addSeparator();
                 rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
             }
