@@ -705,11 +705,9 @@ public class ConfigViewerGUI extends JFrame {
         brightenedCheckBox.setSelected(thumbNail.getGrayFilter().isPixelsBrightened());
 
         JPanel thumbnailGrayFilterPanel = new JPanel(new GridBagLayout());
-//        TODO: Remove hard coded string
-        thumbnailGrayFilterPanel.setBorder(BorderFactory.createTitledBorder("Markerad tumnagel"));
+        thumbnailGrayFilterPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.thumbnail.grayfilter.selected.thumbnail.heading.label")));
 
         GBHelper posThumbnailGrayFilterPanel = new GBHelper();
-
 
         thumbnailGrayFilterPanel.add(percentSliderLabel, posThumbnailGrayFilterPanel);
         thumbnailGrayFilterPanel.add(percentageSlider, posThumbnailGrayFilterPanel.nextCol().expandW());

@@ -84,6 +84,7 @@ configviewer.thumbnail.imageSearchResultWindow.label = Bildsökresultatsfönster
 configviewer.thumbnail.imageViewerWindow.label       = Bildvisarfönster
 configviewer.thumbnail.grayfilter.transparency.label = Genomskinlighet
 configviewer.thumbnail.grayfilter.increase.contrast.label = Öka kontrast
+configviewer.thumbnail.grayfilter.selected.thumbnail.heading.label = Markerad tumnagel
 
 ##############################################################################################################
 # T A G                                                                                                      #

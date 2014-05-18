@@ -84,6 +84,7 @@ configviewer.thumbnail.imageSearchResultWindow.label = Image Search Result Windo
 configviewer.thumbnail.imageViewerWindow.label       = Image Viever Window
 configviewer.thumbnail.grayfilter.transparency.label = Transparency
 configviewer.thumbnail.grayfilter.increase.contrast.label = Increase contrast
+configviewer.thumbnail.grayfilter.selected.thumbnail.heading.label = Selected thumbnail
 
 ##############################################################################################################
 # T A G                                                                                                      #
