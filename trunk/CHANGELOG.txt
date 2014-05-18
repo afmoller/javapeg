@@ -10,7 +10,11 @@
  
  3.0 (2014-xx-xx)
  
- + It is possible to copy a se 
+ + It is possible to add a, in the thumbnail overview, selected set of images
+   to the list of images to display in the image viewer
+ 
+ + It is possible to copy a, in the thumbnail overview, selected set of images
+   to the system clipboard. 
  
  + It is possible to zoom an displayed image in the Image Viewer. It is also
    possible to move the image by dragging it with the mouse. If wanted it is

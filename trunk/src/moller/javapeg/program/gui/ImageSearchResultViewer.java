@@ -18,7 +18,9 @@ package moller.javapeg.program.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -36,7 +38,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -60,6 +68,7 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
+import moller.javapeg.program.gui.main.LoadedThumbnails;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -99,6 +108,11 @@ public class ImageSearchResultViewer extends JFrame {
     private JScrollPane scrollpane;
     private JProgressBar thumbNailLoadingProgressBar;
 
+    private final Map<File, ImageIcon> imageFileToSelectedImaigeMapping;
+    private final LoadedThumbnails loadedThumbnails;
+
+    SelectedImageIconGenerator selectedImageIconGenerator;
+
     public ImageSearchResultViewer(List<File> imagesToView) {
 
         configuration = Config.getInstance().get();
@@ -113,6 +127,10 @@ public class ImageSearchResultViewer extends JFrame {
         this.createRightClickMenu();
         this.createStatusPanel();
         this.addListeners();
+
+        loadedThumbnails = new LoadedThumbnails();
+
+        imageFileToSelectedImaigeMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
 
         ImageSearhResultLoader imageSearhResultLoader = new ImageSearhResultLoader(imagesToView);
         imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
@@ -174,6 +192,13 @@ public class ImageSearchResultViewer extends JFrame {
         backgroundPanel.add(thumbNailLoadingProgressBar, BorderLayout.SOUTH);
 
         this.getContentPane().add(backgroundPanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * @return the instance of this Class.
+     */
+    private Component getThis() {
+        return this;
     }
 
     private JScrollPane createThumbNailsBackgroundPanel(){
@@ -302,7 +327,7 @@ public class ImageSearchResultViewer extends JFrame {
     private class MouseButtonListener extends MouseAdapter{
         @Override
         public void mouseReleased(MouseEvent e){
-            if(e.isPopupTrigger()) {
+            if(e.isPopupTrigger() && !thumbNailLoadingProgressBar.isVisible()) {
                 rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
                 popupMenuCopyImageToSystemClipBoard.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
             }
@@ -325,11 +350,17 @@ public class ImageSearchResultViewer extends JFrame {
     private class RightClickMenuListenerSelectAll implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            while (!selectedImageIconGenerator.isDone()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e1) {
+                }
+            }
+
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
-                    ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
-                    ButtonIconUtil.setSelectedThumbNailImage(jToggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
+                    jToggleButton.setIcon(imageFileToSelectedImaigeMapping.get(new File(jToggleButton.getActionCommand())));
                 }
             }
         }
@@ -448,6 +479,8 @@ public class ImageSearchResultViewer extends JFrame {
         @Override
         protected Void doInBackground() throws Exception {
 
+            getThis().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
             ThumbNailListener thumbNailListener = new ThumbNailListener();
             MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();
 
@@ -482,6 +515,7 @@ public class ImageSearchResultViewer extends JFrame {
 
                     thumbNailsPanel.add(thumbContainer);
                     thumbNailsPanel.updateUI();
+                    loadedThumbnails.add(thumbContainer);
                 }
 
                 setProgress((int)((progress++ / nrOfImages) * 100));
@@ -491,7 +525,53 @@ public class ImageSearchResultViewer extends JFrame {
 
         @Override
         protected void done() {
+            // hide the progress bar...
             thumbNailLoadingProgressBar.setVisible(false);
+
+            getThis().setCursor(Cursor.getDefaultCursor());
+
+            // ... and start the background task or "creating selected" images
+            //for the JToggleButtons.
+            selectedImageIconGenerator = new SelectedImageIconGenerator();
+            selectedImageIconGenerator.execute();
+        }
+    }
+
+    private class SelectedImageIconGenerator extends SwingWorker<Void, String> {
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            logger.logDEBUG("Starting to create selected images for the " + loadedThumbnails.size() + " loaded thumbnails in the search result window");
+
+            ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+            final int percentage = grayFilter.getPercentage();
+            final boolean pixelsBrightened = grayFilter.isPixelsBrightened();
+
+            ExecutorService newCachedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+            for (final JToggleButton loadedThumbnail : loadedThumbnails) {
+                final String actionCommand = loadedThumbnail.getActionCommand();
+                final File actionCommandAsFile = new File(actionCommand);
+
+                newCachedThreadPool.submit(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (!imageFileToSelectedImaigeMapping.containsKey(actionCommandAsFile)) {
+                            Image selectedIcon = ButtonIconUtil.getSelectedIcon(loadedThumbnail, pixelsBrightened, percentage);
+                            imageFileToSelectedImaigeMapping.put(actionCommandAsFile, new ImageIcon(selectedIcon));
+                        }
+                    }
+                });
+            }
+
+            logger.logDEBUG("Waiting for treads to finnish");
+            newCachedThreadPool.shutdown();
+            newCachedThreadPool.awaitTermination(1, TimeUnit.MINUTES);
+            logger.logDEBUG("Finished waiting for treads to finnish");
+
+            logger.logDEBUG("Finished to create selected images for thumbnails in search result window");
+            return null;
         }
     }
 }

@@ -16,11 +16,15 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 public class ButtonIconUtil {
 
     public static void setSelectedThumbNailImage(AbstractButton button, boolean brightened, int percentage) {
+        Image disabledImage = getSelectedIcon(button, brightened, percentage);
+        button.setIcon(new ImageIcon(disabledImage));
+    }
+
+    public static Image getSelectedIcon(AbstractButton button, boolean brightened, int percentage) {
         GrayFilter filter = new GrayFilter(brightened, percentage);
         ImageProducer prod = new FilteredImageSource(((ImageIcon)button.getIcon()).getImage().getSource(), filter);
-        Image disabledImage = Toolkit.getDefaultToolkit().createImage(prod);
+        return Toolkit.getDefaultToolkit().createImage(prod);
 
-        button.setIcon(new ImageIcon(disabledImage));
     }
 
     public static void setDeSelectedThumbNailImage(JToggleButton toggleButton) {

@@ -227,6 +227,7 @@ maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = Bil
 # M A I N  G U I  P O P U P  M E N U                                                                         #
 ##############################################################################################################
 maingui.popupmenu.addImageToList                     = Lägg till bild till bildlistan
+maingui.popupmenu.addSelectedImagesToList            = Lägg till vald(a) bild(er) till bildlistan
 maingui.popupmenu.addAllImagesToList                 = Lägg till alla bilder till bildlistan
 maingui.popupmenu.addImagePathToImageRepository      = Lägg till katalog till bilddatabasen
 maingui.popupmenu.removeImagePathFromImageRepository = Ta bort katalog från bilddatabasen
