@@ -6,6 +6,10 @@ VERSION INFORMATION<LF>
 <LF>
  3.0 (2014-xx-xx)<LF>
 <LF>
+ + It is possible to add a, in the thumbnail overview, selected set of images to the list of images to display in the image viewer<LF>
+<LF> 
+ + It is possible to copy a, in the thumbnail overview, selected set of images to the system clipboard.<LF> 
+<LF>
  + It is possible to zoom an displayed image in the Image Viewer. It is also possible to move the image by dragging it with the mouse. If wanted it is also possible to display an "Navigation image" a small variant of the displayed image in which it is possible to click and the large image will then be centered at the clicked position. It is also possible to center a displayed image.<LF>
 <LF>
  + It is possible to select which scaling method JavaPEG shall use when an image in the ImageViewer is to be scaled. This way it is possible to select the quality and thereby the speed of scaling an image (higher quality requires longer scaling time.)<LF>

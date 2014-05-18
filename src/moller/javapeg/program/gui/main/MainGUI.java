@@ -311,6 +311,7 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuRemoveImagePathFromImageRepositoryView;
     private JMenuItem popupMenuRemoveImagePathFromImageRepositoryTag;
     private JMenuItem popupMenuAddImageToViewList;
+    private JMenuItem popupMenuAddSelectedImagesToViewList;
     private JMenuItem popupMenuAddAllImagesToViewList;
     private JMenuItem popupMenuAddCategory;
     private JMenuItem popupMenuRenameCategory;
@@ -1940,6 +1941,7 @@ public class MainGUI extends JFrame {
         popupMenuCopySelectedImagesToClipBoardTag.setAction(copySelectedImagesAction);
 
         popupMenuAddImageToViewList.addActionListener(new AddImageToViewList());
+        popupMenuAddSelectedImagesToViewList.addActionListener(new AddSelectedImagesToViewList());
         popupMenuAddAllImagesToViewList.addActionListener(new AddAllImagesToViewList());
         popupMenuAddCategory.addActionListener(new AddCategory());
         popupMenuRenameCategory.addActionListener(new RenameCategory());
@@ -2035,6 +2037,7 @@ public class MainGUI extends JFrame {
         popupMenuAddImagePathToImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryView = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
+        popupMenuAddSelectedImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addSelectedImagesToList"));
         popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
 
         rightClickMenuView = new JPopupMenu();
@@ -2046,6 +2049,7 @@ public class MainGUI extends JFrame {
         rightClickMenuView.add(popupMenuCopyAllImagesToClipBoardView);
         rightClickMenuView.addSeparator();
         rightClickMenuView.add(popupMenuAddImageToViewList);
+        rightClickMenuView.add(popupMenuAddSelectedImagesToViewList);
         rightClickMenuView.add(popupMenuAddAllImagesToViewList);
     }
 
@@ -3772,6 +3776,29 @@ public class MainGUI extends JFrame {
         }
     }
 
+    /**
+     * This listener class adds all currently selected images in the thumbnail
+     * overview to the list of images to display in the {@link ImageViewer} GUI.
+     *
+     * @author Fredrik
+     *
+     */
+    private class AddSelectedImagesToViewList implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            List<File> selectedAsFileObjects = loadedThumbnailButtons.getSelectedAsFileObjects();
+            int size = selectedAsFileObjects.size();
+
+            for (int index = 0; index < size; index++) {
+                if (index == size - 1) {
+                    handleAddImageToImageList(selectedAsFileObjects.get(index), true);
+                } else {
+                    handleAddImageToImageList(selectedAsFileObjects.get(index), false);
+                }
+            }
+        }
+    }
+
     private class CopyImageToSystemClipBoard implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -3810,7 +3837,6 @@ public class MainGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             List<File> allDisplayedThumbnailsAsFileObjects = loadedThumbnailButtons.getAllAsFileObjects();
-
             int size = allDisplayedThumbnailsAsFileObjects.size();
 
             for (int index = 0; index < size; index++) {
