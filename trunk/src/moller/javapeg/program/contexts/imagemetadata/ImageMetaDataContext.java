@@ -336,8 +336,8 @@ public class ImageMetaDataContext {
 
                 imagePaths = ImageMetaDataContextUtil.compileSearchResult(searchResults);
             } else {
+                Map<String, Set<Integer>> categoryIdToIndex = javaPegIdToCategories.get(javaPegId);
                 for (String categoryId : c.getCategories()) {
-                    Map<String, Set<Integer>> categoryIdToIndex = javaPegIdToCategories.get(javaPegId);
 
                     // If there are any images associated with the selected
                     // categoryId.

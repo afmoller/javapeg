@@ -72,7 +72,7 @@ public class UpdatesCheckerConfig {
         //  UPDATES CHECKER start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.UPDATES_CHECKER, baseIndent, xmlsw);
 
-        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ENABLED, Tab.FOUR, Boolean.toString(updatesChecker.getEnabled()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ENABLED, Tab.FOUR, Boolean.toString(updatesChecker.isEnabled()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ATTACH_VERSION_INFORMATION, Tab.FOUR, Boolean.toString(updatesChecker.getAttachVersionInformation()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.TIMEOUT, Tab.FOUR, Integer.toString(updatesChecker.getTimeOut()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.URL_VERSION, Tab.FOUR, updatesChecker.getUrlVersion().toString(), xmlsw);
