@@ -26,7 +26,7 @@ public class UpdatesChecker {
     private URL urlVersion;
     private URL urlVersionInformation;
 
-    public Boolean getEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
     public Boolean getAttachVersionInformation() {

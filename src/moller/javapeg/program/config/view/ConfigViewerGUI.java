@@ -280,7 +280,7 @@ public class ConfigViewerGUI extends JFrame {
         LOG_ROTATE_SIZE = configuration.getLogging().getRotateSize();
         LOG_NAME = configuration.getLogging().getFileName();
         LOG_ENTRY_TIMESTAMP_FORMAT = configuration.getLogging().getTimeStampFormat();
-        UPDATE_CHECK_ENABLED = configuration.getUpdatesChecker().getEnabled();
+        UPDATE_CHECK_ENABLED = configuration.getUpdatesChecker().isEnabled();
         UPDATE_CHECK_ATTACH_VERSION = configuration.getUpdatesChecker().getAttachVersionInformation();
         USE_LAST_MODIFIED_DATE = configuration.getRenameImages().getUseLastModifiedDate();
         USE_LAST_MODIFIED_TIME = configuration.getRenameImages().getUseLastModifiedTime();
@@ -497,7 +497,7 @@ public class ConfigViewerGUI extends JFrame {
         UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
 
         updatesEnabled = new JCheckBox(lang.get("configviewer.update.label.updateEnabled.text"));
-        updatesEnabled.setSelected(updatesChecker.getEnabled());
+        updatesEnabled.setSelected(updatesChecker.isEnabled());
 
         sendVersionInformationEnabled = new JCheckBox(lang.get("configviewer.update.label.attachVersionInformation.text"));
         sendVersionInformationEnabled.setSelected(updatesChecker.getAttachVersionInformation());

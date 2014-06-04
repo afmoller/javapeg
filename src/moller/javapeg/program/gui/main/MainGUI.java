@@ -69,6 +69,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -118,7 +119,9 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -164,6 +167,7 @@ import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
+import moller.javapeg.program.gui.CategoriesTransferHandler;
 import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.FileTreeCellRenderer;
@@ -464,7 +468,7 @@ public class MainGUI extends JFrame {
 
         UpdatesChecker updatesChecker = configuration.getUpdatesChecker();
 
-        if(updatesChecker.getEnabled()) {
+        if(updatesChecker.isEnabled()) {
             logger.logDEBUG("Application Update Check Started");
             this.checkApplicationUpdates();
             logger.logDEBUG("Application Update Check Finished");
@@ -1184,9 +1188,7 @@ public class MainGUI extends JFrame {
         selectionModePanel.add(clearCategoriesSelectionButton);
 
         JTree categoriesTree = CategoryUtil.createCategoriesTree();
-         ((DefaultTreeCellRenderer)categoriesTree.getCellRenderer()).setLeafIcon(null);
-
-
+        ((DefaultTreeCellRenderer)categoriesTree.getCellRenderer()).setLeafIcon(null);
 
         Map<String, ImportedCategoryTreeAndDisplayJavaPegID> importedCategoriesTrees = CategoryUtil.createImportedCategoriesTree();
 
@@ -1696,6 +1698,12 @@ public class MainGUI extends JFrame {
 
         categoriesTree = CategoryUtil.createCategoriesTree();
         categoriesTree.addMouseListener(categoriesMouseButtonListener);
+        categoriesTree.setDragEnabled(true);
+        categoriesTree.setTransferHandler(new CategoriesTransferHandler());
+        categoriesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        categoriesTree.setDropMode(DropMode.ON_OR_INSERT);
+        categoriesTree.setExpandsSelectedPaths(false);
+        ((DefaultTreeCellRenderer)categoriesTree.getCellRenderer()).setLeafIcon(null);
 
         // makes your tree as CheckTree
         checkTreeManagerForAssignCategoriesCategoryTree = new CheckTreeManager(categoriesTree, false, null, true);
@@ -4655,6 +4663,34 @@ public class MainGUI extends JFrame {
                     rightClickMenuCategories.show(e.getComponent(),e.getX(), e.getY());
                 }
             }
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            TreePath selectionPath = categoriesTree.getSelectionModel().getSelectionPath();
+
+            if (selectionPath != null) {
+                DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode)selectionPath.getLastPathComponent();
+
+                @SuppressWarnings("unchecked")
+                Enumeration<DefaultMutableTreeNode> preorderEnumeration = lastPathComponent.preorderEnumeration();
+                while(preorderEnumeration.hasMoreElements()){
+                    categoriesTree.getSelectionModel().addSelectionPath(getPath(preorderEnumeration.nextElement()));
+                }
+            }
+        }
+
+        public TreePath getPath(TreeNode treeNode) {
+            List<Object> nodes = new ArrayList<Object>();
+            if (treeNode != null) {
+                nodes.add(treeNode);
+                treeNode = treeNode.getParent();
+                while (treeNode != null) {
+                    nodes.add(0, treeNode);
+                    treeNode = treeNode.getParent();
+                }
+            }
+            return nodes.isEmpty() ? null : new TreePath(nodes.toArray());
         }
 
         private void createMenu(CategoryMenueType categoryMenyType) {

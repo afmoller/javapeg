@@ -243,7 +243,7 @@ public class ApplicationContext {
 
     public int getNextIDToUse() {
         setHighestUsedCategoryID(highestUsedCategoryID + 1);
-        return getHighestUsedCategoryID();
+        return highestUsedCategoryID;
     }
 
     public MainTabbedPaneComponent getMainTabbedPaneComponent() {
