@@ -108,7 +108,7 @@ public class ImageSearchResultViewer extends JFrame {
     private JScrollPane scrollpane;
     private JProgressBar thumbNailLoadingProgressBar;
 
-    private final Map<File, ImageIcon> imageFileToSelectedImaigeMapping;
+    private final Map<File, ImageIcon> imageFileToSelectedImageMapping;
     private final LoadedThumbnails loadedThumbnails;
 
     SelectedImageIconGenerator selectedImageIconGenerator;
@@ -130,7 +130,7 @@ public class ImageSearchResultViewer extends JFrame {
 
         loadedThumbnails = new LoadedThumbnails();
 
-        imageFileToSelectedImaigeMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
+        imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
 
         ImageSearhResultLoader imageSearhResultLoader = new ImageSearhResultLoader(imagesToView);
         imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
@@ -360,7 +360,7 @@ public class ImageSearchResultViewer extends JFrame {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
-                    jToggleButton.setIcon(imageFileToSelectedImaigeMapping.get(new File(jToggleButton.getActionCommand())));
+                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(new File(jToggleButton.getActionCommand())));
                 }
             }
         }
@@ -557,9 +557,9 @@ public class ImageSearchResultViewer extends JFrame {
 
                     @Override
                     public void run() {
-                        if (!imageFileToSelectedImaigeMapping.containsKey(actionCommandAsFile)) {
+                        if (!imageFileToSelectedImageMapping.containsKey(actionCommandAsFile)) {
                             Image selectedIcon = ButtonIconUtil.getSelectedIcon(loadedThumbnail, pixelsBrightened, percentage);
-                            imageFileToSelectedImaigeMapping.put(actionCommandAsFile, new ImageIcon(selectedIcon));
+                            imageFileToSelectedImageMapping.put(actionCommandAsFile, new ImageIcon(selectedIcon));
                         }
                     }
                 });

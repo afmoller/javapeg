@@ -10,6 +10,12 @@
  
  3.0 (2014-xx-xx)
  
+ + The, in the imageviewer, currently displayed image and the images in the 
+   image overview to the left of the Imageviewer is synchronized in the way 
+   that the currently displayed image is always automatically visible 
+   (automatic scrolling if needed) and the displayed image is grayed to 
+   visualize which image that is currently displayed.  
+ 
  + It is possible to add a, in the thumbnail overview, selected set of images
    to the list of images to display in the image viewer
  
