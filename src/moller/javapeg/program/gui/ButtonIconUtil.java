@@ -9,7 +9,6 @@ import java.io.File;
 import javax.swing.AbstractButton;
 import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
-import javax.swing.JToggleButton;
 
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 
@@ -27,8 +26,12 @@ public class ButtonIconUtil {
 
     }
 
-    public static void setDeSelectedThumbNailImage(JToggleButton toggleButton) {
-        toggleButton.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(new File(toggleButton.getActionCommand())).getThumbNailData()));
+    public static void setDeSelectedThumbNailImage(AbstractButton button) {
+        setDeSelectedThumbNailImage(button, new File(button.getActionCommand()));
+    }
+
+    public static void setDeSelectedThumbNailImage(AbstractButton button, File image) {
+        button.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image).getThumbNailData()));
     }
 
 }

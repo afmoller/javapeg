@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
@@ -38,7 +39,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -71,9 +74,11 @@ import moller.javapeg.program.config.model.ImageViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
+import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.datatype.ResizeQualityAndDisplayString;
 import moller.javapeg.program.enumerations.Direction;
+import moller.javapeg.program.gui.ButtonIconUtil;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
@@ -134,6 +139,7 @@ public class ImageViewer extends JFrame {
     private File thePicture;
 
     private final List<File> imagesToView;
+    private final Map<File, JButton> imageToJButtonMapping;
 
     private int imageToViewListIndex;
     private int imagesToViewListSize;
@@ -156,6 +162,8 @@ public class ImageViewer extends JFrame {
         imageToViewListIndex = 0;
         imagesToViewListSize = imagesToView.size();
 
+        imageToJButtonMapping = new HashMap<File, JButton>();
+
         this.createMainFrame();
         this.createToolBar();
         this.createRightClickMenu();
@@ -163,7 +171,7 @@ public class ImageViewer extends JFrame {
         this.addListeners();
         this.initiateButtonStates();
         this.initiateResizeQuality();
-        this.createImage(imagesToView.get(0).getAbsolutePath());
+        this.createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
     }
 
     /**
@@ -354,6 +362,11 @@ public class ImageViewer extends JFrame {
         imageButton.addActionListener(overviewButtonListener);
 
         imageOverViewPanel.add(imageButton);
+
+        // Populate the helper variable, which makes it possible to
+        // automatically let the GUI scroll the list of thumbnails to the
+        // thumbnail for the currently selected image to display.
+        imageToJButtonMapping.put(jpegImage, imageButton);
 
         if (updateGUI) {
             Update.updateWindowUI(this);
@@ -592,27 +605,57 @@ public class ImageViewer extends JFrame {
     }
 
     private void loadAndViewPreviousImage() {
+        int indexForCurrentlyDisplayedImage = imageToViewListIndex;
+
         if (imageToViewListIndex == 0) {
             imageToViewListIndex = imagesToViewListSize - 1;
         } else {
             imageToViewListIndex -= 1;
         }
 
-        createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+        createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
+        clearSelectionForCurrentlyDisplayedButton(indexForCurrentlyDisplayedImage);
 
         logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
     }
 
     private void loadAndViewNextImage() {
+        int indexForCurrentlyDisplayedImage = imageToViewListIndex;
+
         if (imageToViewListIndex == imagesToViewListSize - 1) {
             imageToViewListIndex = 0;
         } else {
             imageToViewListIndex += 1;
         }
 
-        createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+        createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
+        clearSelectionForCurrentlyDisplayedButton(indexForCurrentlyDisplayedImage);
 
         logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+    }
+
+    private void createImageDisplayImageAndScrollThumbnailToVisibleRect(int imageToViewListIndex) {
+        File imageToDisplay = imagesToView.get(imageToViewListIndex);
+
+        createImage(imageToDisplay.getAbsolutePath());
+
+        JButton jButtonForThumbnailForCurrentImageToDisplay = imageToJButtonMapping.get(imageToDisplay);
+
+        ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+
+        Image selectedIcon = ButtonIconUtil.getSelectedIcon(jButtonForThumbnailForCurrentImageToDisplay, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
+
+        jButtonForThumbnailForCurrentImageToDisplay.setIcon(new ImageIcon(selectedIcon));
+
+        if (jButtonForThumbnailForCurrentImageToDisplay != null) {
+            imageOverViewPanel.scrollRectToVisible(jButtonForThumbnailForCurrentImageToDisplay.getBounds());
+        }
+    }
+
+    private void clearSelectionForCurrentlyDisplayedButton(int indexForCurrentlyDisplayedImage) {
+        File image = imagesToView.get(indexForCurrentlyDisplayedImage);
+        JButton button = imageToJButtonMapping.get(image);
+        ButtonIconUtil.setDeSelectedThumbNailImage(button, image);
     }
 
     public void resizeImage() {
@@ -764,8 +807,14 @@ public class ImageViewer extends JFrame {
     private class OverviewButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            int indexForCurrentlyDisplayedImage = imageToViewListIndex;
+
             imageToViewListIndex = Integer.parseInt(e.getActionCommand());
-            createImage(imagesToView.get(imageToViewListIndex).getAbsolutePath());
+
+            if (indexForCurrentlyDisplayedImage != imageToViewListIndex) {
+                createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
+                clearSelectionForCurrentlyDisplayedButton(indexForCurrentlyDisplayedImage);
+            }
         }
     }
 
