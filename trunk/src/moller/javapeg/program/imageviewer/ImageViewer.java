@@ -120,6 +120,8 @@ public class ImageViewer extends JFrame {
     private JButton rotateLeftButton;
     private JButton rotateRightButton;
     private JButton centerButton;
+    private JButton zoomInButton;
+    private JButton zoomOutButton;
 
     private JButton maximizeButton;
     private JButton minimizeButton;
@@ -387,6 +389,8 @@ public class ImageViewer extends JFrame {
         rotateRightButton = new JButton();
         centerButton = new JButton();
         toggleNavigationImageButton = new JToggleButton();
+        zoomInButton = new JButton();
+        zoomOutButton = new JButton();
 
         ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
         ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
@@ -416,6 +420,8 @@ public class ImageViewer extends JFrame {
         ImageIcon rotateRightImageIcon = new ImageIcon();
         ImageIcon automaticRotateImageIcon = new ImageIcon();
         ImageIcon centerImageIcon = new ImageIcon();
+        ImageIcon zoomInImageIcon = new ImageIcon();
+        ImageIcon zoomOutImageIcon = new ImageIcon();
         ImageIcon navigationImageEnabledIcon = new ImageIcon();
         ImageIcon navigationImageDisabledIcon = new ImageIcon();
 
@@ -465,6 +471,18 @@ public class ImageViewer extends JFrame {
             centerButton.setIcon(centerImageIcon);
             centerButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
 
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomIn16.gif");
+            zoomInImageIcon.setImage(ImageIO.read(imageStream));
+            zoomInButton.setIcon(zoomInImageIcon);
+//            TODO: Correct tooltip
+            zoomInButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomOut16.gif");
+            zoomOutImageIcon.setImage(ImageIO.read(imageStream));
+            zoomOutButton.setIcon(zoomOutImageIcon);
+//          TODO: Correct tooltip
+            zoomOutButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageEnabled16.png");
             navigationImageEnabledIcon.setImage(ImageIO.read(imageStream));
 
@@ -487,7 +505,11 @@ public class ImageViewer extends JFrame {
         toolBar.add(automaticRotateToggleButton);
         toolBar.addSeparator();
         toolBar.add(automaticAdjustToWindowSizeJToggleButton);
+        toolBar.addSeparator();
         toolBar.add(adjustToWindowSizeJButton);
+        toolBar.add(zoomInButton);
+        toolBar.add(zoomOutButton);
+        toolBar.addSeparator();
         toolBar.add(resizeQuality);
         toolBar.addSeparator();
         toolBar.add(centerButton);
@@ -527,6 +549,8 @@ public class ImageViewer extends JFrame {
         previousJButton.addActionListener(new ToolBarButtonPrevious());
         nextJButton.addActionListener(new ToolBarButtonNext());
         adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
+        zoomInButton.addActionListener(new ToolBarButtonZoomIn());
+        zoomOutButton.addActionListener(new ToolBarButtonZoomOut());
         automaticAdjustToWindowSizeJToggleButton.addActionListener(new ToolBarButtonAutomaticAdjustToWindowSize());
         imageBackground.addMouseListener(new MouseButtonListener());
         popupMenuPrevious.addActionListener(new RightClickMenuListenerPrevious());
@@ -785,6 +809,20 @@ public class ImageViewer extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             imageBackground.setShowNonScaled(false);
+        }
+    }
+
+    private class ToolBarButtonZoomIn implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            imageBackground.zoomIn();
+        }
+    }
+
+    private class ToolBarButtonZoomOut implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            imageBackground.zoomOut();
         }
     }
 

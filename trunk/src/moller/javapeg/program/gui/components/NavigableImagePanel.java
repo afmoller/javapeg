@@ -288,12 +288,29 @@ public class NavigableImagePanel extends JPanel {
         }
     }
 
+    public void zoomIn() {
+        mousePosition.x = getWidth() / 2;
+        mousePosition.y = getHeight() / 2;
+
+        zoomFactor = 1.0 + zoomIncrement;
+        zoomImage();
+    }
+
+    public void zoomOut() {
+        mousePosition.x = getWidth() / 2;
+        mousePosition.y = getHeight() / 2;
+
+        zoomFactor = 1.0 - zoomIncrement;
+        zoomImage();
+    }
+
     /**
      * <p>Creates a new navigable image panel with no default image and
      * the mouse scroll wheel as the zooming device.</p>
      */
     public NavigableImagePanel() {
-        setOpaque(false);
+        setBackground(Color.BLACK);
+        setOpaque(true);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -715,7 +732,7 @@ public class NavigableImagePanel extends JPanel {
         repaint();
     }
 
-    //Moves te image (by dragging with the mouse) to a new mouse position p.
+    //Moves the image (by dragging with the mouse) to a new mouse position p.
     private void moveImage(Point p) {
         int xDelta = p.x - mousePosition.x;
         int yDelta = p.y - mousePosition.y;
