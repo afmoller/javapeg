@@ -81,7 +81,8 @@ public class C {
 
     public final static String META_DATA_PARAMETER_VALUES_DELIMITER_REGEXP = "\\s\\|\\|\\s";
 
-    public final static String ICONFILEPATH_IMAGEVIEWER = "resources/images/imageviewer/";
+    public final static String ICONFILEPATH = "resources/images/";
+    public final static String ICONFILEPATH_IMAGEVIEWER = ICONFILEPATH + "imageviewer/";
 
     /**
      * The file encoding used by JavaPEG when a text based file is created.

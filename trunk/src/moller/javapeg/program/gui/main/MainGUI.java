@@ -2104,7 +2104,6 @@ public class MainGUI extends JFrame {
     }
 
     private void saveSettings(){
-
         RenameImages renameImages = configuration.getRenameImages();
 
         renameImages.setPathSource(ApplicationContext.getInstance().getSourcePath());
@@ -2127,19 +2126,15 @@ public class MainGUI extends JFrame {
             subDirectoryTemplates.add(subFolderTemplateComboBox.getModel().getElementAt(index));
         }
         renameImages.setTemplateSubDirectoryNames(subDirectoryTemplates);
-
         renameImages.setCreateThumbNails(createThumbNailsCheckBox.isSelected());
 
         TagImages tagImages = configuration.getTagImages();
-
         TagImagesCategories tagImagesCategories = tagImages.getCategories();
-
         tagImagesCategories.setOrRadioButtonIsSelected(orRadioButton.isSelected());
 
         GUI gUI = configuration.getgUI();
 
         if (this.isVisible()) {
-
             Rectangle sizeAndLocation = gUI.getMain().getSizeAndLocation();
 
             sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
@@ -2164,7 +2159,6 @@ public class MainGUI extends JFrame {
         }
 
         RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
-
         repositoryPaths.setPaths(paths);
 
         Config.getInstance().save();
