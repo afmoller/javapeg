@@ -60,6 +60,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -122,6 +123,7 @@ public class ImageViewer extends JFrame {
     private JButton centerButton;
     private JButton zoomInButton;
     private JButton zoomOutButton;
+    private JButton startSlideShowButton;
 
     private JButton maximizeButton;
     private JButton minimizeButton;
@@ -152,6 +154,16 @@ public class ImageViewer extends JFrame {
     private CustomKeyEventDispatcher customKeyEventDispatcher;
 
     private OverviewButtonListener overviewButtonListener;
+
+    private Dimension widthAndHeight;
+
+    private Point location;
+
+    private JPanel imageOverviewPanel;
+
+    private int imageMetaDataSplitPaneDividerLocation;
+
+    private boolean fullScreenEnabled;
 
     public ImageViewer(List<File> imagesToView) {
 
@@ -278,7 +290,7 @@ public class ImageViewer extends JFrame {
 
     private JPanel createOverviewPanel() {
 
-        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        imageOverviewPanel = new JPanel(new GridBagLayout());
 
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         JPanel buttonBackgroundPanel = new JPanel(new GridBagLayout());
@@ -348,10 +360,10 @@ public class ImageViewer extends JFrame {
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        backgroundPanel.add(overViewScrollpane, posBackgroundPanel.expandW());
-        backgroundPanel.add(buttonBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH).expandH());
+        imageOverviewPanel.add(overViewScrollpane, posBackgroundPanel.expandW());
+        imageOverviewPanel.add(buttonBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH).expandH());
 
-        return backgroundPanel;
+        return imageOverviewPanel;
     }
 
     private void addImageToOverViewPanel(File jpegImage, OverviewButtonListener overviewButtonListener, int index, boolean updateGUI) {
@@ -391,6 +403,7 @@ public class ImageViewer extends JFrame {
         toggleNavigationImageButton = new JToggleButton();
         zoomInButton = new JButton();
         zoomOutButton = new JButton();
+        startSlideShowButton = new JButton();
 
         ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
         ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
@@ -424,6 +437,7 @@ public class ImageViewer extends JFrame {
         ImageIcon zoomOutImageIcon = new ImageIcon();
         ImageIcon navigationImageEnabledIcon = new ImageIcon();
         ImageIcon navigationImageDisabledIcon = new ImageIcon();
+        ImageIcon startSlideshowImageIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -492,6 +506,12 @@ public class ImageViewer extends JFrame {
             toggleNavigationImageButton.setIcon(navigationImageEnabledIcon);
             toggleNavigationImageButton.setSelectedIcon(navigationImageDisabledIcon);
             toggleNavigationImageButton.setToolTipText(lang.get("imageviewer.button.toggleNavigationImage.toolTip"));
+
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH + "play.gif");
+            startSlideshowImageIcon.setImage(ImageIO.read(imageStream));
+            startSlideShowButton.setIcon(startSlideshowImageIcon);
+//          TODO: Correct tooltip
+            startSlideShowButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
@@ -514,6 +534,8 @@ public class ImageViewer extends JFrame {
         toolBar.addSeparator();
         toolBar.add(centerButton);
         toolBar.add(toggleNavigationImageButton);
+        toolBar.addSeparator();
+        toolBar.add(startSlideShowButton);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
@@ -551,6 +573,7 @@ public class ImageViewer extends JFrame {
         adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
         zoomInButton.addActionListener(new ToolBarButtonZoomIn());
         zoomOutButton.addActionListener(new ToolBarButtonZoomOut());
+        startSlideShowButton.addActionListener(new ToolBarButtonStartSlideshow());
         automaticAdjustToWindowSizeJToggleButton.addActionListener(new ToolBarButtonAutomaticAdjustToWindowSize());
         imageBackground.addMouseListener(new MouseButtonListener());
         popupMenuPrevious.addActionListener(new RightClickMenuListenerPrevious());
@@ -566,7 +589,7 @@ public class ImageViewer extends JFrame {
         toggleNavigationImageButton.addActionListener(new ToggleNavigationImageButton());
     }
 
-    private void saveSettings() {
+    public void saveSettings() {
         GUI gUI = configuration.getgUI();
 
         Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
@@ -699,6 +722,24 @@ public class ImageViewer extends JFrame {
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
 
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
+                    if (fullScreenEnabled) {
+                        escapeFullScreenMode();
+                    }
+                    return true;
+                }
+
+                else if (KeyEvent.VK_F11 == e.getKeyCode()) {
+                    if (fullScreenEnabled) {
+                        escapeFullScreenMode();
+                    } else {
+                        enterFullScreenMode();
+                    }
+                    return true;
+                }
+            }
+
             if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
                 if (KeyEvent.VK_LEFT == e.getKeyCode()) {
                     if (!loadPreviousImageAction.isRunning()) {
@@ -729,8 +770,61 @@ public class ImageViewer extends JFrame {
                     return true;
                 }
             }
+
             return false;
         }
+
+    }
+    private void enterFullScreenMode() {
+
+        widthAndHeight = new Dimension(this.getSize().width, this.getSize().height);
+        location = new Point(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
+
+        imageMetaDataSplitPaneDividerLocation = imageMetaDataSplitPane.getDividerLocation();
+
+        this.dispose();
+        this.setUndecorated(true);
+        this.setBounds(getGraphicsConfiguration().getBounds());
+        this.getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
+
+        imageMetaDataSplitPane.setDividerSize(0);
+        imageMetaDataSplitPane.setRightComponent(null);
+
+        displaySidePanels(false);
+
+        fullScreenEnabled = true;
+        this.setVisible(true);
+    }
+
+    private void escapeFullScreenMode() {
+        // TODO Auto-generated method stub
+
+
+        this.dispose();
+        this.setUndecorated(false);
+
+        this.setLocation(location);
+        this.setSize(widthAndHeight);
+
+        GUI gUI = configuration.getgUI();
+        List<GUIWindowSplitPane> gUIWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+
+        imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
+        imageMetaDataSplitPane.setDividerLocation(imageMetaDataSplitPaneDividerLocation);
+        imageMetaDataSplitPane.setRightComponent(metaDataPanel);
+
+        displaySidePanels(true);
+
+        fullScreenEnabled = false;
+        this.setVisible(true);
+    }
+
+    private void displaySidePanels(boolean visible) {
+
+        statuspanel.setVisible(visible);
+        imageOverviewPanel.setVisible(visible);
+//        metaDataPanel.setVisible(visible);
+        toolBar.setVisible(visible);
     }
 
     private class MouseButtonListener extends MouseAdapter{
@@ -825,6 +919,21 @@ public class ImageViewer extends JFrame {
             imageBackground.zoomOut();
         }
     }
+
+    private class ToolBarButtonStartSlideshow implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Timer slideShowTimer = new Timer(3000, new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    loadAndViewNextImage();
+                }
+            });
+            slideShowTimer.start();
+        }
+    }
+
 
     private class OverviewMaximizeButton implements ActionListener {
         @Override
