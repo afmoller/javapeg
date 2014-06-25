@@ -104,6 +104,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <automaticallyResizeImages>false</automaticallyResizeImages>
     <showNavigationImage>true</showNavigationImage>
     <resizeQuality>QUALITY</resizeQuality>
+    <slideShowDelayInSeconds>3</slideShowDelayInSeconds>
   </imageViewerState>
   <tagImages>
     <categories>
