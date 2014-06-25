@@ -10,7 +10,15 @@
  
  3.0 (2014-xx-xx)
  
- + The, in the imageviewer, currently displayed image and the images in the 
+ + A slide show functionality with selectable delays have been added to the 
+   Imageviewer.
+ 
+ + It is possible to display the images loaded in the Imageviewer in a 
+   full screen mode. Full screen means that all borders, the toolbar, the meta
+   data and overview sections are hidden, to give the displayed image as much
+   space as possible.
+ 
+ + The, in the Imageviewer, currently displayed image and the images in the 
    image overview to the left of the Imageviewer is synchronized in the way 
    that the currently displayed image is always automatically visible 
    (automatic scrolling if needed) and the displayed image is grayed to 

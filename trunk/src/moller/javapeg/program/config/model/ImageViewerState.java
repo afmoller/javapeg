@@ -36,6 +36,9 @@ import org.imgscalr.Scalr.Method;
  * 4: showNavigationImage: Defines whether or not an navigation image shall be
  * displayed in the image in the image viewer.
  *
+ * 5: slideShowDelayInSeconds: Defines how many seconds of delay it shall be
+ * between two images when the slide show is running
+ *
  * @author Fredrik
  *
  */
@@ -45,6 +48,7 @@ public class ImageViewerState {
     private boolean automaticallyResizeImages;
     private Method resizeQuality;
     private boolean showNavigationImage;
+    private int slideShowDelayInSeconds;
 
     public boolean isAutomaticallyRotateImages() {
         return automaticallyRotateImages;
@@ -69,5 +73,11 @@ public class ImageViewerState {
     }
     public void setShowNavigationImage(boolean showNavigationImage) {
         this.showNavigationImage = showNavigationImage;
+    }
+    public void setSlideShowDelay(int slideShowDelayInSeconds) {
+        this.slideShowDelayInSeconds = slideShowDelayInSeconds;
+    }
+    public int getSlideShowDelayInSeconds() {
+        return slideShowDelayInSeconds;
     }
 }

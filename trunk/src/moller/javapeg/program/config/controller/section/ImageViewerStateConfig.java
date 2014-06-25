@@ -51,6 +51,9 @@ public class ImageViewerStateConfig {
             case ConfigElement.RESIZE_QUALITY:
                 imageViewerState.setResizeQuality(getMethodFromResizeQualityString(node.getTextContent()));
                 break;
+            case ConfigElement.SLIDE_SHOW_DELAY_IN_SECONDS:
+                imageViewerState.setSlideShowDelay(Integer.valueOf(node.getTextContent()));
+                break;
             default:
                 break;
             }
@@ -66,6 +69,7 @@ public class ImageViewerStateConfig {
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.AUTOMATICALLY_ROTATE_IMAGES, Tab.FOUR, Boolean.toString(imageViewerState.isAutomaticallyRotateImages()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.SHOW_NAVIGATION_IMAGE, Tab.FOUR, Boolean.toString(imageViewerState.isShowNavigationImage()), xmlsw);
         XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.RESIZE_QUALITY, Tab.FOUR, imageViewerState.getResizeQuality().name(), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.SLIDE_SHOW_DELAY_IN_SECONDS, Tab.FOUR, Integer.toString(imageViewerState.getSlideShowDelayInSeconds()), xmlsw);
 
         //  IMAGE VIEWER STATE end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);

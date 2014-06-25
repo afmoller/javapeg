@@ -124,11 +124,13 @@ public class ImageViewer extends JFrame {
     private JButton zoomInButton;
     private JButton zoomOutButton;
     private JButton startSlideShowButton;
+    private JButton stopSlideShowButton;
 
     private JButton maximizeButton;
     private JButton minimizeButton;
 
     private JComboBox<ResizeQualityAndDisplayString> resizeQuality;
+    private JComboBox<Integer> slideShowDelay;
 
     private JSplitPane imageMetaDataSplitPane;
 
@@ -165,6 +167,8 @@ public class ImageViewer extends JFrame {
 
     private boolean fullScreenEnabled;
 
+    private final Timer slideShowTimer;
+
     public ImageViewer(List<File> imagesToView) {
 
         configuration = Config.getInstance().get();
@@ -177,6 +181,8 @@ public class ImageViewer extends JFrame {
         imagesToViewListSize = imagesToView.size();
 
         imageToJButtonMapping = new HashMap<File, JButton>();
+        slideShowTimer = new Timer(3000, new ToolBarButtonNext());
+        slideShowTimer.setInitialDelay(0);
 
         this.createMainFrame();
         this.createToolBar();
@@ -185,6 +191,7 @@ public class ImageViewer extends JFrame {
         this.addListeners();
         this.initiateButtonStates();
         this.initiateResizeQuality();
+        this.initiateSlideShowDelay();
         this.createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
     }
 
@@ -205,6 +212,25 @@ public class ImageViewer extends JFrame {
 
         // If no match found, then set the first item as default.
         resizeQuality.setSelectedIndex(0);
+    }
+
+    /**
+     * This method retrieves the slide show delay (from the persisted
+     * configuration) and selects the appropriate element in the
+     * {@link JComboBox} or the first element if no matching element is found.
+     */
+    private void initiateSlideShowDelay() {
+        int slideShowDelayInSeconds = configuration.getImageViewerState().getSlideShowDelayInSeconds();
+
+        for (int index = 0; index < slideShowDelay.getItemCount(); index++) {
+            if (slideShowDelay.getModel().getElementAt(index) == slideShowDelayInSeconds) {
+                slideShowDelay.setSelectedIndex(index);
+                return;
+            }
+        }
+
+        // If no match found, then set the third item as default. (3 seconds)
+        slideShowDelay.setSelectedIndex(2);
     }
 
     /**
@@ -404,6 +430,7 @@ public class ImageViewer extends JFrame {
         zoomInButton = new JButton();
         zoomOutButton = new JButton();
         startSlideShowButton = new JButton();
+        stopSlideShowButton = new JButton();
 
         ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
         ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
@@ -423,6 +450,15 @@ public class ImageViewer extends JFrame {
         resizeQuality = new JComboBox<ResizeQualityAndDisplayString>(model);
         resizeQuality.setMaximumSize(resizeQuality.getPreferredSize());
 
+        Integer[] delayInteger = new Integer[]{1, 2, 3, 4, 5, 7, 10, 15, 20, 25, 30, 45, 60, 120};
+        
+        ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(delayInteger);
+
+        slideShowDelay = new JComboBox<Integer>(delaysModel);
+        slideShowDelay.setMaximumSize(slideShowDelay.getPreferredSize());
+//        TODO: fix hard coded string
+        slideShowDelay.setToolTipText("Slideshow delay in seconds between two images");
+
         InputStream imageStream = null;
 
         ImageIcon previousImageIcon = new ImageIcon();
@@ -438,6 +474,7 @@ public class ImageViewer extends JFrame {
         ImageIcon navigationImageEnabledIcon = new ImageIcon();
         ImageIcon navigationImageDisabledIcon = new ImageIcon();
         ImageIcon startSlideshowImageIcon = new ImageIcon();
+        ImageIcon stopSlideshowImageIcon = new ImageIcon();
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -512,6 +549,12 @@ public class ImageViewer extends JFrame {
             startSlideShowButton.setIcon(startSlideshowImageIcon);
 //          TODO: Correct tooltip
             startSlideShowButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Stop16.gif");
+            stopSlideshowImageIcon.setImage(ImageIO.read(imageStream));
+            stopSlideShowButton.setIcon(stopSlideshowImageIcon);
+//          TODO: Correct tooltip
+            stopSlideShowButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
@@ -536,6 +579,8 @@ public class ImageViewer extends JFrame {
         toolBar.add(toggleNavigationImageButton);
         toolBar.addSeparator();
         toolBar.add(startSlideShowButton);
+        toolBar.add(stopSlideShowButton);
+        toolBar.add(slideShowDelay);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
@@ -574,6 +619,7 @@ public class ImageViewer extends JFrame {
         zoomInButton.addActionListener(new ToolBarButtonZoomIn());
         zoomOutButton.addActionListener(new ToolBarButtonZoomOut());
         startSlideShowButton.addActionListener(new ToolBarButtonStartSlideshow());
+        stopSlideShowButton.addActionListener(new ToolBarButtonStopSlideshow());
         automaticAdjustToWindowSizeJToggleButton.addActionListener(new ToolBarButtonAutomaticAdjustToWindowSize());
         imageBackground.addMouseListener(new MouseButtonListener());
         popupMenuPrevious.addActionListener(new RightClickMenuListenerPrevious());
@@ -585,6 +631,7 @@ public class ImageViewer extends JFrame {
         rotateRightButton.addActionListener(new ToolBarButtonRotateRight());
         automaticRotateToggleButton.addActionListener(new ToolBarButtonAutomaticRotate());
         resizeQuality.addItemListener(new ResizeQualityChangeListener());
+        slideShowDelay.addItemListener(new SlideShowDelayChangeListener());
         centerButton.addActionListener(new CenterButton());
         toggleNavigationImageButton.addActionListener(new ToggleNavigationImageButton());
     }
@@ -608,6 +655,7 @@ public class ImageViewer extends JFrame {
         imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
         imageViewerState.setResizeQuality(resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
         imageViewerState.setShowNavigationImage(toggleNavigationImageButton.isSelected());
+        imageViewerState.setSlideShowDelay(slideShowDelay.getModel().getElementAt(slideShowDelay.getSelectedIndex()));
     }
 
     private void removeCustomKeyEventDispatcher() {
@@ -770,13 +818,11 @@ public class ImageViewer extends JFrame {
                     return true;
                 }
             }
-
             return false;
         }
-
     }
-    private void enterFullScreenMode() {
 
+    private void enterFullScreenMode() {
         widthAndHeight = new Dimension(this.getSize().width, this.getSize().height);
         location = new Point(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
 
@@ -797,9 +843,6 @@ public class ImageViewer extends JFrame {
     }
 
     private void escapeFullScreenMode() {
-        // TODO Auto-generated method stub
-
-
         this.dispose();
         this.setUndecorated(false);
 
@@ -820,10 +863,8 @@ public class ImageViewer extends JFrame {
     }
 
     private void displaySidePanels(boolean visible) {
-
         statuspanel.setVisible(visible);
         imageOverviewPanel.setVisible(visible);
-//        metaDataPanel.setVisible(visible);
         toolBar.setVisible(visible);
     }
 
@@ -923,17 +964,20 @@ public class ImageViewer extends JFrame {
     private class ToolBarButtonStartSlideshow implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Timer slideShowTimer = new Timer(3000, new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    loadAndViewNextImage();
-                }
-            });
-            slideShowTimer.start();
+            if (!slideShowTimer.isRunning()) {
+                slideShowTimer.start();
+            }
         }
     }
 
+    private class ToolBarButtonStopSlideshow implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (slideShowTimer.isRunning()) {
+                slideShowTimer.stop();
+            }
+        }
+    }
 
     private class OverviewMaximizeButton implements ActionListener {
         @Override
@@ -1017,6 +1061,17 @@ public class ImageViewer extends JFrame {
             if (ie.getStateChange() == ItemEvent.SELECTED) {
                 ResizeQualityAndDisplayString resizeQualityAndDisplayString = (ResizeQualityAndDisplayString)ie.getItem();
                 imageBackground.setHighQualityScalingMethodToUse(resizeQualityAndDisplayString.getMethod());
+            }
+        }
+    }
+
+    private class SlideShowDelayChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent ie) {
+            if (ie.getStateChange() == ItemEvent.SELECTED) {
+                Integer delayInSeconds = (Integer)ie.getItem();
+                slideShowTimer.setDelay(delayInSeconds * 1000);
             }
         }
     }
