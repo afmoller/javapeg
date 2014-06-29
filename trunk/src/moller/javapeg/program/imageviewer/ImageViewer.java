@@ -451,13 +451,12 @@ public class ImageViewer extends JFrame {
         resizeQuality.setMaximumSize(resizeQuality.getPreferredSize());
 
         Integer[] delayInteger = new Integer[]{1, 2, 3, 4, 5, 7, 10, 15, 20, 25, 30, 45, 60, 120};
-        
+
         ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(delayInteger);
 
         slideShowDelay = new JComboBox<Integer>(delaysModel);
         slideShowDelay.setMaximumSize(slideShowDelay.getPreferredSize());
-//        TODO: fix hard coded string
-        slideShowDelay.setToolTipText("Slideshow delay in seconds between two images");
+        slideShowDelay.setToolTipText(lang.get("imageviewer.button.slideShowDelay.toolTip"));
 
         InputStream imageStream = null;
 
@@ -525,14 +524,12 @@ public class ImageViewer extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomIn16.gif");
             zoomInImageIcon.setImage(ImageIO.read(imageStream));
             zoomInButton.setIcon(zoomInImageIcon);
-//            TODO: Correct tooltip
-            zoomInButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+            zoomInButton.setToolTipText(lang.get("imageviewer.button.zoomIn.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomOut16.gif");
             zoomOutImageIcon.setImage(ImageIO.read(imageStream));
             zoomOutButton.setIcon(zoomOutImageIcon);
-//          TODO: Correct tooltip
-            zoomOutButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+            zoomOutButton.setToolTipText(lang.get("imageviewer.button.zoomOut.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageEnabled16.png");
             navigationImageEnabledIcon.setImage(ImageIO.read(imageStream));
@@ -547,14 +544,12 @@ public class ImageViewer extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH + "play.gif");
             startSlideshowImageIcon.setImage(ImageIO.read(imageStream));
             startSlideShowButton.setIcon(startSlideshowImageIcon);
-//          TODO: Correct tooltip
-            startSlideShowButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+            startSlideShowButton.setToolTipText(lang.get("imageviewer.button.startSlideShow.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Stop16.gif");
             stopSlideshowImageIcon.setImage(ImageIO.read(imageStream));
             stopSlideShowButton.setIcon(stopSlideshowImageIcon);
-//          TODO: Correct tooltip
-            stopSlideShowButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+            stopSlideShowButton.setToolTipText(lang.get("imageviewer.button.stopSlideShow.toolTip"));
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);

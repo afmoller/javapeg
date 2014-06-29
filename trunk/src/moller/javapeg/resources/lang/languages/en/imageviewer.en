@@ -29,6 +29,11 @@ imageviewer.button.rotateRight.toolTip                  = Rotate image right (Al
 imageviewer.button.rotateAutomatic                      = Automatically rotate image (Alt + Up Arrow)
 imageviewer.button.center.toolTip                       = Center image
 imageviewer.button.toggleNavigationImage.toolTip        = View / Hide navigation image
+imageviewer.button.zoomIn.toolTip                       = Image zoom in
+imageviewer.button.zoomOut.toolTip                      = Image zoom out
+imageviewer.button.startSlideShow.toolTip               = Start slide show
+imageviewer.button.stopSlideShow.toolTip                = Stop slide show
+imageviewer.button.slideShowDelay.toolTip               = Slideshow delay in seconds between two images
 
 imageviewer.popupmenu.back.text               = (Left-Arrow) Previous
 imageviewer.popupmenu.forward.text            = (Right-Arrow) Next
