@@ -29,6 +29,11 @@ imageviewer.button.rotateRight.toolTip                  = Rotera bild höger (Al
 imageviewer.button.rotateAutomatic                      = Rotera bild automatiskt (Alt + Pil Upp)
 imageviewer.button.center.toolTip                       = Centrera bild
 imageviewer.button.toggleNavigationImage.toolTip        = Visa / Göm navigationsbild
+imageviewer.button.zoomIn.toolTip                       = Förstora bild
+imageviewer.button.zoomOut.toolTip                      = Förminska bild
+imageviewer.button.startSlideShow.toolTip               = Starta automatisk bildvisning
+imageviewer.button.stopSlideShow.toolTip                = Stoppa automatisk bildvisning
+imageviewer.button.slideShowDelay.toolTip               = Fördröjning, i sekunder, mellan två bilder i den automatiska bildvisningen
 
 imageviewer.popupmenu.back.text               = (Vänsterpil) Föregående
 imageviewer.popupmenu.forward.text            = (Högerpil) Nästa
