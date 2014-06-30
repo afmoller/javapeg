@@ -42,10 +42,12 @@ public class ValidateFileSetup {
         File layoutInfo   = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "layout.info");
         File styleInfo    = new File(javaPEGuserHome, "resources" + C.FS + "thumb" + C.FS + "style.info");
 
-        checkFileObject(logDirectory);
-        checkFileObject(configFile);
-        checkFileObject(layoutInfo);
-        checkFileObject(styleInfo);
+        boolean firstApplicationLaunch = ApplicationBootUtil.isFirstApplicationLaunch();
+
+        checkFileObject(logDirectory, firstApplicationLaunch);
+        checkFileObject(configFile, firstApplicationLaunch);
+        checkFileObject(layoutInfo, firstApplicationLaunch);
+        checkFileObject(styleInfo, firstApplicationLaunch);
     }
 
     /**
@@ -57,7 +59,7 @@ public class ValidateFileSetup {
      * @param fileToCheck
      *            is the {@link File} object to check the existence for.
      */
-    private static void checkFileObject (File fileToCheck) {
+    private static void checkFileObject (File fileToCheck, boolean silentCreate) {
 
         String fileNameToCheck = fileToCheck.getName();
 
@@ -70,7 +72,7 @@ public class ValidateFileSetup {
                 if (!parent.mkdirs()) {
                     displayErrorMessage("Could not create parent directory: " + parent.getAbsolutePath());
                     System.exit(1);
-                } else {
+                } else if (!silentCreate) {
                     displayInformationMessage("Missing parent directory: " + parent.getAbsolutePath() + " has been created");
                 }
             }
@@ -80,14 +82,14 @@ public class ValidateFileSetup {
                 if(!fileToCheck.mkdir()) {
                     displayErrorMessage("Could not create directory: " + fileToCheck.getAbsolutePath());
                     System.exit(1);
-                } else {
+                } else if (!silentCreate) {
                     displayInformationMessage("Directory: " + fileToCheck.getAbsolutePath() + " has been created");
                 }
             } else {
                 if(!createFile(fileToCheck)) {
                     displayErrorMessage("Could not create file: " + fileToCheck.getAbsolutePath());
                     System.exit(1);
-                } else {
+                } else if (!silentCreate) {
                     displayInformationMessage("File: " + fileToCheck.getAbsolutePath() + " has been created");
                 }
             }
