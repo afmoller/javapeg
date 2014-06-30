@@ -31,7 +31,7 @@ import moller.util.io.DirectoryUtil;
  */
 public class ApplicationBootUtil {
 
-    private static String FIRST_LAUNCH = "firstLaunch";
+    private static final String FIRST_LAUNCH = "firstLaunch";
 
     private static File javaPEGHome = new File(C.JAVAPEG_HOME);
 

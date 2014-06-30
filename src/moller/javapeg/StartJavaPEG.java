@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
 import moller.javapeg.program.C;
 import moller.javapeg.program.applicationstart.ApplicationBootUtil;
+import moller.javapeg.program.applicationstart.ValidateFileSetup;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigHandler;
 import moller.javapeg.program.config.importconfig.ConfigImporter;
@@ -71,6 +72,8 @@ public class StartJavaPEG {
                     initialConfigGUI.setVisible(true);
 
                     if (initialConfigGUI.isContinueButtonClicked()) {
+
+                        ValidateFileSetup.check();
 
                         if (initialConfigGUI.isImport()) {
                             startApplication = performConfigurationImport(initialConfigGUI.getImportPath());
