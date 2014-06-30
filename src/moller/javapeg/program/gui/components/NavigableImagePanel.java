@@ -309,8 +309,8 @@ public class NavigableImagePanel extends JPanel {
      * the mouse scroll wheel as the zooming device.</p>
      */
     public NavigableImagePanel() {
-        setBackground(Color.BLACK);
-        setOpaque(true);
+        setBackground(null);
+        setOpaque(false);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

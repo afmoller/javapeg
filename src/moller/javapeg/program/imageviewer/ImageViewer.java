@@ -17,6 +17,7 @@
 package moller.javapeg.program.imageviewer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -831,6 +832,9 @@ public class ImageViewer extends JFrame {
         imageMetaDataSplitPane.setDividerSize(0);
         imageMetaDataSplitPane.setRightComponent(null);
 
+        imageBackground.setBackground(Color.BLACK);
+        imageBackground.setOpaque(true);
+
         displaySidePanels(false);
 
         fullScreenEnabled = true;
@@ -850,6 +854,9 @@ public class ImageViewer extends JFrame {
         imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
         imageMetaDataSplitPane.setDividerLocation(imageMetaDataSplitPaneDividerLocation);
         imageMetaDataSplitPane.setRightComponent(metaDataPanel);
+
+        imageBackground.setBackground(null);
+        imageBackground.setOpaque(false);
 
         displaySidePanels(true);
 
