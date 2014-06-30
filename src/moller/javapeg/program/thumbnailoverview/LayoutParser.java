@@ -42,6 +42,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
+import moller.util.java.SystemProperties;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -111,15 +112,16 @@ public class LayoutParser {
         DocumentBuilder db;
         Document doc;
 
-        InputStream layoutSource;
+        InputStream layoutSource = null;
 
         try {
-            layoutSource = new FileInputStream(System.getProperty("user.dir") + FS + "resources" + FS + "thumb" + FS + "layout.xml");
-        } catch (FileNotFoundException e1) {
-            layoutSource = StartJavaPEG.class.getResourceAsStream("resources/thumbnailoverview/layout.xml");
-        }
 
-        try {
+            try {
+                layoutSource = new FileInputStream(SystemProperties.getUserDir() + FS + "resources" + FS + "thumb" + FS + "layout.xml");
+            } catch (FileNotFoundException e1) {
+                layoutSource = StartJavaPEG.class.getResourceAsStream("resources/thumbnailoverview/layout.xml");
+            }
+
             db = dbf.newDocumentBuilder();
             doc = db.parse(layoutSource);
             doc.getDocumentElement().normalize();
