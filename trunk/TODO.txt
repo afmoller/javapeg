@@ -8,7 +8,6 @@
 
 3.1:
 ====
-- Add a one size queue for the images to be scaled as preview images in the tagging tab.
 - Move the navigation image to lower right corner.
 - Add meta data base statistics
 - Add list of compatible cameras in the help section of the application.

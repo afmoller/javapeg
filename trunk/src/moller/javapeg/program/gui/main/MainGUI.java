@@ -215,6 +215,7 @@ import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.DefaultLookAndFeel;
+import moller.util.datatype.OneSizedList;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
 import moller.util.gui.TreeUtil;
@@ -3175,6 +3176,11 @@ public class MainGUI extends JFrame {
     }
 
     private class ThumbNailListener implements ActionListener {
+
+        OneSizedList<File> queue = new OneSizedList<File>();
+
+        Thread loadScaleIfNeededAndDisplayPreviewThumbnailThread = null;
+
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -3203,25 +3209,33 @@ public class MainGUI extends JFrame {
                         loadedThumbnailButtons.set(toggleButton, pixelsBrightened, percentage);
                     }
 
-                    final File jpegImage = new File(e.getActionCommand());
+                    File jpegImage = new File(e.getActionCommand());
 
                     imageMetaDataPanel.setMetaData(jpegImage);
 
                     MainTabbedPaneComponent selectedMainTabbedPaneComponent = MainTabbedPaneComponent.valueOf(((JPanel)mainTabbedPane.getSelectedComponent()).getName());
 
+                    queue.set(jpegImage);
+
                     if(selectedMainTabbedPaneComponent == MainTabbedPaneComponent.CATEGORIZE && ac.isImageMetaDataDataBaseFileLoaded()) {
-                        Thread loadScaleIfNeededAndDisplayPreviewThumbnailThread = new Thread() {
-                            @Override
-                            public void run() {
-                                try {
-                                    loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
-                                } catch (IOException iox) {
-                                    logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
-                                    logger.logERROR(iox);
+                        if (loadScaleIfNeededAndDisplayPreviewThumbnailThread == null || !loadScaleIfNeededAndDisplayPreviewThumbnailThread.isAlive()) {
+                            loadScaleIfNeededAndDisplayPreviewThumbnailThread = new Thread() {
+                                @Override
+                                public void run() {
+                                    File jpegImage;
+                                    while ((jpegImage = queue.get()) != null) {
+                                        try {
+                                            loadScaleIfNeededAndDisplayPreviewThumbnail(jpegImage);
+                                        } catch (IOException iox) {
+                                            logger.logERROR("Could not create thumbnail adapted to available space for image: " + jpegImage.getAbsolutePath());
+                                            logger.logERROR(iox);
+                                        }
+                                    }
                                 }
-                            }
-                        };
-                        loadScaleIfNeededAndDisplayPreviewThumbnailThread.start();
+                            };
+
+                            loadScaleIfNeededAndDisplayPreviewThumbnailThread.start();
+                        }
 
                         storeCurrentlySelectedImageData();
 
