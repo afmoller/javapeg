@@ -44,6 +44,7 @@ public class Configuration {
     private TreeNode categories;
     private Repository repository;
     private Map<String, ImportedCategories> importedCategoriesConfig;
+    private ImageSearchResultViewerState imageSearchResultViewerState;
 
     public Logging getLogging() {
         return logging;
@@ -87,6 +88,9 @@ public class Configuration {
     public Map<String, ImportedCategories> getImportedCategoriesConfig() {
         return importedCategoriesConfig;
     }
+    public ImageSearchResultViewerState getImageSearchResultViewerState() {
+        return imageSearchResultViewerState;
+    }
     public void setLogging(Logging logging) {
         this.logging = logging;
     }
@@ -129,4 +133,8 @@ public class Configuration {
     public void setImportedCategories(Map<String, ImportedCategories> importedCategoriesConfig) {
         this.importedCategoriesConfig = importedCategoriesConfig;
     }
+    public void setImageSearchResultViewerState(ImageSearchResultViewerState imageSearchResultViewerState) {
+        this.imageSearchResultViewerState = imageSearchResultViewerState;
+    }
+
 }

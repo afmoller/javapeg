@@ -5,20 +5,21 @@
           
     <xs:complexType name="Config">
         <xs:all>
-            <xs:element name="logging"            type="config:Logging" />
-            <xs:element name="javapegClientId"    type="xs:string" />
-            <xs:element name="gui"                type="config:Gui" />
-            <xs:element name="updatesChecker"     type="config:UpdatesChecker" />
-            <xs:element name="language"           type="config:Language" />
-            <xs:element name="renameImages"       type="config:RenameImages" />
-            <xs:element name="resizeImages"       type="config:ResizeImages" />
-            <xs:element name="imageViewerState"   type="config:ImageViewerState" />
-            <xs:element name="tagImages"          type="config:TagImages" />
-            <xs:element name="thumbNail"          type="config:ThumbNail" />
-            <xs:element name="toolTips"           type="config:ToolTips" />
-            <xs:element name="categories"         type="config:Categories" />
-            <xs:element name="importedcategories" type="config:Importedcategories" />
-            <xs:element name="repository"         type="config:Repository" />
+            <xs:element name="logging"                      type="config:Logging" />
+            <xs:element name="javapegClientId"              type="xs:string" />
+            <xs:element name="gui"                          type="config:Gui" />
+            <xs:element name="updatesChecker"               type="config:UpdatesChecker" />
+            <xs:element name="language"                     type="config:Language" />
+            <xs:element name="renameImages"                 type="config:RenameImages" />
+            <xs:element name="resizeImages"                 type="config:ResizeImages" />
+            <xs:element name="imageViewerState"             type="config:ImageViewerState" />
+            <xs:element name="imageSearchResultViewerState" type="config:ImageSearchResultViewerState" />
+            <xs:element name="tagImages"                    type="config:TagImages" />
+            <xs:element name="thumbNail"                    type="config:ThumbNail" />
+            <xs:element name="toolTips"                     type="config:ToolTips" />
+            <xs:element name="categories"                   type="config:Categories" />
+            <xs:element name="importedcategories"           type="config:Importedcategories" />
+            <xs:element name="repository"                   type="config:Repository" />
         </xs:all>   
     </xs:complexType>  
     
@@ -158,6 +159,12 @@
                 </xs:simpleType>
             </xs:element>
             <xs:element name="slideShowDelayInSeconds" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ImageSearchResultViewerState">
+        <xs:all>
+            <xs:element name="numberOfImagesPerTab" type="xs:int" />
         </xs:all>
     </xs:complexType>
     

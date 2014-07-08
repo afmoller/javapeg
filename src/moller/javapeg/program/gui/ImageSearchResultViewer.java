@@ -28,6 +28,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -35,8 +37,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,9 +46,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -62,10 +64,10 @@ import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.gui.main.LoadedThumbnails;
@@ -96,8 +98,6 @@ public class ImageSearchResultViewer extends JFrame {
     private JMenuItem popupMenuCopyImageToSystemClipBoard;
     private JMenuItem popupMenuCopyAllImagesToSystemClipBoard;
 
-    private final String ICONFILEPATH = "resources/images/imageviewer/";
-
     private int columnMargin;
     private int iconWidth;
     private final int nrOfImagesToView;
@@ -113,6 +113,8 @@ public class ImageSearchResultViewer extends JFrame {
 
     SelectedImageIconGenerator selectedImageIconGenerator;
 
+    private JComboBox<Integer> numberOfImagesPerTab;
+
     public ImageSearchResultViewer(List<File> imagesToView) {
 
         configuration = Config.getInstance().get();
@@ -127,6 +129,7 @@ public class ImageSearchResultViewer extends JFrame {
         this.createRightClickMenu();
         this.createStatusPanel();
         this.addListeners();
+        this.initiateNumberOfImagesPerTab();
 
         loadedThumbnails = new LoadedThumbnails();
 
@@ -225,33 +228,37 @@ public class ImageSearchResultViewer extends JFrame {
         toolBar = new JToolBar();
         toolBar.setRollover(true);
 
-        InputStream imageStream = null;
+        Integer[] imagesPerTabInteger = new Integer[]{50, 100, 200, 400, 800, 1000};
 
-        ImageIcon previousImageIcon = new ImageIcon();
-        ImageIcon nextImageIcon = new ImageIcon();
-        ImageIcon automaticAdjustToWindowSizeImageIcon = new ImageIcon();
-        ImageIcon adjustToWindowSizeImageIcon = new ImageIcon();
+        ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(imagesPerTabInteger);
 
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Back16.gif");
-            previousImageIcon.setImage(ImageIO.read(imageStream));
+        numberOfImagesPerTab = new JComboBox<Integer>(delaysModel);
+        numberOfImagesPerTab.setMaximumSize(numberOfImagesPerTab.getPreferredSize());
+//        TODO: Fix hard coded string
+        numberOfImagesPerTab.setToolTipText("Number of images per tab");
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Forward16.gif");
-            nextImageIcon.setImage(ImageIO.read(imageStream));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "AutoAdjustToWindowSize16.gif");
-            automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(ICONFILEPATH + "Zoom16.gif");
-            adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            logger.logERROR("Could not load image. See Stack Trace below for details");
-            logger.logERROR(e);
-        }
-
-        toolBar.addSeparator();
+        toolBar.add(numberOfImagesPerTab);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
+    }
+
+    /**
+     * This method retrieves the slide show delay (from the persisted
+     * configuration) and selects the appropriate element in the
+     * {@link JComboBox} or the first element if no matching element is found.
+     */
+    private void initiateNumberOfImagesPerTab() {
+        int slideShowDelayInSeconds = configuration.getImageSearchResultViewerState().getNumberOfImagesPerTab();
+
+        for (int index = 0; index < numberOfImagesPerTab.getItemCount(); index++) {
+            if (numberOfImagesPerTab.getModel().getElementAt(index) == slideShowDelayInSeconds) {
+                numberOfImagesPerTab.setSelectedIndex(index);
+                return;
+            }
+        }
+
+        // If no match found, then set the third item as default. (200 images)
+        numberOfImagesPerTab.setSelectedIndex(2);
     }
 
     public void createRightClickMenu(){
@@ -288,6 +295,7 @@ public class ImageSearchResultViewer extends JFrame {
         popupMenuDeSelectAll.addActionListener(new RightClickMenuListenerDeSelectAll());
         popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
         popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
+        numberOfImagesPerTab.addItemListener(new NumberOfImagesPerTabChangeListener());
     }
 
     private void saveSettings() {
@@ -297,6 +305,11 @@ public class ImageSearchResultViewer extends JFrame {
 
         sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
         sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+
+        ImageSearchResultViewerState imageSearchResultViewerState = configuration.getImageSearchResultViewerState();
+
+        imageSearchResultViewerState.setNumberOfImagesPerTab(numberOfImagesPerTab.getModel().getElementAt(numberOfImagesPerTab.getSelectedIndex()));
+
     }
 
     private void setStatusMessages () {
@@ -399,6 +412,18 @@ public class ImageSearchResultViewer extends JFrame {
             }
             FileSelection fileSelection = new FileSelection(selectedFiles);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+        }
+    }
+
+    private class NumberOfImagesPerTabChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent ie) {
+            if (ie.getStateChange() == ItemEvent.SELECTED) {
+                Integer numberOfImagesPerTab = (Integer)ie.getItem();
+
+//                TODO: implement the relayout
+            }
         }
     }
 

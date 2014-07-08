@@ -106,6 +106,9 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <resizeQuality>QUALITY</resizeQuality>
     <slideShowDelayInSeconds>3</slideShowDelayInSeconds>
   </imageViewerState>
+  <imageSearchResultViewerState>
+    <numberOfImagesPerTab>200</numberOfImagesPerTab>
+  </imageSearchResultViewerState>
   <tagImages>
     <categories>
       <warnWhenRemove>true</warnWhenRemove>
