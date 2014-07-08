@@ -581,8 +581,8 @@ public class MainGUI extends JFrame {
             }
         }
 
-        if (xmxValue < ParseVMArguments.parseXmxToLong("-Xmx384m")) {
-            logger.logERROR("Maximum Size of Java Heap is to small. Current size is: \"" + xmxString + "\" bytes and it must be atleast Xmx384m");
+        if (xmxValue < ParseVMArguments.parseXmxToLong("-Xmx768m")) {
+            logger.logERROR("Maximum Size of Java Heap is to small. Current size is: \"" + xmxString + "\" bytes and it must be atleast Xmx768m");
             JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.notEnoughMemory"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             closeApplication(1);
         }

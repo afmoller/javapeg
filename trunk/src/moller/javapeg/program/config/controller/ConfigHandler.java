@@ -40,6 +40,7 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.controller.section.GUIConfig;
+import moller.javapeg.program.config.controller.section.ImageSearchResultViewerStateConfig;
 import moller.javapeg.program.config.controller.section.ImageViewerStateConfig;
 import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
 import moller.javapeg.program.config.controller.section.JavapegClientIdConfig;
@@ -208,6 +209,9 @@ public class ConfigHandler {
                     case ConfigElement.IMAGE_VIEWER_STATE:
                         configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig(node));
                         break;
+                    case ConfigElement.IMAGE_SEARCH_RESULT_VIEWER_STATE:
+                        configuration.setImageSearchResultViewerState(ImageSearchResultViewerStateConfig.getImageSearchResultViewerStateConfig(node));
+                        break;
                     case ConfigElement.REPOSITORY:
                         configuration.setRepository(RepositoryConfig.getRepositoryConfig(node));
                         break;
@@ -306,6 +310,9 @@ public class ConfigHandler {
 
             // IMAGE VIEWER STATE
             ImageViewerStateConfig.writeImageViewerStateConfig(configuration.getImageViewerState(),Tab.TWO, w);
+
+            // IMAGE SEARCH RESULT VIEWER STATE
+            ImageSearchResultViewerStateConfig.writeImageSearchResultViewerStateConfig(configuration.getImageSearchResultViewerState(),Tab.TWO, w);
 
             // TAG IMAGES
             TagImagesConfig.writeTagImagesConfig(configuration.getTagImages(), Tab.TWO, w);
