@@ -82,12 +82,13 @@ public class ConfigUtil {
 
     /**
      * Tries to store a copy of the corrupt configuration file in a file called:
-     * <CONFIGURATION_FILE_NAME>.corrupt in a folder called "corrupt"
+     * <CONFIGURATION_FILE_NAME>.corrupt in a folder called "corrupt". If there
+     * already exists an file with this name, the existing file will be renamed
+     * by having a time stamp suffix added.
      *
-     * @param configFile is the configuration file to make a copy of.
+     * @param configFile
+     *            is the configuration file to make a copy of.
      *
-     * @return a boolean value indication whether or not the storage of the
-     * configuration file was successful or not.
      * @throws IOException
      */
     public static void storeCorruptConfiguration(File configFile) throws IOException {
@@ -103,6 +104,15 @@ public class ConfigUtil {
 
             File corruptPath = new File(parentPath, "corrupt");
             File corruptFile = new File(corruptPath, fileName + ".corrupt");
+
+            if (!corruptPath.exists()) {
+                Files.createDirectory(corruptPath.toPath());
+            }
+
+            if (corruptFile.exists()) {
+                File corruptFileWithTimestampSuffix = new File(corruptFile.getAbsolutePath() + System.currentTimeMillis());
+                Files.move(corruptFile.toPath(), corruptFileWithTimestampSuffix.toPath());
+            }
 
             Files.copy(configFile.toPath(), corruptFile.toPath());
         } else {
