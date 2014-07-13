@@ -91,6 +91,7 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Screen;
 import moller.util.gui.Update;
+import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 
@@ -554,6 +555,10 @@ public class ImageViewer extends JFrame {
         } catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
             logger.logERROR(e);
+        } finally {
+            if (imageStream != null) {
+                StreamUtil.close(imageStream, true);
+            }
         }
 
         toolBar.add(previousJButton);

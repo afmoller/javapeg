@@ -15,10 +15,10 @@ import moller.javapeg.program.gui.ButtonIconUtil;
  * of {@link File} type for all thumbnails ({@link JToggleButton}) that are
  * selected.
  *
- * It offers also methods to make an {@link JToggleButton} selected or
- * de-selected. This means that the {@link JToggleButton} will have it state of
- * {@link JToggleButton#setSelected(boolean)} set to true or false, and the
- * displayed thumbnail will be grayed out if selected or not grayed out if
+ * It also offers methods to make an {@link JToggleButton} selected or
+ * de-selected. This means that the {@link JToggleButton} will have it's state
+ * of {@link JToggleButton#setSelected(boolean)} set to true or false, and the
+ * displayed thumbnail will be grayed out if selected and not grayed out if
  * de-selected.
  *
  * @author Fredrik

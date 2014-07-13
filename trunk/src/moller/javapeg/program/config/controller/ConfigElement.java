@@ -119,5 +119,5 @@ public class ConfigElement {
     public static final String CATEGORY = "category";
     public static final String SLIDE_SHOW_DELAY_IN_SECONDS = "slideShowDelayInSeconds";
     public static final String IMAGE_SEARCH_RESULT_VIEWER_STATE = "imageSearchResultViewerState";
-    public static final String NUMBER_OF_IMAGES_PER_TAB = "numberOfImagesPerTab";
+    public static final String NUMBER_OF_IMAGES_TO_DISPLAY = "numberOfImagesToDisplay";
 }

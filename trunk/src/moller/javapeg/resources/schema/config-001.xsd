@@ -164,7 +164,7 @@
     
     <xs:complexType name="ImageSearchResultViewerState">
         <xs:all>
-            <xs:element name="numberOfImagesPerTab" type="xs:int" />
+            <xs:element name="numberOfImagesToDisplay" type="xs:int" />
         </xs:all>
     </xs:complexType>
     
