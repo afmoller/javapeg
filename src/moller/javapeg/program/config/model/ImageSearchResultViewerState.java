@@ -18,14 +18,14 @@ package moller.javapeg.program.config.model;
 
 public class ImageSearchResultViewerState {
 
-    private int numberOfImagesPerTab;
+    private int numberOfImagesToDisplay;
 
-    public int getNumberOfImagesPerTab() {
-        return numberOfImagesPerTab;
+    public int getNumberOfImagesToDisplay() {
+        return numberOfImagesToDisplay;
     }
 
-    public void setNumberOfImagesPerTab(int numberOfImagesPerTab) {
-        this.numberOfImagesPerTab = numberOfImagesPerTab;
+    public void setNumberOfImagesToDisplay(int numberOfImagesToDisplay) {
+        this.numberOfImagesToDisplay = numberOfImagesToDisplay;
     }
 
 }

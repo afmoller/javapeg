@@ -37,6 +37,8 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,10 +48,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -64,6 +69,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
@@ -79,6 +86,7 @@ import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.ImagesToViewModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.gui.Screen;
+import moller.util.io.StreamUtil;
 
 public class ImageSearchResultViewer extends JFrame {
 
@@ -100,7 +108,9 @@ public class ImageSearchResultViewer extends JFrame {
 
     private int columnMargin;
     private int iconWidth;
-    private final int nrOfImagesToView;
+
+    private final int nrOfImagesInResultSet;
+    private final List<File> imagesInResultSet;
 
     private GridLayout thumbNailGridLayout;
 
@@ -113,29 +123,51 @@ public class ImageSearchResultViewer extends JFrame {
 
     SelectedImageIconGenerator selectedImageIconGenerator;
 
-    private JComboBox<Integer> numberOfImagesPerTab;
+    private JComboBox<Integer> numberOfImagesToDisplaySelectionBox;
+    private JButton loadPreviousImages;
+    private JButton loadNextImages;
 
-    public ImageSearchResultViewer(List<File> imagesToView) {
+    /**
+     * Stores which index in the search result set List<File> that is the first
+     * image that is displayed in the GUI.
+     */
+    private final int currentStartIndexForDisplayedImages;
+
+
+    public ImageSearchResultViewer(List<File> imagesInResultSet) {
 
         configuration = Config.getInstance().get();
         logger = Logger.getInstance();
         lang   = Language.getInstance();
 
         // Must be set before the executeLoadThumbnailsProcess method is called
-        nrOfImagesToView = imagesToView.size();
+        this.imagesInResultSet = imagesInResultSet;
+        nrOfImagesInResultSet = imagesInResultSet.size();
+
+        currentStartIndexForDisplayedImages = 0;
 
         this.createMainFrame();
         this.createToolBar();
         this.createRightClickMenu();
         this.createStatusPanel();
         this.addListeners();
-        this.initiateNumberOfImagesPerTab();
+        this.initiateNumberOfImagesToDisplay();
 
         loadedThumbnails = new LoadedThumbnails();
 
         imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
 
-        ImageSearhResultLoader imageSearhResultLoader = new ImageSearhResultLoader(imagesToView);
+        this.initiateImageDisplay(imagesInResultSet);
+    }
+
+    private void initiateImageDisplay(List<File> imagesInResultSet) {
+        ImageSearhResultLoader imageSearhResultLoader = null;
+        if (imagesInResultSet.size() > getCurrentValueOfNumberOfImagesToDisplay()) {
+            imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet.subList(0, getCurrentValueOfNumberOfImagesToDisplay()));
+        } else {
+            imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet);
+        }
+
         imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
         imageSearhResultLoader.execute();
     }
@@ -225,40 +257,72 @@ public class ImageSearchResultViewer extends JFrame {
     // Create ToolBar
     public void createToolBar()    {
 
-        toolBar = new JToolBar();
-        toolBar.setRollover(true);
 
         Integer[] imagesPerTabInteger = new Integer[]{50, 100, 200, 400, 800, 1000};
 
         ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(imagesPerTabInteger);
 
-        numberOfImagesPerTab = new JComboBox<Integer>(delaysModel);
-        numberOfImagesPerTab.setMaximumSize(numberOfImagesPerTab.getPreferredSize());
+        numberOfImagesToDisplaySelectionBox = new JComboBox<Integer>(delaysModel);
+        numberOfImagesToDisplaySelectionBox.setMaximumSize(numberOfImagesToDisplaySelectionBox.getPreferredSize());
 //        TODO: Fix hard coded string
-        numberOfImagesPerTab.setToolTipText("Number of images per tab");
+        numberOfImagesToDisplaySelectionBox.setToolTipText("Number of images per tab");
 
-        toolBar.add(numberOfImagesPerTab);
+        InputStream imageStream = null;
+
+        ImageIcon loadPreviousImagesIcon = new ImageIcon();
+        ImageIcon loadNextImagesIcon = new ImageIcon();
+
+        loadPreviousImages = new JButton();
+        loadNextImages = new JButton();
+
+        try {
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
+            loadPreviousImagesIcon.setImage(ImageIO.read(imageStream));
+            loadPreviousImages.setIcon(loadPreviousImagesIcon);
+            // TODO: Fix hard coded string
+            loadPreviousImages.setToolTipText("Load previous images");
+
+            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
+            loadNextImagesIcon.setImage(ImageIO.read(imageStream));
+            loadNextImages.setIcon(loadNextImagesIcon);
+            // TODO: Fix hard coded string
+            loadNextImages.setToolTipText("Load next images");
+
+        }  catch (IOException e) {
+            logger.logERROR("Could not load image. See Stack Trace below for details");
+            logger.logERROR(e);
+        } finally {
+            if (imageStream != null) {
+                StreamUtil.close(imageStream, true);
+            }
+        }
+
+        toolBar = new JToolBar();
+        toolBar.setRollover(true);
+        toolBar.add(numberOfImagesToDisplaySelectionBox);
+        toolBar.add(loadPreviousImages);
+        toolBar.add(loadNextImages);
 
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
     }
 
     /**
-     * This method retrieves the slide show delay (from the persisted
-     * configuration) and selects the appropriate element in the
-     * {@link JComboBox} or the first element if no matching element is found.
+     * This method retrieves the number of images to display in the GUI (from
+     * the persisted configuration) and selects the appropriate element in the
+     * {@link JComboBox} or the third element if no matching element is found.
      */
-    private void initiateNumberOfImagesPerTab() {
-        int slideShowDelayInSeconds = configuration.getImageSearchResultViewerState().getNumberOfImagesPerTab();
+    private void initiateNumberOfImagesToDisplay() {
+        int numberOfImagesToDisplay = configuration.getImageSearchResultViewerState().getNumberOfImagesToDisplay();
 
-        for (int index = 0; index < numberOfImagesPerTab.getItemCount(); index++) {
-            if (numberOfImagesPerTab.getModel().getElementAt(index) == slideShowDelayInSeconds) {
-                numberOfImagesPerTab.setSelectedIndex(index);
+        for (int index = 0; index < numberOfImagesToDisplaySelectionBox.getItemCount(); index++) {
+            if (numberOfImagesToDisplaySelectionBox.getModel().getElementAt(index) == numberOfImagesToDisplay) {
+                numberOfImagesToDisplaySelectionBox.setSelectedIndex(index);
                 return;
             }
         }
 
         // If no match found, then set the third item as default. (200 images)
-        numberOfImagesPerTab.setSelectedIndex(2);
+        numberOfImagesToDisplaySelectionBox.setSelectedIndex(2);
     }
 
     public void createRightClickMenu(){
@@ -295,7 +359,7 @@ public class ImageSearchResultViewer extends JFrame {
         popupMenuDeSelectAll.addActionListener(new RightClickMenuListenerDeSelectAll());
         popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
         popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
-        numberOfImagesPerTab.addItemListener(new NumberOfImagesPerTabChangeListener());
+        numberOfImagesToDisplaySelectionBox.addItemListener(new NumberOfImagesToDisplayChangeListener());
     }
 
     private void saveSettings() {
@@ -308,7 +372,7 @@ public class ImageSearchResultViewer extends JFrame {
 
         ImageSearchResultViewerState imageSearchResultViewerState = configuration.getImageSearchResultViewerState();
 
-        imageSearchResultViewerState.setNumberOfImagesPerTab(numberOfImagesPerTab.getModel().getElementAt(numberOfImagesPerTab.getSelectedIndex()));
+        imageSearchResultViewerState.setNumberOfImagesToDisplay(getCurrentValueOfNumberOfImagesToDisplay());
 
     }
 
@@ -317,11 +381,19 @@ public class ImageSearchResultViewer extends JFrame {
 
         statuspanel.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
 
-        int extraRow = nrOfImagesToView % nrOfColumns == 0 ? 0 : 1;
-        int rowsInGridLayout = (nrOfImagesToView / nrOfColumns) + extraRow;
+        int nrOfImagesToDisplay;
+
+        if (nrOfImagesInResultSet > getCurrentValueOfNumberOfImagesToDisplay()) {
+            nrOfImagesToDisplay = getCurrentValueOfNumberOfImagesToDisplay();
+        } else {
+            nrOfImagesToDisplay = nrOfImagesInResultSet;
+        }
+
+        int extraRow = nrOfImagesToDisplay % nrOfColumns == 0 ? 0 : 1;
+        int rowsInGridLayout = (nrOfImagesToDisplay / nrOfColumns) + extraRow;
 
         statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
-        statuspanel.setStatusMessage(Integer.toString(nrOfImagesToView), lang.get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
+        statuspanel.setStatusMessage(Integer.toString(nrOfImagesToDisplay), lang.get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
     }
 
     private void disposeFrame() {
@@ -335,6 +407,18 @@ public class ImageSearchResultViewer extends JFrame {
         public void windowClosing (WindowEvent e) {
             disposeFrame();
         }
+    }
+
+    /**
+     * @return the currently selected value for the {@link JComboBox} which
+     *         defines how many images that shall be selected. If there is no
+     *         selection, then the value 200 is returned.
+     */
+    private int getCurrentValueOfNumberOfImagesToDisplay() {
+        if (numberOfImagesToDisplaySelectionBox.getSelectedIndex() == -1) {
+            return 200;
+        }
+        return numberOfImagesToDisplaySelectionBox.getModel().getElementAt(numberOfImagesToDisplaySelectionBox.getSelectedIndex());
     }
 
     private class MouseButtonListener extends MouseAdapter{
@@ -415,14 +499,35 @@ public class ImageSearchResultViewer extends JFrame {
         }
     }
 
-    private class NumberOfImagesPerTabChangeListener implements ItemListener {
+    /**
+     * This listener class reacts of changes of the {@link JCheckBox} which
+     * defines how many images that shall be displayed in the GUI. This allows
+     * the GUI to present an image result set in a paged mode
+     *
+     * @author Fredrik
+     *
+     */
+    private class NumberOfImagesToDisplayChangeListener implements ItemListener {
+
+        private int previousValue;
 
         @Override
         public void itemStateChanged(ItemEvent ie) {
-            if (ie.getStateChange() == ItemEvent.SELECTED) {
-                Integer numberOfImagesPerTab = (Integer)ie.getItem();
+            switch (ie.getStateChange()) {
+            case ItemEvent.SELECTED:
+                int numberOfImagesToDisplay = (int) ie.getItem();
 
-//                TODO: implement the relayout
+                if (numberOfImagesToDisplay > previousValue && nrOfImagesInResultSet > previousValue) {
+                    initiateImageDisplay(imagesInResultSet);
+                } else if (numberOfImagesToDisplay < previousValue && numberOfImagesToDisplay < nrOfImagesInResultSet) {
+                    initiateImageDisplay(imagesInResultSet);
+                }
+                break;
+            case ItemEvent.DESELECTED:
+                previousValue = (Integer) ie.getItem();
+                break;
+            default:
+                break;
             }
         }
     }
@@ -505,6 +610,11 @@ public class ImageSearchResultViewer extends JFrame {
         protected Void doInBackground() throws Exception {
 
             getThis().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            // Clear any previous state.
+            thumbNailsPanel.removeAll();
+            thumbNailsPanel.updateUI();
+            loadedThumbnails.clear();
 
             ThumbNailListener thumbNailListener = new ThumbNailListener();
             MouseButtonListener mouseRightClickButtonListener = new MouseButtonListener();

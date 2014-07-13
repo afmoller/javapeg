@@ -23,8 +23,8 @@ public class ImageSearchResultViewerStateConfig {
             Node node = childNodes.item(i);
 
             switch (node.getNodeName()) {
-            case ConfigElement.NUMBER_OF_IMAGES_PER_TAB:
-                imageSearchResultViewerState.setNumberOfImagesPerTab(Integer.valueOf(node.getTextContent()));
+            case ConfigElement.NUMBER_OF_IMAGES_TO_DISPLAY:
+                imageSearchResultViewerState.setNumberOfImagesToDisplay(Integer.valueOf(node.getTextContent()));
                 break;
             default:
                 break;
@@ -37,7 +37,7 @@ public class ImageSearchResultViewerStateConfig {
         //  IMAGE SEARCH RESULT VIEWER STATE start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.IMAGE_SEARCH_RESULT_VIEWER_STATE, baseIndent, xmlsw);
 
-        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.NUMBER_OF_IMAGES_PER_TAB, Tab.FOUR, Integer.toString(imageSearchResultViewerState.getNumberOfImagesPerTab()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.NUMBER_OF_IMAGES_TO_DISPLAY, Tab.FOUR, Integer.toString(imageSearchResultViewerState.getNumberOfImagesToDisplay()), xmlsw);
 
         //  IMAGE SEARCH RESULT VIEWER STATE end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);

@@ -107,7 +107,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     <slideShowDelayInSeconds>3</slideShowDelayInSeconds>
   </imageViewerState>
   <imageSearchResultViewerState>
-    <numberOfImagesPerTab>200</numberOfImagesPerTab>
+    <numberOfImagesToDisplay>200</numberOfImagesToDisplay>
   </imageSearchResultViewerState>
   <tagImages>
     <categories>
