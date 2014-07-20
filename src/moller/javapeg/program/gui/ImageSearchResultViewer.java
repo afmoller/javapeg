@@ -77,6 +77,7 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
+import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.gui.main.LoadedThumbnails;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -131,8 +132,9 @@ public class ImageSearchResultViewer extends JFrame {
      * Stores which index in the search result set List<File> that is the first
      * image that is displayed in the GUI.
      */
-    private final int currentStartIndexForDisplayedImages;
+    private int currentStartIndexForDisplayedImages;
 
+    private boolean windowInit;
 
     public ImageSearchResultViewer(List<File> imagesInResultSet) {
 
@@ -146,6 +148,11 @@ public class ImageSearchResultViewer extends JFrame {
 
         currentStartIndexForDisplayedImages = 0;
 
+        loadedThumbnails = new LoadedThumbnails();
+        imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
+
+        windowInit = true;
+
         this.createMainFrame();
         this.createToolBar();
         this.createRightClickMenu();
@@ -153,23 +160,86 @@ public class ImageSearchResultViewer extends JFrame {
         this.addListeners();
         this.initiateNumberOfImagesToDisplay();
 
-        loadedThumbnails = new LoadedThumbnails();
-
-        imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
-
-        this.initiateImageDisplay(imagesInResultSet);
+        windowInit = false;
     }
 
-    private void initiateImageDisplay(List<File> imagesInResultSet) {
+    private void loadThumbnailImages(List<File> imagesInResultSet, Direction direction) {
+        // Display the progress bar, if it is hidden.
+        thumbNailLoadingProgressBar.setVisible(true);
         ImageSearhResultLoader imageSearhResultLoader = null;
         if (imagesInResultSet.size() > getCurrentValueOfNumberOfImagesToDisplay()) {
-            imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet.subList(0, getCurrentValueOfNumberOfImagesToDisplay()));
+            int toIndex = 0;
+
+            List<File> imagesToLoad = null;
+
+            if (windowInit) {
+                imagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+
+                if (imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay()) {
+                    loadNextImages.setEnabled(imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay());
+                    toIndex = getCurrentValueOfNumberOfImagesToDisplay();
+                } else{
+                    loadNextImages.setEnabled(false);
+                    toIndex = imagesToLoad.size();
+                }
+                loadPreviousImages.setEnabled(false);
+             } else {
+                 switch (direction) {
+                 case NEXT:
+                     // Set the new startpoint.
+                     currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
+
+                     if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
+                         toIndex = imagesInResultSet.size();
+                         loadNextImages.setEnabled(false);
+                         loadPreviousImages.setEnabled(true);
+                     } else {
+                         toIndex = currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay();
+                         loadNextImages.setEnabled(true);
+                         loadPreviousImages.setEnabled(true);
+                     }
+                     imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+                     break;
+                 case PREVIOUS:
+                     // First get the to index as the current start index...
+                     toIndex = currentStartIndexForDisplayedImages;
+
+                     // ... and then get the new startindex.
+                     currentStartIndexForDisplayedImages -= getCurrentValueOfNumberOfImagesToDisplay();
+
+                     loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
+                     loadNextImages.setEnabled(true);
+
+                     imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+                     break;
+                 default:
+                     break;
+                 }
+             }
+
+            imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
+
+            // TODO: Fix hard coded string.
+            setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
         } else {
+            loadNextImages.setEnabled(false);
             imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet);
         }
 
         imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
         imageSearhResultLoader.execute();
+    }
+
+    private List<File> getInitialimagesToLoad(List<File> imagesInResultSet) {
+        int toIndex;
+
+        if (getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
+            toIndex = imagesInResultSet.size();
+        } else {
+            toIndex = getCurrentValueOfNumberOfImagesToDisplay();
+        }
+
+        return imagesInResultSet.subList(0, toIndex);
     }
 
     private class ImageSearhResultLoaderPropertyListener implements PropertyChangeListener {
@@ -257,7 +327,6 @@ public class ImageSearchResultViewer extends JFrame {
     // Create ToolBar
     public void createToolBar()    {
 
-
         Integer[] imagesPerTabInteger = new Integer[]{50, 100, 200, 400, 800, 1000};
 
         ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(imagesPerTabInteger);
@@ -273,7 +342,10 @@ public class ImageSearchResultViewer extends JFrame {
         ImageIcon loadNextImagesIcon = new ImageIcon();
 
         loadPreviousImages = new JButton();
+        loadPreviousImages.setEnabled(false);
+
         loadNextImages = new JButton();
+        loadNextImages.setEnabled(false);
 
         try {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
@@ -360,6 +432,8 @@ public class ImageSearchResultViewer extends JFrame {
         popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
         popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
         numberOfImagesToDisplaySelectionBox.addItemListener(new NumberOfImagesToDisplayChangeListener());
+        loadPreviousImages.addActionListener(new LoadPreviousImagesListener());
+        loadNextImages.addActionListener(new LoadNextImagesListener());
     }
 
     private void saveSettings() {
@@ -499,6 +573,20 @@ public class ImageSearchResultViewer extends JFrame {
         }
     }
 
+    private class LoadPreviousImagesListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            loadThumbnailImages(imagesInResultSet, Direction.PREVIOUS);
+        }
+    }
+
+    private class LoadNextImagesListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            loadThumbnailImages(imagesInResultSet, Direction.NEXT);
+        }
+    }
+
     /**
      * This listener class reacts of changes of the {@link JCheckBox} which
      * defines how many images that shall be displayed in the GUI. This allows
@@ -517,10 +605,14 @@ public class ImageSearchResultViewer extends JFrame {
             case ItemEvent.SELECTED:
                 int numberOfImagesToDisplay = (int) ie.getItem();
 
+                // Reset the index to zero, when a number of displayed images
+                // is performed.
+                currentStartIndexForDisplayedImages = 0;
+
                 if (numberOfImagesToDisplay > previousValue && nrOfImagesInResultSet > previousValue) {
-                    initiateImageDisplay(imagesInResultSet);
+                    loadThumbnailImages(imagesInResultSet, Direction.NEXT);
                 } else if (numberOfImagesToDisplay < previousValue && numberOfImagesToDisplay < nrOfImagesInResultSet) {
-                    initiateImageDisplay(imagesInResultSet);
+                    loadThumbnailImages(imagesInResultSet, Direction.NEXT);
                 }
                 break;
             case ItemEvent.DESELECTED:
