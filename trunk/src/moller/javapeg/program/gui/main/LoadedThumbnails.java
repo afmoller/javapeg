@@ -124,4 +124,22 @@ public class LoadedThumbnails extends ArrayList<JToggleButton> {
         }
         return files;
     }
+
+    /**
+     * Returns the {@link File} object of an {@link JToggleButton}
+     *
+     * @param jToggleButton
+     *            is the {@link JToggleButton} to return the associated
+     *            {@link File} object for.
+     * @return the for an {@link JToggleButton} associated {@link File} object
+     *         or null if the {@link JToggleButton} cannot be found.
+     */
+    public File getFileObject(JToggleButton jToggleButton) {
+        int index = indexOf(jToggleButton);
+        if (index == -1) {
+            return null;
+        } else {
+            return new File(get(index).getActionCommand());
+        }
+    }
 }
