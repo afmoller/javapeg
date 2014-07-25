@@ -21,6 +21,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -30,6 +32,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -42,8 +45,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -111,6 +116,10 @@ public class ImageSearchResultViewer extends JFrame {
     private int iconWidth;
 
     private final int nrOfImagesInResultSet;
+
+    // Holds the list of all images which are part of the search result set.
+    // If this set is larger then the current amount of images to display, then
+    // there will be a paged display with several pages with images.
     private final List<File> imagesInResultSet;
 
     private GridLayout thumbNailGridLayout;
@@ -118,6 +127,11 @@ public class ImageSearchResultViewer extends JFrame {
     private JPanel thumbNailsPanel;
     private JScrollPane scrollpane;
     private JProgressBar thumbNailLoadingProgressBar;
+
+    // This Set keeps track on which thumbnails that are selected in the
+    //result set. This is necessary to keep track of because of the paged
+    // result views.
+    private final Set<File> selectedImageFiles;
 
     private final Map<File, ImageIcon> imageFileToSelectedImageMapping;
     private final LoadedThumbnails loadedThumbnails;
@@ -127,6 +141,10 @@ public class ImageSearchResultViewer extends JFrame {
     private JComboBox<Integer> numberOfImagesToDisplaySelectionBox;
     private JButton loadPreviousImages;
     private JButton loadNextImages;
+
+    private CustomKeyEventDispatcher customKeyEventDispatcher;
+
+    private ImageSearhResultLoader imageSearhResultLoader = null;
 
     /**
      * Stores which index in the search result set List<File> that is the first
@@ -150,6 +168,7 @@ public class ImageSearchResultViewer extends JFrame {
 
         loadedThumbnails = new LoadedThumbnails();
         imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
+        selectedImageFiles = new HashSet<File>();
 
         windowInit = true;
 
@@ -164,70 +183,72 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private void loadThumbnailImages(List<File> imagesInResultSet, Direction direction) {
-        // Display the progress bar, if it is hidden.
-        thumbNailLoadingProgressBar.setVisible(true);
-        ImageSearhResultLoader imageSearhResultLoader = null;
-        if (imagesInResultSet.size() > getCurrentValueOfNumberOfImagesToDisplay()) {
-            int toIndex = 0;
+        if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+            // Display the progress bar, if it is hidden.
+            thumbNailLoadingProgressBar.setVisible(true);
 
-            List<File> imagesToLoad = null;
+            if (imagesInResultSet.size() > getCurrentValueOfNumberOfImagesToDisplay()) {
+                int toIndex = 0;
 
-            if (windowInit) {
-                imagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+                List<File> imagesToLoad = null;
 
-                if (imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay()) {
-                    loadNextImages.setEnabled(imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay());
-                    toIndex = getCurrentValueOfNumberOfImagesToDisplay();
-                } else{
-                    loadNextImages.setEnabled(false);
-                    toIndex = imagesToLoad.size();
+                if (windowInit) {
+                    imagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+
+                    if (imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay()) {
+                        loadNextImages.setEnabled(imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay());
+                        toIndex = getCurrentValueOfNumberOfImagesToDisplay();
+                    } else{
+                        loadNextImages.setEnabled(false);
+                        toIndex = imagesToLoad.size();
+                    }
+                    loadPreviousImages.setEnabled(false);
+                } else {
+                    switch (direction) {
+                    case NEXT:
+                        // Set the new startpoint.
+                        currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
+
+                        if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
+                            toIndex = imagesInResultSet.size();
+                            loadNextImages.setEnabled(false);
+                            loadPreviousImages.setEnabled(true);
+                        } else {
+                            toIndex = currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay();
+                            loadNextImages.setEnabled(true);
+                            loadPreviousImages.setEnabled(true);
+                        }
+                        imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+                        break;
+                    case PREVIOUS:
+                        // First get the to index as the current start index...
+                        toIndex = currentStartIndexForDisplayedImages;
+
+                        // ... and then get the new startindex.
+                        currentStartIndexForDisplayedImages -= getCurrentValueOfNumberOfImagesToDisplay();
+
+                        loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
+                        loadNextImages.setEnabled(true);
+
+                        imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+                        break;
+                    default:
+                        break;
+                    }
                 }
-                loadPreviousImages.setEnabled(false);
-             } else {
-                 switch (direction) {
-                 case NEXT:
-                     // Set the new startpoint.
-                     currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
 
-                     if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
-                         toIndex = imagesInResultSet.size();
-                         loadNextImages.setEnabled(false);
-                         loadPreviousImages.setEnabled(true);
-                     } else {
-                         toIndex = currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay();
-                         loadNextImages.setEnabled(true);
-                         loadPreviousImages.setEnabled(true);
-                     }
-                     imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
-                     break;
-                 case PREVIOUS:
-                     // First get the to index as the current start index...
-                     toIndex = currentStartIndexForDisplayedImages;
+                imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
 
-                     // ... and then get the new startindex.
-                     currentStartIndexForDisplayedImages -= getCurrentValueOfNumberOfImagesToDisplay();
+                // TODO: Fix hard coded string.
+                setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
+            } else {
+                loadNextImages.setEnabled(false);
+                imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet);
+            }
 
-                     loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
-                     loadNextImages.setEnabled(true);
-
-                     imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
-                     break;
-                 default:
-                     break;
-                 }
-             }
-
-            imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
-
-            // TODO: Fix hard coded string.
-            setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
-        } else {
-            loadNextImages.setEnabled(false);
-            imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet);
+            imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
+            imageSearhResultLoader.execute();
         }
-
-        imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
-        imageSearhResultLoader.execute();
     }
 
     private List<File> getInitialimagesToLoad(List<File> imagesInResultSet) {
@@ -286,6 +307,11 @@ public class ImageSearchResultViewer extends JFrame {
             logger.logERROR(e);
         }
 
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        customKeyEventDispatcher = new CustomKeyEventDispatcher();
+        manager.addKeyEventDispatcher(customKeyEventDispatcher);
+
+
         this.setTitle(lang.get("imagesearchresultviewer.title"));
 
         thumbNailLoadingProgressBar = new JProgressBar();
@@ -297,6 +323,24 @@ public class ImageSearchResultViewer extends JFrame {
         backgroundPanel.add(thumbNailLoadingProgressBar, BorderLayout.SOUTH);
 
         this.getContentPane().add(backgroundPanel, BorderLayout.CENTER);
+    }
+
+    private class CustomKeyEventDispatcher implements KeyEventDispatcher {
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+
+            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
+                if (KeyEvent.VK_LEFT == e.getKeyCode()) {
+                    loadPreviousImages.doClick();
+                    return true;
+                }
+                if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
+                    loadNextImages.doClick();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**
@@ -436,6 +480,11 @@ public class ImageSearchResultViewer extends JFrame {
         loadNextImages.addActionListener(new LoadNextImagesListener());
     }
 
+    private void removeCustomKeyEventDispatcher() {
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.removeKeyEventDispatcher(customKeyEventDispatcher);
+    }
+
     private void saveSettings() {
         GUI gUI = configuration.getgUI();
 
@@ -472,6 +521,7 @@ public class ImageSearchResultViewer extends JFrame {
 
     private void disposeFrame() {
         this.saveSettings();
+        this.removeCustomKeyEventDispatcher();
         this.setVisible(false);
         this.dispose();
     }
@@ -531,9 +581,11 @@ public class ImageSearchResultViewer extends JFrame {
             for (JToggleButton jToggleButton : getJToggleButtons()) {
                 if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
-                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(new File(jToggleButton.getActionCommand())));
+                    File imageFile = new File(jToggleButton.getActionCommand());
+                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
                 }
             }
+            selectedImageFiles.addAll(imagesInResultSet);
         }
     }
 
@@ -546,6 +598,7 @@ public class ImageSearchResultViewer extends JFrame {
                     jToggleButton.setSelected(false);
                 }
             }
+            selectedImageFiles.clear();
         }
     }
 
@@ -677,8 +730,10 @@ public class ImageSearchResultViewer extends JFrame {
             if (toggleButton.isSelected()) {
                 ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
                 ButtonIconUtil.setSelectedThumbNailImage(toggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
+                selectedImageFiles.add(loadedThumbnails.getFileObject(toggleButton));
             } else {
                 ButtonIconUtil.setDeSelectedThumbNailImage(toggleButton);
+                selectedImageFiles.remove(loadedThumbnails.getFileObject(toggleButton));
             }
         }
     }
@@ -722,6 +777,14 @@ public class ImageSearchResultViewer extends JFrame {
 
                     JToggleButton thumbContainer = new JToggleButton();
                     thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+                    if (selectedImageFiles.contains(image)) {
+                        ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                        final int percentage = grayFilter.getPercentage();
+                        final boolean pixelsBrightened = grayFilter.isPixelsBrightened();
+                        ButtonIconUtil.setSelectedThumbNailImage(thumbContainer, pixelsBrightened, percentage);
+                        thumbContainer.setSelected(true);
+                    }
+
                     thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
                     if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
                         thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
