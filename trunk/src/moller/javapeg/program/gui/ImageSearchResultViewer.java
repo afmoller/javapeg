@@ -152,8 +152,6 @@ public class ImageSearchResultViewer extends JFrame {
      */
     private int currentStartIndexForDisplayedImages;
 
-    private boolean windowInit;
-
     public ImageSearchResultViewer(List<File> imagesInResultSet) {
 
         configuration = Config.getInstance().get();
@@ -170,85 +168,33 @@ public class ImageSearchResultViewer extends JFrame {
         imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
         selectedImageFiles = new HashSet<File>();
 
-        windowInit = true;
-
         this.createMainFrame();
         this.createToolBar();
         this.createRightClickMenu();
         this.createStatusPanel();
-        this.addListeners();
         this.initiateNumberOfImagesToDisplay();
+        this.addListeners();
 
-        windowInit = false;
+        List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+
+        this.loadThumbnailImages(initialimagesToLoad);
+        this.setInitialStateOfNextAndPreviousButtons(initialimagesToLoad.size());
     }
 
-    private void loadThumbnailImages(List<File> imagesInResultSet, Direction direction) {
+    private void loadThumbnailImages(List<File> imagesToLoad) {
         if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
             // Display the progress bar, if it is hidden.
             thumbNailLoadingProgressBar.setVisible(true);
 
-            if (imagesInResultSet.size() > getCurrentValueOfNumberOfImagesToDisplay()) {
-                int toIndex = 0;
-
-                List<File> imagesToLoad = null;
-
-                if (windowInit) {
-                    imagesToLoad = getInitialimagesToLoad(imagesInResultSet);
-
-                    if (imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay()) {
-                        loadNextImages.setEnabled(imagesToLoad.size() == getCurrentValueOfNumberOfImagesToDisplay());
-                        toIndex = getCurrentValueOfNumberOfImagesToDisplay();
-                    } else{
-                        loadNextImages.setEnabled(false);
-                        toIndex = imagesToLoad.size();
-                    }
-                    loadPreviousImages.setEnabled(false);
-                } else {
-                    switch (direction) {
-                    case NEXT:
-                        // Set the new startpoint.
-                        currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
-
-                        if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
-                            toIndex = imagesInResultSet.size();
-                            loadNextImages.setEnabled(false);
-                            loadPreviousImages.setEnabled(true);
-                        } else {
-                            toIndex = currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay();
-                            loadNextImages.setEnabled(true);
-                            loadPreviousImages.setEnabled(true);
-                        }
-                        imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
-                        break;
-                    case PREVIOUS:
-                        // First get the to index as the current start index...
-                        toIndex = currentStartIndexForDisplayedImages;
-
-                        // ... and then get the new startindex.
-                        currentStartIndexForDisplayedImages -= getCurrentValueOfNumberOfImagesToDisplay();
-
-                        loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
-                        loadNextImages.setEnabled(true);
-
-                        imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
-                        break;
-                    default:
-                        break;
-                    }
-                }
-
-                imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
-
-                // TODO: Fix hard coded string.
-                setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
-            } else {
-                loadNextImages.setEnabled(false);
-                imageSearhResultLoader = new ImageSearhResultLoader(imagesInResultSet);
-            }
-
+            imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
             imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
             imageSearhResultLoader.execute();
         }
+    }
+
+    private void setInitialStateOfNextAndPreviousButtons(int nrOfInitialImagesToLoad) {
+        loadPreviousImages.setEnabled(false);
+        loadNextImages.setEnabled(nrOfInitialImagesToLoad < imagesInResultSet.size());
     }
 
     private List<File> getInitialimagesToLoad(List<File> imagesInResultSet) {
@@ -259,6 +205,8 @@ public class ImageSearchResultViewer extends JFrame {
         } else {
             toIndex = getCurrentValueOfNumberOfImagesToDisplay();
         }
+
+        setWindowTitle(toIndex);
 
         return imagesInResultSet.subList(0, toIndex);
     }
@@ -325,17 +273,23 @@ public class ImageSearchResultViewer extends JFrame {
         this.getContentPane().add(backgroundPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * This class listens for keyboard input.
+     *
+     * @author Fredrik
+     *
+     */
     private class CustomKeyEventDispatcher implements KeyEventDispatcher {
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
 
             if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
                 if (KeyEvent.VK_LEFT == e.getKeyCode()) {
-                    loadPreviousImages.doClick();
+                    loadPreviousImages.doClick(0);
                     return true;
                 }
                 if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
-                    loadNextImages.doClick();
+                    loadNextImages.doClick(0);
                     return true;
                 }
             }
@@ -629,14 +583,20 @@ public class ImageSearchResultViewer extends JFrame {
     private class LoadPreviousImagesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            loadThumbnailImages(imagesInResultSet, Direction.PREVIOUS);
+            if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+                List<File> imagesToLoad = getImagesToLoad(Direction.PREVIOUS);
+                loadThumbnailImages(imagesToLoad);
+            }
         }
     }
 
     private class LoadNextImagesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            loadThumbnailImages(imagesInResultSet, Direction.NEXT);
+            if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+                List<File> imagesToLoad = getImagesToLoad(Direction.NEXT);
+                loadThumbnailImages(imagesToLoad);
+            }
         }
     }
 
@@ -650,31 +610,83 @@ public class ImageSearchResultViewer extends JFrame {
      */
     private class NumberOfImagesToDisplayChangeListener implements ItemListener {
 
-        private int previousValue;
-
         @Override
         public void itemStateChanged(ItemEvent ie) {
             switch (ie.getStateChange()) {
             case ItemEvent.SELECTED:
-                int numberOfImagesToDisplay = (int) ie.getItem();
-
                 // Reset the index to zero, when a number of displayed images
                 // is performed.
                 currentStartIndexForDisplayedImages = 0;
 
-                if (numberOfImagesToDisplay > previousValue && nrOfImagesInResultSet > previousValue) {
-                    loadThumbnailImages(imagesInResultSet, Direction.NEXT);
-                } else if (numberOfImagesToDisplay < previousValue && numberOfImagesToDisplay < nrOfImagesInResultSet) {
-                    loadThumbnailImages(imagesInResultSet, Direction.NEXT);
-                }
-                break;
-            case ItemEvent.DESELECTED:
-                previousValue = (Integer) ie.getItem();
+                List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+
+                loadPreviousImages.setEnabled(false);
+                loadNextImages.setEnabled(initialimagesToLoad.size() < imagesInResultSet.size());
+
+                loadThumbnailImages(initialimagesToLoad);
+
                 break;
             default:
                 break;
             }
         }
+    }
+
+    /**
+     * This method returns which images to load depending on the currently
+     * selected {@link Direction} to load.
+     *
+     * @param direction
+     *            specifies in which direction the images shall be loaded.
+     *            Either {@link Direction#NEXT} or {@link Direction#PREVIOUS}
+     * @return a {@link List} of {@link File} objects which is to load in the
+     *         GUI.
+     */
+    private List<File> getImagesToLoad(Direction direction) {
+
+        int toIndex = -1;
+        List<File> imagesToLoad = new ArrayList<File>();
+
+        switch (direction) {
+        case NEXT:
+            // Set the new start index.
+            currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
+
+            if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
+                toIndex = imagesInResultSet.size();
+                loadNextImages.setEnabled(false);
+                loadPreviousImages.setEnabled(true);
+            } else {
+                toIndex = currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay();
+                loadNextImages.setEnabled(true);
+                loadPreviousImages.setEnabled(true);
+            }
+            imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+            break;
+        case PREVIOUS:
+            // First get the to index as the current start index...
+            toIndex = currentStartIndexForDisplayedImages;
+
+            // ... and then get the new start index.
+            currentStartIndexForDisplayedImages -= getCurrentValueOfNumberOfImagesToDisplay();
+
+            loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
+            loadNextImages.setEnabled(true);
+
+            imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+            break;
+        default:
+            break;
+        }
+
+        setWindowTitle(toIndex);
+
+        return imagesToLoad;
+    }
+
+    private void setWindowTitle(int toIndex) {
+        // TODO: Fix hard coded string.
+        setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
     }
 
     private List<JToggleButton> getJToggleButtons() {
