@@ -18,7 +18,6 @@
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
 - Add support for Linux
-- Make it possible to limit search result in the image search result viewer.
 - Add favorite directories functionality to the directory tree view. 
 - Add http://highslide.com/ functionality to thumbnail overview html. 
 - Add functionality for keeping the source directory tree up to date by searching for attached or detached volumes, such as attached USB-disks and so on, and update the 

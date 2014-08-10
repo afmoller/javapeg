@@ -58,13 +58,16 @@ metadatapanel.tableheader.value    = VALUE
 ##############################################################################################################
 # I M A G E  S E A R C H  R E S U L T  V I E W E R                                                           #
 ##############################################################################################################
-imagesearchresultviewer.title = Search Result 
+imagesearchresultviewer.title = Search Result (%s - %s of %s)
 imagesearchresultviewer.menuitem.selectAll = Select all images
 imagesearchresultviewer.menuitem.deSelectAll = Deselect all selected images
 imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Add selected image(s) to view list
 imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Copy selected image to system clip board
 imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Copy all images to system clip board
 imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Amount of images in search result
+imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip = Number of images per tab
+imagesearchresultviewer.button.loadPreviousImage.tooltip = Display previous images
+imagesearchresultviewer.button.loadNextImage.tooltip = Display next images
 
 ##############################################################################################################
 # I M A G E  R E S I Z E  Q U A L I T Y                                                                      #
