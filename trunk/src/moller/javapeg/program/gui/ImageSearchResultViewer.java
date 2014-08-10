@@ -331,8 +331,7 @@ public class ImageSearchResultViewer extends JFrame {
 
         numberOfImagesToDisplaySelectionBox = new JComboBox<Integer>(delaysModel);
         numberOfImagesToDisplaySelectionBox.setMaximumSize(numberOfImagesToDisplaySelectionBox.getPreferredSize());
-//        TODO: Fix hard coded string
-        numberOfImagesToDisplaySelectionBox.setToolTipText("Number of images per tab");
+        numberOfImagesToDisplaySelectionBox.setToolTipText(lang.get("imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip"));
 
         InputStream imageStream = null;
 
@@ -349,14 +348,12 @@ public class ImageSearchResultViewer extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
             loadPreviousImagesIcon.setImage(ImageIO.read(imageStream));
             loadPreviousImages.setIcon(loadPreviousImagesIcon);
-            // TODO: Fix hard coded string
-            loadPreviousImages.setToolTipText("Load previous images");
+            loadPreviousImages.setToolTipText(lang.get("imagesearchresultviewer.button.loadPreviousImage.tooltip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
             loadNextImagesIcon.setImage(ImageIO.read(imageStream));
             loadNextImages.setIcon(loadNextImagesIcon);
-            // TODO: Fix hard coded string
-            loadNextImages.setToolTipText("Load next images");
+            loadNextImages.setToolTipText(lang.get("imagesearchresultviewer.button.loadNextImage.tooltip"));
 
         }  catch (IOException e) {
             logger.logERROR("Could not load image. See Stack Trace below for details");
@@ -685,8 +682,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private void setWindowTitle(int toIndex) {
-        // TODO: Fix hard coded string.
-        setTitle(lang.get("imagesearchresultviewer.title") + " (" + (currentStartIndexForDisplayedImages + 1) + " - " + (toIndex) + " of " +  imagesInResultSet.size());
+        setTitle(String.format(lang.get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInResultSet.size()));
     }
 
     private List<JToggleButton> getJToggleButtons() {
