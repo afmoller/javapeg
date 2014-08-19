@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -162,6 +161,7 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextSearchParameters;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContextUtil;
+import moller.javapeg.program.datatype.FileAndTimeStampPair;
 import moller.javapeg.program.enumerations.CategoryMenueType;
 import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
@@ -3681,21 +3681,29 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            ImageMetaDataContextSearchParameters imageMetaDataContextSearchParameters = collectSearchParameters();
+            // Prepare and perform the image search...
+            Set<File> foundImages = ImageMetaDataContextUtil.performImageSearch(collectSearchParameters());
 
-            Set<File> foundImages = ImageMetaDataContextUtil.performImageSearch(imageMetaDataContextSearchParameters);
+            if (foundImages.size() > 0) {
+                // ... and create file and timestamp pairs...
+                ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
 
-            List<File> foundImagesAsList = new ArrayList<File>(foundImages);
-            Collections.sort(foundImagesAsList, new Comparator<File>() {
-                @Override
-                public int compare(File f1, File f2)
-                {
-                    return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+                List<FileAndTimeStampPair> fileAndTimeStampPairs = new ArrayList<>(foundImages.size());
+                for (File foundImage : foundImages) {
+                    fileAndTimeStampPairs.add(new FileAndTimeStampPair(foundImage, imdc.getDateTime(foundImage)));
                 }
-            });
 
-            if (foundImagesAsList.size() > 0) {
-                ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImagesAsList);
+                // ... and sort the file and timestamp pairs...
+                Collections.sort(fileAndTimeStampPairs);
+
+                // ... and create a new list with the file object from the
+                // sorted file and timestamp pairs.
+                List<File> foundImagesAsSortedList = new ArrayList<File>(foundImages.size());
+                for (FileAndTimeStampPair fileAndTimeStampPair : fileAndTimeStampPairs) {
+                    foundImagesAsSortedList.add(fileAndTimeStampPair.getFile());
+                }
+
+                ImageSearchResultViewer imagesearchResultViewer = new ImageSearchResultViewer(foundImagesAsSortedList);
                 imagesearchResultViewer.setVisible(true);
             } else {
                 displayInformationMessage(lang.get("findimage.searchImages.result"));

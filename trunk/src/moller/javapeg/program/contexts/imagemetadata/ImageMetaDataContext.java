@@ -44,6 +44,13 @@ public class ImageMetaDataContext {
     private final Map<String, ImageSize> imageSizeStringImageSizeMappings;
     private final Map<String, ExposureTime> exposureTimeStringExposureTimeMappings;
 
+
+    /**
+     * Contains a mapping between a absolute path as a {@link String} object and
+     * the timestamp, as a {@link Long} object, when a photo was taken.
+     */
+    private final Map<String, Long> dateTimeValues;
+
     /**
      * Image Exif Meta Data
      */
@@ -68,6 +75,8 @@ public class ImageMetaDataContext {
     private ImageMetaDataContext() {
         exposureTimeStringExposureTimeMappings = new HashMap<String, ExposureTime>();
         imageSizeStringImageSizeMappings = new HashMap<String, ImageSize>();
+
+        dateTimeValues = new HashMap<String, Long>();
 
         javaPegIdToCameraModels = new HashMap<String, Map<String, Set<Integer>>>();
         javaPegIdToYearValues = new HashMap<String, Map<Integer, Set<Integer>>>();
@@ -117,6 +126,7 @@ public class ImageMetaDataContext {
     }
 
     public void addDateTime(String javaPegIdValue, Date dateTime, String imagePath) {
+        dateTimeValues.put(imagePath, dateTime.getTime());
         addToMap(javaPegIdToYearValues, Integer.parseInt(new SimpleDateFormat("yyyy").format(dateTime)), javaPegIdValue, imagePath);
         addToMap(javaPegIdToMonthValues, Integer.parseInt(new SimpleDateFormat("MM").format(dateTime)), javaPegIdValue, imagePath);
         addToMap(javaPegIdToDateValues, Integer.parseInt(new SimpleDateFormat("dd").format(dateTime)), javaPegIdValue, imagePath);
@@ -264,6 +274,16 @@ public class ImageMetaDataContext {
 
     public Set<Integer> getYears() {
         return ImageMetaDataContextUtil.getAllIntegerValues(javaPegIdToYearValues);
+    }
+
+    public Long getDateTime(File image) {
+        Long dateTime = dateTimeValues.get(image.getAbsolutePath());
+
+        if (dateTime == null) {
+            return Long.MAX_VALUE;
+        }
+
+        return dateTime;
     }
 
     public Set<Integer> getMonths() {
