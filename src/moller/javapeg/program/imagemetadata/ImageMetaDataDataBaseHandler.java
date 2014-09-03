@@ -283,7 +283,10 @@ public class ImageMetaDataDataBaseHandler {
                 case UPDATE:
                     for(File image : imageMetaDataDataBaseItems.keySet()) {
                         ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
-                        updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+                        if (imddbi.isNeedsToBeSyncedWithImageMetaDataContext()) {
+                            updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+                            imddbi.setNeedsToBeSyncedWithImageMetaDataContext(false);
+                        }
                     }
                     break;
                 }

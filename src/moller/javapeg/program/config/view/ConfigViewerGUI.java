@@ -61,6 +61,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
@@ -926,7 +927,6 @@ public class ConfigViewerGUI extends JFrame {
         importedCategoriesPanel.add(importedCategoriesScrollPane , posImportedCategoriesPanel.expandW().expandH());
         importedCategoriesPanel.add(removeSelectedImportedCategoriesButton, posImportedCategoriesPanel.nextRow().align(GridBagConstraints.WEST));
 
-
         /**
          * Start of Image Repositories Area
          */
@@ -1001,7 +1001,8 @@ public class ConfigViewerGUI extends JFrame {
         imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel imageRepositoriesAdditionModePanel = new JPanel(new GridBagLayout());
-        imageRepositoriesAdditionModePanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label")));
+        imageRepositoriesAdditionModePanel.setBorder(BorderFactory.createTitledBorder(""));
+        imageRepositoriesAdditionModePanel.setName(lang.get("configviewer.tag.imageRepositoriesAdditionMode.label"));
 
         GBHelper posImageRepositories = new GBHelper();
 
@@ -1019,7 +1020,8 @@ public class ConfigViewerGUI extends JFrame {
         imageRepositoriesAdditionModePanel.add(removeSelectedDoNotAllwaysAddImagePaths, posImageRepositories.nextRow().align(GridBagConstraints.WEST));
 
         JPanel imageRepositoriesContentPanel = new JPanel(new GridBagLayout());
-        imageRepositoriesContentPanel.setBorder(BorderFactory.createTitledBorder(lang.get("configviewer.tag.imageRepositoriesContent.label")));
+        imageRepositoriesContentPanel.setBorder(BorderFactory.createTitledBorder(""));
+        imageRepositoriesContentPanel.setName(lang.get("configviewer.tag.imageRepositoriesContent.label"));
 
         JPanel buttonPanel = new JPanel(new GridBagLayout());
 
@@ -1049,6 +1051,10 @@ public class ConfigViewerGUI extends JFrame {
         imageRepositoriesContentPanel.add(Box.createVerticalStrut(2), posImageRepositoriesContent.nextRow());
         imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().align(GridBagConstraints.WEST));
 
+        JTabbedPane imageRepositoryTabbedPane = new JTabbedPane();
+        imageRepositoryTabbedPane.add(imageRepositoriesAdditionModePanel);
+        imageRepositoryTabbedPane.add(imageRepositoriesContentPanel);
+
         tagConfigurationPanel = new JPanel(new GridBagLayout());
         tagConfigurationPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
@@ -1057,8 +1063,7 @@ public class ConfigViewerGUI extends JFrame {
         tagConfigurationPanel.add(previewImagePanel, posTagPanel.expandW());
         tagConfigurationPanel.add(categoriesPanel, posTagPanel.nextRow().expandW());
         tagConfigurationPanel.add(importedCategoriesPanel, posTagPanel.nextRow().expandW().expandH());
-        tagConfigurationPanel.add(imageRepositoriesAdditionModePanel, posTagPanel.nextRow().expandW().expandH());
-        tagConfigurationPanel.add(imageRepositoriesContentPanel, posTagPanel.nextRow().expandW().expandH());
+        tagConfigurationPanel.add(imageRepositoryTabbedPane, posTagPanel.nextRow().expandW().expandH());
     }
 
     private void updateWindowLocationAndSize() {
@@ -1948,7 +1953,6 @@ public class ConfigViewerGUI extends JFrame {
                     theImportedCategoriesToRenameOrDelete = (ImportedCategories)((JList<Object>)e.getSource()).getModel().getElementAt(selecteIndex);
                 }
                 importedCategoriesPopupMenu.show(e.getComponent(), e.getX(), e.getY());
-
             }
         }
     }

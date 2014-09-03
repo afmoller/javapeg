@@ -2616,7 +2616,7 @@ public class MainGUI extends JFrame {
 
                     if(jpegFile != null) {
 
-                        JPEGThumbNail tn =    JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
+                        JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 
                         JToggleButton thumbContainer = new JToggleButton();
                         thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
@@ -2628,8 +2628,6 @@ public class MainGUI extends JFrame {
                             thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile, toolTips.getOverviewState()));
                         }
                         thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
-                        thumbContainer.addActionListener(thumbNailListener);
-                        thumbContainer.addMouseListener(mouseRightClickButtonListener);
 
                         columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
                         columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
@@ -2666,6 +2664,8 @@ public class MainGUI extends JFrame {
                 thumbnailLoadingProgressBar.setVisible(false);
                 addMouseListener();
                 setInputsEnabled(true);
+                loadedThumbnailButtons.addActionListener(thumbNailListener);
+                loadedThumbnailButtons.addMouseListener(mouseRightClickButtonListener);
                 startProcessButton.setEnabled(setStartProcessButtonState());
                 startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
@@ -3390,6 +3390,7 @@ public class MainGUI extends JFrame {
                 imageMetaDataDataBaseItem.setComment(comment);
                 imageMetaDataDataBaseItem.setRating(rating);
                 imageMetaDataDataBaseItem.setCategories(categories);
+                imageMetaDataDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
 
                 irc.setImageMetaDatadataBaseItem(currentlySelectedImage, imageMetaDataDataBaseItem);
                 irc.setFlushNeeded(true);
@@ -4009,6 +4010,7 @@ public class MainGUI extends JFrame {
 
                             if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
                                 imddbituc.setFlushNeeded(true);
+                                imageMetaDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
                             }
                         }
                     }
@@ -4258,7 +4260,10 @@ public class MainGUI extends JFrame {
 
                     for (File image : imageMetaDataBaseItems.keySet()) {
                         ImageMetaDataItem imddbi = imageMetaDataBaseItems.get(image);
-                        ImageMetaDataDataBaseHandler.updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+                        if (imddbi.isNeedsToBeSyncedWithImageMetaDataContext()) {
+                            ImageMetaDataDataBaseHandler.updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+                            imddbi.setNeedsToBeSyncedWithImageMetaDataContext(false);
+                        }
                     }
                 }
                 ac.setMainTabbedPaneComponent(mainTabbedPaneComponent);

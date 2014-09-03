@@ -1,5 +1,7 @@
 package moller.javapeg.program.gui.main;
 
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -142,4 +144,20 @@ public class LoadedThumbnails extends ArrayList<JToggleButton> {
             return new File(get(index).getActionCommand());
         }
     }
+
+    public void addActionListener(ActionListener actionListener) {
+        Iterator<JToggleButton> iterator = iterator();
+        while (iterator.hasNext()) {
+            iterator.next().addActionListener(actionListener);
+        }
+    }
+
+    public void addMouseListener(MouseAdapter mouseAdapter) {
+        Iterator<JToggleButton> iterator = iterator();
+        while (iterator.hasNext()) {
+            iterator.next().addMouseListener(mouseAdapter);
+        }
+    }
+
+
 }
