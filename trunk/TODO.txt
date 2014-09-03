@@ -1,5 +1,8 @@
 3.0:
 ====
+- Display a "wait"-cursor when image thumbnails are loaded.
+- Add a add all selected categories to all images alternative in the tagging mode.
+- Add meta data base statistics
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.
@@ -9,7 +12,6 @@
 3.1:
 ====
 - Move the navigation image to lower right corner.
-- Add meta data base statistics
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
 - Implement Context aware menu in the menu bar.

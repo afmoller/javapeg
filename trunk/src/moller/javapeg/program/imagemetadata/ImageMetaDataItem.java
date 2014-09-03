@@ -28,6 +28,7 @@ public class ImageMetaDataItem {
     private String comment;
     private int rating;
     private Categories categories;
+    private boolean needsToBeSyncedWithImageMetaDataContext;
 
     public ImageMetaDataItem(File image, CategoryImageExifMetaData imageExifMetaData, String comment,int rating, Categories categories) {
         this.image = image;
@@ -125,5 +126,13 @@ public class ImageMetaDataItem {
             return true;
         }
         return false;
+    }
+
+    public boolean isNeedsToBeSyncedWithImageMetaDataContext() {
+        return needsToBeSyncedWithImageMetaDataContext;
+    }
+
+    public void setNeedsToBeSyncedWithImageMetaDataContext(boolean needsToBeSyncedWithImageMetaDataContext) {
+        this.needsToBeSyncedWithImageMetaDataContext = needsToBeSyncedWithImageMetaDataContext;
     }
 }
