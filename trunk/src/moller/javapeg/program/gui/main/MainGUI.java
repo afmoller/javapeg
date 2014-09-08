@@ -2603,73 +2603,80 @@ public class MainGUI extends JFrame {
     }
 
     private void executeLoadThumbnailsProcess() {
+
         Thread thumbNailsFetcher = new Thread() {
 
             @Override
             public void run(){
-                boolean bufferContainsImages = true;
-                while (loadFilesThread.isAlive() || bufferContainsImages) {
+                try {
+                    getThis().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-                    ApplicationContext ac = ApplicationContext.getInstance();
+                    boolean bufferContainsImages = true;
+                    while (loadFilesThread.isAlive() || bufferContainsImages) {
 
-                    final File jpegFile = ac.handleJpegFileLoadBuffer(null, FileLoadingAction.RETRIEVE);
+                        ApplicationContext ac = ApplicationContext.getInstance();
 
-                    if(jpegFile != null) {
+                        final File jpegFile = ac.handleJpegFileLoadBuffer(null, FileLoadingAction.RETRIEVE);
 
-                        JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
+                        if(jpegFile != null) {
 
-                        JToggleButton thumbContainer = new JToggleButton();
-                        thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-                        thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+                            JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 
-                        ToolTips toolTips = configuration.getToolTips();
+                            JToggleButton thumbContainer = new JToggleButton();
+                            thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+                            thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
-                        if (!toolTips.getOverviewState().equals("0")) {
-                            thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile, toolTips.getOverviewState()));
+                            ToolTips toolTips = configuration.getToolTips();
+
+                            if (!toolTips.getOverviewState().equals("0")) {
+                                thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(jpegFile, toolTips.getOverviewState()));
+                            }
+                            thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
+
+                            columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
+                            columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
+
+                            int width = thumbContainer.getIcon().getIconWidth();
+
+                            if (width > iconWidth) {
+                                iconWidth = width;
+                            }
+
+                            addThumbnail(thumbContainer);
+
+                            MetaData metaData = MetaDataRetriever.getMetaData(jpegFile);
+
+                            metaDataTableModel.addTableRow(metaData);
+                            ApplicationContext.getInstance().addMetaDataObject(metaData);
+                            setStatusMessages();
+                            updateGUI();
+                            thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath() - FileRetriever.getInstance().getNonJPEGFiles().size());
+                            thumbnailLoadingProgressBar.setValue(thumbnailLoadingProgressBar.getValue() + 1);
+                            loadedThumbnailButtons.add(thumbContainer);
+                        } else if (!loadFilesThread.isAlive()){
+                            bufferContainsImages = false;
                         }
-                        thumbContainer.setActionCommand(jpegFile.getAbsolutePath());
 
-                        columnMargin = thumbContainer.getBorder().getBorderInsets(thumbContainer).left;
-                        columnMargin += thumbContainer.getBorder().getBorderInsets(thumbContainer).right;
-
-                        int width = thumbContainer.getIcon().getIconWidth();
-
-                        if (width > iconWidth) {
-                            iconWidth = width;
+                        try {
+                            if (loadFilesThread.isAlive()) {
+                                Thread.sleep(10);
+                            }
+                        } catch (InterruptedException e1) {
                         }
-
-                        addThumbnail(thumbContainer);
-
-                        MetaData metaData = MetaDataRetriever.getMetaData(jpegFile);
-
-                        metaDataTableModel.addTableRow(metaData);
-                        ApplicationContext.getInstance().addMetaDataObject(metaData);
-                        setStatusMessages();
-                        updateGUI();
-                        thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath() - FileRetriever.getInstance().getNonJPEGFiles().size());
-                        thumbnailLoadingProgressBar.setValue(thumbnailLoadingProgressBar.getValue() + 1);
-                        loadedThumbnailButtons.add(thumbContainer);
-                    } else if (!loadFilesThread.isAlive()){
-                        bufferContainsImages = false;
                     }
+                    thumbnailLoadingProgressBar.setValue(0);
+                    thumbnailLoadingProgressBar.setVisible(false);
+                    addMouseListener();
+                    setInputsEnabled(true);
+                    loadedThumbnailButtons.addActionListener(thumbNailListener);
+                    loadedThumbnailButtons.addMouseListener(mouseRightClickButtonListener);
+                    startProcessButton.setEnabled(setStartProcessButtonState());
+                    startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
-                    try {
-                        if (loadFilesThread.isAlive()) {
-                            Thread.sleep(10);
-                        }
-                    } catch (InterruptedException e1) {
-                    }
+                    Table.packColumns(metaDataTable, 6);
+                } finally {
+                    getThis().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 }
-                thumbnailLoadingProgressBar.setValue(0);
-                thumbnailLoadingProgressBar.setVisible(false);
-                addMouseListener();
-                setInputsEnabled(true);
-                loadedThumbnailButtons.addActionListener(thumbNailListener);
-                loadedThumbnailButtons.addMouseListener(mouseRightClickButtonListener);
-                startProcessButton.setEnabled(setStartProcessButtonState());
-                startProcessJMenuItem.setEnabled(setStartProcessButtonState());
-
-                Table.packColumns(metaDataTable, 6);
             }
         };
         thumbNailsFetcher.start();
