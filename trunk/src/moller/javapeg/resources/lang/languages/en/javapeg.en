@@ -435,6 +435,7 @@ findimage.categories.addNewSubCategoryToCategory            = Add new sub catego
 findimage.categories.renameSelectedCategory                 = Rename selected category:
 findimage.categories.removeSelectedCategory                 = Remove selected category:
 findimage.categories.saveSelectedCategoriesToSelectedImages = Add the selected categories to all selected images
+findimage.categories.saveSelectedCategoriesToAllImages      = Add the selected categories to all images
 findimage.imagemetadata.label = IMAGE META DATA
 findimage.rating.label         = RATING
 findimage.rating.label.unrated = UNRATED

@@ -1,6 +1,6 @@
 3.0:
 ====
-- Add a add all selected categories to all images alternative in the tagging mode.
+- Add a copy context menu in the image viewer.
 - Add meta data base statistics
 - Test all functionality.
 - Update version numbers in language files
