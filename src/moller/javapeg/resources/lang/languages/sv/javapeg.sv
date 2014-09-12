@@ -437,6 +437,7 @@ findimage.categories.addNewSubCategoryToCategory            = Lägg till ny unde
 findimage.categories.renameSelectedCategory                 = Byt namn på vald kategori:
 findimage.categories.removeSelectedCategory                 = Ta bort vald kategori:
 findimage.categories.saveSelectedCategoriesToSelectedImages = Lägg till valda kategorier till alla markerade bilder
+findimage.categories.saveSelectedCategoriesToAllImages      = Lägg till valda kategorier till alla bilder
 findimage.imagemetadata.label = BILDMETADATA
 findimage.rating.label         = KLASSIFICERING
 findimage.rating.label.unrated = OKLASSIFICERAD

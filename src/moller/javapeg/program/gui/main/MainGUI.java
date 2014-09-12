@@ -322,6 +322,7 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuRenameCategory;
     private JMenuItem popupMenuRemoveCategory;
     private JMenuItem popupMenuSaveSelectedCategoriesToSelectedImages;
+    private JMenuItem popupMenuSaveSelectedCategoriesToAllImages;
     private JMenuItem popupMenuExpandCategoriesTreeStructure;
     private JMenuItem popupMenuCollapseCategoriesTreeStructure;
     private JMenuItem popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList;
@@ -1956,6 +1957,7 @@ public class MainGUI extends JFrame {
         popupMenuRenameCategory.addActionListener(new RenameCategory());
         popupMenuRemoveCategory.addActionListener(new RemoveCategory());
         popupMenuSaveSelectedCategoriesToSelectedImages.addActionListener(new SaveSelectedCategoriesToSelectedImages());
+        popupMenuSaveSelectedCategoriesToAllImages.addActionListener(new SaveSelectedCategoriesToAllImages());
         popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
         popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
         popupMenuAddImagePathToImageRepositoryRename.addActionListener(addSelecetedPathToImageRepository = new AddSelecetedPathToImageRepository());
@@ -2021,6 +2023,7 @@ public class MainGUI extends JFrame {
         rightClickMenuCategories.add(popupMenuRenameCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages = new JMenuItem());
+        rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages = new JMenuItem());
     }
 
     public void createRightClickMenuRename() {
@@ -3997,28 +4000,46 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             List<File> selectedThmbnailButtonsAsFiles = loadedThumbnailButtons.getSelectedAsFileObjects();
+            setSelectedCategoriesToImages(selectedThmbnailButtonsAsFiles);
+        }
+    }
 
-            // Only do this if any image is selected...
-            if (selectedThmbnailButtonsAsFiles != null && !selectedThmbnailButtonsAsFiles.isEmpty()) {
+    /**
+     * This listener class adds the currently selected categories to all images
+     * in the thumbnail overview.
+     *
+     * @author Fredrik
+     *
+     */
+    private class SaveSelectedCategoriesToAllImages implements ActionListener {
 
-                Categories selectedCategoriesFromTreeModel = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            List<File> allThmbnailButtonsAsFiles = loadedThumbnailButtons.getAllAsFileObjects();
+            setSelectedCategoriesToImages(allThmbnailButtonsAsFiles);
+        }
+    }
 
-                // ... and there are any categories selected.
-                if (selectedCategoriesFromTreeModel.size() > 0) {
-                    ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
+    private void setSelectedCategoriesToImages(List<File> imageFiles) {
+        // Only do this if any image is selected...
+        if (imageFiles != null && !imageFiles.isEmpty()) {
 
-                    for (File selectedImageFile : selectedThmbnailButtonsAsFiles) {
-                        ImageMetaDataItem imageMetaDataBaseItem = imddbituc.getImageMetaDataBaseItem(selectedImageFile);
+            Categories selectedCategoriesFromTreeModel = getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
 
-                        if (imageMetaDataBaseItem != null) {
-                            Categories currentlyStoredCategories = imageMetaDataBaseItem.getCategories();
+            // ... and there are any categories selected.
+            if (selectedCategoriesFromTreeModel.size() > 0) {
+                ImageMetaDataDataBaseItemsToUpdateContext imddbituc = ImageMetaDataDataBaseItemsToUpdateContext.getInstance();
 
-                            if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
-                                imddbituc.setFlushNeeded(true);
-                                imageMetaDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
-                            }
+                for (File imageFile : imageFiles) {
+                    ImageMetaDataItem imageMetaDataBaseItem = imddbituc.getImageMetaDataBaseItem(imageFile);
+
+                    if (imageMetaDataBaseItem != null) {
+                        Categories currentlyStoredCategories = imageMetaDataBaseItem.getCategories();
+
+                        if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
+                            imddbituc.setFlushNeeded(true);
+                            imageMetaDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
                         }
                     }
                 }
@@ -4602,17 +4623,16 @@ public class MainGUI extends JFrame {
                     String addCategory = "";
                     String renameCategory = "";
                     String removeCategory = "";
-                    String saveSelectedCategoriesToSelectedImages = "";
 
                     DefaultMutableTreeNode treeNode = null;
 
-                    // Should the category be added at the top level...
                     if (selectedPath == null) {
+                        // Should the category be added at the top level...
                         addCategory = lang.get("findimage.categories.addNewTopLevelCategory");
                         collapseCategory = lang.get("findimage.categories.collapseTopLevelCategories");
                         expandCategory = lang.get("findimage.categories.expandTopLevelCategories");
-                        // ... or as a sub category of an existing category
                     } else {
+                        // ... or as a sub category of an existing category
                         treeNode = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
                         String value = ((CategoryUserObject)treeNode.getUserObject()).getName();
                         collapseCategory = lang.get("findimage.categories.collapseCategory") + " " + value;
@@ -4621,7 +4641,6 @@ public class MainGUI extends JFrame {
                         renameCategory = lang.get("findimage.categories.renameSelectedCategory") + " " + value;
                         removeCategory = lang.get("findimage.categories.removeSelectedCategory") + " " + value;
                     }
-                    saveSelectedCategoriesToSelectedImages = lang.get("findimage.categories.saveSelectedCategoriesToSelectedImages");
 
                     popupMenuAddCategory.setText(addCategory);
                     popupMenuRenameCategory.setText(renameCategory);
@@ -4630,7 +4649,8 @@ public class MainGUI extends JFrame {
                     popupMenuCollapseCategoriesTreeStructure.setText(collapseCategory);
                     popupMenuExpandCategoriesTreeStructure.setText(expandCategory);
 
-                    popupMenuSaveSelectedCategoriesToSelectedImages.setText(saveSelectedCategoriesToSelectedImages);
+                    popupMenuSaveSelectedCategoriesToSelectedImages.setText(lang.get("findimage.categories.saveSelectedCategoriesToSelectedImages"));
+                    popupMenuSaveSelectedCategoriesToAllImages.setText(lang.get("findimage.categories.saveSelectedCategoriesToAllImages"));
 
                     JTree categoryTree = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
@@ -4781,9 +4801,11 @@ public class MainGUI extends JFrame {
                 break;
             }
 
+            rightClickMenuCategories.addSeparator();
+            rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages);
+
             // Add this menu item if there is more than one selected image.
             if (loadedThumbnailButtons.size() > 1) {
-                rightClickMenuCategories.addSeparator();
                 rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
             }
         }
