@@ -1,6 +1,5 @@
 3.0:
 ====
-- Add a copy context menu in the image viewer.
 - Add meta data base statistics
 - Test all functionality.
 - Update version numbers in language files
