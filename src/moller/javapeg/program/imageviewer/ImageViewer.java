@@ -27,6 +27,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -40,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +70,7 @@ import javax.swing.border.EtchedBorder;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
+import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigElement;
@@ -116,6 +119,7 @@ public class ImageViewer extends JFrame {
     private JMenuItem popupMenuPrevious;
     private JMenuItem popupMenuNext;
     private JMenuItem popupMenuAdjustToWindowSize;
+    private JMenuItem popupMenuCopyImageToSystemClipboard;
 
     private JButton previousJButton;
     private JButton nextJButton;
@@ -593,10 +597,12 @@ public class ImageViewer extends JFrame {
         popupMenuPrevious = new JMenuItem(lang.get("imageviewer.popupmenu.back.text"));
         popupMenuNext = new JMenuItem(lang.get("imageviewer.popupmenu.forward.text"));
         popupMenuAdjustToWindowSize = new JMenuItem(lang.get("imageviewer.popupmenu.adjustToWindowSize.text"));
+        popupMenuCopyImageToSystemClipboard = new JMenuItem(lang.get("imageviewer.popupmenu.copyImageToSystemClipboard.text"));
 
         rightClickMenu.add(popupMenuPrevious);
         rightClickMenu.add(popupMenuNext);
         rightClickMenu.add(popupMenuAdjustToWindowSize);
+        rightClickMenu.add(popupMenuCopyImageToSystemClipboard);
     }
 
     // Create Status Bar
@@ -626,6 +632,7 @@ public class ImageViewer extends JFrame {
         popupMenuPrevious.addActionListener(new RightClickMenuListenerPrevious());
         popupMenuNext.addActionListener(new RightClickMenuListenerNext());
         popupMenuAdjustToWindowSize.addActionListener(new RightClickMenuListenerAdjustToWindowSize());
+        popupMenuCopyImageToSystemClipboard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipboard());
         maximizeButton.addActionListener(new OverviewMaximizeButton());
         minimizeButton.addActionListener(new OverviewMinimizeButton());
         rotateLeftButton.addActionListener(new ToolBarButtonRotateLeft());
@@ -819,6 +826,13 @@ public class ImageViewer extends JFrame {
                     return true;
                 }
             }
+
+            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+                if (KeyEvent.VK_C == e.getKeyCode()) {
+                    copyDisplayedImageToSystemClipboard();
+                }
+                return true;
+            }
             return false;
         }
     }
@@ -875,6 +889,14 @@ public class ImageViewer extends JFrame {
         toolBar.setVisible(visible);
     }
 
+    private void copyDisplayedImageToSystemClipboard() {
+        List<File> displayedImageFile = new ArrayList<File>();
+        displayedImageFile.add(imagesToView.get(imageToViewListIndex));
+
+        FileSelection fileSelection = new FileSelection(displayedImageFile);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+    }
+
     private class MouseButtonListener extends MouseAdapter{
         @Override
         public void mouseReleased(MouseEvent e){
@@ -902,6 +924,13 @@ public class ImageViewer extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             adjustToWindowSizeJButton.doClick();
+        }
+    }
+
+    private class RightClickMenuListenerCopyImageToSystemClipboard implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            copyDisplayedImageToSystemClipboard();
         }
     }
 

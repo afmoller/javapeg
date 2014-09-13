@@ -10,6 +10,9 @@
  
  3.0 (2014-xx-xx)
  
+ + In the Imageviewer is it possible to copy the currently displayed image
+   to the System clipboard. 
+ 
  + A slide show functionality with selectable delays have been added to the 
    Imageviewer.
  

@@ -35,9 +35,10 @@ imageviewer.button.startSlideShow.toolTip               = Starta automatisk bild
 imageviewer.button.stopSlideShow.toolTip                = Stoppa automatisk bildvisning
 imageviewer.button.slideShowDelay.toolTip               = Fördröjning, i sekunder, mellan två bilder i den automatiska bildvisningen
 
-imageviewer.popupmenu.back.text               = (Vänsterpil) Föregående
-imageviewer.popupmenu.forward.text            = (Högerpil) Nästa
-imageviewer.popupmenu.adjustToWindowSize.text = (Alt-A) Anpassa till fönsterstorlek
+imageviewer.popupmenu.back.text                       = (Vänsterpil) Föregående
+imageviewer.popupmenu.forward.text                    = (Högerpil) Nästa
+imageviewer.popupmenu.adjustToWindowSize.text         = (Alt-A) Anpassa till fönsterstorlek
+imageviewer.popupmenu.copyImageToSystemClipboard.text = Kopiera bild till urklipp
 
 imageviewer.statusbar.pathToPicture    = Sökväg till bildfilen
 imageviewer.statusbar.sizeLabel        = S:
