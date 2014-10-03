@@ -36,7 +36,7 @@ public class SortedListModel<T extends Object> extends AbstractListModel<T> {
     public SortedListModel(Set<T> values) {
         model = new TreeSet<T>();
         if (model.addAll(values)) {
-            fireContentsChanged(this, 0, getSize());
+            fireIntervalAdded(this, 0, getSize());
         }
     }
 
@@ -73,19 +73,19 @@ public class SortedListModel<T extends Object> extends AbstractListModel<T> {
      */
     public void add(T element) {
         if (model.add(element)) {
-            fireContentsChanged(this, 0, getSize());
+            fireIntervalAdded(this, 0, getSize());
         }
     }
 
     public void addAll(Set<T> elements) {
         if (model.addAll(elements)) {
-            fireContentsChanged(this, 0, getSize());
+            fireIntervalAdded(this, 0, getSize());
         }
     }
 
     public void clear() {
         model.clear();
-        fireContentsChanged(this, 0, getSize());
+        fireIntervalRemoved(this, 0, getSize());
     }
 
     public boolean contains(T element) {
@@ -107,7 +107,7 @@ public class SortedListModel<T extends Object> extends AbstractListModel<T> {
     public boolean removeElement(T element) {
         boolean removed = model.remove(element);
         if (removed) {
-            fireContentsChanged(this, 0, getSize());
+            fireIntervalRemoved(this, 0, getSize());
         }
         return removed;
     }

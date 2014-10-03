@@ -315,7 +315,9 @@ public class ImageMetaDataContextUtil {
         StringBuilder corruptErrorMessage = new StringBuilder();
 
         if(repositoryPaths != null) {
+            Set<ImageRepositoryItem> imageRepositoryItems = new HashSet<ImageRepositoryItem>();
             for (File repositoryPath : repositoryPaths.getPaths()) {
+
                 ImageRepositoryItem iri = new ImageRepositoryItem();
 
                 iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
@@ -364,16 +366,16 @@ public class ImageMetaDataContextUtil {
                             logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
                             logger.logERROR(iox);
                         }
-                        imageRepositoryListModel.add(iri);
+                        imageRepositoryItems.add(iri);
                     } else {
-                        imageRepositoryListModel.add(iri);
+                        imageRepositoryItems.add(iri);
                     }
                     break;
                 case NOT_AVAILABLE:
-                    imageRepositoryListModel.add(iri);
+                    imageRepositoryItems.add(iri);
                     break;
                 case DOES_NOT_EXIST:
-                    imageRepositoryListModel.add(iri);
+                    imageRepositoryItems.add(iri);
                     break;
                 case INCONSISTENT:
                     // Do nothing here, since this status can only be set after
@@ -383,6 +385,7 @@ public class ImageMetaDataContextUtil {
                     break;
                 }
             }
+            imageRepositoryListModel.addAll(imageRepositoryItems);
         }
 
         String[] errorMessages = new String[2];
