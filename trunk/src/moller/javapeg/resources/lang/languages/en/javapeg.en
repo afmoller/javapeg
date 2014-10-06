@@ -234,6 +234,7 @@ maingui.popupmenu.removeImagePathFromImageRepository = Remove directory from ima
 maingui.popupmenu.copyToSystemClipboard              = Copy image to System Clipboard
 maingui.popupmenu.copySelectedToSystemClipboard      = Copy selected image(s) to System Clipboard
 maingui.popupmenu.copyAllToSystemClipboard           = Copy all images to System Clipboard
+maingui.popupmenu.selectAllImages                    = Select all images
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #

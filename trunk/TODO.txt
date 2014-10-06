@@ -1,5 +1,8 @@
 3.0:
 ====
+- Add deselect all images button in the MainGUI
+- Add fullscreen button to the image viewer. 
+- Add startup splashscreen.
 - Add meta data base statistics
 - Test all functionality.
 - Update version numbers in language files

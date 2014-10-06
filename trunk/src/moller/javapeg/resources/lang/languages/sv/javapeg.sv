@@ -234,6 +234,7 @@ maingui.popupmenu.removeImagePathFromImageRepository = Ta bort katalog från bil
 maingui.popupmenu.copyToSystemClipboard              = Kopiera bild till urklipp
 maingui.popupmenu.copySelectedToSystemClipboard      = Kopiera vald(a) bild(er) till urklipp
 maingui.popupmenu.copyAllToSystemClipboard           = Kopiera alla bilder till urklipp
+maingui.popupmenu.selectAllImages                    = Markera alla bilder
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #

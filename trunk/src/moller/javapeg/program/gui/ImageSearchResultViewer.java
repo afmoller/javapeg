@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
@@ -49,9 +48,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -83,7 +79,9 @@ import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Direction;
+import moller.javapeg.program.gui.components.ThumbNailsPanel;
 import moller.javapeg.program.gui.main.LoadedThumbnails;
+import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
@@ -124,7 +122,7 @@ public class ImageSearchResultViewer extends JFrame {
 
     private GridLayout thumbNailGridLayout;
 
-    private JPanel thumbNailsPanel;
+    private ThumbNailsPanel thumbNailsPanel;
     private JScrollPane scrollpane;
     private JProgressBar thumbNailLoadingProgressBar;
 
@@ -136,7 +134,7 @@ public class ImageSearchResultViewer extends JFrame {
     private final Map<File, ImageIcon> imageFileToSelectedImageMapping;
     private final LoadedThumbnails loadedThumbnails;
 
-    SelectedImageIconGenerator selectedImageIconGenerator;
+    private SelectedImageIconGenerator selectedImageIconGenerator;
 
     private JComboBox<Integer> numberOfImagesToDisplaySelectionBox;
     private JButton loadPreviousImages;
@@ -307,7 +305,7 @@ public class ImageSearchResultViewer extends JFrame {
     private JScrollPane createThumbNailsBackgroundPanel(){
 
         thumbNailGridLayout = new GridLayout(0, 6);
-        thumbNailsPanel = new JPanel(thumbNailGridLayout);
+        thumbNailsPanel = new ThumbNailsPanel(thumbNailGridLayout);
 
         JScrollBar hSB = new JScrollBar(JScrollBar.HORIZONTAL);
         JScrollBar vSB = new JScrollBar(JScrollBar.VERTICAL);
@@ -511,7 +509,7 @@ public class ImageSearchResultViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImagesToViewModel imagesToViewModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 
-            for (JToggleButton jToggleButton : getJToggleButtons()) {
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
                 if (jToggleButton.isSelected()) {
                     imagesToViewModel.addElement(new File(jToggleButton.getActionCommand()));
                 }
@@ -529,7 +527,7 @@ public class ImageSearchResultViewer extends JFrame {
                 }
             }
 
-            for (JToggleButton jToggleButton : getJToggleButtons()) {
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
                 if (!jToggleButton.isSelected()) {
                     jToggleButton.setSelected(true);
                     File imageFile = new File(jToggleButton.getActionCommand());
@@ -543,7 +541,7 @@ public class ImageSearchResultViewer extends JFrame {
     private class RightClickMenuListenerDeSelectAll implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            for (JToggleButton jToggleButton : getJToggleButtons()) {
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
                 if (jToggleButton.isSelected()) {
                     ButtonIconUtil.setDeSelectedThumbNailImage(jToggleButton);
                     jToggleButton.setSelected(false);
@@ -569,7 +567,7 @@ public class ImageSearchResultViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             List<File> selectedFiles = new ArrayList<File>();
 
-            for (JToggleButton jToggleButton : getJToggleButtons()) {
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
                 selectedFiles.add(new File(jToggleButton.getActionCommand()));
             }
             FileSelection fileSelection = new FileSelection(selectedFiles);
@@ -683,19 +681,6 @@ public class ImageSearchResultViewer extends JFrame {
 
     private void setWindowTitle(int toIndex) {
         setTitle(String.format(lang.get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInResultSet.size()));
-    }
-
-    private List<JToggleButton> getJToggleButtons() {
-        List<JToggleButton> jToggleButtons = new ArrayList<JToggleButton>();
-
-        Component[] components = thumbNailsPanel.getComponents();
-
-        for (Component component : components) {
-            if (component instanceof JToggleButton) {
-                jToggleButtons.add((JToggleButton)component);
-            }
-        }
-        return jToggleButtons;
     }
 
     /**
@@ -828,48 +813,10 @@ public class ImageSearchResultViewer extends JFrame {
 
             getThis().setCursor(Cursor.getDefaultCursor());
 
-            // ... and start the background task or "creating selected" images
+            // ... and start the background task of "creating selected" images
             //for the JToggleButtons.
-            selectedImageIconGenerator = new SelectedImageIconGenerator();
+            selectedImageIconGenerator = new SelectedImageIconGenerator(loadedThumbnails, imageFileToSelectedImageMapping);
             selectedImageIconGenerator.execute();
-        }
-    }
-
-    private class SelectedImageIconGenerator extends SwingWorker<Void, String> {
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            logger.logDEBUG("Starting to create selected images for the " + loadedThumbnails.size() + " loaded thumbnails in the search result window");
-
-            ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
-            final int percentage = grayFilter.getPercentage();
-            final boolean pixelsBrightened = grayFilter.isPixelsBrightened();
-
-            ExecutorService newCachedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-            for (final JToggleButton loadedThumbnail : loadedThumbnails) {
-                final String actionCommand = loadedThumbnail.getActionCommand();
-                final File actionCommandAsFile = new File(actionCommand);
-
-                newCachedThreadPool.submit(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (!imageFileToSelectedImageMapping.containsKey(actionCommandAsFile)) {
-                            Image selectedIcon = ButtonIconUtil.getSelectedIcon(loadedThumbnail, pixelsBrightened, percentage);
-                            imageFileToSelectedImageMapping.put(actionCommandAsFile, new ImageIcon(selectedIcon));
-                        }
-                    }
-                });
-            }
-
-            logger.logDEBUG("Waiting for treads to finnish");
-            newCachedThreadPool.shutdown();
-            newCachedThreadPool.awaitTermination(1, TimeUnit.MINUTES);
-            logger.logDEBUG("Finished waiting for treads to finnish");
-
-            logger.logDEBUG("Finished to create selected images for thumbnails in search result window");
-            return null;
         }
     }
 }
