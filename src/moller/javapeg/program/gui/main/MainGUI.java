@@ -179,11 +179,13 @@ import moller.javapeg.program.gui.MetaDataPanel;
 import moller.javapeg.program.gui.StatusPanel;
 import moller.javapeg.program.gui.VariablesPanel;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
+import moller.javapeg.program.gui.components.ThumbNailsPanel;
 import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
 import moller.javapeg.program.gui.tab.ImageMergeTab;
+import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
@@ -315,6 +317,10 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuRemoveImagePathFromImageRepositoryMerge;
     private JMenuItem popupMenuRemoveImagePathFromImageRepositoryView;
     private JMenuItem popupMenuRemoveImagePathFromImageRepositoryTag;
+    private JMenuItem popupMenuSelectAllImagesRename;
+    private JMenuItem popupMenuSelectAllImagesMerge;
+    private JMenuItem popupMenuSelectAllImagesView;
+    private JMenuItem popupMenuSelectAllImagesTag;
     private JMenuItem popupMenuAddImageToViewList;
     private JMenuItem popupMenuAddSelectedImagesToViewList;
     private JMenuItem popupMenuAddAllImagesToViewList;
@@ -335,7 +341,7 @@ public class MainGUI extends JFrame {
     private JPopupMenu rightClickMenuDirectoryTree;
     private JPopupMenu rightClickMenuMerge;
 
-    private JPanel thumbNailsPanel;
+    private ThumbNailsPanel thumbNailsPanel;
     private JPanel thumbNailsBackgroundsPanel;
 
     private JSplitPane thumbNailMetaPanelSplitPane;
@@ -419,7 +425,10 @@ public class MainGUI extends JFrame {
      * This object keeps track on which thumbnails that are loaded and selected
      * in the thumbnailoverview part of this GUI.
      */
-    private final LoadedThumbnails loadedThumbnailButtons = new LoadedThumbnails();
+    private final LoadedThumbnails loadedThumbnails = new LoadedThumbnails();
+
+    private final Map<File, ImageIcon> imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
+    private SelectedImageIconGenerator selectedImageIconGenerator;
 
     /** Provides nice icons and names for files. */
     private final FileSystemView fileSystemView;
@@ -665,7 +674,7 @@ public class MainGUI extends JFrame {
     private JScrollPane createThumbNailsBackgroundPanel(){
 
         thumbNailGridLayout = new GridLayout(0, 6);
-        thumbNailsPanel = new JPanel(thumbNailGridLayout);
+        thumbNailsPanel = new ThumbNailsPanel(thumbNailGridLayout);
 
         JScrollBar hSB = new JScrollBar(JScrollBar.HORIZONTAL);
         JScrollBar vSB = new JScrollBar(JScrollBar.VERTICAL);
@@ -1943,6 +1952,13 @@ public class MainGUI extends JFrame {
         popupMenuCopyAllImagesToClipBoardView.addActionListener(new CopyAllImagesToSystemClipBoard());
         popupMenuCopyAllImagesToClipBoardTag.addActionListener(new CopyAllImagesToSystemClipBoard());
 
+        SelectAllImagesAction selectAllImagesAction = new SelectAllImagesAction();
+        selectAllImagesAction.putValue(Action.NAME, lang.get("maingui.popupmenu.selectAllImages"));
+        popupMenuSelectAllImagesRename.setAction(selectAllImagesAction);
+        popupMenuSelectAllImagesMerge.setAction(selectAllImagesAction);
+        popupMenuSelectAllImagesView.setAction(selectAllImagesAction);
+        popupMenuSelectAllImagesTag.setAction(selectAllImagesAction);
+
         CopySelectedImagesAction copySelectedImagesAction = new CopySelectedImagesAction();
         copySelectedImagesAction.putValue(Action.NAME, lang.get("maingui.popupmenu.copySelectedToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardRename.setAction(copySelectedImagesAction);
@@ -1984,14 +2000,37 @@ public class MainGUI extends JFrame {
         imageTagPreviewScrollPane.addComponentListener(new ImageTagPreviewScrollPaneListener());
     }
 
+    private class SelectAllImagesAction extends AbstractAction {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            while (!selectedImageIconGenerator.isDone()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e1) {
+                }
+            }
+
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
+                if (!jToggleButton.isSelected()) {
+                    jToggleButton.setSelected(true);
+                    File imageFile = new File(jToggleButton.getActionCommand());
+                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
+                }
+            }
+        }
+    }
+
     private class CopySelectedImagesAction extends AbstractAction {
 
         private static final long serialVersionUID = 1L;
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (loadedThumbnailButtons.size() > 0) {
-                FileSelection fileSelection = new FileSelection(loadedThumbnailButtons.getSelectedAsFileObjects());
+            if (loadedThumbnails.size() > 0) {
+                FileSelection fileSelection = new FileSelection(loadedThumbnails.getSelectedAsFileObjects());
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
             }
         }
@@ -2004,6 +2043,7 @@ public class MainGUI extends JFrame {
         popupMenuCopyImageToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardMerge = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
+        popupMenuSelectAllImagesMerge = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
 
         rightClickMenuMerge = new JPopupMenu();
         rightClickMenuMerge.add(popupMenuAddImagePathToImageRepositoryMerge);
@@ -2012,6 +2052,8 @@ public class MainGUI extends JFrame {
         rightClickMenuMerge.add(popupMenuCopyImageToClipBoardMerge);
         rightClickMenuMerge.add(popupMenuCopySelectedImagesToClipBoardMerge);
         rightClickMenuMerge.add(popupMenuCopyAllImagesToClipBoardMerge);
+        rightClickMenuMerge.addSeparator();
+        rightClickMenuMerge.add(popupMenuSelectAllImagesMerge);
     }
 
     public void createRightClickMenuCategories() {
@@ -2024,6 +2066,7 @@ public class MainGUI extends JFrame {
         rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages = new JMenuItem());
         rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages = new JMenuItem());
+
     }
 
     public void createRightClickMenuRename() {
@@ -2032,6 +2075,7 @@ public class MainGUI extends JFrame {
         popupMenuCopyImageToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardRename = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
+        popupMenuSelectAllImagesRename = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
 
         rightClickMenuRename = new JPopupMenu();
         rightClickMenuRename.add(popupMenuAddImagePathToImageRepositoryRename);
@@ -2040,6 +2084,8 @@ public class MainGUI extends JFrame {
         rightClickMenuRename.add(popupMenuCopyImageToClipBoardRename);
         rightClickMenuRename.add(popupMenuCopySelectedImagesToClipBoardRename);
         rightClickMenuRename.add(popupMenuCopyAllImagesToClipBoardRename);
+        rightClickMenuRename.addSeparator();
+        rightClickMenuRename.add(popupMenuSelectAllImagesRename);
     }
 
     public void createRightClickMenuView(){
@@ -2051,6 +2097,7 @@ public class MainGUI extends JFrame {
         popupMenuAddImageToViewList = new JMenuItem(lang.get("maingui.popupmenu.addImageToList"));
         popupMenuAddSelectedImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addSelectedImagesToList"));
         popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
+        popupMenuSelectAllImagesView = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
 
         rightClickMenuView = new JPopupMenu();
         rightClickMenuView.add(popupMenuAddImagePathToImageRepositoryView);
@@ -2063,6 +2110,8 @@ public class MainGUI extends JFrame {
         rightClickMenuView.add(popupMenuAddImageToViewList);
         rightClickMenuView.add(popupMenuAddSelectedImagesToViewList);
         rightClickMenuView.add(popupMenuAddAllImagesToViewList);
+        rightClickMenuView.addSeparator();
+        rightClickMenuView.add(popupMenuSelectAllImagesView);
     }
 
     public void createRightClickMenuTag() {
@@ -2071,6 +2120,7 @@ public class MainGUI extends JFrame {
         popupMenuCopyImageToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardTag = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
+        popupMenuSelectAllImagesTag = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
 
         rightClickMenuTag = new JPopupMenu();
         rightClickMenuTag.add(popupMenuAddImagePathToImageRepositoryTag);
@@ -2079,6 +2129,8 @@ public class MainGUI extends JFrame {
         rightClickMenuTag.add(popupMenuCopyImageToClipBoardTag);
         rightClickMenuTag.add(popupMenuCopySelectedImagesToClipBoardTag);
         rightClickMenuTag.add(popupMenuCopyAllImagesToClipBoardTag);
+        rightClickMenuTag.addSeparator();
+        rightClickMenuTag.add(popupMenuSelectAllImagesTag);
     }
 
     public void createRightClickMenuDirectoryTree() {
@@ -2601,8 +2653,8 @@ public class MainGUI extends JFrame {
 
         // Remove all references of any old selected thumbnail buttons and
         // finally clear the entire list of the selected buttons.
-        loadedThumbnailButtons.clearSelections();
-        loadedThumbnailButtons.clear();
+        loadedThumbnails.clearSelections();
+        loadedThumbnails.clear();
     }
 
     private void executeLoadThumbnailsProcess() {
@@ -2655,7 +2707,7 @@ public class MainGUI extends JFrame {
                             updateGUI();
                             thumbnailLoadingProgressBar.setMaximum(ac.getNrOfFilesInSourcePath() - FileRetriever.getInstance().getNonJPEGFiles().size());
                             thumbnailLoadingProgressBar.setValue(thumbnailLoadingProgressBar.getValue() + 1);
-                            loadedThumbnailButtons.add(thumbContainer);
+                            loadedThumbnails.add(thumbContainer);
                         } else if (!loadFilesThread.isAlive()){
                             bufferContainsImages = false;
                         }
@@ -2671,14 +2723,19 @@ public class MainGUI extends JFrame {
                     thumbnailLoadingProgressBar.setVisible(false);
                     addMouseListener();
                     setInputsEnabled(true);
-                    loadedThumbnailButtons.addActionListener(thumbNailListener);
-                    loadedThumbnailButtons.addMouseListener(mouseRightClickButtonListener);
+                    loadedThumbnails.addActionListener(thumbNailListener);
+                    loadedThumbnails.addMouseListener(mouseRightClickButtonListener);
                     startProcessButton.setEnabled(setStartProcessButtonState());
                     startProcessJMenuItem.setEnabled(setStartProcessButtonState());
 
                     Table.packColumns(metaDataTable, 6);
                 } finally {
                     getThis().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+                    // Start the background task of "creating selected" images
+                    //for the JToggleButtons.
+                    selectedImageIconGenerator = new SelectedImageIconGenerator(loadedThumbnails, imageFileToSelectedImageMapping);
+                    selectedImageIconGenerator.execute();
                 }
             }
         };
@@ -2999,7 +3056,6 @@ public class MainGUI extends JFrame {
         } finally {
             getThis().setCursor(Cursor.getDefaultCursor());
         }
-
     }
 
     private class ThumbNailListener implements ActionListener {
@@ -3031,9 +3087,9 @@ public class MainGUI extends JFrame {
                     int percentage = grayFilter.getPercentage();
 
                     if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        loadedThumbnailButtons.addSelection(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.addSelection(toggleButton, pixelsBrightened, percentage);
                     } else {
-                        loadedThumbnailButtons.set(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.set(toggleButton, pixelsBrightened, percentage);
                     }
 
                     File jpegImage = new File(e.getActionCommand());
@@ -3081,10 +3137,10 @@ public class MainGUI extends JFrame {
                 else {
                     // if the Ctrl key is NOT pressed, the clear all selection.
                     if (!((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)) {
-                        loadedThumbnailButtons.clearSelections();
+                        loadedThumbnails.clearSelections();
                     }
 
-                    loadedThumbnailButtons.removeSelection(toggleButton);
+                    loadedThumbnails.removeSelection(toggleButton);
 
                     storeCurrentlySelectedImageData();
                     ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setCurrentlySelectedImage(null);
@@ -3638,7 +3694,7 @@ public class MainGUI extends JFrame {
     private class AddSelectedImagesToViewList implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<File> selectedAsFileObjects = loadedThumbnailButtons.getSelectedAsFileObjects();
+            List<File> selectedAsFileObjects = loadedThumbnails.getSelectedAsFileObjects();
             int size = selectedAsFileObjects.size();
 
             for (int index = 0; index < size; index++) {
@@ -3688,7 +3744,7 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            List<File> allDisplayedThumbnailsAsFileObjects = loadedThumbnailButtons.getAllAsFileObjects();
+            List<File> allDisplayedThumbnailsAsFileObjects = loadedThumbnails.getAllAsFileObjects();
             int size = allDisplayedThumbnailsAsFileObjects.size();
 
             for (int index = 0; index < size; index++) {
@@ -3817,7 +3873,7 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<File> selectedThmbnailButtonsAsFiles = loadedThumbnailButtons.getSelectedAsFileObjects();
+            List<File> selectedThmbnailButtonsAsFiles = loadedThumbnails.getSelectedAsFileObjects();
             setSelectedCategoriesToImages(selectedThmbnailButtonsAsFiles);
         }
     }
@@ -3833,7 +3889,7 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<File> allThmbnailButtonsAsFiles = loadedThumbnailButtons.getAllAsFileObjects();
+            List<File> allThmbnailButtonsAsFiles = loadedThumbnails.getAllAsFileObjects();
             setSelectedCategoriesToImages(allThmbnailButtonsAsFiles);
         }
     }
@@ -4622,7 +4678,7 @@ public class MainGUI extends JFrame {
             rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages);
 
             // Add this menu item if there is more than one selected image.
-            if (loadedThumbnailButtons.size() > 1) {
+            if (loadedThumbnails.size() > 1) {
                 rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
             }
         }
