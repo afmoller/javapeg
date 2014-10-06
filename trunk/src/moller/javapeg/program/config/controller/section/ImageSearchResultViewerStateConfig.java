@@ -42,5 +42,4 @@ public class ImageSearchResultViewerStateConfig {
         //  IMAGE SEARCH RESULT VIEWER STATE end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
-
 }
