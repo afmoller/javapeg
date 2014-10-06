@@ -9,6 +9,8 @@
 	<property name="zip_src.name"         value="JavaPEG_${ver}_Src.zip" />
 		
 	<property name="main.class.javepeg"     value="moller.javapeg.StartJavaPEG" />
+	<property name="splashscreen.image"     value="moller/javapeg/resources/images/javapeg.gif" />
+	
 
 	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_util, create_release, create_release_src" />
 
@@ -98,6 +100,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
 				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar lib/imgscalr-lib-4.2.jar" />
+				<attribute name="SplashScreen-Image" value="${splashscreen.image}" />
 			</manifest>
 			<fileset dir="build">
 				<exclude name="**/util/**" />
