@@ -26,6 +26,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -33,6 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -378,10 +381,12 @@ public class MainGUI extends JFrame {
     private JTree tree;
     private JTree categoriesTree;
 
+    // Listeners
     private FileSystemDirectoryTreeMouselistener mouseListener;
     private MouseButtonListener mouseRightClickButtonListener;
     private CategoriesMouseButtonListener categoriesMouseButtonListener;
     private ActionListener addSelecetedPathToImageRepository;
+    private ThumbNailListener thumbNailListener;
 
     private int iconWidth = 160;
     private int columnMargin = 0;
@@ -393,8 +398,6 @@ public class MainGUI extends JFrame {
 
     private StatusPanel statusBar;
     private MetaDataPanel imageMetaDataPanel;
-
-    private ThumbNailListener thumbNailListener;
 
     private final DefaultListModel<File> imagesToViewListModel;
     private final SortedListModel<ImageRepositoryItem> imageRepositoryListModel;
@@ -420,6 +423,8 @@ public class MainGUI extends JFrame {
     private HeadingPanel thumbNailsPanelHeading;
 
     private List<ButtonGroup> importedButtonGroups;
+
+    private KeyEventDispatcher customKeyEventDispatcher;
 
     /**
      * This object keeps track on which thumbnails that are loaded and selected
@@ -821,6 +826,10 @@ public class MainGUI extends JFrame {
                 logger.logERROR(iox);
             }
         }
+
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        customKeyEventDispatcher = new CustomKeyEventDispatcher();
+        manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
         GUI gUI = configuration.getgUI();
 
@@ -2006,19 +2015,47 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            while (!selectedImageIconGenerator.isDone()) {
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e1) {
-                }
+            selectAllImages();
+        }
+    }
+
+    private void selectAllImages() {
+        while (!selectedImageIconGenerator.isDone()) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e1) {
+            }
+        }
+
+        JToggleButton firstJToggleButton = null;
+        JToggleButton jToggleButtonToSelect = null;
+
+        for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
+            if (firstJToggleButton == null) {
+                firstJToggleButton = jToggleButton;
             }
 
-            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
-                if (!jToggleButton.isSelected()) {
-                    jToggleButton.setSelected(true);
-                    File imageFile = new File(jToggleButton.getActionCommand());
-                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
-                }
+            if (jToggleButton.isSelected()) {
+                jToggleButtonToSelect = jToggleButton;
+                break;
+            }
+        }
+
+        if (jToggleButtonToSelect == null) {
+            jToggleButtonToSelect = firstJToggleButton;
+        }
+
+        jToggleButtonToSelect.setSelected(true);
+        ActionEvent actionEvent = new  ActionEvent(jToggleButtonToSelect, ActionEvent.ACTION_PERFORMED, jToggleButtonToSelect.getActionCommand());
+        for (ActionListener listener : jToggleButtonToSelect.getActionListeners()) {
+            listener.actionPerformed(actionEvent);
+        }
+
+        for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
+            if (!jToggleButton.isSelected()) {
+                jToggleButton.setSelected(true);
+                File imageFile = new File(jToggleButton.getActionCommand());
+                jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
             }
         }
     }
@@ -4977,6 +5014,20 @@ public class MainGUI extends JFrame {
                 }
             }
             return null;
+        }
+    }
+
+    private class CustomKeyEventDispatcher implements KeyEventDispatcher {
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+
+            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+                if (KeyEvent.VK_A == e.getKeyCode()) {
+                    selectAllImages();
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
