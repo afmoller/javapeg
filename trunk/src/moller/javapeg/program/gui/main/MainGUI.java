@@ -324,6 +324,10 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuSelectAllImagesMerge;
     private JMenuItem popupMenuSelectAllImagesView;
     private JMenuItem popupMenuSelectAllImagesTag;
+    private JMenuItem popupMenuDeSelectAllImagesRename;
+    private JMenuItem popupMenuDeSelectAllImagesMerge;
+    private JMenuItem popupMenuDeSelectAllImagesView;
+    private JMenuItem popupMenuDeSelectAllImagesTag;
     private JMenuItem popupMenuAddImageToViewList;
     private JMenuItem popupMenuAddSelectedImagesToViewList;
     private JMenuItem popupMenuAddAllImagesToViewList;
@@ -1968,6 +1972,13 @@ public class MainGUI extends JFrame {
         popupMenuSelectAllImagesView.setAction(selectAllImagesAction);
         popupMenuSelectAllImagesTag.setAction(selectAllImagesAction);
 
+        DeSelectAllImagesAction deSelectAllImagesAction = new DeSelectAllImagesAction();
+        deSelectAllImagesAction.putValue(Action.NAME, lang.get("maingui.popupmenu.deSelectAllImages"));
+        popupMenuDeSelectAllImagesRename.setAction(deSelectAllImagesAction);
+        popupMenuDeSelectAllImagesMerge.setAction(deSelectAllImagesAction);
+        popupMenuDeSelectAllImagesView.setAction(deSelectAllImagesAction);
+        popupMenuDeSelectAllImagesTag.setAction(deSelectAllImagesAction);
+
         CopySelectedImagesAction copySelectedImagesAction = new CopySelectedImagesAction();
         copySelectedImagesAction.putValue(Action.NAME, lang.get("maingui.popupmenu.copySelectedToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardRename.setAction(copySelectedImagesAction);
@@ -2017,6 +2028,33 @@ public class MainGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             selectAllImages();
         }
+    }
+
+    private class DeSelectAllImagesAction extends AbstractAction {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            deSelectAllImages(e, null);
+        }
+    }
+
+    private void deSelectAllImages(ActionEvent e, JToggleButton toggleButton) {
+        // if the Ctrl key is NOT pressed, then clear all selection.
+        if (!((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)) {
+            loadedThumbnails.clearSelections();
+        }
+
+        if (toggleButton != null) {
+            loadedThumbnails.removeSelection(toggleButton);
+        }
+
+        storeCurrentlySelectedImageData();
+        ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setCurrentlySelectedImage(null);
+        clearTagTab();
+        setRatingCommentAndCategoryEnabled(false);
+        imageMetaDataPanel.clearMetaData();
     }
 
     private void selectAllImages() {
@@ -2074,13 +2112,13 @@ public class MainGUI extends JFrame {
     }
 
     public void createRightClickMenuMerge() {
-
         popupMenuAddImagePathToImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.addImagePathToImageRepository"));
         popupMenuRemoveImagePathFromImageRepositoryMerge = new JMenuItem(lang.get("maingui.popupmenu.removeImagePathFromImageRepository"));
         popupMenuCopyImageToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyToSystemClipboard"));
         popupMenuCopySelectedImagesToClipBoardMerge = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardMerge = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
         popupMenuSelectAllImagesMerge = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
+        popupMenuDeSelectAllImagesMerge = new JMenuItem(lang.get("maingui.popupmenu.deSelectAllImages"));
 
         rightClickMenuMerge = new JPopupMenu();
         rightClickMenuMerge.add(popupMenuAddImagePathToImageRepositoryMerge);
@@ -2091,6 +2129,7 @@ public class MainGUI extends JFrame {
         rightClickMenuMerge.add(popupMenuCopyAllImagesToClipBoardMerge);
         rightClickMenuMerge.addSeparator();
         rightClickMenuMerge.add(popupMenuSelectAllImagesMerge);
+        rightClickMenuMerge.add(popupMenuDeSelectAllImagesMerge);
     }
 
     public void createRightClickMenuCategories() {
@@ -2113,6 +2152,7 @@ public class MainGUI extends JFrame {
         popupMenuCopySelectedImagesToClipBoardRename = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardRename = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
         popupMenuSelectAllImagesRename = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
+        popupMenuDeSelectAllImagesRename = new JMenuItem(lang.get("maingui.popupmenu.deSelectAllImages"));
 
         rightClickMenuRename = new JPopupMenu();
         rightClickMenuRename.add(popupMenuAddImagePathToImageRepositoryRename);
@@ -2123,6 +2163,7 @@ public class MainGUI extends JFrame {
         rightClickMenuRename.add(popupMenuCopyAllImagesToClipBoardRename);
         rightClickMenuRename.addSeparator();
         rightClickMenuRename.add(popupMenuSelectAllImagesRename);
+        rightClickMenuRename.add(popupMenuDeSelectAllImagesRename);
     }
 
     public void createRightClickMenuView(){
@@ -2135,6 +2176,7 @@ public class MainGUI extends JFrame {
         popupMenuAddSelectedImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addSelectedImagesToList"));
         popupMenuAddAllImagesToViewList = new JMenuItem(lang.get("maingui.popupmenu.addAllImagesToList"));
         popupMenuSelectAllImagesView = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
+        popupMenuDeSelectAllImagesView = new JMenuItem(lang.get("maingui.popupmenu.deSelectAllImages"));
 
         rightClickMenuView = new JPopupMenu();
         rightClickMenuView.add(popupMenuAddImagePathToImageRepositoryView);
@@ -2149,6 +2191,7 @@ public class MainGUI extends JFrame {
         rightClickMenuView.add(popupMenuAddAllImagesToViewList);
         rightClickMenuView.addSeparator();
         rightClickMenuView.add(popupMenuSelectAllImagesView);
+        rightClickMenuView.add(popupMenuDeSelectAllImagesView);
     }
 
     public void createRightClickMenuTag() {
@@ -2158,6 +2201,7 @@ public class MainGUI extends JFrame {
         popupMenuCopySelectedImagesToClipBoardTag = new JMenuItem();
         popupMenuCopyAllImagesToClipBoardTag = new JMenuItem(lang.get("maingui.popupmenu.copyAllToSystemClipboard"));
         popupMenuSelectAllImagesTag = new JMenuItem(lang.get("maingui.popupmenu.selectAllImages"));
+        popupMenuDeSelectAllImagesTag = new JMenuItem(lang.get("maingui.popupmenu.deSelectAllImages"));
 
         rightClickMenuTag = new JPopupMenu();
         rightClickMenuTag.add(popupMenuAddImagePathToImageRepositoryTag);
@@ -2168,6 +2212,7 @@ public class MainGUI extends JFrame {
         rightClickMenuTag.add(popupMenuCopyAllImagesToClipBoardTag);
         rightClickMenuTag.addSeparator();
         rightClickMenuTag.add(popupMenuSelectAllImagesTag);
+        rightClickMenuTag.add(popupMenuDeSelectAllImagesTag);
     }
 
     public void createRightClickMenuDirectoryTree() {
@@ -3172,18 +3217,7 @@ public class MainGUI extends JFrame {
                 }
                 // An image is deselected
                 else {
-                    // if the Ctrl key is NOT pressed, the clear all selection.
-                    if (!((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)) {
-                        loadedThumbnails.clearSelections();
-                    }
-
-                    loadedThumbnails.removeSelection(toggleButton);
-
-                    storeCurrentlySelectedImageData();
-                    ImageMetaDataDataBaseItemsToUpdateContext.getInstance().setCurrentlySelectedImage(null);
-                    clearTagTab();
-                    setRatingCommentAndCategoryEnabled(false);
-                    imageMetaDataPanel.clearMetaData();
+                    deSelectAllImages(e, toggleButton);
                 }
             }
         }
