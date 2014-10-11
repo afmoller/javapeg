@@ -120,6 +120,8 @@ public class ImageViewer extends JFrame {
     private JMenuItem popupMenuNext;
     private JMenuItem popupMenuAdjustToWindowSize;
     private JMenuItem popupMenuCopyImageToSystemClipboard;
+    private JMenuItem popupMenuFullScreenView;
+    private JMenuItem popupMenuExitFullScreenView;
 
     private JButton previousJButton;
     private JButton nextJButton;
@@ -598,11 +600,15 @@ public class ImageViewer extends JFrame {
         popupMenuNext = new JMenuItem(lang.get("imageviewer.popupmenu.forward.text"));
         popupMenuAdjustToWindowSize = new JMenuItem(lang.get("imageviewer.popupmenu.adjustToWindowSize.text"));
         popupMenuCopyImageToSystemClipboard = new JMenuItem(lang.get("imageviewer.popupmenu.copyImageToSystemClipboard.text"));
+        popupMenuFullScreenView = new JMenuItem(lang.get("imageviewer.popupmenu.fullScreenView.text"));
+        popupMenuExitFullScreenView = new JMenuItem(lang.get("imageviewer.popupmenu.exitFullScreenView.text"));
 
         rightClickMenu.add(popupMenuPrevious);
         rightClickMenu.add(popupMenuNext);
         rightClickMenu.add(popupMenuAdjustToWindowSize);
         rightClickMenu.add(popupMenuCopyImageToSystemClipboard);
+        rightClickMenu.add(popupMenuFullScreenView);
+        rightClickMenu.add(popupMenuExitFullScreenView);
     }
 
     // Create Status Bar
@@ -633,6 +639,8 @@ public class ImageViewer extends JFrame {
         popupMenuNext.addActionListener(new RightClickMenuListenerNext());
         popupMenuAdjustToWindowSize.addActionListener(new RightClickMenuListenerAdjustToWindowSize());
         popupMenuCopyImageToSystemClipboard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipboard());
+        popupMenuFullScreenView.addActionListener(new RightClickMenuListenerFullScreenView());
+        popupMenuExitFullScreenView.addActionListener(new RightClickMenuListenerExitFullScreenView());
         maximizeButton.addActionListener(new OverviewMaximizeButton());
         minimizeButton.addActionListener(new OverviewMinimizeButton());
         rotateLeftButton.addActionListener(new ToolBarButtonRotateLeft());
@@ -901,6 +909,13 @@ public class ImageViewer extends JFrame {
         @Override
         public void mouseReleased(MouseEvent e){
             if(e.isPopupTrigger()) {
+                if (fullScreenEnabled) {
+                    popupMenuFullScreenView.setVisible(false);
+                    popupMenuExitFullScreenView.setVisible(true);
+                } else {
+                    popupMenuFullScreenView.setVisible(true);
+                    popupMenuExitFullScreenView.setVisible(false);
+                }
                 rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
             }
         }
@@ -931,6 +946,20 @@ public class ImageViewer extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             copyDisplayedImageToSystemClipboard();
+        }
+    }
+
+    private class RightClickMenuListenerFullScreenView implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            enterFullScreenMode();
+        }
+    }
+
+    private class RightClickMenuListenerExitFullScreenView implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            escapeFullScreenMode();
         }
     }
 
