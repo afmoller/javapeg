@@ -35,7 +35,7 @@ import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.model.SortedListModel;
+import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.Status;
 import moller.util.result.ResultObject;
@@ -299,7 +299,7 @@ public class ImageMetaDataContextUtil {
      *            if the path does not longer exist, then it will be
      *            automatically removed from the list of configured repository
      *            paths.
-     * @param imageRepositoryListModel
+     * @param imageRepositoriesTableModel
      *            to which model the the {@link ImageRepositoryItem} objects
      *            shall be added.
      * @param logger
@@ -308,7 +308,7 @@ public class ImageMetaDataContextUtil {
      *         to be restarted after the de-serialization of all image meta data
      *         files.
      */
-    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, SortedListModel<ImageRepositoryItem> imageRepositoryListModel, Logger logger) {
+    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, ImageRepositoriesTableModel imageRepositoriesTableModel, Logger logger) {
 
         ResultObject<String[]> result = null;
         StringBuilder inconsistenceErrorMessage = new StringBuilder();
@@ -385,7 +385,7 @@ public class ImageMetaDataContextUtil {
                     break;
                 }
             }
-            imageRepositoryListModel.addAll(imageRepositoryItems);
+            imageRepositoriesTableModel.addAll(imageRepositoryItems);
         }
 
         String[] errorMessages = new String[2];

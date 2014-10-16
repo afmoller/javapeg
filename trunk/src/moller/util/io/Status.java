@@ -16,10 +16,34 @@
  ******************************************************************************/
 package moller.util.io;
 
+import java.awt.Color;
+
 public enum Status {
-	EXISTS,
-	NOT_AVAILABLE,
-	DOES_NOT_EXIST,
-	INCONSISTENT,
-	CORRUPT;
+    CORRUPT("configviewer.tag.imageRepositories.label.corruptTooltip", "configviewer.tag.imageRepositories.label.corrupt", new Color(255,0,51)),
+    DOES_NOT_EXIST("configviewer.tag.imageRepositories.label.doesNotExistTooltip", "configviewer.tag.imageRepositories.label.doesNotExist", new Color(255,127,127)),
+    EXISTS("configviewer.tag.imageRepositories.label.existsTooltip", "configviewer.tag.imageRepositories.label.exists", new Color(127,255,127)),
+    INCONSISTENT("configviewer.tag.imageRepositories.label.inconsistentTooltip", "configviewer.tag.imageRepositories.label.inconsistent", new Color(255,0,51)),
+	NOT_AVAILABLE("configviewer.tag.imageRepositories.label.notAvailableTooltip", "configviewer.tag.imageRepositories.label.notAvailable", new Color(251,231,128));
+
+	private String toolTipTextKey;
+    private String textKey;
+	private Color bakgroundColor;
+
+	Status(String toolTipTextKey, String textKey, Color bakgroundColor) {
+	    this.toolTipTextKey = toolTipTextKey;
+	    this.textKey = textKey;
+	    this.bakgroundColor = bakgroundColor;
+	}
+
+	public String getToolTipTextKey() {
+        return toolTipTextKey;
+    }
+
+    public String getTextKey() {
+        return textKey;
+    }
+
+    public Color getBakgroundColor() {
+        return bakgroundColor;
+    }
 }

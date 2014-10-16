@@ -16,7 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
-import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 
 public class ModelInstanceLibrary {
 
@@ -27,7 +26,7 @@ public class ModelInstanceLibrary {
 
     private final MetaDataTableModel metaDataTableModel;
     private final PreviewTableModel  previewTableModel;
-    private final SortedListModel<ImageRepositoryItem> imageRepositoryListModel;
+    private final ImageRepositoriesTableModel imageRepositoriesTableModel;
     private final ImagesToViewModel  imagesToViewModel;
     private final CategoriesModel    categoriesModel;
 
@@ -35,11 +34,11 @@ public class ModelInstanceLibrary {
      * Private constructor.
      */
     private ModelInstanceLibrary() {
-        metaDataTableModel       = new MetaDataTableModel();
-        previewTableModel        = new PreviewTableModel();
-        imagesToViewModel        = new ImagesToViewModel();
-        imageRepositoryListModel = new SortedListModel<ImageRepositoryItem>();
-        categoriesModel          = new CategoriesModel(null);
+        imageRepositoriesTableModel = new ImageRepositoriesTableModel();
+        metaDataTableModel          = new MetaDataTableModel();
+        previewTableModel           = new PreviewTableModel();
+        imagesToViewModel           = new ImagesToViewModel();
+        categoriesModel             = new CategoriesModel(null);
     }
 
     /**
@@ -66,15 +65,15 @@ public class ModelInstanceLibrary {
         return previewTableModel;
     }
 
-    public SortedListModel<ImageRepositoryItem> getImageRepositoryListModel() {
-        return imageRepositoryListModel;
-    }
-
     public ImagesToViewModel getImagesToViewModel() {
         return imagesToViewModel;
     }
 
     public CategoriesModel getCategoriesModel() {
         return categoriesModel;
+    }
+
+    public ImageRepositoriesTableModel getImageRepositoriesTableModel() {
+        return imageRepositoriesTableModel;
     }
 }
