@@ -17,7 +17,7 @@
 package moller.javapeg.program.gui;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 public class CustomizedJTable extends JTable {
 
@@ -26,7 +26,7 @@ public class CustomizedJTable extends JTable {
      */
     private static final long serialVersionUID = 1L;
 
-    public CustomizedJTable(DefaultTableModel metaDataTableModel) {
+    public CustomizedJTable(AbstractTableModel metaDataTableModel) {
         super(metaDataTableModel);
     }
 

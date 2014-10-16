@@ -30,9 +30,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -75,6 +77,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
@@ -99,18 +103,19 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Level;
-import moller.javapeg.program.gui.CustomCellRenderer;
+import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
-import moller.javapeg.program.model.SortedListModel;
 import moller.util.gui.Screen;
 import moller.util.image.ImageUtil;
 import moller.util.io.PathUtil;
+import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.java.SystemProperties;
 import moller.util.jpeg.JPEGScaleAlgorithm;
@@ -216,7 +221,8 @@ public class ConfigViewerGUI extends JFrame {
     private JList<ImportedCategories> importedCategoriesList;
     private JList<Object> imageRepositoriesAllwaysAddList;
     private JList<Object> imageRepositoriesNeverAddList;
-    private JList<ImageRepositoryItem> imageRepositoriesList;
+
+    private CustomizedJTable imageRepositoriesTable;
 
     private JPopupMenu importedCategoriesPopupMenu;
     private ImportedCategories theImportedCategoriesToRenameOrDelete;
@@ -993,11 +999,15 @@ public class ConfigViewerGUI extends JFrame {
             logger.logERROR(iox);
         }
 
-        imageRepositoriesList = new JList<ImageRepositoryItem>(ModelInstanceLibrary.getInstance().getImageRepositoryListModel());
-        imageRepositoriesList.setCellRenderer(new CustomCellRenderer());
-        imageRepositoriesList.setVisibleRowCount(5);
+        ImageRepositoriesTableModel imageRepositoriesTableModel = ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel();
 
-        JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesList);
+        TableRowSorter<TableModel> imageRepositoriesTableModelSorter = new TableRowSorter<TableModel>(imageRepositoriesTableModel);
+        imageRepositoriesTable = new CustomizedJTable(imageRepositoriesTableModel);
+        imageRepositoriesTable.setRowSorter(imageRepositoriesTableModelSorter);
+        imageRepositoriesTable.getRowSorter().toggleSortOrder(0);
+        imageRepositoriesTable.setDefaultRenderer(Object.class, new ImageRepositoriesTableCellRenderer());
+
+        JScrollPane imageRepositoriesScrollPane = new JScrollPane(imageRepositoriesTable);
         imageRepositoriesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel imageRepositoriesAdditionModePanel = new JPanel(new GridBagLayout());
@@ -1839,36 +1849,17 @@ public class ConfigViewerGUI extends JFrame {
     private class RemoveSelectedImagePathsButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            SortedListModel<ImageRepositoryItem> imageRepositroyListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
+            ImageRepositoriesTableModel imageRepositoriesTableModel = ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel();
 
-            List<ImageRepositoryItem> selectedValues = imageRepositoriesList.getSelectedValuesList();
+            List<ImageRepositoryItem> selectedValues = getSelectedValues(imageRepositoriesTable);
 
             StringBuilder paths = new StringBuilder();
 
             for (Object selectedValue : selectedValues) {
                 ImageRepositoryItem iri = (ImageRepositoryItem)selectedValue;
 
-                String status = "";
+                String status = lang.get(iri.getPathStatus().getTextKey());
 
-                switch (iri.getPathStatus()) {
-                case EXISTS:
-                    status = lang.get("configviewer.tag.imageRepositories.label.exists");
-                    break;
-                case NOT_AVAILABLE:
-                    status = lang.get("configviewer.tag.imageRepositories.label.notAvailable");
-                    break;
-                case DOES_NOT_EXIST:
-                    status = lang.get("configviewer.tag.imageRepositories.label.doesNotExist");
-                    break;
-                case INCONSISTENT:
-                    status = lang.get("configviewer.tag.imageRepositories.label.inconsistent");
-                    break;
-                case CORRUPT:
-                    status = lang.get("configviewer.tag.imageRepositories.label.corrupt");
-                    break;
-                default:
-                    break;
-                }
                 paths.append(iri.getPath() + " (" + status + ")");
                 paths.append(C.LS);
             }
@@ -1877,9 +1868,26 @@ public class ConfigViewerGUI extends JFrame {
 
             if (result == 0) {
                 for (ImageRepositoryItem selectedValue : selectedValues) {
-                    imageRepositroyListModel.removeElement(selectedValue);
+                    imageRepositoriesTableModel.removeRow(selectedValue);
                 }
             }
+        }
+
+        private List<ImageRepositoryItem> getSelectedValues(CustomizedJTable imageRepositoriesTable) {
+
+            int[] selectedRows = imageRepositoriesTable.getSelectedRows();
+
+            List<ImageRepositoryItem> selectedValues = new ArrayList<ImageRepositoryItem>();
+
+            for (int selectedRow : selectedRows) {
+                File path = (File) imageRepositoriesTable.getValueAt(selectedRow, 0);
+                Status status = (Status) imageRepositoriesTable.getValueAt(selectedRow, 1);
+
+                ImageRepositoryItem iri = new ImageRepositoryItem(path, status);
+
+                selectedValues.add(iri);
+            }
+            return selectedValues;
         }
     }
 

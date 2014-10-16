@@ -58,7 +58,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 
@@ -204,10 +203,10 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
+import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.javapeg.program.model.MetaDataTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.javapeg.program.model.PreviewTableModel;
-import moller.javapeg.program.model.SortedListModel;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
@@ -404,7 +403,7 @@ public class MainGUI extends JFrame {
     private MetaDataPanel imageMetaDataPanel;
 
     private final DefaultListModel<File> imagesToViewListModel;
-    private final SortedListModel<ImageRepositoryItem> imageRepositoryListModel;
+    private final ImageRepositoriesTableModel imageRepositoriesTableModel;
 
     private JList<File> imagesToViewList;
 
@@ -471,7 +470,7 @@ public class MainGUI extends JFrame {
         fileSystemView = FileSystemView.getFileSystemView();
 
         imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
-        imageRepositoryListModel = ModelInstanceLibrary.getInstance().getImageRepositoryListModel();
+        imageRepositoriesTableModel = ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel();
 
         this.printSystemPropertiesToLogFile();
         this.overrideSwingUIProperties();
@@ -2288,13 +2287,7 @@ public class MainGUI extends JFrame {
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_AND_COMMENT, previewAndCommentSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitpane.getDividerLocation());
 
-        SortedSet<ImageRepositoryItem> imageRepositoryItems = imageRepositoryListModel.getModel();
-
-        List<File> paths = new ArrayList<File>();
-
-        for (ImageRepositoryItem imageRepositoryItem : imageRepositoryItems) {
-            paths.add(imageRepositoryItem.getPath());
-        }
+        List<File> paths = imageRepositoriesTableModel.getPaths();
 
         RepositoryPaths repositoryPaths = configuration.getRepository().getPaths();
         repositoryPaths.setPaths(paths);
@@ -2954,7 +2947,7 @@ public class MainGUI extends JFrame {
     private void handleRightClickOnFileTreeItem(String totalPath, MouseEvent event) {
         File selectedPath = new File(totalPath);
 
-        if (!imageRepositoryListModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
+        if (!imageRepositoriesTableModel.contains(new ImageRepositoryItem(selectedPath, Status.EXISTS))) {
 
             RepositoryExceptions repositoryExceptions = Config.getInstance().get().getRepository().getExceptions();
 
@@ -4163,7 +4156,9 @@ public class MainGUI extends JFrame {
         @Override
         public void mouseReleased(MouseEvent e){
             if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 0)) {
-                if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+
+
+                if (imageRepositoriesTableModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
                     popupMenuAddImagePathToImageRepositoryMerge.setVisible(false);
                     popupMenuRemoveImagePathFromImageRepositoryMerge.setVisible(true);
                 } else {
@@ -4173,7 +4168,7 @@ public class MainGUI extends JFrame {
                 popupMenuCopyImageToClipBoardMerge.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuMerge.show(e.getComponent(),e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 1)) {
-                if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+                if (imageRepositoriesTableModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
                     popupMenuAddImagePathToImageRepositoryRename.setVisible(false);
                     popupMenuRemoveImagePathFromImageRepositoryRename.setVisible(true);
                 } else {
@@ -4183,7 +4178,7 @@ public class MainGUI extends JFrame {
                 popupMenuCopyImageToClipBoardRename.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuRename.show(e.getComponent(),e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 2)) {
-                if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+                if (imageRepositoriesTableModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
                     popupMenuAddImagePathToImageRepositoryTag.setVisible(false);
                     popupMenuRemoveImagePathFromImageRepositoryTag.setVisible(true);
                 } else {
@@ -4193,7 +4188,7 @@ public class MainGUI extends JFrame {
                 popupMenuCopyImageToClipBoardTag.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
                 rightClickMenuTag.show(e.getComponent(), e.getX(), e.getY());
             } else if(e.isPopupTrigger() && (mainTabbedPane.getSelectedIndex() == 3)) {
-                if (imageRepositoryListModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
+                if (imageRepositoriesTableModel.contains(new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS))) {
                     popupMenuAddImagePathToImageRepositoryView.setVisible(false);
                     popupMenuRemoveImagePathFromImageRepositoryView.setVisible(true);
                 } else {
@@ -4325,7 +4320,7 @@ public class MainGUI extends JFrame {
                  * selected path.
                  */
                 ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
-                imageRepositoryListModel.add(iri);
+                imageRepositoriesTableModel.addRow(iri);
 
                 /**
                  * Add the path to the configuration, so the entry will be
@@ -4371,7 +4366,7 @@ public class MainGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             ImageRepositoryItem iri = new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS);
-            imageRepositoryListModel.removeElement(iri);
+            imageRepositoriesTableModel.removeRow(iri);
         }
     }
 
@@ -4768,7 +4763,7 @@ public class MainGUI extends JFrame {
     private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String[]>, String> {
         @Override
         protected ResultObject<String[]> doInBackground() throws Exception {
-            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), imageRepositoryListModel, logger);
+            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), imageRepositoriesTableModel, logger);
         }
 
         @Override
@@ -4908,7 +4903,7 @@ public class MainGUI extends JFrame {
 
                     ImageMetaDataDataBase imageMetaDataDataBase = null;
 
-                    if (!imageRepositoryListModel.contains(iri)) {
+                    if (!imageRepositoriesTableModel.contains(iri)) {
                         // If the selected path shall not be added to the
                         // image meta data repository, according to policy
                         // and answer then just do nothing
@@ -5027,8 +5022,8 @@ public class MainGUI extends JFrame {
                      * Populate the image repository model with any
                      * unpopulated paths.
                      */
-                    if(!imageRepositoryListModel.contains(iri)) {
-                        imageRepositoryListModel.add(iri);
+                    if(!imageRepositoriesTableModel.contains(iri)) {
+                        imageRepositoriesTableModel.addRow(iri);
                     }
 
                     ac.setImageMetaDataDataBaseFileWritable(canWrite);
