@@ -174,13 +174,21 @@ public class Language {
      * This method returns a language specific String associated to a key in a
      * Properties data structure
      *
-     * @param key is the parameter name for which language specific string
-     *        that shall be returned.
+     * @param key
+     *            is the parameter name for which the language specific string
+     *            shall be returned.
      *
-     * @return a language specific string or null if the key does not exist in
-     *         the Properties data structure.
+     * @return a language specific string or the string MISSING TRANSLATION if
+     *         the key does not exist in the Properties data structure.
      */
     public String get(String key) {
-        return properties.getProperty(key).trim();
+        String property = properties.getProperty(key);
+
+        if (property == null) {
+            logger.logERROR("Translation is missing for key: " + key);
+            return "MISSING TRANSLATION";
+        } else {
+            return property.trim();
+        }
     }
 }
