@@ -109,6 +109,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -2017,6 +2019,7 @@ public class MainGUI extends JFrame {
         fileNameTemplateComboBox.addActionListener(new FileNameTemplateComboBoxListener());
         subFolderTemplateComboBox.addActionListener(new SubFolderTemplateComboBoxListener());
         imageTagPreviewScrollPane.addComponentListener(new ImageTagPreviewScrollPaneListener());
+        imagesToViewListModel.addListDataListener(new ImagesToViewListModelListener());
     }
 
     private class SelectAllImagesAction extends AbstractAction {
@@ -3084,6 +3087,37 @@ public class MainGUI extends JFrame {
     }
 
     /**
+     * Listener which listens for changes of the images to view list model.
+     * Whenever the model is changed, then the {@link JLabel} which displays the
+     * amout of images which are in the image view list is updated with the
+     * correct amount of images.
+     * 
+     * @author Fredrik
+     * 
+     */
+    private class ImagesToViewListModelListener implements ListDataListener {
+
+        @Override
+        public void intervalAdded(ListDataEvent e) {
+            setNrOfImagesLabel(e);
+        }
+
+        @Override
+        public void intervalRemoved(ListDataEvent e) {
+            setNrOfImagesLabel(e);
+        }
+
+        @Override
+        public void contentsChanged(ListDataEvent e) {
+            setNrOfImagesLabel(e);
+        }
+
+        private void setNrOfImagesLabel(ListDataEvent listDataEvent) {
+            setNrOfImagesLabels();
+        }
+    }
+
+    /**
      * This method loads an preview image either from the thumbnail cache, if
      * that is specified by the application settings, or from the orginal image
      * file. If the preview area is smaller than the loaded thumbnail, or the
@@ -3392,7 +3426,6 @@ public class MainGUI extends JFrame {
                         imagesToViewList.setSelectedIndex(firstSelectedIndex);
                     }
                 }
-                setNrOfImagesLabels();
             }
         }
     }
@@ -3403,7 +3436,6 @@ public class MainGUI extends JFrame {
             if (imagesToViewListModel.size() > 0) {
                 imagesToViewListModel.clear();
                 imagePreviewLabel.setIcon(null);
-                setNrOfImagesLabels();
             }
         }
     }
@@ -3470,7 +3502,6 @@ public class MainGUI extends JFrame {
 
                         JOptionPane.showMessageDialog(null, missingFilesErrorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
                     }
-                    setNrOfImagesLabels();
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.couldNotReadFile") + "\n(" + source.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
                     logger.logERROR("Could not read from file:");
@@ -4143,8 +4174,6 @@ public class MainGUI extends JFrame {
         if (addMetaData) {
             imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
             imagesToViewList.ensureIndexIsVisible(imagesToViewList.getSelectedIndex());
-
-            setNrOfImagesLabels();
         }
 
         if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
