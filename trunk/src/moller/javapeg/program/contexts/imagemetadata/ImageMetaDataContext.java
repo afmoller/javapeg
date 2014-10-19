@@ -126,13 +126,15 @@ public class ImageMetaDataContext {
     }
 
     public void addDateTime(String javaPegIdValue, Date dateTime, String imagePath) {
-        dateTimeValues.put(imagePath, dateTime.getTime());
-        addToMap(javaPegIdToYearValues, Integer.parseInt(new SimpleDateFormat("yyyy").format(dateTime)), javaPegIdValue, imagePath);
-        addToMap(javaPegIdToMonthValues, Integer.parseInt(new SimpleDateFormat("MM").format(dateTime)), javaPegIdValue, imagePath);
-        addToMap(javaPegIdToDateValues, Integer.parseInt(new SimpleDateFormat("dd").format(dateTime)), javaPegIdValue, imagePath);
-        addToMap(javaPegIdToHourValues, Integer.parseInt(new SimpleDateFormat("HH").format(dateTime)), javaPegIdValue, imagePath);
-        addToMap(javaPegIdToMinuteValues, Integer.parseInt(new SimpleDateFormat("mm").format(dateTime)), javaPegIdValue, imagePath);
-        addToMap(javaPegIdToSecondValues, Integer.parseInt(new SimpleDateFormat("ss").format(dateTime)), javaPegIdValue, imagePath);
+        if (dateTime != null) {
+            dateTimeValues.put(imagePath, dateTime.getTime());
+            addToMap(javaPegIdToYearValues, Integer.parseInt(new SimpleDateFormat("yyyy").format(dateTime)), javaPegIdValue, imagePath);
+            addToMap(javaPegIdToMonthValues, Integer.parseInt(new SimpleDateFormat("MM").format(dateTime)), javaPegIdValue, imagePath);
+            addToMap(javaPegIdToDateValues, Integer.parseInt(new SimpleDateFormat("dd").format(dateTime)), javaPegIdValue, imagePath);
+            addToMap(javaPegIdToHourValues, Integer.parseInt(new SimpleDateFormat("HH").format(dateTime)), javaPegIdValue, imagePath);
+            addToMap(javaPegIdToMinuteValues, Integer.parseInt(new SimpleDateFormat("mm").format(dateTime)), javaPegIdValue, imagePath);
+            addToMap(javaPegIdToSecondValues, Integer.parseInt(new SimpleDateFormat("ss").format(dateTime)), javaPegIdValue, imagePath);
+        }
     }
 
     private void addToMap(Map<String, Map<Integer, Set<Integer>>> mapToAddTo, Integer value, String javaPegIdValue, String imagePath) {
@@ -156,19 +158,21 @@ public class ImageMetaDataContext {
     }
 
     public void addExposureTime(String javaPegIdValue, ExposureTime exposureTime, String imagePath) {
-        if (!javaPegIdToExposureTimeValues.containsKey(javaPegIdValue)) {
-            Map<String, Set<Integer>> exposureTimeValuesToIndex = new HashMap<String, Set<Integer>>();
+        if (exposureTime != null) {
+            if (!javaPegIdToExposureTimeValues.containsKey(javaPegIdValue)) {
+                Map<String, Set<Integer>> exposureTimeValuesToIndex = new HashMap<String, Set<Integer>>();
 
-            exposureTimeValuesToIndex.put(exposureTime.toString(), new HashSet<Integer>());
-            javaPegIdToExposureTimeValues.put(javaPegIdValue, exposureTimeValuesToIndex);
+                exposureTimeValuesToIndex.put(exposureTime.toString(), new HashSet<Integer>());
+                javaPegIdToExposureTimeValues.put(javaPegIdValue, exposureTimeValuesToIndex);
+            }
+
+            if (!javaPegIdToExposureTimeValues.get(javaPegIdValue).containsKey(exposureTime.toString())) {
+                javaPegIdToExposureTimeValues.get(javaPegIdValue).put(exposureTime.toString(), new HashSet<Integer>());
+            }
+
+            exposureTimeStringExposureTimeMappings.put(exposureTime.toString(), exposureTime);
+            javaPegIdToExposureTimeValues.get(javaPegIdValue).get(exposureTime.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
         }
-
-        if (!javaPegIdToExposureTimeValues.get(javaPegIdValue).containsKey(exposureTime.toString())) {
-            javaPegIdToExposureTimeValues.get(javaPegIdValue).put(exposureTime.toString(), new HashSet<Integer>());
-        }
-
-        exposureTimeStringExposureTimeMappings.put(exposureTime.toString(), exposureTime);
-        javaPegIdToExposureTimeValues.get(javaPegIdValue).get(exposureTime.toString()).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
     }
 
     public void addImageSize(String javaPegIdValue, ImageSize imageSize, String imagePath) {

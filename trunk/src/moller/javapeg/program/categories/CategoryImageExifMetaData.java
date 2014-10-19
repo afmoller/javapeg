@@ -102,7 +102,11 @@ public class CategoryImageExifMetaData {
     }
 
     public String getDateTimeAsString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        return sdf.format(dateTime);
+        if (dateTime != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+            return sdf.format(dateTime);
+        } else {
+            return "";
+        }
     }
 }
