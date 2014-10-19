@@ -256,7 +256,7 @@ public class ImageMetaDataDataBaseHandler {
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.ISO_VALUE     , Integer.toString(ciemd.getIsoValue())     , w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.PICTURE_HEIGHT, Integer.toString(ciemd.getPictureHeight()), w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.PICTURE_WIDTH , Integer.toString(ciemd.getPictureWidth()) , w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.EXPOSURE_TIME , ciemd.getExposureTime().toString() , w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.EXPOSURE_TIME , ciemd.getExposureTime() == null ? "" : ciemd.getExposureTime().toString() , w);
                     XMLUtil.writeElementEnd(w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.COMMENT, imddbi.getComment(), w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.RATING, Integer.toString(imddbi.getRating()), w);
