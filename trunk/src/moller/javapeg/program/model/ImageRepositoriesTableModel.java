@@ -18,13 +18,19 @@ package moller.javapeg.program.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.table.AbstractTableModel;
 
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.language.Language;
+import moller.util.io.Status;
 
 public class ImageRepositoriesTableModel extends AbstractTableModel {
 
@@ -46,7 +52,7 @@ public class ImageRepositoriesTableModel extends AbstractTableModel {
         columnNames[PATH_INDEX] = lang.get("configviewer.tag.imageRepositoriesContent.table.column.path");
         columnNames[PATH_STATUS_INDEX] = lang.get("configviewer.tag.imageRepositoriesContent.table.column.status");
 
-        rows = new ArrayList<Object[]>();
+        rows = Collections.synchronizedList(new ArrayList<Object[]>());
     }
 
     @Override
@@ -111,4 +117,26 @@ public class ImageRepositoriesTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public Map<Status, AtomicInteger> getNumberOfRowsPerStatus() {
+        Map<Status, AtomicInteger> statusToAmountMapping = new HashMap<Status, AtomicInteger>();
+
+        synchronized (rows) {
+            Iterator<Object[]> iterator = rows.iterator();
+            while (iterator.hasNext()) {
+                Object[] row = iterator.next();
+                Status status = (Status)row[PATH_STATUS_INDEX];
+
+                addToMap(status, statusToAmountMapping);
+            }
+        }
+        return statusToAmountMapping;
+    }
+
+    private void addToMap(Status status, Map<Status, AtomicInteger> statusToAmountMapping) {
+        if (statusToAmountMapping.containsKey(status)) {
+            statusToAmountMapping.get(status).incrementAndGet();
+        } else {
+            statusToAmountMapping.put(status, new AtomicInteger(1));
+        }
+    }
 }
