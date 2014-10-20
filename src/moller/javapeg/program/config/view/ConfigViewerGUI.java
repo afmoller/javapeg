@@ -18,6 +18,7 @@ package moller.javapeg.program.config.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -41,6 +42,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -77,6 +79,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -222,6 +226,7 @@ public class ConfigViewerGUI extends JFrame {
     private JList<Object> imageRepositoriesAllwaysAddList;
     private JList<Object> imageRepositoriesNeverAddList;
 
+    private JLabel imageRepositoriesMetaDataLabel;
     private CustomizedJTable imageRepositoriesTable;
 
     private JPopupMenu importedCategoriesPopupMenu;
@@ -390,10 +395,12 @@ public class ConfigViewerGUI extends JFrame {
         enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
         maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());
         removeSelectedImagePathsButton.addActionListener(new RemoveSelectedImagePathsButtonListener());
+
+        ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel().addTableModelListener(new ImageRepositoriesTableModelListener());
     }
 
     private JPanel createButtonPanel() {
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         okButton     = new JButton(lang.get("common.button.ok.label"));
         applyButton  = new JButton(lang.get("common.button.apply.label"));
@@ -1057,7 +1064,9 @@ public class ConfigViewerGUI extends JFrame {
 
         GBHelper posImageRepositoriesContent = new GBHelper();
 
-        imageRepositoriesContentPanel.add(imageRepositoriesScrollPane, posImageRepositoriesContent.expandW().expandH());
+        imageRepositoriesMetaDataLabel = new JLabel();
+        imageRepositoriesContentPanel.add(imageRepositoriesMetaDataLabel, posImageRepositoriesContent);
+        imageRepositoriesContentPanel.add(imageRepositoriesScrollPane, posImageRepositoriesContent.nextRow().expandW().expandH());
         imageRepositoriesContentPanel.add(Box.createVerticalStrut(2), posImageRepositoriesContent.nextRow());
         imageRepositoriesContentPanel.add(buttonPanel, posImageRepositoriesContent.nextRow().align(GridBagConstraints.WEST));
 
@@ -1843,6 +1852,80 @@ public class ConfigViewerGUI extends JFrame {
                 cacheSizeLabel.setText(Integer.toString(jptc.getCurrentSize()));
                 clearCacheJButton.setEnabled(false);
             }
+        }
+    }
+
+    /**
+     * This class listens for changes to the image repositories TableModel and
+     * prints information about how many entries and of which type there are in
+     * the model onto a {@link JLabel}.
+     * 
+     * @author Fredrik
+     * 
+     */
+    private class ImageRepositoriesTableModelListener implements TableModelListener { 
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            ImageRepositoriesTableModel imageRepositoriesTableModel = (ImageRepositoriesTableModel)e.getSource();
+
+            int total = imageRepositoriesTableModel.getRowCount();
+            Map<Status, AtomicInteger> numberOfRowsPerStatus = imageRepositoriesTableModel.getNumberOfRowsPerStatus();
+
+            String labelText = createLabelText(total, numberOfRowsPerStatus);
+            String labelTooltipText = createLabelTooltipText(total, numberOfRowsPerStatus);
+
+            imageRepositoriesMetaDataLabel.setText(labelText);
+            imageRepositoriesMetaDataLabel.setToolTipText(labelTooltipText);
+        }
+
+        private String createLabelTooltipText(int total, Map<Status, AtomicInteger> numberOfRowsPerStatus) {
+            String stringToFormat = createText(total, numberOfRowsPerStatus);
+
+            String totalAmount = lang.get("configviewer.tag.imageRepositories.label.totalAmount");
+            String exists = lang.get("configviewer.tag.imageRepositories.label.exists");
+            String notAvailable = lang.get("configviewer.tag.imageRepositories.label.notAvailable");
+            String doesNotExist = lang.get("configviewer.tag.imageRepositories.label.doesNotExist");
+            String inconsistent = lang.get("configviewer.tag.imageRepositories.label.inconsistent");
+            String corrupt = lang.get("configviewer.tag.imageRepositories.label.corrupt");
+
+            stringToFormat = "<html>" + stringToFormat + "</html>";
+
+            return String.format(stringToFormat,totalAmount, "<br/>" + exists, "<br/>" + doesNotExist, "<br/>" + notAvailable, "<br/>" + inconsistent, "<br/>" + corrupt);
+        }
+
+        private String createLabelText(int total, Map<Status, AtomicInteger> numberOfRowsPerStatus) {
+            String stringToFormat = createText(total, numberOfRowsPerStatus);
+
+            String totalAmountMnemonic = lang.get("configviewer.tag.imageRepositories.label.totalAmountMnemonic");
+            String existsMnemonic = lang.get("configviewer.tag.imageRepositories.label.existsMnemonic");
+            String notAvailableMnemonic = lang.get("configviewer.tag.imageRepositories.label.notAvailableMnemonic");
+            String doesNotExistMnemonic = lang.get("configviewer.tag.imageRepositories.label.doesNotExistMnemonic");
+            String inconsistentMnemonic = lang.get("configviewer.tag.imageRepositories.label.inconsistentMnemonic");
+            String corruptMnemonic = lang.get("configviewer.tag.imageRepositories.label.corruptMnemonic");
+
+            return String.format(stringToFormat, totalAmountMnemonic, existsMnemonic, doesNotExistMnemonic, notAvailableMnemonic, inconsistentMnemonic, corruptMnemonic);
+        }
+
+        private String createText(int total, Map<Status, AtomicInteger> numberOfRowsPerStatus) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("%s: ");
+            builder.append(total);
+            builder.append(" %s: ");
+            builder.append(getNumberOfForStatus(numberOfRowsPerStatus, Status.EXISTS));
+            builder.append(" %s: ");
+            builder.append(getNumberOfForStatus(numberOfRowsPerStatus, Status.DOES_NOT_EXIST));
+            builder.append(" %s: ");
+            builder.append(getNumberOfForStatus(numberOfRowsPerStatus, Status.NOT_AVAILABLE));
+            builder.append(" %s: ");
+            builder.append(getNumberOfForStatus(numberOfRowsPerStatus, Status.INCONSISTENT));
+            builder.append(" %s: ");
+            builder.append(getNumberOfForStatus(numberOfRowsPerStatus, Status.CORRUPT));
+
+            return builder.toString();
+        }
+
+        private Number getNumberOfForStatus(Map<Status, AtomicInteger> numberOfRowsPerStatus, Status status) {
+            return numberOfRowsPerStatus.get(status) == null ? 0 : numberOfRowsPerStatus.get(status);
         }
     }
 
