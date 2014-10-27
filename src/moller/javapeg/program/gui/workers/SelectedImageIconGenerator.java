@@ -31,7 +31,7 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.gui.ButtonIconUtil;
-import moller.javapeg.program.gui.main.LoadedThumbnails;
+import moller.javapeg.program.gui.LoadedThumbnails;
 import moller.javapeg.program.logger.Logger;
 
 public class SelectedImageIconGenerator extends SwingWorker<Void, String> {

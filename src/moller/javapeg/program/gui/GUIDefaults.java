@@ -53,4 +53,8 @@ public class GUIDefaults {
     // Image merge conflict window viewer
     public static final int IMAGE_CONFLICT_VIEWER_WIDTH = 300;
     public static final int IMAGE_CONFLICT_VIEWER_HEIGHT = 600;
+
+    // Image repository statistics viewer
+    public static final int IMAGE_REPOSITORY_STATISTICS_VIEWER_WIDTH = 800;
+    public static final int IMAGE_REPOSITORY_STATISTICS_VIEWER_HEIGHT = 600;
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui.main;
+package moller.javapeg.program.gui.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -172,18 +172,17 @@ import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.gui.CategoriesTransferHandler;
-import moller.javapeg.program.gui.CategoryImportExportPopup;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.FileTreeCellRenderer;
 import moller.javapeg.program.gui.GUIDefaults;
-import moller.javapeg.program.gui.HeadingPanel;
-import moller.javapeg.program.gui.ImageResizer;
-import moller.javapeg.program.gui.ImageSearchResultViewer;
-import moller.javapeg.program.gui.MetaDataPanel;
-import moller.javapeg.program.gui.StatusPanel;
-import moller.javapeg.program.gui.VariablesPanel;
+import moller.javapeg.program.gui.LoadedThumbnails;
 import moller.javapeg.program.gui.checktree.CheckTreeManager;
+import moller.javapeg.program.gui.components.HeadingPanel;
+import moller.javapeg.program.gui.components.MetaDataPanel;
+import moller.javapeg.program.gui.components.StatusPanel;
 import moller.javapeg.program.gui.components.ThumbNailsPanel;
+import moller.javapeg.program.gui.components.VariablesPanel;
+import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
 import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
@@ -3091,9 +3090,9 @@ public class MainGUI extends JFrame {
      * Whenever the model is changed, then the {@link JLabel} which displays the
      * amout of images which are in the image view list is updated with the
      * correct amount of images.
-     * 
+     *
      * @author Fredrik
-     * 
+     *
      */
     private class ImagesToViewListModelListener implements ListDataListener {
 

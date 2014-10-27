@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -42,6 +42,8 @@ import javax.swing.border.TitledBorder;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.JCheckBoxWithUserObject;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.frames;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -75,6 +75,7 @@ import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
+import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;

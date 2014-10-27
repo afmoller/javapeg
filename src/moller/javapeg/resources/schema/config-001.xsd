@@ -54,6 +54,7 @@
             <xs:element name="helpViewer" type="config:GuiWindow" />
             <xs:element name="imageResizer" type="config:GuiWindow" />
             <xs:element name="imageConflictViewer" type="config:GuiWindow" />
+            <xs:element name="imageRepositoryStatisticsViewer" type="config:GuiWindow" />
         </xs:all>
     </xs:complexType>
     
