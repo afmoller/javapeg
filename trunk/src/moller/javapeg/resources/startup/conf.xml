@@ -64,6 +64,12 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <width>300</width>
       <height>600</height>
     </imageConflictViewer>
+    <imageRepositoryStatisticsViewer>
+      <xLocation>10</xLocation>
+      <yLocation>10</yLocation>
+      <width>800</width>
+      <height>600</height>
+    </imageRepositoryStatisticsViewer>
   </gui>
   <updatesChecker>
     <enabled>true</enabled>

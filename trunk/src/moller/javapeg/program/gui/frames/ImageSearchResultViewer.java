@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -79,8 +79,11 @@ import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Direction;
+import moller.javapeg.program.gui.ButtonIconUtil;
+import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.LoadedThumbnails;
+import moller.javapeg.program.gui.components.StatusPanel;
 import moller.javapeg.program.gui.components.ThumbNailsPanel;
-import moller.javapeg.program.gui.main.LoadedThumbnails;
 import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;

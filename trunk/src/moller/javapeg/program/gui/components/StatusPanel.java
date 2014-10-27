@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui;
+package moller.javapeg.program.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

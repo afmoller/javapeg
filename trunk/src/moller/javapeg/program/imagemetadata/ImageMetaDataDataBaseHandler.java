@@ -57,7 +57,7 @@ import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
-import moller.javapeg.program.gui.CategoryImportExportPopup;
+import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.PathUtil;

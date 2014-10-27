@@ -1,4 +1,4 @@
-package moller.javapeg.program.gui.main;
+package moller.javapeg.program.gui;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import moller.javapeg.program.gui.ButtonIconUtil;
 
 /**
  * This class is an extension of an typed {@link ArrayList}. It contains

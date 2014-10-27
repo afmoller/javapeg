@@ -68,6 +68,9 @@ public class GUIConfig {
             case ConfigElement.IMAGE_CONFLICT_VIEWER:
                 gui.setImageConflictViewer(createGUIWindow(node));
                 break;
+            case ConfigElement.IMAGE_REPOSITORY_STATISTICS_VIEWER:
+                gui.setImageRepositoryStatisticsViewer(createGUIWindow(node));
+                break;
             default:
                 break;
             }
@@ -214,6 +217,16 @@ public class GUIConfig {
         XMLUtil.writeIndent(xmlsw, baseIndent.value());
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //    IMAGE CONFLICT VIEWER end
+
+        //    IMAGE REPOSITORY STATISTICS VIEWER start
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.IMAGE_REPOSITORY_STATISTICS_VIEWER, Tab.TWO, xmlsw);
+
+        writeSizeAndLocation(gUI.getImageRepositoryStatisticsViewer().getSizeAndLocation(), Tab.SIX, xmlsw);
+
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
+        //    IMAGE REPOSITORY STATISTICS end
 
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //  GUI end

@@ -25,6 +25,7 @@ public class GUI {
     private GUIWindow helpViewer;
     private GUIWindow imageResizer;
     private GUIWindow imageConflictViewer;
+    private GUIWindow imageRepositoryStatisticsViewer;
 
     public GUIWindow getMain() {
         return main;
@@ -47,6 +48,9 @@ public class GUI {
     public GUIWindow getImageConflictViewer() {
         return imageConflictViewer;
     }
+    public GUIWindow getImageRepositoryStatisticsViewer() {
+        return imageRepositoryStatisticsViewer;
+    }
     public void setMain(GUIWindow main) {
         this.main = main;
     }
@@ -67,5 +71,8 @@ public class GUI {
     }
     public void setImageConflictViewer(GUIWindow imageConflictViewer) {
         this.imageConflictViewer = imageConflictViewer;
+    }
+    public void setImageRepositoryStatisticsViewer(GUIWindow imageRepositoryStatisticsViewer) {
+        this.imageRepositoryStatisticsViewer = imageRepositoryStatisticsViewer;
     }
 }

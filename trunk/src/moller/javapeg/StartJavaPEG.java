@@ -33,7 +33,7 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.Language;
 import moller.javapeg.program.firstlaunch.InitialConfigGUI;
 import moller.javapeg.program.firstlaunch.InitialConfigGUILanguage;
-import moller.javapeg.program.gui.main.MainGUI;
+import moller.javapeg.program.gui.frames.MainGUI;
 import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
 
