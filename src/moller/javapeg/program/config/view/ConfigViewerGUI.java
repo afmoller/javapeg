@@ -397,6 +397,11 @@ public class ConfigViewerGUI extends JFrame {
         removeSelectedImagePathsButton.addActionListener(new RemoveSelectedImagePathsButtonListener());
 
         ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel().addTableModelListener(new ImageRepositoriesTableModelListener());
+
+        // Force an invocation of the registered listener if all the image
+        // repositories already have been added to the model (which occurs when
+        // the application is started).
+        ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel().fireTableDataChanged();
     }
 
     private JPanel createButtonPanel() {
@@ -1859,11 +1864,11 @@ public class ConfigViewerGUI extends JFrame {
      * This class listens for changes to the image repositories TableModel and
      * prints information about how many entries and of which type there are in
      * the model onto a {@link JLabel}.
-     * 
+     *
      * @author Fredrik
-     * 
+     *
      */
-    private class ImageRepositoriesTableModelListener implements TableModelListener { 
+    private class ImageRepositoriesTableModelListener implements TableModelListener {
         @Override
         public void tableChanged(TableModelEvent e) {
             ImageRepositoriesTableModel imageRepositoriesTableModel = (ImageRepositoriesTableModel)e.getSource();
