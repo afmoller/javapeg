@@ -269,6 +269,7 @@ public class MainGUI extends JFrame {
     private JButton copyImageListdButton;
     private JButton openImageResizerButton;
     private JButton searchImagesButton;
+    private JButton displayImageRepositoryStatisticsViewerButton;
     private JButton clearCategoriesSelectionButton;
     private JButton clearAllMetaDataParameters;
     private JButton saveFileNameTemplateButton;
@@ -1504,6 +1505,17 @@ public class MainGUI extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
+        displayImageRepositoryStatisticsViewerButton = new JButton();
+        displayImageRepositoryStatisticsViewerButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
+        displayImageRepositoryStatisticsViewerButton.setEnabled(false);
+
+        try {
+            displayImageRepositoryStatisticsViewerButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/statistics.png"), true));
+        } catch (IOException iox) {
+            displayImageRepositoryStatisticsViewerButton.setText("VIEW IMAGE META DATA REPOSITORY STATISTICS");
+            logger.logERROR("Could not set image: resources/images/viewtab/statistics.png as icon for the view image meta data repository statistics. See stacktrace below for details");
+            logger.logERROR(iox);
+        }
 
         clearAllMetaDataParameters = new JButton();
         clearAllMetaDataParameters.setToolTipText(lang.get("findimage.clearAllMetaDataParameters.tooltip"));
@@ -1512,7 +1524,6 @@ public class MainGUI extends JFrame {
             clearAllMetaDataParameters.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
         } catch (IOException iox) {
             clearAllMetaDataParameters.setText("x");
-            Logger logger = Logger.getInstance();
             logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear meta data button. See stacktrace below for details");
             logger.logERROR(iox);
         }
@@ -1525,13 +1536,13 @@ public class MainGUI extends JFrame {
             searchImagesButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif"), true));
         } catch (IOException iox) {
             searchImagesButton.setText("SEARCH IMAGES");
-            Logger logger = Logger.getInstance();
             logger.logERROR("Could not set image: resources/images/Find16.gif as icon for the search images button. See stacktrace below for details");
             logger.logERROR(iox);
         }
 
         buttonPanel.add(searchImagesButton);
         buttonPanel.add(clearAllMetaDataParameters);
+        buttonPanel.add(displayImageRepositoryStatisticsViewerButton);
 
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1953,6 +1964,7 @@ public class MainGUI extends JFrame {
         openImageResizerButton.addActionListener(new OpenImageResizerListener());
         copyImageListdButton.addActionListener(new CopyImageListListener());
         searchImagesButton.addActionListener(new SearchImagesListener());
+        displayImageRepositoryStatisticsViewerButton.addActionListener(new DisplayImageRepositoryStatisticsViewerListener());
         clearCategoriesSelectionButton.addActionListener(new ClearCategoriesSelectionListener());
         clearAllMetaDataParameters.addActionListener(new ClearAllMetaDataParametersListener());
 
@@ -3696,6 +3708,15 @@ public class MainGUI extends JFrame {
         }
     }
 
+    private class DisplayImageRepositoryStatisticsViewerListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ImageRepositoryStatisticsViewer imageRepositoryStatisticsViewer = new ImageRepositoryStatisticsViewer();
+            imageRepositoryStatisticsViewer.setVisible(true);
+        }
+    }
+
     private class ImportedClearCategoriesSelectionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -4798,6 +4819,9 @@ public class MainGUI extends JFrame {
         protected void done() {
             searchImagesButton.setEnabled(true);
             searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
+
+            displayImageRepositoryStatisticsViewerButton.setEnabled(true);
+            displayImageRepositoryStatisticsViewerButton.setToolTipText("findimage.displayImageRepositoryStatisticsViewer.tooltip");
 
             MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 
