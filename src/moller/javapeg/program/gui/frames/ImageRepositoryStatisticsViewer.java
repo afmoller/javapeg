@@ -16,20 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.Dimension;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.config.model.Configuration;
-import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.gui.GUIDefaults;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
-import moller.util.gui.Screen;
+import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 
 /**
  * This class displays different kind of meta information about the content in
@@ -38,22 +29,14 @@ import moller.util.gui.Screen;
  * @author Fredrik
  *
  */
-public class ImageRepositoryStatisticsViewer extends JFrame {
+public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
 
     /**
      *
      */
     private static final long serialVersionUID = -8257537751440691196L;
 
-    private final Configuration configuration;
-    private final Logger logger;
-    private final Language lang;
-
     public ImageRepositoryStatisticsViewer() {
-        configuration = Config.getInstance().get();
-        logger = Logger.getInstance();
-        lang   = Language.getInstance();
-
         this.createMainFrame();
         this.addListeners();
     }
@@ -64,34 +47,19 @@ public class ImageRepositoryStatisticsViewer extends JFrame {
     }
 
     private void createMainFrame() {
-        GUI gUI = configuration.getgUI();
-
-        Rectangle sizeAndLocation = gUI.getImageRepositoryStatisticsViewer().getSizeAndLocation();
-
-        this.setSize(sizeAndLocation.getSize());
-
-        Point xyFromConfig = new Point(sizeAndLocation.getLocation());
-
-        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
-            this.setLocation(xyFromConfig);
-            this.setSize(sizeAndLocation.getSize());
-        } else {
-            JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Repository Statistics GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
-
-            this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_WIDTH, GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_HEIGHT);
-        }
-
-        try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e){
-            logger.logERROR("Could not set desired Look And Feel for Image Repository Statistics Viewer GUI");
-            logger.logERROR(e);
-        }
+       loadAndApplyGUISettings();
 
 
+    }
+
+    @Override
+    public GUIWindow getGUIWindowConfig() {
+        return getConfiguration().getgUI().getImageRepositoryStatisticsViewer();
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return new Dimension(GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_WIDTH, GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_HEIGHT);
     }
 
 }

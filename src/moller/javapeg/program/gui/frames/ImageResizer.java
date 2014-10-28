@@ -18,10 +18,9 @@ package moller.javapeg.program.gui.frames;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -43,7 +42,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -54,7 +52,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -67,32 +64,23 @@ import javax.swing.text.DocumentFilter;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.Configuration;
-import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
+import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.progress.CustomizedJTextArea;
-import moller.util.gui.Screen;
 import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
 
-public class ImageResizer extends JFrame {
+public class ImageResizer extends JavaPEGBaseFrame {
 
     private static final long serialVersionUID = 1L;
-
-    private static Configuration configuration;
-    private static Logger logger;
-    private static Language lang;
 
     private DefaultListModel<File> imagesToViewListModel;
 
@@ -127,11 +115,7 @@ public class ImageResizer extends JFrame {
 
         this.imagesToResize = imagesToResize;
 
-        configuration = Config.getInstance().get();
-        logger = Logger.getInstance();
-        lang   = Language.getInstance();
-
-        sdf = configuration.getRenameImages().getProgressLogTimestampFormat();
+        sdf = getConfiguration().getRenameImages().getProgressLogTimestampFormat();
 
         this.createMainFrame();
         this.addListeners();
@@ -141,7 +125,7 @@ public class ImageResizer extends JFrame {
     private void initiateGUI() {
         imagesToViewList.setSelectedIndex(0);
 
-        ResizeImages resizeImages = configuration.getResizeImages();
+        ResizeImages resizeImages = getConfiguration().getResizeImages();
 
         widthTextField.setText(resizeImages.getWidth().equals(-1) ? "" : Integer.toString(resizeImages.getWidth()));
         heightTextField.setText(resizeImages.getHeight().equals(-1) ? "" : Integer.toString(resizeImages.getHeight()));
@@ -169,41 +153,17 @@ public class ImageResizer extends JFrame {
     }
 
     private void createMainFrame() {
-        GUI gUI = configuration.getgUI();
+        loadAndApplyGUISettings();
 
-        this.setTitle(lang.get("imageresizer.gui.title"));
-
-        GUIWindow imageResizer = gUI.getImageConflictViewer();
-
-        Point xyFromConfig = imageResizer.getSizeAndLocation().getLocation();
-
-        if (Screen.isVisibleOnScreen(imageResizer.getSizeAndLocation())) {
-            this.setLocation(xyFromConfig);
-            this.setSize(imageResizer.getSizeAndLocation().getSize());
-
-        } else {
-            JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Conflict Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
-
-            this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_CONFLICT_VIEWER_WIDTH, GUIDefaults.IMAGE_CONFLICT_VIEWER_HEIGHT);
-        }
-
-        try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e){
-            logger.logERROR("Could not set desired Look And Feel for Main GUI");
-            logger.logERROR(e);
-        }
+        this.setTitle(getLang().get("imageresizer.gui.title"));
 
         InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
 
         try {
             this.setIconImage(ImageIO.read(imageStream));
         } catch (IOException e) {
-            logger.logERROR("Could not load icon: Open16.gif");
-            logger.logERROR(e);
+            getLogger().logERROR("Could not load icon: Open16.gif");
+            getLogger().logERROR(e);
         }
 
         GBHelper posBackgroundPanel = new GBHelper();
@@ -212,7 +172,7 @@ public class ImageResizer extends JFrame {
 
         leftAndRightSplitpane = new JSplitPane();
         leftAndRightSplitpane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        leftAndRightSplitpane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(imageResizer.getGuiWindowSplitPane(), ConfigElement.VERTICAL));
+        leftAndRightSplitpane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(getGUIWindowConfig().getGuiWindowSplitPane(), ConfigElement.VERTICAL));
         leftAndRightSplitpane.setLeftComponent(this.createLeftPanel());
         leftAndRightSplitpane.setRightComponent(this.createRightPanel());
 
@@ -260,7 +220,7 @@ public class ImageResizer extends JFrame {
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        JLabel outputLabel = new JLabel(lang.get("imageresizer.processlog.title"));
+        JLabel outputLabel = new JLabel(getLang().get("imageresizer.processlog.title"));
         outputLabel.setForeground(Color.GRAY);
 
         outputTextArea = new CustomizedJTextArea();
@@ -308,17 +268,17 @@ public class ImageResizer extends JFrame {
         try {
             removePictureImageIcon.setImage(ImageIO.read(imageStream));
         } catch (IOException iox) {
-            logger.logERROR("Could not load image: resources/images/viewtab/remove.gif, see stacktrace for details");
-            logger.logERROR(iox);
+            getLogger().logERROR("Could not load image: resources/images/viewtab/remove.gif, see stacktrace for details");
+            getLogger().logERROR(iox);
         }
         removeSelectedImagesButton = new JButton();
         removeSelectedImagesButton.setIcon(removePictureImageIcon);
-        removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
+        removeSelectedImagesButton.setToolTipText(getLang().get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         buttonPanel.add(removeSelectedImagesButton);
 
-        JLabel imageListLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.list"));
+        JLabel imageListLabel = new JLabel(getLang().get("maingui.tabbedpane.imagelist.label.list"));
         imageListLabel.setForeground(Color.GRAY);
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -336,7 +296,7 @@ public class ImageResizer extends JFrame {
 
     private JPanel createPreviewPanel() {
 
-        JLabel previewLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.preview"));
+        JLabel previewLabel = new JLabel(getLang().get("maingui.tabbedpane.imagelist.label.preview"));
         previewLabel.setForeground(Color.GRAY);
 
         JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
@@ -356,24 +316,23 @@ public class ImageResizer extends JFrame {
         previewBackgroundPanel.add(new JPanel(), posPreviewPanel.nextRow().expandH());
 
         return previewBackgroundPanel;
-
     }
 
     private JPanel createInputPanel() {
 
         destinationDirectorySelector = new DestinationDirectorySelector(false);
 
-        JLabel widthLabel = new JLabel(lang.get("imageresizer.resize.input.width"));
+        JLabel widthLabel = new JLabel(getLang().get("imageresizer.resize.input.width"));
 
         widthTextField = new JTextField();
         ((AbstractDocument)widthTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
-        JLabel heightLabel = new JLabel(lang.get("imageresizer.resize.input.height"));
+        JLabel heightLabel = new JLabel(getLang().get("imageresizer.resize.input.height"));
 
         heightTextField = new JTextField();
         ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
 
-        JLabel qualityLabel = new JLabel(lang.get("imageresizer.resize.input.quality"));
+        JLabel qualityLabel = new JLabel(getLang().get("imageresizer.resize.input.quality"));
 
         qualityComboBox = new JComboBox<Integer>();
         qualityComboBox.addItem(Integer.valueOf(100));
@@ -381,10 +340,10 @@ public class ImageResizer extends JFrame {
         qualityComboBox.addItem(Integer.valueOf(50));
         qualityComboBox.addItem(Integer.valueOf(25));
 
-        resizeButton = new JButton(lang.get("imageresizer.resize.input.button.resize"));
+        resizeButton = new JButton(getLang().get("imageresizer.resize.input.button.resize"));
         resizeButton.addActionListener(new ResizeButtonListener());
 
-        cancelResizeButton = new JButton(lang.get("imageresizer.resize.input.button.cancel"));
+        cancelResizeButton = new JButton(getLang().get("imageresizer.resize.input.button.cancel"));
         cancelResizeButton.addActionListener(new CancelResizeButtonListener());
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -426,27 +385,18 @@ public class ImageResizer extends JFrame {
     }
 
     private void saveSettings() {
-        GUI gUI = configuration.getgUI();
+        saveGUISizeAndLocationSettings();
 
-        if (this.isVisible()) {
-
-            Rectangle sizeAndLocation = gUI.getImageResizer().getSizeAndLocation();
-
-            sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
-            sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
-        }
-
-        List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageResizer().getGuiWindowSplitPane();
+        List<GUIWindowSplitPane> guiWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL, leftAndRightSplitpane.getDividerLocation());
 
-        ResizeImages resizeImages = configuration.getResizeImages();
+        ResizeImages resizeImages = getConfiguration().getResizeImages();
 
         resizeImages.setHeight(heightTextField.getText().equals("") ? -1 : Integer.parseInt(heightTextField.getText()));
         resizeImages.setWidth(widthTextField.getText().equals("") ? -1 : Integer.parseInt(widthTextField.getText()));
         resizeImages.setPathDestination(destinationDirectorySelector.getText().equals("") ? null : new File(destinationDirectorySelector.getText()));
         resizeImages.setSelectedQualityIndex(qualityComboBox.getSelectedIndex());
-
     }
 
     private class RemoveSelectedImagesListener implements ActionListener {
@@ -542,15 +492,15 @@ public class ImageResizer extends JFrame {
 
             destinationDirectory = DirectoryUtil.getUniqueDirectory(destinationDirectory.getParentFile(), destinationDirectory);
 
-            publish(lang.get("imageresizer.resize.process.started"));
+            publish(getLang().get("imageresizer.resize.process.started"));
 
             if (!destinationDirectory.mkdirs()) {
-                publish(lang.get("imageresizer.resize.process.couldNotCreateDirectory") + ": " + destinationDirectory.getAbsolutePath());
-                logger.logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
+                publish(getLang().get("imageresizer.resize.process.couldNotCreateDirectory") + ": " + destinationDirectory.getAbsolutePath());
+                getLogger().logERROR("Could not create directory:" + destinationDirectory.getAbsolutePath());
 
-                return lang.get("imageresizer.resize.process.aborted");
+                return getLang().get("imageresizer.resize.process.aborted");
             } else {
-                publish(lang.get("imageresizer.resize.process.destination.directory.created") + " " + destinationDirectory.getAbsolutePath());
+                publish(getLang().get("imageresizer.resize.process.destination.directory.created") + " " + destinationDirectory.getAbsolutePath());
 
                 int size = imagesToViewListModel.getSize();
 
@@ -560,22 +510,22 @@ public class ImageResizer extends JFrame {
 
                         float floatQuality = quality / 100;
                         ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
-                        publish(String.format(lang.get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
+                        publish(String.format(getLang().get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
                         setProgress((index + 1) * 100 / size);
                     } else {
-                        publish(lang.get("imageresizer.resize.process.cancelled"));
+                        publish(getLang().get("imageresizer.resize.process.cancelled"));
                         break;
                     }
                 }
 
                 if (!irw.isCancelled()) {
-                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
-                    return lang.get("imageresizer.resize.process.done");
+                    publish(String.format(getLang().get("imageresizer.processlog.image.resize.done"), (System.currentTimeMillis() - startTime) / 1000));
+                    return getLang().get("imageresizer.resize.process.done");
                 } else {
-                    publish(String.format(lang.get("imageresizer.processlog.image.resize.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
+                    publish(String.format(getLang().get("imageresizer.processlog.image.resize.done.cancelled"), (System.currentTimeMillis() - startTime) / 1000));
 
                     resizeButton.setEnabled(true);
-                    return lang.get("imageresizer.resize.process.cancelled");
+                    return getLang().get("imageresizer.resize.process.cancelled");
                 }
             }
         }
@@ -633,5 +583,15 @@ public class ImageResizer extends JFrame {
         public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string, AttributeSet aset) throws BadLocationException {
             fp.insertString(offset, string.replaceAll(NON_INTEGER_REGEXP, ""), aset);
         }
+    }
+
+    @Override
+    public GUIWindow getGUIWindowConfig() {
+        return getConfiguration().getgUI().getImageResizer();
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return new Dimension(GUIDefaults.IMAGE_RESIZER_WIDTH, GUIDefaults.IMAGE_RESIZER_HEIGHT);
     }
 }

@@ -19,11 +19,10 @@ package moller.javapeg.program.gui.frames;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,9 +56,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
@@ -68,15 +65,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.FileSelection;
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.ImageSearchResultViewerState;
-import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.gui.ButtonIconUtil;
@@ -84,24 +78,18 @@ import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.LoadedThumbnails;
 import moller.javapeg.program.gui.components.StatusPanel;
 import moller.javapeg.program.gui.components.ThumbNailsPanel;
+import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.ImagesToViewModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
-import moller.util.gui.Screen;
 import moller.util.io.StreamUtil;
 
-public class ImageSearchResultViewer extends JFrame {
+public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
     private static final long serialVersionUID = 1L;
-
-    private static Configuration configuration;
-    private static Logger logger;
-    private static Language lang;
 
     private JToolBar toolBar;
     private JPopupMenu rightClickMenu;
@@ -154,10 +142,6 @@ public class ImageSearchResultViewer extends JFrame {
     private int currentStartIndexForDisplayedImages;
 
     public ImageSearchResultViewer(List<File> imagesInResultSet) {
-
-        configuration = Config.getInstance().get();
-        logger = Logger.getInstance();
-        lang   = Language.getInstance();
 
         // Must be set before the executeLoadThumbnailsProcess method is called
         this.imagesInResultSet = imagesInResultSet;
@@ -213,7 +197,6 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private class ImageSearhResultLoaderPropertyListener implements PropertyChangeListener {
-
         /**
          * Invoked when task's progress property changes.
          */
@@ -228,40 +211,14 @@ public class ImageSearchResultViewer extends JFrame {
 
     // Create Main Window
     public void createMainFrame() {
-
-        GUI gUI = configuration.getgUI();
-
-        Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
-
-        this.setSize(sizeAndLocation.getSize());
-
-        Point xyFromConfig = new Point(sizeAndLocation.getLocation());
-
-        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
-            this.setLocation(xyFromConfig);
-            this.setSize(sizeAndLocation.getSize());
-        } else {
-            JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Search Result Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
-
-            this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_WIDTH, GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_HEIGHT);
-        }
-
-        try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e){
-            logger.logERROR("Could not set desired Look And Feel for Image Search Result Viewer GUI");
-            logger.logERROR(e);
-        }
+        loadAndApplyGUISettings();
 
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
 
-        this.setTitle(lang.get("imagesearchresultviewer.title"));
+        this.setTitle(getLang().get("imagesearchresultviewer.title"));
 
         thumbNailLoadingProgressBar = new JProgressBar();
         thumbNailLoadingProgressBar.setStringPainted(true);
@@ -306,7 +263,6 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private JScrollPane createThumbNailsBackgroundPanel(){
-
         thumbNailGridLayout = new GridLayout(0, 6);
         thumbNailsPanel = new ThumbNailsPanel(thumbNailGridLayout);
 
@@ -325,14 +281,13 @@ public class ImageSearchResultViewer extends JFrame {
 
     // Create ToolBar
     public void createToolBar()    {
-
         Integer[] imagesPerTabInteger = new Integer[]{50, 100, 200, 400, 800, 1000};
 
         ComboBoxModel<Integer> delaysModel = new DefaultComboBoxModel<Integer>(imagesPerTabInteger);
 
         numberOfImagesToDisplaySelectionBox = new JComboBox<Integer>(delaysModel);
         numberOfImagesToDisplaySelectionBox.setMaximumSize(numberOfImagesToDisplaySelectionBox.getPreferredSize());
-        numberOfImagesToDisplaySelectionBox.setToolTipText(lang.get("imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip"));
+        numberOfImagesToDisplaySelectionBox.setToolTipText(getLang().get("imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip"));
 
         InputStream imageStream = null;
 
@@ -349,16 +304,16 @@ public class ImageSearchResultViewer extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
             loadPreviousImagesIcon.setImage(ImageIO.read(imageStream));
             loadPreviousImages.setIcon(loadPreviousImagesIcon);
-            loadPreviousImages.setToolTipText(lang.get("imagesearchresultviewer.button.loadPreviousImage.tooltip"));
+            loadPreviousImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadPreviousImage.tooltip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
             loadNextImagesIcon.setImage(ImageIO.read(imageStream));
             loadNextImages.setIcon(loadNextImagesIcon);
-            loadNextImages.setToolTipText(lang.get("imagesearchresultviewer.button.loadNextImage.tooltip"));
+            loadNextImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadNextImage.tooltip"));
 
         }  catch (IOException e) {
-            logger.logERROR("Could not load image. See Stack Trace below for details");
-            logger.logERROR(e);
+            getLogger().logERROR("Could not load image. See Stack Trace below for details");
+            getLogger().logERROR(e);
         } finally {
             if (imageStream != null) {
                 StreamUtil.close(imageStream, true);
@@ -380,7 +335,7 @@ public class ImageSearchResultViewer extends JFrame {
      * {@link JComboBox} or the third element if no matching element is found.
      */
     private void initiateNumberOfImagesToDisplay() {
-        int numberOfImagesToDisplay = configuration.getImageSearchResultViewerState().getNumberOfImagesToDisplay();
+        int numberOfImagesToDisplay = getConfiguration().getImageSearchResultViewerState().getNumberOfImagesToDisplay();
 
         for (int index = 0; index < numberOfImagesToDisplaySelectionBox.getItemCount(); index++) {
             if (numberOfImagesToDisplaySelectionBox.getModel().getElementAt(index) == numberOfImagesToDisplay) {
@@ -394,14 +349,13 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     public void createRightClickMenu(){
-
         rightClickMenu = new JPopupMenu();
 
-        popupMenuSelectAll = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.selectAll"));
-        popupMenuDeSelectAll = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.deSelectAll"));
-        popupMenuSetSelectedToViewList = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.addSelectedImagesToViewList"));
-        popupMenuCopyImageToSystemClipBoard = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard"));
-        popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem(lang.get("imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard"));
+        popupMenuSelectAll = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.selectAll"));
+        popupMenuDeSelectAll = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.deSelectAll"));
+        popupMenuSetSelectedToViewList = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.addSelectedImagesToViewList"));
+        popupMenuCopyImageToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard"));
+        popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard"));
 
         rightClickMenu.add(popupMenuSelectAll);
         rightClickMenu.add(popupMenuDeSelectAll);
@@ -438,23 +392,17 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private void saveSettings() {
-        GUI gUI = configuration.getgUI();
+        saveGUISizeAndLocationSettings();
 
-        Rectangle sizeAndLocation = gUI.getImageSearchResultViewer().getSizeAndLocation();
-
-        sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
-        sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
-
-        ImageSearchResultViewerState imageSearchResultViewerState = configuration.getImageSearchResultViewerState();
+        ImageSearchResultViewerState imageSearchResultViewerState = getConfiguration().getImageSearchResultViewerState();
 
         imageSearchResultViewerState.setNumberOfImagesToDisplay(getCurrentValueOfNumberOfImagesToDisplay());
-
     }
 
     private void setStatusMessages () {
         int nrOfColumns = thumbNailGridLayout.getColumns();
 
-        statuspanel.setStatusMessage(Integer.toString(nrOfColumns), lang.get("statusbar.message.amountOfColumns"), 1);
+        statuspanel.setStatusMessage(Integer.toString(nrOfColumns), getLang().get("statusbar.message.amountOfColumns"), 1);
 
         int nrOfImagesToDisplay;
 
@@ -467,8 +415,8 @@ public class ImageSearchResultViewer extends JFrame {
         int extraRow = nrOfImagesToDisplay % nrOfColumns == 0 ? 0 : 1;
         int rowsInGridLayout = (nrOfImagesToDisplay / nrOfColumns) + extraRow;
 
-        statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), lang.get("statusbar.message.amountOfRows"), 2);
-        statuspanel.setStatusMessage(Integer.toString(nrOfImagesToDisplay), lang.get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
+        statuspanel.setStatusMessage(Integer.toString(rowsInGridLayout), getLang().get("statusbar.message.amountOfRows"), 2);
+        statuspanel.setStatusMessage(Integer.toString(nrOfImagesToDisplay), getLang().get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
     }
 
     private void disposeFrame() {
@@ -683,7 +631,7 @@ public class ImageSearchResultViewer extends JFrame {
     }
 
     private void setWindowTitle(int toIndex) {
-        setTitle(String.format(lang.get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInResultSet.size()));
+        setTitle(String.format(getLang().get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInResultSet.size()));
     }
 
     /**
@@ -724,7 +672,7 @@ public class ImageSearchResultViewer extends JFrame {
             JToggleButton toggleButton = (JToggleButton)e.getSource();
 
             if (toggleButton.isSelected()) {
-                ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
                 ButtonIconUtil.setSelectedThumbNailImage(toggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
                 selectedImageFiles.add(loadedThumbnails.getFileObject(toggleButton));
             } else {
@@ -774,7 +722,7 @@ public class ImageSearchResultViewer extends JFrame {
                     JToggleButton thumbContainer = new JToggleButton();
                     thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
                     if (selectedImageFiles.contains(image)) {
-                        ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+                        ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
                         final int percentage = grayFilter.getPercentage();
                         final boolean pixelsBrightened = grayFilter.isPixelsBrightened();
                         ButtonIconUtil.setSelectedThumbNailImage(thumbContainer, pixelsBrightened, percentage);
@@ -782,8 +730,8 @@ public class ImageSearchResultViewer extends JFrame {
                     }
 
                     thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-                    if (!configuration.getToolTips().getImageSearchResultState().equals("0")) {
-                        thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, configuration.getToolTips().getImageSearchResultState()));
+                    if (!getConfiguration().getToolTips().getImageSearchResultState().equals("0")) {
+                        thumbContainer.setToolTipText(MetaDataUtil.getToolTipText(image, getConfiguration().getToolTips().getImageSearchResultState()));
                     }
                     String absolutePath = image.getAbsolutePath();
                     thumbContainer.setActionCommand(absolutePath);
@@ -821,5 +769,15 @@ public class ImageSearchResultViewer extends JFrame {
             selectedImageIconGenerator = new SelectedImageIconGenerator(loadedThumbnails, imageFileToSelectedImageMapping);
             selectedImageIconGenerator.execute();
         }
+    }
+
+    @Override
+    public GUIWindow getGUIWindowConfig() {
+        return getConfiguration().getgUI().getImageSearchResultViewer();
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return new Dimension(GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_WIDTH, GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_HEIGHT);
     }
 }
