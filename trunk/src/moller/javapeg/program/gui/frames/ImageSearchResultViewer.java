@@ -211,6 +211,15 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     public void createMainFrame() {
         loadAndApplyGUISettings();
 
+        InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif");
+
+        try {
+            this.setIconImage(ImageIO.read(imageStream));
+        } catch (IOException e) {
+            getLogger().logERROR("Could not load icon: Find16.gif");
+            getLogger().logERROR(e);
+        }
+
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);

@@ -17,7 +17,12 @@
 package moller.javapeg.program.gui.frames;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+
+import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
@@ -50,6 +55,14 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
     private void createMainFrame() {
        loadAndApplyGUISettings();
 
+       InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/statistics.png");
+
+       try {
+           this.setIconImage(ImageIO.read(imageStream));
+       } catch (IOException e) {
+           getLogger().logERROR("Could not load icon: statistics.png");
+           getLogger().logERROR(e);
+       }
 
     }
 
