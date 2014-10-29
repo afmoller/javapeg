@@ -142,6 +142,10 @@
    internally. It is also possible to set the max size (number of thumbnails to
    cache) of the cache and to entirely clear the cache from thumbnails.   
  
+ ! If the Unbuffered logging setting in the logging configuration was 
+   activated then the log level setting was not respected (all levels was 
+   logged)
+ 
  ! If a file was copied incorrect when it was renamed the, rename process log 
    window did incorrectly state that the file was both copied correct and with
    failure.
