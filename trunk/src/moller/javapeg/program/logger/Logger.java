@@ -51,7 +51,7 @@ public class Logger {
     private final boolean rotateLog;
     private final boolean zipLog;
 
-    private final Long    rotateSize;
+    private final Long   rotateSize;
     private final String logName;
 
     private final static String BASE_PATH = C.JAVAPEG_HOME + C.FS + "logs";
@@ -223,12 +223,11 @@ public class Logger {
 
     private void log(String logMessage, Level level) {
 
-        if ((level.ordinal() >= logLevel.ordinal()) || developerMode) {
-
-            date.setTime(System.currentTimeMillis());
+        if ((level.ordinal() >= logLevel.ordinal())) {
 
             String padding = (level == Level.INFO || level == Level.WARN) ? " " : "";
 
+            date.setTime(System.currentTimeMillis());
             String logEntry = sdf.format(date) + " " + level + padding +  " : " + logMessage;
 
             try {
@@ -263,7 +262,7 @@ public class Logger {
                     flush();
                 }
             } catch (IOException iox) {
-
+                throw new RuntimeException(iox);
             }
         }
     }
