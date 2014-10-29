@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.imageviewer;
+package moller.javapeg.program.gui.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,7 +26,6 @@ import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +34,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +50,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -64,7 +60,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
@@ -72,11 +67,9 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.ImageViewerState;
-import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
@@ -88,11 +81,9 @@ import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.components.MetaDataPanel;
 import moller.javapeg.program.gui.components.NavigableImagePanel;
 import moller.javapeg.program.gui.components.StatusPanel;
+import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaDataUtil;
-import moller.util.gui.Screen;
 import moller.util.gui.Update;
 import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
@@ -100,13 +91,9 @@ import moller.util.string.StringUtil;
 
 import org.imgscalr.Scalr.Method;
 
-public class ImageViewer extends JFrame {
+public class ImageViewer extends JavaPEGBaseFrame {
 
     private static final long serialVersionUID = 1L;
-
-    private static Configuration configuration;
-    private static Logger logger;
-    private static Language lang;
 
     private JToolBar toolBar;
     private JPopupMenu rightClickMenu;
@@ -178,11 +165,6 @@ public class ImageViewer extends JFrame {
     private final Timer slideShowTimer;
 
     public ImageViewer(List<File> imagesToView) {
-
-        configuration = Config.getInstance().get();
-        logger = Logger.getInstance();
-        lang   = Language.getInstance();
-
         this.imagesToView = imagesToView;
 
         imageToViewListIndex = 0;
@@ -209,7 +191,7 @@ public class ImageViewer extends JFrame {
      * {@link JComboBox} or the first element if no matching element is found.
      */
     private void initiateResizeQuality() {
-        Method resizeQualityMethod = configuration.getImageViewerState().getResizeQuality();
+        Method resizeQualityMethod = getConfiguration().getImageViewerState().getResizeQuality();
 
         for (int index = 0; index < resizeQuality.getItemCount(); index++) {
             if (resizeQuality.getModel().getElementAt(index).getMethod() == resizeQualityMethod) {
@@ -228,7 +210,7 @@ public class ImageViewer extends JFrame {
      * {@link JComboBox} or the first element if no matching element is found.
      */
     private void initiateSlideShowDelay() {
-        int slideShowDelayInSeconds = configuration.getImageViewerState().getSlideShowDelayInSeconds();
+        int slideShowDelayInSeconds = getConfiguration().getImageViewerState().getSlideShowDelayInSeconds();
 
         for (int index = 0; index < slideShowDelay.getItemCount(); index++) {
             if (slideShowDelay.getModel().getElementAt(index) == slideShowDelayInSeconds) {
@@ -246,40 +228,14 @@ public class ImageViewer extends JFrame {
      * ImageViewer.
      */
     private void initiateButtonStates() {
-        automaticAdjustToWindowSizeJToggleButton.setSelected(configuration.getImageViewerState().isAutomaticallyResizeImages());
-        automaticRotateToggleButton.setSelected(configuration.getImageViewerState().isAutomaticallyRotateImages());
-        toggleNavigationImageButton.setSelected(configuration.getImageViewerState().isShowNavigationImage());
+        automaticAdjustToWindowSizeJToggleButton.setSelected(getConfiguration().getImageViewerState().isAutomaticallyResizeImages());
+        automaticRotateToggleButton.setSelected(getConfiguration().getImageViewerState().isAutomaticallyRotateImages());
+        toggleNavigationImageButton.setSelected(getConfiguration().getImageViewerState().isShowNavigationImage());
     }
 
     // Create Main Window
     public void createMainFrame() {
-
-        GUI gUI = configuration.getgUI();
-
-        Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
-
-        this.setSize(sizeAndLocation.getSize());
-
-        Point xyFromConfig = new Point(sizeAndLocation.getLocation());
-
-        if (Screen.isVisibleOnScreen(sizeAndLocation)) {
-            this.setLocation(xyFromConfig);
-            this.setSize(sizeAndLocation.getSize());
-        } else {
-            JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.locationError"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            logger.logERROR("Could not set location of Image Viewer GUI to: x = " + xyFromConfig.x + " and y = " + xyFromConfig.y + " since that is outside of available screen size.");
-
-            this.setLocation(0,0);
-            this.setSize(GUIDefaults.IMAGE_VIEWER_WIDTH, GUIDefaults.IMAGE_VIEWER_HEIGHT);
-        }
-
-        try{
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e){
-            logger.logERROR("Could not set desired Look And Feel for Main GUI");
-            logger.logERROR(e);
-        }
+        loadAndApplyGUISettings();
 
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
@@ -290,13 +246,13 @@ public class ImageViewer extends JFrame {
         try {
             this.setIconImage(ImageIO.read(imageStream));
         } catch (IOException e) {
-            logger.logERROR("Could not load icon: Open16.gif");
-            logger.logERROR(e);
+            getLogger().logERROR("Could not load icon: Open16.gif");
+            getLogger().logERROR(e);
         }
 
         imageBackground = new NavigableImagePanel();
         imageBackground.setHighQualityRenderingEnabled(true);
-        imageBackground.setNavigationImageEnabled(configuration.getImageViewerState().isShowNavigationImage());
+        imageBackground.setNavigationImageEnabled(getConfiguration().getImageViewerState().isShowNavigationImage());
 
         thePicture = new File(imagesToView.get(0).getAbsolutePath());
 
@@ -308,7 +264,7 @@ public class ImageViewer extends JFrame {
         imageMetaDataSplitPane = new JSplitPane();
         imageMetaDataSplitPane.setOneTouchExpandable(true);
 
-        List<GUIWindowSplitPane> gUIWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+        List<GUIWindowSplitPane> gUIWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
         imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
         imageMetaDataSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
@@ -356,8 +312,8 @@ public class ImageViewer extends JFrame {
             minimizeButton.setMinimumSize(buttonSize);
 
         } catch (IOException e) {
-            logger.logERROR("Could not load image. See Stack Trace below for details");
-            logger.logERROR(e);
+            getLogger().logERROR("Could not load image. See Stack Trace below for details");
+            getLogger().logERROR(e);
         }
 
         buttonPanel.add(maximizeButton, posButtonPanel);
@@ -404,8 +360,8 @@ public class ImageViewer extends JFrame {
         JButton imageButton = new JButton(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegImage).getThumbNailData()));
 
         imageButton.setActionCommand(Integer.toString(index));
-        if (!configuration.getToolTips().getOverviewImageViewerState().equals("0")) {
-            imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage, configuration.getToolTips().getOverviewImageViewerState()));
+        if (!getConfiguration().getToolTips().getOverviewImageViewerState().equals("0")) {
+            imageButton.setToolTipText(MetaDataUtil.getToolTipText(jpegImage, getConfiguration().getToolTips().getOverviewImageViewerState()));
         }
         imageButton.addActionListener(overviewButtonListener);
 
@@ -440,11 +396,11 @@ public class ImageViewer extends JFrame {
         startSlideShowButton = new JButton();
         stopSlideShowButton = new JButton();
 
-        ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
-        ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
-        ResizeQualityAndDisplayString three = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.balanced"), Method.BALANCED);
-        ResizeQualityAndDisplayString four = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.quality"), Method.QUALITY);
-        ResizeQualityAndDisplayString five = new ResizeQualityAndDisplayString(lang.get("imageviewer.combobox.resize.quality.ultraquality"), Method.ULTRA_QUALITY);
+        ResizeQualityAndDisplayString one = new ResizeQualityAndDisplayString(getLang().get("imageviewer.combobox.resize.quality.automatic"), Method.AUTOMATIC);
+        ResizeQualityAndDisplayString two = new ResizeQualityAndDisplayString(getLang().get("imageviewer.combobox.resize.quality.speed"), Method.SPEED);
+        ResizeQualityAndDisplayString three = new ResizeQualityAndDisplayString(getLang().get("imageviewer.combobox.resize.quality.balanced"), Method.BALANCED);
+        ResizeQualityAndDisplayString four = new ResizeQualityAndDisplayString(getLang().get("imageviewer.combobox.resize.quality.quality"), Method.QUALITY);
+        ResizeQualityAndDisplayString five = new ResizeQualityAndDisplayString(getLang().get("imageviewer.combobox.resize.quality.ultraquality"), Method.ULTRA_QUALITY);
 
         ResizeQualityAndDisplayString[] qualityAndDisplayStrings = new ResizeQualityAndDisplayString[5];
         qualityAndDisplayStrings[0] = one;
@@ -464,7 +420,7 @@ public class ImageViewer extends JFrame {
 
         slideShowDelay = new JComboBox<Integer>(delaysModel);
         slideShowDelay.setMaximumSize(slideShowDelay.getPreferredSize());
-        slideShowDelay.setToolTipText(lang.get("imageviewer.button.slideShowDelay.toolTip"));
+        slideShowDelay.setToolTipText(getLang().get("imageviewer.button.slideShowDelay.toolTip"));
 
         InputStream imageStream = null;
 
@@ -487,57 +443,57 @@ public class ImageViewer extends JFrame {
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
             previousImageIcon.setImage(ImageIO.read(imageStream));
             previousJButton.setIcon(previousImageIcon);
-            previousJButton.setToolTipText(lang.get("imageviewer.button.back.toolTip"));
+            previousJButton.setToolTipText(getLang().get("imageviewer.button.back.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER+ "Forward16.gif");
             nextImageIcon.setImage(ImageIO.read(imageStream));
             nextJButton.setIcon(nextImageIcon);
-            nextJButton.setToolTipText(lang.get("imageviewer.button.forward.toolTip"));
+            nextJButton.setToolTipText(getLang().get("imageviewer.button.forward.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "AutoAdjustToWindowSize16.gif");
             automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
             automaticAdjustToWindowSizeJToggleButton.setIcon(automaticAdjustToWindowSizeImageIcon);
-            automaticAdjustToWindowSizeJToggleButton.setToolTipText(lang.get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
-            automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
+            automaticAdjustToWindowSizeJToggleButton.setToolTipText(getLang().get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
+            automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Zoom16.gif");
             adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
             adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
-            adjustToWindowSizeJButton.setToolTipText(lang.get("imageviewer.button.adjustToWindowSize.toolTip"));
-            adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+            adjustToWindowSizeJButton.setToolTipText(getLang().get("imageviewer.button.adjustToWindowSize.toolTip"));
+            adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateLeft16.gif");
             rotateLeftImageIcon.setImage(ImageIO.read(imageStream));
             rotateLeftButton.setIcon(rotateLeftImageIcon);
-            rotateLeftButton.setToolTipText(lang.get("imageviewer.button.rotateLeft.toolTip"));
+            rotateLeftButton.setToolTipText(getLang().get("imageviewer.button.rotateLeft.toolTip"));
             rotateLeftButton.setMnemonic(KeyEvent.VK_LEFT);
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateRight16.gif");
             rotateRightImageIcon.setImage(ImageIO.read(imageStream));
             rotateRightButton.setIcon(rotateRightImageIcon);
-            rotateRightButton.setToolTipText(lang.get("imageviewer.button.rotateRight.toolTip"));
+            rotateRightButton.setToolTipText(getLang().get("imageviewer.button.rotateRight.toolTip"));
             rotateRightButton.setMnemonic(KeyEvent.VK_RIGHT);
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateAutomatic16.gif");
             automaticRotateImageIcon.setImage(ImageIO.read(imageStream));
             automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
-            automaticRotateToggleButton.setToolTipText(lang.get("imageviewer.button.rotateAutomatic"));
+            automaticRotateToggleButton.setToolTipText(getLang().get("imageviewer.button.rotateAutomatic"));
             automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Center16.png");
             centerImageIcon.setImage(ImageIO.read(imageStream));
             centerButton.setIcon(centerImageIcon);
-            centerButton.setToolTipText(lang.get("imageviewer.button.center.toolTip"));
+            centerButton.setToolTipText(getLang().get("imageviewer.button.center.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomIn16.gif");
             zoomInImageIcon.setImage(ImageIO.read(imageStream));
             zoomInButton.setIcon(zoomInImageIcon);
-            zoomInButton.setToolTipText(lang.get("imageviewer.button.zoomIn.toolTip"));
+            zoomInButton.setToolTipText(getLang().get("imageviewer.button.zoomIn.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomOut16.gif");
             zoomOutImageIcon.setImage(ImageIO.read(imageStream));
             zoomOutButton.setIcon(zoomOutImageIcon);
-            zoomOutButton.setToolTipText(lang.get("imageviewer.button.zoomOut.toolTip"));
+            zoomOutButton.setToolTipText(getLang().get("imageviewer.button.zoomOut.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageEnabled16.png");
             navigationImageEnabledIcon.setImage(ImageIO.read(imageStream));
@@ -547,20 +503,20 @@ public class ImageViewer extends JFrame {
 
             toggleNavigationImageButton.setIcon(navigationImageEnabledIcon);
             toggleNavigationImageButton.setSelectedIcon(navigationImageDisabledIcon);
-            toggleNavigationImageButton.setToolTipText(lang.get("imageviewer.button.toggleNavigationImage.toolTip"));
+            toggleNavigationImageButton.setToolTipText(getLang().get("imageviewer.button.toggleNavigationImage.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH + "play.gif");
             startSlideshowImageIcon.setImage(ImageIO.read(imageStream));
             startSlideShowButton.setIcon(startSlideshowImageIcon);
-            startSlideShowButton.setToolTipText(lang.get("imageviewer.button.startSlideShow.toolTip"));
+            startSlideShowButton.setToolTipText(getLang().get("imageviewer.button.startSlideShow.toolTip"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Stop16.gif");
             stopSlideshowImageIcon.setImage(ImageIO.read(imageStream));
             stopSlideShowButton.setIcon(stopSlideshowImageIcon);
-            stopSlideShowButton.setToolTipText(lang.get("imageviewer.button.stopSlideShow.toolTip"));
+            stopSlideShowButton.setToolTipText(getLang().get("imageviewer.button.stopSlideShow.toolTip"));
         } catch (IOException e) {
-            logger.logERROR("Could not load image. See Stack Trace below for details");
-            logger.logERROR(e);
+            getLogger().logERROR("Could not load image. See Stack Trace below for details");
+            getLogger().logERROR(e);
         } finally {
             if (imageStream != null) {
                 StreamUtil.close(imageStream, true);
@@ -596,12 +552,12 @@ public class ImageViewer extends JFrame {
 
         rightClickMenu = new JPopupMenu();
 
-        popupMenuPrevious = new JMenuItem(lang.get("imageviewer.popupmenu.back.text"));
-        popupMenuNext = new JMenuItem(lang.get("imageviewer.popupmenu.forward.text"));
-        popupMenuAdjustToWindowSize = new JMenuItem(lang.get("imageviewer.popupmenu.adjustToWindowSize.text"));
-        popupMenuCopyImageToSystemClipboard = new JMenuItem(lang.get("imageviewer.popupmenu.copyImageToSystemClipboard.text"));
-        popupMenuFullScreenView = new JMenuItem(lang.get("imageviewer.popupmenu.fullScreenView.text"));
-        popupMenuExitFullScreenView = new JMenuItem(lang.get("imageviewer.popupmenu.exitFullScreenView.text"));
+        popupMenuPrevious = new JMenuItem(getLang().get("imageviewer.popupmenu.back.text"));
+        popupMenuNext = new JMenuItem(getLang().get("imageviewer.popupmenu.forward.text"));
+        popupMenuAdjustToWindowSize = new JMenuItem(getLang().get("imageviewer.popupmenu.adjustToWindowSize.text"));
+        popupMenuCopyImageToSystemClipboard = new JMenuItem(getLang().get("imageviewer.popupmenu.copyImageToSystemClipboard.text"));
+        popupMenuFullScreenView = new JMenuItem(getLang().get("imageviewer.popupmenu.fullScreenView.text"));
+        popupMenuExitFullScreenView = new JMenuItem(getLang().get("imageviewer.popupmenu.exitFullScreenView.text"));
 
         rightClickMenu.add(popupMenuPrevious);
         rightClickMenu.add(popupMenuNext);
@@ -624,8 +580,9 @@ public class ImageViewer extends JFrame {
         this.addImageToOverViewPanel(image, overviewButtonListener, imagesToView.size() - 1, true);
     }
 
-    private void addListeners() {
-        this.addWindowListener(new WindowDestroyer());
+    @Override
+    protected void addListeners() {
+        super.addListeners();
         previousJButton.addActionListener(new ToolBarButtonPrevious());
         nextJButton.addActionListener(new ToolBarButtonNext());
         adjustToWindowSizeJButton.addActionListener(new ToolBarButtonAdjustToWindowSize());
@@ -652,20 +609,16 @@ public class ImageViewer extends JFrame {
         toggleNavigationImageButton.addActionListener(new ToggleNavigationImageButton());
     }
 
+    @Override
     public void saveSettings() {
-        GUI gUI = configuration.getgUI();
+        super.saveSettings();
 
-        Rectangle sizeAndLocation = gUI.getImageViewer().getSizeAndLocation();
-
-        sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
-        sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
-
-        List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+        List<GUIWindowSplitPane> guiWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerSize());
 
-        ImageViewerState imageViewerState = configuration.getImageViewerState();
+        ImageViewerState imageViewerState = getConfiguration().getImageViewerState();
 
         imageViewerState.setAutomaticallyResizeImages(automaticAdjustToWindowSizeJToggleButton.isSelected());
         imageViewerState.setAutomaticallyRotateImages(automaticRotateToggleButton.isSelected());
@@ -680,23 +633,22 @@ public class ImageViewer extends JFrame {
     }
 
     private void setStatusMessages (String imagePath, long fileSize,  int imageWidht, int imageHeight) {
-        statuspanel.setStatusMessage(" " + imagePath, lang.get("imageviewer.statusbar.pathToPicture"), 0);
-        statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.sizeLabel") + " " + StringUtil.formatBytes(fileSize, "0.00") + " ", lang.get("imageviewer.statusbar.sizeLabelImage") + " byte", 1);
-        statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(imageWidht)  + " px ", lang.get("imageviewer.statusbar.widthLabelImage"), 2);
-        statuspanel.setStatusMessage(" " + lang.get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(imageHeight) + " px", lang.get("imageviewer.statusbar.heightLabelImage"), 3);
+        statuspanel.setStatusMessage(" " + imagePath, getLang().get("imageviewer.statusbar.pathToPicture"), 0);
+        statuspanel.setStatusMessage(" " + getLang().get("imageviewer.statusbar.sizeLabel") + " " + StringUtil.formatBytes(fileSize, "0.00") + " ", getLang().get("imageviewer.statusbar.sizeLabelImage") + " byte", 1);
+        statuspanel.setStatusMessage(" " + getLang().get("imageviewer.statusbar.widthLabel") + " " + Integer.toString(imageWidht)  + " px ", getLang().get("imageviewer.statusbar.widthLabelImage"), 2);
+        statuspanel.setStatusMessage(" " + getLang().get("imageviewer.statusbar.heightLabel") + " "  + Integer.toString(imageHeight) + " px", getLang().get("imageviewer.statusbar.heightLabelImage"), 3);
     }
 
-    private void disposeFrame() {
-        this.saveSettings();
+    @Override
+    protected void disposeFrame() {
+        super.disposeFrame();
         this.removeCustomKeyEventDispatcher();
-        this.setVisible(false);
-        this.dispose();
         ApplicationContext.getInstance().setImageViewerDisplayed(false);
     }
 
     private void createImage(String imagePath) {
-        logger.logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
-        logger.logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
+        getLogger().logDEBUG("Total mem " + Runtime.getRuntime().totalMemory());
+        getLogger().logDEBUG("Max mem   " + Runtime.getRuntime().maxMemory());
 
         try {
             // Load image from disk
@@ -709,9 +661,9 @@ public class ImageViewer extends JFrame {
 
             imageBackground.setImage(img, thePicture, !automaticAdjustToWindowSizeJToggleButton.isSelected(), automaticRotateToggleButton.isSelected(), resizeQuality.getModel().getElementAt(resizeQuality.getSelectedIndex()).getMethod());
         } catch (IOException iox) {
-            logger.logERROR("Could not read the image: " + thePicture.getAbsolutePath());
-            logger.logERROR(iox);
-            JOptionPane.showMessageDialog(this, String.format(lang.get("imageviewer.could.nor.read.image"), thePicture.getAbsolutePath()), lang.get("common.error"), JOptionPane.ERROR_MESSAGE);
+            getLogger().logERROR("Could not read the image: " + thePicture.getAbsolutePath());
+            getLogger().logERROR(iox);
+            JOptionPane.showMessageDialog(this, String.format(getLang().get("imageviewer.could.nor.read.image"), thePicture.getAbsolutePath()), getLang().get("common.error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -727,7 +679,7 @@ public class ImageViewer extends JFrame {
         createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
         clearSelectionForCurrentlyDisplayedButton(indexForCurrentlyDisplayedImage);
 
-        logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+        getLogger().logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
     }
 
     private void loadAndViewNextImage() {
@@ -742,7 +694,7 @@ public class ImageViewer extends JFrame {
         createImageDisplayImageAndScrollThumbnailToVisibleRect(imageToViewListIndex);
         clearSelectionForCurrentlyDisplayedButton(indexForCurrentlyDisplayedImage);
 
-        logger.logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
+        getLogger().logDEBUG("Image: " + imagesToView.get(imageToViewListIndex).getAbsolutePath() + " has been loaded");
     }
 
     private void createImageDisplayImageAndScrollThumbnailToVisibleRect(int imageToViewListIndex) {
@@ -752,7 +704,7 @@ public class ImageViewer extends JFrame {
 
         JButton jButtonForThumbnailForCurrentImageToDisplay = imageToJButtonMapping.get(imageToDisplay);
 
-        ThumbNailGrayFilter grayFilter = configuration.getThumbNail().getGrayFilter();
+        ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
 
         Image selectedIcon = ButtonIconUtil.getSelectedIcon(jButtonForThumbnailForCurrentImageToDisplay, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
 
@@ -772,13 +724,6 @@ public class ImageViewer extends JFrame {
     public void resizeImage() {
         if (this.isVisible()) {
             adjustToWindowSizeJButton.doClick();
-        }
-    }
-
-    private class WindowDestroyer extends WindowAdapter {
-        @Override
-        public void windowClosing (WindowEvent e) {
-            disposeFrame();
         }
     }
 
@@ -875,8 +820,7 @@ public class ImageViewer extends JFrame {
         this.setLocation(location);
         this.setSize(widthAndHeight);
 
-        GUI gUI = configuration.getgUI();
-        List<GUIWindowSplitPane> gUIWindowSplitPanes = gUI.getImageViewer().getGuiWindowSplitPane();
+        List<GUIWindowSplitPane> gUIWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
         imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
         imageMetaDataSplitPane.setDividerLocation(imageMetaDataSplitPaneDividerLocation);
@@ -1171,5 +1115,15 @@ public class ImageViewer extends JFrame {
         public void actionPerformed(ActionEvent e) {
             imageBackground.setNavigationImageEnabled(toggleNavigationImageButton.isSelected());
         }
+    }
+
+    @Override
+    public GUIWindow getGUIWindowConfig() {
+        return getConfiguration().getgUI().getImageViewer();
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return new Dimension(GUIDefaults.IMAGE_VIEWER_WIDTH, GUIDefaults.IMAGE_VIEWER_HEIGHT);
     }
 }
