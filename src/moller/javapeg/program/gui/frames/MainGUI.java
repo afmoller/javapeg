@@ -195,7 +195,6 @@ import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
-import moller.javapeg.program.imageviewer.ImageViewer;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
@@ -4821,7 +4820,7 @@ public class MainGUI extends JFrame {
             searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
 
             displayImageRepositoryStatisticsViewerButton.setEnabled(true);
-            displayImageRepositoryStatisticsViewerButton.setToolTipText("findimage.displayImageRepositoryStatisticsViewer.tooltip");
+            displayImageRepositoryStatisticsViewerButton.setToolTipText(lang.get("findimage.displayImageRepositoryStatisticsViewer.tooltip"));
 
             MetaDataTextfieldListener mdtl = new MetaDataTextfieldListener();
 
