@@ -19,6 +19,8 @@ package moller.javapeg.program.gui.frames.base;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -71,7 +73,6 @@ public abstract class JavaPEGBaseFrame extends JFrame {
      * not part (outside) of the available coordinate system.
      */
     protected void loadAndApplyGUISettings() {
-
         GUIWindow guiWindowConfig = getGUIWindowConfig();
         Rectangle sizeAndLocation = guiWindowConfig.getSizeAndLocation();
 
@@ -100,19 +101,6 @@ public abstract class JavaPEGBaseFrame extends JFrame {
     }
 
     /**
-     * Stores the current size and location of the GUI into the configuration
-     * object.
-     */
-    protected void saveGUISizeAndLocationSettings() {
-        if (this.isVisible()) {
-            Rectangle sizeAndLocation = getGUIWindowConfig().getSizeAndLocation();
-
-            sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
-            sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
-        }
-    }
-
-    /**
      * Returns the {@link Language} object which is kept by this class
      *
      * @return
@@ -137,5 +125,36 @@ public abstract class JavaPEGBaseFrame extends JFrame {
      */
     public Logger getLogger() {
         return logger;
+    }
+
+    protected void addListeners() {
+        this.addWindowListener(new WindowDestroyer());
+    }
+
+    protected class WindowDestroyer extends WindowAdapter {
+
+        @Override
+        public void windowClosing (WindowEvent e) {
+            disposeFrame();
+        }
+    }
+
+    protected void disposeFrame() {
+        saveSettings();
+        setVisible(false);
+        dispose();
+    }
+
+    /**
+     * Stores the current size and location of the GUI into the configuration
+     * object.
+     */
+    protected void saveSettings() {
+        if (this.isVisible()) {
+            Rectangle sizeAndLocation = getGUIWindowConfig().getSizeAndLocation();
+
+            sizeAndLocation.setSize(this.getSize().width, this.getSize().height);
+            sizeAndLocation.setLocation(this.getLocationOnScreen().x, this.getLocationOnScreen().y);
+        }
     }
 }

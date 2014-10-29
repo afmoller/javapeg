@@ -41,8 +41,9 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
         this.addListeners();
     }
 
-    private void addListeners() {
-        // TODO Auto-generated method stub
+    @Override
+    protected void addListeners() {
+        super.addListeners();
 
     }
 
@@ -61,5 +62,4 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
     public Dimension getDefaultSize() {
         return new Dimension(GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_WIDTH, GUIDefaults.IMAGE_REPOSITORY_STATISTICS_VIEWER_HEIGHT);
     }
-
 }

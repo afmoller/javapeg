@@ -23,8 +23,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -146,8 +144,9 @@ public class ImageResizer extends JavaPEGBaseFrame {
         qualityComboBox.setSelectedIndex(selectedQualityIndex);
     }
 
-    private void addListeners() {
-        this.addWindowListener(new WindowDestroyer());
+    @Override
+    protected void addListeners() {
+        super.addListeners();
         removeSelectedImagesButton.addActionListener(new RemoveSelectedImagesListener());
         imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
     }
@@ -371,21 +370,9 @@ public class ImageResizer extends JavaPEGBaseFrame {
         return backgroundPanel;
     }
 
-    private class WindowDestroyer extends WindowAdapter {
-        @Override
-        public void windowClosing (WindowEvent e) {
-            disposeFrame();
-        }
-    }
-
-    private void disposeFrame() {
-        this.saveSettings();
-        this.setVisible(false);
-        this.dispose();
-    }
-
-    private void saveSettings() {
-        saveGUISizeAndLocationSettings();
+    @Override
+    protected void saveSettings() {
+        super.saveSettings();
 
         List<GUIWindowSplitPane> guiWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 

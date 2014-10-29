@@ -33,8 +33,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -373,8 +371,9 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         this.getContentPane().add(statuspanel, BorderLayout.SOUTH);
     }
 
-    private void addListeners() {
-        this.addWindowListener(new WindowDestroyer());
+    @Override
+    protected void addListeners() {
+        super.addListeners();
         this.addComponentListener(new ComponentListener());
         popupMenuSetSelectedToViewList.addActionListener(new RightClickMenuListenerSetSelectedToViewList());
         popupMenuSelectAll.addActionListener(new RightClickMenuListenerSelectAll());
@@ -391,8 +390,9 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         manager.removeKeyEventDispatcher(customKeyEventDispatcher);
     }
 
-    private void saveSettings() {
-        saveGUISizeAndLocationSettings();
+    @Override
+    protected void saveSettings() {
+        super.saveSettings();
 
         ImageSearchResultViewerState imageSearchResultViewerState = getConfiguration().getImageSearchResultViewerState();
 
@@ -419,18 +419,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         statuspanel.setStatusMessage(Integer.toString(nrOfImagesToDisplay), getLang().get("imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult"), 3);
     }
 
-    private void disposeFrame() {
-        this.saveSettings();
+    @Override
+    protected void disposeFrame() {
         this.removeCustomKeyEventDispatcher();
-        this.setVisible(false);
-        this.dispose();
-    }
-
-    private class WindowDestroyer extends WindowAdapter {
-        @Override
-        public void windowClosing (WindowEvent e) {
-            disposeFrame();
-        }
+        super.disposeFrame();
     }
 
     /**
