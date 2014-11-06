@@ -32,7 +32,7 @@ import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
-
+import moller.util.string.StringUtil;
 
 public class ImageMetaDataContext {
 
@@ -43,7 +43,6 @@ public class ImageMetaDataContext {
 
     private final Map<String, ImageSize> imageSizeStringImageSizeMappings;
     private final Map<String, ExposureTime> exposureTimeStringExposureTimeMappings;
-
 
     /**
      * Contains a mapping between a absolute path as a {@link String} object and
@@ -111,6 +110,10 @@ public class ImageMetaDataContext {
     }
 
     public void addCameraModel(String javaPegIdValue, String cameraModel, String imagePath) {
+        if (!StringUtil.isNotBlank(cameraModel)) {
+            cameraModel = "Unknown";
+        }
+
         if (!javaPegIdToCameraModels.containsKey(javaPegIdValue)) {
             Map<String, Set<Integer>> cameraModelToIndex = new HashMap<String, Set<Integer>>();
 
@@ -545,4 +548,62 @@ public class ImageMetaDataContext {
             }
         }
     }
+
+    public int getNumberOfImagesForCameraModel(String cameraModel) {
+        int amountOfImages = 0;
+
+        for (String javaPegId : javaPegIdToCameraModels.keySet()) {
+             Map<String, Set<Integer>> cameraModelsToImagesMapping = javaPegIdToCameraModels.get(javaPegId);
+
+             amountOfImages += cameraModelsToImagesMapping.get(cameraModel).size();
+        }
+        return amountOfImages;
+    }
+
+    public int getNumberOfImagesForYear(Integer year) {
+        return getNumberOfImagesForInteger(javaPegIdToYearValues, year);
+    }
+
+    public int getNumberOfImagesForDate(Integer date) {
+        return getNumberOfImagesForInteger(javaPegIdToDateValues, date);
+    }
+
+    public int getNumberOfImagesForHour(Integer hour) {
+        return getNumberOfImagesForInteger(javaPegIdToHourValues, hour);
+    }
+
+    public int getNumberOfImagesForMinute(Integer minute) {
+        return getNumberOfImagesForInteger(javaPegIdToMinuteValues, minute);
+    }
+
+    public int getNumberOfImagesForSecond(Integer second) {
+        return getNumberOfImagesForInteger(javaPegIdToSecondValues, second);
+    }
+
+    public int getNumberOfImagesForISO(Integer iso) {
+        return getNumberOfImagesForInteger(javaPegIdToIsoValues, iso);
+    }
+
+    private int getNumberOfImagesForInteger(Map<String, Map<Integer, Set<Integer>>> map, Integer integer) {
+        int amountOfImages = 0;
+
+        for (String javaPegId : map.keySet()) {
+             Map<Integer, Set<Integer>> integersToImagesMapping = map.get(javaPegId);
+             amountOfImages += integersToImagesMapping.get(integer).size();
+        }
+        return amountOfImages;
+    }
+
+    public int getNumberOfImagesForImageSize(ImageSize imageSize) {
+        int amountOfImages = 0;
+
+        for (String javaPegId : javaPegIdToImageSizeValues.keySet()) {
+             Map<String, Set<Integer>> imageSizesToImagesMapping = javaPegIdToImageSizeValues.get(javaPegId);
+             amountOfImages += imageSizesToImagesMapping.get(imageSize.toString()).size();
+        }
+        return amountOfImages;
+    }
+
+
+
 }

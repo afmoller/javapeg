@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="libraries/xmpcore.jar"/>
 	<classpathentry kind="lib" path="libraries/metadata-extractor-2.6.4.jar"/>
 	<classpathentry kind="lib" path="libraries/imgscalr-lib-4.2.jar"/>
+	<classpathentry kind="lib" path="libraries/Chart2D.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
