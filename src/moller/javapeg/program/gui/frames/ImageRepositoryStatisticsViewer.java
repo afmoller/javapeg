@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -97,6 +98,7 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
         tabbedPane.add(createISOStatistics(), 7);
         tabbedPane.add(createExposureTimeStatistics(), 8);
         tabbedPane.add(createFNumberStatistics(), 9);
+        tabbedPane.add(createWeekDayStatistics(), 10);
 
         return tabbedPane;
     }
@@ -119,6 +121,59 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
         }
 
         return defaultCategoryDataset;
+    }
+
+    private Component createWeekDayStatistics() {
+        int[] weekdays = new int[]{0, 0, 0, 0, 0, 0, 0};
+
+        ImageMetaDataContext imdc = ImageMetaDataContext.getInstance();
+
+        Calendar calendar = Calendar.getInstance();
+
+        Map<String, Long> dateTimeValues = imdc.getDateTimeValues();
+
+        for (String imagePath : dateTimeValues.keySet()) {
+            calendar.setTimeInMillis(dateTimeValues.get(imagePath));
+
+            ++weekdays[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+        }
+
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
+
+        for (int i = 0; i < weekdays.length; i++) {
+            dataSet.setValue(weekdays[i], "Weekdays", getWeekDayAsString(i));
+        }
+
+        return createChart(dataSet, "Weekdays");
+    }
+
+    private String getWeekDayAsString(int weekDayAsInt) {
+        switch (weekDayAsInt) {
+        case 0:
+            // TODO: Fix hard coded string
+            return "Sunday";
+        case 1:
+            // TODO: Fix hard coded string
+            return "Monday";
+        case 2:
+            // TODO: Fix hard coded string
+            return "Tuesday";
+        case 3:
+            // TODO: Fix hard coded string
+            return "Wednesday";
+        case 4:
+            // TODO: Fix hard coded string
+            return "Thursday";
+        case 5:
+            // TODO: Fix hard coded string
+            return "Friday";
+        case 6:
+            // TODO: Fix hard coded string
+            return "Saturday";
+        default:
+            // TODO: Fix hard coded string
+            return "Unknown";
+        }
     }
 
     private Component createFNumberStatistics() {
