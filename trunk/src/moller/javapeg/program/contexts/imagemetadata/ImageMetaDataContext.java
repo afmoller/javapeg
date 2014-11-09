@@ -623,4 +623,14 @@ public class ImageMetaDataContext {
         }
         return amountOfImages;
     }
+
+    /**
+     * Returns the time stamp as a {@link Long} for all images which are stored
+     * in the {@link ImageMetaDataContext}
+     *
+     * @return
+     */
+    public Map<String, Long> getDateTimeValues() {
+        return dateTimeValues;
+    }
 }

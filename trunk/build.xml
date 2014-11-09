@@ -99,7 +99,7 @@
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
-				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar lib/imgscalr-lib-4.2.jar lib/Chart2D.jar" />
+				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar lib/imgscalr-lib-4.2.jar lib/jcommon-1.0.23.jar lib/jfreechart-1.0.19.jar" />
 				<attribute name="SplashScreen-Image" value="${splashscreen.image}" />
 			</manifest>
 			<fileset dir="build">
@@ -184,7 +184,8 @@
 	                <include name="libraries/metadata-extractor-2.6.4.jar" />
 	            	<include name="libraries/xmpcore.jar" />
 	            	<include name="libraries/imgscalr-lib-4.2.jar" />
-	            	<include name="libraries/Chart2D.jar" />
+	            	<include name="libraries/jcommon-1.0.23.jar" />
+	            	<include name="libraries/jfreechart-1.0.19.jar" />
 	            </fileset>
 	        </zip>
 	    </target>
