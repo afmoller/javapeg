@@ -604,6 +604,23 @@ public class ImageMetaDataContext {
         return amountOfImages;
     }
 
+    public Integer getNumberOfImagesForExposureTime(ExposureTime exposureTime) {
+        int amountOfImages = 0;
 
+        for (String javaPegId : javaPegIdToExposureTimeValues.keySet()) {
+             Map<String, Set<Integer>> exposureTimesToImagesMapping = javaPegIdToExposureTimeValues.get(javaPegId);
+             amountOfImages += exposureTimesToImagesMapping.get(exposureTime.toString()).size();
+        }
+        return amountOfImages;
+    }
 
+    public Integer getNumberOfImagesForFNumber(Double fNumber) {
+        int amountOfImages = 0;
+
+        for (String javaPegId : javaPegIdToFNumberValues.keySet()) {
+             Map<Double, Set<Integer>> exposureTimesToImagesMapping = javaPegIdToFNumberValues.get(javaPegId);
+             amountOfImages += exposureTimesToImagesMapping.get(fNumber).size();
+        }
+        return amountOfImages;
+    }
 }
