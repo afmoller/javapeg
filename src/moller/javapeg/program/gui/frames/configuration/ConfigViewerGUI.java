@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.config.view;
+package moller.javapeg.program.gui.frames.configuration;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -109,6 +109,7 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.frames.configuration.panels.MetadataConfigurationPanel;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
@@ -139,6 +140,7 @@ public class ConfigViewerGUI extends JFrame {
     private JPanel renameConfigurationPanel;
     private JPanel thumbnailConfigurationPanel;
     private JPanel tagConfigurationPanel;
+    private final MetadataConfigurationPanel metadataConfigurationPanel;
 
     private JSplitPane splitPane;
 
@@ -281,6 +283,9 @@ public class ConfigViewerGUI extends JFrame {
         this.createRenameConfigurationPanel();
         this.createThumbnailConfigurationPanel();
         this.createTagConfigurationPanel();
+
+        metadataConfigurationPanel = new MetadataConfigurationPanel();
+
         this.addListeners();
     }
 
@@ -1738,6 +1743,7 @@ public class ConfigViewerGUI extends JFrame {
     private class Mouselistener extends MouseAdapter{
         @Override
         public void mousePressed(MouseEvent e){
+
             int selRow = tree.getRowForLocation(e.getX(), e.getY());
             if(selRow > -1) {
 
@@ -1756,6 +1762,8 @@ public class ConfigViewerGUI extends JFrame {
                     backgroundsPanel.add(thumbnailConfigurationPanel);
                 } else if (selRow == 6) {
                     backgroundsPanel.add(tagConfigurationPanel);
+                } else if (selRow == 7) {
+                    backgroundsPanel.add(metadataConfigurationPanel);
                 }
             }
         }

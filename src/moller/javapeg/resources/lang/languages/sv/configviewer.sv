@@ -148,6 +148,7 @@ configviewer.tree.node.rename    = Namnbyte
 configviewer.tree.node.language  = Språk
 configviewer.tree.node.thumbnail = Tumnagel
 configviewer.tree.node.tag       = Taggar
+configviewer.tree.node.metadata  = Metadata
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
