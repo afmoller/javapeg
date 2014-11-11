@@ -148,6 +148,7 @@ configviewer.tree.node.rename    = Rename
 configviewer.tree.node.language  = Language
 configviewer.tree.node.thumbnail = Thumbnail
 configviewer.tree.node.tag       = Tag
+configviewer.tree.node.metadata  = Meta data
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
