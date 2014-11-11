@@ -23,7 +23,6 @@ public class ButtonIconUtil {
         GrayFilter filter = new GrayFilter(brightened, percentage);
         ImageProducer prod = new FilteredImageSource(((ImageIcon)button.getIcon()).getImage().getSource(), filter);
         return Toolkit.getDefaultToolkit().createImage(prod);
-
     }
 
     public static void setDeSelectedThumbNailImage(AbstractButton button) {
