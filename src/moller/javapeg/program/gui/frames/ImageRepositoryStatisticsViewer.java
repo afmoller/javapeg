@@ -17,6 +17,7 @@
 package moller.javapeg.program.gui.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.IOException;
@@ -40,6 +41,9 @@ import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -109,6 +113,15 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setName(label);
         chartPanel.setMouseWheelEnabled(true);
+
+        final CategoryPlot plot = barChart.getCategoryPlot();
+        plot.setBackgroundPaint(new Color(204, 204, 204));
+
+        BarRenderer barRenderer = (BarRenderer) plot.getRenderer();
+        barRenderer.setBarPainter(new StandardBarPainter());
+        barRenderer.setSeriesPaint(0, new Color(102, 153, 204));
+        barRenderer.setDrawBarOutline(true);
+        barRenderer.setSeriesOutlinePaint(0, Color.BLACK);
 
         return chartPanel;
     }
