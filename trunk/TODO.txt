@@ -1,7 +1,7 @@
 3.0:
 ====
+- Add possibility to filter strange ISO values from specific camera models.
 - Add startup splashscreen.
-- Add meta data base statistics
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.
