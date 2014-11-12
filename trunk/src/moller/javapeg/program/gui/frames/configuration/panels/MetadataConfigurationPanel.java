@@ -55,4 +55,40 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     }
 
+    @Override
+    public boolean isValidConfiguration() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    protected void addListeners() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void createPanel() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getChangedConfigurationMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateConfiguration() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void setStartUpConfig() {
+        // TODO Auto-generated method stub
+
+    }
+
 }
