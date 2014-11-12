@@ -25,8 +25,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -34,11 +32,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,11 +86,9 @@ import moller.javapeg.program.categories.CategoryUtil;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.model.Configuration;
-import moller.javapeg.program.config.model.Logging;
 import moller.javapeg.program.config.model.ToolTips;
 import moller.javapeg.program.config.model.UpdatesChecker;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
-import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
@@ -106,10 +99,11 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
-import moller.javapeg.program.enumerations.Level;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.frames.configuration.panels.LoggingConfigurationPanel;
 import moller.javapeg.program.gui.frames.configuration.panels.MetadataConfigurationPanel;
+import moller.javapeg.program.gui.frames.configuration.panels.RenameConfigurationPanel;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
 import moller.javapeg.program.language.ISO639;
@@ -119,7 +113,6 @@ import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.gui.Screen;
 import moller.util.image.ImageUtil;
-import moller.util.io.PathUtil;
 import moller.util.io.Status;
 import moller.util.io.StreamUtil;
 import moller.util.java.SystemProperties;
@@ -134,33 +127,19 @@ public class ConfigViewerGUI extends JFrame {
 
     private JPanel backgroundsPanel;
 
-    private JPanel loggingConfigurationPanel;
     private JPanel updatesConfigurationPanel;
     private JPanel languageConfigurationPanel;
-    private JPanel renameConfigurationPanel;
     private JPanel thumbnailConfigurationPanel;
     private JPanel tagConfigurationPanel;
     private final MetadataConfigurationPanel metadataConfigurationPanel;
+    private final RenameConfigurationPanel renameConfigurationPanel;
+    private final LoggingConfigurationPanel loggingConfigurationPanel;
 
     private JSplitPane splitPane;
 
     private JButton okButton;
     private JButton applyButton;
     private JButton cancelButton;
-
-    /**
-     * Variables for the logging panel
-     */
-    private JCheckBox developerMode;
-    private JCheckBox rotateLog;
-    private JCheckBox zipLog;
-    private JComboBox<String> rotateLogSizeFactor;
-    private JComboBox<Level> logLevels;
-    private JComboBox<String> logEntryTimeStampFormats;
-
-    private JTextField rotateLogSize;
-    private JTextField logName;
-    private JTextField logEntryTimeStampPreview;
 
     /**
      * Variables for the updates panel
@@ -172,13 +151,6 @@ public class ConfigViewerGUI extends JFrame {
      * Variables for the language panel
      */
     private JList<String> languageList;
-
-    /**
-     * Variables for the rename panel
-     */
-    private JCheckBox useLastModifiedDate;
-    private JCheckBox useLastModifiedTime;
-    private JTextField maximumLengthOfCameraModelValueTextField;
 
     private JLabel currentLanguage;
 
@@ -239,30 +211,20 @@ public class ConfigViewerGUI extends JFrame {
     private final Language lang;
 
     // Configuration values read from configuration.
-    private Level LOG_LEVEL;
-    private String LOG_NAME;
-    private Long LOG_ROTATE_SIZE;
-    private SimpleDateFormat LOG_ENTRY_TIMESTAMP_FORMAT;
+
     private String GUI_LANGUAGE_ISO6391;
     private Integer THUMBNAIL_WIDTH;
     private Integer THUMBNAIL_HEIGHT;
     private JPEGScaleAlgorithm CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
     private Integer THUMBNAIL_MAX_CACHE_SIZE;
-    private Integer MAXIMUM_LENGTH_OF_CAMERA_MODEL;
     private String OVERVIEW_THUMBNAIL_TOOLTIP_STATE;
     private String IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE;
     private String OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE;
     private Integer ADD_TO_IMAGEREPOSITOY_POLICY;
     private Integer PERCENTAGE_SLIDER;
     private Boolean BRIGHTENED_CHECKBOX;
-
-    private boolean DEVELOPER_MODE;
-    private boolean LOG_ROTATE;
-    private boolean LOG_ROTATE_ZIP;
     private boolean UPDATE_CHECK_ENABLED;
     private boolean UPDATE_CHECK_ATTACH_VERSION;
-    private boolean USE_LAST_MODIFIED_DATE;
-    private boolean USE_LAST_MODIFIED_TIME;
     private boolean AUTOMATIC_LANGUAGE_SELECTION;
     private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
     private boolean ENABLE_THUMBNAIL_CACHE;
@@ -277,10 +239,14 @@ public class ConfigViewerGUI extends JFrame {
 
         this.setStartupConfig();
         this.initiateWindow();
-        this.createLoggingConfigurationPanel();
+
+        loggingConfigurationPanel = new LoggingConfigurationPanel();
+
         this.createUpdateConfigurationPanel();
         this.createLanguageConfigurationPanel();
-        this.createRenameConfigurationPanel();
+
+        renameConfigurationPanel = new RenameConfigurationPanel();
+
         this.createThumbnailConfigurationPanel();
         this.createTagConfigurationPanel();
 
@@ -290,18 +256,8 @@ public class ConfigViewerGUI extends JFrame {
     }
 
     private void setStartupConfig() {
-        LOG_LEVEL = configuration.getLogging().getLevel();
-        DEVELOPER_MODE = configuration.getLogging().getDeveloperMode();
-        LOG_ROTATE = configuration.getLogging().getRotate();
-        LOG_ROTATE_ZIP = configuration.getLogging().getRotateZip();
-        LOG_ROTATE_SIZE = configuration.getLogging().getRotateSize();
-        LOG_NAME = configuration.getLogging().getFileName();
-        LOG_ENTRY_TIMESTAMP_FORMAT = configuration.getLogging().getTimeStampFormat();
         UPDATE_CHECK_ENABLED = configuration.getUpdatesChecker().isEnabled();
         UPDATE_CHECK_ATTACH_VERSION = configuration.getUpdatesChecker().getAttachVersionInformation();
-        USE_LAST_MODIFIED_DATE = configuration.getRenameImages().getUseLastModifiedDate();
-        USE_LAST_MODIFIED_TIME = configuration.getRenameImages().getUseLastModifiedTime();
-        MAXIMUM_LENGTH_OF_CAMERA_MODEL = configuration.getRenameImages().getCameraModelNameMaximumLength();
         AUTOMATIC_LANGUAGE_SELECTION = configuration.getLanguage().getAutomaticSelection();
         GUI_LANGUAGE_ISO6391 = configuration.getLanguage().getgUILanguageISO6391();
         CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = configuration.getThumbNail().getCreation().getIfMissingOrCorrupt();
@@ -380,15 +336,10 @@ public class ConfigViewerGUI extends JFrame {
 
     private void addListeners(){
         this.addWindowListener(new WindowEventHandler());
-        rotateLogSize.getDocument().addDocumentListener(new RotateLogSizeJTextFieldListener());
-        rotateLogSizeFactor.addItemListener(new RotateLogSizeFactorJComboBoxListener());
-        logName.getDocument().addDocumentListener(new LogNameJTextFieldListener());
-        logEntryTimeStampFormats.addItemListener(new LogEntryTimestampFormatsJComboBoxListener());
         manualRadioButton.addActionListener(new ManualRadioButtonListener());
         automaticRadioButton.addActionListener(new AutomaticRadioButtonListener());
         languageList.addListSelectionListener(new LanguageListListener());
         updatesEnabled.addChangeListener(new UpdatesEnabledCheckBoxListener());
-        rotateLog.addChangeListener(new RotateLogCheckBoxListener());
         okButton.addActionListener(new OkButtonListener());
         applyButton.addActionListener(new ApplyButtonListener());
         cancelButton.addActionListener(new CancelButtonListener());
@@ -398,7 +349,7 @@ public class ConfigViewerGUI extends JFrame {
         maxCacheSize.getDocument().addDocumentListener(new ThumbnailMaxCacheSizeJTextFieldListener());
         clearCacheJButton.addActionListener(new ClearCacheButtonListener());
         enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
-        maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());
+
         removeSelectedImagePathsButton.addActionListener(new RemoveSelectedImagePathsButtonListener());
 
         ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel().addTableModelListener(new ImageRepositoriesTableModelListener());
@@ -423,95 +374,6 @@ public class ConfigViewerGUI extends JFrame {
         return buttonPanel;
     }
 
-    private void createLoggingConfigurationPanel() {
-        loggingConfigurationPanel = new JPanel(new GridBagLayout());
-        loggingConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.logging"))));
-
-        GBHelper posLoggingPanel = new GBHelper();
-
-        Logging logging = configuration.getLogging();
-
-        JLabel logLevelsLabel = new JLabel(lang.get("configviewer.logging.label.logLevel.text"));
-        logLevels = new JComboBox<Level>(Level.values());
-        logLevels.setSelectedItem(logging.getLevel());
-
-        developerMode = new JCheckBox(lang.get("configviewer.logging.label.developerMode.text"));
-        developerMode.setSelected(logging.getDeveloperMode());
-
-        rotateLog = new JCheckBox(lang.get("configviewer.logging.label.rotateLog.text"));
-        rotateLog.setSelected(logging.getRotate());
-
-        zipLog = new JCheckBox(lang.get("configviewer.logging.label.zipLog.text"));
-        zipLog.setSelected(logging.getRotateZip());
-
-        JLabel rotateLogSizeLabel = new JLabel(lang.get("configviewer.logging.label.rotateLogSize.text"));
-
-        JPanel logSizePanel = new JPanel(new GridBagLayout());
-        GBHelper posLogSizePanel = new GBHelper();
-
-        rotateLogSize = new JTextField();
-        rotateLogSize.setEnabled(logging.getRotate());
-
-        long logSize = logging.getRotateSize();
-
-        String [] factors = {"KiB", "MiB"};
-
-        rotateLogSizeFactor = new JComboBox<String>(factors);
-
-        /**
-         * Set values to the rotate log size JTextField and rotate log size
-         * factor JComboBox
-         */
-        longToHuman(logSize);
-
-        logSizePanel.add(rotateLogSize, posLogSizePanel.expandW());
-        logSizePanel.add(Box.createHorizontalStrut(10), posLogSizePanel.nextCol());
-        logSizePanel.add(rotateLogSizeFactor, posLogSizePanel.nextCol());
-
-        JLabel logNameLabel = new JLabel(lang.get("configviewer.logging.label.logName.text"));
-        logName = new JTextField();
-        logName.setText(logging.getFileName());
-
-        JLabel logEntryTimeStampFormatLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text"));
-
-        Set<String> formats = new LinkedHashSet<String>();
-
-        formats.add(logging.getTimeStampFormat().toPattern());
-        formats.add("yyyy-MM-dd'T'HH:mm:ss:SSSZ");
-        formats.add("yyyyMMdd'T'HHmmssSSSZ");
-        formats.add("yyyy-D'T'HH:mm:ss:SSSZ");
-        formats.add("yyyyD'T'HHmmssSSSZ");
-        formats.add("MM/dd/yyyy:HH:mm:ss:SSS");
-        formats.add("dd/MM/yyyy:HH:mm:ss:SSS");
-
-        logEntryTimeStampFormats = new JComboBox<String>(formats.toArray(new String[]{""}));
-
-        JLabel logEntryTimeStampPreviewLabel = new JLabel(lang.get("configviewer.logging.label.logEntryTimeStampPreview.text"));
-        logEntryTimeStampPreview = new JTextField();
-        logEntryTimeStampPreview.setEditable(false);
-        this.updatePreviewTimestamp();
-
-        loggingConfigurationPanel.add(developerMode, posLoggingPanel.expandW());
-        loggingConfigurationPanel.add(rotateLog, posLoggingPanel.nextRow().expandW());
-        loggingConfigurationPanel.add(zipLog, posLoggingPanel.nextRow().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(rotateLogSizeLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logSizePanel, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logLevelsLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logLevels, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logNameLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logName, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logEntryTimeStampFormatLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logEntryTimeStampFormats, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalStrut(5), posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logEntryTimeStampPreviewLabel, posLoggingPanel.nextRow());
-        loggingConfigurationPanel.add(logEntryTimeStampPreview, posLoggingPanel.nextCol().expandW());
-        loggingConfigurationPanel.add(Box.createVerticalGlue(), posLoggingPanel.nextRow().expandH());
-    }
-
     private void createUpdateConfigurationPanel() {
         updatesConfigurationPanel = new JPanel(new GridBagLayout());
         updatesConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.updates"))));
@@ -530,31 +392,6 @@ public class ConfigViewerGUI extends JFrame {
         updatesConfigurationPanel.add(updatesEnabled, posUpdatesPanel.expandW());
         updatesConfigurationPanel.add(sendVersionInformationEnabled, posUpdatesPanel.nextRow().expandW());
         updatesConfigurationPanel.add(Box.createVerticalGlue(), posUpdatesPanel.nextRow().expandH().expandW());
-    }
-
-    private void createRenameConfigurationPanel() {
-        renameConfigurationPanel = new JPanel(new GridBagLayout());
-        renameConfigurationPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(lang.get("configviewer.tree.node.rename"))));
-
-        GBHelper posRenamePanel = new GBHelper();
-
-        RenameImages renameImages = configuration.getRenameImages();
-
-        useLastModifiedDate = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedDate.text"));
-        useLastModifiedDate.setSelected(renameImages.getUseLastModifiedDate());
-
-        useLastModifiedTime = new JCheckBox(lang.get("configviewer.rename.label.useLastModifiedTime.text"));
-        useLastModifiedTime.setSelected(renameImages.getUseLastModifiedTime());
-
-        JLabel cameraModelValueLengthLabel = new JLabel(lang.get("configviewer.rename.label.maximumCameraModelValueLength"));
-        maximumLengthOfCameraModelValueTextField = new JTextField(5);
-        maximumLengthOfCameraModelValueTextField.setText(Integer.toString(renameImages.getCameraModelNameMaximumLength()));
-
-        renameConfigurationPanel.add(cameraModelValueLengthLabel, posRenamePanel);
-        renameConfigurationPanel.add(maximumLengthOfCameraModelValueTextField, posRenamePanel.nextCol().expandW());
-        renameConfigurationPanel.add(useLastModifiedDate, posRenamePanel.nextRow().expandW());
-        renameConfigurationPanel.add(useLastModifiedTime, posRenamePanel.nextRow().expandW());
-        renameConfigurationPanel.add(Box.createVerticalGlue(), posRenamePanel.nextRow().expandW().expandH());
     }
 
     private void createLanguageConfigurationPanel() {
@@ -1114,19 +951,9 @@ public class ConfigViewerGUI extends JFrame {
         return new JScrollPane(tree);
     }
 
-    private void updatePreviewTimestamp() {
-        Date date = new Date();
-
-        SimpleDateFormat sdf = new SimpleDateFormat(logEntryTimeStampFormats.getSelectedItem().toString());
-        logEntryTimeStampPreview.setText(sdf.format(date));
-    }
-
     private boolean updateConfiguration() {
 
-        if(!validateLogName(logName.getText())) {
-            return false;
-        }
-        if(!validateLogRotateSize()) {
+        if (!loggingConfigurationPanel.isValidConfiguration()) {
             return false;
         }
 
@@ -1142,22 +969,14 @@ public class ConfigViewerGUI extends JFrame {
             return false;
         }
 
-        if(!validateMaximumLengtOfCameraModel()) {
+        if (!renameConfigurationPanel.isValidConfiguration()) {
             return false;
         }
 
         /**
          * Update Logging Configuration
          */
-        Logging logging = configuration.getLogging();
-
-        logging.setDeveloperMode(developerMode.isSelected());
-        logging.setFileName(logName.getText().trim());
-        logging.setLevel((Level)logLevels.getSelectedItem());
-        logging.setRotate(rotateLog.isSelected());
-        logging.setRotateSize(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString()));
-        logging.setRotateZip(zipLog.isSelected());
-        logging.setTimeStampFormat(new SimpleDateFormat((String)logEntryTimeStampFormats.getSelectedItem()));
+        loggingConfigurationPanel.updateConfiguration();
 
         /**
          * Update Updates Configuration
@@ -1178,11 +997,7 @@ public class ConfigViewerGUI extends JFrame {
         /**
          * Update Rename Configuration
          */
-        RenameImages renameImages = configuration.getRenameImages();
-
-        renameImages.setCameraModelNameMaximumLength(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()));
-        renameImages.setUseLastModifiedDate(useLastModifiedDate.isSelected());
-        renameImages.setUseLastModifiedTime(useLastModifiedTime.isSelected());
+        renameConfigurationPanel.updateConfiguration();
 
         /**
          * Update Thumbnail Configuration
@@ -1286,48 +1101,12 @@ public class ConfigViewerGUI extends JFrame {
         String postMessage = lang.get("configviewer.changed.configuration.end");
         StringBuilder displayMessage = new StringBuilder();
 
-        if(DEVELOPER_MODE != developerMode.isSelected()){
-            displayMessage.append(lang.get("configviewer.logging.label.developerMode.text") + ": " + developerMode.isSelected() + " (" + DEVELOPER_MODE + ")\n");
-        }
-
-        if(LOG_ROTATE != rotateLog.isSelected()){
-            displayMessage.append(lang.get("configviewer.logging.label.rotateLog.text") + ": " + rotateLog.isSelected() + " (" + LOG_ROTATE + ")\n");
-        }
-
-        if(LOG_ROTATE_ZIP != zipLog.isSelected()){
-            displayMessage.append(lang.get("configviewer.logging.label.zipLog.text") + ": " + zipLog.isSelected() + " (" + LOG_ROTATE_ZIP + ")\n");
-        }
-
-        if(!LOG_ROTATE_SIZE.equals(calculateRotateLogSize(rotateLogSize.getText(), rotateLogSizeFactor.getSelectedItem().toString()))){
-            displayMessage.append(lang.get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(LOG_ROTATE_SIZE, rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
-        }
-
-        if(LOG_LEVEL != (Level)logLevels.getSelectedItem()) {
-            displayMessage.append(lang.get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + LOG_LEVEL + ")\n");
-        }
-
-        if(!LOG_NAME.equals(logName.getText())){
-            displayMessage.append(lang.get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + LOG_NAME + ")\n");
-        }
-
-        if(!LOG_ENTRY_TIMESTAMP_FORMAT.toPattern().equals(logEntryTimeStampFormats.getSelectedItem())) {
-            displayMessage.append(lang.get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + LOG_ENTRY_TIMESTAMP_FORMAT.toPattern() + ")\n");
-        }
-
         if(UPDATE_CHECK_ENABLED != updatesEnabled.isSelected()){
             displayMessage.append(lang.get("configviewer.update.label.updateEnabled.text") + ": " + updatesEnabled.isSelected() + " (" + UPDATE_CHECK_ENABLED + ")\n");
         }
 
         if(UPDATE_CHECK_ATTACH_VERSION != sendVersionInformationEnabled.isSelected()){
             displayMessage.append(lang.get("configviewer.update.label.attachVersionInformation.text") + ": " + sendVersionInformationEnabled.isSelected() + " (" + UPDATE_CHECK_ATTACH_VERSION + ")\n");
-        }
-
-        if(USE_LAST_MODIFIED_DATE != useLastModifiedDate.isSelected()){
-            displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedDate.text") + ": " + useLastModifiedDate.isSelected() + " (" + USE_LAST_MODIFIED_DATE + ")\n");
-        }
-
-        if(USE_LAST_MODIFIED_TIME != useLastModifiedTime.isSelected()){
-            displayMessage.append(lang.get("configviewer.rename.label.useLastModifiedTime.text") + ": " + useLastModifiedTime.isSelected() + " (" + USE_LAST_MODIFIED_TIME + ")\n");
         }
 
         if(AUTOMATIC_LANGUAGE_SELECTION != automaticRadioButton.isSelected()){
@@ -1362,9 +1141,8 @@ public class ConfigViewerGUI extends JFrame {
             displayMessage.append(lang.get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
         }
 
-        if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()))) {
-            displayMessage.append(lang.get("configviewer.rename.label.maximumCameraModelValueLength") + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
-        }
+        displayMessage.append(loggingConfigurationPanel.getChangedConfigurationMessage());
+        displayMessage.append(renameConfigurationPanel.getChangedConfigurationMessage());
 
         if(USE_EMBEDDED_THUMBNAIL != useEmbeddedThumbnail.isSelected()) {
             if (USE_EMBEDDED_THUMBNAIL) {
@@ -1503,80 +1281,6 @@ public class ConfigViewerGUI extends JFrame {
         return enabled;
     }
 
-    private boolean validateLogName(String logName) {
-        boolean isValid = true;
-
-        int result = PathUtil.validateString(logName, false);
-
-        if (result > -1) {
-            isValid = false;
-            JOptionPane.showMessageDialog(this, lang.get("common.message.error.invalidFileName") + " " + (char)result, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-        }
-        return isValid;
-    }
-
-    private boolean validateLogRotateSize() {
-        boolean isValid = true;
-
-        try {
-            Long size = Long.parseLong(rotateLogSize.getText());
-
-            String factor = rotateLogSizeFactor.getSelectedItem().toString();
-
-            size = calculateRotateLogSize(size, factor);
-
-            if(size > 100 * 1024 * 1024) {
-                isValid = false;
-
-                if(factor.equals("KiB")) {
-                    JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeKiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToLargeMiB"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
-            if(size < 10 * 1024) {
-                JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeToSmall"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException nfex) {
-            isValid = false;
-            JOptionPane.showMessageDialog(this, lang.get("configviewer.errormessage.rotateLogSizeNotAnInteger"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-        }
-        return isValid;
-    }
-
-    private Long calculateRotateLogSize(String size, String factor) {
-        return calculateRotateLogSize(Long.parseLong(size), factor);
-    }
-
-    private String parseRotateLongSize(Long size, String factor) {
-        if (factor.equals("KiB")) {
-            size /= 1024;
-        } else {
-            size /= 1024 * 1024;
-        }
-        return Long.toString(size);
-    }
-
-    private long calculateRotateLogSize(Long size, String factor) {
-        if (factor.equals("KiB")) {
-            size *= 1024;
-        } else {
-            size *= 1024 * 1024;
-        }
-        return size;
-    }
-
-    private void longToHuman (Long logSize) {
-        if (logSize / (1024 * 1024) > 1) {
-            rotateLogSize.setText(Long.toString(logSize / (1024 * 1024)));
-            rotateLogSizeFactor.setSelectedIndex(1);
-        } else {
-            rotateLogSize.setText(Long.toString(logSize / (1024)));
-            rotateLogSizeFactor.setSelectedIndex(0);
-        }
-    }
-
     private boolean validateThumbnailSize(String validatorFor) {
 
         String errorMessage = "";
@@ -1608,14 +1312,6 @@ public class ConfigViewerGUI extends JFrame {
     private boolean validateThumbnailCacheMaxSize() {
         if(!StringUtil.isInt(maxCacheSize.getText(), true)) {
             JOptionPane.showMessageDialog(this, lang.get("configviewer.thumbnail.cache.validation.size.max"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateMaximumLengtOfCameraModel() {
-        if(!StringUtil.isInt(maximumLengthOfCameraModelValueTextField.getText(), true)) {
-            JOptionPane.showMessageDialog(this, lang.get("configviewer.rename.label.maximumCameraModelValueLengthNotNegative"), lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -1656,29 +1352,6 @@ public class ConfigViewerGUI extends JFrame {
         }
 
         importedCategoriesList.clearSelection();
-    }
-
-    private class RotateLogSizeJTextFieldListener implements DocumentListener {
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-        }
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            validateLogRotateSize();
-        }
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-        }
-    }
-
-    private class RotateLogSizeFactorJComboBoxListener implements ItemListener {
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                validateLogRotateSize();
-            }
-        }
     }
 
     private class  ThumbnailWidthJTextFieldListener implements DocumentListener {
@@ -1723,20 +1396,6 @@ public class ConfigViewerGUI extends JFrame {
         }
     }
 
-    private class  MaximumLengtOfCameraModelJTextFieldListener implements DocumentListener {
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-        }
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            validateMaximumLengtOfCameraModel();
-        }
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-        }
-    }
-
     /**
      * Mouse listener
      */
@@ -1766,29 +1425,6 @@ public class ConfigViewerGUI extends JFrame {
                     backgroundsPanel.add(metadataConfigurationPanel);
                 }
             }
-        }
-    }
-
-    private class LogEntryTimestampFormatsJComboBoxListener implements ItemListener {
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                updatePreviewTimestamp();
-            }
-        }
-    }
-
-    private class LogNameJTextFieldListener implements DocumentListener {
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            validateLogName(logName.getText());
-        }
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-        }
-        @Override
-        public void changedUpdate(DocumentEvent e) {
         }
     }
 
@@ -1825,13 +1461,6 @@ public class ConfigViewerGUI extends JFrame {
         @Override
         public void stateChanged(ChangeEvent e) {
             sendVersionInformationEnabled.setEnabled(updatesEnabled.isSelected());
-        }
-    }
-
-    private class RotateLogCheckBoxListener implements ChangeListener {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            rotateLogSize.setEnabled(rotateLog.isSelected());
         }
     }
 
