@@ -16,11 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.base;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
 
 public abstract class BaseConfigurationPanel extends JPanel {
 
@@ -31,14 +33,28 @@ public abstract class BaseConfigurationPanel extends JPanel {
 
     private final Configuration configuration;
     private final Language language;
+    private final Logger logger;
 
     public BaseConfigurationPanel() {
         configuration = Config.getInstance().get();
         language = Language.getInstance();
+        logger = Logger.getInstance();
 
         createPanel();
         setStartUpConfig();
         addListeners();
+    }
+
+    /**
+     * Displays a confirm dialog.
+     *
+     * @param message
+     * @param label
+     * @param type
+     * @return
+     */
+    protected int displayConfirmDialog(String message, String label, int type) {
+        return JOptionPane.showConfirmDialog(this, message, label, type);
     }
 
     public Configuration getConfiguration() {
@@ -47,6 +63,10 @@ public abstract class BaseConfigurationPanel extends JPanel {
 
     public Language getLang() {
         return language;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     /**
