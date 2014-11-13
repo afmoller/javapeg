@@ -182,7 +182,6 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
         add(logEntryTimeStampPreviewLabel, posPanel.nextRow());
         add(logEntryTimeStampPreview, posPanel.nextCol().expandW());
         add(Box.createVerticalGlue(), posPanel.nextRow().expandH());
-
     }
 
     @Override
