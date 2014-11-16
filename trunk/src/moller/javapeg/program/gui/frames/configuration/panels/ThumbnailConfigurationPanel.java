@@ -81,19 +81,6 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
     private JRadioButton overviewImageViewerToolTipEnabled;
     private JRadioButton overviewImageViewerToolTipExtended;
 
-    private Integer THUMBNAIL_WIDTH;
-    private Integer THUMBNAIL_HEIGHT;
-    private JPEGScaleAlgorithm CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM;
-    private Integer THUMBNAIL_MAX_CACHE_SIZE;
-    private String OVERVIEW_THUMBNAIL_TOOLTIP_STATE;
-    private String IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE;
-    private String OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE;
-
-    private Integer PERCENTAGE_SLIDER;
-    private Boolean BRIGHTENED_CHECKBOX;
-    private boolean CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT;
-    private boolean ENABLE_THUMBNAIL_CACHE;
-
     @Override
     public boolean isValidConfiguration() {
         if(!validateThumbnailSize("width")) {
@@ -361,42 +348,49 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
         add(thumbnailCachePanel, posPanel.nextRow().expandW().expandH());
         add(thumbnailGrayFilterPanel, posPanel.nextRow().expandW().expandH());
         add(thumbnailToolTipPanel, posPanel.nextRow().expandW().expandH());
-
     }
 
     @Override
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT != createThumbnailIfMissingOrCorrupt.isSelected()) {
-            displayMessage .append(getLang().get("configviewer.thumbnail.creation.label.missingOrCorrupt") + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT + ")\n");
+        ThumbNail thumbNail = getConfiguration().getThumbNail();
+
+        ThumbNailCreation creation = thumbNail.getCreation();
+
+        if(creation.getIfMissingOrCorrupt() != createThumbnailIfMissingOrCorrupt.isSelected()) {
+            displayMessage .append(getLang().get("configviewer.thumbnail.creation.label.missingOrCorrupt") + ": " + createThumbnailIfMissingOrCorrupt.isSelected() + " (" + creation.getIfMissingOrCorrupt() + ")\n");
         }
 
-        if(!THUMBNAIL_WIDTH.equals(Integer.parseInt(thumbnailWidth.getText()))) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.thumbnail.width") + ": " + thumbnailWidth.getText() + " (" + THUMBNAIL_WIDTH + ")\n");
+        if(!creation.getWidth().equals(Integer.parseInt(thumbnailWidth.getText()))) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.thumbnail.width") + ": " + thumbnailWidth.getText() + " (" + creation.getWidth() + ")\n");
         }
 
-        if(!THUMBNAIL_HEIGHT.equals(Integer.parseInt(thumbnailHeight.getText()))) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.thumbnail.height") + ": " + thumbnailHeight.getText() + " (" + THUMBNAIL_HEIGHT + ")\n");
+        if(!creation.getHeight().equals(Integer.parseInt(thumbnailHeight.getText()))) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.thumbnail.height") + ": " + thumbnailHeight.getText() + " (" + creation.getHeight() + ")\n");
         }
 
-        if(CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM != (JPEGScaleAlgorithm)thumbnailCreationAlgorithm.getSelectedItem()) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.algorithm") + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM + ")\n");
+        if(creation.getAlgorithm() != (JPEGScaleAlgorithm)thumbnailCreationAlgorithm.getSelectedItem()) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.creation.label.algorithm") + ": " + thumbnailCreationAlgorithm.getSelectedItem().toString() + " (" + creation.getAlgorithm() + ")\n");
         }
 
-        if(!THUMBNAIL_MAX_CACHE_SIZE.equals(Integer.parseInt(maxCacheSize.getText()))) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.cache.label.size.max") + ": " + maxCacheSize.getText() + " (" + THUMBNAIL_MAX_CACHE_SIZE + ")\n");
+        ThumbNailCache cache = thumbNail.getCache();
+
+        if(!cache.getMaxSize().equals(Integer.parseInt(maxCacheSize.getText()))) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.cache.label.size.max") + ": " + maxCacheSize.getText() + " (" + cache.getMaxSize() + ")\n");
         }
 
-        if(ENABLE_THUMBNAIL_CACHE != enableThumbnailCache.isSelected()) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + ENABLE_THUMBNAIL_CACHE + ")\n");
+        if(cache.getEnabled() != enableThumbnailCache.isSelected()) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.cache.label.enable") + ": " + enableThumbnailCache.isSelected() + " (" + cache.getEnabled() + ")\n");
         }
 
-        if(!OVERVIEW_THUMBNAIL_TOOLTIP_STATE.equals(getOverviewToolTipState())) {
+        ToolTips toolTips = getConfiguration().getToolTips();
+
+        if(!toolTips.getOverviewState().equals(getOverviewToolTipState())) {
             int previousThumbNailToolTipState = -1;
 
             try {
-                previousThumbNailToolTipState = Integer.parseInt(OVERVIEW_THUMBNAIL_TOOLTIP_STATE);
+                previousThumbNailToolTipState = Integer.parseInt(toolTips.getOverviewState());
             } catch (NumberFormatException nfex) {
                 previousThumbNailToolTipState = 1;
             }
@@ -409,11 +403,11 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
             displayMessage.append(getLang().get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
         }
 
-        if(!IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE.equals(getImageSearchResultTooltipState())) {
+        if(!toolTips.getImageSearchResultState().equals(getImageSearchResultTooltipState())) {
             int previousThumbNailToolTipState = -1;
 
             try {
-                previousThumbNailToolTipState = Integer.parseInt(IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE);
+                previousThumbNailToolTipState = Integer.parseInt(toolTips.getImageSearchResultState());
             } catch (NumberFormatException nfex) {
                 previousThumbNailToolTipState = 1;
             }
@@ -426,11 +420,11 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
             displayMessage.append(getLang().get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
         }
 
-        if(!OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE.equals(getOverviewImageViewerTooltipState())) {
+        if(!toolTips.getOverviewImageViewerState().equals(getOverviewImageViewerTooltipState())) {
             int previousThumbNailToolTipState = -1;
 
             try {
-                previousThumbNailToolTipState = Integer.parseInt(OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE);
+                previousThumbNailToolTipState = Integer.parseInt(toolTips.getOverviewImageViewerState());
             } catch (NumberFormatException nfex) {
                 previousThumbNailToolTipState = 1;
             }
@@ -443,14 +437,14 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
             displayMessage.append(getLang().get("configviewer.thumbnail.tooltip.label") + ": " + current + " (" + previous + ")\n");
         }
 
+        ThumbNailGrayFilter grayFilter = thumbNail.getGrayFilter();
 
-
-        if(!PERCENTAGE_SLIDER.equals(percentageSlider.getValue())) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.grayfilter.transparency.label") + ": " + percentageSlider.getValue() + " (" + PERCENTAGE_SLIDER + ")\n");
+        if(!Integer.valueOf(grayFilter.getPercentage()).equals(percentageSlider.getValue())) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.grayfilter.transparency.label") + ": " + percentageSlider.getValue() + " (" + Integer.valueOf(grayFilter.getPercentage()) + ")\n");
         }
 
-        if(BRIGHTENED_CHECKBOX != brightenedCheckBox.isSelected()) {
-            displayMessage.append(getLang().get("configviewer.thumbnail.grayfilter.increase.contrast.label") + ": " + brightenedCheckBox.isSelected() + " (" + BRIGHTENED_CHECKBOX + ")\n");
+        if(grayFilter.isPixelsBrightened() != brightenedCheckBox.isSelected()) {
+            displayMessage.append(getLang().get("configviewer.thumbnail.grayfilter.increase.contrast.label") + ": " + brightenedCheckBox.isSelected() + " (" + grayFilter.isPixelsBrightened() + ")\n");
         }
 
         return displayMessage.toString();
@@ -482,23 +476,6 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
         toolTips.setOverviewImageViewerState(getOverviewImageViewerTooltipState());
         toolTips.setOverviewState(getOverviewToolTipState());
 
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT = getConfiguration().getThumbNail().getCreation().getIfMissingOrCorrupt();
-        THUMBNAIL_WIDTH = getConfiguration().getThumbNail().getCreation().getWidth();
-        THUMBNAIL_HEIGHT = getConfiguration().getThumbNail().getCreation().getHeight();
-        CREATE_THUMBNAIL_IF_MISSING_OR_CORRUPT_ALGORITHM = getConfiguration().getThumbNail().getCreation().getAlgorithm();
-        THUMBNAIL_MAX_CACHE_SIZE = getConfiguration().getThumbNail().getCache().getMaxSize();
-        ENABLE_THUMBNAIL_CACHE = getConfiguration().getThumbNail().getCache().getEnabled();
-
-        OVERVIEW_THUMBNAIL_TOOLTIP_STATE = getConfiguration().getToolTips().getOverviewState();
-        IMAGE_SEARCH_RESULT_THUMBNAIL_TOOLTIP_STATE = getConfiguration().getToolTips().getImageSearchResultState();
-        OVERVIEW_IMAGE_VIEWER_THUMBNAIL_TOOLTIP_STATE = getConfiguration().getToolTips().getOverviewImageViewerState();
-
-        PERCENTAGE_SLIDER = getConfiguration().getThumbNail().getGrayFilter().getPercentage();
-        BRIGHTENED_CHECKBOX = getConfiguration().getThumbNail().getGrayFilter().isPixelsBrightened();
     }
 
     private class  ThumbnailWidthJTextFieldListener implements DocumentListener {
@@ -665,5 +642,4 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
         }
         return enabled;
     }
-
 }

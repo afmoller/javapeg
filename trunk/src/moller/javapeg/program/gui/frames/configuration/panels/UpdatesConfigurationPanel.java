@@ -38,9 +38,6 @@ public class UpdatesConfigurationPanel extends BaseConfigurationPanel {
     private JCheckBox updatesEnabled;
     private JCheckBox sendVersionInformationEnabled;
 
-    private boolean UPDATE_CHECK_ENABLED;
-    private boolean UPDATE_CHECK_ATTACH_VERSION;
-
     @Override
     public boolean isValidConfiguration() {
         return true;
@@ -76,12 +73,14 @@ public class UpdatesConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(UPDATE_CHECK_ENABLED != updatesEnabled.isSelected()){
-            displayMessage .append(getLang().get("configviewer.update.label.updateEnabled.text") + ": " + updatesEnabled.isSelected() + " (" + UPDATE_CHECK_ENABLED + ")\n");
+        UpdatesChecker updatesChecker = getConfiguration().getUpdatesChecker();
+
+        if(updatesChecker.isEnabled() != updatesEnabled.isSelected()){
+            displayMessage .append(getLang().get("configviewer.update.label.updateEnabled.text") + ": " + updatesEnabled.isSelected() + " (" + updatesChecker.isEnabled() + ")\n");
         }
 
-        if(UPDATE_CHECK_ATTACH_VERSION != sendVersionInformationEnabled.isSelected()){
-            displayMessage.append(getLang().get("configviewer.update.label.attachVersionInformation.text") + ": " + sendVersionInformationEnabled.isSelected() + " (" + UPDATE_CHECK_ATTACH_VERSION + ")\n");
+        if(updatesChecker.getAttachVersionInformation() != sendVersionInformationEnabled.isSelected()){
+            displayMessage.append(getLang().get("configviewer.update.label.attachVersionInformation.text") + ": " + sendVersionInformationEnabled.isSelected() + " (" + updatesChecker.getAttachVersionInformation() + ")\n");
         }
 
         return displayMessage.toString();
@@ -93,12 +92,6 @@ public class UpdatesConfigurationPanel extends BaseConfigurationPanel {
 
         updatesChecker.setEnabled(updatesEnabled.isSelected());
         updatesChecker.setAttachVersionInformation(sendVersionInformationEnabled.isSelected());
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        UPDATE_CHECK_ENABLED = getConfiguration().getUpdatesChecker().isEnabled();
-        UPDATE_CHECK_ATTACH_VERSION = getConfiguration().getUpdatesChecker().getAttachVersionInformation();
     }
 
     private class UpdatesEnabledCheckBoxListener implements ChangeListener {

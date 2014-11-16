@@ -41,7 +41,6 @@ public abstract class BaseConfigurationPanel extends JPanel {
         logger = Logger.getInstance();
 
         createPanel();
-        setStartUpConfig();
         addListeners();
     }
 
@@ -103,10 +102,4 @@ public abstract class BaseConfigurationPanel extends JPanel {
      * made on the graphical elements into the {@link Configuration} data model.
      */
     public abstract void updateConfiguration();
-
-    /**
-     * This method is responsible of remembering the initial configuration
-     * state.
-     */
-    protected abstract void setStartUpConfig();
 }

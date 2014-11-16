@@ -50,9 +50,6 @@ public class LanguageConfigurationPanel extends BaseConfigurationPanel {
     private JList<String> languageList;
     private JLabel currentLanguage;
 
-    private String GUI_LANGUAGE_ISO6391;
-    private boolean AUTOMATIC_LANGUAGE_SELECTION;
-
     @Override
     public boolean isValidConfiguration() {
         return true;
@@ -135,12 +132,14 @@ public class LanguageConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(AUTOMATIC_LANGUAGE_SELECTION != automaticRadioButton.isSelected()){
-            displayMessage.append(getLang().get("configviewer.language.radiobutton.automatic") + ": " + automaticRadioButton.isSelected() + " (" + AUTOMATIC_LANGUAGE_SELECTION + ")\n");
+        Language language = getConfiguration().getLanguage();
+
+        if(language.getAutomaticSelection() != automaticRadioButton.isSelected()){
+            displayMessage.append(getLang().get("configviewer.language.radiobutton.automatic") + ": " + automaticRadioButton.isSelected() + " (" + language.getAutomaticSelection() + ")\n");
         }
 
-        if(!GUI_LANGUAGE_ISO6391.equals(ISO639.getInstance().getCode(currentLanguage.getText()))){
-            displayMessage.append(getLang().get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(GUI_LANGUAGE_ISO6391) + ")\n");
+        if(!language.getgUILanguageISO6391().equals(ISO639.getInstance().getCode(currentLanguage.getText()))){
+            displayMessage.append(getLang().get("configviewer.language.label.currentLanguage") + ": " + currentLanguage.getText() + " (" + ISO639.getInstance().getLanguage(language.getgUILanguageISO6391()) + ")\n");
         }
 
         return displayMessage.toString();
@@ -152,13 +151,6 @@ public class LanguageConfigurationPanel extends BaseConfigurationPanel {
 
         language.setAutomaticSelection(automaticRadioButton.isSelected());
         language.setgUILanguageISO6391(ISO639.getInstance().getCode(currentLanguage.getText()));
-
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        AUTOMATIC_LANGUAGE_SELECTION = getConfiguration().getLanguage().getAutomaticSelection();
-        GUI_LANGUAGE_ISO6391 = getConfiguration().getLanguage().getgUILanguageISO6391();
 
     }
 
