@@ -61,14 +61,6 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
     private JComboBox<String> logEntryTimeStampFormats;
     private JTextField logEntryTimeStampPreview;
 
-    private Level LOG_LEVEL;
-    private String LOG_NAME;
-    private Long LOG_ROTATE_SIZE;
-    private SimpleDateFormat LOG_ENTRY_TIMESTAMP_FORMAT;
-    private boolean DEVELOPER_MODE;
-    private boolean LOG_ROTATE;
-    private boolean LOG_ROTATE_ZIP;
-
     public LoggingConfigurationPanel() {
         super();
     }
@@ -99,7 +91,6 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(getLang().get("configviewer.tree.node.logging"))));
 
-        GBHelper posPanel = new GBHelper();
 
         Logging logging = getConfiguration().getLogging();
 
@@ -163,6 +154,7 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
         logEntryTimeStampPreview.setEditable(false);
         updatePreviewTimestamp();
 
+        GBHelper posPanel = new GBHelper();
         add(developerMode, posPanel.expandW());
         add(rotateLog, posPanel.nextRow().expandW());
         add(zipLog, posPanel.nextRow().expandW());
@@ -188,32 +180,34 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(DEVELOPER_MODE != developerMode.isSelected()){
-            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + developerMode.isSelected() + " (" + DEVELOPER_MODE + ")\n");
+        Logging logging = getConfiguration().getLogging();
+
+        if(logging.getDeveloperMode() != developerMode.isSelected()){
+            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + developerMode.isSelected() + " (" + logging.getDeveloperMode() + ")\n");
         }
 
-        if(LOG_ROTATE != rotateLog.isSelected()){
-            displayMessage.append(getLang().get("configviewer.logging.label.rotateLog.text") + ": " + rotateLog.isSelected() + " (" + LOG_ROTATE + ")\n");
+        if(logging.getRotate() != rotateLog.isSelected()){
+            displayMessage.append(getLang().get("configviewer.logging.label.rotateLog.text") + ": " + rotateLog.isSelected() + " (" + logging.getRotate() + ")\n");
         }
 
-        if(LOG_ROTATE_ZIP != zipLog.isSelected()){
-            displayMessage.append(getLang().get("configviewer.logging.label.zipLog.text") + ": " + zipLog.isSelected() + " (" + LOG_ROTATE_ZIP + ")\n");
+        if(logging.getRotateZip() != zipLog.isSelected()){
+            displayMessage.append(getLang().get("configviewer.logging.label.zipLog.text") + ": " + zipLog.isSelected() + " (" + logging.getRotateZip() + ")\n");
         }
 
-        if(!LOG_ROTATE_SIZE.equals(calculateRotateLogSize(rotateLogSize.getText(), rotateLogSizeFactor.getSelectedItem().toString()))){
-            displayMessage.append(getLang().get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(LOG_ROTATE_SIZE, rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
+        if(!logging.getRotateSize().equals(calculateRotateLogSize(rotateLogSize.getText(), rotateLogSizeFactor.getSelectedItem().toString()))){
+            displayMessage.append(getLang().get("configviewer.logging.label.rotateLogSize.text") + ": " + rotateLogSize.getText() + " " + rotateLogSizeFactor.getSelectedItem() + " (" + parseRotateLongSize(logging.getRotateSize(), rotateLogSizeFactor.getSelectedItem().toString()) + " " + rotateLogSizeFactor.getSelectedItem()+ ")\n");
         }
 
-        if(LOG_LEVEL != (Level)logLevels.getSelectedItem()) {
-            displayMessage.append(getLang().get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + LOG_LEVEL + ")\n");
+        if(logging.getLevel() != (Level)logLevels.getSelectedItem()) {
+            displayMessage.append(getLang().get("configviewer.logging.label.logLevel.text") + ": " + logLevels.getSelectedItem() + " (" + logging.getLevel() + ")\n");
         }
 
-        if(!LOG_NAME.equals(logName.getText())){
-            displayMessage.append(getLang().get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + LOG_NAME + ")\n");
+        if(!logging.getFileName().equals(logName.getText())){
+            displayMessage.append(getLang().get("configviewer.logging.label.logName.text") + ": " + logName.getText() + " (" + logging.getFileName() + ")\n");
         }
 
-        if(!LOG_ENTRY_TIMESTAMP_FORMAT.toPattern().equals(logEntryTimeStampFormats.getSelectedItem())) {
-            displayMessage.append(getLang().get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + LOG_ENTRY_TIMESTAMP_FORMAT.toPattern() + ")\n");
+        if(!logging.getTimeStampFormat().toPattern().equals(logEntryTimeStampFormats.getSelectedItem())) {
+            displayMessage.append(getLang().get("configviewer.logging.label.logEntryTimeStampFormat.text") + ": " + logEntryTimeStampFormats.getSelectedItem() + " (" + logging.getTimeStampFormat().toPattern() + ")\n");
         }
 
         return displayMessage.toString();
@@ -364,16 +358,5 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
         logging.setRotateSize(calculateRotateLogSize(Long.parseLong(rotateLogSize.getText()), rotateLogSizeFactor.getSelectedItem().toString()));
         logging.setRotateZip(zipLog.isSelected());
         logging.setTimeStampFormat(new SimpleDateFormat((String)logEntryTimeStampFormats.getSelectedItem()));
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        LOG_LEVEL = getConfiguration().getLogging().getLevel();
-        DEVELOPER_MODE = getConfiguration().getLogging().getDeveloperMode();
-        LOG_ROTATE = getConfiguration().getLogging().getRotate();
-        LOG_ROTATE_ZIP = getConfiguration().getLogging().getRotateZip();
-        LOG_ROTATE_SIZE = getConfiguration().getLogging().getRotateSize();
-        LOG_NAME = getConfiguration().getLogging().getFileName();
-        LOG_ENTRY_TIMESTAMP_FORMAT = getConfiguration().getLogging().getTimeStampFormat();
     }
 }

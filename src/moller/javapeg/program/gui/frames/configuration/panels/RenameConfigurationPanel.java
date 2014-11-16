@@ -44,10 +44,6 @@ public class RenameConfigurationPanel extends BaseConfigurationPanel {
     private JCheckBox useLastModifiedTime;
     private JTextField maximumLengthOfCameraModelValueTextField;
 
-    private boolean USE_LAST_MODIFIED_DATE;
-    private boolean USE_LAST_MODIFIED_TIME;
-    private Integer MAXIMUM_LENGTH_OF_CAMERA_MODEL;
-
     public RenameConfigurationPanel() {
         super();
     }
@@ -125,24 +121,19 @@ public class RenameConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(USE_LAST_MODIFIED_DATE != useLastModifiedDate.isSelected()){
-            displayMessage.append(getLang().get("configviewer.rename.label.useLastModifiedDate.text") + ": " + useLastModifiedDate.isSelected() + " (" + USE_LAST_MODIFIED_DATE + ")\n");
+        RenameImages renameImages = getConfiguration().getRenameImages();
+
+        if(renameImages.getUseLastModifiedDate() != useLastModifiedDate.isSelected()){
+            displayMessage.append(getLang().get("configviewer.rename.label.useLastModifiedDate.text") + ": " + useLastModifiedDate.isSelected() + " (" + renameImages.getUseLastModifiedDate() + ")\n");
         }
 
-        if(USE_LAST_MODIFIED_TIME != useLastModifiedTime.isSelected()){
-            displayMessage.append(getLang().get("configviewer.rename.label.useLastModifiedTime.text") + ": " + useLastModifiedTime.isSelected() + " (" + USE_LAST_MODIFIED_TIME + ")\n");
+        if(renameImages.getUseLastModifiedTime() != useLastModifiedTime.isSelected()){
+            displayMessage.append(getLang().get("configviewer.rename.label.useLastModifiedTime.text") + ": " + useLastModifiedTime.isSelected() + " (" + renameImages.getUseLastModifiedTime() + ")\n");
         }
 
-        if(!MAXIMUM_LENGTH_OF_CAMERA_MODEL.equals(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()))) {
-            displayMessage.append(getLang().get("configviewer.rename.label.maximumCameraModelValueLength") + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + MAXIMUM_LENGTH_OF_CAMERA_MODEL + ")\n");
+        if(!renameImages.getCameraModelNameMaximumLength().equals(Integer.parseInt(maximumLengthOfCameraModelValueTextField.getText()))) {
+            displayMessage.append(getLang().get("configviewer.rename.label.maximumCameraModelValueLength") + ": " + maximumLengthOfCameraModelValueTextField.getText() + " (" + renameImages.getCameraModelNameMaximumLength() + ")\n");
         }
         return displayMessage.toString();
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        USE_LAST_MODIFIED_DATE = getConfiguration().getRenameImages().getUseLastModifiedDate();
-        USE_LAST_MODIFIED_TIME = getConfiguration().getRenameImages().getUseLastModifiedTime();
-        MAXIMUM_LENGTH_OF_CAMERA_MODEL = getConfiguration().getRenameImages().getCameraModelNameMaximumLength();
     }
 }

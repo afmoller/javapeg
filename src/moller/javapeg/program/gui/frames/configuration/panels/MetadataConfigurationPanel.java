@@ -85,10 +85,4 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     }
 
-    @Override
-    protected void setStartUpConfig() {
-        // TODO Auto-generated method stub
-
-    }
-
 }

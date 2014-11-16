@@ -212,6 +212,11 @@ public class ConfigViewerGUI extends JFrame {
         }
 
         /**
+         * Show configuration changes.
+         */
+        this.displayChangedConfigurationMessage();
+
+        /**
          * Update Logging Configuration
          */
         loggingConfigurationPanel.updateConfiguration();
@@ -240,11 +245,6 @@ public class ConfigViewerGUI extends JFrame {
          * Update Tag Configuration
          */
         tagConfigurationPanel.updateConfiguration();
-
-        /**
-         * Show configuration changes.
-         */
-        this.displayChangedConfigurationMessage();
 
         return true;
     }

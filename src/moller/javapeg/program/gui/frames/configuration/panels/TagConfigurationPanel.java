@@ -102,15 +102,9 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
 
     private ImportedCategories theImportedCategoriesToRenameOrDelete;
 
-    private Integer ADD_TO_IMAGEREPOSITOY_POLICY;
-    private boolean USE_EMBEDDED_THUMBNAIL;
-    private boolean WARN_WHEN_REMOVE_CATEGORY;
-    private boolean WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES;
-
     @Override
     public boolean isValidConfiguration() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
@@ -123,7 +117,6 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
         // repositories already have been added to the model (which occurs when
         // the application is started).
         ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel().fireTableDataChanged();
-
     }
 
     @Override
@@ -361,18 +354,23 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        if(USE_EMBEDDED_THUMBNAIL != useEmbeddedThumbnail.isSelected()) {
-            if (USE_EMBEDDED_THUMBNAIL) {
+        TagImages tagImages = getConfiguration().getTagImages();
+        TagImagesPreview preview = tagImages.getPreview();
+
+        if(preview.getUseEmbeddedThumbnail() != useEmbeddedThumbnail.isSelected()) {
+            if (preview.getUseEmbeddedThumbnail()) {
                 displayMessage .append(getLang().get("configviewer.tag.previewimage.label.scaledthumbnail")+ " (" + getLang().get("configviewer.tag.previewimage.label.embeddedthumbnail") + ")\n");
             } else {
                 displayMessage.append(getLang().get("configviewer.tag.previewimage.label.embeddedthumbnail")+ " (" + getLang().get("configviewer.tag.previewimage.label.scaledthumbnail") + ")\n");
             }
         }
 
-        if(!ADD_TO_IMAGEREPOSITOY_POLICY.equals(Integer.parseInt(getAddToRepositoryPolicy()))) {
+        TagImagesPaths imagesPaths = tagImages.getImagesPaths();
+
+        if(!imagesPaths.getAddToRepositoryPolicy().equals(Integer.parseInt(getAddToRepositoryPolicy()))) {
             String previous = "";
 
-            switch (ADD_TO_IMAGEREPOSITOY_POLICY) {
+            switch (imagesPaths.getAddToRepositoryPolicy()) {
             case 0:
                 previous = getLang().get("configviewer.tag.imageRepositories.label.addAutomatically");
                 break;
@@ -402,12 +400,14 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
             displayMessage.append(getLang().get("configviewer.tag.imageRepositoriesAdditionMode.label") + ": " + current + " (" + previous + ")\n");
         }
 
-        if(WARN_WHEN_REMOVE_CATEGORY != warnWhenRemoveCategory.isSelected()) {
-            displayMessage.append(getLang().get("configviewer.tag.categories.warnWhenRemove") + ": " + warnWhenRemoveCategory.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY + ")\n");
+        TagImagesCategories categories = tagImages.getCategories();
+
+        if(categories.getWarnWhenRemove() != warnWhenRemoveCategory.isSelected()) {
+            displayMessage.append(getLang().get("configviewer.tag.categories.warnWhenRemove") + ": " + warnWhenRemoveCategory.isSelected() + " (" + categories.getWarnWhenRemove() + ")\n");
         }
 
-        if(WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
-            displayMessage.append(getLang().get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories") + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES + ")\n");
+        if(categories.getWarnWhenRemoveWithSubCategories() != warnWhenRemoveCategoryWithSubCategories.isSelected()) {
+            displayMessage.append(getLang().get("configviewer.tag.categories.warnWhenRemoveCategoryWithSubCategories") + ": " + warnWhenRemoveCategoryWithSubCategories.isSelected() + " (" + categories.getWarnWhenRemoveWithSubCategories() + ")\n");
         }
 
         return displayMessage.toString();
@@ -440,14 +440,6 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
         } else {
             return doNotAddRadioButton.getName();
         }
-    }
-
-    @Override
-    protected void setStartUpConfig() {
-        USE_EMBEDDED_THUMBNAIL = getConfiguration().getTagImages().getPreview().getUseEmbeddedThumbnail();
-        WARN_WHEN_REMOVE_CATEGORY = getConfiguration().getTagImages().getCategories().getWarnWhenRemove();
-        WARN_WHEN_REMOVE_CATEGORY_WITH_SUB_CATEGORIES  = getConfiguration().getTagImages().getCategories().getWarnWhenRemoveWithSubCategories();
-        ADD_TO_IMAGEREPOSITOY_POLICY = getConfiguration().getTagImages().getImagesPaths().getAddToRepositoryPolicy();
     }
 
     private class RemoveExceptionPathsListener implements ActionListener {
