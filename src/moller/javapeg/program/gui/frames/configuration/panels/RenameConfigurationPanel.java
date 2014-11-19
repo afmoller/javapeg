@@ -44,10 +44,6 @@ public class RenameConfigurationPanel extends BaseConfigurationPanel {
     private JCheckBox useLastModifiedTime;
     private JTextField maximumLengthOfCameraModelValueTextField;
 
-    public RenameConfigurationPanel() {
-        super();
-    }
-
     @Override
     protected void addListeners() {
         maximumLengthOfCameraModelValueTextField.getDocument().addDocumentListener(new MaximumLengtOfCameraModelJTextFieldListener());

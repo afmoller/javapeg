@@ -121,4 +121,9 @@ public class ConfigElement {
     public static final String IMAGE_SEARCH_RESULT_VIEWER_STATE = "imageSearchResultViewerState";
     public static final String NUMBER_OF_IMAGES_TO_DISPLAY = "numberOfImagesToDisplay";
     public static final String IMAGE_REPOSITORY_STATISTICS_VIEWER = "imageRepositoryStatisticsViewer";
+    public static final String ISO_FILTERS = "isoFilters";
+    public static final String ISO_FILTER = "isoFilter";
+    public static final String CAMERA_MODEL = "cameraModel";
+    public static final String ISO_MASK = "isoMask";
+    public static final String METADATA = "metadata";
 }

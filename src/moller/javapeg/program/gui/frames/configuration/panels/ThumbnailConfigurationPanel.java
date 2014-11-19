@@ -105,7 +105,6 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
         maxCacheSize.getDocument().addDocumentListener(new ThumbnailMaxCacheSizeJTextFieldListener());
         clearCacheJButton.addActionListener(new ClearCacheButtonListener());
         enableThumbnailCache.addChangeListener(new EnableThumbnailCacheCheckBoxListener());
-
     }
 
     @Override
@@ -475,7 +474,6 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
         toolTips.setImageSearchResultState(getImageSearchResultTooltipState());
         toolTips.setOverviewImageViewerState(getOverviewImageViewerTooltipState());
         toolTips.setOverviewState(getOverviewToolTipState());
-
     }
 
     private class  ThumbnailWidthJTextFieldListener implements DocumentListener {

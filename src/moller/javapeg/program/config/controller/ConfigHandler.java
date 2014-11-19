@@ -46,6 +46,7 @@ import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig
 import moller.javapeg.program.config.controller.section.JavapegClientIdConfig;
 import moller.javapeg.program.config.controller.section.LanguageConfig;
 import moller.javapeg.program.config.controller.section.LoggingConfig;
+import moller.javapeg.program.config.controller.section.MetaDataConfig;
 import moller.javapeg.program.config.controller.section.RenameImagesConfig;
 import moller.javapeg.program.config.controller.section.RepositoryConfig;
 import moller.javapeg.program.config.controller.section.ResizeImagesConfig;
@@ -200,6 +201,9 @@ public class ConfigHandler {
                     case ConfigElement.LANGUAGE:
                         configuration.setLanguage(LanguageConfig.getLanguageConfig(node));
                         break;
+                    case ConfigElement.METADATA:
+                        configuration.setMetadata(MetaDataConfig.getMetaDataConfig(node));
+                        break;
                     case ConfigElement.RENAME_IMAGES:
                         configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig(node));
                         break;
@@ -331,6 +335,9 @@ public class ConfigHandler {
 
             // REPOSITORY
             RepositoryConfig.writeRepositoryConfig(configuration.getRepository(), Tab.TWO, w);
+
+            // METADATA
+            MetaDataConfig.writeLanguageConfig(configuration.getMetadata(), Tab.TWO, w);
 
             XMLUtil.writeElementEnd(w);
             w.flush();
