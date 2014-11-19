@@ -20,8 +20,40 @@
             <xs:element name="categories"                   type="config:Categories" />
             <xs:element name="importedcategories"           type="config:Importedcategories" />
             <xs:element name="repository"                   type="config:Repository" />
+            <xs:element name="metadata"                     type="config:Metadata" />
         </xs:all>   
+    </xs:complexType> 
+    
+    <xs:complexType name="Metadata">
+        <xs:sequence>
+        <xs:element name="isoFilters" type="config:IsoFilters" />
+        </xs:sequence>
     </xs:complexType>  
+
+    <xs:complexType name="IsoFilters">
+        <xs:sequence>
+            <xs:element name="isoFilter" type="config:IsoFilter" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+	<xs:complexType name="IsoFilter">
+		<xs:all>
+			<xs:element name="cameraModel" type="xs:string" />
+			<xs:element name="isoMask">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="NO_MASK" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FIRST" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_SECOND" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_THIRD" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FOURTH" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FIFTH" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_SIXTH" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
     
     <xs:complexType name="Logging">
         <xs:all>

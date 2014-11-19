@@ -161,4 +161,8 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <neverAdd/>
     </exceptions>
   </repository>
+  <metadata>
+    <isoFilters>
+    </isoFilters>
+  </metadata>
 </config>

@@ -25,6 +25,7 @@ import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 
@@ -45,7 +46,11 @@ public class Configuration {
     private Repository repository;
     private Map<String, ImportedCategories> importedCategoriesConfig;
     private ImageSearchResultViewerState imageSearchResultViewerState;
+    private MetaData metadata;
 
+    public MetaData getMetadata() {
+        return metadata;
+    }
     public Logging getLogging() {
         return logging;
     }
@@ -135,6 +140,9 @@ public class Configuration {
     }
     public void setImageSearchResultViewerState(ImageSearchResultViewerState imageSearchResultViewerState) {
         this.imageSearchResultViewerState = imageSearchResultViewerState;
+    }
+    public void setMetadata(MetaData metaData) {
+        this.metadata = metaData;
     }
 
 }

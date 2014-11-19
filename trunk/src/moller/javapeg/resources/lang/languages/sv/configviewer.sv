@@ -131,6 +131,13 @@ configviewer.tag.importedCategories.rename.dialog.title                         
 configviewer.tag.importedCategories.rename.dialog.text                             = Ange ett nytt namn för importerade kategorier:
 
 ##############################################################################################################
+# M E T A  D A T A                                                                                           #
+##############################################################################################################
+configviewer.metadata.isofiltertable.header.cameramodel    = Kameramodell
+configviewer.metadata.isofiltertable.header.filter         = Filter
+configviewer.metadata.isofiltertable.delete.confirmmessage = Följande ISO-filter kommer att tas bort.
+
+##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
 configviewer.errormessage.rotateLogSizeToLargeKiB   = Loggroteringsstorleken är för stor: Maximalt tillåtna är 100000 KiB 

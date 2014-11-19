@@ -246,6 +246,11 @@ public class ConfigViewerGUI extends JFrame {
          */
         tagConfigurationPanel.updateConfiguration();
 
+        /**
+         * Update Metadata Configuration
+         */
+        metadataConfigurationPanel.updateConfiguration();
+
         return true;
     }
 

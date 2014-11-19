@@ -61,10 +61,6 @@ public class LoggingConfigurationPanel extends BaseConfigurationPanel {
     private JComboBox<String> logEntryTimeStampFormats;
     private JTextField logEntryTimeStampPreview;
 
-    public LoggingConfigurationPanel() {
-        super();
-    }
-
     @Override
     public boolean isValidConfiguration() {
         if (!validateLogName(logName.getText())) {
