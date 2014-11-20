@@ -27,6 +27,7 @@ import moller.javapeg.StartJavaPEG;
 public class IconLoader {
 
     private static ImageIcon addIcon = null;
+    private static ImageIcon removeIcon = null;
 
 
     public static ImageIcon getAddIcon() {
@@ -34,6 +35,13 @@ public class IconLoader {
             addIcon = loadIcon(Icons.ADDICON);
         }
         return addIcon;
+    }
+
+    public static ImageIcon getRemoveIcon() {
+        if (removeIcon  == null) {
+            removeIcon = loadIcon(Icons.REMOVEICON);
+        }
+        return removeIcon;
     }
 
     private static ImageIcon loadIcon(Icons icon) {

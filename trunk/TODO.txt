@@ -1,7 +1,9 @@
 3.0:
 ====
-- Add possibility to filter strange ISO values from specific camera models.
+- Canon Powershot A95 has strange ISO values.
+- Investigate why the repository configuration is lost.
 - Add startup splashscreen.
+- All icons should be loaded with the IconLoader class.
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.

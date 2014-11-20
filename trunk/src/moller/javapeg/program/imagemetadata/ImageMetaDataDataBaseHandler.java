@@ -49,6 +49,7 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.config.model.metadata.ISOFilter;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
@@ -56,6 +57,7 @@ import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ImageSize;
+import moller.javapeg.program.enumerations.ISOFilterMask;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
 import moller.javapeg.program.language.Language;
@@ -421,7 +423,7 @@ public class ImageMetaDataDataBaseHandler {
 
         imdc.addCameraModel(javaPegIdValue, imageExifMetaData.getCameraModel(), imagePath);
         imdc.addDateTime(javaPegIdValue, imageExifMetaData.getDateTime(), imagePath);
-        imdc.addIso(javaPegIdValue, imageExifMetaData.getIsoValue(), imagePath);
+        addIso(imdc, javaPegIdValue, imageExifMetaData.getIsoValue(), imagePath, imageExifMetaData.getCameraModel());
         imdc.addImageSize(javaPegIdValue, new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
         imdc.addExposureTime(javaPegIdValue, imageExifMetaData.getExposureTime(), imagePath);
         imdc.addFNumber(javaPegIdValue, imageExifMetaData.getFNumber(), imagePath);
@@ -433,6 +435,72 @@ public class ImageMetaDataDataBaseHandler {
         for (String category : categories.getCategories()) {
             imdc.addCategory(javaPegIdValue, category, imagePath);
         }
+    }
+
+    private static void addIso(ImageMetaDataContext imdc, String javaPegIdValue, int isoValue, String imagePath, String cameraModel) {
+
+        ISOFilter isoFilter = getIsoFilterForCameraModel(cameraModel);
+
+        if (isoFilter == null) {
+            imdc.addIso(javaPegIdValue, isoValue, imagePath);
+        } else {
+            int maskedISOValue = getMaskedIsoValue(isoValue, isoFilter.getIsoFilterMask());
+            imdc.addIso(javaPegIdValue, maskedISOValue, imagePath);
+        }
+    }
+
+    private static int getMaskedIsoValue(int isoValue, ISOFilterMask isoFilterMask) {
+
+        // Pass through, which will enable the most appropriate mask to be
+        // applied on the incoming isoValue.
+        switch (isoFilterMask) {
+        case MASK_UP_TO_POSITON_SIXTH:
+            if (isoValue > 1000000) {
+                int reminder = isoValue % 1000000;
+                return isoValue - reminder;
+            }
+        case MASK_UP_TO_POSITON_FIFTH:
+            if (isoValue > 100000) {
+                int reminder = isoValue % 100000;
+                return isoValue - reminder;
+            }
+        case MASK_UP_TO_POSITON_FOURTH:
+            if (isoValue > 10000) {
+                int reminder = isoValue % 10000;
+                return isoValue - reminder;
+            }
+        case MASK_UP_TO_POSITON_THIRD:
+            if (isoValue > 1000) {
+                int reminder = isoValue % 1000;
+                return isoValue - reminder;
+            }
+        case MASK_UP_TO_POSITON_SECOND:
+            if (isoValue > 100) {
+                int reminder = isoValue % 100;
+                return isoValue - reminder;
+            }
+        case MASK_UP_TO_POSITON_FIRST:
+            if (isoValue > 10) {
+                int reminder = isoValue % 10;
+                return isoValue - reminder;
+            }
+        case NO_MASK:
+        default:
+            return isoValue;
+        }
+    }
+
+    private static ISOFilter getIsoFilterForCameraModel(String cameraModel) {
+        List<ISOFilter> isoFilters = configuration.getMetadata().getIsoFilters();
+
+        for (ISOFilter isoFilter : isoFilters) {
+            if (isoFilter.getCameraModel().equals(cameraModel)) {
+                return isoFilter;
+            }
+        }
+
+        // No ISO filter found for the given camera model.
+        return null;
     }
 
     public static void updateImageMetaDataContext(String javaPegIdValue, File image, String newComment, int rating, Categories categories) {
