@@ -18,7 +18,8 @@ package moller.javapeg.program.gui.icons;
 
 public enum Icons {
 
-    ADDICON("resources/images/plus_16.png");
+    ADDICON("resources/images/plus_16.png"),
+    REMOVEICON("resources/images/viewtab/remove.gif");
 
     private final String resource;
 

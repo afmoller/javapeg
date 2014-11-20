@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
@@ -78,11 +79,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
     @Override
     protected void createPanel() {
         setLayout(new GridBagLayout());
-
         setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(getLang().get("configviewer.tree.node.metadata"))));
-
-        GBHelper posPanel = new GBHelper();
-
 
         DefaultComboBoxModel<ISOFilterMask> isoPatternModel = new DefaultComboBoxModel<ISOFilterMask>();
         isoPatternModel.addElement(ISOFilterMask.NO_MASK);
@@ -107,7 +104,6 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         ImageMetaDataContext instance = ImageMetaDataContext.getInstance();
         Set<String> cameraModels = instance.getCameraModels();
 
-
         DefaultComboBoxModel<String> cameraModelsModel = new DefaultComboBoxModel<String>();
         for (String cameraModel : cameraModels) {
             cameraModelsModel.addElement(cameraModel);
@@ -116,8 +112,8 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         cameraModelsJComboBox = new JComboBox<String>(cameraModelsModel );
 
         addNewRuleButton = new JButton(IconLoader.getAddIcon());
+//        TODO: Fix hard coded string
         addNewRuleButton.setToolTipText("Add rule for selected selected camera model");
-
 
         isoFilteringTableModel = new ISOFilteringTableModel();
 
@@ -125,7 +121,6 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         List<ISOFilter> isoFilters = metadata.getIsoFilters();
 
         for (ISOFilter isoFilter : isoFilters) {
-
             CameraAndISOFilterPair cameraAndISOFilterPair = new CameraAndISOFilterPair();
             cameraAndISOFilterPair.setCameraModel(isoFilter.getCameraModel());
             cameraAndISOFilterPair.setiSOFilter(isoFilter.getIsoFilterMask());
@@ -140,8 +135,9 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         JScrollPane isoRuleToCameraModelScrollPane = new JScrollPane(isoRuleToCameraModelTable);
         isoRuleToCameraModelScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        removeRuleButton = new JButton("Remove");
+        removeRuleButton = new JButton(IconLoader.getRemoveIcon());
 
+        GBHelper posPanel = new GBHelper();
         add(new JLabel("Camera model"), posPanel);
         add(Box.createHorizontalStrut(3), posPanel.nextCol());
         add(new JLabel("Filterpattern"), posPanel.nextCol());
@@ -153,9 +149,13 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         add(addNewRuleButton, posPanel.nextCol());
         add(Box.createVerticalStrut(5), posPanel.nextRow());
         add(isoRuleToCameraModelScrollPane, posPanel.nextRow().expandH().expandW());
-        add(removeRuleButton, posPanel.nextRow());
-//        add(Box.createVerticalGlue(), posPanel.nextRow().expandH().expandW());
 
+        GBHelper posRemovePanel = new GBHelper();
+        JPanel removeButtonPanel = new JPanel(new GridBagLayout());
+        removeButtonPanel.add(removeRuleButton, posRemovePanel);
+        removeButtonPanel.add(Box.createVerticalGlue(), posRemovePanel.nextRow().expandH());
+
+        add(removeButtonPanel, posPanel.nextCol().nextCol().nextCol().nextCol());
     }
 
     @Override
@@ -206,24 +206,26 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
             int[] selectedRowIndices = isoRuleToCameraModelTable.getSelectedRows();
 
-            List<CameraAndISOFilterPair> rowsToRemove = new ArrayList<CameraAndISOFilterPair>();
-            for (int selectedRowIndex : selectedRowIndices) {
-                CameraAndISOFilterPair row = isoFilteringTableModel.getRow(isoRuleToCameraModelTable.convertRowIndexToModel(selectedRowIndex));
-                rowsToRemove.add(row);
-            }
+            if (selectedRowIndices.length > 0) {
+                List<CameraAndISOFilterPair> rowsToRemove = new ArrayList<CameraAndISOFilterPair>();
+                for (int selectedRowIndex : selectedRowIndices) {
+                    CameraAndISOFilterPair row = isoFilteringTableModel.getRow(isoRuleToCameraModelTable.convertRowIndexToModel(selectedRowIndex));
+                    rowsToRemove.add(row);
+                }
 
-            StringBuilder paths = new StringBuilder();
+                StringBuilder paths = new StringBuilder();
 
-            for (CameraAndISOFilterPair rowToRemove : rowsToRemove) {
-                paths.append(rowToRemove.getCameraModel() + " " + rowToRemove.getiSOFilter());
-                paths.append(C.LS);
-            }
-
-            int result = displayConfirmDialog(getLang().get("configviewer.metadata.isofiltertable.delete.confirmmessage") + C.LS + C.LS + paths.toString(), getLang().get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
-
-            if (result == 0) {
                 for (CameraAndISOFilterPair rowToRemove : rowsToRemove) {
-                    isoFilteringTableModel.removeRow(rowToRemove);
+                    paths.append(rowToRemove.getCameraModel() + " " + rowToRemove.getiSOFilter());
+                    paths.append(C.LS);
+                }
+
+                int result = displayConfirmDialog(getLang().get("configviewer.metadata.isofiltertable.delete.confirmmessage") + C.LS + C.LS + paths.toString(), getLang().get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == 0) {
+                    for (CameraAndISOFilterPair rowToRemove : rowsToRemove) {
+                        isoFilteringTableModel.removeRow(rowToRemove);
+                    }
                 }
             }
         }
