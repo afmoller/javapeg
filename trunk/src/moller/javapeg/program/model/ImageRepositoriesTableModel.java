@@ -77,7 +77,31 @@ public class ImageRepositoriesTableModel extends AbstractTableModel {
 
     public void addRow(ImageRepositoryItem imageRepositoryItem) {
         rows.add(new Object[]{imageRepositoryItem.getPath(), imageRepositoryItem.getPathStatus()});
-        fireTableDataChanged();
+        fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
+    }
+
+    /**
+     * Sets the {@link Status} column of an existing row.
+     *
+     * @param path
+     *            specifies which row that shall be updated.
+     * @param newStatus
+     *            is the {@link Status} to set.
+     */
+    public void setRowStatus(File path, Status newStatus) {
+
+        int size = getRowCount();
+
+        for (int index = 0; index < size; index++) {
+            Object[] objects = rows.get(index);
+            Object pathColumn = objects[PATH_INDEX];
+
+            if (pathColumn.equals(path)) {
+                objects[PATH_STATUS_INDEX] = newStatus;
+                fireTableCellUpdated(index, PATH_STATUS_INDEX);
+                break;
+            }
+        }
     }
 
     public synchronized void removeRow(ImageRepositoryItem iri) {
