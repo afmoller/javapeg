@@ -17,7 +17,6 @@
 package moller.javapeg.program.contexts.imagemetadata;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,22 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.config.model.repository.RepositoryPaths;
-import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
-import moller.javapeg.program.imagerepository.ImageRepositoryItem;
-import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.model.ImageRepositoriesTableModel;
-import moller.util.io.DirectoryUtil;
-import moller.util.io.Status;
-import moller.util.result.ResultObject;
-
-import org.xml.sax.SAXException;
 
 public class ImageMetaDataContextUtil {
 
@@ -286,119 +270,5 @@ public class ImageMetaDataContextUtil {
             returnValues.addAll(doubleCollectionWithValuesToFetch.get(javaPegId).keySet());
         }
         return returnValues;
-    }
-
-    /**
-     * This method loads (de-serializes) any available and configured image meta
-     * data file into the {@link ImageMetaDataContext}.
-     *
-     * @param repositoryPaths
-     *            contains the paths to all image meta data files that must be
-     *            de-serialized.
-     * @param automaticallyRemoveNonExistingImagePath
-     *            if the path does not longer exist, then it will be
-     *            automatically removed from the list of configured repository
-     *            paths.
-     * @param imageRepositoriesTableModel
-     *            to which model the the {@link ImageRepositoryItem} objects
-     *            shall be added.
-     * @param logger
-     *            is the logger to log to.
-     * @return a boolean value indicating whether or not the application needs
-     *         to be restarted after the de-serialization of all image meta data
-     *         files.
-     */
-    public static ResultObject<String[]> initiateImageMetaDataContext(RepositoryPaths repositoryPaths, ImageRepositoriesTableModel imageRepositoriesTableModel, Logger logger) {
-
-        ResultObject<String[]> result = null;
-        StringBuilder inconsistenceErrorMessage = new StringBuilder();
-        StringBuilder corruptErrorMessage = new StringBuilder();
-
-        if(repositoryPaths != null) {
-            Set<ImageRepositoryItem> imageRepositoryItems = new HashSet<ImageRepositoryItem>();
-            for (File repositoryPath : repositoryPaths.getPaths()) {
-
-                ImageRepositoryItem iri = new ImageRepositoryItem();
-
-                iri.setPathStatus(DirectoryUtil.getStatus(repositoryPath));
-                iri.setPath(repositoryPath);
-
-                switch (iri.getPathStatus()) {
-                case EXISTS:
-                    File imageMetaDataDataBaseFile = new File(repositoryPath, C.JAVAPEG_IMAGE_META_NAME);
-                    if (imageMetaDataDataBaseFile.exists()) {
-
-                        try {
-                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " START CHECK against schema");
-                            ResultObject<Exception> metaDataBaseValidation = ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile);
-                            logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " FINISHED CHECK against schema");
-
-                            if (!metaDataBaseValidation.getResult()) {
-                                inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
-                                inconsistenceErrorMessage.append(C.LS);
-                                logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is corrupt");
-                                logger.logERROR(metaDataBaseValidation.getObject());
-                                iri.setPathStatus(Status.CORRUPT);
-                            } else {
-                                ImageMetaDataDataBase imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
-                                String javaPEGId = imageMetaDataDataBase.getJavaPEGId();
-
-                                logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " START CHECK consistency");
-                                if (ImageMetaDataDataBaseHandler.isConsistent(imageMetaDataDataBase, repositoryPath)) {
-                                    logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " FINISHED CHECK consistency");
-                                    ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, javaPEGId);
-                                    ImageMetaDataDataBaseHandler.populateImageMetaDataContext(javaPEGId, imageMetaDataDataBase.getImageMetaDataItems());
-                                    logger.logDEBUG("Image Meta Data File: " + imageMetaDataDataBaseFile.getAbsolutePath() + " deserialized");
-                                } else {
-                                    inconsistenceErrorMessage.append(imageMetaDataDataBaseFile);
-                                    inconsistenceErrorMessage.append(C.LS);
-                                    logger.logERROR("The meta data base file: " + imageMetaDataDataBaseFile + " is inconsistent with the content in directory: " + repositoryPath);
-                                    iri.setPathStatus(Status.INCONSISTENT);
-                                }
-                            }
-                        } catch (ParserConfigurationException pcex) {
-                            logger.logERROR("Could not create a DocumentBuilder");
-                            logger.logERROR(pcex);
-                        } catch (SAXException sex) {
-                            logger.logERROR("Could not parse file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                            logger.logERROR(sex);
-                        } catch (IOException iox) {
-                            logger.logERROR("IO exception occurred when parsing file: " + imageMetaDataDataBaseFile.getAbsolutePath());
-                            logger.logERROR(iox);
-                        }
-                        imageRepositoryItems.add(iri);
-                    } else {
-                        imageRepositoryItems.add(iri);
-                    }
-                    break;
-                case NOT_AVAILABLE:
-                    imageRepositoryItems.add(iri);
-                    break;
-                case DOES_NOT_EXIST:
-                    imageRepositoryItems.add(iri);
-                    break;
-                case INCONSISTENT:
-                    // Do nothing here, since this status can only be set after
-                    // an validation process.
-                    break;
-                default:
-                    break;
-                }
-            }
-            imageRepositoriesTableModel.addAll(imageRepositoryItems);
-        }
-
-        String[] errorMessages = new String[2];
-
-        if (!inconsistenceErrorMessage.toString().isEmpty()) {
-            errorMessages[0] = inconsistenceErrorMessage.toString();
-        }
-
-        if (!corruptErrorMessage.toString().isEmpty()) {
-            errorMessages[1] = corruptErrorMessage.toString();
-        }
-
-        result = new ResultObject<String[]>(ApplicationContext.getInstance().isRestartNeeded(), errorMessages);
-        return result;
     }
 }

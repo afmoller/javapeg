@@ -40,6 +40,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -188,6 +190,7 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
 import moller.javapeg.program.gui.tab.ImageMergeTab;
+import moller.javapeg.program.gui.workers.AbstractImageMetaDataContextLoader;
 import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
 import moller.javapeg.program.imagelistformat.ImageList;
@@ -423,6 +426,7 @@ public class MainGUI extends JFrame {
     private ImageViewer imageViewer;
 
     private JProgressBar thumbnailLoadingProgressBar;
+    private JProgressBar imageMetaDataContextLoadingProgressBar;
 
     private HeadingPanel thumbNailsPanelHeading;
 
@@ -521,6 +525,7 @@ public class MainGUI extends JFrame {
 
         logger.logDEBUG("Image Meta Data Context initialization Started");
         ImageMetaDataContextLoader imdcl = new  ImageMetaDataContextLoader();
+        imdcl.addPropertyChangeListener(new ImageMetaDataContextLoaderPropertyListener());
         imdcl.execute();
     }
 
@@ -1543,12 +1548,18 @@ public class MainGUI extends JFrame {
         buttonPanel.add(clearAllMetaDataParameters);
         buttonPanel.add(displayImageRepositoryStatisticsViewerButton);
 
+
+        imageMetaDataContextLoadingProgressBar = new JProgressBar();
+        imageMetaDataContextLoadingProgressBar.setStringPainted(true);
+        imageMetaDataContextLoadingProgressBar.setVisible(true);
+
         GBHelper posBackground = new GBHelper();
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
 
         backgroundPanel.add(ratingPanel, posBackground.nextRow());
         backgroundPanel.add(commentPanel, posBackground.nextRow().expandH());
         backgroundPanel.add(buttonPanel, posBackground.nextRow());
+        backgroundPanel.add(imageMetaDataContextLoadingProgressBar, posBackground.nextRow());
 
         return backgroundPanel;
     }
@@ -4799,23 +4810,53 @@ public class MainGUI extends JFrame {
     }
 
     /**
-     * This class extends the {@link SwingWorker} and performs the long running
-     * task of loading all the configured image meta data repository files in a
-     * separate thread. When the loading is done, then the "search image" button
-     * is set to enabled, and thereby it is possible to perform searches in the
-     * image meta data repository.
+     * This class extends the AbstractImageMetaDataContextLoader which extends
+     * the {@link SwingWorker} and performs the long running task of loading
+     * (parsing, validating and put the data into the Image meta data context)
+     * all the configured image meta data repository files in a separate thread.
+     *
+     * When the loading is done, then the "search image", "view statistics" and
+     * "delete repository paths (int the configuration GUI)" buttons are set to
+     * enabled, and thereby it is possible to perform searches in the image meta
+     * data repository or perform changes in the image repository.
      *
      * @author Fredrik
      *
      */
-    private class ImageMetaDataContextLoader extends SwingWorker<ResultObject<String[]>, String> {
+    private class ImageMetaDataContextLoader extends AbstractImageMetaDataContextLoader {
+
+        /**
+         * Load all the repository paths into the table model, with the
+         * {@link Status#UNKNOWN}. This is to minimize the risk that the
+         * configuration GUI is opened and closed before all repoitory paths
+         * have been validated and added to the table model.
+         */
+        public ImageMetaDataContextLoader() {
+            List<File> paths = configuration.getRepository().getPaths().getPaths();
+
+            Set<ImageRepositoryItem> imageRepositoryItems = new HashSet<>();
+
+            for (File path : paths) {
+                ImageRepositoryItem imageRepositoryItem = new ImageRepositoryItem(path, Status.UNKNOWN);
+                imageRepositoryItems.add(imageRepositoryItem);
+            }
+
+            imageRepositoriesTableModel.addAll(imageRepositoryItems);
+        }
+
         @Override
-        protected ResultObject<String[]> doInBackground() throws Exception {
-            return ImageMetaDataContextUtil.initiateImageMetaDataContext(configuration.getRepository().getPaths(), imageRepositoriesTableModel, logger);
+        protected void process(List<ImageRepositoryItem> chunks) {
+            for (ImageRepositoryItem imageRepositoryItem : chunks) {
+                imageRepositoriesTableModel.setRowStatus(imageRepositoryItem.getPath(), imageRepositoryItem.getPathStatus());
+            }
         }
 
         @Override
         protected void done() {
+
+            // hide the progress bar...
+            imageMetaDataContextLoadingProgressBar.setVisible(false);
+
             searchImagesButton.setEnabled(true);
             searchImagesButton.setToolTipText(lang.get("findimage.searchImages.tooltip"));
 
@@ -4857,19 +4898,16 @@ public class MainGUI extends JFrame {
 
                     if (errorMessages[0] != null) {
                         errorMessage.append(lang.get("imagerepository.repositories.inconsistent"));
-                        errorMessage.append(C.LS);
-                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS).append(C.LS);
                         errorMessage.append(errorMessages[0]);
                         errorMessage.append(C.LS);
                         errorMessage.append(lang.get("imagerepository.repositories.inconsistent.repair"));
-                        errorMessage.append(C.LS);
-                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS).append(C.LS);
                     }
 
                     if (errorMessages[1] != null) {
                         errorMessage.append(lang.get("imagerepository.repositories.corrupt"));
-                        errorMessage.append(C.LS);
-                        errorMessage.append(C.LS);
+                        errorMessage.append(C.LS).append(C.LS);
                         errorMessage.append(errorMessages[1]);
                         errorMessage.append(C.LS);
                         errorMessage.append(lang.get("imagerepository.repositories.corrupt.repair"));
@@ -5108,6 +5146,19 @@ public class MainGUI extends JFrame {
                 }
             }
             return false;
+        }
+    }
+
+    private class ImageMetaDataContextLoaderPropertyListener implements PropertyChangeListener {
+        /**
+         * Invoked when task's progress property changes.
+         */
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if ("progress" == evt.getPropertyName()) {
+                int progress = (Integer) evt.getNewValue();
+                imageMetaDataContextLoadingProgressBar.setValue(progress);
+            }
         }
     }
 }
