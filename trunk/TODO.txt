@@ -1,7 +1,6 @@
 3.0:
 ====
 - Canon Powershot A95 has strange ISO values.
-- Only the displayed selected images (if the search result is paged) are copied to the image view list 
 - Add startup splashscreen.
 - All icons should be loaded with the IconLoader class.
 - Test all functionality.
