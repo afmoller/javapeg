@@ -66,6 +66,7 @@ imagesearchresultviewer.menuitem.selectAll = Markera alla bilder
 imagesearchresultviewer.menuitem.deSelectAll = Avmarkera alla markerade bilder
 imagesearchresultviewer.menuitem.addSelectedImagesToViewList = Lägg valda bilder till bildlistan
 imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard = Kopiera valda bilder till systemets urklippshanterare
+imagesearchresultviewer.menuitem.copyImageToSystemClipboard = Kopiera bild till systemets urklippshanterare
 imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard = Kopiera alla bilder till systemets urklippshanterare
 imagesearchresultviewer.statusMessage.amountOfImagesInSearchResult = Antal bilder i sökresultatet
 imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip = Antal bilder per flik

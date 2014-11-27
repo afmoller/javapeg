@@ -97,6 +97,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     private JMenuItem popupMenuSelectAll;
     private JMenuItem popupMenuDeSelectAll;
     private JMenuItem popupMenuCopyImageToSystemClipBoard;
+    private JMenuItem popupMenuCopySelectedImagesToSystemClipBoard;
     private JMenuItem popupMenuCopyAllImagesToSystemClipBoard;
 
     private int columnMargin;
@@ -361,7 +362,8 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         popupMenuSelectAll = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.selectAll"));
         popupMenuDeSelectAll = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.deSelectAll"));
         popupMenuSetSelectedToViewList = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.addSelectedImagesToViewList"));
-        popupMenuCopyImageToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard"));
+        popupMenuCopyImageToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copyImageToSystemClipboard"));
+        popupMenuCopySelectedImagesToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copySelectedImagesToSystemClipboard"));
         popupMenuCopyAllImagesToSystemClipBoard = new JMenuItem(getLang().get("imagesearchresultviewer.menuitem.copyAllImagesToSystemClipboard"));
 
         rightClickMenu.add(popupMenuSelectAll);
@@ -370,6 +372,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         rightClickMenu.add(popupMenuSetSelectedToViewList);
         rightClickMenu.addSeparator();
         rightClickMenu.add(popupMenuCopyImageToSystemClipBoard);
+        rightClickMenu.add(popupMenuCopySelectedImagesToSystemClipBoard);
         rightClickMenu.add(popupMenuCopyAllImagesToSystemClipBoard);
     }
 
@@ -388,6 +391,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         popupMenuSelectAll.addActionListener(new RightClickMenuListenerSelectAll());
         popupMenuDeSelectAll.addActionListener(new RightClickMenuListenerDeSelectAll());
         popupMenuCopyImageToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyImageToSystemClipBoard());
+        popupMenuCopySelectedImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopySelectedImagesToSystemClipBoard());
         popupMenuCopyAllImagesToSystemClipBoard.addActionListener(new RightClickMenuListenerCopyAllImagesToSystemClipBoard());
         numberOfImagesToDisplaySelectionBox.addItemListener(new NumberOfImagesToDisplayChangeListener());
         loadPreviousImages.addActionListener(new LoadPreviousImagesListener());
@@ -452,6 +456,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             if(e.isPopupTrigger() && !thumbNailLoadingProgressBar.isVisible()) {
                 rightClickMenu.show(e.getComponent(),e.getX(), e.getY());
                 popupMenuCopyImageToSystemClipBoard.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
+
+                // Only set these as enabled if there are any selected images.
+                popupMenuCopySelectedImagesToSystemClipBoard.setEnabled(selectedImageFiles.size() > 0);
+                popupMenuSetSelectedToViewList.setEnabled(selectedImageFiles.size() > 0);
             }
         }
     }
@@ -510,6 +518,14 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             selectedFiles.add(new File(e.getActionCommand()));
 
             FileSelection fileSelection = new FileSelection(selectedFiles);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
+        }
+    }
+
+    private class RightClickMenuListenerCopySelectedImagesToSystemClipBoard implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            FileSelection fileSelection = new FileSelection(new ArrayList<File>(selectedImageFiles));
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
         }
     }
