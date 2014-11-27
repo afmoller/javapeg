@@ -469,10 +469,8 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         public void actionPerformed(ActionEvent e) {
             ImagesToViewModel imagesToViewModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 
-            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
-                if (jToggleButton.isSelected()) {
-                    imagesToViewModel.addElement(new File(jToggleButton.getActionCommand()));
-                }
+            for (File selectedImageFile : selectedImageFiles) {
+                imagesToViewModel.addElement(selectedImageFile);
             }
         }
     }
