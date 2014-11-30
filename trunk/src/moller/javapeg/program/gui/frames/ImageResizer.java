@@ -70,6 +70,8 @@ import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.progress.CustomizedJTextArea;
@@ -259,19 +261,8 @@ public class ImageResizer extends JavaPEGBaseFrame {
 
         JScrollPane spImageList = new JScrollPane(imagesToViewList);
 
-        InputStream imageStream = null;
-
-        ImageIcon removePictureImageIcon = new ImageIcon();
-
-        imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
-        try {
-            removePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            getLogger().logERROR("Could not load image: resources/images/viewtab/remove.gif, see stacktrace for details");
-            getLogger().logERROR(iox);
-        }
         removeSelectedImagesButton = new JButton();
-        removeSelectedImagesButton.setIcon(removePictureImageIcon);
+        removeSelectedImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
         removeSelectedImagesButton.setToolTipText(getLang().get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));

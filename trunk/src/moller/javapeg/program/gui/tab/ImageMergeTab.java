@@ -57,6 +57,8 @@ import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.gui.dialog.ImageMergeConflictViewer;
 import moller.javapeg.program.gui.frames.MainGUI;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.SortedListModel;
@@ -184,15 +186,7 @@ public class ImageMergeTab extends JPanel {
 
         destinationDirectorySelector = new DestinationDirectorySelector(true);
 
-        ImageIcon removePictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");){
-            removePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image remove.gif");
-            logger.logERROR(iox);
-        }
-        removeSelectedDirectoryButton = new JButton();
-        removeSelectedDirectoryButton.setIcon(removePictureImageIcon);
+        removeSelectedDirectoryButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
         removeSelectedDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.directories.remove"));
 
         JPanel removeSelectedDirectoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));

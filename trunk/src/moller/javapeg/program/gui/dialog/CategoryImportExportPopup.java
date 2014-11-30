@@ -25,7 +25,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,12 +41,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.DefaultLookAndFeel;
-import moller.util.image.ImageUtil;
 import moller.util.io.FileUtil;
 import moller.util.java.SystemProperties;
 
@@ -163,19 +162,12 @@ public class CategoryImportExportPopup extends JDialog {
         categoryImportExportTextField.setEditable(false);
 
         pathSelectionButton = new JButton();
+        pathSelectionButton.setIcon(IconLoader.getIcon(Icons.OPEN));
 
         if (isImport()) {
             pathSelectionButton.setToolTipText(lang.get("categoryimportexport.selectCategoryFileToImport"));
         } else {
             pathSelectionButton.setToolTipText(lang.get("categoryimportexport.selectDestinationForCategoryExport"));
-        }
-
-        try {
-            pathSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/open.gif"), true));
-        } catch (IOException iox) {
-            pathSelectionButton.setText("Open");
-            logger.logERROR("Could not set image: resources/images/open.gif as icon for the import categories button. See stacktrace below for details");
-            logger.logERROR(iox);
         }
 
         mainPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));

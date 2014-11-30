@@ -23,8 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,13 +30,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -58,7 +53,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.categories.CategoryUtil;
@@ -72,12 +66,12 @@ import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.frames.configuration.ImageRepositoriesTableCellRenderer;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
-import moller.util.image.ImageUtil;
 import moller.util.io.Status;
-import moller.util.io.StreamUtil;
 
 public class TagConfigurationPanel extends BaseConfigurationPanel {
 
@@ -257,19 +251,9 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
         removeSelectedDoNotAllwaysAddImagePaths.setName("DoNotAllwaysAddImagePaths");
         removeSelectedDoNotAllwaysAddImagePaths.addActionListener(new RemoveExceptionPathsListener());
 
-        try {
-            Icon removeIcon = ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true);
-
-            removeSelectedAllwaysAddImagePaths.setIcon(removeIcon);
-            removeSelectedDoNotAllwaysAddImagePaths.setIcon(removeIcon);
-            removeSelectedImportedCategoriesButton.setIcon(removeIcon);
-        } catch (IOException iox) {
-            removeSelectedAllwaysAddImagePaths.setText("X");
-            removeSelectedDoNotAllwaysAddImagePaths.setText("X");
-            removeSelectedImportedCategoriesButton.setText("X");
-            getLogger().logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the remove selected image paths button. See stacktrace below for details");
-            getLogger().logERROR(iox);
-        }
+        removeSelectedAllwaysAddImagePaths.setIcon(IconLoader.getIcon(Icons.REMOVE));
+        removeSelectedDoNotAllwaysAddImagePaths.setIcon(IconLoader.getIcon(Icons.REMOVE));
+        removeSelectedImportedCategoriesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
         ImageRepositoriesTableModel imageRepositoriesTableModel = ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel();
 
@@ -308,19 +292,7 @@ public class TagConfigurationPanel extends BaseConfigurationPanel {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
 
         removeSelectedImagePathsButton = new JButton();
-
-        InputStream imageStream = null;
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
-            removeSelectedImagePathsButton.setIcon(new ImageIcon(ImageIO.read(imageStream)));
-        } catch (IOException iox) {
-            removeSelectedImagePathsButton.setText("X");
-            getLogger().logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the remove selected image paths button. See stacktrace below for details");
-            getLogger().logERROR(iox);
-        } finally {
-            StreamUtil.close(imageStream, true);
-        }
-
+        removeSelectedImagePathsButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
         removeSelectedImagePathsButton.setToolTipText("Remove selected path(s) from the image repository");
 
         GBHelper posButtonPanel = new GBHelper();
