@@ -20,12 +20,10 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -41,7 +39,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.ToolTips;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
@@ -49,8 +46,9 @@ import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.jpeg.JPEGThumbNailCache;
-import moller.util.image.ImageUtil;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 
@@ -171,15 +169,7 @@ public class ThumbnailConfigurationPanel extends BaseConfigurationPanel {
 
         JLabel clearCachLabel = new JLabel(getLang().get("configviewer.thumbnail.cache.label.clear"));
 
-        try {
-            Icon cleanThumbNailCacheImageIcon = ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true);
-            clearCacheJButton = new JButton(cleanThumbNailCacheImageIcon);
-        } catch (IOException iox) {
-            clearCacheJButton = new JButton("X");
-            getLogger().logERROR("Could not set image resources/images/viewtab/remove.gif to clean thumbnail cache button." );
-            getLogger().logERROR(iox);
-        }
-
+        clearCacheJButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
         clearCacheJButton.setEnabled(thumbNail.getCache().getEnabled() && (jptc.getCurrentSize() > 0));
 
         JPanel thumbnailCachePanel = new JPanel(new GridBagLayout());

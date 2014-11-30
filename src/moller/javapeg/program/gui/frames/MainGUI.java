@@ -185,6 +185,8 @@ import moller.javapeg.program.gui.components.ThumbNailsPanel;
 import moller.javapeg.program.gui.components.VariablesPanel;
 import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
 import moller.javapeg.program.gui.frames.configuration.ConfigViewerGUI;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
@@ -1007,9 +1009,7 @@ public class MainGUI extends JFrame {
 
         InputStream imageStream = null;
 
-        ImageIcon removePictureImageIcon = new ImageIcon();
         ImageIcon removeAllPictureImageIcon = new ImageIcon();
-        ImageIcon openImageListImageIcon = new ImageIcon();
         ImageIcon saveImageListImageIcon = new ImageIcon();
         ImageIcon exportImageListImageIcon = new ImageIcon();
         ImageIcon moveUpImageIcon = new ImageIcon();
@@ -1021,9 +1021,7 @@ public class MainGUI extends JFrame {
         ImageIcon openImageResizerImageIcon = new ImageIcon();
 
         try {
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif");
-            removePictureImageIcon.setImage(ImageIO.read(imageStream));
-            removeSelectedImagesButton.setIcon(removePictureImageIcon);
+            removeSelectedImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
             removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
@@ -1031,9 +1029,7 @@ public class MainGUI extends JFrame {
             removeAllImagesButton.setIcon(removeAllPictureImageIcon);
             removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif");
-            openImageListImageIcon.setImage(ImageIO.read(imageStream));
-            openImageListButton.setIcon(openImageListImageIcon);
+            openImageListButton.setIcon(IconLoader.getIcon(Icons.OPEN));
             openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
 
             imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif");
@@ -1200,15 +1196,7 @@ public class MainGUI extends JFrame {
 
         clearCategoriesSelectionButton = new JButton();
         clearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
-
-        try {
-            clearCategoriesSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
-        } catch (IOException iox) {
-            clearCategoriesSelectionButton.setText("x");
-            Logger logger = Logger.getInstance();
-            logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear categories button. See stacktrace below for details");
-            logger.logERROR(iox);
-        }
+        clearCategoriesSelectionButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
         JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
@@ -1296,15 +1284,7 @@ public class MainGUI extends JFrame {
                 importedClearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
                 importedClearCategoriesSelectionButton.setActionCommand(importedJavePegId);
                 importedClearCategoriesSelectionButton.addActionListener(new ImportedClearCategoriesSelectionListener());
-
-                try {
-                    importedClearCategoriesSelectionButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
-                } catch (IOException iox) {
-                    importedClearCategoriesSelectionButton.setText("x");
-                    Logger logger = Logger.getInstance();
-                    logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear categories button. See stacktrace below for details");
-                    logger.logERROR(iox);
-                }
+                importedClearCategoriesSelectionButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
                 JPanel importedSelectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
@@ -1523,14 +1503,7 @@ public class MainGUI extends JFrame {
 
         clearAllMetaDataParameters = new JButton();
         clearAllMetaDataParameters.setToolTipText(lang.get("findimage.clearAllMetaDataParameters.tooltip"));
-
-        try {
-            clearAllMetaDataParameters.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif"), true));
-        } catch (IOException iox) {
-            clearAllMetaDataParameters.setText("x");
-            logger.logERROR("Could not set image: resources/images/viewtab/remove.gif as icon for the clear meta data button. See stacktrace below for details");
-            logger.logERROR(iox);
-        }
+        clearAllMetaDataParameters.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
         searchImagesButton = new JButton();
         searchImagesButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
@@ -1614,14 +1587,6 @@ public class MainGUI extends JFrame {
         startProcessButton.setMinimumSize(new Dimension(30, 20));
         startProcessButton.setEnabled(false);
 
-        ImageIcon openPictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif")){
-            openPictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image open.gif");
-            logger.logERROR(iox);
-        }
-
         JLabel destinationPathLabel = new JLabel(lang.get("labels.destinationPath"));
         destinationPathLabel.setForeground(Color.GRAY);
 
@@ -1629,7 +1594,7 @@ public class MainGUI extends JFrame {
         destinationPathTextField.setEditable(false);
         destinationPathTextField.setBackground(Color.WHITE);
 
-        destinationPathButton = new JButton(openPictureImageIcon);
+        destinationPathButton = new JButton(IconLoader.getIcon(Icons.OPEN));
         destinationPathButton.setActionCommand("destinationPathButton");
         destinationPathButton.setToolTipText(lang.get("tooltip.destinationPathButton"));
         destinationPathButton.setPreferredSize(new Dimension(30, 20));
@@ -1678,14 +1643,6 @@ public class MainGUI extends JFrame {
             logger.logERROR(iox);
         }
 
-        ImageIcon removeTemplatePictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/remove.gif")){
-            removeTemplatePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image remove.gif");
-            logger.logERROR(iox);
-        }
-
         saveFileNameTemplateButton = new JButton(saveTemplatePictureImageIcon);
         saveFileNameTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
         saveFileNameTemplateButton.setEnabled(false);
@@ -1694,11 +1651,11 @@ public class MainGUI extends JFrame {
         saveSubFolderTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
         saveSubFolderTemplateButton.setEnabled(false);
 
-        removeFileNameTemplateButton = new JButton(removeTemplatePictureImageIcon);
+        removeFileNameTemplateButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
         removeFileNameTemplateButton.setToolTipText(lang.get("tooltip.deleteTemplateFromTemplateList"));
         removeFileNameTemplateButton.setEnabled(false);
 
-        removeSubFolderTemplateButton = new JButton(removeTemplatePictureImageIcon);
+        removeSubFolderTemplateButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
         removeSubFolderTemplateButton.setToolTipText(lang.get("tooltip.deleteTemplateFromTemplateList"));
         removeSubFolderTemplateButton.setEnabled(false);
 

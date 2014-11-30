@@ -22,11 +22,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -34,11 +30,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
 
 /**
  * This class constructs a reusable GUI component that consists of a
@@ -68,7 +64,6 @@ public class DestinationDirectorySelector extends JPanel {
     private JButton destinationPathButton;
 
     private static Language lang;
-    private static Logger logger;
 
     /**
      * Constructor
@@ -81,7 +76,6 @@ public class DestinationDirectorySelector extends JPanel {
     public DestinationDirectorySelector(boolean ignoreSourcePath) {
 
         lang = Language.getInstance();
-        logger = Logger.getInstance();
 
         this.construct(ignoreSourcePath);
     }
@@ -98,19 +92,11 @@ public class DestinationDirectorySelector extends JPanel {
         JLabel destinationPathLabel = new JLabel(lang.get("labels.destinationPath"));
         destinationPathLabel.setForeground(Color.GRAY);
 
-        ImageIcon openPictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif")) {
-            openPictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image open.gif");
-            logger.logERROR(iox);
-        }
-
         destinationPathTextField = new JTextField();
         destinationPathTextField.setEditable(false);
         destinationPathTextField.setBackground(Color.WHITE);
 
-        destinationPathButton = new JButton(openPictureImageIcon);
+        destinationPathButton = new JButton(IconLoader.getIcon(Icons.OPEN));
         destinationPathButton.setActionCommand("destinationPathButton");
         destinationPathButton.addActionListener(new DestinationPathButtonListener(ignoreSourcePath));
 

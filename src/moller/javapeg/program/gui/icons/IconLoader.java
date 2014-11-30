@@ -18,40 +18,56 @@ package moller.javapeg.program.gui.icons;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.logger.Logger;
 
+/**
+ * Helper class which acts as an repository of all icon images which are used in
+ * this application. It is responsible for loading, if not yet loaded, and the
+ * delivery of an specific image. Any error handling is also handled by this
+ * class.
+ *
+ * @author Fredrik
+ *
+ */
 public class IconLoader {
 
-    private static ImageIcon addIcon = null;
-    private static ImageIcon removeIcon = null;
+    /**
+     * A map which contains all loaded and created {@link ImageIcon} objects.
+     */
+    private static Map<Icons, ImageIcon> icons = new HashMap<Icons, ImageIcon>();
 
-
-    public static ImageIcon getAddIcon() {
-        if (addIcon == null) {
-            addIcon = loadIcon(Icons.ADDICON);
-        }
-        return addIcon;
+    /**
+     * Gets the icon described by the parameter icon of type {@link Icons}.
+     *
+     * @param icon
+     *            specifies which {@link ImageIcon} object to return.
+     * @return
+     */
+    public static ImageIcon getIcon(Icons icon) {
+        return getOrCreateAndGetIcon(icon);
     }
 
-    public static ImageIcon getRemoveIcon() {
-        if (removeIcon  == null) {
-            removeIcon = loadIcon(Icons.REMOVEICON);
+    private static ImageIcon getOrCreateAndGetIcon(Icons icon) {
+        if (icons.containsKey(icon)) {
+            return icons.get(icon);
+        } else {
+            ImageIcon imageIcon = new ImageIcon();
+            try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream(icon.getResource())) {
+                imageIcon.setImage(ImageIO.read(imageStream));
+                icons.put(icon, imageIcon);
+            } catch (IOException iox) {
+                Logger logger = Logger.getInstance();
+                logger.logERROR("The icon: " + icon + " could not be loaded, see stack trace for details");
+                logger.logERROR(iox);
+            }
+            return imageIcon;
         }
-        return removeIcon;
     }
-
-    private static ImageIcon loadIcon(Icons icon) {
-        ImageIcon imageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream(icon.getResource())) {
-            imageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-
-        }
-        return imageIcon;
-    }
-
 }

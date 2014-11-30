@@ -47,6 +47,7 @@ import moller.javapeg.program.gui.ComboboxToolTipRenderer;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.model.iso.CameraAndISOFilterPair;
 import moller.javapeg.program.model.iso.ISOFilteringTableModel;
 
@@ -111,7 +112,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         cameraModelsJComboBox = new JComboBox<String>(cameraModelsModel );
 
-        addNewRuleButton = new JButton(IconLoader.getAddIcon());
+        addNewRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
 //        TODO: Fix hard coded string
         addNewRuleButton.setToolTipText("Add rule for selected selected camera model");
 
@@ -135,7 +136,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         JScrollPane isoRuleToCameraModelScrollPane = new JScrollPane(isoRuleToCameraModelTable);
         isoRuleToCameraModelScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        removeRuleButton = new JButton(IconLoader.getRemoveIcon());
+        removeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
 
         GBHelper posPanel = new GBHelper();
         add(new JLabel("Camera model"), posPanel);

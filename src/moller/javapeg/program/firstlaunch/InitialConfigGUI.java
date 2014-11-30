@@ -22,17 +22,13 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -56,6 +52,8 @@ import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.ConfigurationSchema;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.ISO639;
 import moller.javapeg.program.language.LanguageUtil;
 import moller.util.DefaultLookAndFeel;
@@ -290,14 +288,7 @@ public class InitialConfigGUI extends JDialog {
         JPanel importConfigFileChooserOpenButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
         importConfigFileChooserOpenButtonPanel.add(importConfigFileChooserOpenButton);
 
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/open.gif")) {
-            ImageIcon openImageIcon = new ImageIcon();
-            openImageIcon.setImage(ImageIO.read(imageStream));
-            importConfigFileChooserOpenButton.setIcon(openImageIcon);
-        } catch (IOException e) {
-            importConfigFileChooserOpenButton.setText("Open");
-        }
-
+        importConfigFileChooserOpenButton.setIcon(IconLoader.getIcon(Icons.OPEN));
         importConfigFileChooserOpenButton.addActionListener(new ImportConfigFileChooserOpenButtonListener());
 
         availableAlternativeConfigurationsLabel = new JLabel(language.get("configuration.section.other.import.location.found.configurations"));
