@@ -26,14 +26,11 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -60,7 +57,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
@@ -157,15 +153,7 @@ public class ImageResizer extends JavaPEGBaseFrame {
         loadAndApplyGUISettings();
 
         this.setTitle(getLang().get("imageresizer.gui.title"));
-
-        InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
-
-        try {
-            this.setIconImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            getLogger().logERROR("Could not load icon: Open16.gif");
-            getLogger().logERROR(e);
-        }
+        this.setIconImage(IconLoader.getIcon(Icons.IMAGE_RESIZER).getImage());
 
         GBHelper posBackgroundPanel = new GBHelper();
 

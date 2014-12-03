@@ -18,10 +18,25 @@ package moller.javapeg.program.gui.icons;
 
 public enum Icons {
 
-    ADD("resources/images/plus_16.png"),
-    OPEN("resources/images/open.gif"),
-    ARROW_JOIN("resources/images/arrow_join.png"),
-    REMOVE("resources/images/viewtab/remove.gif");
+    ADD("plus_16.png"),
+    OPEN("open.gif"),
+    ARROW_JOIN("arrow_join.png"),
+    REMOVE("viewtab/remove.gif"),
+    IMAGE_RESIZER("ImageResizer16.gif"),
+    COPY("viewtab/copy.gif"),
+    MOVE_TO_BOTTOM("viewtab/bottom.gif"),
+    VIEW_IMAGES("viewtab/view.gif"),
+    MOVE_TO_TOP("viewtab/top.gif"),
+    MOVE_DOWN("viewtab/down.gif"),
+    MOVE_UP("viewtab/up.gif"),
+    EXPORT_IMAGE_LIST("viewtab/export.gif"),
+    SAVE_IMAGE_LIST("viewtab/save.gif"),
+    REMOVE_ALL("viewtab/removeall.gif");
+
+
+
+
+    private static final String PREFIX = "resources/images/";
 
     private final String resource;
 
@@ -29,7 +44,7 @@ public enum Icons {
         return resource;
     }
 
-    Icons(String resource) {
-        this.resource = resource;
+    Icons(String resourceWithoutPrefix) {
+        this.resource = PREFIX + resourceWithoutPrefix;
     }
 }

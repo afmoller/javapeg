@@ -993,102 +993,53 @@ public class MainGUI extends JFrame {
     }
 
     private JPanel createViewPanelListSection () {
-
         removeSelectedImagesButton = new JButton();
-        removeAllImagesButton      = new JButton();
-        openImageListButton        = new JButton();
-        saveImageListButton        = new JButton();
-        exportImageListButton      = new JButton();
-        moveUpButton               = new JButton();
-        moveDownButton             = new JButton();
+        removeSelectedImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
+        removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
+
+        removeAllImagesButton = new JButton();
+        removeAllImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE_ALL));
+        removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
+
+        openImageListButton = new JButton();
+        openImageListButton.setIcon(IconLoader.getIcon(Icons.OPEN));
+        openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
+
+        saveImageListButton = new JButton();
+        saveImageListButton.setIcon(IconLoader.getIcon(Icons.SAVE_IMAGE_LIST));
+        saveImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.saveImageList"));
+
+        exportImageListButton = new JButton();
+        exportImageListButton.setIcon(IconLoader.getIcon(Icons.EXPORT_IMAGE_LIST));
+        exportImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.exportImageList"));
+
+        moveUpButton = new JButton();
+        moveUpButton.setIcon(IconLoader.getIcon(Icons.MOVE_UP));
+        moveUpButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveUp"));
+
+        moveDownButton = new JButton();
+        moveDownButton.setIcon(IconLoader.getIcon(Icons.MOVE_DOWN));
+        moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
+
         openImageViewerButton      = new JButton();
-        moveToTopButton            = new JButton();
-        moveToBottomButton         = new JButton();
-        copyImageListdButton       = new JButton();
-        openImageResizerButton     = new JButton();
+        openImageViewerButton.setIcon(IconLoader.getIcon(Icons.VIEW_IMAGES));
+        openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
 
-        InputStream imageStream = null;
+        moveToTopButton = new JButton();
+        moveToTopButton.setIcon(IconLoader.getIcon(Icons.MOVE_TO_TOP));
+        moveToTopButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToTop"));
 
-        ImageIcon removeAllPictureImageIcon = new ImageIcon();
-        ImageIcon saveImageListImageIcon = new ImageIcon();
-        ImageIcon exportImageListImageIcon = new ImageIcon();
-        ImageIcon moveUpImageIcon = new ImageIcon();
-        ImageIcon moveDownImageIcon = new ImageIcon();
-        ImageIcon viewImagesImageIcon = new ImageIcon();
-        ImageIcon moveToTopImageIcon = new ImageIcon();
-        ImageIcon moveToBottomImageIcon = new ImageIcon();
-        ImageIcon copyImageListToClipBoardImageIcon = new ImageIcon();
-        ImageIcon openImageResizerImageIcon = new ImageIcon();
+        moveToBottomButton = new JButton();
+        moveToBottomButton.setIcon(IconLoader.getIcon(Icons.MOVE_TO_BOTTOM));
+        moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
 
-        try {
-            removeSelectedImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
-            removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
+        copyImageListdButton = new JButton();
+        copyImageListdButton.setIcon(IconLoader.getIcon(Icons.COPY));
+        copyImageListdButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.copyImageListToClipboard"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/removeall.gif");
-            removeAllPictureImageIcon.setImage(ImageIO.read(imageStream));
-            removeAllImagesButton.setIcon(removeAllPictureImageIcon);
-            removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
-
-            openImageListButton.setIcon(IconLoader.getIcon(Icons.OPEN));
-            openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif");
-            saveImageListImageIcon.setImage(ImageIO.read(imageStream));
-            saveImageListButton.setIcon(saveImageListImageIcon);
-            saveImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.saveImageList"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/export.gif");
-            exportImageListImageIcon.setImage(ImageIO.read(imageStream));
-            exportImageListButton.setIcon(exportImageListImageIcon);
-            exportImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.exportImageList"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/up.gif");
-            moveUpImageIcon.setImage(ImageIO.read(imageStream));
-            moveUpButton.setIcon(moveUpImageIcon);
-            moveUpButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveUp"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/down.gif");
-            moveDownImageIcon.setImage(ImageIO.read(imageStream));
-            moveDownButton.setIcon(moveDownImageIcon);
-            moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/view.gif");
-            viewImagesImageIcon.setImage(ImageIO.read(imageStream));
-            openImageViewerButton.setIcon(viewImagesImageIcon);
-            openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/top.gif");
-            moveToTopImageIcon.setImage(ImageIO.read(imageStream));
-            moveToTopButton.setIcon(moveToTopImageIcon);
-            moveToTopButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToTop"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/bottom.gif");
-            moveToBottomImageIcon.setImage(ImageIO.read(imageStream));
-            moveToBottomButton.setIcon(moveToBottomImageIcon);
-            moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/copy.gif");
-            copyImageListToClipBoardImageIcon.setImage(ImageIO.read(imageStream));
-            copyImageListdButton.setIcon(copyImageListToClipBoardImageIcon);
-            copyImageListdButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.copyImageListToClipboard"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/ImageResizer16.gif");
-            openImageResizerImageIcon.setImage(ImageIO.read(imageStream));
-            openImageResizerButton.setIcon(openImageResizerImageIcon);
-            openImageResizerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageResizer"));
-
-
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image");
-            logger.logERROR(iox);
-        } finally {
-            try {
-                StreamUtil.closeStream(imageStream);
-            } catch (IOException iox) {
-                logger.logERROR("Could not close InputStream for image");
-                logger.logERROR(iox);
-            }
-        }
+        openImageResizerButton = new JButton();
+        openImageResizerButton.setIcon(IconLoader.getIcon(Icons.IMAGE_RESIZER));
+        openImageResizerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageResizer"));
 
         imagesToViewList = new JList<File>(imagesToViewListModel);
         imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
