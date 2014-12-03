@@ -30,7 +30,7 @@ public enum Icons {
     MOVE_DOWN("viewtab/down.gif"),
     MOVE_UP("viewtab/up.gif"),
     EXPORT_IMAGE_LIST("viewtab/export.gif"),
-    SAVE_IMAGE_LIST("viewtab/save.gif"),
+    SAVE_IMAGE_LIST("save.gif"),
     REMOVE_ALL("viewtab/removeall.gif");
 
 
