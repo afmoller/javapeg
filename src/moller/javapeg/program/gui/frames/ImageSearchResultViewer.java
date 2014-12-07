@@ -225,7 +225,6 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
-
         this.setTitle(getLang().get("imagesearchresultviewer.title"));
 
         thumbNailLoadingProgressBar = new JProgressBar();
@@ -249,16 +248,19 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
 
-            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
-                if (KeyEvent.VK_LEFT == e.getKeyCode()) {
-                    loadPreviousImages.doClick(0);
-                    return true;
-                }
-                if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
-                    loadNextImages.doClick(0);
-                    return true;
+            if (ImageSearchResultViewer.this.isFocused()) {
+                if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
+                    if (KeyEvent.VK_LEFT == e.getKeyCode()) {
+                        loadPreviousImages.doClick(0);
+                        return true;
+                    }
+                    if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
+                        loadNextImages.doClick(0);
+                        return true;
+                    }
                 }
             }
+
             return false;
         }
     }

@@ -33,9 +33,6 @@ public enum Icons {
     SAVE_IMAGE_LIST("save.gif"),
     REMOVE_ALL("viewtab/removeall.gif");
 
-
-
-
     private static final String PREFIX = "resources/images/";
 
     private final String resource;
