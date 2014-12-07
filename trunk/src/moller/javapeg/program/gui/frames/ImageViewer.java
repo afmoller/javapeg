@@ -731,60 +731,62 @@ public class ImageViewer extends JavaPEGBaseFrame {
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
 
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
-                    if (fullScreenEnabled) {
-                        escapeFullScreenMode();
+            if (ImageViewer.this.isFocused()) {
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
+                        if (fullScreenEnabled) {
+                            escapeFullScreenMode();
+                        }
+                        return true;
+                    }
+
+                    else if (KeyEvent.VK_F11 == e.getKeyCode()) {
+                        if (fullScreenEnabled) {
+                            escapeFullScreenMode();
+                        } else {
+                            enterFullScreenMode();
+                        }
+                        return true;
+                    }
+                }
+
+                if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
+                    if (KeyEvent.VK_LEFT == e.getKeyCode()) {
+                        if (!loadPreviousImageAction.isRunning()) {
+                            Thread thread = new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    loadPreviousImageAction.run();
+                                }
+                            });
+                            loadPreviousImageAction.start();
+                            thread.start();
+                        }
+                        return true;
+                    }
+                    if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
+                        if (!loadNextImageAction.isRunning()) {
+                            Thread thread = new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    loadNextImageAction.run();
+                                }
+                            });
+                            loadNextImageAction.start();
+                            thread.start();
+                        }
+                        return true;
+                    }
+                }
+
+                if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+                    if (KeyEvent.VK_C == e.getKeyCode()) {
+                        copyDisplayedImageToSystemClipboard();
                     }
                     return true;
                 }
-
-                else if (KeyEvent.VK_F11 == e.getKeyCode()) {
-                    if (fullScreenEnabled) {
-                        escapeFullScreenMode();
-                    } else {
-                        enterFullScreenMode();
-                    }
-                    return true;
-                }
-            }
-
-            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() != KeyEvent.ALT_DOWN_MASK) {
-                if (KeyEvent.VK_LEFT == e.getKeyCode()) {
-                    if (!loadPreviousImageAction.isRunning()) {
-                        Thread thread = new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                loadPreviousImageAction.run();
-                            }
-                        });
-                        loadPreviousImageAction.start();
-                        thread.start();
-                    }
-                    return true;
-                }
-                if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
-                    if (!loadNextImageAction.isRunning()) {
-                        Thread thread = new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                loadNextImageAction.run();
-                            }
-                        });
-                        loadNextImageAction.start();
-                        thread.start();
-                    }
-                    return true;
-                }
-            }
-
-            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
-                if (KeyEvent.VK_C == e.getKeyCode()) {
-                    copyDisplayedImageToSystemClipboard();
-                }
-                return true;
             }
             return false;
         }

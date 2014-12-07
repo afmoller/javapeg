@@ -1989,42 +1989,44 @@ public class MainGUI extends JFrame {
     }
 
     private void selectAllImages() {
-        while (!selectedImageIconGenerator.isDone()) {
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e1) {
-            }
-        }
-
-        JToggleButton firstJToggleButton = null;
-        JToggleButton jToggleButtonToSelect = null;
-
-        for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
-            if (firstJToggleButton == null) {
-                firstJToggleButton = jToggleButton;
+        if (loadedThumbnails  != null && !loadedThumbnails.isEmpty()) {
+            while (!selectedImageIconGenerator.isDone()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e1) {
+                }
             }
 
-            if (jToggleButton.isSelected()) {
-                jToggleButtonToSelect = jToggleButton;
-                break;
+            JToggleButton firstJToggleButton = null;
+            JToggleButton jToggleButtonToSelect = null;
+
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
+                if (firstJToggleButton == null) {
+                    firstJToggleButton = jToggleButton;
+                }
+
+                if (jToggleButton.isSelected()) {
+                    jToggleButtonToSelect = jToggleButton;
+                    break;
+                }
             }
-        }
 
-        if (jToggleButtonToSelect == null) {
-            jToggleButtonToSelect = firstJToggleButton;
-        }
+            if (jToggleButtonToSelect == null) {
+                jToggleButtonToSelect = firstJToggleButton;
+            }
 
-        jToggleButtonToSelect.setSelected(true);
-        ActionEvent actionEvent = new  ActionEvent(jToggleButtonToSelect, ActionEvent.ACTION_PERFORMED, jToggleButtonToSelect.getActionCommand());
-        for (ActionListener listener : jToggleButtonToSelect.getActionListeners()) {
-            listener.actionPerformed(actionEvent);
-        }
+            jToggleButtonToSelect.setSelected(true);
+            ActionEvent actionEvent = new  ActionEvent(jToggleButtonToSelect, ActionEvent.ACTION_PERFORMED, jToggleButtonToSelect.getActionCommand());
+            for (ActionListener listener : jToggleButtonToSelect.getActionListeners()) {
+                listener.actionPerformed(actionEvent);
+            }
 
-        for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
-            if (!jToggleButton.isSelected()) {
-                jToggleButton.setSelected(true);
-                File imageFile = new File(jToggleButton.getActionCommand());
-                jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
+            for (JToggleButton jToggleButton : thumbNailsPanel.getJToggleButtons()) {
+                if (!jToggleButton.isSelected()) {
+                    jToggleButton.setSelected(true);
+                    File imageFile = new File(jToggleButton.getActionCommand());
+                    jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
+                }
             }
         }
     }
@@ -5047,10 +5049,12 @@ public class MainGUI extends JFrame {
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
 
-            if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
-                if (KeyEvent.VK_A == e.getKeyCode()) {
-                    selectAllImages();
-                    return true;
+            if (MainGUI.this.isFocused()) {
+                if (e.getID() == KeyEvent.KEY_PRESSED && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+                    if (KeyEvent.VK_A == e.getKeyCode()) {
+                        selectAllImages();
+                        return true;
+                    }
                 }
             }
             return false;
