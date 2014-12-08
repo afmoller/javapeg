@@ -37,7 +37,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,8 +62,6 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.C;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.controller.ConfigElement;
@@ -82,10 +79,11 @@ import moller.javapeg.program.gui.components.MetaDataPanel;
 import moller.javapeg.program.gui.components.NavigableImagePanel;
 import moller.javapeg.program.gui.components.StatusPanel;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Update;
-import moller.util.io.StreamUtil;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
 
@@ -241,14 +239,7 @@ public class ImageViewer extends JavaPEGBaseFrame {
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
-        InputStream imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Open16.gif");
-
-        try {
-            this.setIconImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            getLogger().logERROR("Could not load icon: Open16.gif");
-            getLogger().logERROR(e);
-        }
+        this.setIconImage(IconLoader.getIcon(Icons.OPEN).getImage());
 
         imageBackground = new NavigableImagePanel();
         imageBackground.setHighQualityRenderingEnabled(true);
@@ -293,28 +284,13 @@ public class ImageViewer extends JavaPEGBaseFrame {
         maximizeButton = new JButton();
         minimizeButton = new JButton();
 
-        InputStream imageStream = null;
+        maximizeButton.setIcon(IconLoader.getIcon(Icons.FORWARD));
+        maximizeButton.setPreferredSize(buttonSize);
+        maximizeButton.setMinimumSize(buttonSize);
 
-        ImageIcon maximizeImageIcon = new ImageIcon();
-        ImageIcon minimizeIcon = new ImageIcon();
-
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
-            maximizeImageIcon.setImage(ImageIO.read(imageStream));
-            maximizeButton.setIcon(maximizeImageIcon);
-            maximizeButton.setPreferredSize(buttonSize);
-            maximizeButton.setMinimumSize(buttonSize);
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
-            minimizeIcon.setImage(ImageIO.read(imageStream));
-            minimizeButton.setIcon(minimizeIcon);
-            minimizeButton.setPreferredSize(buttonSize);
-            minimizeButton.setMinimumSize(buttonSize);
-
-        } catch (IOException e) {
-            getLogger().logERROR("Could not load image. See Stack Trace below for details");
-            getLogger().logERROR(e);
-        }
+        minimizeButton.setIcon(IconLoader.getIcon(Icons.BACK));
+        minimizeButton.setPreferredSize(buttonSize);
+        minimizeButton.setMinimumSize(buttonSize);
 
         buttonPanel.add(maximizeButton, posButtonPanel);
         buttonPanel.add(minimizeButton, posButtonPanel.nextRow());
@@ -422,106 +398,50 @@ public class ImageViewer extends JavaPEGBaseFrame {
         slideShowDelay.setMaximumSize(slideShowDelay.getPreferredSize());
         slideShowDelay.setToolTipText(getLang().get("imageviewer.button.slideShowDelay.toolTip"));
 
-        InputStream imageStream = null;
+        previousJButton.setIcon(IconLoader.getIcon(Icons.BACK));
+        previousJButton.setToolTipText(getLang().get("imageviewer.button.back.toolTip"));
 
-        ImageIcon previousImageIcon = new ImageIcon();
-        ImageIcon nextImageIcon = new ImageIcon();
-        ImageIcon automaticAdjustToWindowSizeImageIcon = new ImageIcon();
-        ImageIcon adjustToWindowSizeImageIcon = new ImageIcon();
-        ImageIcon rotateLeftImageIcon = new ImageIcon();
-        ImageIcon rotateRightImageIcon = new ImageIcon();
-        ImageIcon automaticRotateImageIcon = new ImageIcon();
-        ImageIcon centerImageIcon = new ImageIcon();
-        ImageIcon zoomInImageIcon = new ImageIcon();
-        ImageIcon zoomOutImageIcon = new ImageIcon();
-        ImageIcon navigationImageEnabledIcon = new ImageIcon();
-        ImageIcon navigationImageDisabledIcon = new ImageIcon();
-        ImageIcon startSlideshowImageIcon = new ImageIcon();
-        ImageIcon stopSlideshowImageIcon = new ImageIcon();
+        nextJButton.setIcon(IconLoader.getIcon(Icons.FORWARD));
+        nextJButton.setToolTipText(getLang().get("imageviewer.button.forward.toolTip"));
 
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
-            previousImageIcon.setImage(ImageIO.read(imageStream));
-            previousJButton.setIcon(previousImageIcon);
-            previousJButton.setToolTipText(getLang().get("imageviewer.button.back.toolTip"));
+        automaticAdjustToWindowSizeJToggleButton.setIcon(IconLoader.getIcon(Icons.AUTO_ADJUST_TO_WINDOW_SIZE));
+        automaticAdjustToWindowSizeJToggleButton.setToolTipText(getLang().get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
+        automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER+ "Forward16.gif");
-            nextImageIcon.setImage(ImageIO.read(imageStream));
-            nextJButton.setIcon(nextImageIcon);
-            nextJButton.setToolTipText(getLang().get("imageviewer.button.forward.toolTip"));
+        adjustToWindowSizeJButton.setIcon(IconLoader.getIcon(Icons.ZOOM));
+        adjustToWindowSizeJButton.setToolTipText(getLang().get("imageviewer.button.adjustToWindowSize.toolTip"));
+        adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "AutoAdjustToWindowSize16.gif");
-            automaticAdjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-            automaticAdjustToWindowSizeJToggleButton.setIcon(automaticAdjustToWindowSizeImageIcon);
-            automaticAdjustToWindowSizeJToggleButton.setToolTipText(getLang().get("imageviewer.button.automaticAdjustToWindowSize.toolTip"));
-            automaticAdjustToWindowSizeJToggleButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.automaticAdjustToWindowSize.mnemonic").charAt(0)));
+        rotateLeftButton.setIcon(IconLoader.getIcon(Icons.ROTATE_LEFT));
+        rotateLeftButton.setToolTipText(getLang().get("imageviewer.button.rotateLeft.toolTip"));
+        rotateLeftButton.setMnemonic(KeyEvent.VK_LEFT);
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Zoom16.gif");
-            adjustToWindowSizeImageIcon.setImage(ImageIO.read(imageStream));
-            adjustToWindowSizeJButton.setIcon(adjustToWindowSizeImageIcon);
-            adjustToWindowSizeJButton.setToolTipText(getLang().get("imageviewer.button.adjustToWindowSize.toolTip"));
-            adjustToWindowSizeJButton.setMnemonic(MnemonicConverter.convertAtoZCharToKeyEvent(getLang().get("imageviewer.button.adjustToWindowSize.mnemonic").charAt(0)));
+        rotateRightButton.setIcon(IconLoader.getIcon(Icons.ROTATE_RIGHT));
+        rotateRightButton.setToolTipText(getLang().get("imageviewer.button.rotateRight.toolTip"));
+        rotateRightButton.setMnemonic(KeyEvent.VK_RIGHT);
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateLeft16.gif");
-            rotateLeftImageIcon.setImage(ImageIO.read(imageStream));
-            rotateLeftButton.setIcon(rotateLeftImageIcon);
-            rotateLeftButton.setToolTipText(getLang().get("imageviewer.button.rotateLeft.toolTip"));
-            rotateLeftButton.setMnemonic(KeyEvent.VK_LEFT);
+        automaticRotateToggleButton.setIcon(IconLoader.getIcon(Icons.ROTATE_AUTOMATIC));
+        automaticRotateToggleButton.setToolTipText(getLang().get("imageviewer.button.rotateAutomatic"));
+        automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateRight16.gif");
-            rotateRightImageIcon.setImage(ImageIO.read(imageStream));
-            rotateRightButton.setIcon(rotateRightImageIcon);
-            rotateRightButton.setToolTipText(getLang().get("imageviewer.button.rotateRight.toolTip"));
-            rotateRightButton.setMnemonic(KeyEvent.VK_RIGHT);
+        centerButton.setIcon(IconLoader.getIcon(Icons.CENTER));
+        centerButton.setToolTipText(getLang().get("imageviewer.button.center.toolTip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "RotateAutomatic16.gif");
-            automaticRotateImageIcon.setImage(ImageIO.read(imageStream));
-            automaticRotateToggleButton.setIcon(automaticRotateImageIcon);
-            automaticRotateToggleButton.setToolTipText(getLang().get("imageviewer.button.rotateAutomatic"));
-            automaticRotateToggleButton.setMnemonic(KeyEvent.VK_UP);
+        zoomInButton.setIcon(IconLoader.getIcon(Icons.ZOOM_IN));
+        zoomInButton.setToolTipText(getLang().get("imageviewer.button.zoomIn.toolTip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Center16.png");
-            centerImageIcon.setImage(ImageIO.read(imageStream));
-            centerButton.setIcon(centerImageIcon);
-            centerButton.setToolTipText(getLang().get("imageviewer.button.center.toolTip"));
+        zoomOutButton.setIcon(IconLoader.getIcon(Icons.ZOOM_OUT));
+        zoomOutButton.setToolTipText(getLang().get("imageviewer.button.zoomOut.toolTip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomIn16.gif");
-            zoomInImageIcon.setImage(ImageIO.read(imageStream));
-            zoomInButton.setIcon(zoomInImageIcon);
-            zoomInButton.setToolTipText(getLang().get("imageviewer.button.zoomIn.toolTip"));
+        toggleNavigationImageButton.setIcon(IconLoader.getIcon(Icons.NAVIGATION_ENABLED));
+        toggleNavigationImageButton.setSelectedIcon(IconLoader.getIcon(Icons.NAVIGATION_DISABLED));
+        toggleNavigationImageButton.setToolTipText(getLang().get("imageviewer.button.toggleNavigationImage.toolTip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "ZoomOut16.gif");
-            zoomOutImageIcon.setImage(ImageIO.read(imageStream));
-            zoomOutButton.setIcon(zoomOutImageIcon);
-            zoomOutButton.setToolTipText(getLang().get("imageviewer.button.zoomOut.toolTip"));
+        startSlideShowButton.setIcon(IconLoader.getIcon(Icons.PLAY));
+        startSlideShowButton.setToolTipText(getLang().get("imageviewer.button.startSlideShow.toolTip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageEnabled16.png");
-            navigationImageEnabledIcon.setImage(ImageIO.read(imageStream));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "NavigationImageDisabled16.png");
-            navigationImageDisabledIcon.setImage(ImageIO.read(imageStream));
-
-            toggleNavigationImageButton.setIcon(navigationImageEnabledIcon);
-            toggleNavigationImageButton.setSelectedIcon(navigationImageDisabledIcon);
-            toggleNavigationImageButton.setToolTipText(getLang().get("imageviewer.button.toggleNavigationImage.toolTip"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH + "play.gif");
-            startSlideshowImageIcon.setImage(ImageIO.read(imageStream));
-            startSlideShowButton.setIcon(startSlideshowImageIcon);
-            startSlideShowButton.setToolTipText(getLang().get("imageviewer.button.startSlideShow.toolTip"));
-
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Stop16.gif");
-            stopSlideshowImageIcon.setImage(ImageIO.read(imageStream));
-            stopSlideShowButton.setIcon(stopSlideshowImageIcon);
-            stopSlideShowButton.setToolTipText(getLang().get("imageviewer.button.stopSlideShow.toolTip"));
-        } catch (IOException e) {
-            getLogger().logERROR("Could not load image. See Stack Trace below for details");
-            getLogger().logERROR(e);
-        } finally {
-            if (imageStream != null) {
-                StreamUtil.close(imageStream, true);
-            }
-        }
+        stopSlideShowButton.setIcon(IconLoader.getIcon(Icons.STOP));
+        stopSlideShowButton.setToolTipText(getLang().get("imageviewer.button.stopSlideShow.toolTip"));
 
         toolBar.add(previousJButton);
         toolBar.add(nextJButton);

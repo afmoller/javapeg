@@ -34,10 +34,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import moller.util.io.StreamUtil;
 
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
@@ -136,28 +132,6 @@ public class ImageUtil {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		return gd.getDefaultConfiguration();
-	}
-
-	/**
-	 * This method returns an Icon from an InputStream.
-	 *
-	 * @param imageStream is the resource to create the Icon from.
-	 * @param silent is a flag indicating whether this method should propagate
-	 *        exceptions that might occur when the InputStream is closed.
-	 *
-	 * @return an Icon with the content specified by the supplied InputStream
-	 *
-	 * @throws IOException is thrown if an error occurs during reading.
-	 */
-	public static Icon getIcon(InputStream imageStream, boolean silent) throws IOException {
-		ImageIcon imageIcon = new ImageIcon();
-
-		try {
-			imageIcon.setImage(ImageIO.read(imageStream));
-		}  finally {
-			StreamUtil.close(imageStream, true);
-		}
-		return imageIcon;
 	}
 
 	/**

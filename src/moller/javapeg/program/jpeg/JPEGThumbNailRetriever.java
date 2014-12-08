@@ -25,6 +25,7 @@ import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
@@ -129,7 +130,7 @@ public class JPEGThumbNailRetriever {
                             thumbNailData = searchForOrCreateThumbnail(jpegFile);
                         } else {
                             logger.logDEBUG("Loading missing thumbnail image");
-                            return new JPEGThumbNail(StreamUtil.getByteArray(StartJavaPEG.class.getResourceAsStream("resources/images/missing.png")));
+                            return new JPEGThumbNail(StreamUtil.getByteArray(StartJavaPEG.class.getResourceAsStream(Icons.MISSING.getResource())));
                         }
                     }
 
@@ -151,7 +152,7 @@ public class JPEGThumbNailRetriever {
                 } else {
                     logger.logDEBUG("Loading missing thumbnail image");
                     try {
-                        return new JPEGThumbNail(StreamUtil.getByteArray(StartJavaPEG.class.getResourceAsStream("resources/images/missing.png")));
+                        return new JPEGThumbNail(StreamUtil.getByteArray(StartJavaPEG.class.getResourceAsStream(Icons.MISSING.getResource())));
                     } catch (IOException iox) {
                        logger.logFATAL("Could not get internal image resource for \"missing image\". See stacktrace below for details");
                        logger.logFATAL(iox);

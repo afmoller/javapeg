@@ -21,16 +21,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.logger.Logger;
-import moller.util.image.ImageUtil;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 
 public class HeadingPanel extends JPanel {
 
@@ -39,7 +37,7 @@ public class HeadingPanel extends JPanel {
     private final JLabel label;
     private final JButton icon;
 
-    public HeadingPanel(String title, Color titleColor, String iconPath) {
+    public HeadingPanel(String title, Color titleColor, Icons iconPath) {
         this.setLayout(new GridBagLayout());
 
         label = new JLabel(title);
@@ -60,16 +58,10 @@ public class HeadingPanel extends JPanel {
         this.add(icon, position.nextCol().align(GridBagConstraints.EAST).expandW());
     }
 
-    public void setIcon(String iconPath, String iconToolTip) {
-        try {
-            icon.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream(iconPath), true));
-            if (null != iconToolTip) {
-                icon.setToolTipText(iconToolTip);
-            }
-        } catch (IOException iox) {
-            Logger logger = Logger.getInstance();
-            logger.logERROR("Could not set image: " + iconPath + " as icon. See stacktrace below for details");
-            logger.logERROR(iox);
+    public void setIcon(Icons iconToSet, String iconToolTip) {
+        icon.setIcon(IconLoader.getIcon(iconToSet));
+        if (null != iconToolTip) {
+            icon.setToolTipText(iconToolTip);
         }
     }
 
