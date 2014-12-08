@@ -26,9 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -39,7 +37,6 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
@@ -51,10 +48,11 @@ import moller.javapeg.program.gui.frames.configuration.panels.RenameConfiguratio
 import moller.javapeg.program.gui.frames.configuration.panels.TagConfigurationPanel;
 import moller.javapeg.program.gui.frames.configuration.panels.ThumbnailConfigurationPanel;
 import moller.javapeg.program.gui.frames.configuration.panels.UpdatesConfigurationPanel;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
-import moller.util.io.StreamUtil;
 
 public class ConfigViewerGUI extends JFrame {
 
@@ -133,15 +131,7 @@ public class ConfigViewerGUI extends JFrame {
         this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
         this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 
-        InputStream imageStream = null;
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/configuration.gif");
-            this.setIconImage(ImageIO.read(imageStream));
-        } catch (Exception e) {
-            Logger.getInstance().logERROR("Could not open the image Help16.gif");
-        } finally {
-            StreamUtil.close(imageStream, true);
-        }
+        this.setIconImage(IconLoader.getIcon(Icons.CONFIGURATION).getImage());
         this.setTitle(lang.get("configviewer.window.title"));
     }
 

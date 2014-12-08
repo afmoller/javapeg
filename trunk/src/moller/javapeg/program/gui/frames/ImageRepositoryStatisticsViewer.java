@@ -20,23 +20,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.JTabbedPane;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -75,15 +73,7 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
     private void createMainFrame() {
        loadAndApplyGUISettings();
 
-       InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/statistics.png");
-
-       try {
-           this.setIconImage(ImageIO.read(imageStream));
-       } catch (IOException e) {
-           getLogger().logERROR("Could not load icon: statistics.png");
-           getLogger().logERROR(e);
-       }
-
+       this.setIconImage(IconLoader.getIcon(Icons.STATISTICS).getImage());
        this.getContentPane().setLayout(new BorderLayout());
        this.add(createStatiticsPanel(), BorderLayout.CENTER);
     }

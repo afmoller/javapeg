@@ -46,7 +46,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -63,7 +62,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -132,7 +130,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.FileRetriever;
 import moller.javapeg.program.FileSelection;
@@ -820,23 +817,7 @@ public class MainGUI extends JFrame {
     private void createMainFrame(){
 
         this.setTitle("JavaPEG " + C.JAVAPEG_VERSION);
-
-        InputStream imageStream = null;
-        ImageIcon titleImageIcon = new ImageIcon();
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/javapeg.gif");
-            titleImageIcon.setImage(ImageIO.read(imageStream));
-            this.setIconImage(titleImageIcon.getImage());
-        } catch (Exception e) {
-            logger.logERROR("Could not open the image javapeg.gif");
-        } finally {
-            try {
-                StreamUtil.closeStream(imageStream);
-            } catch (IOException iox) {
-                logger.logERROR("Could not close InputStream for image: \"resources/images/javapeg.gif\"");
-                logger.logERROR(iox);
-            }
-        }
+        this.setIconImage(IconLoader.getIcon(Icons.JAVAPEG).getImage());
 
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
@@ -993,52 +974,40 @@ public class MainGUI extends JFrame {
     }
 
     private JPanel createViewPanelListSection () {
-        removeSelectedImagesButton = new JButton();
-        removeSelectedImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
+        removeSelectedImagesButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
         removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 
-        removeAllImagesButton = new JButton();
-        removeAllImagesButton.setIcon(IconLoader.getIcon(Icons.REMOVE_ALL));
+        removeAllImagesButton = new JButton(IconLoader.getIcon(Icons.REMOVE_ALL));
         removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
 
-        openImageListButton = new JButton();
-        openImageListButton.setIcon(IconLoader.getIcon(Icons.OPEN));
+        openImageListButton = new JButton(IconLoader.getIcon(Icons.OPEN));
         openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
 
-        saveImageListButton = new JButton();
-        saveImageListButton.setIcon(IconLoader.getIcon(Icons.SAVE_IMAGE_LIST));
+        saveImageListButton = new JButton(IconLoader.getIcon(Icons.SAVE));
         saveImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.saveImageList"));
 
-        exportImageListButton = new JButton();
-        exportImageListButton.setIcon(IconLoader.getIcon(Icons.EXPORT_IMAGE_LIST));
+        exportImageListButton = new JButton(IconLoader.getIcon(Icons.EXPORT_IMAGE_LIST));
         exportImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.exportImageList"));
 
-        moveUpButton = new JButton();
-        moveUpButton.setIcon(IconLoader.getIcon(Icons.MOVE_UP));
+        moveUpButton = new JButton(IconLoader.getIcon(Icons.MOVE_UP));
         moveUpButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveUp"));
 
-        moveDownButton = new JButton();
-        moveDownButton.setIcon(IconLoader.getIcon(Icons.MOVE_DOWN));
+        moveDownButton = new JButton(IconLoader.getIcon(Icons.MOVE_DOWN));
         moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
 
-        openImageViewerButton      = new JButton();
-        openImageViewerButton.setIcon(IconLoader.getIcon(Icons.VIEW_IMAGES));
+        openImageViewerButton = new JButton(IconLoader.getIcon(Icons.VIEW_IMAGES));
         openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
 
-        moveToTopButton = new JButton();
-        moveToTopButton.setIcon(IconLoader.getIcon(Icons.MOVE_TO_TOP));
+        moveToTopButton = new JButton(IconLoader.getIcon(Icons.MOVE_TO_TOP));
         moveToTopButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToTop"));
 
-        moveToBottomButton = new JButton();
-        moveToBottomButton.setIcon(IconLoader.getIcon(Icons.MOVE_TO_BOTTOM));
+        moveToBottomButton = new JButton(IconLoader.getIcon(Icons.MOVE_TO_BOTTOM));
         moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
 
-        copyImageListdButton = new JButton();
-        copyImageListdButton.setIcon(IconLoader.getIcon(Icons.COPY));
+        copyImageListdButton = new JButton(IconLoader.getIcon(Icons.COPY));
         copyImageListdButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.copyImageListToClipboard"));
 
-        openImageResizerButton = new JButton();
-        openImageResizerButton.setIcon(IconLoader.getIcon(Icons.IMAGE_RESIZER));
+        openImageResizerButton = new JButton(IconLoader.getIcon(Icons.IMAGE_RESIZER));
         openImageResizerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageResizer"));
 
         imagesToViewList = new JList<File>(imagesToViewListModel);
@@ -1231,11 +1200,10 @@ public class MainGUI extends JFrame {
 
                 importedButtonGroups.add(importedGroup);
 
-                JButton importedClearCategoriesSelectionButton = new JButton();
+                JButton importedClearCategoriesSelectionButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
                 importedClearCategoriesSelectionButton.setToolTipText(lang.get("findimage.categories.clearCategoriesSelectionButton.label"));
                 importedClearCategoriesSelectionButton.setActionCommand(importedJavePegId);
                 importedClearCategoriesSelectionButton.addActionListener(new ImportedClearCategoriesSelectionListener());
-                importedClearCategoriesSelectionButton.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
                 JPanel importedSelectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
@@ -1440,38 +1408,20 @@ public class MainGUI extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-        displayImageRepositoryStatisticsViewerButton = new JButton();
+        displayImageRepositoryStatisticsViewerButton = new JButton(IconLoader.getIcon(Icons.STATISTICS));
         displayImageRepositoryStatisticsViewerButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
         displayImageRepositoryStatisticsViewerButton.setEnabled(false);
 
-        try {
-            displayImageRepositoryStatisticsViewerButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/viewtab/statistics.png"), true));
-        } catch (IOException iox) {
-            displayImageRepositoryStatisticsViewerButton.setText("VIEW IMAGE META DATA REPOSITORY STATISTICS");
-            logger.logERROR("Could not set image: resources/images/viewtab/statistics.png as icon for the view image meta data repository statistics. See stacktrace below for details");
-            logger.logERROR(iox);
-        }
-
-        clearAllMetaDataParameters = new JButton();
+        clearAllMetaDataParameters = new JButton(IconLoader.getIcon(Icons.REMOVE));
         clearAllMetaDataParameters.setToolTipText(lang.get("findimage.clearAllMetaDataParameters.tooltip"));
-        clearAllMetaDataParameters.setIcon(IconLoader.getIcon(Icons.REMOVE));
 
-        searchImagesButton = new JButton();
+        searchImagesButton = new JButton(IconLoader.getIcon(Icons.FIND));
         searchImagesButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
         searchImagesButton.setEnabled(false);
-
-        try {
-            searchImagesButton.setIcon(ImageUtil.getIcon(StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif"), true));
-        } catch (IOException iox) {
-            searchImagesButton.setText("SEARCH IMAGES");
-            logger.logERROR("Could not set image: resources/images/Find16.gif as icon for the search images button. See stacktrace below for details");
-            logger.logERROR(iox);
-        }
 
         buttonPanel.add(searchImagesButton);
         buttonPanel.add(clearAllMetaDataParameters);
         buttonPanel.add(displayImageRepositoryStatisticsViewerButton);
-
 
         imageMetaDataContextLoadingProgressBar = new JProgressBar();
         imageMetaDataContextLoadingProgressBar.setStringPainted(true);
@@ -1522,16 +1472,7 @@ public class MainGUI extends JFrame {
             createThumbNailsCheckBox.setSelected(true);
         }
 
-        ImageIcon playPictureImageIcon = new ImageIcon();
-        try(InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/play.gif")) {
-
-            playPictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image play.gif");
-            logger.logERROR(iox);
-        }
-
-        startProcessButton = new JButton(playPictureImageIcon);
+        startProcessButton = new JButton(IconLoader.getIcon(Icons.PLAY));
         startProcessButton.setActionCommand("startProcessButton");
         startProcessButton.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
         startProcessButton.setPreferredSize(new Dimension(30, 20));
@@ -1586,19 +1527,11 @@ public class MainGUI extends JFrame {
         fileNameTemplateComboBox.setModel(fileNameTemplateComboBoxModel);
         fileNameTemplateComboBox.setEnabled(false);
 
-        ImageIcon saveTemplatePictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/save.gif")){
-            saveTemplatePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image save.gif");
-            logger.logERROR(iox);
-        }
-
-        saveFileNameTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        saveFileNameTemplateButton = new JButton(IconLoader.getIcon(Icons.SAVE));
         saveFileNameTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
         saveFileNameTemplateButton.setEnabled(false);
 
-        saveSubFolderTemplateButton = new JButton(saveTemplatePictureImageIcon);
+        saveSubFolderTemplateButton = new JButton(IconLoader.getIcon(Icons.SAVE));
         saveSubFolderTemplateButton.setToolTipText(lang.get("tooltip.saveTemplateToTemplatesList"));
         saveSubFolderTemplateButton.setEnabled(false);
 
@@ -4298,10 +4231,10 @@ public class MainGUI extends JFrame {
                 configuration.getRepository().getPaths().getPaths().add(repositoryPath);
 
                 if (ac.isImageMetaDataDataBaseFileWritable()) {
-                    thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                    thumbNailsPanelHeading.setIcon(Icons.DB, lang.get("imagerepository.directory.added"));
                 }
                 else {
-                    thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+                    thumbNailsPanelHeading.setIcon(Icons.LOCK, lang.get("imagerepository.directory.added.writeprotected"));
                 }
 
                 thumbNailsPanelHeading.removeListeners();
@@ -4907,7 +4840,7 @@ public class MainGUI extends JFrame {
                         // image meta data repository, according to policy
                         // and answer then just do nothing
                         if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(getThis(), repositoryPath)) {
-                            thumbNailsPanelHeading.setIcon("resources/images/db_add.png", lang.get("imagerepository.directory.not.added"));
+                            thumbNailsPanelHeading.setIcon(Icons.DB_ADD, lang.get("imagerepository.directory.not.added"));
                             thumbNailsPanelHeading.setListener(addSelecetedPathToImageRepository);
                             return null;
                         }
@@ -5028,10 +4961,10 @@ public class MainGUI extends JFrame {
                     ac.setImageMetaDataDataBaseFileWritable(canWrite);
 
                     if (canWrite) {
-                        thumbNailsPanelHeading.setIcon("resources/images/db.png", lang.get("imagerepository.directory.added"));
+                        thumbNailsPanelHeading.setIcon(Icons.DB, lang.get("imagerepository.directory.added"));
                     }
                     else {
-                        thumbNailsPanelHeading.setIcon("resources/images/lock.png", lang.get("imagerepository.directory.added.writeprotected"));
+                        thumbNailsPanelHeading.setIcon(Icons.LOCK, lang.get("imagerepository.directory.added.writeprotected"));
                     }
 
                     thumbNailsPanelHeading.removeListeners();

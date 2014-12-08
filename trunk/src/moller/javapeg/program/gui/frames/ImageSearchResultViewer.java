@@ -36,8 +36,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -64,8 +61,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.C;
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
@@ -77,13 +72,14 @@ import moller.javapeg.program.gui.LoadedThumbnails;
 import moller.javapeg.program.gui.components.StatusPanel;
 import moller.javapeg.program.gui.components.ThumbNailsPanel;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.ImagesToViewModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
-import moller.util.io.StreamUtil;
 
 public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
@@ -212,19 +208,11 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     public void createMainFrame() {
         loadAndApplyGUISettings();
 
-        InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Find16.gif");
-
-        try {
-            this.setIconImage(ImageIO.read(imageStream));
-        } catch (IOException e) {
-            getLogger().logERROR("Could not load icon: Find16.gif");
-            getLogger().logERROR(e);
-        }
-
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
+        this.setIconImage(IconLoader.getIcon(Icons.FIND).getImage());
         this.setTitle(getLang().get("imagesearchresultviewer.title"));
 
         thumbNailLoadingProgressBar = new JProgressBar();
@@ -299,36 +287,17 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         numberOfImagesToDisplaySelectionBox.setMaximumSize(numberOfImagesToDisplaySelectionBox.getPreferredSize());
         numberOfImagesToDisplaySelectionBox.setToolTipText(getLang().get("imagesearchresultviewer.button.numberOfImagesToDisplayPerTab.tooltip"));
 
-        InputStream imageStream = null;
-
-        ImageIcon loadPreviousImagesIcon = new ImageIcon();
-        ImageIcon loadNextImagesIcon = new ImageIcon();
-
         loadPreviousImages = new JButton();
         loadPreviousImages.setEnabled(false);
 
         loadNextImages = new JButton();
         loadNextImages.setEnabled(false);
 
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Back16.gif");
-            loadPreviousImagesIcon.setImage(ImageIO.read(imageStream));
-            loadPreviousImages.setIcon(loadPreviousImagesIcon);
-            loadPreviousImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadPreviousImage.tooltip"));
+        loadPreviousImages.setIcon(IconLoader.getIcon(Icons.BACK));
+        loadPreviousImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadPreviousImage.tooltip"));
 
-            imageStream = StartJavaPEG.class.getResourceAsStream(C.ICONFILEPATH_IMAGEVIEWER + "Forward16.gif");
-            loadNextImagesIcon.setImage(ImageIO.read(imageStream));
-            loadNextImages.setIcon(loadNextImagesIcon);
-            loadNextImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadNextImage.tooltip"));
-
-        }  catch (IOException e) {
-            getLogger().logERROR("Could not load image. See Stack Trace below for details");
-            getLogger().logERROR(e);
-        } finally {
-            if (imageStream != null) {
-                StreamUtil.close(imageStream, true);
-            }
-        }
+        loadNextImages.setIcon(IconLoader.getIcon(Icons.FORWARD));
+        loadNextImages.setToolTipText(getLang().get("imagesearchresultviewer.button.loadNextImage.tooltip"));
 
         toolBar = new JToolBar();
         toolBar.setRollover(true);

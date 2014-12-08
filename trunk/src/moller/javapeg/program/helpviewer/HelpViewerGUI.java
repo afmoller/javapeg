@@ -28,7 +28,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,6 +46,8 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.gui.CustomizedJScrollPane;
 import moller.javapeg.program.gui.GUIDefaults;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
@@ -114,16 +115,7 @@ public class HelpViewerGUI extends JFrame {
         }
         this.getContentPane().add(this.initiateSplitPane(), BorderLayout.CENTER);
 
-        InputStream imageStream = null;
-        try {
-            imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/Help16.gif");
-            this.setIconImage(ImageIO.read(imageStream));
-        } catch (Exception e) {
-            Logger.getInstance().logERROR("Could not open the image Help16.gif");
-        } finally {
-            StreamUtil.close(imageStream, true);
-        }
-
+        this.setIconImage(IconLoader.getIcon(Icons.HELP).getImage());
         this.setTitle(lang.get("helpViewerGUI.window.title"));
     }
 

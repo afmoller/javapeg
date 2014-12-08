@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,10 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,7 +45,6 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
@@ -192,40 +188,13 @@ public class ImageMergeTab extends JPanel {
         JPanel removeSelectedDirectoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         removeSelectedDirectoryButtonPanel.add(removeSelectedDirectoryButton);
 
-        ImageIcon addPictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/plus_16.png")) {
-            addPictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image plus_16.png");
-            logger.logERROR(iox);
-        }
-
-        addDirectoryButton = new JButton();
-        addDirectoryButton.setIcon(addPictureImageIcon);
+        addDirectoryButton = new JButton(IconLoader.getIcon(Icons.PLUS));
         addDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.directories.add"));
 
-        ImageIcon mergePictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/arrow_join.png")) {
-            mergePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image arrow_join.png");
-            logger.logERROR(iox);
-        }
-
-        mergeDirectoryButton = new JButton();
-        mergeDirectoryButton.setIcon(mergePictureImageIcon);
+        mergeDirectoryButton = new JButton(IconLoader.getIcon(Icons.ARROW_JOIN));
         mergeDirectoryButton.setToolTipText(lang.get("imagemerge.tooltip.process.merge.start"));
 
-        ImageIcon cancelMergePictureImageIcon = new ImageIcon();
-        try (InputStream imageStream = StartJavaPEG.class.getResourceAsStream("resources/images/cancel.png")) {
-            cancelMergePictureImageIcon.setImage(ImageIO.read(imageStream));
-        } catch (IOException iox) {
-            logger.logERROR("Could not open the image arrow_join.png");
-            logger.logERROR(iox);
-        }
-
-        cancelMergeButton = new JButton();
-        cancelMergeButton.setIcon(cancelMergePictureImageIcon);
+        cancelMergeButton = new JButton(IconLoader.getIcon(Icons.CANCEL));
         cancelMergeButton.setToolTipText(lang.get("imagemerge.tooltip.process.merge.cancel"));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
