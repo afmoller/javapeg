@@ -1,8 +1,6 @@
 3.0:
 ====
 - Canon Powershot A95 has strange ISO values.
-- All icons should be loaded with the IconLoader class.
-- Add startup splashscreen.
 - Test all functionality.
 - Update version numbers in language files
 - Update info files in the internal resources directory.

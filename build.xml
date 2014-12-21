@@ -9,7 +9,7 @@
 	<property name="zip_src.name"       value="JavaPEG_${ver}_Src.zip" />
 		
 	<property name="main.class.javepeg" value="moller.javapeg.StartJavaPEG" />
-	<property name="splashscreen.image" value="moller/javapeg/resources/images/javapeg.gif" />
+	<property name="splashscreen.image" value="moller/javapeg/resources/images/splash/splash.png" />
 	
 
 	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_util, create_release, create_release_src" />
