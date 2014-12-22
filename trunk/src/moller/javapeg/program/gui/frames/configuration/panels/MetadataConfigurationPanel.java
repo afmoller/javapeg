@@ -28,12 +28,11 @@ import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -58,6 +57,8 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
      */
     private static final long serialVersionUID = 1L;
 
+    private JTabbedPane tabbedPane;
+
     private JButton addNewRuleButton;
     private JButton removeRuleButton;
     private JComboBox<String> cameraModelsJComboBox;
@@ -80,28 +81,30 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
     @Override
     protected void createPanel() {
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createTitledBorder(getLang().get("configviewer.tree.node.metadata"))));
 
-        DefaultComboBoxModel<ISOFilterMask> isoPatternModel = new DefaultComboBoxModel<ISOFilterMask>();
-        isoPatternModel.addElement(ISOFilterMask.NO_MASK);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FIRST);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_SECOND);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_THIRD);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FOURTH);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FIFTH);
-        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_SIXTH);
+        GBHelper posPanel = new GBHelper();
 
-        ComboboxToolTipRenderer comboboxToolTipRenderer = new ComboboxToolTipRenderer();
-        ArrayList<String> tooltips = new ArrayList<String>();
-        tooltips.add("tooltip 1");
-        tooltips.add("tooltip 2");
-        tooltips.add("tooltip 3");
-        tooltips.add("tooltip 4");
-        comboboxToolTipRenderer.setTooltips(tooltips);
+        add(createCameraModelComboBox(), posPanel);
+        add(createTabbePaneBoxPanel(), posPanel.nextRow().expandH().expandW());
+    }
 
-        isoPatterns = new JComboBox<ISOFilterMask>(isoPatternModel);
-        isoPatterns.setRenderer(comboboxToolTipRenderer);
+    private JPanel createTabbePaneBoxPanel() {
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+//      TODO: fix hard coded string
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Configurations"));
 
+        GBHelper posPanel = new GBHelper();
+
+        tabbedPane = new JTabbedPane();
+        tabbedPane.add(createISOConfigurationPanel());
+        tabbedPane.add(createExposureTimeConfigurationPanel());
+
+        backgroundPanel.add(tabbedPane, posPanel.expandH().expandW());
+
+        return backgroundPanel;
+    }
+
+    private JPanel createCameraModelComboBox() {
         ImageMetaDataContext instance = ImageMetaDataContext.getInstance();
         Set<String> cameraModels = instance.getCameraModels();
 
@@ -112,10 +115,24 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         cameraModelsJComboBox = new JComboBox<String>(cameraModelsModel );
 
-        addNewRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
-//        TODO: Fix hard coded string
-        addNewRuleButton.setToolTipText("Add rule for selected selected camera model");
+        GBHelper posPanel = new GBHelper();
 
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+//        TODO: fix hard coded string
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Camera model"));
+        backgroundPanel.add(cameraModelsJComboBox, posPanel.nextRow().expandW());
+
+        return backgroundPanel;
+    }
+
+    private JPanel createExposureTimeConfigurationPanel() {
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        backgroundPanel.setName(getLang().get("variable.shutterSpeed"));
+
+        return backgroundPanel;
+    }
+
+    private JPanel createISOConfigurationPanel() {
         isoFilteringTableModel = new ISOFilteringTableModel();
 
         MetaData metadata = getConfiguration().getMetadata();
@@ -136,27 +153,58 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         JScrollPane isoRuleToCameraModelScrollPane = new JScrollPane(isoRuleToCameraModelTable);
         isoRuleToCameraModelScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        removeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
+        JPanel isoRuleToCameraModelScrollPanePanel = new JPanel(new GridBagLayout());
+        GBHelper posIsoRuleToCameraModelScrollPanePanel = new GBHelper();
+        isoRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder("Configured filterpatterns"));
+        isoRuleToCameraModelScrollPanePanel.add(isoRuleToCameraModelScrollPane, posIsoRuleToCameraModelScrollPanePanel.expandH().expandW());
+
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        backgroundPanel.setName(getLang().get("variable.isoValue"));
 
         GBHelper posPanel = new GBHelper();
-        add(new JLabel("Camera model"), posPanel);
-        add(Box.createHorizontalStrut(3), posPanel.nextCol());
-        add(new JLabel("Filterpattern"), posPanel.nextCol());
-        add(Box.createVerticalStrut(2), posPanel.nextRow());
-        add(cameraModelsJComboBox, posPanel);
-        add(Box.createHorizontalStrut(3), posPanel.nextCol());
-        add(isoPatterns, posPanel.nextCol());
-        add(Box.createHorizontalStrut(3), posPanel.nextCol());
-        add(addNewRuleButton, posPanel.nextCol());
-        add(Box.createVerticalStrut(5), posPanel.nextRow());
-        add(isoRuleToCameraModelScrollPane, posPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(createISOButtonPanel(),posPanel);
+        backgroundPanel.add(isoRuleToCameraModelScrollPanePanel, posPanel.nextRow().expandH().expandW());
 
-        GBHelper posRemovePanel = new GBHelper();
-        JPanel removeButtonPanel = new JPanel(new GridBagLayout());
-        removeButtonPanel.add(removeRuleButton, posRemovePanel);
-        removeButtonPanel.add(Box.createVerticalGlue(), posRemovePanel.nextRow().expandH());
+        return backgroundPanel;
+    }
 
-        add(removeButtonPanel, posPanel.nextCol().nextCol().nextCol().nextCol());
+    private JPanel createISOButtonPanel() {
+        DefaultComboBoxModel<ISOFilterMask> isoPatternModel = new DefaultComboBoxModel<ISOFilterMask>();
+        isoPatternModel.addElement(ISOFilterMask.NO_MASK);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FIRST);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_SECOND);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_THIRD);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FOURTH);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_FIFTH);
+        isoPatternModel.addElement(ISOFilterMask.MASK_UP_TO_POSITON_SIXTH);
+
+        ComboboxToolTipRenderer comboboxToolTipRenderer = new ComboboxToolTipRenderer();
+        ArrayList<String> tooltips = new ArrayList<String>();
+//        TODO: fix hard coded string
+        tooltips.add("tooltip 1");
+        tooltips.add("tooltip 2");
+        tooltips.add("tooltip 3");
+        tooltips.add("tooltip 4");
+        comboboxToolTipRenderer.setTooltips(tooltips);
+
+        isoPatterns = new JComboBox<ISOFilterMask>(isoPatternModel);
+        isoPatterns.setRenderer(comboboxToolTipRenderer);
+
+        addNewRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
+//      TODO: Fix hard coded string
+        addNewRuleButton.setToolTipText("Add rule for selected selected camera model");
+
+        removeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
+
+        GBHelper posButtonPanel = new GBHelper();
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBorder(BorderFactory.createTitledBorder("Manage filterpatterns"));
+        buttonPanel.add(isoPatterns, posButtonPanel.nextRow());
+        buttonPanel.add(Box.createHorizontalStrut(3), posButtonPanel.nextCol());
+        buttonPanel.add(addNewRuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(removeRuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(Box.createHorizontalGlue(), posButtonPanel.nextCol().expandW());
+        return buttonPanel;
     }
 
     @Override
