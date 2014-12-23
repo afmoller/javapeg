@@ -164,5 +164,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
   <metadata>
     <isoFilters>
     </isoFilters>
+    <exposureTimeFilters>
+    </exposureTimeFilters>
   </metadata>
 </config>

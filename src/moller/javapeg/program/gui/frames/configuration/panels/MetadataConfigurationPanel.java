@@ -16,6 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,17 +39,19 @@ import javax.swing.table.TableRowSorter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.config.model.metadata.ExposureTimeFilter;
 import moller.javapeg.program.config.model.metadata.ISOFilter;
 import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
+import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
 import moller.javapeg.program.enumerations.ISOFilterMask;
 import moller.javapeg.program.gui.ComboboxToolTipRenderer;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
-import moller.javapeg.program.model.iso.CameraAndISOFilterPair;
-import moller.javapeg.program.model.iso.ISOFilteringTableModel;
+import moller.javapeg.program.model.iso.CameraAndFilterPair;
+import moller.javapeg.program.model.iso.FilteringTableModel;
 
 public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
@@ -59,13 +62,22 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     private JTabbedPane tabbedPane;
 
-    private JButton addNewRuleButton;
-    private JButton removeRuleButton;
-    private JComboBox<String> cameraModelsJComboBox;
-    private JComboBox<ISOFilterMask> isoPatterns;
+    private JButton addNewISORuleButton;
+    private JButton removeISORuleButton;
 
-    private ISOFilteringTableModel isoFilteringTableModel;
+    private JButton addNewExposureTimeRuleButton;
+    private JButton removeExposureTimeRuleButton;
+
+    private JComboBox<String> cameraModelsJComboBox;
+
+    private JComboBox<ISOFilterMask> isoPatterns;
+    private JComboBox<ExposureTimeFilterMask> exposureTimePatterns;
+
+    private FilteringTableModel<ISOFilterMask> isoFilteringTableModel;
     private CustomizedJTable isoRuleToCameraModelTable;
+
+    private FilteringTableModel<ExposureTimeFilterMask> exposureTimeFilteringTableModel;
+    private CustomizedJTable exposureTimeRuleToCameraModelTable;
 
     @Override
     public boolean isValidConfiguration() {
@@ -74,8 +86,10 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     @Override
     protected void addListeners() {
-        addNewRuleButton.addActionListener(new AddNewRuleListener());
-        removeRuleButton.addActionListener(new RemoveRuleListener());
+        addNewISORuleButton.addActionListener(new AddNewISORuleListener());
+        removeISORuleButton.addActionListener(new RemoveISORuleListener());
+        addNewExposureTimeRuleButton.addActionListener(new AddNewExposureTimeRuleListener());
+        removeExposureTimeRuleButton.addActionListener(new RemoveExposureTimeRuleListener());
     }
 
     @Override
@@ -126,22 +140,52 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
     }
 
     private JPanel createExposureTimeConfigurationPanel() {
+
+        exposureTimeFilteringTableModel = new FilteringTableModel<ExposureTimeFilterMask>();
+
+        MetaData metadata = getConfiguration().getMetadata();
+        List<ExposureTimeFilter> exposureTimeFilters = metadata.getExposureTimeFilters();
+
+        for (ExposureTimeFilter exposureTimeFilter : exposureTimeFilters) {
+            CameraAndFilterPair<ExposureTimeFilterMask> cameraAndExposureTimeFilterPair = new CameraAndFilterPair<ExposureTimeFilterMask>();
+            cameraAndExposureTimeFilterPair.setCameraModel(exposureTimeFilter.getCameraModel());
+            cameraAndExposureTimeFilterPair.setFilterMask(exposureTimeFilter.getExposureTimeFilterMask());
+            exposureTimeFilteringTableModel.addRow(cameraAndExposureTimeFilterPair);
+        }
+
+        TableRowSorter<TableModel> exposureTimeFilteringTableModelSorter = new TableRowSorter<TableModel>(exposureTimeFilteringTableModel);
+        exposureTimeRuleToCameraModelTable = new CustomizedJTable(exposureTimeFilteringTableModel);
+        exposureTimeRuleToCameraModelTable.setRowSorter(exposureTimeFilteringTableModelSorter);
+        exposureTimeRuleToCameraModelTable.getRowSorter().toggleSortOrder(0);
+
+        JScrollPane exposureTimeRuleToCameraModelScrollPane = new JScrollPane(exposureTimeRuleToCameraModelTable);
+        exposureTimeRuleToCameraModelScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JPanel exposureTimeRuleToCameraModelScrollPanePanel = new JPanel(new GridBagLayout());
+        GBHelper posExposureTimeRuleToCameraModelScrollPanePanel = new GBHelper();
+        exposureTimeRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder("Configured filterpatterns"));
+        exposureTimeRuleToCameraModelScrollPanePanel.add(exposureTimeRuleToCameraModelScrollPane, posExposureTimeRuleToCameraModelScrollPanePanel.expandH().expandW());
+
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setName(getLang().get("variable.shutterSpeed"));
+
+        GBHelper posPanel = new GBHelper();
+        backgroundPanel.add(createExposureTimeButtonPanel(),posPanel);
+        backgroundPanel.add(exposureTimeRuleToCameraModelScrollPanePanel, posPanel.nextRow().expandH().expandW());
 
         return backgroundPanel;
     }
 
     private JPanel createISOConfigurationPanel() {
-        isoFilteringTableModel = new ISOFilteringTableModel();
+        isoFilteringTableModel = new FilteringTableModel<ISOFilterMask>();
 
         MetaData metadata = getConfiguration().getMetadata();
         List<ISOFilter> isoFilters = metadata.getIsoFilters();
 
         for (ISOFilter isoFilter : isoFilters) {
-            CameraAndISOFilterPair cameraAndISOFilterPair = new CameraAndISOFilterPair();
+            CameraAndFilterPair<ISOFilterMask> cameraAndISOFilterPair = new CameraAndFilterPair<ISOFilterMask>();
             cameraAndISOFilterPair.setCameraModel(isoFilter.getCameraModel());
-            cameraAndISOFilterPair.setiSOFilter(isoFilter.getIsoFilterMask());
+            cameraAndISOFilterPair.setFilterMask(isoFilter.getIsoFilterMask());
             isoFilteringTableModel.addRow(cameraAndISOFilterPair);
         }
 
@@ -190,19 +234,58 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         isoPatterns = new JComboBox<ISOFilterMask>(isoPatternModel);
         isoPatterns.setRenderer(comboboxToolTipRenderer);
 
-        addNewRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
+        addNewISORuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
 //      TODO: Fix hard coded string
-        addNewRuleButton.setToolTipText("Add rule for selected selected camera model");
+        addNewISORuleButton.setToolTipText("Add rule for selected selected camera model");
 
-        removeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
+        removeISORuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
 
         GBHelper posButtonPanel = new GBHelper();
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBorder(BorderFactory.createTitledBorder("Manage filterpatterns"));
         buttonPanel.add(isoPatterns, posButtonPanel.nextRow());
         buttonPanel.add(Box.createHorizontalStrut(3), posButtonPanel.nextCol());
-        buttonPanel.add(addNewRuleButton, posButtonPanel.nextCol());
-        buttonPanel.add(removeRuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(addNewISORuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(removeISORuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(Box.createHorizontalGlue(), posButtonPanel.nextCol().expandW());
+        return buttonPanel;
+    }
+
+    private Component createExposureTimeButtonPanel() {
+        DefaultComboBoxModel<ExposureTimeFilterMask> exposureTimePatternModel = new DefaultComboBoxModel<ExposureTimeFilterMask>();
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.NO_MASK);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_FIRST);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_SECOND);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_THIRD);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_FOURTH);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_FIFTH);
+        exposureTimePatternModel.addElement(ExposureTimeFilterMask.MASK_UP_TO_POSITON_SIXTH);
+
+        ComboboxToolTipRenderer comboboxToolTipRenderer = new ComboboxToolTipRenderer();
+        ArrayList<String> tooltips = new ArrayList<String>();
+//        TODO: fix hard coded string
+        tooltips.add("tooltip 1");
+        tooltips.add("tooltip 2");
+        tooltips.add("tooltip 3");
+        tooltips.add("tooltip 4");
+        comboboxToolTipRenderer.setTooltips(tooltips);
+
+        exposureTimePatterns = new JComboBox<ExposureTimeFilterMask>(exposureTimePatternModel);
+        exposureTimePatterns.setRenderer(comboboxToolTipRenderer);
+
+        addNewExposureTimeRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
+//      TODO: Fix hard coded string
+        addNewExposureTimeRuleButton.setToolTipText("Add rule for selected selected camera model");
+
+        removeExposureTimeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
+
+        GBHelper posButtonPanel = new GBHelper();
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBorder(BorderFactory.createTitledBorder("Manage filterpatterns"));
+        buttonPanel.add(exposureTimePatterns, posButtonPanel.nextRow());
+        buttonPanel.add(Box.createHorizontalStrut(3), posButtonPanel.nextCol());
+        buttonPanel.add(addNewExposureTimeRuleButton, posButtonPanel.nextCol());
+        buttonPanel.add(removeExposureTimeRuleButton, posButtonPanel.nextCol());
         buttonPanel.add(Box.createHorizontalGlue(), posButtonPanel.nextCol().expandW());
         return buttonPanel;
     }
@@ -224,31 +307,61 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         int rowCount = isoFilteringTableModel.getRowCount();
 
         for (int i = 0; i < rowCount; i++) {
-            CameraAndISOFilterPair row = isoFilteringTableModel.getRow(i);
+            CameraAndFilterPair<ISOFilterMask> row = isoFilteringTableModel.getRow(i);
 
             String cameraModel = row.getCameraModel();
-            ISOFilterMask isoFilterMask = row.getiSOFilter();
+            ISOFilterMask isoFilterMask = row.getFilterMask();
 
             ISOFilter isoFilter = new ISOFilter();
             isoFilter.setCameraModel(cameraModel);
             isoFilter.setIsoFilter(isoFilterMask);
             isoFilters.add(isoFilter);
         }
+
+        List<ExposureTimeFilter> exposureTimeFilters = metadata.getExposureTimeFilters();
+
+        exposureTimeFilters.clear();
+
+        rowCount = exposureTimeFilteringTableModel.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            CameraAndFilterPair<ExposureTimeFilterMask> row = exposureTimeFilteringTableModel.getRow(i);
+
+            String cameraModel = row.getCameraModel();
+            ExposureTimeFilterMask exposureTimeFilterMask = row.getFilterMask();
+
+            ExposureTimeFilter exposureTimeFilter = new ExposureTimeFilter();
+            exposureTimeFilter.setCameraModel(cameraModel);
+            exposureTimeFilter.setExposureTimeFilterMask(exposureTimeFilterMask);
+            exposureTimeFilters.add(exposureTimeFilter);
+        }
     }
 
-    private class AddNewRuleListener implements ActionListener {
+    private class AddNewISORuleListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            CameraAndISOFilterPair cameraAndISOFilterPair = new CameraAndISOFilterPair();
+            CameraAndFilterPair<ISOFilterMask> cameraAndISOFilterPair = new CameraAndFilterPair<ISOFilterMask>();
             cameraAndISOFilterPair.setCameraModel((String)cameraModelsJComboBox.getSelectedItem());
-            cameraAndISOFilterPair.setiSOFilter((ISOFilterMask) isoPatterns.getSelectedItem());
+            cameraAndISOFilterPair.setFilterMask((ISOFilterMask) isoPatterns.getSelectedItem());
 
             isoFilteringTableModel.addRow(cameraAndISOFilterPair);
         }
     }
 
-    private class RemoveRuleListener implements ActionListener {
+    private class AddNewExposureTimeRuleListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            CameraAndFilterPair<ExposureTimeFilterMask> cameraAndExposureTimeFilterPair = new CameraAndFilterPair<ExposureTimeFilterMask>();
+            cameraAndExposureTimeFilterPair.setCameraModel((String)cameraModelsJComboBox.getSelectedItem());
+            cameraAndExposureTimeFilterPair.setFilterMask((ExposureTimeFilterMask) exposureTimePatterns.getSelectedItem());
+
+            exposureTimeFilteringTableModel.addRow(cameraAndExposureTimeFilterPair);
+        }
+    }
+
+    private class RemoveISORuleListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -256,24 +369,56 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
             int[] selectedRowIndices = isoRuleToCameraModelTable.getSelectedRows();
 
             if (selectedRowIndices.length > 0) {
-                List<CameraAndISOFilterPair> rowsToRemove = new ArrayList<CameraAndISOFilterPair>();
+                List<CameraAndFilterPair<ISOFilterMask>> rowsToRemove = new ArrayList<CameraAndFilterPair<ISOFilterMask>>();
                 for (int selectedRowIndex : selectedRowIndices) {
-                    CameraAndISOFilterPair row = isoFilteringTableModel.getRow(isoRuleToCameraModelTable.convertRowIndexToModel(selectedRowIndex));
+                    CameraAndFilterPair<ISOFilterMask> row = isoFilteringTableModel.getRow(isoRuleToCameraModelTable.convertRowIndexToModel(selectedRowIndex));
                     rowsToRemove.add(row);
                 }
 
                 StringBuilder paths = new StringBuilder();
 
-                for (CameraAndISOFilterPair rowToRemove : rowsToRemove) {
-                    paths.append(rowToRemove.getCameraModel() + " " + rowToRemove.getiSOFilter());
+                for (CameraAndFilterPair<ISOFilterMask> rowToRemove : rowsToRemove) {
+                    paths.append(rowToRemove.getCameraModel() + " " + rowToRemove.getFilterMask());
                     paths.append(C.LS);
                 }
 
                 int result = displayConfirmDialog(getLang().get("configviewer.metadata.isofiltertable.delete.confirmmessage") + C.LS + C.LS + paths.toString(), getLang().get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
 
                 if (result == 0) {
-                    for (CameraAndISOFilterPair rowToRemove : rowsToRemove) {
+                    for (CameraAndFilterPair<ISOFilterMask> rowToRemove : rowsToRemove) {
                         isoFilteringTableModel.removeRow(rowToRemove);
+                    }
+                }
+            }
+        }
+    }
+
+    private class RemoveExposureTimeRuleListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            int[] selectedRowIndices = exposureTimeRuleToCameraModelTable.getSelectedRows();
+
+            if (selectedRowIndices.length > 0) {
+                List<CameraAndFilterPair<ExposureTimeFilterMask>> rowsToRemove = new ArrayList<CameraAndFilterPair<ExposureTimeFilterMask>>();
+                for (int selectedRowIndex : selectedRowIndices) {
+                    CameraAndFilterPair<ExposureTimeFilterMask> row = exposureTimeFilteringTableModel.getRow(exposureTimeRuleToCameraModelTable.convertRowIndexToModel(selectedRowIndex));
+                    rowsToRemove.add(row);
+                }
+
+                StringBuilder paths = new StringBuilder();
+
+                for (CameraAndFilterPair<ExposureTimeFilterMask> rowToRemove : rowsToRemove) {
+                    paths.append(rowToRemove.getCameraModel() + " " + rowToRemove.getFilterMask());
+                    paths.append(C.LS);
+                }
+
+                int result = displayConfirmDialog(getLang().get("configviewer.metadata.exposuretimefiltertable.delete.confirmmessage") + C.LS + C.LS + paths.toString(), getLang().get("common.confirmation"), JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == 0) {
+                    for (CameraAndFilterPair<ExposureTimeFilterMask> rowToRemove : rowsToRemove) {
+                        exposureTimeFilteringTableModel.removeRow(rowToRemove);
                     }
                 }
             }
