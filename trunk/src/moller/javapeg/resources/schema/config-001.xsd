@@ -27,6 +27,7 @@
     <xs:complexType name="Metadata">
         <xs:sequence>
         <xs:element name="isoFilters" type="config:IsoFilters" />
+        <xs:element name="exposureTimeFilters" type="config:ExposureTimeFilters" />
         </xs:sequence>
     </xs:complexType>  
 
@@ -54,6 +55,31 @@
 			</xs:element>
 		</xs:all>
 	</xs:complexType>
+	
+	 <xs:complexType name="ExposureTimeFilters">
+        <xs:sequence>
+            <xs:element name="exposureTimeFilter" type="config:ExposureTimeFilter" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+	
+	<xs:complexType name="ExposureTimeFilter">
+        <xs:all>
+            <xs:element name="cameraModel" type="xs:string" />
+            <xs:element name="exposureTimeMask">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="NO_MASK" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FIRST" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_SECOND" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_THIRD" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FOURTH" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FIFTH" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_SIXTH" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
     
     <xs:complexType name="Logging">
         <xs:all>

@@ -18,20 +18,14 @@ package moller.javapeg.program.config.model.metadata;
 
 import moller.javapeg.program.enumerations.ISOFilterMask;
 
-public class ISOFilter {
+public class ISOFilter extends AbstractFilter {
 
-    private String cameraModel;
     private ISOFilterMask isoFilterMask;
 
-    public String getCameraModel() {
-        return cameraModel;
-    }
     public ISOFilterMask getIsoFilterMask() {
         return isoFilterMask;
     }
-    public void setCameraModel(String cameraModel) {
-        this.cameraModel = cameraModel;
-    }
+
     public void setIsoFilter(ISOFilterMask isoFilterMask) {
         this.isoFilterMask = isoFilterMask;
     }

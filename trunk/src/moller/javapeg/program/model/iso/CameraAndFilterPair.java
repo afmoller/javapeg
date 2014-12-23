@@ -16,24 +16,24 @@
  ******************************************************************************/
 package moller.javapeg.program.model.iso;
 
-import moller.javapeg.program.enumerations.ISOFilterMask;
+import moller.javapeg.program.enumerations.IFilterMask;
 
-public class CameraAndISOFilterPair {
+public class CameraAndFilterPair<F extends IFilterMask> {
 
     private String cameraModel;
-    private ISOFilterMask iSOFilterMask;
+    private F filterMask;
 
     public String getCameraModel() {
         return cameraModel;
     }
-    public ISOFilterMask getiSOFilter() {
-        return iSOFilterMask;
+    public F getFilterMask() {
+        return filterMask;
     }
     public void setCameraModel(String cameraModel) {
         this.cameraModel = cameraModel;
     }
-    public void setiSOFilter(ISOFilterMask isoFilterMask) {
-        this.iSOFilterMask = isoFilterMask;
+    public void setFilterMask(F filterMask) {
+        this.filterMask = filterMask;
     }
 
     @Override
@@ -55,7 +55,8 @@ public class CameraAndISOFilterPair {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CameraAndISOFilterPair other = (CameraAndISOFilterPair) obj;
+        @SuppressWarnings("unchecked")
+        CameraAndFilterPair<F> other = (CameraAndFilterPair<F>) obj;
            if (cameraModel == null) {
             if (other.cameraModel != null) {
                 return false;

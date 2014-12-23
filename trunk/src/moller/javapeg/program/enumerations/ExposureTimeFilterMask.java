@@ -14,29 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.config.model.metadata;
+package moller.javapeg.program.enumerations;
 
-import java.util.List;
+public enum ExposureTimeFilterMask implements IFilterMask {
 
-public class MetaData {
+    NO_MASK("1/n"),
+    MASK_UP_TO_POSITON_FIRST("1/n0"),
+    MASK_UP_TO_POSITON_SECOND("1/n00"),
+    MASK_UP_TO_POSITON_THIRD("1/n000"),
+    MASK_UP_TO_POSITON_FOURTH("1/n0000"),
+    MASK_UP_TO_POSITON_FIFTH("1/n00000"),
+    MASK_UP_TO_POSITON_SIXTH("1/n000000");
 
-    private List<ISOFilter> isoFilters;
-    private List<ExposureTimeFilter> exposureTimeFilters;
+    private String mask;
 
-
-    public List<ISOFilter> getIsoFilters() {
-        return isoFilters;
+    private ExposureTimeFilterMask(String mask) {
+        this.mask = mask;
     }
 
-    public void setIsoFilters(List<ISOFilter> isoFilters) {
-        this.isoFilters = isoFilters;
+    @Override
+    public String getMask() {
+        return mask;
     }
 
-    public List<ExposureTimeFilter> getExposureTimeFilters() {
-        return exposureTimeFilters;
-    }
-
-    public void setExposureTimeFilters(List<ExposureTimeFilter> exposureTimeFilters) {
-        this.exposureTimeFilters = exposureTimeFilters;
+    @Override
+    public String toString() {
+        return mask;
     }
 }

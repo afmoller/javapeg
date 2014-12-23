@@ -137,7 +137,8 @@ configviewer.tag.importedCategories.rename.dialog.text                          
 ##############################################################################################################
 configviewer.metadata.isofiltertable.header.cameramodel    = Camera model
 configviewer.metadata.isofiltertable.header.filter         = Filter
-configviewer.metadata.isofiltertable.delete.confirmmessage = The following ISO value filters will be removed.
+configviewer.metadata.isofiltertable.delete.confirmmessage          = The following ISO value filters will be removed.
+configviewer.metadata.exposuretimefiltertable.delete.confirmmessage = The following Exposure time value filters will be removed.
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

@@ -22,9 +22,10 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import moller.javapeg.program.enumerations.IFilterMask;
 import moller.javapeg.program.language.Language;
 
-public class ISOFilteringTableModel extends AbstractTableModel {
+public class FilteringTableModel<F extends IFilterMask> extends AbstractTableModel {
 
     /**
      *
@@ -35,16 +36,16 @@ public class ISOFilteringTableModel extends AbstractTableModel {
     private static final int ISO_FILTER_PATTERN = 1;
 
     private final String[] columnNames;
-    private final List<CameraAndISOFilterPair> rows;
+    private final List<CameraAndFilterPair<F>> rows;
 
     private final Language lang = Language.getInstance();
 
-    public ISOFilteringTableModel() {
+    public FilteringTableModel() {
         columnNames = new String[2];
         columnNames[CAMERA_MODEL] = lang.get("configviewer.metadata.isofiltertable.header.cameramodel");
         columnNames[ISO_FILTER_PATTERN] = lang.get("configviewer.metadata.isofiltertable.header.filter");
 
-        rows = Collections.synchronizedList(new ArrayList<CameraAndISOFilterPair>());
+        rows = Collections.synchronizedList(new ArrayList<CameraAndFilterPair<F>>());
     }
 
     @Override
@@ -72,26 +73,26 @@ public class ISOFilteringTableModel extends AbstractTableModel {
             throw new IllegalArgumentException("columnIndex: " + columnIndex + " is outside of the range 0 - 1");
         }
 
-        CameraAndISOFilterPair cameraAndISOFilterPair = rows.get(rowIndex);
+        CameraAndFilterPair<F> cameraAndISOFilterPair = rows.get(rowIndex);
 
-        return columnIndex == 0 ? cameraAndISOFilterPair.getCameraModel() : cameraAndISOFilterPair.getiSOFilter();
+        return columnIndex == 0 ? cameraAndISOFilterPair.getCameraModel() : cameraAndISOFilterPair.getFilterMask();
     }
 
-    public synchronized void addRow(CameraAndISOFilterPair cameraAndISOFilterPair) {
+    public synchronized void addRow(CameraAndFilterPair<F> cameraAndISOFilterPair) {
         if (rows.indexOf(cameraAndISOFilterPair) > -1) {
-            rows.get(rows.indexOf(cameraAndISOFilterPair)).setiSOFilter(cameraAndISOFilterPair.getiSOFilter());
+            rows.get(rows.indexOf(cameraAndISOFilterPair)).setFilterMask(cameraAndISOFilterPair.getFilterMask());
         } else {
             rows.add(cameraAndISOFilterPair);
         }
         fireTableDataChanged();
     }
 
-    public synchronized void removeRow(CameraAndISOFilterPair cameraAndISOFilterPair) {
+    public synchronized void removeRow(CameraAndFilterPair<F> cameraAndISOFilterPair) {
         rows.remove(rows.indexOf(cameraAndISOFilterPair));
         fireTableDataChanged();
     }
 
-    public CameraAndISOFilterPair getRow(int rowIndex) {
+    public CameraAndFilterPair<F> getRow(int rowIndex) {
         if (rowIndex - 1  > rows.size()) {
             throw new IllegalArgumentException("rowIndex: " + rowIndex + " is outside of the range 0 - " + (rows.size() - 1));
         }

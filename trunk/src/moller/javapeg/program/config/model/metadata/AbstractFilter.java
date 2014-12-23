@@ -16,27 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.metadata;
 
-import java.util.List;
+public class AbstractFilter {
 
-public class MetaData {
+    private String cameraModel;
 
-    private List<ISOFilter> isoFilters;
-    private List<ExposureTimeFilter> exposureTimeFilters;
-
-
-    public List<ISOFilter> getIsoFilters() {
-        return isoFilters;
+    public String getCameraModel() {
+        return cameraModel;
     }
 
-    public void setIsoFilters(List<ISOFilter> isoFilters) {
-        this.isoFilters = isoFilters;
-    }
-
-    public List<ExposureTimeFilter> getExposureTimeFilters() {
-        return exposureTimeFilters;
-    }
-
-    public void setExposureTimeFilters(List<ExposureTimeFilter> exposureTimeFilters) {
-        this.exposureTimeFilters = exposureTimeFilters;
+    public void setCameraModel(String cameraModel) {
+        this.cameraModel = cameraModel;
     }
 }

@@ -126,4 +126,7 @@ public class ConfigElement {
     public static final String CAMERA_MODEL = "cameraModel";
     public static final String ISO_MASK = "isoMask";
     public static final String METADATA = "metadata";
+    public static final String EXPOSURETIME_FILTERS = "exposureTimeFilters";
+    public static final String EXPOSURETIME_FILTER = "exposureTimeFilter";
+    public static final String EXPOSURETIME_MASK = "exposureTimeMask";
 }

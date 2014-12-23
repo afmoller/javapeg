@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.enumerations;
 
-public enum ISOFilterMask {
+public enum ISOFilterMask implements IFilterMask {
 
     NO_MASK("n"),
     MASK_UP_TO_POSITON_FIRST("n0"),
@@ -32,6 +32,7 @@ public enum ISOFilterMask {
         this.mask = mask;
     }
 
+    @Override
     public String getMask() {
         return mask;
     }
