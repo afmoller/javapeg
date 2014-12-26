@@ -4,4 +4,6 @@ public interface IFilterMask {
 
     public String getMask();
 
+    public String name();
+
 }

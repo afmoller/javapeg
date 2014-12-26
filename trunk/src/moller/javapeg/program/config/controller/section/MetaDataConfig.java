@@ -23,9 +23,10 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.config.model.metadata.MetaData;
+import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.IFilterMask;
 import moller.javapeg.program.enumerations.ISOFilterMask;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
@@ -106,7 +107,7 @@ public class MetaDataConfig {
             case ConfigElement.CAMERA_MODEL:
                 cameraModel = node.getTextContent();
                 break;
-            case ConfigElement.ISO_MASK:
+            case ConfigElement.FILTER_MASK:
                 isoFilterMask = ISOFilterMask.valueOf(node.getTextContent());
                 break;
             default:
@@ -134,7 +135,7 @@ public class MetaDataConfig {
             case ConfigElement.CAMERA_MODEL:
                 cameraModel = node.getTextContent();
                 break;
-            case ConfigElement.EXPOSURETIME_MASK:
+            case ConfigElement.FILTER_MASK:
                 exposureTimeFilterMask = ExposureTimeFilterMask.valueOf(node.getTextContent());
                 break;
             default:
@@ -156,7 +157,7 @@ public class MetaDataConfig {
         // ISO FILTERS start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.ISO_FILTERS, Tab.FOUR, xmlsw);
 
-        writeIsoFilters(metaData.getIsoFilters(), xmlsw);
+        writeFilters(ConfigElement.ISO_FILTER, metaData.getIsoFilters(), xmlsw);
 
         // ISO FILTERS end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.FOUR);
@@ -164,38 +165,24 @@ public class MetaDataConfig {
         // EXPOSURETIME FILTERS start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.EXPOSURETIME_FILTERS, Tab.FOUR, xmlsw);
 
-        writeExposureTimeFilters(metaData.getExposureTimeFilters(), xmlsw);
+        writeFilters(ConfigElement.EXPOSURETIME_FILTER, metaData.getExposureTimeFilters(), xmlsw);
 
         // EXPOSURETIME FILTERS end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.FOUR);
-
 
         //  METADATA end
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 
-    private static void writeExposureTimeFilters(List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
-        for (MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter : exposureTimeFilters) {
-            // EXPOSURETIME FILTER start
-            XMLUtil.writeElementStartWithLineBreak(ConfigElement.EXPOSURETIME_FILTER, Tab.SIX, xmlsw);
+    private static <T extends IFilterMask> void writeFilters(String tagName, List<MetaDataFilter<T>> filters, XMLStreamWriter xmlsw) throws XMLStreamException {
+        for (MetaDataFilter<T> filter : filters) {
+            // FILTER start
+            XMLUtil.writeElementStartWithLineBreak(tagName, Tab.SIX, xmlsw);
 
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.CAMERA_MODEL, Tab.EIGHT, exposureTimeFilter.getCameraModel(), xmlsw);
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.EXPOSURETIME_MASK, Tab.EIGHT, exposureTimeFilter.getFilterMask().name(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.CAMERA_MODEL, Tab.EIGHT, filter.getCameraModel(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.FILTER_MASK, Tab.EIGHT, filter.getFilterMask().name(), xmlsw);
 
-            // EXPOSURETIME FILTER end
-            XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);
-        }
-    }
-
-    private static void writeIsoFilters(List<MetaDataFilter<ISOFilterMask>> isoFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
-        for (MetaDataFilter<ISOFilterMask> isoFilter : isoFilters) {
-            // ISO FILTER start
-            XMLUtil.writeElementStartWithLineBreak(ConfigElement.ISO_FILTER, Tab.SIX, xmlsw);
-
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.CAMERA_MODEL, Tab.EIGHT, isoFilter.getCameraModel(), xmlsw);
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ISO_MASK, Tab.EIGHT, isoFilter.getFilterMask().name(), xmlsw);
-
-            // ISO FILTER end
+            // FILTER end
             XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);
         }
     }
