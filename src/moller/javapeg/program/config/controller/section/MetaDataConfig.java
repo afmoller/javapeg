@@ -23,8 +23,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.metadata.ExposureTimeFilter;
-import moller.javapeg.program.config.model.metadata.ISOFilter;
+import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
 import moller.javapeg.program.enumerations.ISOFilterMask;
@@ -56,8 +55,8 @@ public class MetaDataConfig {
         return metaData;
     }
 
-    private static List<ExposureTimeFilter> getExposureTimeFilters(Node exposureTimesFiltersNode) {
-        List<ExposureTimeFilter> exposureTimeFilters = new ArrayList<ExposureTimeFilter>();
+    private static List<MetaDataFilter<ExposureTimeFilterMask>> getExposureTimeFilters(Node exposureTimesFiltersNode) {
+        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = new ArrayList<MetaDataFilter<ExposureTimeFilterMask>>();
 
         NodeList childNodes = exposureTimesFiltersNode.getChildNodes();
 
@@ -75,8 +74,8 @@ public class MetaDataConfig {
         return exposureTimeFilters;
     }
 
-    private static List<ISOFilter> getIsoFilters(Node isoFiltersNode) {
-        List<ISOFilter> isoFilters = new ArrayList<ISOFilter>();
+    private static List<MetaDataFilter<ISOFilterMask>> getIsoFilters(Node isoFiltersNode) {
+        List<MetaDataFilter<ISOFilterMask>> isoFilters = new ArrayList<MetaDataFilter<ISOFilterMask>>();
 
         NodeList childNodes = isoFiltersNode.getChildNodes();
 
@@ -94,7 +93,7 @@ public class MetaDataConfig {
         return isoFilters;
     }
 
-    private static ISOFilter createIsoFilter(Node isoFilterNode) {
+    private static MetaDataFilter<ISOFilterMask> createIsoFilter(Node isoFilterNode) {
         NodeList childNodes = isoFilterNode.getChildNodes();
 
         String cameraModel = "";
@@ -115,14 +114,14 @@ public class MetaDataConfig {
             }
         }
 
-        ISOFilter isoFilter = new ISOFilter();
+        MetaDataFilter<ISOFilterMask> isoFilter = new MetaDataFilter<ISOFilterMask>();
         isoFilter.setCameraModel(cameraModel);
-        isoFilter.setIsoFilter(isoFilterMask);
+        isoFilter.setFilterMask(isoFilterMask);
 
         return isoFilter;
     }
 
-    private static ExposureTimeFilter createExposureTimeFilter(Node exposureTimeFilterNode) {
+    private static MetaDataFilter<ExposureTimeFilterMask> createExposureTimeFilter(Node exposureTimeFilterNode) {
         NodeList childNodes = exposureTimeFilterNode.getChildNodes();
 
         String cameraModel = "";
@@ -143,9 +142,9 @@ public class MetaDataConfig {
             }
         }
 
-        ExposureTimeFilter exposureTimeFilter = new ExposureTimeFilter();
+        MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = new MetaDataFilter<ExposureTimeFilterMask>();
         exposureTimeFilter.setCameraModel(cameraModel);
-        exposureTimeFilter.setExposureTimeFilterMask(exposureTimeFilterMask);
+        exposureTimeFilter.setFilterMask(exposureTimeFilterMask);
 
         return exposureTimeFilter;
     }
@@ -175,26 +174,26 @@ public class MetaDataConfig {
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 
-    private static void writeExposureTimeFilters(List<ExposureTimeFilter> exposureTimeFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
-        for (ExposureTimeFilter exposureTimeFilter : exposureTimeFilters) {
+    private static void writeExposureTimeFilters(List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
+        for (MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter : exposureTimeFilters) {
             // EXPOSURETIME FILTER start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.EXPOSURETIME_FILTER, Tab.SIX, xmlsw);
 
             XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.CAMERA_MODEL, Tab.EIGHT, exposureTimeFilter.getCameraModel(), xmlsw);
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.EXPOSURETIME_MASK, Tab.EIGHT, exposureTimeFilter.getExposureTimeFilterMask().name(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.EXPOSURETIME_MASK, Tab.EIGHT, exposureTimeFilter.getFilterMask().name(), xmlsw);
 
             // EXPOSURETIME FILTER end
             XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);
         }
     }
 
-    private static void writeIsoFilters(List<ISOFilter> isoFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
-        for (ISOFilter isoFilter : isoFilters) {
+    private static void writeIsoFilters(List<MetaDataFilter<ISOFilterMask>> isoFilters, XMLStreamWriter xmlsw) throws XMLStreamException {
+        for (MetaDataFilter<ISOFilterMask> isoFilter : isoFilters) {
             // ISO FILTER start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.ISO_FILTER, Tab.SIX, xmlsw);
 
             XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.CAMERA_MODEL, Tab.EIGHT, isoFilter.getCameraModel(), xmlsw);
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ISO_MASK, Tab.EIGHT, isoFilter.getIsoFilterMask().name(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.ISO_MASK, Tab.EIGHT, isoFilter.getFilterMask().name(), xmlsw);
 
             // ISO FILTER end
             XMLUtil.writeElementEndWithLineBreak(xmlsw, Tab.SIX);

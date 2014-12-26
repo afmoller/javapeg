@@ -16,17 +16,26 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.metadata;
 
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.IFilterMask;
 
-public class ExposureTimeFilter extends AbstractFilter {
+public class MetaDataFilter<T extends IFilterMask> {
 
-    private ExposureTimeFilterMask exposureTimeFilterMask;
+    private String cameraModel;
+    private T filterMask;
 
-    public ExposureTimeFilterMask getExposureTimeFilterMask() {
-        return exposureTimeFilterMask;
+    public String getCameraModel() {
+        return cameraModel;
     }
 
-    public void setExposureTimeFilterMask(ExposureTimeFilterMask exposureTimeFilterMask) {
-        this.exposureTimeFilterMask = exposureTimeFilterMask;
+    public void setCameraModel(String cameraModel) {
+        this.cameraModel = cameraModel;
+    }
+
+    public T getFilterMask() {
+        return filterMask;
+    }
+
+    public void setFilterMask(T filterMask) {
+        this.filterMask = filterMask;
     }
 }

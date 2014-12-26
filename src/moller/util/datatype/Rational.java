@@ -16,6 +16,13 @@
  ******************************************************************************/
 package moller.util.datatype;
 
+/**
+ * This class represents a mathematical rational number on the form:
+ * <code>numerator / denominator</code>.
+ *
+ * @author Fredrik
+ *
+ */
 public class Rational {
 	private int numerator;
 	private int denominator;
@@ -72,4 +79,23 @@ public class Rational {
 			return gcd(n, m % n);
 		}
 	}
+
+    /**
+     * Forces this rational to be on the form 1/x. This is only done if the
+     * denominator is larger than the numerator and the numerator is larger than
+     * 1.
+     * <p/>
+     * If the denominator is not divisable with the numerator then the
+     * denominator is rounded to the closest integer.
+     */
+    public void normalize() {
+        if ((numerator > 1) && (denominator > numerator)) {
+            float newDenominator = (float) denominator / (float) numerator;
+
+            int roundNewDominator = Math.round(newDenominator);
+
+            numerator = 1;
+            denominator = roundNewDominator;
+        }
+    }
 }

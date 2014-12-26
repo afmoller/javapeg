@@ -18,25 +18,28 @@ package moller.javapeg.program.config.model.metadata;
 
 import java.util.List;
 
+import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.ISOFilterMask;
+
 public class MetaData {
 
-    private List<ISOFilter> isoFilters;
-    private List<ExposureTimeFilter> exposureTimeFilters;
+    private List<MetaDataFilter<ISOFilterMask>> isoFilters;
+    private List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters;
 
 
-    public List<ISOFilter> getIsoFilters() {
+    public List<MetaDataFilter<ISOFilterMask>> getIsoFilters() {
         return isoFilters;
     }
 
-    public void setIsoFilters(List<ISOFilter> isoFilters) {
+    public void setIsoFilters(List<MetaDataFilter<ISOFilterMask>> isoFilters) {
         this.isoFilters = isoFilters;
     }
 
-    public List<ExposureTimeFilter> getExposureTimeFilters() {
+    public List<MetaDataFilter<ExposureTimeFilterMask>> getExposureTimeFilters() {
         return exposureTimeFilters;
     }
 
-    public void setExposureTimeFilters(List<ExposureTimeFilter> exposureTimeFilters) {
+    public void setExposureTimeFilters(List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters) {
         this.exposureTimeFilters = exposureTimeFilters;
     }
 }

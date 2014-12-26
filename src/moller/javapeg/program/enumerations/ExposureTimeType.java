@@ -14,17 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.config.model.metadata;
+package moller.javapeg.program.enumerations;
 
-public class AbstractFilter {
+/**
+ * This enumeration defines different kinds of Exposure time strings.
+ *
+ * @author Fredrik
+ *
+ */
+public enum ExposureTimeType {
+    INTEGER, // "2" = two seconds
 
-    private String cameraModel;
+    RATIONAL, // "1/100" = one hundredth of a second or
+              // "1 1/2" = one and a half second.
 
-    public String getCameraModel() {
-        return cameraModel;
-    }
-
-    public void setCameraModel(String cameraModel) {
-        this.cameraModel = cameraModel;
-    }
+    DECIMAL; // "1.5" = one and a half second or
+             // "1,5" = one and a half second.
 }

@@ -16,14 +16,30 @@
  ******************************************************************************/
 package moller.javapeg.program.datatype;
 
+import moller.javapeg.program.enumerations.ExposureTimeType;
 import moller.util.datatype.Rational;
 import moller.util.string.StringUtil;
 
+/**
+ * This class supports the following Exposure time formats as input strings:
+ *
+ * "2"     = two seconds
+ * "1/100" = one hundredth of a second.
+ * "1 1/2" = one and a half second.
+ * "1.5"   = one and a half second.
+ * "1,5"   = one and a half second.
+ *
+ * @author Fredrik
+ *
+ */
 public class ExposureTime implements Comparable<ExposureTime> {
 
-    private int seconds;
-    private Rational partsOfSecond;
-    private float exposureTimeAsFloat;
+    private static final int DEFAULT_SECONDS_VALUE = -1;
+    private static final float DEFAULT_EXPOSURETIME_AS_FLOAT = Float.MIN_VALUE;
+
+    private int seconds = DEFAULT_SECONDS_VALUE;
+    private Rational partsOfSecond = null;
+    private float exposureTimeAsFloat = DEFAULT_EXPOSURETIME_AS_FLOAT;
 
     public ExposureTime(String exposureTime) throws ExposureTimeException {
         exposureTime = StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(exposureTime);
@@ -44,20 +60,15 @@ public class ExposureTime implements Comparable<ExposureTime> {
                 delimiterIndex = partsOfSeconds.indexOf(Rational.DELIMITER);
                 this.seconds = Integer.parseInt(seconds);
                 this.partsOfSecond = new Rational(partsOfSeconds.substring(0, delimiterIndex), partsOfSeconds.substring(delimiterIndex + 1, partsOfSeconds.length()));
-                this.exposureTimeAsFloat = Float.MIN_VALUE;
-
             } else {
                 delimiterIndex = exposureTime.indexOf(Rational.DELIMITER);
-                this.seconds = -1;
                 this.partsOfSecond = new Rational(exposureTime.substring(0, delimiterIndex), exposureTime.substring(delimiterIndex + 1, exposureTime.length()));
-                this.exposureTimeAsFloat = Float.MIN_VALUE;
             }
         } else if (exposureTime.contains(".") || exposureTime.contains(",")) {
             if (exposureTime.contains(",")) {
                 exposureTime = exposureTime.replace(",", ".");
             }
             try {
-                this.seconds = -1;
                 this.partsOfSecond = null;
                 this.exposureTimeAsFloat  = Float.parseFloat(exposureTime);
             } catch (NumberFormatException nfex) {
@@ -67,7 +78,6 @@ public class ExposureTime implements Comparable<ExposureTime> {
             try {
                 this.seconds = Integer.parseInt(exposureTime.trim());
                 this.partsOfSecond = null;
-                this.exposureTimeAsFloat = Float.MIN_VALUE;
             } catch (NumberFormatException nfex) {
                 throw new ExposureTimeException("Invalid format of ExposureTime: " + exposureTime);
             }
@@ -76,13 +86,13 @@ public class ExposureTime implements Comparable<ExposureTime> {
 
     @Override
     public String toString() {
-        if (partsOfSecond == null && seconds == -1 && exposureTimeAsFloat == Float.MIN_VALUE) {
+        if (partsOfSecond == null && seconds == DEFAULT_SECONDS_VALUE && exposureTimeAsFloat == DEFAULT_EXPOSURETIME_AS_FLOAT) {
             return "";
-        } else if (exposureTimeAsFloat == Float.MIN_VALUE && partsOfSecond == null) {
+        } else if (exposureTimeAsFloat == DEFAULT_EXPOSURETIME_AS_FLOAT && partsOfSecond == null) {
             return Integer.toString(seconds);
-        } else if (exposureTimeAsFloat == Float.MIN_VALUE && seconds == -1){
+        } else if (exposureTimeAsFloat == DEFAULT_EXPOSURETIME_AS_FLOAT && seconds == DEFAULT_SECONDS_VALUE){
             return partsOfSecond.toString();
-        } else if (partsOfSecond == null && seconds == -1){
+        } else if (partsOfSecond == null && seconds == DEFAULT_SECONDS_VALUE){
             return Float.toString(exposureTimeAsFloat);
         } else {
             return Integer.toString(seconds) + " " + partsOfSecond.toString();
@@ -100,7 +110,7 @@ public class ExposureTime implements Comparable<ExposureTime> {
             result += (float)partsOfSecond.getNumerator() / (float)partsOfSecond.getDenominator();
         }
 
-        if (exposureTimeAsFloat != Float.MIN_NORMAL) {
+        if (exposureTimeAsFloat != DEFAULT_EXPOSURETIME_AS_FLOAT) {
             result += exposureTimeAsFloat;
         }
         return result;
@@ -122,6 +132,29 @@ public class ExposureTime implements Comparable<ExposureTime> {
             return 0;
         } else {
             return 1;
+        }
+    }
+
+    public float getExposureTimeAsFloat() {
+        return exposureTimeAsFloat;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public Rational getPartsOfSecond() {
+        return partsOfSecond;
+    }
+
+    public ExposureTimeType getExposureTimeType() {
+
+        if (exposureTimeAsFloat != DEFAULT_EXPOSURETIME_AS_FLOAT) {
+            return ExposureTimeType.DECIMAL;
+        } else if (partsOfSecond != null) {
+            return ExposureTimeType.RATIONAL;
+        } else {
+            return ExposureTimeType.INTEGER;
         }
     }
 }

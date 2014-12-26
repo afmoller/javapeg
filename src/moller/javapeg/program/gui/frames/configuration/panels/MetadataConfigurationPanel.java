@@ -39,8 +39,7 @@ import javax.swing.table.TableRowSorter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.model.metadata.ExposureTimeFilter;
-import moller.javapeg.program.config.model.metadata.ISOFilter;
+import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
@@ -144,12 +143,12 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         exposureTimeFilteringTableModel = new FilteringTableModel<ExposureTimeFilterMask>();
 
         MetaData metadata = getConfiguration().getMetadata();
-        List<ExposureTimeFilter> exposureTimeFilters = metadata.getExposureTimeFilters();
+        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = metadata.getExposureTimeFilters();
 
-        for (ExposureTimeFilter exposureTimeFilter : exposureTimeFilters) {
+        for (MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter : exposureTimeFilters) {
             CameraAndFilterPair<ExposureTimeFilterMask> cameraAndExposureTimeFilterPair = new CameraAndFilterPair<ExposureTimeFilterMask>();
             cameraAndExposureTimeFilterPair.setCameraModel(exposureTimeFilter.getCameraModel());
-            cameraAndExposureTimeFilterPair.setFilterMask(exposureTimeFilter.getExposureTimeFilterMask());
+            cameraAndExposureTimeFilterPair.setFilterMask(exposureTimeFilter.getFilterMask());
             exposureTimeFilteringTableModel.addRow(cameraAndExposureTimeFilterPair);
         }
 
@@ -180,12 +179,12 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         isoFilteringTableModel = new FilteringTableModel<ISOFilterMask>();
 
         MetaData metadata = getConfiguration().getMetadata();
-        List<ISOFilter> isoFilters = metadata.getIsoFilters();
+        List<MetaDataFilter<ISOFilterMask>> isoFilters = metadata.getIsoFilters();
 
-        for (ISOFilter isoFilter : isoFilters) {
+        for (MetaDataFilter<ISOFilterMask> isoFilter : isoFilters) {
             CameraAndFilterPair<ISOFilterMask> cameraAndISOFilterPair = new CameraAndFilterPair<ISOFilterMask>();
             cameraAndISOFilterPair.setCameraModel(isoFilter.getCameraModel());
-            cameraAndISOFilterPair.setFilterMask(isoFilter.getIsoFilterMask());
+            cameraAndISOFilterPair.setFilterMask(isoFilter.getFilterMask());
             isoFilteringTableModel.addRow(cameraAndISOFilterPair);
         }
 
@@ -300,7 +299,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
     public void updateConfiguration() {
         MetaData metadata = getConfiguration().getMetadata();
 
-        List<ISOFilter> isoFilters = metadata.getIsoFilters();
+        List<MetaDataFilter<ISOFilterMask>> isoFilters = metadata.getIsoFilters();
 
         isoFilters.clear();
 
@@ -312,13 +311,13 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
             String cameraModel = row.getCameraModel();
             ISOFilterMask isoFilterMask = row.getFilterMask();
 
-            ISOFilter isoFilter = new ISOFilter();
+            MetaDataFilter<ISOFilterMask> isoFilter = new MetaDataFilter<ISOFilterMask>();
             isoFilter.setCameraModel(cameraModel);
-            isoFilter.setIsoFilter(isoFilterMask);
+            isoFilter.setFilterMask(isoFilterMask);
             isoFilters.add(isoFilter);
         }
 
-        List<ExposureTimeFilter> exposureTimeFilters = metadata.getExposureTimeFilters();
+        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = metadata.getExposureTimeFilters();
 
         exposureTimeFilters.clear();
 
@@ -330,9 +329,9 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
             String cameraModel = row.getCameraModel();
             ExposureTimeFilterMask exposureTimeFilterMask = row.getFilterMask();
 
-            ExposureTimeFilter exposureTimeFilter = new ExposureTimeFilter();
+            MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = new MetaDataFilter<ExposureTimeFilterMask>();
             exposureTimeFilter.setCameraModel(cameraModel);
-            exposureTimeFilter.setExposureTimeFilterMask(exposureTimeFilterMask);
+            exposureTimeFilter.setFilterMask(exposureTimeFilterMask);
             exposureTimeFilters.add(exposureTimeFilter);
         }
     }
