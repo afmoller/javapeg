@@ -40,7 +40,7 @@
 	<xs:complexType name="IsoFilter">
 		<xs:all>
 			<xs:element name="cameraModel" type="xs:string" />
-			<xs:element name="isoMask">
+			<xs:element name="filterMask">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 						<xs:enumeration value="NO_MASK" />
@@ -65,7 +65,7 @@
 	<xs:complexType name="ExposureTimeFilter">
         <xs:all>
             <xs:element name="cameraModel" type="xs:string" />
-            <xs:element name="exposureTimeMask">
+            <xs:element name="filterMask">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="NO_MASK" />
