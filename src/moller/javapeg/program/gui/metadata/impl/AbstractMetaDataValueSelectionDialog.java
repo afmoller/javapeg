@@ -23,6 +23,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -155,6 +157,7 @@ public abstract class AbstractMetaDataValueSelectionDialog extends JDialog imple
         okButton.addActionListener(new OkButtonListener());
         cancelButton.addActionListener(new CancelButtonListener());
         values.addListSelectionListener(new ValuesListListener());
+        values.addMouseListener(new ValuesListDoubleClickListener());
     }
 
     protected void setValuesInJList(String valuesStringWithoutPrefix) {
@@ -242,6 +245,16 @@ public abstract class AbstractMetaDataValueSelectionDialog extends JDialog imple
         public void actionPerformed(ActionEvent e) {
             setOkButtonClicked(true);
             dispose();
+        }
+    }
+
+    private class ValuesListDoubleClickListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent evt) {
+            if (evt.getClickCount() == 2) {
+                setOkButtonClicked(true);
+                dispose();
+            }
         }
     }
 
