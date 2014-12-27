@@ -18,7 +18,7 @@ package moller.javapeg.program.gui.metadata;
 
 public interface MetaDataValueSelectionDialog {
 
-    String getResult();
+    public String getResult();
 
-    void collectSelectedValues();
+    public void collectSelectedValues();
 }
