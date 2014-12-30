@@ -29,6 +29,19 @@ import moller.util.datatype.Rational;
 
 public class ImageMetaDataDataBaseHandlerUtil {
 
+    /**
+     * Adds a an ISO value to the {@link ImageMetaDataContext} for an image path
+     * and a specific camera model. If there is a configured ISO
+     * {@link MetaDataFilter} specified for the current camera model then that
+     * filter will be applied to the ISO value before the value is added to the
+     * {@link ImageMetaDataContext}.
+     *
+     * @param imdc
+     * @param javaPegIdValue
+     * @param isoValue
+     * @param imagePath
+     * @param cameraModel
+     */
     public static void addIso(ImageMetaDataContext imdc, String javaPegIdValue, int isoValue, String imagePath, String cameraModel) {
 
         MetaDataFilter<ISOFilterMask> isoFilter = getIsoFilterForCameraModel(cameraModel);
@@ -41,6 +54,19 @@ public class ImageMetaDataDataBaseHandlerUtil {
         }
     }
 
+    /**
+     * Adds a an Exposure time value to the {@link ImageMetaDataContext} for an
+     * image path and a specific camera model. If there is a configured Exposure
+     * time {@link MetaDataFilter} specified for the current camera model then
+     * that filter will be applied to the Exposure time value before the value
+     * is added to the {@link ImageMetaDataContext}.
+     *
+     * @param imdc
+     * @param javaPegIdValue
+     * @param isoValue
+     * @param imagePath
+     * @param cameraModel
+     */
     public static void addExposureTime(ImageMetaDataContext imdc, String javaPegIdValue, ExposureTime exposureTime, String imagePath, String cameraModel) {
 
         MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = getExposureTimeFilterForCameraModel(cameraModel);
@@ -53,6 +79,15 @@ public class ImageMetaDataDataBaseHandlerUtil {
         }
     }
 
+    /**
+     * Returns a matching (for the camera model) {@link MetaDataFilter} if one
+     * is found, otherwise null is returned
+     *
+     * @param cameraModel
+     *            specifies for which camera model a filter shall be searched.
+     * @return a found {@link MetaDataFilter} or <code>null</code> if no filter
+     *         is found.
+     */
     private static MetaDataFilter<ISOFilterMask> getIsoFilterForCameraModel(String cameraModel) {
         List<MetaDataFilter<ISOFilterMask>> isoFilters = Config.getInstance().get().getMetadata().getIsoFilters();
 
@@ -94,22 +129,55 @@ public class ImageMetaDataDataBaseHandlerUtil {
         }
     }
 
-    private static int maskValue(int value, int triggerValue) {
-        int reminder = value % triggerValue;
+    /**
+     * <p>
+     * This method receives an integer value and returns a masked variant of
+     * that integer value.
+     * </p>
+     * <p>
+     * With an incoming value of <code>106</code> and an maskingValue of
+     * <code>100</code> will be masked to <code>100</code>. The algorithm is the
+     * following:
+     * </p>
+     * <p>
+     * <code>106 modulo 100 = 6</br>
+     * 100 = 106 - 6</code> The value will be masked to
+     * <code>100</code>
+     * </p>
+     * <p>
+     * With an incoming value of <code>163</code> and an maskingValue of
+     * <code>100</code> will be masked to <code>200</code>. The algorithm is the
+     * following:
+     * </p>
+     * <p>
+     * <code>163 modulo 100 = 63</br>
+     * 200 = 163 + 100 - 63</code> The value will be
+     * rounded to <code>200</code> and masked in one step.
+     * </p>
+     *
+     * @param value
+     *            is the value to be masked.
+     * @param maskingValue
+     *            specifies the mask value.
+     * @return an masked integer value.
+     */
+    private static int maskValue(int value, int maskingValue) {
+        int reminder = value % maskingValue;
 
-        int half = triggerValue / 2;
+        // calculate the breakpoint between rounding up or down.
+        int half = maskingValue / 2;
 
         if (reminder >= half) {
-            return value + triggerValue - reminder;
+            return value + maskingValue - reminder;
         } else {
             return value - reminder;
         }
     }
 
-    private static <T extends IFilterMask> MetaDataFilter<T> returnMatchingFilter(String cameraModel, List<MetaDataFilter<T>> exposureTimeFilters) {
-        for (MetaDataFilter<T> exposureTimeFilter : exposureTimeFilters) {
-            if (exposureTimeFilter.getCameraModel().equals(cameraModel)) {
-                return exposureTimeFilter;
+    private static <T extends IFilterMask> MetaDataFilter<T> returnMatchingFilter(String cameraModel, List<MetaDataFilter<T>> filters) {
+        for (MetaDataFilter<T> filter : filters) {
+            if (filter.getCameraModel().equals(cameraModel)) {
+                return filter;
             }
         }
 
@@ -117,6 +185,15 @@ public class ImageMetaDataDataBaseHandlerUtil {
         return null;
     }
 
+    /**
+     * Returns a matching (for the camera model) {@link MetaDataFilter} if one
+     * is found, otherwise null is returned
+     *
+     * @param cameraModel
+     *            specifies for which camera model a filter shall be searched.
+     * @return a found {@link MetaDataFilter} or <code>null</code> if no filter
+     *         is found.
+     */
     private static MetaDataFilter<ExposureTimeFilterMask> getExposureTimeFilterForCameraModel(String cameraModel) {
         List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = Config.getInstance().get().getMetadata().getExposureTimeFilters();
 
