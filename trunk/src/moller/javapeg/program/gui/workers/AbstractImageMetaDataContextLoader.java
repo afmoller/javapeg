@@ -29,7 +29,7 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseHandler;
+import moller.javapeg.program.imagemetadata.handler.ImageMetaDataDataBaseHandler;
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.DirectoryUtil;

@@ -18,18 +18,20 @@ package moller.javapeg.program.enumerations;
 
 public enum ISOFilterMask implements IFilterMask {
 
-    NO_MASK("n"),
-    MASK_UP_TO_POSITON_FIRST("n0"),
-    MASK_UP_TO_POSITON_SECOND("n00"),
-    MASK_UP_TO_POSITON_THIRD("n000"),
-    MASK_UP_TO_POSITON_FOURTH("n0000"),
-    MASK_UP_TO_POSITON_FIFTH("n00000"),
-    MASK_UP_TO_POSITON_SIXTH("n000000");
+    NO_MASK(                  "n",       1),
+    MASK_UP_TO_POSITON_FIRST( "n0",      10),
+    MASK_UP_TO_POSITON_SECOND("n00",     100),
+    MASK_UP_TO_POSITON_THIRD( "n000",    1000),
+    MASK_UP_TO_POSITON_FOURTH("n0000",   10000),
+    MASK_UP_TO_POSITON_FIFTH( "n00000",  100000),
+    MASK_UP_TO_POSITON_SIXTH( "n000000", 1000000);
 
     private String mask;
+    private int triggerValue;
 
-    private ISOFilterMask(String mask) {
+    private ISOFilterMask(String mask, int triggerValue) {
         this.mask = mask;
+        this.triggerValue = triggerValue;
     }
 
     @Override
@@ -41,4 +43,10 @@ public enum ISOFilterMask implements IFilterMask {
     public String toString() {
         return mask;
     }
+
+    @Override
+    public int getTriggerValue() {
+        return triggerValue;
+    }
+
 }
