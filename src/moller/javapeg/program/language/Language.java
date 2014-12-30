@@ -87,16 +87,17 @@ public class Language {
      */
     private boolean loadLanguageFile() {
 
-        InputStreamReader langFileJavaPEG              = null;
-        InputStreamReader langFileImageViewer          = null;
-        InputStreamReader langFileCommon               = null;
-        InputStreamReader langFileConfigViewer         = null;
-        InputStreamReader langFileCategory             = null;
-        InputStreamReader langFileHelpViewer           = null;
-        InputStreamReader langFileImageRepository      = null;
-        InputStreamReader langFileImageResizer         = null;
-        InputStreamReader langFileCategoryImportExport = null;
-        InputStreamReader langFileImageMerge           = null;
+        InputStreamReader langFileJavaPEG               = null;
+        InputStreamReader langFileImageViewer           = null;
+        InputStreamReader langFileCommon                = null;
+        InputStreamReader langFileConfigViewer          = null;
+        InputStreamReader langFileCategory              = null;
+        InputStreamReader langFileHelpViewer            = null;
+        InputStreamReader langFileImageRepository       = null;
+        InputStreamReader langFileImageResizer          = null;
+        InputStreamReader langFileCategoryImportExport  = null;
+        InputStreamReader langFileImageMerge            = null;
+        InputStreamReader langFileImageStatisticsViewer = null;
 
         try {
             String languageCode = "";
@@ -118,16 +119,17 @@ public class Language {
                 languageCode = "en";
             }
 
-            langFileJavaPEG              = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/javapeg."              + languageCode), C.UTF8);
-            langFileImageViewer          = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageviewer."          + languageCode), C.UTF8);
-            langFileCommon               = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/common."               + languageCode), C.UTF8);
-            langFileConfigViewer         = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/configviewer."         + languageCode), C.UTF8);
-            langFileCategory             = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/category."             + languageCode), C.UTF8);
-            langFileHelpViewer           = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/helpviewer."           + languageCode), C.UTF8);
-            langFileImageRepository      = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagerepository."      + languageCode), C.UTF8);
-            langFileImageResizer         = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageresizer."         + languageCode), C.UTF8);
-            langFileCategoryImportExport = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/categoryimportexport." + languageCode), C.UTF8);
-            langFileImageMerge           = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagemerge."           + languageCode), C.UTF8);
+            langFileJavaPEG               = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/javapeg."               + languageCode), C.UTF8);
+            langFileImageViewer           = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageviewer."           + languageCode), C.UTF8);
+            langFileCommon                = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/common."                + languageCode), C.UTF8);
+            langFileConfigViewer          = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/configviewer."          + languageCode), C.UTF8);
+            langFileCategory              = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/category."              + languageCode), C.UTF8);
+            langFileHelpViewer            = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/helpviewer."            + languageCode), C.UTF8);
+            langFileImageRepository       = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagerepository."       + languageCode), C.UTF8);
+            langFileImageResizer          = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageresizer."          + languageCode), C.UTF8);
+            langFileCategoryImportExport  = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/categoryimportexport."  + languageCode), C.UTF8);
+            langFileImageMerge            = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagemerge."            + languageCode), C.UTF8);
+            langFileImageStatisticsViewer = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imagestatisticsviewer." + languageCode), C.UTF8);
 
             loadAndLog("javapeg." + languageCode, langFileJavaPEG);
             loadAndLog("imageviewer." + languageCode, langFileImageViewer);
@@ -139,6 +141,7 @@ public class Language {
             loadAndLog("imageresizer." + languageCode, langFileImageResizer);
             loadAndLog("categoryimportexport." + languageCode, langFileCategoryImportExport);
             loadAndLog("imagemerge." + languageCode, langFileImageMerge);
+            loadAndLog("imagestatisticsviewer." + languageCode, langFileImageStatisticsViewer);
 
             return true;
         } catch (IOException e) {
@@ -157,6 +160,7 @@ public class Language {
             StreamUtil.close(langFileImageRepository, true);
             StreamUtil.close(langFileImageResizer, true);
             StreamUtil.close(langFileImageMerge, true);
+            StreamUtil.close(langFileImageStatisticsViewer, true);
         }
     }
 

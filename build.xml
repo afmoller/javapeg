@@ -10,7 +10,6 @@
 		
 	<property name="main.class.javepeg" value="moller.javapeg.StartJavaPEG" />
 	<property name="splashscreen.image" value="moller/javapeg/resources/images/splash/splash.png" />
-	
 
 	<target name="all" depends="clean_build, build, create_jar_javapeg, create_jar_util, create_release, create_release_src" />
 
@@ -49,6 +48,7 @@
 				<include name="**/imagemerge.en" />
 				<include name="**/imagerepository.en" />
 				<include name="**/imageresizer.en" />
+				<include name="**/imagestatisticsviewer.en" />
 				<include name="**/imageviewer.en" />
 				<include name="**/initialgui.en" />
 				<include name="**/javapeg.en" />
@@ -60,6 +60,7 @@
 				<include name="**/imagemerge.sv" />
 				<include name="**/imagerepository.sv" />
 				<include name="**/imageresizer.sv" />
+				<include name="**/imagestatisticsviewer.sv" />
 				<include name="**/imageviewer.sv" />
 				<include name="**/initialgui.sv" />
 				<include name="**/javapeg.sv" />
