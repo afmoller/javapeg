@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.imagemetadata;
+package moller.javapeg.program.imagemetadata.handler;
 
 import java.awt.Component;
 import java.awt.Rectangle;
@@ -49,23 +49,21 @@ import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
-import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
-import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
-import moller.javapeg.program.enumerations.IFilterMask;
-import moller.javapeg.program.enumerations.ISOFilterMask;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
 import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItemElement;
+import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItemUtil;
+import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
-import moller.util.datatype.Rational;
 import moller.util.io.PathUtil;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
@@ -427,9 +425,9 @@ public class ImageMetaDataDataBaseHandler {
 
         imdc.addCameraModel(javaPegIdValue, imageExifMetaData.getCameraModel(), imagePath);
         imdc.addDateTime(javaPegIdValue, imageExifMetaData.getDateTime(), imagePath);
-        addIso(imdc, javaPegIdValue, imageExifMetaData.getIsoValue(), imagePath, imageExifMetaData.getCameraModel());
+        ImageMetaDataDataBaseHandlerUtil.addIso(imdc, javaPegIdValue, imageExifMetaData.getIsoValue(), imagePath, imageExifMetaData.getCameraModel());
         imdc.addImageSize(javaPegIdValue, new ImageSize(imageExifMetaData.getPictureHeight(), imageExifMetaData.getPictureWidth()), imagePath);
-        addExposureTime(imdc, javaPegIdValue, imageExifMetaData.getExposureTime(), imagePath, imageExifMetaData.getCameraModel());
+        ImageMetaDataDataBaseHandlerUtil.addExposureTime(imdc, javaPegIdValue, imageExifMetaData.getExposureTime(), imagePath, imageExifMetaData.getCameraModel());
         imdc.addFNumber(javaPegIdValue, imageExifMetaData.getFNumber(), imagePath);
         imdc.addComment(javaPegIdValue, imageMetaDataDataBaseItemFromImageTag.getComment(), imagePath);
         imdc.addRating(javaPegIdValue, imageMetaDataDataBaseItemFromImageTag.getRating(), imagePath);
@@ -439,164 +437,6 @@ public class ImageMetaDataDataBaseHandler {
         for (String category : categories.getCategories()) {
             imdc.addCategory(javaPegIdValue, category, imagePath);
         }
-    }
-
-    private static void addExposureTime(ImageMetaDataContext imdc, String javaPegIdValue, ExposureTime exposureTime, String imagePath, String cameraModel) {
-
-        MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = getExposureTimeFilterForCameraModel(cameraModel);
-
-        if (exposureTimeFilter == null) {
-            imdc.addExposureTime(javaPegIdValue, exposureTime, imagePath);
-        } else {
-            ExposureTime maskedExposureTimeValue = getMaskedExposureTimeValue(exposureTime, exposureTimeFilter.getFilterMask());
-            imdc.addExposureTime(javaPegIdValue, maskedExposureTimeValue, imagePath);
-        }
-    }
-
-    private static void addIso(ImageMetaDataContext imdc, String javaPegIdValue, int isoValue, String imagePath, String cameraModel) {
-
-        MetaDataFilter<ISOFilterMask> isoFilter = getIsoFilterForCameraModel(cameraModel);
-
-        if (isoFilter == null) {
-            imdc.addIso(javaPegIdValue, isoValue, imagePath);
-        } else {
-            int maskedISOValue = getMaskedIsoValue(isoValue, isoFilter.getFilterMask());
-            imdc.addIso(javaPegIdValue, maskedISOValue, imagePath);
-        }
-    }
-
-    private static int getMaskedIsoValue(int isoValue, ISOFilterMask isoFilterMask) {
-
-        // Pass through, which will enable the most appropriate mask to be
-        // applied on the incoming isoValue.
-        switch (isoFilterMask) {
-        case MASK_UP_TO_POSITON_SIXTH:
-            if (isoValue > 1000000) {
-                int reminder = isoValue % 1000000;
-                return isoValue - reminder;
-            }
-        case MASK_UP_TO_POSITON_FIFTH:
-            if (isoValue > 100000) {
-                int reminder = isoValue % 100000;
-                return isoValue - reminder;
-            }
-        case MASK_UP_TO_POSITON_FOURTH:
-            if (isoValue > 10000) {
-                int reminder = isoValue % 10000;
-                return isoValue - reminder;
-            }
-        case MASK_UP_TO_POSITON_THIRD:
-            if (isoValue > 1000) {
-                int reminder = isoValue % 1000;
-                return isoValue - reminder;
-            }
-        case MASK_UP_TO_POSITON_SECOND:
-            if (isoValue > 100) {
-                int reminder = isoValue % 100;
-                return isoValue - reminder;
-            }
-        case MASK_UP_TO_POSITON_FIRST:
-            if (isoValue > 10) {
-                int reminder = isoValue % 10;
-                return isoValue - reminder;
-            }
-        case NO_MASK:
-        default:
-            return isoValue;
-        }
-    }
-
-    private static ExposureTime getMaskedExposureTimeValue(ExposureTime exposureTime, ExposureTimeFilterMask filterMask) {
-        switch (exposureTime.getExposureTimeType()) {
-        case DECIMAL:
-        case INTEGER:
-            return exposureTime;
-        case RATIONAL:
-            normalizeRationalExposureTime(exposureTime);
-            filterRationalExposureTime(exposureTime, filterMask);
-
-            return exposureTime;
-        default:
-            return exposureTime;
-        }
-    }
-
-    private static void filterRationalExposureTime(ExposureTime normalizedRationalExposureTime, ExposureTimeFilterMask filterMask) {
-
-        Rational partsOfSecond = normalizedRationalExposureTime.getPartsOfSecond();
-        int denominator = partsOfSecond.getDenominator();
-
-
-        // Pass through, which will enable the most appropriate mask to be
-        // applied on the incoming isoValue.
-        switch (filterMask) {
-        case MASK_UP_TO_POSITON_SIXTH:
-            if (denominator > 1000000) {
-                int reminder = denominator % 1000000;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case MASK_UP_TO_POSITON_FIFTH:
-            if (denominator > 100000) {
-                int reminder = denominator % 100000;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case MASK_UP_TO_POSITON_FOURTH:
-            if (denominator > 10000) {
-                int reminder = denominator % 10000;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case MASK_UP_TO_POSITON_THIRD:
-            if (denominator > 1000) {
-                int reminder = denominator % 1000;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case MASK_UP_TO_POSITON_SECOND:
-            if (denominator > 100) {
-                int reminder = denominator % 100;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case MASK_UP_TO_POSITON_FIRST:
-            if (denominator > 10) {
-                int reminder = denominator % 10;
-                partsOfSecond.setDenominator(denominator - reminder);
-                break;
-            }
-        case NO_MASK:
-        default:
-            break;
-        }
-    }
-
-    private static void normalizeRationalExposureTime(ExposureTime exposureTime) {
-        exposureTime.getPartsOfSecond().normalize();
-    }
-
-    private static MetaDataFilter<ISOFilterMask> getIsoFilterForCameraModel(String cameraModel) {
-        List<MetaDataFilter<ISOFilterMask>> isoFilters = configuration.getMetadata().getIsoFilters();
-
-        return returnMatchingFilter(cameraModel, isoFilters);
-    }
-
-    private static MetaDataFilter<ExposureTimeFilterMask> getExposureTimeFilterForCameraModel(String cameraModel) {
-        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = configuration.getMetadata().getExposureTimeFilters();
-
-        return returnMatchingFilter(cameraModel, exposureTimeFilters);
-    }
-
-    private static <T extends IFilterMask> MetaDataFilter<T> returnMatchingFilter(String cameraModel, List<MetaDataFilter<T>> exposureTimeFilters) {
-        for (MetaDataFilter<T> exposureTimeFilter : exposureTimeFilters) {
-            if (exposureTimeFilter.getCameraModel().equals(cameraModel)) {
-                return exposureTimeFilter;
-            }
-        }
-
-        // No matching filter found for the given camera model.
-        return null;
     }
 
     public static void updateImageMetaDataContext(String javaPegIdValue, File image, String newComment, int rating, Categories categories) {

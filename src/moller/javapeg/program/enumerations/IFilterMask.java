@@ -6,4 +6,6 @@ public interface IFilterMask {
 
     public String name();
 
+    public int getTriggerValue();
+
 }
