@@ -20,8 +20,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -144,39 +146,18 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
         for (int i = 0; i < weekdays.length; i++) {
-            dataSet.setValue(weekdays[i], "Weekdays", getWeekDayAsString(i));
+//            TODO: fix hard coded string
+            dataSet.setValue(weekdays[i], "Weekdays", getWeekDayAsString(i + 1));
         }
 
         return createChart(dataSet, "Weekdays");
     }
 
     private String getWeekDayAsString(int weekDayAsInt) {
-        switch (weekDayAsInt) {
-        case 0:
-            // TODO: Fix hard coded string
-            return "Sunday";
-        case 1:
-            // TODO: Fix hard coded string
-            return "Monday";
-        case 2:
-            // TODO: Fix hard coded string
-            return "Tuesday";
-        case 3:
-            // TODO: Fix hard coded string
-            return "Wednesday";
-        case 4:
-            // TODO: Fix hard coded string
-            return "Thursday";
-        case 5:
-            // TODO: Fix hard coded string
-            return "Friday";
-        case 6:
-            // TODO: Fix hard coded string
-            return "Saturday";
-        default:
-            // TODO: Fix hard coded string
-            return "Unknown";
-        }
+        DateFormatSymbols symbols = new DateFormatSymbols(new Locale(getConfiguration().getLanguage().getgUILanguageISO6391()));
+
+        String[] dayNames = symbols.getWeekdays();
+        return dayNames[weekDayAsInt];
     }
 
     private Component createFNumberStatistics() {

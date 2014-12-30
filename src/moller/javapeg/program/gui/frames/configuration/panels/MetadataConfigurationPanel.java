@@ -39,10 +39,11 @@ import javax.swing.table.TableRowSorter;
 
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.config.model.metadata.MetaData;
+import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.IFilterMask;
 import moller.javapeg.program.enumerations.ISOFilterMask;
 import moller.javapeg.program.gui.ComboboxToolTipRenderer;
 import moller.javapeg.program.gui.CustomizedJTable;
@@ -103,8 +104,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     private JPanel createTabbePaneBoxPanel() {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-//      TODO: fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Configurations"));
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.label.configurations")));
 
         GBHelper posPanel = new GBHelper();
 
@@ -131,8 +131,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
         GBHelper posPanel = new GBHelper();
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-//        TODO: fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Camera model"));
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.label.cameramodel")));
         backgroundPanel.add(cameraModelsJComboBox, posPanel.nextRow().expandW());
 
         return backgroundPanel;
@@ -340,11 +339,8 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            CameraAndFilterPair<ISOFilterMask> cameraAndISOFilterPair = new CameraAndFilterPair<ISOFilterMask>();
-            cameraAndISOFilterPair.setCameraModel((String)cameraModelsJComboBox.getSelectedItem());
-            cameraAndISOFilterPair.setFilterMask((ISOFilterMask) isoPatterns.getSelectedItem());
-
-            isoFilteringTableModel.addRow(cameraAndISOFilterPair);
+            CameraAndFilterPair<ISOFilterMask> createdCameraAndFilterPair = createCameraAndFilterPair((String)cameraModelsJComboBox.getSelectedItem(), (ISOFilterMask)isoPatterns.getSelectedItem());
+            isoFilteringTableModel.addRow(createdCameraAndFilterPair);
         }
     }
 
@@ -352,12 +348,17 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            CameraAndFilterPair<ExposureTimeFilterMask> cameraAndExposureTimeFilterPair = new CameraAndFilterPair<ExposureTimeFilterMask>();
-            cameraAndExposureTimeFilterPair.setCameraModel((String)cameraModelsJComboBox.getSelectedItem());
-            cameraAndExposureTimeFilterPair.setFilterMask((ExposureTimeFilterMask) exposureTimePatterns.getSelectedItem());
-
-            exposureTimeFilteringTableModel.addRow(cameraAndExposureTimeFilterPair);
+            CameraAndFilterPair<ExposureTimeFilterMask> createdCameraAndFilterPair = createCameraAndFilterPair((String)cameraModelsJComboBox.getSelectedItem(), (ExposureTimeFilterMask)exposureTimePatterns.getSelectedItem());
+            exposureTimeFilteringTableModel.addRow(createdCameraAndFilterPair);
         }
+    }
+
+    private <T extends IFilterMask> CameraAndFilterPair<T> createCameraAndFilterPair(String cameraModel, T filterMask) {
+        CameraAndFilterPair<T> cameraAndExposureTimeFilterPair = new CameraAndFilterPair<T>();
+        cameraAndExposureTimeFilterPair.setCameraModel(cameraModel);
+        cameraAndExposureTimeFilterPair.setFilterMask(filterMask);
+
+        return cameraAndExposureTimeFilterPair;
     }
 
     private class RemoveISORuleListener implements ActionListener {
