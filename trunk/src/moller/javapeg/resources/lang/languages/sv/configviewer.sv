@@ -135,8 +135,10 @@ configviewer.tag.importedCategories.rename.dialog.text                          
 ##############################################################################################################
 # M E T A  D A T A                                                                                           #
 ##############################################################################################################
-configviewer.metadata.isofiltertable.header.cameramodel    = Kameramodell
-configviewer.metadata.isofiltertable.header.filter         = Filter
+configviewer.metadata.label.cameramodel    = Kameramodell
+configviewer.metadata.label.configurations = Konfigurationer 
+configviewer.metadata.filtertable.header.cameramodel    = Kameramodell
+configviewer.metadata.filtertable.header.filter         = Filter
 configviewer.metadata.isofiltertable.delete.confirmmessage = Följande ISO-filter kommer att tas bort.
 configviewer.metadata.exposuretimefiltertable.delete.confirmmessage = Följande Exponeringstid(s)-filter kommer att tas bort.
 

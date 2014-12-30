@@ -42,8 +42,8 @@ public class FilteringTableModel<F extends IFilterMask> extends AbstractTableMod
 
     public FilteringTableModel() {
         columnNames = new String[2];
-        columnNames[CAMERA_MODEL] = lang.get("configviewer.metadata.isofiltertable.header.cameramodel");
-        columnNames[ISO_FILTER_PATTERN] = lang.get("configviewer.metadata.isofiltertable.header.filter");
+        columnNames[CAMERA_MODEL] = lang.get("configviewer.metadata.filtertable.header.cameramodel");
+        columnNames[ISO_FILTER_PATTERN] = lang.get("configviewer.metadata.filtertable.header.filter");
 
         rows = Collections.synchronizedList(new ArrayList<CameraAndFilterPair<F>>());
     }
