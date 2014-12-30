@@ -100,7 +100,10 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
     }
 
     private ChartPanel createChart(CategoryDataset bardataset, String label) {
-        JFreeChart barChart = ChartFactory.createBarChart("Number of images per " + label, label, "number of images", bardataset);
+        String title = getLang().get("imagestatisticsviewer.chart.title.prefix");
+        String valueAxisLabel = getLang().get("imagestatisticsviewer.chart.valueAxisLabel");
+
+        JFreeChart barChart = ChartFactory.createBarChart(title + " " + label, label, valueAxisLabel, bardataset);
 
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setName(label);
@@ -145,12 +148,13 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
 
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
+        String title = getLang().get("imagestatisticsviewer.chart.weekday.title");
+
         for (int i = 0; i < weekdays.length; i++) {
-//            TODO: fix hard coded string
-            dataSet.setValue(weekdays[i], "Weekdays", getWeekDayAsString(i + 1));
+            dataSet.setValue(weekdays[i], title, getWeekDayAsString(i + 1));
         }
 
-        return createChart(dataSet, "Weekdays");
+        return createChart(dataSet, title);
     }
 
     private String getWeekDayAsString(int weekDayAsInt) {
@@ -170,9 +174,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             fNumberToNumberOfImagesMapping.put(fNumber, imdc.getNumberOfImagesForFNumber(fNumber));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(fNumberToNumberOfImagesMapping, fNumbers, "F-Number");
+        String title = getLang().get("imagestatisticsviewer.chart.fnumber.title");
 
-        return createChart(dataSet, "F-Number");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(fNumberToNumberOfImagesMapping, fNumbers, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createExposureTimeStatistics() {
@@ -185,9 +191,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             isoToNumberOfImagesMapping.put(exposureTime, imdc.getNumberOfImagesForExposureTime(exposureTime));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(isoToNumberOfImagesMapping, exposureTimes, "Exposure Time");
+        String title = getLang().get("imagestatisticsviewer.chart.exposuretime.title");
 
-        return createChart(dataSet, "Exposure Time");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(isoToNumberOfImagesMapping, exposureTimes, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createISOStatistics() {
@@ -200,9 +208,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             isoToNumberOfImagesMapping.put(iso, imdc.getNumberOfImagesForISO(iso));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(isoToNumberOfImagesMapping, isos, "ISO");
+        String title = getLang().get("imagestatisticsviewer.chart.iso.title");
 
-        return createChart(dataSet, "ISO");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(isoToNumberOfImagesMapping, isos, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createImageSizeStatistics() {
@@ -215,10 +225,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             imageSizeToNumberOfImagesMapping.put(imageSize, imdc.getNumberOfImagesForImageSize(imageSize));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(imageSizeToNumberOfImagesMapping, imageSizes, "Image Size");
+        String title = getLang().get("imagestatisticsviewer.chart.imagesize.title");
 
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(imageSizeToNumberOfImagesMapping, imageSizes, title);
 
-        return createChart(dataSet, "Image Size");
+        return createChart(dataSet, title);
     }
 
     private Component createSecondStatistics() {
@@ -231,9 +242,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             secondToNumberOfImagesMapping.put(second, imdc.getNumberOfImagesForSecond(second));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(secondToNumberOfImagesMapping, seconds, "Seconds");
+        String title = getLang().get("imagestatisticsviewer.chart.second.title");
 
-        return createChart(dataSet, "Seconds");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(secondToNumberOfImagesMapping, seconds, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createMinuteStatistics() {
@@ -246,9 +259,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             minuteToNumberOfImagesMapping.put(minute, imdc.getNumberOfImagesForMinute(minute));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(minuteToNumberOfImagesMapping, minutes, "Minutes");
+        String title = getLang().get("imagestatisticsviewer.chart.minute.title");
 
-        return createChart(dataSet, "Minutes");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(minuteToNumberOfImagesMapping, minutes, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createDatesStatistics() {
@@ -261,9 +276,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             dateToNumberOfImagesMapping.put(date, imdc.getNumberOfImagesForDate(date));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(dateToNumberOfImagesMapping, dates, "Day in month");
+        String title = getLang().get("imagestatisticsviewer.chart.dayinmonth.title");
 
-        return createChart(dataSet, "Day in month");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(dateToNumberOfImagesMapping, dates, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createHourStatistics() {
@@ -276,9 +293,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             hourToNumberOfImagesMapping.put(hour, imdc.getNumberOfImagesForHour(hour));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(hourToNumberOfImagesMapping, hours, "Hour");
+        String title = getLang().get("imagestatisticsviewer.chart.hour.title");
 
-        return createChart(dataSet, "Hour");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(hourToNumberOfImagesMapping, hours, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createYearStatistics() {
@@ -291,9 +310,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             yearToNumberOfImagesMapping.put(year, imdc.getNumberOfImagesForYear(year));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(yearToNumberOfImagesMapping, years, "Year");
+        String title = getLang().get("imagestatisticsviewer.chart.year.title");
 
-        return createChart(dataSet, "Year");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(yearToNumberOfImagesMapping, years, title);
+
+        return createChart(dataSet, title);
     }
 
     private Component createCameraModelStatistics() {
@@ -306,9 +327,11 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
             yearToNumberOfImagesMapping.put(cameraModel, imdc.getNumberOfImagesForCameraModel(cameraModel));
         }
 
-        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(yearToNumberOfImagesMapping, cameraModels, "Camera model");
+        String title = getLang().get("imagestatisticsviewer.chart.cameramodel.title");
 
-        return createChart(dataSet, "Camera model");
+        DefaultCategoryDataset dataSet = createDefaultCategoryDataset(yearToNumberOfImagesMapping, cameraModels, title);
+
+        return createChart(dataSet, title);
     }
 
     @Override
