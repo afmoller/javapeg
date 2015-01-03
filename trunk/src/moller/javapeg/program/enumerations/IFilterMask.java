@@ -8,4 +8,10 @@ public interface IFilterMask {
 
     public int getTriggerValue();
 
+    @Override
+    public boolean equals(Object obj);
+
+    @Override
+    public int hashCode();
+
 }

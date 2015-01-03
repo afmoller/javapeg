@@ -91,7 +91,8 @@ public abstract class BaseConfigurationPanel extends JPanel {
     /**
      * This method returns a string which contains information about which
      * properties that has a changed value, if any, compared with was the value
-     * was when the configuration was loaded.
+     * was when the configuration was loaded. This method is called before the
+     * {@link #updateConfiguration()} method is called.
      *
      * @return
      */

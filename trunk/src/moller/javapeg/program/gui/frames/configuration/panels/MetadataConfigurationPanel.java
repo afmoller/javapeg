@@ -81,6 +81,8 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     @Override
     public boolean isValidConfiguration() {
+        // No specific validation is needed to be performed, always return
+        // true.
         return true;
     }
 
@@ -161,7 +163,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         JPanel exposureTimeRuleToCameraModelScrollPanePanel = new JPanel(new GridBagLayout());
         GBHelper posExposureTimeRuleToCameraModelScrollPanePanel = new GBHelper();
-        exposureTimeRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder("Configured filterpatterns"));
+        exposureTimeRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.scrollpane.configured.fillters")));
         exposureTimeRuleToCameraModelScrollPanePanel.add(exposureTimeRuleToCameraModelScrollPane, posExposureTimeRuleToCameraModelScrollPanePanel.expandH().expandW());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -197,7 +199,7 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         JPanel isoRuleToCameraModelScrollPanePanel = new JPanel(new GridBagLayout());
         GBHelper posIsoRuleToCameraModelScrollPanePanel = new GBHelper();
-        isoRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder("Configured filterpatterns"));
+        isoRuleToCameraModelScrollPanePanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.scrollpane.configured.fillters")));
         isoRuleToCameraModelScrollPanePanel.add(isoRuleToCameraModelScrollPane, posIsoRuleToCameraModelScrollPanePanel.expandH().expandW());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -222,25 +224,29 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         ComboboxToolTipRenderer comboboxToolTipRenderer = new ComboboxToolTipRenderer();
         ArrayList<String> tooltips = new ArrayList<String>();
-//        TODO: fix hard coded string
-        tooltips.add("tooltip 1");
-        tooltips.add("tooltip 2");
-        tooltips.add("tooltip 3");
-        tooltips.add("tooltip 4");
+
+        String willBe = getLang().get("configviewer.metadata.filterlists.tooltip.willbe");
+
+        tooltips.add("218 " + willBe + " 218");
+        tooltips.add("218 " + willBe + " 220");
+        tooltips.add("218 " + willBe + " 200");
+        tooltips.add("25718 " + willBe + " 26000");
+        tooltips.add("25718 " + willBe + " 30000");
+        tooltips.add("25718 " + willBe + " 30000");
+        tooltips.add("25718 " + willBe + " 30000");
         comboboxToolTipRenderer.setTooltips(tooltips);
 
         isoPatterns = new JComboBox<ISOFilterMask>(isoPatternModel);
         isoPatterns.setRenderer(comboboxToolTipRenderer);
 
         addNewISORuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
-//      TODO: Fix hard coded string
-        addNewISORuleButton.setToolTipText("Add rule for selected selected camera model");
+        addNewISORuleButton.setToolTipText(getLang().get("configviewer.metadata.filterbuttonpanel.addnewrulebutton"));
 
         removeISORuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
 
         GBHelper posButtonPanel = new GBHelper();
         JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBorder(BorderFactory.createTitledBorder("Manage filterpatterns"));
+        buttonPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.filterbuttonpanel.title")));
         buttonPanel.add(isoPatterns, posButtonPanel.nextRow());
         buttonPanel.add(Box.createHorizontalStrut(3), posButtonPanel.nextCol());
         buttonPanel.add(addNewISORuleButton, posButtonPanel.nextCol());
@@ -261,25 +267,29 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
         ComboboxToolTipRenderer comboboxToolTipRenderer = new ComboboxToolTipRenderer();
         ArrayList<String> tooltips = new ArrayList<String>();
-//        TODO: fix hard coded string
-        tooltips.add("tooltip 1");
-        tooltips.add("tooltip 2");
-        tooltips.add("tooltip 3");
-        tooltips.add("tooltip 4");
+
+        String willBe = getLang().get("configviewer.metadata.filterlists.tooltip.willbe");
+
+        tooltips.add("1/218 " + willBe + " 1/218");
+        tooltips.add("1/218 " + willBe + " 1/220");
+        tooltips.add("1/218 " + willBe + " 1/200");
+        tooltips.add("1/25718 " + willBe + " 1/26000");
+        tooltips.add("1/25718 " + willBe + " 1/30000");
+        tooltips.add("1/25718 " + willBe + " 1/30000");
+        tooltips.add("1/25718 " + willBe + " 1/30000");
         comboboxToolTipRenderer.setTooltips(tooltips);
 
         exposureTimePatterns = new JComboBox<ExposureTimeFilterMask>(exposureTimePatternModel);
         exposureTimePatterns.setRenderer(comboboxToolTipRenderer);
 
         addNewExposureTimeRuleButton = new JButton(IconLoader.getIcon(Icons.ADD));
-//      TODO: Fix hard coded string
-        addNewExposureTimeRuleButton.setToolTipText("Add rule for selected selected camera model");
+        addNewExposureTimeRuleButton.setToolTipText(getLang().get("configviewer.metadata.filterbuttonpanel.addnewrulebutton"));
 
         removeExposureTimeRuleButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
 
         GBHelper posButtonPanel = new GBHelper();
         JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBorder(BorderFactory.createTitledBorder("Manage filterpatterns"));
+        buttonPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.metadata.filterbuttonpanel.title")));
         buttonPanel.add(exposureTimePatterns, posButtonPanel.nextRow());
         buttonPanel.add(Box.createHorizontalStrut(3), posButtonPanel.nextCol());
         buttonPanel.add(addNewExposureTimeRuleButton, posButtonPanel.nextCol());
@@ -290,8 +300,85 @@ public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 
     @Override
     public String getChangedConfigurationMessage() {
-        // TODO Auto-generated method stub
-        return null;
+
+        // Exposure Time
+        List<CameraAndFilterPair<ExposureTimeFilterMask>> exposureTimeCameraAndFilterPairsFromTableModel = createCameraAndFilterPairsFromTableModel(exposureTimeFilteringTableModel);
+        List<CameraAndFilterPair<ExposureTimeFilterMask>> exposureTimeCameraAndFilterPairsFromConfig     = createCameraAndFilterPairsFromConfig(getConfiguration().getMetadata().getExposureTimeFilters());
+
+        List<CameraAndFilterPair<ExposureTimeFilterMask>> addedExposureTimeCameraAndFilterPairs   = getAddedFilterPairs(exposureTimeCameraAndFilterPairsFromTableModel, exposureTimeCameraAndFilterPairsFromConfig);
+        List<CameraAndFilterPair<ExposureTimeFilterMask>> removedExposureTimeCameraAndFilterPairs = getRemovedFilterPairs(exposureTimeCameraAndFilterPairsFromTableModel, exposureTimeCameraAndFilterPairsFromConfig);
+
+        // ISO
+        List<CameraAndFilterPair<ISOFilterMask>> isoCameraAndFilterPairsFromTableModel = createCameraAndFilterPairsFromTableModel(isoFilteringTableModel);
+        List<CameraAndFilterPair<ISOFilterMask>> isoCameraAndFilterPairsFromConfig     = createCameraAndFilterPairsFromConfig(getConfiguration().getMetadata().getIsoFilters());
+
+        List<CameraAndFilterPair<ISOFilterMask>> addedIsoCameraAndFilterPairs   = getAddedFilterPairs(isoCameraAndFilterPairsFromTableModel, isoCameraAndFilterPairsFromConfig);
+        List<CameraAndFilterPair<ISOFilterMask>> removedIsoCameraAndFilterPairs = getRemovedFilterPairs(isoCameraAndFilterPairsFromTableModel, isoCameraAndFilterPairsFromConfig);
+
+        // Build display message
+        StringBuilder displayMessage = new StringBuilder();
+
+        appendConfigurationDisplayMessage(displayMessage, getLang().get("configviewer.metadata.exposuretimefilter.added"), addedExposureTimeCameraAndFilterPairs);
+        appendConfigurationDisplayMessage(displayMessage, getLang().get("configviewer.metadata.exposuretimefilter.removed"), removedExposureTimeCameraAndFilterPairs);
+
+        appendConfigurationDisplayMessage(displayMessage, getLang().get("configviewer.metadata.isofilter.added"), addedIsoCameraAndFilterPairs);
+        appendConfigurationDisplayMessage(displayMessage, getLang().get("configviewer.metadata.isofilter.removed"), removedIsoCameraAndFilterPairs);
+
+        return displayMessage.toString();
+    }
+
+    private <F extends IFilterMask> void appendConfigurationDisplayMessage(StringBuilder displayMessage, String prefix, List<CameraAndFilterPair<F>> modifiedCameraAndFilterPairs) {
+        if (!modifiedCameraAndFilterPairs.isEmpty()) {
+            for (CameraAndFilterPair<F> modifiedCameraAndFilterPair : modifiedCameraAndFilterPairs) {
+                displayMessage.append(prefix + " " + modifiedCameraAndFilterPair.toString());
+                displayMessage.append("\n");
+            }
+        }
+    }
+
+    private <F extends IFilterMask> List<CameraAndFilterPair<F>> createCameraAndFilterPairsFromTableModel(FilteringTableModel<F> filteringTableModel) {
+        List<CameraAndFilterPair<F>> cameraAndFilterPairsFromTableModel = new ArrayList<CameraAndFilterPair<F>>();
+
+        int rowCount = filteringTableModel.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            cameraAndFilterPairsFromTableModel.add(filteringTableModel.getRow(i));
+        }
+        return cameraAndFilterPairsFromTableModel;
+    }
+
+    private <F extends IFilterMask> List<CameraAndFilterPair<F>> createCameraAndFilterPairsFromConfig(List<MetaDataFilter<F>> exposureTimeFilters) {
+        List<CameraAndFilterPair<F>> cameraAndFilterPairsFromConfig = new ArrayList<CameraAndFilterPair<F>>();
+
+        for (MetaDataFilter<F> exposureTimeFilter : exposureTimeFilters) {
+            cameraAndFilterPairsFromConfig.add(createCameraAndFilterPair(exposureTimeFilter.getCameraModel(), exposureTimeFilter.getFilterMask()));
+        }
+
+        return cameraAndFilterPairsFromConfig;
+    }
+
+
+    private <F extends IFilterMask> List<CameraAndFilterPair<F>> getRemovedFilterPairs(List<CameraAndFilterPair<F>> cameraAndFilterPairsFromTableModel, List<CameraAndFilterPair<F>> cameraAndFilterPairsFromConfig) {
+        List<CameraAndFilterPair<F>> removedCameraAndFilterPairs = new ArrayList<CameraAndFilterPair<F>>();
+
+        for (CameraAndFilterPair<F> cameraAndFilterPairFromConfig : cameraAndFilterPairsFromConfig) {
+            if (!cameraAndFilterPairsFromTableModel.contains(cameraAndFilterPairFromConfig)) {
+                removedCameraAndFilterPairs.add(cameraAndFilterPairFromConfig);
+            }
+        }
+        return removedCameraAndFilterPairs;
+    }
+
+
+    private <F extends IFilterMask> List<CameraAndFilterPair<F>> getAddedFilterPairs(List<CameraAndFilterPair<F>> cameraAndFilterPairsFromTableModel, List<CameraAndFilterPair<F>> cameraAndFilterPairsFromConfig) {
+        List<CameraAndFilterPair<F>> addedCameraAndFilterPairs = new ArrayList<CameraAndFilterPair<F>>();
+
+        for (CameraAndFilterPair<F> cameraAndFilterPairFromTableModel : cameraAndFilterPairsFromTableModel ) {
+            if (!cameraAndFilterPairsFromConfig.contains(cameraAndFilterPairFromTableModel)) {
+                addedCameraAndFilterPairs.add(cameraAndFilterPairFromTableModel);
+            }
+        }
+        return addedCameraAndFilterPairs;
     }
 
     @Override

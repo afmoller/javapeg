@@ -141,6 +141,14 @@ configviewer.metadata.filtertable.header.cameramodel    = Kameramodell
 configviewer.metadata.filtertable.header.filter         = Filter
 configviewer.metadata.isofiltertable.delete.confirmmessage = Följande ISO-filter kommer att tas bort.
 configviewer.metadata.exposuretimefiltertable.delete.confirmmessage = Följande Exponeringstid(s)-filter kommer att tas bort.
+configviewer.metadata.filterbuttonpanel.title = Hantera filter
+configviewer.metadata.filterbuttonpanel.addnewrulebutton = Lägg till ett nytt filter eller anpassa ett existerande vald kameramodell
+configviewer.metadata.scrollpane.configured.fillters = Konfigurerade filter
+configviewer.metadata.filterlists.tooltip.willbe = kommer att bli
+configviewer.metadata.isofilter.added = Följande ISO-filter har lagts till:
+configviewer.metadata.exposuretimefilter.added = Följande Exponeringstids-filter har lagts till:
+configviewer.metadata.isofilter.removed = Följande ISO-filter har tagits bort:
+configviewer.metadata.exposuretimefilter.removed = Följande Exponeringstids-filter har tagits bort:
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

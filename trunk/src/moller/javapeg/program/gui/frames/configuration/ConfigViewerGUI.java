@@ -256,6 +256,7 @@ public class ConfigViewerGUI extends JFrame {
         displayMessage.append(languageConfigurationPanel.getChangedConfigurationMessage());
         displayMessage.append(loggingConfigurationPanel.getChangedConfigurationMessage());
         displayMessage.append(renameConfigurationPanel.getChangedConfigurationMessage());
+        displayMessage.append(metadataConfigurationPanel.getChangedConfigurationMessage());
 
         if(displayMessage.length() > 0) {
             JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);

@@ -41,6 +41,7 @@ public class CameraAndFilterPair<F extends IFilterMask> {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((cameraModel == null) ? 0 : cameraModel.hashCode());
+        result = prime * result + ((filterMask == null) ? 0 : filterMask.hashCode());
         return result;
     }
 
@@ -55,15 +56,26 @@ public class CameraAndFilterPair<F extends IFilterMask> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked")
-        CameraAndFilterPair<F> other = (CameraAndFilterPair<F>) obj;
-           if (cameraModel == null) {
+        CameraAndFilterPair<?> other = (CameraAndFilterPair<?>) obj;
+        if (cameraModel == null) {
             if (other.cameraModel != null) {
                 return false;
             }
         } else if (!cameraModel.equals(other.cameraModel)) {
             return false;
         }
+        if (filterMask == null) {
+            if (other.filterMask != null) {
+                return false;
+            }
+        } else if (!filterMask.equals(other.filterMask)) {
+            return false;
+        }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return cameraModel + " " + filterMask.toString();
     }
 }
