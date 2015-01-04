@@ -184,8 +184,11 @@ public class FindBy {
                             valuesToGet.add(exposureTime.toString());
                         }
                     } catch (ExposureTimeException spex) {
-                        logger.logERROR("Could not create a ExposureTime object from string value:");
-                        logger.logERROR(spex);
+                        // This can happen if there is a missing exposure time
+                        // or an exposure time in an incorrect format in the
+                        // image meta data information.
+                        logger.logDEBUG("Could not create a ExposureTime object from string value:");
+                        logger.logDEBUG(spex);
                     }
                     break;
                 default:
@@ -216,8 +219,11 @@ public class FindBy {
                             valuesToGet.add(exposureTime.toString());
                         }
                     } catch (ExposureTimeException spex) {
-                        logger.logERROR("Could not create a ExposureTime object from string value:");
-                        logger.logERROR(spex);
+                        // This can happen if there is a missing exposure time
+                        // or an exposure time in an incorrect format in the
+                        // image meta data information.
+                        logger.logDEBUG("Could not create a ExposureTime object from string value:");
+                        logger.logDEBUG(spex);
                     }
                     break;
                 default:

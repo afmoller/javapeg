@@ -1,5 +1,6 @@
 3.0:
 ====
+- Add new sections to the help: Metadata.
 - Canon Powershot A95 has strange ISO values.
 - Test all functionality.
 - Update version numbers in language files
