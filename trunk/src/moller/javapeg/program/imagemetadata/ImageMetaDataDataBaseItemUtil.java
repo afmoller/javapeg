@@ -203,9 +203,11 @@ public class ImageMetaDataDataBaseItemUtil {
                 try {
                     imageExifMetaData.setDateTime(sdf.parse(dateTime));
                 } catch (ParseException pex) {
+                    // This can happen if there is a missing date or a date in
+                    // an incorrect format in the image meta data information.
                     imageExifMetaData.setDateTime(null);
-                    logger.logERROR("Could not parse date string: \"" + dateTime + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
-                    logger.logERROR(pex);
+                    logger.logDEBUG("Could not parse date string: \"" + dateTime + "\" with SimpleDateFormat string: \"" + sdf.toPattern() + "\"");
+                    logger.logDEBUG(pex);
                 }
                 break;
 
@@ -227,9 +229,12 @@ public class ImageMetaDataDataBaseItemUtil {
                 try {
                     imageExifMetaData.setExposureTime(new ExposureTime(exposureTime));
                 } catch (ExposureTimeException etex) {
+                    // This can happen if there is a missing exposure time or
+                    // an exposure time in an incorrect format in the image
+                    // meta data information.
                     imageExifMetaData.setExposureTime(null);
-                    logger.logERROR("Could not create a ExposureTime object from string value: " + exposureTime);
-                    logger.logERROR(etex);
+                    logger.logDEBUG("Could not create a ExposureTime object from string value: " + exposureTime);
+                    logger.logDEBUG(etex);
                 }
                 break;
 
@@ -295,5 +300,4 @@ public class ImageMetaDataDataBaseItemUtil {
         logger.logDEBUG("Ended the checking file consistency. Found: " + nonExistingFiles.size() + " inconsistencies (missing files) in the total of " + imageMetaDataDataBaseItems.size() + " referenced files");
         return nonExistingFiles;
     }
-
 }
