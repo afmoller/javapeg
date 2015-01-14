@@ -1,15 +1,17 @@
-PROGRAMBESKRIVNING<LF>
-==================<LF>
+<html>
+PROGRAMBESKRIVNING<br />
+==================<br />
 JavaPEG har möjligheten att ändra filnamn på jpeg bilder som innehåller Exif data, Exchangeable Image File Format. Flertalet digitalkameror stödjer detta format och lagrar på så sätt metadata (information om själva filen) när en bild sparas på digitalkamerans lagringsmedia. Exempel på metadata kan vara vilket datum bilden togs.
-<LF>
-<LF>
+<br />
+<br />
 Förutom att ändra filnamnet så kan JavaPEG även skapa bildöversikter. Dessa översikter visar tumnagelversioner av de fullstora bilderna. Under varje tumnagel finns det möjlighet att visa metadata om den fullstora bilden. Varje tumnagel länkar dessutom till den fullstora bilden. Dessa översikter är i HTML format och tanken med dem är att det skall vara enkelt att kunna få en överblick av vilka bilder som finns i en katalog.
-<LF>
-<LF>
+<br />
+<br />
 Det är också möjligt att skapa bildlistor (slide shows) med JavaPEG. Dels är det möjligt att skapa listor i ett internt JavaPEG format, vilka kan sparas och därefter öppnas igen för vidare bearbetning. Det är dessutom möjligt att exportera bildlistor till format som stödjs av tredjeparts programvaror, för att på så sätt kunna arbeta vidare med listan i dessa program eller för att visa själva listan med bilder.
-<LF>
-<LF>
+<br />
+<br />
 Det finns också en inbyggd bildvisare tillgänglig, vilken visar bilder som samlats i en bildlista (samma lista som nämns ovan). Bildvisaren erbjuder möjlighet att navigera framåt och bakåt i listan av bilder men också att välja valfri bild i listan genom att klicka på en tumnagelversion som finns tillgänglig i användargränssnittet. Bildvisaren kan också visa detaljerad metadata om den visade bilden. Det är också möjligt att låta bildvisaren automatiskt skala om bilderna så att de passar fönsterstorleken. En annan finess är att det är möjligt att låta bildvisaren automatisk rotera bilderna till rätt orientering (Exif orientering).
-<LF>
-<LF>
+<br />
+<br />
 JavaPEG har också möjligheten att organisera bilder i en sökbar databas. Databasen är decentraliserad och består av XML-filer, vilka skapas i varje katalog med bilder som skall ingå i databasen. Antingen läggs en katalog som innehåller bilder automatiskt till i databasen när katalogen väljs i JavaPEG eller genom att den läggs till efter att en fråga ställts, eller inte alls. Detta beteende är konfigurerbart i JavaPEGs inställningar. Det är möjligt att tilldela en bild en kommentar, en klassificering och ett obegränsat antal kategorier. Dessutom hamnar utvald Exif information automatisk i databasen. Databasen är sökbar på samtliga listade kriterier.
+</html>

@@ -1,5 +1,7 @@
-Använd senast ändraddatum om Exif-datum saknas:<LF>
-Om datuminformation saknas i Exif-informationen så används det datum som filen senast ändrades istället.<LF>
-<LF>
-Använd senast ändradtid om Exif-tid saknas:<LF>
+<html>
+Använd senast ändraddatum om Exif-datum saknas:<br />
+Om datuminformation saknas i Exif-informationen så används det datum som filen senast ändrades istället.<br />
+<br />
+Använd senast ändradtid om Exif-tid saknas:<br />
 Om tidinformation saknas i Exif-informationen så används den tidpunkt som filen senast ändrades istället.
+</html>

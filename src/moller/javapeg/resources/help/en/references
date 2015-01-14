@@ -1,13 +1,15 @@
-REFERENCES<LF>
-==========<LF>
+<html>
+REFERENCES<br />
+==========<br />
 The meta data extractor library, created by Drew Noakes, is used internally in JavaPEG to fetch the meta data for each image that shall be renamed. 
 Information about this library can be found at: http://www.drewnoakes.com/code/exif/
-<LF>
-<LF>
-CREDITS<LF>
-=======<LF>
-Angel Bueno:<LF>
- - Creation of the logic behind the variable "Original file name"<LF>
- - Spanish translation of JavaPEG 2.2<LF>
- - Spanish translation of JavaPEG 2.3<LF>
+<br />
+<br />
+CREDITS<br />
+=======<br />
+Angel Bueno:<br />
+ - Creation of the logic behind the variable "Original file name"<br />
+ - Spanish translation of JavaPEG 2.2<br />
+ - Spanish translation of JavaPEG 2.3<br />
  - Spanish translation of JavaPEG 2.4
+ </html>

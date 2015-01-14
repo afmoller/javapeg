@@ -1,36 +1,38 @@
-VIEW IMAGES<LF>
-===========<LF>
+<html>
+VIEW IMAGES<br />
+===========<br />
 The following text will describe how an image list is created and how that list can be saved, exported and or viewed in the Image Viewer. In other words start reading by going to next paragraph.
-<LF>
-<LF>
-1:<LF>
+<br />
+<br />
+1:<br />
 If there has not been any directory with images selected in the tree structure to the left, that has to be done.
-<LF>
-<LF>
-2:<LF>
+<br />
+<br />
+2:<br />
 Click on the tab with the label "VIEW IMAGES"
-<LF>
-<LF>
-3:<LF>
+<br />
+<br />
+3:<br />
 Now it is possible to add images to the list by right clicking the thumbnails that is displayed. Either it is possible to add only the marked image or all images in the selected directory. It is possible to add the same image(s) multiple times if wanted.
-<LF>
-<LF>
-4:<LF>
+<br />
+<br />
+4:<br />
 It is possible to select other directories with images in the tree structure to the left and repeat step 3 before the image list is saved, exported and or displayed in the Image Viewer.
-<LF>
-<LF>
-5:<LF>
+<br />
+<br />
+5:<br />
 When all desired images have been chosen (or earlier), it is possible to have a preview of the images by clicking the file name in the frame with the image list.
-<LF>
-<LF>
-6:<LF>
+<br />
+<br />
+6:<br />
 It is also possible to change the order of the images in the list. That is done by selecting the image in the list which shall be moved and then click the button with an arrow pointing up or down to, depending whether the image shall be moved upwards or downwards in the list. 
-<LF>
-<LF>
-7:<LF>
+<br />
+<br />
+7:<br />
 Now it is possible to either save the list for further future processing according to above, export it to a list format supported by a third party application and or display the list in the Image Viewer. That is done by either clicking the "save"-button, "export"-button or "view selected images in the ImageViewer"-button. JavaPEG supports the creation of image lists in the formats used by the following applications:
-<LF>
-<LF>
-PolyView  (http://www.polybytes.com/)<LF>
-IrfanView (http://www.irfanview.com/)<LF>
+<br />
+<br />
+PolyView  (http://www.polybytes.com/)<br />
+IrfanView (http://www.irfanview.com/)<br />
 XnView    (http://www.xnview.com/)
+</html>

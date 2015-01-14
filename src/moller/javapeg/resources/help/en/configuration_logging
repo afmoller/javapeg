@@ -1,23 +1,32 @@
-Unbuffered Logging:<LF>
-All logging is instantly written to the log file and is not being buffered in the memory. This might be useful for debugging.<LF> 
-<LF>
-Rotate Log Automatically:<LF>
-Means that the log file will be rotated, in other words that the current file will be closed and a new will be created automatically.<LF>
-<LF>
-Compress Rotated Log File:<LF>
-When a log file is rotated it is possible to have it compressed to save space. The compression format used is ZIP.<LF>
-<LF>
-Log Rotate Size:<LF>
-Defines at which size the log file will be rotated. The size is set either in KiB or in MiB. Smallest allowed size is 10 KiB and largest size is 100 MiB.<LF>
-<LF>
-Log Level:<LF>
-Specifies how detailed the logging will be. Possible alternatives are: DEBUG, INFO, WARN, ERROR and FATAL. DEBUG will generate most detailed logging and FATAL least detailed.<LF>
-<LF>
-Log Name:<LF>
-The name that the log file will have.<LF>
-<LF>
-Log Entry Timestamp Format:<LF>
-Specifies what the timestamp in the log file will look like.<LF>
-<LF>
-Log Entry Timestamp Preview:<LF>
+<html>
+Unbuffered Logging:<br />
+All logging is instantly written to the log file and is not being buffered in the memory. This might be useful for debugging.
+<br />
+<br />
+Rotate Log Automatically:<br />
+Means that the log file will be rotated, in other words that the current file will be closed and a new will be created automatically.
+<br />
+<br />
+Compress Rotated Log File:<br />
+When a log file is rotated it is possible to have it compressed to save space. The compression format used is ZIP.
+<br />
+<br />
+Log Rotate Size:<br />
+Defines at which size the log file will be rotated. The size is set either in KiB or in MiB. Smallest allowed size is 10 KiB and largest size is 100 MiB.
+<br />
+<br />
+Log Level:<br />
+Specifies how detailed the logging will be. Possible alternatives are: DEBUG, INFO, WARN, ERROR and FATAL. DEBUG will generate most detailed logging and FATAL least detailed.
+<br />
+<br />
+Log Name:<br />
+The name that the log file will have.
+<br />
+<br />
+Log Entry Timestamp Format:<br />
+Specifies what the timestamp in the log file will look like.
+<br />
+<br />
+Log Entry Timestamp Preview:<br />
 Displays a preview of what a log entry timestamp will look like in the log file.
+</html>

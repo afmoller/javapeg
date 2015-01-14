@@ -1,40 +1,42 @@
-Thumbnail Creation:<LF>
-<LF>
-If embedded thumbnail is missing or corrupt, create a temporary:<LF>
-If an image is missing an thumbnail or if it is corrupt then a temporary thumbnail can be created by JavaPEG to be displayed in the places where thumbnails exists.<LF>
-<LF>
-Width of the created thumbnail:<LF>
-Specifies in pixels, how wide the created thumbnail shall be.<LF>
-<LF>
-Height of the created thumbnail:<LF>
-Specifies in pixels, how high the created thumbnail shall be.<LF>
-<LF>
-Thumbnail Creation Algorithm:<LF>
-Specifies which algorithm to use when a thumbnail is created. There are two possible algortims to choose between: SMOOTH and FAST. The first one is slower but provides a nicer looking result.<LF>
-<LF>
-<LF>
-Thumbnail Cache:<LF>
-<LF>
-Enable Thumbnail Cache:<LF>
-Activation of thumbnail cache will result in a more responsive application since the thumbnails from images which have already been displayed once in JavaPEG will be stored in the memory of the computer and this means that if the same thumbnail shall be displayed once more, then the thumbnail can be fetched from the computer memory instead from the source image, which is much faster.<LF>
-<LF>
-Thumbnail cache size:<LF>
-Indicates how many thumbnails that currently is stored in the thumbnail cache.<LF>
-<LF>
-Thumbnail cache size max:<LF>
-Specifies the maximum amount of thumbnails that can be stored in the memory based thumbnail cache.<LF>
-<LF>
-Clean Thumbnail chache:<LF>
-Empties the thumbnail cache from all currently stored thumbnails.<LF>
-<LF>
-<LF>
-Thumbnail Tooltips:<LF>
-<LF>
-Disabled:<LF>
-No tooltips will be displayed when the mouse pointer is over thumbnails.<LF>
-<LF>
-Enabled:<LF>
-Tooltips will be displayed when the mouse pointer is over an thumbnail.<LF>
-<LF>
-Extended:<LF>
+<html>
+Thumbnail Creation:<br />
+<br />
+If embedded thumbnail is missing or corrupt, create a temporary:<br />
+If an image is missing an thumbnail or if it is corrupt then a temporary thumbnail can be created by JavaPEG to be displayed in the places where thumbnails exists.<br />
+<br />
+Width of the created thumbnail:<br />
+Specifies in pixels, how wide the created thumbnail shall be.<br />
+<br />
+Height of the created thumbnail:<br />
+Specifies in pixels, how high the created thumbnail shall be.<br />
+<br />
+Thumbnail Creation Algorithm:<br />
+Specifies which algorithm to use when a thumbnail is created. There are two possible algortims to choose between: SMOOTH and FAST. The first one is slower but provides a nicer looking result.<br />
+<br />
+<br />
+Thumbnail Cache:<br />
+<br />
+Enable Thumbnail Cache:<br />
+Activation of thumbnail cache will result in a more responsive application since the thumbnails from images which have already been displayed once in JavaPEG will be stored in the memory of the computer and this means that if the same thumbnail shall be displayed once more, then the thumbnail can be fetched from the computer memory instead from the source image, which is much faster.<br />
+<br />
+Thumbnail cache size:<br />
+Indicates how many thumbnails that currently is stored in the thumbnail cache.<br />
+<br />
+Thumbnail cache size max:<br />
+Specifies the maximum amount of thumbnails that can be stored in the memory based thumbnail cache.<br />
+<br />
+Clean Thumbnail chache:<br />
+Empties the thumbnail cache from all currently stored thumbnails.<br />
+<br />
+<br />
+Thumbnail Tooltips:<br />
+<br />
+Disabled:<br />
+No tooltips will be displayed when the mouse pointer is over thumbnails.<br />
+<br />
+Enabled:<br />
+Tooltips will be displayed when the mouse pointer is over an thumbnail.<br />
+<br />
+Extended:<br />
 A tooltip with more information will be displayed, compared to the "Enabled" setting, when the mouse pointer is over an thumbnail.
+</html>
