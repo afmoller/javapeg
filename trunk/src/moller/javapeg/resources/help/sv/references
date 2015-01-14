@@ -1,13 +1,15 @@
-REFERENSER<LF>
-==========<LF>
+<html>
+REFERENSER<br />
+==========<br />
 Internt använder JavaPEG Drew Noakes "metadata extractor" bibliotek för att hämta ur meta datat ur varje bild som skall döpas om.
 Information (på engelska) om biblioteket finns på följande plats: http://www.drewnoakes.com/code/exif/
-<LF>
-<LF>
-TACK TILL<LF>
-=========<LF>
-Angel Bueno:<LF>
- - Skapandet av logiken till variabeln "Ursprungligt filnamn".<LF>
- - Spansk översättning av JavaPEG 2.2<LF>
- - Spansk översättning av JavaPEG 2.3<LF>
+<br />
+<br />
+TACK TILL<br />
+=========<br />
+Angel Bueno:<br />
+ - Skapandet av logiken till variabeln "Ursprungligt filnamn".<br />
+ - Spansk översättning av JavaPEG 2.2<br />
+ - Spansk översättning av JavaPEG 2.3<br />
  - Spansk översättning av JavaPEG 2.4
+</html>

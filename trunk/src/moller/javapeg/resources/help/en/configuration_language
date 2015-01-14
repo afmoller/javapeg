@@ -1,3 +1,11 @@
-It is possible to either choose language manually, or to let JavaPEG select language automatically.<LF>
-<LF>
-If the language selection mode is manually then a language is selected by clicking on the desired language in the list of available languages. If the language selection mode is automatically then JavaPEG will choose the language that matches the language used by the computer as system language. If the language used by the system is not available then English is selected.
+<html>
+    It is possible to either choose language manually, or to let JavaPEG select language automatically.
+    
+    <br />
+    <br />
+    
+    If the language selection mode is manually then a language is selected by clicking on the desired language
+    in the list of available languages. If the language selection mode is automatically then JavaPEG will choose
+    the language that matches the language used by the computer as system language. If the language used by the 
+    system is not available then English is selected.
+</html>

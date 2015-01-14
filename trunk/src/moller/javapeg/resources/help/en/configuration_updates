@@ -1,5 +1,7 @@
-Enable Application Update Check:<LF>
-An update check will be performed at each application start to see if there exist a newer version of JavaPEG.<LF>
-<LF>
-Add Version Information To Update Check:<LF>
+<html>
+Enable Application Update Check:<br />
+An update check will be performed at each application start to see if there exist a newer version of JavaPEG.<br />
+<br />
+Add Version Information To Update Check:<br />
 The version number of JavaPEG will be attached to the update check performed at application start. This information is only used for statistical purposes and is entirely anonymous. NO other information than the version number of JavaPEG is sent.
+</html>

@@ -20,7 +20,6 @@
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.
 - Add support for Linux
 - Add favorite directories functionality to the directory tree view. 
-- Add http://highslide.com/ functionality to thumbnail overview html. 
 - Add functionality for keeping the source directory tree up to date by searching for attached or detached volumes, such as attached USB-disks and so on, and update the 
 - Test all functionality.
 - Update version numbers in language files

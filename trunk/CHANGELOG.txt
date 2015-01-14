@@ -170,6 +170,9 @@
    image key was held down, then the change of images did not stop at once when
    the key was released. This has been fixed in this version.  
    
+ ~ The texts displayed in the Help viewer are now in HTML format instead of
+   plain text.   
+   
  ~ The thumbnails in the main GUI are explicitly loaded in date order (oldest
    first) and not as it was before, in unspecified order.   
    

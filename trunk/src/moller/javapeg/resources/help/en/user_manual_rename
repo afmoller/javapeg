@@ -1,46 +1,47 @@
-RENAME IMAGES<LF>
-=============<LF>
+<html>
+RENAME IMAGES<br />
+=============<br />
 The following text will describe how a complete program cycle works. In other words start reading by going to next paragraph.
-<LF>
-<LF>
-1:<LF>
+<br />
+<br />
+1:<br />
 Select a directory with images in the tree structure to the left.
-<LF>
-<LF>
-2:<LF>
+<br />
+<br />
+2:<br />
 A destination directory must be selected. That is done by pushing the button to the right of the field labeled "PATH TO DESTINATION DIRECTORY". When the button is clicked a file chooser will appear, in which the destination directory must be selected.
-<LF>
-<LF>
-3:<LF>
+<br />
+<br />
+3:<br />
 "FILENAME TEMPLATE" and "SUB DIRECTORY NAME TEMPLATE" are made up by those variables available in the window "VARIABLES". These variables will have it's information from the embedded Exif-information in picture.
-<LF>
-<LF>
+<br />
+<br />
 "SUB DIRECTORY NAME TEMPLATE" can only use those variables which are marked by an asterisk in the list. Besides from this it is possible to mix variables with static strings in form of words and numbers in any combination.
-<LF>
-<LF>
+<br />
+<br />
  Example of a template may be: "Image %d% - %t%"
-<LF>
-<LF>
+<br />
+<br />
  Which will give a result like this "Image 2005-06-15 - 16-25-14.jpg"
-<LF>
-<LF>
-It is possible to save templates for future reuse. A template is saved by clicking on the "save" button to the right of the template input field. A template will be saved if it does not already exists among the the already saved templates.<LF>
-<LF>
-4:<LF>
+<br />
+<br />
+It is possible to save templates for future reuse. A template is saved by clicking on the "save" button to the right of the template input field. A template will be saved if it does not already exists among the the already saved templates.<br />
+<br />
+4:<br />
 To get a thumb nail overview: mark the checkbox "CREATE THUMBNAIL OVERVIEW".
-<LF>
-<LF>
-5:<LF>
+<br />
+<br />
+5:<br />
 At this point all the preparations for the renaming has been done. To start the rename process, push the button that has an arrow pointing to right, or by clicking the corresponding alternative in the File menu. 
-<LF>
-<LF>
-<LF>
-Crib - five simple steps<LF>
-========================<LF>
-<LF>
- 1. Select path to images<LF>
- 2. Select destination folder and alternatives for rename process<LF>
- 3. Enter file name template and sub directory name template<LF>
- 4. Choose whether thumb nails shall be created<LF>
- 5. Start the rename process by pushing the button with a arrow pointing to the right<LF>
- 
+<br />
+<br />
+<br />
+Crib - five simple steps<br />
+========================<br />
+<br />
+ 1. Select path to images<br />
+ 2. Select destination folder and alternatives for rename process<br />
+ 3. Enter file name template and sub directory name template<br />
+ 4. Choose whether thumb nails shall be created<br />
+ 5. Start the rename process by pushing the button with a arrow pointing to the right<br />
+</html>

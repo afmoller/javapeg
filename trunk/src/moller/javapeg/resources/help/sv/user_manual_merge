@@ -1,25 +1,27 @@
-SLÅ IHOP BILDER<LF>
-===============<LF>
-Med JavaPEG är det möjligt att slå ihop innehållet från olika kataloger till en destinationskatalog. För varje vald katalog att slå ihop, så kommer alla filer av JPEG-typ som finns i dessa kataloger, att få sin MD5-summa beräknad. Varje bild med en unik MD5-summa kommer direkt att kopieras till destinationskatalogen. För varje bild med en konflikt (två eller fler bilder med samma MD5-summa), så kommer en dialog att visas, i vilken samtliga bildkonflikter kommer att visas. Användaren väljer i denna dialog vilka bilder som skall kopieras till destinationskatalogen.<LF> 
-<LF>
-Ihopslagningsprocess<LF>
-====================<LF>
-<LF>
-1:<LF>
-Välj en katalog med bilder i trädstrukturen till vänster och lägg till den till listan med kataloger att slå ihop genom att klicka på knappen med ett "plus"-tecken.<LF>
-<LF>
-2:<LF>
-Upprepa steg 1 tills alla önskade kataloger att slå ihop har blivit valda.<LF>
-<LF>
-3:<LF>
-Välj destinationskatalog med katalogväljaren som visas när destinationskatalogsknappen klickas.<LF>
-<LF>
-4:<LF>
-Starta sammanslagningsprocessen genom att klicka på "sammanslagnings"-knappen.<LF>
-<LF>
-5:<LF>
-Om en konflikt hittas, så visas en dialog där alla bildkonfliker visas. Varje rad i dialogen visar bilder med samma MD5-summa. Sammanslagningsprocessen fortsätter när användaren har valt, genom att klicka på kryssrutan som finns vid varje bild, vilka bilder som skall kopieras och när sammanslagningsdialogen stängts.<LF> 
-<LF>
-Vad slås samman?<LF>
-================<LF>
+<html>
+SLÅ IHOP BILDER<br />
+===============<br />
+Med JavaPEG är det möjligt att slå ihop innehållet från olika kataloger till en destinationskatalog. För varje vald katalog att slå ihop, så kommer alla filer av JPEG-typ som finns i dessa kataloger, att få sin MD5-summa beräknad. Varje bild med en unik MD5-summa kommer direkt att kopieras till destinationskatalogen. För varje bild med en konflikt (två eller fler bilder med samma MD5-summa), så kommer en dialog att visas, i vilken samtliga bildkonflikter kommer att visas. Användaren väljer i denna dialog vilka bilder som skall kopieras till destinationskatalogen.<br /> 
+<br />
+Ihopslagningsprocess<br />
+====================<br />
+<br />
+1:<br />
+Välj en katalog med bilder i trädstrukturen till vänster och lägg till den till listan med kataloger att slå ihop genom att klicka på knappen med ett "plus"-tecken.<br />
+<br />
+2:<br />
+Upprepa steg 1 tills alla önskade kataloger att slå ihop har blivit valda.<br />
+<br />
+3:<br />
+Välj destinationskatalog med katalogväljaren som visas när destinationskatalogsknappen klickas.<br />
+<br />
+4:<br />
+Starta sammanslagningsprocessen genom att klicka på "sammanslagnings"-knappen.<br />
+<br />
+5:<br />
+Om en konflikt hittas, så visas en dialog där alla bildkonfliker visas. Varje rad i dialogen visar bilder med samma MD5-summa. Sammanslagningsprocessen fortsätter när användaren har valt, genom att klicka på kryssrutan som finns vid varje bild, vilka bilder som skall kopieras och när sammanslagningsdialogen stängts.<br /> 
+<br />
+Vad slås samman?<br />
+================<br />
 Vad som slås samman är all filer av JPEG-typ som ligger sparade direkt i de valda katalogerna. Detta betyder att varje annan filtyp eller bildfiler inuti underkataloger ej kommer att hanteras av sammanslagningsprocessen. Sammanslagning betyder i JavaPEG, en process för att eliminera duplikat genom att jämföra bilderna med varandra och bara kopiera en bild när flera med konfliktande MD5-summa hittas. 
+</html>

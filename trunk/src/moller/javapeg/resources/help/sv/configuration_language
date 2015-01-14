@@ -1,3 +1,5 @@
-Det är möjligt att antingen välja språk manuellt, eller låta JavaPEG välja språk automatiskt.<LF>
-<LF>
+<html>
+Det är möjligt att antingen välja språk manuellt, eller låta JavaPEG välja språk automatiskt.<br />
+<br />
 Om språkvalsmetoden är manuell väljs språk genom att klicka på det språk som önskas i listan med tillgängliga språk. Om språkvalsmetoden är automatisk kommer JavaPEG välja det språk som matchar det språk som används som datorns systemspråk. Finns inte datorns systemspråk tillgängligt väljs engelska istället.
+</html>
