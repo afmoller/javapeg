@@ -111,10 +111,10 @@ public class HelpViewerGUI extends JavaPEGBaseFrame {
             String confLang = getConfiguration().getLanguage().getgUILanguageISO6391();
 
             try {
-                InputStream helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString);
+                InputStream helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString + ".html");
                 helpFileContent = StreamUtil.getString(helpFile, C.UTF8);
             } catch (IOException iox) {
-                getLogger().logFATAL("Could not read content from helpfile");
+                getLogger().logFATAL("Could not read content from helpfile: " + "resources/help/" + confLang + "/" + identityString + ".html");
                 getLogger().logFATAL(iox);
             }
         }
