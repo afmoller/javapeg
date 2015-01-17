@@ -1,5 +1,8 @@
 3.0:
 ====
+- Add configuration which remembers which tab that was opened last
+- Move the Image View list somewhere else, so it is always visible.
+- Add Add to image view list on every context menu, and add double click action.
 - Add new sections to the help: Metadata.
 - Canon Powershot A95 has strange ISO values.
 - Test all functionality.
