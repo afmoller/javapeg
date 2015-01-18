@@ -1,9 +1,9 @@
 package moller.javapeg.test.unittest;
 
-import junit.framework.Assert;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestExposureTime {

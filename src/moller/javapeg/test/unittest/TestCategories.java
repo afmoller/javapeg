@@ -1,8 +1,8 @@
 package moller.javapeg.test.unittest;
 
-import junit.framework.Assert;
 import moller.javapeg.program.categories.Categories;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestCategories {

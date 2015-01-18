@@ -18,9 +18,9 @@ package moller.util.test.unittest.image;
 
 import java.awt.Dimension;
 
-import junit.framework.Assert;
 import moller.util.image.ImageUtil;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestImageUtil {

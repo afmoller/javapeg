@@ -1,26 +1,30 @@
-<html>MERGE IMAGES<br />
-============<br />
-With JavaPEG it is possible to merge the image files stored in different directories into one destination directory. For every selected directory to merge, all JPEG images are searched and a MD5 hash sum is calculated for every found image. Each image with a unique MD5 hash sum is directly copied into the destination directory. For any conflicting images (two or more images with the same MD5 hash sum) a dialog is displayed, in which the user selects which image(s) to copy to the destination directory.<br />
-<br />
-Merge procedure<br />
-===============<br />
-<br />
-1:<br />
-Select a directory with images in the tree structure to the left and add it to the list of directories to merge with a click on the button with a "plus"-sign.<br />
-<br />
-2:<br />
-Repeat step 1 until all desired directories to merge have been selected.<br />
-<br />
-3:<br />
-Select a destination directory with the directory selector that is displayed when the destination directory selector button is clicked.<br />
-<br />
-4:<br />
-Start the merge process by clicking on the "merge" button.<br />
-<br />
-5:<br />
-If there is a conflict found, a dialog is displayed in which all the conflicting images are displayed. Each row in the dialog displays the images with the same MD5 hash sum. The merge process continues when the user has selected which images to copy, by marking the select box by every desired image, and closed the merge dialog.<br />
-<br />
-What is merged?<br />
-===============<br />
-What is going to be merged is all files of type JPEG which are directly found in the selected directories. This means that any other file or image files inside a sub directory will not be taken under consideration by the merge process. Merge means, a process to eliminate duplicate copies of images by comparing them with each other and only copy one occurrence of the conflicting images.
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+    </head>
+    <body>
+        <b><u>MERGE IMAGES</u></b><br />
+        With JavaPEG it is possible to merge the image files stored in different directories into one destination directory. For every selected directory to merge, all JPEG images are searched and a MD5 hash sum is calculated for every found image. Each image with a unique MD5 hash sum is directly copied into the destination directory. For any conflicting images (two or more images with the same MD5 hash sum) a dialog is displayed, in which the user selects which image(s) to copy to the destination directory.<br />
+        <br />
+        <b><u>Merge procedure</u></b><br />
+        <ol>
+            <li>
+                Select a directory with images in the tree structure to the left and add it to the list of directories to merge with a click on the button with a "plus"-sign.<br />
+            </li>
+            <li>
+                Repeat step 1 until all desired directories to merge have been selected.<br />
+            </li>
+            <li>
+                Select a destination directory with the directory selector that is displayed when the destination directory selector button is clicked.<br />
+            </li>
+            <li>
+                Start the merge process by clicking on the "merge" button.<br />
+            </li>
+            <li>
+                If there is a conflict found, a dialog is displayed in which all the conflicting images are displayed. Each row in the dialog displays the images with the same MD5 hash sum. The merge process continues when the user has selected which images to copy, by marking the select box by every desired image, and closed the merge dialog.<br />
+            </li>    
+        </ol>
+        <b><u>What is merged?</u></b><br />
+        What is going to be merged is all files of type JPEG which are directly found in the selected directories. This means that any other file or image files inside a sub directory will not be taken under consideration by the merge process. Merge means, a process to eliminate duplicate copies of images by comparing them with each other and only copy one occurrence of the conflicting images.
+    </body>
 </html>

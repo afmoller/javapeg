@@ -72,25 +72,25 @@
 				<include name="**/conf.xml" />
 				<include name="**/layout.info" />
 				<include name="**/style.info" />
-				<include name="**/configuration_language" />
-				<include name="**/configuration_logging" />
-				<include name="**/configuration_rename" />
-				<include name="**/configuration_tag" />
-				<include name="**/configuration_thumbnail" />
-				<include name="**/configuration_updates" />
-				<include name="**/help_metadatabase_corrupt" />
-				<include name="**/help_metadatabase_inconsistent" />
-				<include name="**/references" />
-				<include name="**/thumbnail_overview" />
-				<include name="**/user_manual_image_search" />
-				<include name="**/user_manual_image_tag" />
-				<include name="**/user_manual_imageresizer" />
-				<include name="**/user_manual_imageviewer" />
-				<include name="**/user_manual_merge" />
-				<include name="**/user_manual_overview" />
-				<include name="**/user_manual_rename" />
-				<include name="**/user_manual_viewimages" />
-				<include name="**/version_information" />
+				<include name="**/configuration_language.html" />
+				<include name="**/configuration_logging.html" />
+				<include name="**/configuration_rename.html" />
+				<include name="**/configuration_tag.html" />
+				<include name="**/configuration_thumbnail.html" />
+				<include name="**/configuration_updates.html" />
+				<include name="**/help_metadatabase_corrupt.html" />
+				<include name="**/help_metadatabase_inconsistent.html" />
+				<include name="**/references.html" />
+				<include name="**/thumbnail_overview.html" />
+				<include name="**/user_manual_image_search.html" />
+				<include name="**/user_manual_image_tag.html" />
+				<include name="**/user_manual_imageresizer.html" />
+				<include name="**/user_manual_imageviewer.html" />
+				<include name="**/user_manual_merge.html" />
+				<include name="**/user_manual_overview.html" />
+				<include name="**/user_manual_rename.html" />
+				<include name="**/user_manual_viewimages.html" />
+				<include name="**/version_information.html" />
 			</fileset>
 		</copy>
 	</target>
@@ -180,7 +180,7 @@
 	                <include name="src/moller/**" />
 	                <include name="build.xml" />
 	                <include name="gpl.txt" />
-	            	<include name="CHANGELOG.txt" />
+	            	<include name="CHANGELOG.html" />
 	                <include name="TODO.txt" />
 	                <include name="libraries/metadata-extractor-2.6.4.jar" />
 	            	<include name="libraries/xmpcore.jar" />
