@@ -1,35 +1,42 @@
 <html>
-IMAGE RESIZER<br />
-=============<br />
-JavaPEG has the ability to resize images. The images that can be resized are those that have been added to the "IMAGE LIST" list in the "SEARCH / VIEW IMAGES" tab. See help for the creation of an image list in the help section "VIEW IMAGES".
-<br />
-<br />
-If an image list has been created according to above then it is possible to click the button "Open the Image Resizer" in the "SEARCH / VIEW IMAGES" tab to display the Image Resizer, otherwise create an image list first.
-<br />
-<br />
-Characteristics of the Image Resizer:
-<br />
-<br />
-The Image Resizer consists of three main elements: A list with available images to resize (is displayed as a list and a thumbnail which is displayed when an image is selected in the list). Below the image list there is a section with input fields in which the resize parameters are specified. To the right, there is a process log, logging the different steps when a resize takes place.
-<br />
-<br />
-There is support for following activities in the Image Resizer:
-<br />
-<br />
-* Remove an image from the list of images to resize.
-<br />
-<br />
-* Specify a destination directory into which the resized images will be saved. To avoid conflicts there will be a directory named "resized" created in the specified destination directory. If the destination directory already contains a directory named "resized" then there will be a suffix added to the name, starting with 0 (zero) and going on with 1,2,3,4,5,... until a unique directory name is found.
-<br />
-<br />
-* Specify the width, in pixels, how wide the resized image(s) shall be.
-<br />
-<br />
-* Specify the height, in pixels, how high the resized image(s) shall be.
-<br />
-<br />
-* If only one of the width or height parameters are entered then the other value will be calculated so the aspect ratio for the images will be kept. If both width and height are entered then the created images will get the specified sizes, regardless if the aspect ratio will be correct or not.
-<br />
-<br />
-* Specify the quality of the resized images in four steps, 25, 50, 75 and 100. 100 means best quality but also longest process time, 25 means fastest process time but also the lowest quality of the produced images.
+    <head>
+    </head>
+    <body>
+        <b><u>IMAGE RESIZER</u></b><br />
+        JavaPEG has the ability to resize images. The images that can be resized are those that have been added to the "IMAGE LIST" list in the "SEARCH / VIEW IMAGES" tab. See help for the creation of an image list in the help section "VIEW IMAGES".
+        <br />
+        <br />
+        If an image list has been created according to above then it is possible to click the button "Open the Image Resizer" in the "SEARCH / VIEW IMAGES" tab to display the Image Resizer, otherwise create an image list first.
+        <br />
+        <br />
+        <b>Characteristics of the Image Resizer:</b>
+        <br />
+        <br />
+        The Image Resizer consists of three main elements: A list with available images to resize (is displayed as a list and a thumbnail which is displayed when an image is selected in the list). Below the image list there is a section with input fields in which the resize parameters are specified. To the right, there is a process log, logging the different steps when a resize takes place.
+        <br />
+        <br />
+        <b>There is support for following activities in the Image Resizer:</b>
+        <br />
+        <br />
+        <ul>
+            <li>
+                Remove an image from the list of images to resize.
+            </li>
+            <li>
+                Specify a destination directory into which the resized images will be saved. To avoid conflicts there will be a directory named "resized" created in the specified destination directory. If the destination directory already contains a directory named "resized" then there will be a suffix added to the name, starting with 0 (zero) and going on with 1,2,3,4,5,... until a unique directory name is found.
+            </li>
+            <li>
+                Specify the width, in pixels, how wide the resized image(s) shall be.
+            </li>
+            <li>
+                Specify the height, in pixels, how high the resized image(s) shall be.
+            </li>
+            <li>
+                If only one of the width or height parameters are entered then the other value will be calculated so the aspect ratio for the images will be kept. If both width and height are entered then the created images will get the specified sizes, regardless if the aspect ratio will be correct or not.
+            </li>
+            <li>
+                Specify the quality of the resized images in four steps, 25, 50, 75 and 100. 100 means best quality but also longest process time, 25 means fastest process time but also the lowest quality of the produced images.
+            </li>
+        </ul>
+    </body>
 </html>
