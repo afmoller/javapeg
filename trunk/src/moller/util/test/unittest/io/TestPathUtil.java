@@ -18,9 +18,9 @@ package moller.util.test.unittest.io;
 
 import java.io.File;
 
-import junit.framework.Assert;
 import moller.util.io.PathUtil;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestPathUtil {

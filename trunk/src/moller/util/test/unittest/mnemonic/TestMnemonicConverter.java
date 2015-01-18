@@ -19,9 +19,9 @@ package moller.util.test.unittest.mnemonic;
  * Latest changed         :
  */
 
-import junit.framework.Assert;
 import moller.util.mnemonic.MnemonicConverter;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

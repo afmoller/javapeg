@@ -16,9 +16,9 @@
  ******************************************************************************/
 package moller.util.test.unittest.java;
 
-import junit.framework.Assert;
 import moller.util.java.SystemProperties;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestSystemProperties {
