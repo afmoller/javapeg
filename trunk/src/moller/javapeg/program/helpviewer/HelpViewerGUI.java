@@ -93,7 +93,7 @@ public class HelpViewerGUI extends JavaPEGBaseFrame {
     private JScrollPane initiateJTree() {
         tree = new JTree(HelpViewerGUIUtil.createNodes());
         tree.setShowsRootHandles(true);
-        tree.addMouseListener(new Mouselistener());
+        tree.addMouseListener(new MouseListener());
         return new JScrollPane(tree);
     }
 
@@ -101,6 +101,7 @@ public class HelpViewerGUI extends JavaPEGBaseFrame {
         contentJEditorPane = new JEditorPane();
         contentJEditorPane.setEditable(false);
         contentJEditorPane.setContentType("text/html");
+
         return new CustomizedJScrollPane(contentJEditorPane);
     }
 
@@ -109,6 +110,12 @@ public class HelpViewerGUI extends JavaPEGBaseFrame {
 
         if (identityString != null) {
             String confLang = getConfiguration().getLanguage().getgUILanguageISO6391();
+
+            // The version information file is not localized, and exists only
+            // one time in a separate directory called "common".
+            if (identityString.equals("version_information")) {
+                confLang = "common";
+            }
 
             try {
                 InputStream helpFile = StartJavaPEG.class.getResourceAsStream("resources/help/" + confLang + "/" + identityString + ".html");
@@ -124,7 +131,7 @@ public class HelpViewerGUI extends JavaPEGBaseFrame {
     /**
      * Mouse listener
      */
-    private class Mouselistener extends MouseAdapter{
+    private class MouseListener extends MouseAdapter{
         @Override
         public void mousePressed(MouseEvent e){
             int selRow = tree.getRowForLocation(e.getX(), e.getY());
