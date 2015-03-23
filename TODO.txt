@@ -13,6 +13,7 @@
 
 3.1:
 ====
+- Add the possibility to print images, and subselection of an image.
 - Move the navigation image to lower right corner.
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
