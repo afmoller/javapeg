@@ -16,17 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.metadata.impl;
 
-import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.util.string.StringUtil;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
 public class MetaDataValueSelectionDialogEqual extends AbstractMetaDataValueSelectionDialog {
 

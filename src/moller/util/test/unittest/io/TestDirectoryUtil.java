@@ -16,13 +16,12 @@
  ******************************************************************************/
 package moller.util.test.unittest.io;
 
-import java.io.File;
-
 import moller.util.io.DirectoryUtil;
 import moller.util.io.Status;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.File;
 
 public class TestDirectoryUtil {
 

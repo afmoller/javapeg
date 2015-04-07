@@ -16,15 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import moller.javapeg.program.TemplateUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.rename.ValidatorStatus;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DestinationDirectoryDoesNotExist {
 

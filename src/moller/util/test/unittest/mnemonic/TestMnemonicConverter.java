@@ -20,7 +20,6 @@ package moller.util.test.unittest.mnemonic;
  */
 
 import moller.util.mnemonic.MnemonicConverter;
-
 import org.junit.Assert;
 import org.junit.Test;
 

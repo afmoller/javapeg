@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import javax.swing.JCheckBox;
+import javax.swing.*;
 
 /**
  * This class is an extension of the {@link JCheckBox} class. The extension

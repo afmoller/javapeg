@@ -16,9 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program;
 
-import java.io.File;
-
 import moller.util.java.SystemProperties;
+
+import java.io.File;
 
 /**
  * This class contains environment or instance information constants that might

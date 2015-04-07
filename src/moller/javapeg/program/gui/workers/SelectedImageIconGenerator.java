@@ -16,23 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.workers;
 
-import java.awt.Image;
-import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.ImageIcon;
-import javax.swing.JToggleButton;
-import javax.swing.SwingWorker;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.gui.ButtonIconUtil;
 import moller.javapeg.program.gui.LoadedThumbnails;
 import moller.javapeg.program.logger.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SelectedImageIconGenerator extends SwingWorker<Void, String> {
 

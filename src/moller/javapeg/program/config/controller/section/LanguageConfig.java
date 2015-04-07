@@ -16,16 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.Language;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class LanguageConfig {
 
@@ -37,12 +36,14 @@ public class LanguageConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.AUTOMATIC_SELECTION:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case AUTOMATIC_SELECTION:
                 language.setAutomaticSelection(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.GUI_LANGUAGE_ISO_6391:
+            case GUI_LANGUAGE_ISO_6391:
                 language.setgUILanguageISO6391(node.getTextContent());
+                break;
+            default:
                 break;
             }
         }

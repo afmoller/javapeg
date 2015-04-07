@@ -16,13 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.categories;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CategoryImageExifMetaData {
 

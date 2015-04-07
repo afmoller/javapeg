@@ -16,33 +16,25 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.GridBagLayout;
+import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.config.model.Logging;
+import moller.javapeg.program.enumerations.Level;
+import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
+import moller.util.io.PathUtil;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.model.Logging;
-import moller.javapeg.program.enumerations.Level;
-import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
-import moller.util.io.PathUtil;
 
 public class LoggingConfigurationPanel extends BaseConfigurationPanel {
 

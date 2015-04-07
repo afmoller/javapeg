@@ -17,7 +17,6 @@
 package moller.util.test.unittest.java;
 
 import moller.util.java.SystemProperties;
-
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -16,9 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts.imagemetadata;
 
-import java.util.Map;
-
 import moller.javapeg.program.categories.Categories;
+
+import java.util.Map;
 
 public class ImageMetaDataContextSearchParameters {
 

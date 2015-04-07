@@ -16,16 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.icons;
 
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.logger.Logger;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.logger.Logger;
 
 /**
  * Helper class which acts as an repository of all icon images which are used in

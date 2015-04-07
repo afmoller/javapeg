@@ -16,23 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts.imagemetadata;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.util.string.StringUtil;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ImageMetaDataContext {
 

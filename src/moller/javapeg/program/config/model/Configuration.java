@@ -16,10 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model;
 
-import java.util.Map;
-
-import javax.swing.tree.TreeNode;
-
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
@@ -28,6 +24,9 @@ import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
+
+import javax.swing.tree.TreeNode;
+import java.util.Map;
 
 public class Configuration {
 

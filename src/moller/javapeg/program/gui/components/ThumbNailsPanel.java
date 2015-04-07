@@ -16,13 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
-import java.awt.Component;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 public class ThumbNailsPanel extends JPanel {
 

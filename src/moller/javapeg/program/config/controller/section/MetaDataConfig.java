@@ -16,23 +16,21 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.util.ArrayList;
-import java.util.List;
+import moller.javapeg.program.config.model.metadata.MetaData;
+import moller.javapeg.program.config.model.metadata.MetaDataFilter;
+import moller.javapeg.program.enumerations.filter.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.filter.IFilterMask;
+import moller.javapeg.program.enumerations.filter.ISOFilterMask;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.metadata.MetaData;
-import moller.javapeg.program.config.model.metadata.MetaDataFilter;
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
-import moller.javapeg.program.enumerations.IFilterMask;
-import moller.javapeg.program.enumerations.ISOFilterMask;
-import moller.util.string.Tab;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MetaDataConfig {
 
@@ -44,12 +42,14 @@ public class MetaDataConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ISO_FILTERS:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ISO_FILTERS:
                 metaData.setIsoFilters(getIsoFilters(node));
                 break;
-            case ConfigElement.EXPOSURETIME_FILTERS:
+            case EXPOSURETIME_FILTERS:
                 metaData.setExposureTimeFilters(getExposureTimeFilters(node));
+                break;
+            default:
                 break;
             }
         }
@@ -64,8 +64,8 @@ public class MetaDataConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.EXPOSURETIME_FILTER:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case EXPOSURETIME_FILTER:
                 exposureTimeFilters.add(createExposureTimeFilter(node));
                 break;
             default:
@@ -83,8 +83,8 @@ public class MetaDataConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ISO_FILTER:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ISO_FILTER:
                 isoFilters.add(createIsoFilter(node));
                 break;
             default:
@@ -103,11 +103,11 @@ public class MetaDataConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CAMERA_MODEL:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CAMERA_MODEL:
                 cameraModel = node.getTextContent();
                 break;
-            case ConfigElement.FILTER_MASK:
+            case FILTER_MASK:
                 isoFilterMask = ISOFilterMask.valueOf(node.getTextContent());
                 break;
             default:
@@ -131,11 +131,11 @@ public class MetaDataConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CAMERA_MODEL:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CAMERA_MODEL:
                 cameraModel = node.getTextContent();
                 break;
-            case ConfigElement.FILTER_MASK:
+            case FILTER_MASK:
                 exposureTimeFilterMask = ExposureTimeFilterMask.valueOf(node.getTextContent());
                 break;
             default:
@@ -174,7 +174,7 @@ public class MetaDataConfig {
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 
-    private static <T extends IFilterMask> void writeFilters(String tagName, List<MetaDataFilter<T>> filters, XMLStreamWriter xmlsw) throws XMLStreamException {
+    private static <T extends IFilterMask> void writeFilters(ConfigElement tagName, List<MetaDataFilter<T>> filters, XMLStreamWriter xmlsw) throws XMLStreamException {
         for (MetaDataFilter<T> filter : filters) {
             // FILTER start
             XMLUtil.writeElementStartWithLineBreak(tagName, Tab.SIX, xmlsw);

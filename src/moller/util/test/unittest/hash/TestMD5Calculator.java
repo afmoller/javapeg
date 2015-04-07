@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.util.test.unittest.hash;
 
-import java.io.File;
-
 import moller.util.hash.MD5Calculator;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.File;
 
 public class TestMD5Calculator {
 

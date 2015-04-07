@@ -16,35 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.tab;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingWorker;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
@@ -63,6 +34,20 @@ import moller.util.hash.MD5Calculator;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
 import moller.util.jpeg.JPEGUtil;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class constructs a GUI that is to be added to the {@link JTabbedPane}

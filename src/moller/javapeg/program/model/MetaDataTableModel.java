@@ -16,13 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
-import java.util.Vector;
-
-import javax.swing.table.DefaultTableModel;
-
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.Vector;
 
 public class MetaDataTableModel extends DefaultTableModel {
 

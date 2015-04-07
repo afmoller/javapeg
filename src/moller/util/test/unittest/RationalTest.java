@@ -1,9 +1,9 @@
 package moller.util.test.unittest;
 
-import static org.junit.Assert.assertEquals;
 import moller.util.datatype.Rational;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class RationalTest {
 

@@ -16,21 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.swing.table.AbstractTableModel;
-
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.language.Language;
 import moller.util.io.Status;
+
+import javax.swing.table.AbstractTableModel;
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageRepositoriesTableModel extends AbstractTableModel {
 

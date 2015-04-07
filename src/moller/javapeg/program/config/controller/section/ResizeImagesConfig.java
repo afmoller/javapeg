@@ -16,19 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.io.File;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
 
 public class ResizeImagesConfig {
 
@@ -40,20 +38,20 @@ public class ResizeImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.HEIGHT:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case HEIGHT:
                 resizeImages.setHeight(StringUtil.getIntValue(node.getTextContent(), 100));
                 break;
-            case ConfigElement.WIDTH:
+            case WIDTH:
                 resizeImages.setWidth(StringUtil.getIntValue(node.getTextContent(), 150));
                 break;
-            case ConfigElement.PATH_DESTINATION:
+            case PATH_DESTINATION:
                 String destination = node.getTextContent();
                 if (StringUtil.isNotBlank(destination)) {
                     resizeImages.setPathDestination(new File(destination));
                 }
                 break;
-            case ConfigElement.SELECTED_QUALITY_INDEX:
+            case SELECTED_QUALITY_INDEX:
                 resizeImages.setSelectedQualityIndex(StringUtil.getIntValue(node.getTextContent(), 0));
                 break;
             default:

@@ -16,12 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.applicationstart;
 
+import moller.javapeg.program.C;
+import moller.util.io.DirectoryUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-
-import moller.javapeg.program.C;
-import moller.util.io.DirectoryUtil;
 
 /**
  * This class contains methods which are used when JavaPEG is booting up.

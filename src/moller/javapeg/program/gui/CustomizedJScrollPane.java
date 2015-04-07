@@ -16,9 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import java.awt.Component;
-
-import javax.swing.JScrollPane;
+import javax.swing.*;
+import java.awt.*;
 
 public class CustomizedJScrollPane extends JScrollPane {
 

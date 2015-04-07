@@ -16,33 +16,26 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
-import moller.util.gui.Table;
-
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
+import moller.util.gui.Table;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Vector;
 
 /**
  * This class encapsulates a table which displays image Exif meta data.

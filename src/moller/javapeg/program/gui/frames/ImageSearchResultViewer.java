@@ -16,54 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.SwingWorker;
-
 import moller.javapeg.program.FileSelection;
-import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
+import moller.javapeg.program.config.model.ImageSearchResultViewerState;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.enumerations.Direction;
 import moller.javapeg.program.gui.ButtonIconUtil;
@@ -80,6 +35,15 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.ImagesToViewModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.*;
+import java.util.List;
 
 public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 

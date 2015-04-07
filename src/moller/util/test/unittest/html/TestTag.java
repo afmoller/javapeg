@@ -17,7 +17,6 @@
 package moller.util.test.unittest.html;
 
 import moller.util.html.Tag;
-
 import org.junit.Assert;
 import org.junit.Test;
 //import junit.framework.Assert;

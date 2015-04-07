@@ -16,31 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.progress;
 
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import moller.javapeg.program.GBC;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.language.Language;
+import moller.util.mnemonic.MnemonicConverter;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-
-import moller.javapeg.program.GBC;
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.language.Language;
-import moller.util.mnemonic.MnemonicConverter;
 
 public class RenameProcess extends JFrame implements ActionListener {
 

@@ -16,10 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.process;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
@@ -28,6 +24,10 @@ import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.util.hash.MD5Calculator;
 import moller.util.io.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class PostFileProcessor {
 

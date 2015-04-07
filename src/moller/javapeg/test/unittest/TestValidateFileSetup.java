@@ -1,12 +1,11 @@
 package moller.javapeg.test.unittest;
 
-import java.io.File;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.applicationstart.ValidateFileSetup;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.File;
 
 public class TestValidateFileSetup {
 

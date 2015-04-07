@@ -16,25 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * This class constructs a reusable GUI component that consists of a

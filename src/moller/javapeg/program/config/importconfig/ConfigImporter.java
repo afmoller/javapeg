@@ -16,11 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.config.importconfig;
 
-import java.io.File;
-import java.util.List;
-
-import javax.xml.transform.stream.StreamSource;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.ConfigHandler;
@@ -28,6 +23,10 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.enumerations.ConfigurationSchema;
 import moller.util.xml.XMLUtil;
+
+import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.util.List;
 
 public class ConfigImporter {
 

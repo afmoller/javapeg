@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import javax.swing.AbstractListModel;
 
 public class SortedListModel<T extends Object> extends AbstractListModel<T> {
 

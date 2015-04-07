@@ -16,11 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.jpeg;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
@@ -31,6 +26,11 @@ import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataRetriever;
 import moller.util.io.StreamUtil;
 import moller.util.jpeg.JPEGUtil;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class JPEGThumbNailRetriever {
 

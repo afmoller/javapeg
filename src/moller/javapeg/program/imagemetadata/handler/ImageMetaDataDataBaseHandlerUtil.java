@@ -16,16 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.imagemetadata.handler;
 
-import java.util.List;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
-import moller.javapeg.program.enumerations.IFilterMask;
-import moller.javapeg.program.enumerations.ISOFilterMask;
+import moller.javapeg.program.enumerations.filter.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.filter.IFilterMask;
+import moller.javapeg.program.enumerations.filter.ISOFilterMask;
 import moller.util.datatype.Rational;
+
+import java.util.List;
 
 public class ImageMetaDataDataBaseHandlerUtil {
 
@@ -63,7 +63,7 @@ public class ImageMetaDataDataBaseHandlerUtil {
      *
      * @param imdc
      * @param javaPegIdValue
-     * @param isoValue
+     * @param exposureTime
      * @param imagePath
      * @param cameraModel
      */

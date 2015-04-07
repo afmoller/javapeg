@@ -16,9 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.imagerepository;
 
-import java.io.File;
-
 import moller.util.io.Status;
+
+import java.io.File;
 
 public class ImageRepositoryItem implements Comparable<ImageRepositoryItem>{
 

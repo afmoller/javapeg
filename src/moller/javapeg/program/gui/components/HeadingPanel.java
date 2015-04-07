@@ -16,19 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class HeadingPanel extends JPanel {
 

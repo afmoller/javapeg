@@ -16,11 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.jpeg;
 
+import moller.javapeg.program.config.Config;
+
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import moller.javapeg.program.config.Config;
 
 public class JPEGThumbNailCache {
 

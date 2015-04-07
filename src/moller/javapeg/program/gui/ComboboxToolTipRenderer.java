@@ -16,13 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
 
 /**
  * This Renderer renders a tooltip when an item is hovered in a

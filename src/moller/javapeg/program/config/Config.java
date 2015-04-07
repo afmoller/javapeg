@@ -16,11 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.config;
 
-import java.io.File;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.ConfigHandler;
 import moller.javapeg.program.config.model.Configuration;
+
+import java.io.File;
 
 public class Config {
 

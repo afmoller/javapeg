@@ -2,7 +2,6 @@ package moller.javapeg.test.unittest.config;
 
 import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.enumerations.ConfigurationSchema;
-
 import org.junit.Assert;
 import org.junit.Test;
 

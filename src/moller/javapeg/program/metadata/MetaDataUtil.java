@@ -16,14 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
-
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
@@ -31,6 +23,13 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MetaDataUtil {
 

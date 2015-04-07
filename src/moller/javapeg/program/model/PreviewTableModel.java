@@ -16,11 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
-import java.util.Vector;
+import moller.javapeg.program.language.Language;
 
 import javax.swing.table.DefaultTableModel;
-
-import moller.javapeg.program.language.Language;
+import java.util.Vector;
 
 public class PreviewTableModel extends DefaultTableModel {
 

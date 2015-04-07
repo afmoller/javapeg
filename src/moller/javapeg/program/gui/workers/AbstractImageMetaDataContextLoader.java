@@ -16,13 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.workers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.swing.SwingWorker;
-import javax.xml.parsers.ParserConfigurationException;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
@@ -35,8 +28,13 @@ import moller.javapeg.program.logger.Logger;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.Status;
 import moller.util.result.ResultObject;
-
 import org.xml.sax.SAXException;
+
+import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public abstract class AbstractImageMetaDataContextLoader extends SwingWorker<ResultObject<String[]>, ImageRepositoryItem> {
 

@@ -16,9 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
@@ -26,6 +23,9 @@ import moller.javapeg.program.language.Language;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.io.FileUtil;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class TemplateUtil {
 

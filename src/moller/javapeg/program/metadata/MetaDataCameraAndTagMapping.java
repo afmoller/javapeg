@@ -16,10 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
+import moller.javapeg.program.enumerations.FieldName;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import moller.javapeg.program.enumerations.FieldName;
 
 public class MetaDataCameraAndTagMapping {
 

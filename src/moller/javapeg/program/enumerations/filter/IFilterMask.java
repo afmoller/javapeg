@@ -1,4 +1,4 @@
-package moller.javapeg.program.enumerations;
+package moller.javapeg.program.enumerations.filter;
 
 public interface IFilterMask {
 

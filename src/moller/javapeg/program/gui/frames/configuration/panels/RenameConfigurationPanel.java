@@ -16,22 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.GridBagLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.util.string.StringUtil;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 
 public class RenameConfigurationPanel extends BaseConfigurationPanel {
 

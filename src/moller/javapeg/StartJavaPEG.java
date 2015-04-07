@@ -16,12 +16,6 @@
  ******************************************************************************/
 package moller.javapeg;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import moller.javapeg.program.ApplicationUncaughtExceptionHandler;
 import moller.javapeg.program.C;
 import moller.javapeg.program.applicationstart.ApplicationBootUtil;
@@ -36,6 +30,10 @@ import moller.javapeg.program.firstlaunch.InitialConfigGUILanguage;
 import moller.javapeg.program.gui.frames.MainGUI;
 import moller.javapeg.program.language.ISO639;
 import moller.util.os.OsUtil;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This is the entry point class that starts the entire JavaPEG application.

@@ -16,11 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
+import moller.javapeg.program.datatype.ExposureTime;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import moller.javapeg.program.datatype.ExposureTime;
 
 public class MetaData {
 

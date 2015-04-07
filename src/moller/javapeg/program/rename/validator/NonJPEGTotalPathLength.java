@@ -16,9 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-import java.util.Collection;
-
 import moller.javapeg.program.FileRetriever;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.Type;
@@ -28,6 +25,9 @@ import moller.javapeg.program.rename.FileAndType;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.util.io.DirectoryUtil;
+
+import java.io.File;
+import java.util.Collection;
 
 /**
  * This class validates the length of the paths that all non

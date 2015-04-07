@@ -17,7 +17,6 @@
 package moller.util.test.unittest.string;
 
 import moller.util.string.Tab;
-
 import org.junit.Assert;
 import org.junit.Test;
 

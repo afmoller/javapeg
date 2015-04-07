@@ -1,16 +1,12 @@
 package moller.javapeg.program.gui;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.io.File;
-
-import javax.swing.AbstractButton;
-import javax.swing.GrayFilter;
-import javax.swing.ImageIcon;
-
-import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 
 public class ButtonIconUtil {
 

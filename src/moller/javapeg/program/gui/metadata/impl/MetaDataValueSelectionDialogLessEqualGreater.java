@@ -16,22 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.metadata.impl;
 
-import java.awt.Component;
-import java.awt.GridBagLayout;
-import java.awt.Point;
+import moller.javapeg.program.C;
+import moller.javapeg.program.GBHelper;
+import moller.util.string.StringUtil;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.ListSelectionModel;
-
-import moller.javapeg.program.C;
-import moller.javapeg.program.GBHelper;
-import moller.util.string.StringUtil;
 
 public class MetaDataValueSelectionDialogLessEqualGreater extends AbstractMetaDataValueSelectionDialog {
 

@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.model.iso;
 
-import moller.javapeg.program.enumerations.IFilterMask;
+import moller.javapeg.program.enumerations.filter.IFilterMask;
 
 public class CameraAndFilterPair<F extends IFilterMask> {
 

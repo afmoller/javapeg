@@ -16,10 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.datatype;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.JComboBox;
-
 import org.imgscalr.Scalr.Method;
+
+import javax.swing.*;
 
 /**
  * This class maps a {@link Method} object with a {@link String}. Typical use

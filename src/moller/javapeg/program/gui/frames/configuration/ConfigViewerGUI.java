@@ -16,43 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.gui.GUIDefaults;
-import moller.javapeg.program.gui.frames.configuration.panels.LanguageConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.LoggingConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.MetadataConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.RenameConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.TagConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.ThumbnailConfigurationPanel;
-import moller.javapeg.program.gui.frames.configuration.panels.UpdatesConfigurationPanel;
+import moller.javapeg.program.gui.frames.configuration.panels.*;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class ConfigViewerGUI extends JFrame {
 

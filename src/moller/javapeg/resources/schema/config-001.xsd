@@ -105,6 +105,16 @@
        
     <xs:complexType name="Gui">
         <xs:all>
+            <xs:element name="selectedMainGUITab">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="MERGE" />
+                        <xs:enumeration value="RENAME" />
+                        <xs:enumeration value="TAG" />
+                        <xs:enumeration value="SEARCH_VIEW" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
             <xs:element name="main" type="config:GuiWindow" />
             <xs:element name="imageViewer" type="config:GuiWindow" />
             <xs:element name="imageSearchResultViewer" type="config:GuiWindow" />

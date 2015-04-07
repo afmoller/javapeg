@@ -16,9 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-import java.util.Map;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.Type;
@@ -29,6 +26,9 @@ import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.util.io.DirectoryUtil;
 import moller.util.io.FileUtil;
+
+import java.io.File;
+import java.util.Map;
 
 public class FileCreationAtDestinationDirectory {
 

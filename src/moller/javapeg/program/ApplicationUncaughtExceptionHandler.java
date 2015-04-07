@@ -16,11 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+
+import javax.swing.*;
 
 /**
  * This class receives all exceptions that have not earlier been caught by the

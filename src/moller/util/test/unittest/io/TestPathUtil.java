@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.util.test.unittest.io;
 
-import java.io.File;
-
 import moller.util.io.PathUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.File;
 
 public class TestPathUtil {
 

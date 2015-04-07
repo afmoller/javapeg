@@ -16,13 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.base;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
+
+import javax.swing.*;
 
 public abstract class BaseConfigurationPanel extends JPanel {
 

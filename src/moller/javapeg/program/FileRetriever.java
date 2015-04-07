@@ -16,22 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.swing.JOptionPane;
-
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.FileLoadingAction;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.jpeg.JPEGUtil;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 public class FileRetriever {
 

@@ -16,21 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.thumbnail.ThumbNail;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCache;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailCreation;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.jpeg.JPEGScaleAlgorithm;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class ThumbNailConfig {
 
@@ -42,14 +41,14 @@ public class ThumbNailConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CACHE:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CACHE:
                 thumbNail.setCache(getCache(node));
                 break;
-            case ConfigElement.CREATION:
+            case CREATION:
                 thumbNail.setCreation(getCreation(node));
                 break;
-            case ConfigElement.GRAYFILTER:
+            case GRAYFILTER:
                 thumbNail.setGrayFilter(getGrayFilter(node));
                 break;
             default:
@@ -67,17 +66,17 @@ public class ThumbNailConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ALGORITHM:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ALGORITHM:
                 thumbNailCreation.setAlgorithm(JPEGScaleAlgorithm.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.HEIGHT:
+            case HEIGHT:
                 thumbNailCreation.setHeight(StringUtil.getIntValue(node.getTextContent(), 120));
                 break;
-            case ConfigElement.IF_MISSING_OR_CORRUPT:
+            case IF_MISSING_OR_CORRUPT:
                 thumbNailCreation.setIfMissingOrCorrupt(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.WIDTH:
+            case WIDTH:
                 thumbNailCreation.setWidth(StringUtil.getIntValue(node.getTextContent(), 160));
                 break;
             default:
@@ -95,11 +94,11 @@ public class ThumbNailConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ENABLED:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ENABLED:
                 thumbNailCache.setEnabled(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.MAX_SIZE:
+            case MAX_SIZE:
                 thumbNailCache.setMaxSize(StringUtil.getIntValue(node.getTextContent(), 1000));
                 break;
             default:
@@ -117,11 +116,11 @@ public class ThumbNailConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.PERCENTAGE:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case PERCENTAGE:
                 thumbNailGrayFilter.setPercentage(StringUtil.getIntValue(node.getTextContent(), 35));
                 break;
-            case ConfigElement.PIXELS_BRIGHTENED:
+            case PIXELS_BRIGHTENED:
                 thumbNailGrayFilter.setPixelsBrightened(Boolean.valueOf(node.getTextContent()));
                 break;
             default:

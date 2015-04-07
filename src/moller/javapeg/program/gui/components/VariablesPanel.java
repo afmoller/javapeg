@@ -16,16 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
-import java.awt.Color;
-import java.awt.GridBagLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.language.Language;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class VariablesPanel extends JPanel {
 

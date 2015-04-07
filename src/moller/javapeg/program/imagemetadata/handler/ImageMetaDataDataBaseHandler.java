@@ -16,31 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.imagemetadata.handler;
 
-import java.awt.Component;
-import java.awt.Rectangle;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.stream.StreamSource;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.categories.Categories;
@@ -57,9 +32,9 @@ import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.contexts.imagemetadata.ImagePathAndIndex;
 import moller.javapeg.program.datatype.ImageSize;
 import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
+import moller.javapeg.program.enumerations.xml.ImageMetaDataDataBaseItemElement;
 import moller.javapeg.program.gui.dialog.CategoryImportExportPopup;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
-import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItemElement;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBaseItemUtil;
 import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.language.Language;
@@ -70,10 +45,22 @@ import moller.util.jpeg.JPEGUtil;
 import moller.util.result.ResultObject;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.util.List;
 
 public class ImageMetaDataDataBaseHandler {
 
@@ -243,7 +230,7 @@ public class ImageMetaDataDataBaseHandler {
                 xmlAttributes[2] = new XMLAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
                 xmlAttributes[3] = new XMLAttribute("xsi:schemaLocation", "http://moller.javapeg.metadata.com metadata.xsd");
 
-                XMLUtil.writeElementStart("javapeg-image-meta-data-data-base", xmlAttributes, w);
+                XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.JAVAPEG_IMAGE_META_DATA_DATA_BASE, xmlAttributes, w);
                 XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.JAVAPEG_ID, configuration.getJavapegClientId(), w);
 
                 logger.logDEBUG("Start writing image elements");
@@ -252,7 +239,7 @@ public class ImageMetaDataDataBaseHandler {
                     CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
                     logger.logDEBUG("Start writing image detail elements for image: " + image.getAbsolutePath());
-                    XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.IMAGE, ImageMetaDataDataBaseItemElement.FILE, imddbi.getImage().getName(), w);
+                    XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.IMAGE, ImageMetaDataDataBaseItemElement.FILE.getElementValue(), imddbi.getImage().getName(), w);
                     XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.EXIF_META_DATA, w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.F_NUMBER, Double.toString(ciemd.getFNumber()), w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.CAMERA_MODEL  , ciemd.getCameraModel()  , w);
@@ -357,7 +344,7 @@ public class ImageMetaDataDataBaseHandler {
         /**
          *  Get all the image tags as ImageMetaDataDataBaseItem objects.
          */
-        NodeList allImageTags = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.IMAGE);
+        NodeList allImageTags = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.IMAGE.getElementValue());
 
         List<ImageMetaDataItem> imageMetaDataDataBaseItemsFromXML = ImageMetaDataDataBaseItemUtil.getImageMetaDataDataBaseItemsFromXML(allImageTags, imageMetaDataDataBase.getParentFile());
 
@@ -366,7 +353,7 @@ public class ImageMetaDataDataBaseHandler {
          */
         String javaPegIdValue = "";
 
-        NodeList javaPegIdValueNodeList = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.JAVAPEG_ID);
+        NodeList javaPegIdValueNodeList = doc.getElementsByTagName(ImageMetaDataDataBaseItemElement.JAVAPEG_ID.getElementValue());
         if (javaPegIdValueNodeList.getLength() > 0) {
             javaPegIdValue = javaPegIdValueNodeList.item(0).getTextContent();
         }

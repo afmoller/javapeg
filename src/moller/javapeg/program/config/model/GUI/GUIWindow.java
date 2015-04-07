@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
 
 public class GUIWindow {

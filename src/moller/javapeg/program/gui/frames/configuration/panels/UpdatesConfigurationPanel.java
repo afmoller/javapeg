@@ -16,18 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.GridBagLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.UpdatesChecker;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class UpdatesConfigurationPanel extends BaseConfigurationPanel {
 

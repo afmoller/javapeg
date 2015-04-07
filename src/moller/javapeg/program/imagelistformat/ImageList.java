@@ -16,13 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.imagelistformat;
 
-import java.io.File;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-
 import moller.javapeg.program.language.Language;
 import moller.util.io.FileUtil;
+
+import javax.swing.*;
+import java.io.File;
 
 public class ImageList {
 

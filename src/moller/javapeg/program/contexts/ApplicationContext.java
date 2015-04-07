@@ -16,17 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts;
 
+import moller.javapeg.program.enumerations.FileLoadingAction;
+import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.metadata.MetaData;
+
+import javax.swing.tree.TreePath;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.tree.TreePath;
-
-import moller.javapeg.program.enumerations.FileLoadingAction;
-import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
-import moller.javapeg.program.metadata.MetaData;
 
 /**
  * This is a class that holds non persistent runtime specific

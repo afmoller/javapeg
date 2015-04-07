@@ -16,23 +16,21 @@
  ******************************************************************************/
 package moller.javapeg.program.imagemetadata;
 
+import moller.javapeg.program.categories.Categories;
+import moller.javapeg.program.categories.CategoryImageExifMetaData;
+import moller.javapeg.program.datatype.ExposureTime;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
+import moller.javapeg.program.enumerations.xml.ImageMetaDataDataBaseItemElement;
+import moller.javapeg.program.logger.Logger;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.xpath.XPathExpressionException;
-
-import moller.javapeg.program.categories.Categories;
-import moller.javapeg.program.categories.CategoryImageExifMetaData;
-import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
-import moller.javapeg.program.logger.Logger;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * This class contains various utility methods related to the
@@ -76,20 +74,19 @@ public class ImageMetaDataDataBaseItemUtil {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ImageMetaDataDataBaseItemElement.EXIF_META_DATA:
+            switch (ImageMetaDataDataBaseItemElement.getEnum(node.getNodeName())) {
+            case EXIF_META_DATA:
                 imageExifMetaData = createImageExifMetaData(node);
                 break;
-            case ImageMetaDataDataBaseItemElement.COMMENT:
+            case COMMENT:
                 comment = node.getTextContent();
                 break;
-            case ImageMetaDataDataBaseItemElement.RATING:
+            case RATING:
                 rating = getRating(node);
                 break;
-            case ImageMetaDataDataBaseItemElement.CATEGORIES:
+            case CATEGORIES:
                 categories = getCategories(node);
                 break;
-
             default:
                 break;
             }
@@ -122,7 +119,7 @@ public class ImageMetaDataDataBaseItemUtil {
      */
     private static File getFile(Node imageTag, File imageDirectory) {
         NamedNodeMap attributes = imageTag.getAttributes();
-        Node fileAttribute = attributes.getNamedItem(ImageMetaDataDataBaseItemElement.FILE);
+        Node fileAttribute = attributes.getNamedItem(ImageMetaDataDataBaseItemElement.FILE.getElementValue());
         String fileName = fileAttribute.getTextContent();
 
         return new File(imageDirectory, fileName);
@@ -173,8 +170,6 @@ public class ImageMetaDataDataBaseItemUtil {
      *            is the {@link Node} object that contains the data that shall
      *            be transfered into the {@link CategoryImageExifMetaData}
      *            object
-     * @param xPath
-     *            is used to query the {@link Node} object.
      * @return a {@link CategoryImageExifMetaData} object constructed from the
      *         information found in the given {@link Node} object.
      * @throws NumberFormatException
@@ -188,16 +183,14 @@ public class ImageMetaDataDataBaseItemUtil {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ImageMetaDataDataBaseItemElement.F_NUMBER:
+            switch (ImageMetaDataDataBaseItemElement.getEnum(node.getNodeName())) {
+            case F_NUMBER:
                 imageExifMetaData.setFNumber(Double.parseDouble(node.getTextContent()));
                 break;
-
-            case ImageMetaDataDataBaseItemElement.CAMERA_MODEL:
+            case CAMERA_MODEL:
                 imageExifMetaData.setCameraModel(node.getTextContent());
                 break;
-
-            case ImageMetaDataDataBaseItemElement.DATE_TIME:
+            case DATE_TIME:
                 String dateTime = node.getTextContent();
 
                 try {
@@ -210,20 +203,16 @@ public class ImageMetaDataDataBaseItemUtil {
                     logger.logDEBUG(pex);
                 }
                 break;
-
-            case ImageMetaDataDataBaseItemElement.ISO_VALUE:
+            case ISO_VALUE:
                 imageExifMetaData.setIsoValue(Integer.parseInt(node.getTextContent()));
                 break;
-
-            case ImageMetaDataDataBaseItemElement.PICTURE_HEIGHT:
+            case PICTURE_HEIGHT:
                 imageExifMetaData.setPictureHeight(Integer.parseInt(node.getTextContent()));
                 break;
-
-            case ImageMetaDataDataBaseItemElement.PICTURE_WIDTH:
+            case PICTURE_WIDTH:
                 imageExifMetaData.setPictureWidth(Integer.parseInt(node.getTextContent()));
                 break;
-
-            case ImageMetaDataDataBaseItemElement.EXPOSURE_TIME:
+            case EXPOSURE_TIME:
                 String exposureTime = node.getTextContent();
 
                 try {
@@ -237,7 +226,6 @@ public class ImageMetaDataDataBaseItemUtil {
                     logger.logDEBUG(etex);
                 }
                 break;
-
             default:
                 break;
             }
@@ -274,16 +262,10 @@ public class ImageMetaDataDataBaseItemUtil {
     /**
      * Tests whether or not a list of files exists or not.
      *
-     * @param imageTags
-     *            are the list with XML nodes which contain a file attribute.
-     * @param xPath
-     *            the object used to query the XML node
-     * @param parentDirectory
-     *            is the directory to which the file name in the imageTag
-     *            element belongs-
+     * @param imageMetaDataDataBaseItems
+     *            is the list with XML nodes which contain a file attribute.
      * @return a list with {@link File} objects that does not exist. If all
      *         {@link File} objects exist the an empty {@link List} is returned.
-     * @throws XPathExpressionException
      */
     public static List<File> checkReferencedFilesExistence(List<ImageMetaDataItem> imageMetaDataDataBaseItems) {
         logger.logDEBUG("Start of checking file consistency for meta data XML content");

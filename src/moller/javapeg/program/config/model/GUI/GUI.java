@@ -26,6 +26,7 @@ public class GUI {
     private GUIWindow imageResizer;
     private GUIWindow imageConflictViewer;
     private GUIWindow imageRepositoryStatisticsViewer;
+    private SelectedMainGUITab selectedMainGUITab;
 
     public GUIWindow getMain() {
         return main;
@@ -74,5 +75,11 @@ public class GUI {
     }
     public void setImageRepositoryStatisticsViewer(GUIWindow imageRepositoryStatisticsViewer) {
         this.imageRepositoryStatisticsViewer = imageRepositoryStatisticsViewer;
+    }
+    public SelectedMainGUITab getSelectedMainGUITab() {
+        return selectedMainGUITab;
+    }
+    public void setSelectedMainGUITab(SelectedMainGUITab selectedMainGUITab) {
+        this.selectedMainGUITab = selectedMainGUITab;
     }
 }

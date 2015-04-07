@@ -16,6 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.updates;
 
+import moller.javapeg.program.C;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.UpdatesChecker;
+import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
+import moller.util.version.UpdateChecker;
+import moller.util.version.containers.VersionInformation;
+import org.xml.sax.SAXException;
+
+import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -25,20 +37,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
-
-import moller.javapeg.program.C;
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.config.model.Configuration;
-import moller.javapeg.program.config.model.UpdatesChecker;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
-import moller.util.version.UpdateChecker;
-import moller.util.version.containers.VersionInformation;
-
-import org.xml.sax.SAXException;
 
 public class NewVersionChecker {
 

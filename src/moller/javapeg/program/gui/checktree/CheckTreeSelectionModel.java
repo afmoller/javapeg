@@ -15,16 +15,11 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Stack;
-
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import java.util.*;
 
 /**
  * @author Santhosh Kumar T
