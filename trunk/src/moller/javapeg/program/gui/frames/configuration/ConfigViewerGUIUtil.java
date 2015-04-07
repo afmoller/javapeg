@@ -16,10 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration;
 
+import moller.javapeg.program.language.Language;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
-
-import moller.javapeg.program.language.Language;
 
 public class ConfigViewerGUIUtil {
 

@@ -16,27 +16,19 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.model.Language;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.language.ISO639;
 import moller.util.java.SystemProperties;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LanguageConfigurationPanel extends BaseConfigurationPanel {
 

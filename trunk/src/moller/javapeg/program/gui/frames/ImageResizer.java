@@ -16,53 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingWorker;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-
 import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
@@ -73,6 +32,27 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ImageResizer extends JavaPEGBaseFrame {
 

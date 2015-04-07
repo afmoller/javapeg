@@ -17,7 +17,6 @@
 package moller.util.test.unittest.os;
 
 import moller.util.os.OsUtil;
-
 import org.junit.Test;
 
 public class TestOsUtil {

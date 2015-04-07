@@ -16,16 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.language;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Properties;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.StreamUtil;
 import moller.util.java.SystemProperties;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 public class Language {
 

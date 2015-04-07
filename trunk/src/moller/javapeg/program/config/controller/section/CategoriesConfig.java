@@ -16,8 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.io.File;
-import java.util.Enumeration;
+import moller.javapeg.program.categories.CategoryUserObject;
+import moller.javapeg.program.config.controller.ConfigHandlerUtil;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.Tab;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -28,25 +37,14 @@ import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
-import moller.javapeg.program.categories.CategoryUserObject;
-import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.controller.ConfigHandlerUtil;
-import moller.javapeg.program.config.model.categories.ImportedCategories;
-import moller.javapeg.program.contexts.ApplicationContext;
-import moller.util.string.Tab;
-import moller.util.xml.XMLAttribute;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import java.io.File;
+import java.util.Enumeration;
 
 public class CategoriesConfig {
 
     public static TreeNode getCategoriesConfig(Node categoriesNode) {
         NamedNodeMap attributes = categoriesNode.getAttributes();
-        Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID);
+        Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID.getElementValue());
 
         ApplicationContext.getInstance().setHighestUsedCategoryID(Integer.parseInt(highestUsedIdAttribute.getTextContent()));
 
@@ -121,7 +119,7 @@ public class CategoriesConfig {
         writeConfig(ConfigElement.INSTANCE, root, rootAttributes, Tab.ZERO, xmlsw);
     }
 
-    private static void writeConfig(String element, TreeNode root, XMLAttribute[] rootAttributes, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+    private static void writeConfig(ConfigElement element, TreeNode root, XMLAttribute[] rootAttributes, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
         // Start
         XMLUtil.writeElementStartWithLineBreak(element, rootAttributes, baseIndent, xmlsw);
 

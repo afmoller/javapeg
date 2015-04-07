@@ -16,22 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
+import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.StringUtil;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
-import moller.util.string.StringUtil;
-import moller.util.string.Tab;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class RenameImagesConfig {
 
@@ -43,46 +41,46 @@ public class RenameImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CAMERA_MODEL_NAME_MAXIMUM_LENGTH:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CAMERA_MODEL_NAME_MAXIMUM_LENGTH:
                 renameImages.setCameraModelNameMaximumLength(StringUtil.getIntValue(node.getTextContent(), 0));
                 break;
-            case ConfigElement.CREATE_THUMBNAILS:
+            case CREATE_THUMBNAILS:
                 renameImages.setCreateThumbNails(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.PATH_DESTINATION:
+            case PATH_DESTINATION:
                 String destination = node.getTextContent();
 
                 if (StringUtil.isNotBlank(destination)) {
                     renameImages.setPathDestination(new File(destination));
                 }
                 break;
-            case ConfigElement.PATH_SOURCE:
+            case PATH_SOURCE:
                 String source = node.getTextContent();
 
                 if (StringUtil.isNotBlank(source)) {
                     renameImages.setPathSource(new File(source));
                 }
                 break;
-            case ConfigElement.PROGRESS_LOG_TIMESTAMP_FORMAT:
+            case PROGRESS_LOG_TIMESTAMP_FORMAT:
                 renameImages.setProgressLogTimestampFormat(new SimpleDateFormat(node.getTextContent()));
                 break;
-            case ConfigElement.TEMPLATE_FILE_NAME:
+            case TEMPLATE_FILE_NAME:
                 renameImages.setTemplateFileName(node.getTextContent());
                 break;
-            case ConfigElement.TEMPLATE_SUB_DIRECTORY_NAME:
+            case TEMPLATE_SUB_DIRECTORY_NAME:
                 renameImages.setTemplateSubDirectoryName(node.getTextContent());
                 break;
-            case ConfigElement.TEMPLATES_FILE_NAME:
+            case TEMPLATES_FILE_NAME:
                 renameImages.setTemplateFileNameNames(getTemplates(node));
                 break;
-            case ConfigElement.TEMPLATES_SUB_DIRECTORY_NAME:
+            case TEMPLATES_SUB_DIRECTORY_NAME:
                 renameImages.setTemplateSubDirectoryNames(getTemplates(node));
                 break;
-            case ConfigElement.USE_LAST_MODIFIED_DATE:
+            case USE_LAST_MODIFIED_DATE:
                 renameImages.setUseLastModifiedDate(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.USE_LAST_MODIFIED_TIME:
+            case USE_LAST_MODIFIED_TIME:
                 renameImages.setUseLastModifiedTime(Boolean.valueOf(node.getTextContent()));
                 break;
             default:
@@ -100,8 +98,8 @@ public class RenameImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.TEMPLATE:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case TEMPLATE:
                 String template = node.getTextContent();
                 if (StringUtil.isNotBlank(template)) {
                     templates.add(template);
@@ -148,7 +146,7 @@ public class RenameImagesConfig {
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
     }
 
-    private static void writeTemplates(Set<String> templates, String configElement, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
+    private static void writeTemplates(Set<String> templates, ConfigElement configElement, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
         // TEMPLATE SECTION START
         XMLUtil.writeElementStartWithLineBreak(configElement, baseIndent, xmlsw);
 

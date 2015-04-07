@@ -16,9 +16,8 @@
  ******************************************************************************/
 package moller.util.gui;
 
-import java.awt.Component;
-
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This Class extends the existing JOptionPane and fills a gap that exists in

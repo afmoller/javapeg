@@ -16,20 +16,19 @@
  ******************************************************************************/
 package moller.javapeg.program.logger;
 
+import moller.javapeg.program.C;
+import moller.javapeg.program.config.Config;
+import moller.javapeg.program.config.model.Logging;
+import moller.javapeg.program.enumerations.Level;
+import moller.util.io.ZipUtil;
+
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.swing.JOptionPane;
-
-import moller.javapeg.program.C;
-import moller.javapeg.program.config.Config;
-import moller.javapeg.program.config.model.Logging;
-import moller.javapeg.program.enumerations.Level;
-import moller.util.io.ZipUtil;
 
 public class Logger {
 

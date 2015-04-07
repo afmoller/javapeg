@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.categories;
 
-import javax.swing.JTree;
+import javax.swing.*;
 
 public class ImportedCategoryTreeAndDisplayJavaPegID {
 

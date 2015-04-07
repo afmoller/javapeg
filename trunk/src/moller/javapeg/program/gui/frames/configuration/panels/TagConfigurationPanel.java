@@ -16,43 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.categories.CategoryUtil;
@@ -72,6 +35,22 @@ import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.model.ImageRepositoriesTableModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.io.Status;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TagConfigurationPanel extends BaseConfigurationPanel {
 

@@ -16,20 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.helpviewer;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
@@ -39,6 +25,14 @@ import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.util.io.StreamUtil;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <p>

@@ -16,11 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import moller.javapeg.program.TemplateUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
@@ -28,6 +23,11 @@ import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.rename.RenameProcessContext;
 import moller.javapeg.program.rename.ValidatorStatus;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class validates the lengths of all converted paths that

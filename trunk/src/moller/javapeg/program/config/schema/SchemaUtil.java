@@ -16,11 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.config.schema;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import moller.javapeg.program.enumerations.ConfigurationSchema;
 import moller.javapeg.program.enumerations.MetaDataSchema;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchemaUtil {
 

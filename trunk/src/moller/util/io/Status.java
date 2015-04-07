@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.util.io;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * This enumeration specifies the possible statuses an image repository can have:

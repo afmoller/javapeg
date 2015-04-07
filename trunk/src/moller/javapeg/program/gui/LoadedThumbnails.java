@@ -1,13 +1,12 @@
 package moller.javapeg.program.gui;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.JToggleButton;
 
 
 /**

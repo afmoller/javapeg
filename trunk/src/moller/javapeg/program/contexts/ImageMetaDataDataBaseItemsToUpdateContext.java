@@ -16,12 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts;
 
+import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 
 public class ImageMetaDataDataBaseItemsToUpdateContext {
 

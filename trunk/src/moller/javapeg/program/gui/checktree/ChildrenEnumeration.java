@@ -15,11 +15,10 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
-
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 /**
  * @author Santhosh Kumar T

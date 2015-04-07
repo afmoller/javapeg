@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.util.test.unittest.image;
 
-import java.awt.Dimension;
-
 import moller.util.image.ImageUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.awt.*;
 
 public class TestImageUtil {
 

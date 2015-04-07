@@ -15,6 +15,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
   </logging>
   <javapegClientId>NOT-DEFINED</javapegClientId>
   <gui>
+    <selectedMainGUITab>MERGE</selectedMainGUITab>
     <main>
       <xLocation>10</xLocation>
       <yLocation>10</yLocation>

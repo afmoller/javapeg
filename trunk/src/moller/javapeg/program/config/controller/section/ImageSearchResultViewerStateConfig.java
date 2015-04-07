@@ -1,15 +1,14 @@
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.ImageSearchResultViewerState;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class ImageSearchResultViewerStateConfig {
 
@@ -22,8 +21,8 @@ public class ImageSearchResultViewerStateConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.NUMBER_OF_IMAGES_TO_DISPLAY:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case NUMBER_OF_IMAGES_TO_DISPLAY:
                 imageSearchResultViewerState.setNumberOfImagesToDisplay(Integer.valueOf(node.getTextContent()));
                 break;
             default:

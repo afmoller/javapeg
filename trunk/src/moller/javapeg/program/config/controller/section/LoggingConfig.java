@@ -16,19 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.text.SimpleDateFormat;
+import moller.javapeg.program.config.model.Logging;
+import moller.javapeg.program.enumerations.Level;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.Tab;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.model.Logging;
-import moller.javapeg.program.enumerations.Level;
-import moller.util.string.Tab;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.text.SimpleDateFormat;
 
 public class LoggingConfig {
 
@@ -44,26 +42,26 @@ public class LoggingConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.FILE_NAME:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case FILE_NAME:
                 logging.setFileName(node.getTextContent());
                 break;
-            case ConfigElement.DEVELOPER_MODE:
+            case DEVELOPER_MODE:
                 logging.setDeveloperMode(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.LEVEL:
+            case LEVEL:
                 logging.setLevel(Level.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.ROTATE:
+            case ROTATE:
                 logging.setRotate(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.ROTATE_SIZE:
+            case ROTATE_SIZE:
                 logging.setRotateSize(Long.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.ROTATE_ZIP:
+            case ROTATE_ZIP:
                 logging.setRotateZip(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.TIMESTAMP_FORMAT:
+            case TIMESTAMP_FORMAT:
                 logging.setTimeStampFormat(new SimpleDateFormat(node.getTextContent()));
                 break;
             default:

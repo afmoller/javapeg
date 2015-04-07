@@ -1,11 +1,10 @@
 package moller.javapeg.test.unittest.config;
 
-import java.util.UUID;
-
 import moller.javapeg.program.config.ConfigUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.UUID;
 
 public class TestConfigUtil {
 

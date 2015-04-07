@@ -16,12 +16,11 @@
  ******************************************************************************/
 package moller.util.gui;
 
-import java.awt.Component;
-
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 
 public class Table {
 

@@ -16,20 +16,19 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller;
 
-import java.util.Enumeration;
+import moller.javapeg.program.categories.CategoryUserObject;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.Tab;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.categories.CategoryUserObject;
-import moller.util.string.Tab;
-import moller.util.xml.XMLAttribute;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.util.Enumeration;
 
 public class ConfigHandlerUtil {
 
@@ -40,8 +39,8 @@ public class ConfigHandlerUtil {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CATEGORY:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CATEGORY:
                 populateNodeBranch(root, node);
             default:
                 break;
@@ -68,8 +67,8 @@ public class ConfigHandlerUtil {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CATEGORY:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CATEGORY:
                 populateNodeBranch(mtn, node);
             default:
                 break;
@@ -78,7 +77,6 @@ public class ConfigHandlerUtil {
     }
 
     /**
-     * @param child
      * @param w
      * @throws XMLStreamException
      */
@@ -91,7 +89,7 @@ public class ConfigHandlerUtil {
 
             xmlAttributes[0] = new XMLAttribute("id", cuo.getIdentity());
             xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
-            XMLUtil.writeElementStartWithLineBreak("category", indent, xmlAttributes, w);
+            XMLUtil.writeElementStartWithLineBreak(ConfigElement.CATEGORY, indent, xmlAttributes, w);
 
             Enumeration<DefaultMutableTreeNode> children = node.children();
 

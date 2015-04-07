@@ -16,23 +16,21 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.language.Language;
+import moller.javapeg.program.logger.Logger;
+import moller.javapeg.program.rename.ValidatorStatus;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.language.Language;
-import moller.javapeg.program.logger.Logger;
-import moller.javapeg.program.rename.ValidatorStatus;
-
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * This class validates the content of an external layout.xml file, if it

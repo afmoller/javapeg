@@ -17,7 +17,6 @@
 package moller.util.test.unittest.string;
 
 import moller.util.string.StringUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -16,9 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts.imagemetadata;
 
-import java.util.Iterator;
-import java.util.List;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.datatype.ExposureTime;
 import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
@@ -27,6 +24,9 @@ import moller.javapeg.program.enumerations.MetaDataValueFieldName;
 import moller.javapeg.program.enumerations.Operator;
 import moller.javapeg.program.logger.Logger;
 import moller.util.string.StringUtil;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class FindBy {
 

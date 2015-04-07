@@ -6,7 +6,7 @@
 
 package moller.javapeg.program;
 
-import java.awt.GridBagConstraints;
+import java.awt.*;
 
 public class GBHelper extends GridBagConstraints {
 

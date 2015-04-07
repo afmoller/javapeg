@@ -16,17 +16,16 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.ImageViewerState;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.imgscalr.Scalr.Method;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class ImageViewerStateConfig {
 
@@ -38,20 +37,20 @@ public class ImageViewerStateConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.AUTOMATICALLY_RESIZE_IMAGES:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case AUTOMATICALLY_RESIZE_IMAGES:
                 imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.AUTOMATICALLY_ROTATE_IMAGES:
+            case AUTOMATICALLY_ROTATE_IMAGES:
                 imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.SHOW_NAVIGATION_IMAGE:
+            case SHOW_NAVIGATION_IMAGE:
                 imageViewerState.setShowNavigationImage(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.RESIZE_QUALITY:
+            case RESIZE_QUALITY:
                 imageViewerState.setResizeQuality(getMethodFromResizeQualityString(node.getTextContent()));
                 break;
-            case ConfigElement.SLIDE_SHOW_DELAY_IN_SECONDS:
+            case SLIDE_SHOW_DELAY_IN_SECONDS:
                 imageViewerState.setSlideShowDelay(Integer.valueOf(node.getTextContent()));
                 break;
             default:

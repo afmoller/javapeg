@@ -15,13 +15,10 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-
-import javax.swing.JPanel;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 
 /**
  * @author Santhosh Kumar T

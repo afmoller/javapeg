@@ -16,35 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels;
 
-import java.awt.Component;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.metadata.MetaData;
 import moller.javapeg.program.config.model.metadata.MetaDataFilter;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
-import moller.javapeg.program.enumerations.IFilterMask;
-import moller.javapeg.program.enumerations.ISOFilterMask;
+import moller.javapeg.program.enumerations.filter.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.filter.IFilterMask;
+import moller.javapeg.program.enumerations.filter.ISOFilterMask;
 import moller.javapeg.program.gui.ComboboxToolTipRenderer;
 import moller.javapeg.program.gui.CustomizedJTable;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
@@ -52,6 +31,16 @@ import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.model.iso.CameraAndFilterPair;
 import moller.javapeg.program.model.iso.FilteringTableModel;
+
+import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class MetadataConfigurationPanel extends BaseConfigurationPanel {
 

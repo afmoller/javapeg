@@ -16,47 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller;
 
-import java.awt.Dialog.ModalityType;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-
-import javax.swing.JDialog;
-import javax.swing.JTextArea;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.stream.StreamSource;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.ConfigUtil;
-import moller.javapeg.program.config.controller.section.CategoriesConfig;
-import moller.javapeg.program.config.controller.section.GUIConfig;
-import moller.javapeg.program.config.controller.section.ImageSearchResultViewerStateConfig;
-import moller.javapeg.program.config.controller.section.ImageViewerStateConfig;
-import moller.javapeg.program.config.controller.section.ImportedCategoriesConfig;
-import moller.javapeg.program.config.controller.section.JavapegClientIdConfig;
-import moller.javapeg.program.config.controller.section.LanguageConfig;
-import moller.javapeg.program.config.controller.section.LoggingConfig;
-import moller.javapeg.program.config.controller.section.MetaDataConfig;
-import moller.javapeg.program.config.controller.section.RenameImagesConfig;
-import moller.javapeg.program.config.controller.section.RepositoryConfig;
-import moller.javapeg.program.config.controller.section.ResizeImagesConfig;
-import moller.javapeg.program.config.controller.section.TagImagesConfig;
-import moller.javapeg.program.config.controller.section.ThumbNailConfig;
-import moller.javapeg.program.config.controller.section.ToolTipsConfig;
-import moller.javapeg.program.config.controller.section.UpdatesCheckerConfig;
+import moller.javapeg.program.config.controller.section.*;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.schema.SchemaUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.gui.Screen;
@@ -66,10 +33,22 @@ import moller.util.result.ResultObject;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.stream.StreamSource;
+import java.awt.Dialog.ModalityType;
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ConfigHandler {
 
@@ -173,7 +152,7 @@ public class ConfigHandler {
 
             configuration = new Configuration();
 
-            NodeList configElementsByTagName = doc.getElementsByTagName(ConfigElement.CONFIG);
+            NodeList configElementsByTagName = doc.getElementsByTagName(ConfigElement.CONFIG.getElementValue());
 
             if (configElementsByTagName != null && configElementsByTagName.getLength() == 1) {
                 Node configNode = configElementsByTagName.item(0);
@@ -182,53 +161,53 @@ public class ConfigHandler {
                 for (int i = 0; i < configNodeChildNodes.getLength(); i++) {
                     Node node = configNodeChildNodes.item(i);
 
-                    switch (node.getNodeName()) {
-                    case ConfigElement.LOGGING:
+                    switch (ConfigElement.getEnum(node.getNodeName())) {
+                    case LOGGING:
                         configuration.setLogging(LoggingConfig.getLoggingConfig(node));
                         break;
-                    case ConfigElement.CATEGORIES:
+                    case CATEGORIES:
                         configuration.setCategories(CategoriesConfig.getCategoriesConfig(node));
                         break;
-                    case ConfigElement.IMPORTEDCATEGORIES:
+                    case IMPORTEDCATEGORIES:
                         configuration.setImportedCategories(ImportedCategoriesConfig.getImportedCategoriesConfig(node));
                         break;
-                    case ConfigElement.GUI:
+                    case GUI:
                         configuration.setgUI(GUIConfig.getGUIConfig(node));
                         break;
-                    case ConfigElement.JAVAPEG_CLIENT_ID:
+                    case JAVAPEG_CLIENT_ID:
                         configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig(node.getTextContent()));
                         break;
-                    case ConfigElement.LANGUAGE:
+                    case LANGUAGE:
                         configuration.setLanguage(LanguageConfig.getLanguageConfig(node));
                         break;
-                    case ConfigElement.METADATA:
+                    case METADATA:
                         configuration.setMetadata(MetaDataConfig.getMetaDataConfig(node));
                         break;
-                    case ConfigElement.RENAME_IMAGES:
+                    case RENAME_IMAGES:
                         configuration.setRenameImages(RenameImagesConfig.getRenameImagesConfig(node));
                         break;
-                    case ConfigElement.RESIZE_IMAGES:
+                    case RESIZE_IMAGES:
                         configuration.setResizeImages(ResizeImagesConfig.getResizeImagesConfig(node));
                         break;
-                    case ConfigElement.IMAGE_VIEWER_STATE:
+                    case IMAGE_VIEWER_STATE:
                         configuration.setImageViewerState(ImageViewerStateConfig.getImageViewerStateConfig(node));
                         break;
-                    case ConfigElement.IMAGE_SEARCH_RESULT_VIEWER_STATE:
+                    case IMAGE_SEARCH_RESULT_VIEWER_STATE:
                         configuration.setImageSearchResultViewerState(ImageSearchResultViewerStateConfig.getImageSearchResultViewerStateConfig(node));
                         break;
-                    case ConfigElement.REPOSITORY:
+                    case REPOSITORY:
                         configuration.setRepository(RepositoryConfig.getRepositoryConfig(node));
                         break;
-                    case ConfigElement.TAG_IMAGES:
+                    case TAG_IMAGES:
                         configuration.setTagImages(TagImagesConfig.getTagImagesConfig(node));
                         break;
-                    case ConfigElement.THUMBNAIL:
+                    case THUMBNAIL:
                         configuration.setThumbNail(ThumbNailConfig.getThumbNailConfig(node));
                         break;
-                    case ConfigElement.TOOL_TIPS:
+                    case TOOL_TIPS:
                         configuration.setToolTips(ToolTipsConfig.getToolTipsConfig(node));
                         break;
-                    case ConfigElement.UPDATES_CHECKER:
+                    case UPDATES_CHECKER:
                         configuration.setUpdatesChecker(UpdatesCheckerConfig.getUpdatesCheckerConfig(node));
                         break;
                     default:

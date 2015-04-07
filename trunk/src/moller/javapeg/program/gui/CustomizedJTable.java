@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class CustomizedJTable extends JTable {

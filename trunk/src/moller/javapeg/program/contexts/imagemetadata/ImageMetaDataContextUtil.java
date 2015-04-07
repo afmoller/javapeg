@@ -16,15 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.contexts.imagemetadata;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import moller.javapeg.program.categories.Categories;
+
+import java.io.File;
+import java.util.*;
 
 public class ImageMetaDataContextUtil {
 

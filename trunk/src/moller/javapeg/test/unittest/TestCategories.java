@@ -1,7 +1,6 @@
 package moller.javapeg.test.unittest;
 
 import moller.javapeg.program.categories.Categories;
-
 import org.junit.Assert;
 import org.junit.Test;
 

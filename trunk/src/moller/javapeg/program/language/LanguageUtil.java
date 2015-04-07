@@ -16,18 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.language;
 
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
+import moller.javapeg.program.contexts.ApplicationContext;
+import moller.javapeg.program.logger.Logger;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.C;
-import moller.javapeg.program.contexts.ApplicationContext;
-import moller.javapeg.program.logger.Logger;
 
 public class LanguageUtil {
 

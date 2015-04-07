@@ -16,16 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.ToolTips;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class ToolTipsConfig {
 
@@ -37,14 +36,14 @@ public class ToolTipsConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.OVERVIEW_STATE:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case OVERVIEW_STATE:
                 toolTips.setOverviewState(node.getTextContent());
                 break;
-            case ConfigElement.IMAGE_SEARCH_RESULT_STATE:
+            case IMAGE_SEARCH_RESULT_STATE:
                 toolTips.setImageSearchResultState(node.getTextContent());
                 break;
-            case ConfigElement.OVERVIEW_IMAGE_VIEWER_STATE:
+            case OVERVIEW_IMAGE_VIEWER_STATE:
                 toolTips.setOverviewImageViewerState(node.getTextContent());
                 break;
             default:

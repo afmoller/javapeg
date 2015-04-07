@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.progress;
 
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class CustomizedJTextArea extends JTextArea {
 

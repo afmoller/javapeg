@@ -16,17 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-
 import moller.javapeg.program.imagerepository.ImageRepositoryItem;
 import moller.javapeg.program.language.Language;
 import moller.util.io.Status;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This Rendered class is used in the Configurations GUI and specifically by the

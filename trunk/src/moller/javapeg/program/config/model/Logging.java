@@ -16,9 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model;
 
-import java.text.SimpleDateFormat;
-
 import moller.javapeg.program.enumerations.Level;
+
+import java.text.SimpleDateFormat;
 
 public class Logging {
 

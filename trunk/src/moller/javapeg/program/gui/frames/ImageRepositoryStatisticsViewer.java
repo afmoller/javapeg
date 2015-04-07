@@ -16,19 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.JTabbedPane;
-
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.contexts.imagemetadata.ImageMetaDataContext;
 import moller.javapeg.program.datatype.ExposureTime;
@@ -37,7 +24,6 @@ import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.frames.base.JavaPEGBaseFrame;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -46,6 +32,11 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.DateFormatSymbols;
+import java.util.*;
 
 /**
  * This class displays different kind of meta information about the content in

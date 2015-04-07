@@ -16,18 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
+import moller.javapeg.program.datatype.ExposureTime;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
+import moller.javapeg.program.enumerations.FieldName;
+import moller.javapeg.program.logger.Logger;
+import moller.util.string.StringUtil;
+
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-
-import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
-import moller.javapeg.program.enumerations.FieldName;
-import moller.javapeg.program.logger.Logger;
-import moller.util.string.StringUtil;
 
 public class MetaDataRetriever {
 

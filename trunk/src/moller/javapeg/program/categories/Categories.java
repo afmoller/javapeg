@@ -16,10 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.categories;
 
+import moller.util.string.StringUtil;
+
 import java.util.Set;
 import java.util.TreeSet;
-
-import moller.util.string.StringUtil;
 
 /**
  * This class

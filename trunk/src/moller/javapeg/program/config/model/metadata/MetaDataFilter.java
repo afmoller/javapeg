@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.metadata;
 
-import moller.javapeg.program.enumerations.IFilterMask;
+import moller.javapeg.program.enumerations.filter.IFilterMask;
 
 public class MetaDataFilter<T extends IFilterMask> {
 

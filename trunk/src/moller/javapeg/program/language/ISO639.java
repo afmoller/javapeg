@@ -16,16 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.language;
 
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.logger.Logger;
+
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.logger.Logger;
 
 public class ISO639 {
 

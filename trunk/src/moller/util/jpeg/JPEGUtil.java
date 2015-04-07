@@ -16,21 +16,16 @@
  ******************************************************************************/
 package moller.util.jpeg;
 
-import java.awt.Image;
+import moller.util.io.FileUtil;
+import moller.util.io.StreamUtil;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import moller.util.io.FileUtil;
-import moller.util.io.StreamUtil;
 
 public class JPEGUtil {
 

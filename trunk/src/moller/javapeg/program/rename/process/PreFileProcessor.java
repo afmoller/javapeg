@@ -20,14 +20,7 @@ import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.progress.RenameProcess;
 import moller.javapeg.program.rename.ValidatorStatus;
-import moller.javapeg.program.rename.validator.AvailableDiskSpace;
-import moller.javapeg.program.rename.validator.DestinationDirectoryDoesNotExist;
-import moller.javapeg.program.rename.validator.ExternalOverviewLayout;
-import moller.javapeg.program.rename.validator.FileAndSubDirectoryTemplate;
-import moller.javapeg.program.rename.validator.FileCreationAtDestinationDirectory;
-import moller.javapeg.program.rename.validator.JPEGTotalPathLength;
-import moller.javapeg.program.rename.validator.NonJPEGTotalPathLength;
-import moller.javapeg.program.rename.validator.SourceAndDestinationPath;
+import moller.javapeg.program.rename.validator.*;
 
 public class PreFileProcessor {
 

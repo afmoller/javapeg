@@ -16,14 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.applicationstart;
 
+import moller.javapeg.StartJavaPEG;
+import moller.javapeg.program.C;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-
-import javax.swing.JOptionPane;
-
-import moller.javapeg.StartJavaPEG;
-import moller.javapeg.program.C;
 
 public class ValidateFileSetup {
 

@@ -16,16 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.imagelistformat;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.util.io.FileUtil;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 public class XnView {
 

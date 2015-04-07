@@ -16,15 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
 import moller.javapeg.program.language.Language;
 import moller.util.io.Status;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 public class ImageRepositoriesTableCellRenderer extends JLabel implements TableCellRenderer {
 

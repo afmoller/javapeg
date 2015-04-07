@@ -16,14 +16,8 @@
  ******************************************************************************/
 package moller.util.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.Window;
-
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JToolBar;
+import javax.swing.*;
+import java.awt.*;
 
 public class Update{
 

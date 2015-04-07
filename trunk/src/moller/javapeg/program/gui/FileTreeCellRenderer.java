@@ -16,14 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.gui;
 
-import java.awt.Component;
-import java.io.File;
-
-import javax.swing.JLabel;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
+import java.io.File;
 
 /** A TreeCellRenderer for a File. */
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {

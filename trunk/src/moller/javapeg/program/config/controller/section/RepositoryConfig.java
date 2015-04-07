@@ -16,23 +16,21 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.repository.Repository;
 import moller.javapeg.program.config.model.repository.RepositoryExceptions;
 import moller.javapeg.program.config.model.repository.RepositoryPaths;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RepositoryConfig {
 
@@ -44,11 +42,11 @@ public class RepositoryConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.EXCEPTIONS:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case EXCEPTIONS:
                 repository.setExceptions(getRepositoryExceptions(node));
                 break;
-            case ConfigElement.PATHS:
+            case PATHS:
                 repository.setPaths(getRepositoryPaths(node));
                 break;
             default:
@@ -66,8 +64,8 @@ public class RepositoryConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.PATH:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case PATH:
                 String path = node.getTextContent();
                 if (StringUtil.isNotBlank(path)) {
                     paths.add(new File(path));
@@ -95,16 +93,16 @@ public class RepositoryConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ALLWAYS_ADD:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ALLWAYS_ADD:
 
                 NodeList allwaysAddChildNodes= node.getChildNodes();
 
                 for (int j = 0; j < allwaysAddChildNodes.getLength(); j++) {
                     Node allwaysAddChildNode = allwaysAddChildNodes.item(j);
 
-                    switch (allwaysAddChildNode.getNodeName()) {
-                    case ConfigElement.PATH:
+                    switch (ConfigElement.getEnum(allwaysAddChildNode.getNodeName())) {
+                    case PATH:
                         String path = allwaysAddChildNode.getTextContent();
                         if (StringUtil.isNotBlank(path)) {
                             allwaysAdd.add(new File(path));
@@ -117,15 +115,15 @@ public class RepositoryConfig {
                 repositoryExceptions.setAllwaysAdd(allwaysAdd);
                 break;
 
-            case ConfigElement.NEVER_ADD:
+            case NEVER_ADD:
 
                 NodeList neverAddChildNodes= node.getChildNodes();
 
                 for (int j = 0; j < neverAddChildNodes.getLength(); j++) {
                     Node neverAddChildNode = neverAddChildNodes.item(j);
 
-                    switch (neverAddChildNode.getNodeName()) {
-                    case ConfigElement.PATH:
+                    switch (ConfigElement.getEnum(neverAddChildNode.getNodeName())) {
+                    case PATH:
                         String path = neverAddChildNode.getTextContent();
                         if (StringUtil.isNotBlank(path)) {
                             neverAdd.add(new File(path));

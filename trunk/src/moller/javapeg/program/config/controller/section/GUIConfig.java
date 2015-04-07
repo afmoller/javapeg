@@ -16,25 +16,24 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.SelectedMainGUITab;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIConfig {
 
@@ -46,30 +45,33 @@ public class GUIConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CONFIG_VIEWER:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CONFIG_VIEWER:
                 gui.setConfigViewer(createGUIWindow(node));
                 break;
-            case ConfigElement.HELP_VIEWER:
+            case HELP_VIEWER:
                 gui.setHelpViewer(createGUIWindow(node));
                 break;
-            case ConfigElement.IMAGE_RESIZER:
+            case IMAGE_RESIZER:
                 gui.setImageResizer(createGUIWindow(node));
                 break;
-            case ConfigElement.IMAGE_SEARCH_RESULT_VIEWER:
+            case IMAGE_SEARCH_RESULT_VIEWER:
                 gui.setImageSearchResultViewer(createGUIWindow(node));
                 break;
-            case ConfigElement.IMAGE_VIEWER:
+            case IMAGE_VIEWER:
                 gui.setImageViewer(createGUIWindow(node));
                 break;
-            case ConfigElement.MAIN:
+            case MAIN:
                 gui.setMain(createGUIWindow(node));
                 break;
-            case ConfigElement.IMAGE_CONFLICT_VIEWER:
+            case IMAGE_CONFLICT_VIEWER:
                 gui.setImageConflictViewer(createGUIWindow(node));
                 break;
-            case ConfigElement.IMAGE_REPOSITORY_STATISTICS_VIEWER:
+            case IMAGE_REPOSITORY_STATISTICS_VIEWER:
                 gui.setImageRepositoryStatisticsViewer(createGUIWindow(node));
+                break;
+            case SELECTED_MAIN_GUI_TAB:
+                gui.setSelectedMainGUITab(SelectedMainGUITab.valueOf(node.getTextContent()));
                 break;
             default:
                 break;
@@ -89,20 +91,20 @@ public class GUIConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.X_LOCATION:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case X_LOCATION:
                 sizeAndLocation.x = StringUtil.getIntValue(node.getTextContent(), 1);
                 break;
-            case ConfigElement.Y_LOCATION:
+            case Y_LOCATION:
                 sizeAndLocation.y = StringUtil.getIntValue(node.getTextContent(), 1);
                 break;
-            case ConfigElement.WIDTH:
+            case WIDTH:
                 sizeAndLocation.width = StringUtil.getIntValue(node.getTextContent(), 100);
                 break;
-            case ConfigElement.HEIGHT:
+            case HEIGHT:
                 sizeAndLocation.height = StringUtil.getIntValue(node.getTextContent(), 100);
                 break;
-            case ConfigElement.SPLIT_PANE:
+            case SPLIT_PANE:
                 guiWindowSplitPanes.add(createGUIWindowSplitPane(node));
                 break;
             default:
@@ -123,10 +125,10 @@ public class GUIConfig {
         guiWindowSplitPane.setLocation(StringUtil.getIntValue(splitPaneNode.getTextContent(), 1));
 
         NamedNodeMap attributes = splitPaneNode.getAttributes();
-        Node idAttribute = attributes.getNamedItem(ConfigElement.ID);
+        Node idAttribute = attributes.getNamedItem(ConfigElement.ID.getElementValue());
         String id = idAttribute.getTextContent();
 
-        Node widthAttribute = attributes.getNamedItem(ConfigElement.WIDTH);
+        Node widthAttribute = attributes.getNamedItem(ConfigElement.WIDTH.getElementValue());
         String width = "";
 
         // The width attribute is an optional attribute, therefore it is
@@ -144,6 +146,9 @@ public class GUIConfig {
     public static void writeGUIConfig(GUI gUI, Tab baseIndent, XMLStreamWriter xmlsw) throws XMLStreamException {
         //  GUI start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.GUI, baseIndent, xmlsw);
+
+        XMLUtil.writeIndent(xmlsw, baseIndent.value());
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.SELECTED_MAIN_GUI_TAB, Tab.TWO, gUI.getSelectedMainGUITab().name(), xmlsw);
 
         //    MAIN start
         XMLUtil.writeIndent(xmlsw, baseIndent.value());
@@ -245,13 +250,13 @@ public class GUIConfig {
             String id = guiWindowSplitPane.getName();
             Integer width = guiWindowSplitPane.getWidth();
 
-            XMLAttribute idAttribute = new XMLAttribute(ConfigElement.ID, id);
+            XMLAttribute idAttribute = new XMLAttribute(ConfigElement.ID.getElementValue(), id);
             XMLAttribute widthAttribute;
 
             XMLAttribute[] attributes;
 
             if (width != null) {
-                widthAttribute = new XMLAttribute(ConfigElement.WIDTH, Integer.toString(width));
+                widthAttribute = new XMLAttribute(ConfigElement.WIDTH.getElementValue(), Integer.toString(width));
 
                 attributes = new XMLAttribute[2];
                 attributes[0] = idAttribute;

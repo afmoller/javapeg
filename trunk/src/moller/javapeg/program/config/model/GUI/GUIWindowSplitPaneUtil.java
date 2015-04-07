@@ -16,39 +16,41 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+
 import java.util.List;
 
 public class GUIWindowSplitPaneUtil {
 
-    public static Integer getGUIWindowSplitPaneDividerLocation(List<GUIWindowSplitPane> gUIWindowSplitPanes, String name)  {
+    public static Integer getGUIWindowSplitPaneDividerLocation(List<GUIWindowSplitPane> gUIWindowSplitPanes, ConfigElement name)  {
         for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
-            if (guiWindowSplitPane.getName().equals(name)) {
+            if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
                 return guiWindowSplitPane.getLocation();
             }
         }
         return 0;
     }
 
-    public static Integer getGUIWindowSplitPaneDividerSize(List<GUIWindowSplitPane> gUIWindowSplitPanes, String name)  {
+    public static Integer getGUIWindowSplitPaneDividerSize(List<GUIWindowSplitPane> gUIWindowSplitPanes, ConfigElement name)  {
         for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
-            if (guiWindowSplitPane.getName().equals(name)) {
+            if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
                 return guiWindowSplitPane.getWidth();
             }
         }
         return 10;
     }
 
-    public static void setGUIWindowSplitPaneDividerLocation(List<GUIWindowSplitPane> gUIWindowSplitPanes, String name, int splitPaneLocation)  {
+    public static void setGUIWindowSplitPaneDividerLocation(List<GUIWindowSplitPane> gUIWindowSplitPanes, ConfigElement name, int splitPaneLocation)  {
         for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
-            if (guiWindowSplitPane.getName().equals(name)) {
+            if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
                 guiWindowSplitPane.setLocation(splitPaneLocation);
             }
         }
     }
 
-    public static void setGUIWindowSplitPaneDividerWidth(List<GUIWindowSplitPane> gUIWindowSplitPanes, String name, int dividerSize) {
+    public static void setGUIWindowSplitPaneDividerWidth(List<GUIWindowSplitPane> gUIWindowSplitPanes, ConfigElement name, int dividerSize) {
         for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
-            if (guiWindowSplitPane.getName().equals(name)) {
+            if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
                 guiWindowSplitPane.setWidth(dividerSize);
             }
         }

@@ -16,24 +16,6 @@
  ******************************************************************************/
 package moller.javapeg.program.thumbnailoverview;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.swing.JOptionPane;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.LayoutMetaDataVariable;
@@ -47,6 +29,10 @@ import moller.util.io.FileUtil;
 import moller.util.io.StreamUtil;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
+
+import javax.swing.*;
+import java.io.*;
+import java.util.*;
 
 public class ThumbNailOverViewCreator {
 

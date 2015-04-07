@@ -1,18 +1,17 @@
 package moller.javapeg.test.unittest.config.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import moller.javapeg.program.C;
 import moller.javapeg.program.config.controller.ConfigHandler;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.util.io.FileUtil;
 import moller.util.java.SystemProperties;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public class TestConfigHandler {
 

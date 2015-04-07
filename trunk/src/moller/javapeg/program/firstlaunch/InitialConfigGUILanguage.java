@@ -16,13 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.firstlaunch;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Properties;
-
 import moller.javapeg.StartJavaPEG;
 import moller.javapeg.program.C;
 import moller.util.java.SystemProperties;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 public class InitialConfigGUILanguage {
 

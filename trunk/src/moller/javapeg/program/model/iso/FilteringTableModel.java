@@ -16,14 +16,13 @@
  ******************************************************************************/
 package moller.javapeg.program.model.iso;
 
+import moller.javapeg.program.enumerations.filter.IFilterMask;
+import moller.javapeg.program.language.Language;
+
+import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.swing.table.AbstractTableModel;
-
-import moller.javapeg.program.enumerations.IFilterMask;
-import moller.javapeg.program.language.Language;
 
 public class FilteringTableModel<F extends IFilterMask> extends AbstractTableModel {
 

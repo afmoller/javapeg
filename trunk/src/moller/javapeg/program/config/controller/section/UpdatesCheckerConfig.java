@@ -16,20 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.UpdatesChecker;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class UpdatesCheckerConfig {
 
@@ -42,20 +40,20 @@ public class UpdatesCheckerConfig {
             for (int i = 0; i < childNodes.getLength(); i++) {
                 Node node = childNodes.item(i);
 
-                switch (node.getNodeName()) {
-                case ConfigElement.ATTACH_VERSION_INFORMATION:
+                switch (ConfigElement.getEnum(node.getNodeName())) {
+                case ATTACH_VERSION_INFORMATION:
                     updatesChecker.setAttachVersionInformation(Boolean.valueOf(node.getTextContent()));
                     break;
-                case ConfigElement.ENABLED:
+                case ENABLED:
                     updatesChecker.setEnabled(Boolean.valueOf(node.getTextContent()));
                     break;
-                case ConfigElement.TIMEOUT:
+                case TIMEOUT:
                     updatesChecker.setTimeOut(StringUtil.getIntValue(node.getTextContent(), 60));
                     break;
-                case ConfigElement.URL_VERSION:
+                case URL_VERSION:
                     updatesChecker.setUrlVersion(new URL(node.getTextContent()));
                     break;
-                case ConfigElement.URL_VERSION_INFORMATION:
+                case URL_VERSION_INFORMATION:
                     updatesChecker.setUrlVersionInformation(new URL(node.getTextContent()));
                     break;
                 default:

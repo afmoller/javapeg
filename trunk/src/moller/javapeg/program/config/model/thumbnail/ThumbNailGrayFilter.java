@@ -1,6 +1,6 @@
 package moller.javapeg.program.config.model.thumbnail;
 
-import javax.swing.GrayFilter;
+import javax.swing.*;
 
 /**
  * This class persists the configuration properties of an {@link GrayFilter}

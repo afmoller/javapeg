@@ -16,21 +16,20 @@
  ******************************************************************************/
 package moller.javapeg.program.categories;
 
-import java.awt.Component;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.categories.ImportedCategories;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.model.CategoriesModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
 import moller.util.gui.CustomJOptionPane;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CategoryUtil {
 

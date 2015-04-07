@@ -16,12 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class JavapegClientIdConfig {
 

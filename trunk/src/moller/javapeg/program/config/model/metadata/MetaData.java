@@ -16,10 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.metadata;
 
-import java.util.List;
+import moller.javapeg.program.enumerations.filter.ExposureTimeFilterMask;
+import moller.javapeg.program.enumerations.filter.ISOFilterMask;
 
-import moller.javapeg.program.enumerations.ExposureTimeFilterMask;
-import moller.javapeg.program.enumerations.ISOFilterMask;
+import java.util.List;
 
 public class MetaData {
 

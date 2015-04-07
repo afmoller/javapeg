@@ -1,15 +1,12 @@
 package moller.javapeg.test.unittest;
 
-import org.junit.Test;
-
-import moller.javapeg.program.thumbnailoverview.LayoutParser;
 import moller.javapeg.program.thumbnailoverview.LayoutMetaItem;
+import moller.javapeg.program.thumbnailoverview.LayoutParser;
+import org.junit.Test;
 
 
 public class TestLayoutParser {
-	
-	LayoutParser lp = LayoutParser.getInstance();
-	
+
 	@Test
 	public void testParse() {
 		LayoutParser lp = LayoutParser.getInstance();

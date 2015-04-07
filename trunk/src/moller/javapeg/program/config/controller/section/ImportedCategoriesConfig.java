@@ -16,25 +16,23 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import moller.javapeg.program.categories.CategoryUserObject;
+import moller.javapeg.program.config.controller.ConfigHandlerUtil;
+import moller.javapeg.program.config.model.categories.ImportedCategories;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
+import moller.util.string.Tab;
+import moller.util.xml.XMLAttribute;
+import moller.util.xml.XMLUtil;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.categories.CategoryUserObject;
-import moller.javapeg.program.config.controller.ConfigElement;
-import moller.javapeg.program.config.controller.ConfigHandlerUtil;
-import moller.javapeg.program.config.model.categories.ImportedCategories;
-import moller.util.string.Tab;
-import moller.util.xml.XMLAttribute;
-import moller.util.xml.XMLUtil;
-
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImportedCategoriesConfig {
 
@@ -46,13 +44,13 @@ public class ImportedCategoriesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.INSTANCE:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case INSTANCE:
                 NamedNodeMap attributes = node.getAttributes();
 
-                Node javaPegClientAttribute = attributes.getNamedItem(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE);
-                Node displayNameAttribute = attributes.getNamedItem(ConfigElement.DISPLAY_NAME);
-                Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID);
+                Node javaPegClientAttribute = attributes.getNamedItem(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE.getElementValue());
+                Node displayNameAttribute = attributes.getNamedItem(ConfigElement.DISPLAY_NAME.getElementValue());
+                Node highestUsedIdAttribute = attributes.getNamedItem(ConfigElement.HIGHEST_USED_ID.getElementValue());
 
                 String javapegClientId = javaPegClientAttribute.getTextContent();
                 String displayName = displayNameAttribute.getTextContent();
@@ -88,9 +86,9 @@ public class ImportedCategoriesConfig {
 
             ImportedCategories importedCategories = javaPEGIdToImportedCategoriesMappings.get(javaPEGId);
 
-            xmlAttributes[0] = new XMLAttribute(ConfigElement.DISPLAY_NAME, importedCategories.getDisplayName());
-            xmlAttributes[1] = new XMLAttribute(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE, javaPEGId);
-            xmlAttributes[2] = new XMLAttribute(ConfigElement.HIGHEST_USED_ID, importedCategories.getHighestUsedId());
+            xmlAttributes[0] = new XMLAttribute(ConfigElement.DISPLAY_NAME.getElementValue(), importedCategories.getDisplayName());
+            xmlAttributes[1] = new XMLAttribute(ConfigElement.JAVAPEG_CLIENT_ID_ATTRIBUTE.getElementValue(), javaPEGId);
+            xmlAttributes[2] = new XMLAttribute(ConfigElement.HIGHEST_USED_ID.getElementValue(), importedCategories.getHighestUsedId());
 
             //  INSTANCE start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.INSTANCE, xmlAttributes, Tab.FOUR, xmlsw);

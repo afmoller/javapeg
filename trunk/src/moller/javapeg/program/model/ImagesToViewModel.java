@@ -16,9 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.model;
 
+import javax.swing.*;
 import java.io.File;
-
-import javax.swing.DefaultListModel;
 
 public class ImagesToViewModel extends DefaultListModel<File> {
 

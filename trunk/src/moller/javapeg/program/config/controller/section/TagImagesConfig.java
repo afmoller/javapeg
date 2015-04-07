@@ -16,20 +16,19 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import moller.javapeg.program.config.controller.ConfigElement;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesCategories;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPaths;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImagesPreview;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLUtil;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 public class TagImagesConfig {
 
@@ -41,14 +40,14 @@ public class TagImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.CATEGORIES:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case CATEGORIES:
                 tagImages.setCategories(getCategories(node));
                 break;
-            case ConfigElement.PATHS:
+            case PATHS:
                 tagImages.setImagesPaths(getImagesPaths(node));
                 break;
-            case ConfigElement.PREVIEW:
+            case PREVIEW:
                 tagImages.setPreview(getPreview(node));
                 break;
             default:
@@ -66,8 +65,8 @@ public class TagImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.USE_EMBEDDED_THUMBNAIL:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case USE_EMBEDDED_THUMBNAIL:
                 tagImagesPreview.setUseEmbeddedThumbnail(Boolean.valueOf(node.getTextContent()));
                 break;
             default:
@@ -85,8 +84,8 @@ public class TagImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.ADD_TO_REPOSITORY_POLICY:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case ADD_TO_REPOSITORY_POLICY:
                 tagImagesPaths.setAddToRepositoryPolicy(StringUtil.getIntValue(node.getTextContent(), 1));
                 break;
             default:
@@ -104,14 +103,14 @@ public class TagImagesConfig {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.item(i);
 
-            switch (node.getNodeName()) {
-            case ConfigElement.OR_RADIO_BUTTON_IS_SELECTED:
+            switch (ConfigElement.getEnum(node.getNodeName())) {
+            case OR_RADIO_BUTTON_IS_SELECTED:
                 tagImagesCategories.setOrRadioButtonIsSelected(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.WARN_WHEN_REMOVE:
+            case WARN_WHEN_REMOVE:
                 tagImagesCategories.setWarnWhenRemove(Boolean.valueOf(node.getTextContent()));
                 break;
-            case ConfigElement.WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES:
+            case WARN_WHEN_REMOVE_WITH_SUB_CATEGORIES:
                 tagImagesCategories.setWarnWhenRemoveWithSubCategories(Boolean.valueOf(node.getTextContent()));
                 break;
             default:

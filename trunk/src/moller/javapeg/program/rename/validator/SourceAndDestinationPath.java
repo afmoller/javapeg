@@ -16,12 +16,12 @@
  ******************************************************************************/
 package moller.javapeg.program.rename.validator;
 
-import java.io.File;
-
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.rename.ValidatorStatus;
 import moller.util.io.PathUtil;
+
+import java.io.File;
 
 public class SourceAndDestinationPath {
 
