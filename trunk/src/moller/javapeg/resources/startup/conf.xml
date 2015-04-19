@@ -26,6 +26,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <splitPane id="thumbNailMetaDataPanel">640</splitPane>
       <splitPane id="previewAndComment">160</splitPane>
       <splitPane id="previewCommentCategoriesRating">400</splitPane>
+      <splitPane id="mainToImageList">800</splitPane>
     </main>
     <imageViewer>
       <xLocation>10</xLocation>

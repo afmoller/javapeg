@@ -59,11 +59,11 @@ import moller.javapeg.program.gui.metadata.MetaDataValueSelectionDialog;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValue;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqual;
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
+import moller.javapeg.program.gui.panel.ViewPanelListSection;
 import moller.javapeg.program.gui.tab.ImageMergeTab;
 import moller.javapeg.program.gui.workers.AbstractImageMetaDataContextLoader;
 import moller.javapeg.program.gui.workers.SelectedImageIconGenerator;
 import moller.javapeg.program.helpviewer.HelpViewerGUI;
-import moller.javapeg.program.imagelistformat.ImageList;
 import moller.javapeg.program.imagemetadata.ImageMetaDataDataBase;
 import moller.javapeg.program.imagemetadata.ImageMetaDataItem;
 import moller.javapeg.program.imagemetadata.handler.ImageMetaDataDataBaseHandler;
@@ -114,7 +114,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -148,18 +147,7 @@ public class MainGUI extends JFrame {
 
     private JButton destinationPathButton;
     private JButton startProcessButton;
-    private JButton removeSelectedImagesButton;
-    private JButton removeAllImagesButton;
-    private JButton openImageListButton;
-    private JButton saveImageListButton;
-    private JButton exportImageListButton;
-    private JButton moveUpButton;
-    private JButton moveDownButton;
-    private JButton openImageViewerButton;
-    private JButton moveToTopButton;
-    private JButton moveToBottomButton;
-    private JButton copyImageListdButton;
-    private JButton openImageResizerButton;
+
     private JButton searchImagesButton;
     private JButton displayImageRepositoryStatisticsViewerButton;
     private JButton clearCategoriesSelectionButton;
@@ -169,8 +157,6 @@ public class MainGUI extends JFrame {
     private JButton removeFileNameTemplateButton;
     private JButton removeSubFolderTemplateButton;
 
-    private JLabel amountOfImagesInImageListLabel;
-    private JLabel imagePreviewLabel;
     private JLabel imageTagPreviewLabel;
 
     private JTextField destinationPathTextField;
@@ -180,10 +166,6 @@ public class MainGUI extends JFrame {
 
     private JComboBox<String> fileNameTemplateComboBox;
     private JComboBox<String> subFolderTemplateComboBox;
-
-    private JMenu fileMenu;
-    private JMenu helpMenu;
-    private JMenu configMenu;
 
     private JMenuItem configGUIJMenuItem;
     private JMenuItem shutDownProgramJMenuItem;
@@ -248,7 +230,8 @@ public class MainGUI extends JFrame {
     private JSplitPane verticalSplitPane;
     private JSplitPane mainSplitPane;
     private JSplitPane previewAndCommentSplitPane;
-    private JSplitPane previewCommentCategoriesRatingSplitpane;
+    private JSplitPane previewCommentCategoriesRatingSplitPane;
+    private JSplitPane mainSplitPaneImageViewListSplitPane;
 
     private MetaDataValue yearMetaDataValue;
     private MetaDataValue monthMetaDataValue;
@@ -282,7 +265,7 @@ public class MainGUI extends JFrame {
     private FileSystemDirectoryTreeMouselistener mouseListener;
     private MouseButtonListener mouseRightClickButtonListener;
     private CategoriesMouseButtonListener categoriesMouseButtonListener;
-    private ActionListener addSelecetedPathToImageRepository;
+    private ActionListener addSelectedPathToImageRepository;
     private ThumbNailListener thumbNailListener;
 
     private int iconWidth = 160;
@@ -296,10 +279,7 @@ public class MainGUI extends JFrame {
     private StatusPanel statusBar;
     private MetaDataPanel imageMetaDataPanel;
 
-    private final DefaultListModel<File> imagesToViewListModel;
     private final ImageRepositoriesTableModel imageRepositoriesTableModel;
-
-    private JList<File> imagesToViewList;
 
     private JTextArea imageCommentTextArea;
 
@@ -313,20 +293,17 @@ public class MainGUI extends JFrame {
 
     private Thread loadFilesThread;
 
-    private ImageViewer imageViewer;
-
     private JProgressBar thumbnailLoadingProgressBar;
     private JProgressBar imageMetaDataContextLoadingProgressBar;
 
     private HeadingPanel thumbNailsPanelHeading;
+    private ViewPanelListSection viewPanelListSection;
 
     private List<ButtonGroup> importedButtonGroups;
 
-    private KeyEventDispatcher customKeyEventDispatcher;
-
     /**
      * This object keeps track on which thumbnails that are loaded and selected
-     * in the thumbnailoverview part of this GUI.
+     * in the thumbnail overview part of this GUI.
      */
     private final LoadedThumbnails loadedThumbnails = new LoadedThumbnails();
 
@@ -364,7 +341,6 @@ public class MainGUI extends JFrame {
 
         fileSystemView = FileSystemView.getFileSystemView();
 
-        imagesToViewListModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
         imageRepositoriesTableModel = ModelInstanceLibrary.getInstance().getImageRepositoriesTableModel();
 
         this.printSystemPropertiesToLogFile();
@@ -513,25 +489,25 @@ public class MainGUI extends JFrame {
 
         // Skapa menyrader i arkiv-menyn
         openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
-        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
         startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
         startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
-        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
         startProcessJMenuItem.setEnabled(false);
 
         shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
-        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
         exportCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.export.long.title"));
         exportCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.export.long.title.tooltip"));
-        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
         importCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.import.long.title"));
         importCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.import.long.title.tooltip"));
-        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
-        fileMenu = new JMenu(lang.get("menu.file"));
+        JMenu fileMenu = new JMenu(lang.get("menu.file"));
         fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
 
         fileMenu.add(openDestinationFileChooserJMenuItem);
@@ -543,9 +519,9 @@ public class MainGUI extends JFrame {
 
         // Create rows in the Configuration menu
         configGUIJMenuItem = new JMenuItem(lang.get("menu.item.configuration"));
-        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
-        configMenu = new JMenu(lang.get("menu.configuration"));
+        JMenu configMenu = new JMenu(lang.get("menu.configuration"));
         configMenu.setMnemonic(lang.get("menu.mnemonic.configuration").charAt(0));
 
         configMenu.add(configGUIJMenuItem);
@@ -555,9 +531,9 @@ public class MainGUI extends JFrame {
         helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
 
         aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
-        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), ActionEvent.CTRL_MASK + ActionEvent.ALT_MASK));
+        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
 
-        helpMenu = new JMenu(lang.get("menu.help"));
+        JMenu helpMenu = new JMenu(lang.get("menu.help"));
         helpMenu.setMnemonic(lang.get("menu.mnemonic.help").charAt(0));
 
         helpMenu.add(helpJMenuItem);
@@ -686,7 +662,7 @@ public class MainGUI extends JFrame {
 
                 Map<File, File> allJPEGFileNameMappings = rpc.getAllJPEGFileNameMappings();
 
-                Set<File> sortedSet = new TreeSet<File>(allJPEGFileNameMappings.keySet());
+                Set<File> sortedSet = new TreeSet<>(allJPEGFileNameMappings.keySet());
 
                 for (File file : sortedSet) {
                     Object[] row = {file.getName(), allJPEGFileNameMappings.get(file).getName()};
@@ -711,7 +687,7 @@ public class MainGUI extends JFrame {
         this.setIconImage(IconLoader.getIcon(Icons.JAVAPEG).getImage());
 
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        customKeyEventDispatcher = new CustomKeyEventDispatcher();
+        KeyEventDispatcher customKeyEventDispatcher = new CustomKeyEventDispatcher();
         manager.addKeyEventDispatcher(customKeyEventDispatcher);
 
         GUI gUI = configuration.getgUI();
@@ -789,8 +765,17 @@ public class MainGUI extends JFrame {
         mainSplitPane.setLeftComponent(createTreePanel());
         mainSplitPane.setRightComponent(verticalSplitPane);
 
+        viewPanelListSection = new ViewPanelListSection();
+
+        mainSplitPaneImageViewListSplitPane = new JSplitPane();
+        mainSplitPaneImageViewListSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN_TO_IMAGELIST));
+        mainSplitPaneImageViewListSplitPane.setDividerSize(10);
+        mainSplitPaneImageViewListSplitPane.setOneTouchExpandable(true);
+        mainSplitPaneImageViewListSplitPane.setLeftComponent(mainSplitPane);
+        mainSplitPaneImageViewListSplitPane.setRightComponent(viewPanelListSection);
+
         this.getContentPane().setLayout(new BorderLayout());
-        this.add(mainSplitPane, BorderLayout.CENTER);
+        this.add(mainSplitPaneImageViewListSplitPane, BorderLayout.CENTER);
 
         boolean [] timerStatus = {false,false,false,false};
         statusBar = new StatusPanel(timerStatus);
@@ -839,8 +824,6 @@ public class MainGUI extends JFrame {
         backgroundJPanel.setName(MainTabbedPaneComponent.VIEW.toString());
         backgroundJPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         backgroundJPanel.add(this.createFindImageSection(), posBackgroundPanel.expandH().expandW());
-        backgroundJPanel.add(Box.createHorizontalStrut(2), posBackgroundPanel.nextCol());
-        backgroundJPanel.add(this.createViewPanelListSection(), posBackgroundPanel.nextCol().expandH());
 
         return backgroundJPanel;
     }
@@ -849,127 +832,24 @@ public class MainGUI extends JFrame {
 
         GUI gUI = configuration.getgUI();
 
-        previewCommentCategoriesRatingSplitpane = new JSplitPane();
+        previewCommentCategoriesRatingSplitPane = new JSplitPane();
 
-        previewCommentCategoriesRatingSplitpane.setLeftComponent(this.createPreviweAndCommentPanel());
-        previewCommentCategoriesRatingSplitpane.setRightComponent(this.createCategoryAndRatingPanel());
-        previewCommentCategoriesRatingSplitpane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUI.getMain().getGuiWindowSplitPane(), ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING));
+        previewCommentCategoriesRatingSplitPane.setLeftComponent(this.createPreviewAndCommentPanel());
+        previewCommentCategoriesRatingSplitPane.setRightComponent(this.createCategoryAndRatingPanel());
+        previewCommentCategoriesRatingSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUI.getMain().getGuiWindowSplitPane(), ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
         JPanel backgroundJPanel = new JPanel(new GridBagLayout());
         backgroundJPanel.setName(MainTabbedPaneComponent.CATEGORIZE.toString());
-        backgroundJPanel.add(previewCommentCategoriesRatingSplitpane, posBackgroundPanel.expandH().expandW());
+        backgroundJPanel.add(previewCommentCategoriesRatingSplitPane, posBackgroundPanel.expandH().expandW());
 
         this.setRatingCommentAndCategoryEnabled(false);
 
         return backgroundJPanel;
     }
 
-    private JPanel createViewPanelListSection () {
-        removeSelectedImagesButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
-        removeSelectedImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeSelectedImages"));
 
-        removeAllImagesButton = new JButton(IconLoader.getIcon(Icons.REMOVE_ALL));
-        removeAllImagesButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.removeAllImages"));
-
-        openImageListButton = new JButton(IconLoader.getIcon(Icons.OPEN));
-        openImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageList"));
-
-        saveImageListButton = new JButton(IconLoader.getIcon(Icons.SAVE));
-        saveImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.saveImageList"));
-
-        exportImageListButton = new JButton(IconLoader.getIcon(Icons.EXPORT_IMAGE_LIST));
-        exportImageListButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.exportImageList"));
-
-        moveUpButton = new JButton(IconLoader.getIcon(Icons.MOVE_UP));
-        moveUpButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveUp"));
-
-        moveDownButton = new JButton(IconLoader.getIcon(Icons.MOVE_DOWN));
-        moveDownButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveDown"));
-
-        openImageViewerButton = new JButton(IconLoader.getIcon(Icons.VIEW_IMAGES));
-        openImageViewerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.viewImages"));
-
-        moveToTopButton = new JButton(IconLoader.getIcon(Icons.MOVE_TO_TOP));
-        moveToTopButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToTop"));
-
-        moveToBottomButton = new JButton(IconLoader.getIcon(Icons.MOVE_TO_BOTTOM));
-        moveToBottomButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.moveToBottom"));
-
-        copyImageListdButton = new JButton(IconLoader.getIcon(Icons.COPY));
-        copyImageListdButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.copyImageListToClipboard"));
-
-        openImageResizerButton = new JButton(IconLoader.getIcon(Icons.IMAGE_RESIZER));
-        openImageResizerButton.setToolTipText(lang.get("maingui.tabbedpane.imagelist.button.openImageResizer"));
-
-        imagesToViewList = new JList<File>(imagesToViewListModel);
-        imagesToViewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
-
-        GBHelper posVerticalButtonPanel = new GBHelper();
-
-        JPanel verticalButtonPanel = new JPanel(new GridBagLayout());
-        verticalButtonPanel.add(removeSelectedImagesButton, posVerticalButtonPanel);
-        verticalButtonPanel.add(removeAllImagesButton, posVerticalButtonPanel.nextRow());
-        verticalButtonPanel.add(moveToTopButton, posVerticalButtonPanel.nextRow());
-        verticalButtonPanel.add(moveUpButton, posVerticalButtonPanel.nextRow());
-        verticalButtonPanel.add(moveDownButton, posVerticalButtonPanel.nextRow());
-        verticalButtonPanel.add(moveToBottomButton, posVerticalButtonPanel.nextRow());
-        verticalButtonPanel.add(openImageResizerButton, posVerticalButtonPanel.nextRow());
-
-        GBHelper posHorisontalButtonPanel = new GBHelper();
-
-        JPanel horisontalButtonPanel = new JPanel(new GridBagLayout());
-
-        horisontalButtonPanel.add(openImageListButton, posHorisontalButtonPanel);
-        horisontalButtonPanel.add(saveImageListButton, posHorisontalButtonPanel.nextCol());
-        horisontalButtonPanel.add(exportImageListButton, posHorisontalButtonPanel.nextCol());
-        horisontalButtonPanel.add(openImageViewerButton, posHorisontalButtonPanel.nextCol());
-        horisontalButtonPanel.add(copyImageListdButton, posHorisontalButtonPanel.nextCol());
-
-        GBHelper posBackgroundPanel = new GBHelper();
-
-        JScrollPane spImageList = new JScrollPane(imagesToViewList);
-
-        JLabel imageListLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.list"));
-        imageListLabel.setForeground(Color.GRAY);
-
-        amountOfImagesInImageListLabel = new JLabel();
-        this.setNrOfImagesLabels();
-
-        JLabel previewLabel = new JLabel(lang.get("maingui.tabbedpane.imagelist.label.preview"));
-        previewLabel.setForeground(Color.GRAY);
-
-        JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
-
-        GBHelper posPreviewPanel = new GBHelper();
-
-        imagePreviewLabel = new JLabel();
-
-        JPanel previewPanel = new JPanel();
-        previewPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-        previewPanel.add(imagePreviewLabel);
-
-        previewBackgroundPanel.add(previewPanel, posPreviewPanel);
-
-        backgroundPanel.add(imageListLabel, posBackgroundPanel);
-        backgroundPanel.add(previewLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
-        backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH());
-
-        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
-        backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
-        backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
-        backgroundPanel.add(Box.createVerticalStrut(3), posBackgroundPanel.nextRow());
-        backgroundPanel.add(horisontalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.WEST));
-        backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextCol().nextCol().nextCol().nextCol());
-
-        return backgroundPanel;
-    }
 
     private JPanel createFindImageSection() {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
@@ -1025,7 +905,7 @@ public class MainGUI extends JFrame {
         CheckTreeManager checkTreeManagerForFindImagesCategoryTree = new CheckTreeManager(categoriesTree, false, null, false);
         checkTreeManagerForFindImagesCategoryTree.setSelectionEnabled(true);
 
-        javaPegIdToCheckTreeManager = new HashMap<String, CheckTreeManager>(importedCategoriesTrees.size() + 1);
+        javaPegIdToCheckTreeManager = new HashMap<>(importedCategoriesTrees.size() + 1);
         javaPegIdToCheckTreeManager.put(configuration.getJavapegClientId(), checkTreeManagerForFindImagesCategoryTree);
 
         JScrollPane categoriesScrollPane = new JScrollPane();
@@ -1048,16 +928,13 @@ public class MainGUI extends JFrame {
 
         posBackground.fill = GridBagConstraints.BOTH;
 
-        JTabbedPane categoriesTabbedPane = null;
-
         if (importedCategoriesTrees.size() > 0) {
-
-            categoriesTabbedPane = new JTabbedPane();
+            JTabbedPane categoriesTabbedPane = new JTabbedPane();
             categoriesTabbedPane.add(lang.get("category.mineCategoriesTab"), categoryTreeAndSelectionModePanel);
 
-            Set<String> displayNames = new TreeSet<String>(importedCategoriesTrees.keySet());
+            Set<String> displayNames = new TreeSet<>(importedCategoriesTrees.keySet());
 
-            importedButtonGroups = new ArrayList<ButtonGroup>(importedCategoriesTrees.size());
+            importedButtonGroups = new ArrayList<>(importedCategoriesTrees.size());
 
             for (String displayName : displayNames) {
 
@@ -1402,21 +1279,21 @@ public class MainGUI extends JFrame {
         fileNameTemplateTextField.setToolTipText(lang.get("tooltip.enableTemplateFields"));
         fileNameTemplateTextField.setText(renameImages.getTemplateFileName());
 
-        DefaultComboBoxModel<String> subFolderTemplateComboBoxModel = new DefaultComboBoxModel<String>();
+        DefaultComboBoxModel<String> subFolderTemplateComboBoxModel = new DefaultComboBoxModel<>();
         for (String template : renameImages.getTemplateSubDirectoryNames()) {
             subFolderTemplateComboBoxModel.addElement(template);
         }
 
-        subFolderTemplateComboBox = new JComboBox<String>();
+        subFolderTemplateComboBox = new JComboBox<>();
         subFolderTemplateComboBox.setModel(subFolderTemplateComboBoxModel);
         subFolderTemplateComboBox.setEnabled(false);
 
-        DefaultComboBoxModel<String> fileNameTemplateComboBoxModel = new DefaultComboBoxModel<String>();
+        DefaultComboBoxModel<String> fileNameTemplateComboBoxModel = new DefaultComboBoxModel<>();
         for (String template : renameImages.getTemplateFileNameNames()) {
             fileNameTemplateComboBoxModel.addElement(template);
         }
 
-        fileNameTemplateComboBox = new JComboBox<String>();
+        fileNameTemplateComboBox = new JComboBox<>();
         fileNameTemplateComboBox.setModel(fileNameTemplateComboBoxModel);
         fileNameTemplateComboBox.setEnabled(false);
 
@@ -1544,7 +1421,7 @@ public class MainGUI extends JFrame {
         return borderPanel;
     }
 
-    private JPanel createPreviweAndCommentPanel() {
+    private JPanel createPreviewAndCommentPanel() {
 
         JLabel previewHeading = new JLabel(lang.get("findimage.preview.label"));
         previewHeading.setForeground(Color.GRAY);
@@ -1656,7 +1533,7 @@ public class MainGUI extends JFrame {
 
         File file = (File) node.getUserObject();
         if (file.isDirectory()) {
-            File[] files = fileSystemView.getFiles(file, true); //!!
+            File[] files = fileSystemView.getFiles(file, true);
 
             Arrays.sort(files);
 
@@ -1695,18 +1572,6 @@ public class MainGUI extends JFrame {
         createThumbNailsCheckBox.addActionListener(new CheckBoxListener());
         thumbNailsBackgroundsPanel.addComponentListener(new ComponentListener());
 
-        removeSelectedImagesButton.addActionListener(new RemoveSelectedImagesListener());
-        removeAllImagesButton.addActionListener(new RemoveAllImagesListener());
-        openImageListButton.addActionListener(new OpenImageListListener());
-        saveImageListButton.addActionListener(new SaveImageListListener());
-        exportImageListButton.addActionListener(new ExportImageListListener());
-        moveUpButton.addActionListener(new MoveImageUpInListListener());
-        moveDownButton.addActionListener(new MoveImageDownInListListener());
-        moveToTopButton.addActionListener(new MoveImageToTopInListListener());
-        moveToBottomButton.addActionListener(new MoveImageToBottomInListListener());
-        openImageViewerButton.addActionListener(new OpenImageViewerListener());
-        openImageResizerButton.addActionListener(new OpenImageResizerListener());
-        copyImageListdButton.addActionListener(new CopyImageListListener());
         searchImagesButton.addActionListener(new SearchImagesListener());
         displayImageRepositoryStatisticsViewerButton.addActionListener(new DisplayImageRepositoryStatisticsViewerListener());
         clearCategoriesSelectionButton.addActionListener(new ClearCategoriesSelectionListener());
@@ -1752,10 +1617,10 @@ public class MainGUI extends JFrame {
         popupMenuSaveSelectedCategoriesToAllImages.addActionListener(new SaveSelectedCategoriesToAllImages());
         popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
         popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
-        popupMenuAddImagePathToImageRepositoryRename.addActionListener(addSelecetedPathToImageRepository = new AddSelecetedPathToImageRepository());
-        popupMenuAddImagePathToImageRepositoryMerge.addActionListener(addSelecetedPathToImageRepository);
-        popupMenuAddImagePathToImageRepositoryTag.addActionListener(addSelecetedPathToImageRepository);
-        popupMenuAddImagePathToImageRepositoryView.addActionListener(addSelecetedPathToImageRepository);
+        popupMenuAddImagePathToImageRepositoryRename.addActionListener(addSelectedPathToImageRepository = new AddSelecetedPathToImageRepository());
+        popupMenuAddImagePathToImageRepositoryMerge.addActionListener(addSelectedPathToImageRepository);
+        popupMenuAddImagePathToImageRepositoryTag.addActionListener(addSelectedPathToImageRepository);
+        popupMenuAddImagePathToImageRepositoryView.addActionListener(addSelectedPathToImageRepository);
         popupMenuRemoveImagePathFromImageRepositoryRename.addActionListener(new RemoveSelecetedPathFromImageRepository());
         popupMenuRemoveImagePathFromImageRepositoryMerge.addActionListener(new RemoveSelecetedPathFromImageRepository());
         popupMenuRemoveImagePathFromImageRepositoryTag.addActionListener(new RemoveSelecetedPathFromImageRepository());
@@ -1763,7 +1628,6 @@ public class MainGUI extends JFrame {
         popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList());
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.addActionListener(new AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList());
 
-        imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
         mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
 
         saveFileNameTemplateButton.addActionListener(new SaveFileNameTemplateButtonListener());
@@ -1774,7 +1638,6 @@ public class MainGUI extends JFrame {
         fileNameTemplateComboBox.addActionListener(new FileNameTemplateComboBoxListener());
         subFolderTemplateComboBox.addActionListener(new SubFolderTemplateComboBoxListener());
         imageTagPreviewScrollPane.addComponentListener(new ImageTagPreviewScrollPaneListener());
-        imagesToViewListModel.addListDataListener(new ImagesToViewListModelListener());
     }
 
     private class SelectAllImagesAction extends AbstractAction {
@@ -1901,7 +1764,6 @@ public class MainGUI extends JFrame {
         rightClickMenuCategories.add(popupMenuRemoveCategory = new JMenuItem());
         rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages = new JMenuItem());
         rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages = new JMenuItem());
-
     }
 
     public void createRightClickMenuRename() {
@@ -2012,13 +1874,13 @@ public class MainGUI extends JFrame {
         renameImages.setTemplateSubDirectoryName(subFolderTextField.getText());
         renameImages.setTemplateFileName(fileNameTemplateTextField.getText());
 
-        TreeSet<String> fileNameTemplates = new TreeSet<String>();
+        TreeSet<String> fileNameTemplates = new TreeSet<>();
         for (int index = 0; index < fileNameTemplateComboBox.getModel().getSize(); index++) {
             fileNameTemplates.add(fileNameTemplateComboBox.getModel().getElementAt(index));
         }
         renameImages.setTemplateFileNameNames(fileNameTemplates);
 
-        TreeSet<String> subDirectoryTemplates = new TreeSet<String>();
+        TreeSet<String> subDirectoryTemplates = new TreeSet<>();
         for (int index = 0; index < subFolderTemplateComboBox.getModel().getSize(); index++) {
             subDirectoryTemplates.add(subFolderTemplateComboBox.getModel().getElementAt(index));
         }
@@ -2043,11 +1905,11 @@ public class MainGUI extends JFrame {
         List<GUIWindowSplitPane> guiWindowSplitPanes = gUI.getMain().getGuiWindowSplitPane();
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN, mainSplitPane.getDividerLocation());
-
+        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN_TO_IMAGELIST, mainSplitPaneImageViewListSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL, verticalSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL, thumbNailMetaPanelSplitPane.getDividerLocation());
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_AND_COMMENT, previewAndCommentSplitPane.getDividerLocation());
-        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitpane.getDividerLocation());
+        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.PREVIEW_COMMENT_CATEGORIES_RATING, previewCommentCategoriesRatingSplitPane.getDividerLocation());
 
         List<File> paths = imageRepositoriesTableModel.getPaths();
 
@@ -2211,10 +2073,8 @@ public class MainGUI extends JFrame {
                     CategoriesConfig.exportCategoriesConfig(configuration.getCategories(), configuration.getJavapegClientId(), ApplicationContext.getInstance().getHighestUsedCategoryID(), xmlsw);
 
                     displayInformationMessage(lang.get("categoryimportexport.categoryImportExportExport.exported") + " " + categoryExportFile.getAbsolutePath());
-                } catch (FileNotFoundException fnfex) {
-                 categoryExportError(categoryExportFile, fnfex);
-                } catch (XMLStreamException xsex) {
-                 categoryExportError(categoryExportFile, xsex);
+                } catch (FileNotFoundException | XMLStreamException ex) {
+                 categoryExportError(categoryExportFile, ex);
                 } finally {
                     StreamUtil.close(os, true);
                 }
@@ -2788,9 +2648,7 @@ public class MainGUI extends JFrame {
         tree.addMouseListener(mouseListener);
     }
 
-    private void setNrOfImagesLabels () {
-        amountOfImagesInImageListLabel.setText(lang.get("maingui.tabbedpane.imagelist.label.numberOfImagesInList") + " " + Integer.toString(imagesToViewListModel.size()));
-    }
+
 
     private void setStatusMessages() {
         int nrOfImages =  FileRetriever.getInstance().handleNrOfJpegImages(FileLoadingAction.RETRIEVE);
@@ -2846,37 +2704,6 @@ public class MainGUI extends JFrame {
     }
 
     /**
-     * Listener which listens for changes of the images to view list model.
-     * Whenever the model is changed, then the {@link JLabel} which displays the
-     * amout of images which are in the image view list is updated with the
-     * correct amount of images.
-     *
-     * @author Fredrik
-     *
-     */
-    private class ImagesToViewListModelListener implements ListDataListener {
-
-        @Override
-        public void intervalAdded(ListDataEvent e) {
-            setNrOfImagesLabel(e);
-        }
-
-        @Override
-        public void intervalRemoved(ListDataEvent e) {
-            setNrOfImagesLabel(e);
-        }
-
-        @Override
-        public void contentsChanged(ListDataEvent e) {
-            setNrOfImagesLabel(e);
-        }
-
-        private void setNrOfImagesLabel(ListDataEvent listDataEvent) {
-            setNrOfImagesLabels();
-        }
-    }
-
-    /**
      * This method loads an preview image either from the thumbnail cache, if
      * that is specified by the application settings, or from the orginal image
      * file. If the preview area is smaller than the loaded thumbnail, or the
@@ -2905,7 +2732,7 @@ public class MainGUI extends JFrame {
             int width = imageTagPreviewScrollPane.getViewport().getSize().width;
             int height = imageTagPreviewScrollPane.getViewport().getSize().height;
 
-            Image scaledImage = null;
+            Image scaledImage;
             if (thumbnail != null) {
                 Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
 
@@ -2928,7 +2755,7 @@ public class MainGUI extends JFrame {
 
     private class ThumbNailListener implements ActionListener {
 
-        OneSizedList<File> queue = new OneSizedList<File>();
+        OneSizedList<File> queue = new OneSizedList<>();
 
         Thread loadScaleIfNeededAndDisplayPreviewThumbnailThread = null;
 
@@ -3053,7 +2880,7 @@ public class MainGUI extends JFrame {
             DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
             Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 
-            List<TreePath> treePaths = new ArrayList<TreePath>();
+            List<TreePath> treePaths = new ArrayList<>();
 
             while (elements.hasMoreElements()) {
                 DefaultMutableTreeNode element = elements.nextElement();
@@ -3103,7 +2930,7 @@ public class MainGUI extends JFrame {
         Map<String, Categories> javaPegIdToCategories = null;
 
         if (javaPegIdToCheckTreeManager != null && !javaPegIdToCheckTreeManager.isEmpty()) {
-            javaPegIdToCategories = new HashMap<String, Categories>();
+            javaPegIdToCategories = new HashMap<>();
 
             for (String javaPegId : javaPegIdToCheckTreeManager.keySet()) {
                 javaPegIdToCategories.put(javaPegId, getSelectedCategoriesFromTreeModel(javaPegIdToCheckTreeManager.get(javaPegId)));
@@ -3138,282 +2965,16 @@ public class MainGUI extends JFrame {
         }
     }
 
-    /**
-     * This class implementents the actions that is taking place when the
-     * "Remove image button from image view list" is clicked.
-     *
-     * The selected images are removed and the image after in the list is set
-     * as the selected image and the preview image is set to this newly selected
-     * image.
-     *
-     * If there is only one image left after the removal then this image is set
-     * to the selected image independent of it was before or after the removed
-     * image in image view list.
-     *
-     * If the last image is removed then the preview image is cleared.
-     *
-     * @author Fredrik
-     *
-     */
-    private class RemoveSelectedImagesListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-            if (!imagesToViewList.isSelectionEmpty()) {
 
-                int firstSelectedIndex = imagesToViewList.getSelectedIndex();
-                int [] selectedIndices = imagesToViewList.getSelectedIndices();
 
-                // Remove all the selected indices
-                while(selectedIndices.length > 0) {
-                    imagesToViewListModel.remove(selectedIndices[0]);
-                    selectedIndices = imagesToViewList.getSelectedIndices();
-                }
 
-                if (imagesToViewListModel.isEmpty()) {
-                    // All images have been removed, clear the preview image
-                    imagePreviewLabel.setIcon(null);
-                } else {
-                    if (firstSelectedIndex == 0) {
-                        // If the first image was removed
-                        imagesToViewList.setSelectedIndex(firstSelectedIndex);
-                    } else if (firstSelectedIndex >= imagesToViewListModel.getSize()) {
-                        // The last image was removed
-                        imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
-                    } else  {
-                        // An image inbetween the first and last was removed
-                        imagesToViewList.setSelectedIndex(firstSelectedIndex);
-                    }
-                }
-            }
-        }
-    }
 
-    private class RemoveAllImagesListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (imagesToViewListModel.size() > 0) {
-                imagesToViewListModel.clear();
-                imagePreviewLabel.setIcon(null);
-            }
-        }
-    }
 
-    private class OpenImageListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-            FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
 
-            JFileChooser chooser = new JFileChooser();
 
-            chooser.setAcceptAllFileFilterUsed(false);
-            chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.title"));
-            chooser.addChoosableFileFilter(fileFilterPolyView);
 
-            File source = null;
-
-            int returnVal = chooser.showOpenDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-
-                if(!imagesToViewListModel.isEmpty()) {
-                    int returnValue = JOptionPane.showConfirmDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage"));
-
-                    /**
-                     * 0 indicates a yes answer, and then the current list
-                     * shall be overwritten, otherwise just return.
-                     */
-                    if(returnValue != 0) {
-                        return;
-                    }
-                }
-
-                source = chooser.getSelectedFile();
-
-                try {
-                    List<String> fileContent = FileUtil.readFromFile(source);
-
-                    imagesToViewListModel.clear();
-
-                    List<String> notExistingFiles = new ArrayList<String>();
-
-                    for(String filePath : fileContent) {
-                        File file = new File(filePath);
-
-                        if(file.exists()) {
-                            imagesToViewListModel.addElement(file);
-                        } else {
-                            notExistingFiles.add(filePath);
-                        }
-                    }
-
-                    if(!notExistingFiles.isEmpty()) {
-                        StringBuilder missingFilesErrorMessage = new StringBuilder();
-
-                        missingFilesErrorMessage.append(lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage"));
-                        missingFilesErrorMessage.append(C.LS);
-                        missingFilesErrorMessage.append(C.LS);
-
-                        for(String path : notExistingFiles) {
-                            missingFilesErrorMessage.append(path);
-                            missingFilesErrorMessage.append(C.LS);
-                        }
-
-                        JOptionPane.showMessageDialog(null, missingFilesErrorMessage, lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (IOException ioe) {
-                    JOptionPane.showMessageDialog(null, lang.get("maingui.tabbedpane.imagelist.filechooser.openImageList.couldNotReadFile") + "\n(" + source.getAbsolutePath() + ")", lang.get("errormessage.maingui.errorMessageLabel"), JOptionPane.ERROR_MESSAGE);
-                    logger.logERROR("Could not read from file:");
-                    logger.logERROR(ioe);
-                }
-            }
-        }
-    }
-
-    private class SaveImageListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            if (imagesToViewListModel.size() > 0) {
-
-                FileNameExtensionFilter fileFilterPolyView = new FileNameExtensionFilter("JavaPEG Image List", "jil");
-
-                JFileChooser chooser = new JFileChooser();
-
-                chooser.setAcceptAllFileFilterUsed(false);
-                chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.saveImageList.title"));
-                chooser.addChoosableFileFilter(fileFilterPolyView);
-
-                File destination = null;
-
-                int returnVal = chooser.showSaveDialog(null);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    destination = chooser.getSelectedFile();
-                    ImageList.getInstance().createList(imagesToViewListModel, destination, "jil", "JavaPEG Image List");
-                }
-            }
-        }
-    }
-
-    private class MoveImageUpInListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int selecteIndex = imagesToViewList.getSelectedIndex();
-
-            if(selecteIndex > -1) {
-                if(selecteIndex > 0) {
-                    File image = imagesToViewListModel.remove(selecteIndex);
-                    imagesToViewListModel.add(selecteIndex - 1, image);
-                    imagesToViewList.setSelectedIndex(selecteIndex - 1);
-                }
-            }
-        }
-    }
-
-    private class MoveImageDownInListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int selecteIndex = imagesToViewList.getSelectedIndex();
-
-            if(selecteIndex > -1) {
-                if(selecteIndex < (imagesToViewListModel.size() - 1)) {
-                    File image = imagesToViewListModel.remove(selecteIndex);
-                    imagesToViewListModel.add(selecteIndex + 1, image);
-                    imagesToViewList.setSelectedIndex(selecteIndex + 1);
-                }
-            }
-        }
-    }
-
-    private class MoveImageToTopInListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int selecteIndex = imagesToViewList.getSelectedIndex();
-
-            if (selecteIndex > 0) {
-                File image = imagesToViewListModel.remove(selecteIndex);
-                imagesToViewListModel.add(0, image);
-                imagesToViewList.setSelectedIndex(0);
-            }
-        }
-    }
-
-    private class MoveImageToBottomInListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int selecteIndex = imagesToViewList.getSelectedIndex();
-
-            if (selecteIndex > -1) {
-                File image = imagesToViewListModel.remove(selecteIndex);
-                imagesToViewListModel.addElement(image);
-                imagesToViewList.setSelectedIndex(imagesToViewListModel.size() - 1);
-            }
-        }
-    }
-
-    private class OpenImageViewerListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(!imagesToViewListModel.isEmpty()) {
-
-                ApplicationContext ac = ApplicationContext.getInstance();
-                if (ac.isImageViewerDisplayed()) {
-                    JOptionPane.showMessageDialog(null, lang.get("errormessage.maingui.onlyOneImageViewer"), lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    List<File> imagesToView = new ArrayList<File>();
-
-                    for (int i = 0; i < imagesToViewListModel.size(); i++) {
-                        imagesToView.add(imagesToViewListModel.get(i));
-                    }
-
-                    imageViewer = new ImageViewer(imagesToView);
-                    imageViewer.setVisible(true);
-
-                    // This can only be done when the image viewer is visible
-                    // and with an image loaded, otherwise does nothing happen
-                    // since the image is of size 0 pixels before the window is
-                    // displayed.
-                    if (configuration.getImageViewerState().isAutomaticallyResizeImages()) {
-                        imageViewer.resizeImage();
-                    }
-
-                    ac.setImageViewerDisplayed(true);
-                }
-            }
-        }
-    }
-
-    private class OpenImageResizerListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(!imagesToViewListModel.isEmpty()) {
-
-                List<File> imagesToResize = new ArrayList<File>();
-
-                for (int i = 0; i < imagesToViewListModel.size(); i++) {
-                    imagesToResize.add(imagesToViewListModel.get(i));
-                }
-
-                ImageResizer imageresizer = new ImageResizer(imagesToResize);
-                imageresizer.setVisible(true);
-            }
-        }
-    }
-
-    private class CopyImageListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(!imagesToViewListModel.isEmpty()) {
-                List<File> imagesToSetToSystemClipBoard = new ArrayList<File>();
-
-                for (int i = 0; i < imagesToViewListModel.size(); i++) {
-                    imagesToSetToSystemClipBoard.add(imagesToViewListModel.get(i));
-                }
-                FileSelection fileSelection = new FileSelection(imagesToSetToSystemClipBoard);
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
-            }
-        }
-    }
 
     private class SearchImagesListener implements ActionListener {
         @Override
@@ -3436,7 +2997,7 @@ public class MainGUI extends JFrame {
 
                 // ... and create a new list with the file object from the
                 // sorted file and timestamp pairs.
-                List<File> foundImagesAsSortedList = new ArrayList<File>(foundImages.size());
+                List<File> foundImagesAsSortedList = new ArrayList<>(foundImages.size());
                 for (FileAndTimeStampPair fileAndTimeStampPair : fileAndTimeStampPairs) {
                     foundImagesAsSortedList.add(fileAndTimeStampPair.getFile());
                 }
@@ -3506,44 +3067,13 @@ public class MainGUI extends JFrame {
         }
     }
 
-    private class ExportImageListListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-            if (imagesToViewListModel.size() > 0) {
-
-                FileNameExtensionFilter fileFilterIrfanView = new FileNameExtensionFilter("IrfanView", "txt");
-                FileNameExtensionFilter fileFilterPolyView  = new FileNameExtensionFilter("PolyView" , "pvs");
-                FileNameExtensionFilter fileFilterXnView    = new FileNameExtensionFilter("XnView"   , "sld");
-
-                JFileChooser chooser = new JFileChooser();
-
-                chooser.setAcceptAllFileFilterUsed(false);
-                chooser.setDialogTitle(lang.get("maingui.tabbedpane.imagelist.filechooser.exportImageList.title"));
-                chooser.addChoosableFileFilter(fileFilterIrfanView);
-                chooser.addChoosableFileFilter(fileFilterPolyView);
-                chooser.addChoosableFileFilter(fileFilterXnView);
-
-                File destination = null;
-
-                int returnVal = chooser.showSaveDialog(null);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    destination = chooser.getSelectedFile();
-
-                    String listFormat      = ((FileNameExtensionFilter)chooser.getFileFilter()).getExtensions()[0];
-                    String listDescription = ((FileNameExtensionFilter)chooser.getFileFilter()).getDescription();
-
-                    ImageList.getInstance().createList(imagesToViewListModel, destination, listFormat, listDescription);
-                }
-            }
-        }
-    }
 
     private class AddImageToViewList implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             File image = new File(e.getActionCommand());
-            handleAddImageToImageList(image, true);
+            viewPanelListSection.handleAddImageToImageList(image, true);
         }
     }
 
@@ -3561,11 +3091,7 @@ public class MainGUI extends JFrame {
             int size = selectedAsFileObjects.size();
 
             for (int index = 0; index < size; index++) {
-                if (index == size - 1) {
-                    handleAddImageToImageList(selectedAsFileObjects.get(index), true);
-                } else {
-                    handleAddImageToImageList(selectedAsFileObjects.get(index), false);
-                }
+                viewPanelListSection.handleAddImageToImageList(selectedAsFileObjects.get(index), index == size - 1);
             }
         }
     }
@@ -3573,7 +3099,7 @@ public class MainGUI extends JFrame {
     private class CopyImageToSystemClipBoard implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<File> selectedFiles = new ArrayList<File>();
+            List<File> selectedFiles = new ArrayList<>();
             selectedFiles.add(new File(e.getActionCommand()));
 
             FileSelection fileSelection = new FileSelection(selectedFiles);
@@ -3587,7 +3113,7 @@ public class MainGUI extends JFrame {
            Collection<File> jPEGFiles = FileRetriever.getInstance().getJPEGFiles();
 
            if (jPEGFiles.size() > 0) {
-               FileSelection fileSelection = new FileSelection(new ArrayList<File>(jPEGFiles));
+               FileSelection fileSelection = new FileSelection(new ArrayList<>(jPEGFiles));
                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
            }
         }
@@ -3611,11 +3137,7 @@ public class MainGUI extends JFrame {
             int size = allDisplayedThumbnailsAsFileObjects.size();
 
             for (int index = 0; index < size; index++) {
-                if (index == size -1) {
-                    handleAddImageToImageList(allDisplayedThumbnailsAsFileObjects.get(index), true);
-                } else {
-                    handleAddImageToImageList(allDisplayedThumbnailsAsFileObjects.get(index), false);
-                }
+                viewPanelListSection.handleAddImageToImageList(allDisplayedThumbnailsAsFileObjects.get(index), index == size -1);
             }
         }
     }
@@ -3674,7 +3196,7 @@ public class MainGUI extends JFrame {
             DefaultMutableTreeNode nodeToRename = ((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
             String value = ((CategoryUserObject)nodeToRename.getUserObject()).getName();
 
-            String newName = displayInputDialog(lang.get("categrory.rename"), lang.get("category.enterNewNameForCategory")+ " " + value, value);
+            String newName = displayInputDialog(lang.get("categrory.rename"), lang.get("category.enterNewNameForCategory") + " " + value, value);
 
             if (newName != null && !newName.equals(value)) {
                 if (!CategoryUtil.isValid(newName)) {
@@ -3795,7 +3317,7 @@ public class MainGUI extends JFrame {
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
                 TreeUtil.collapseEntireTree(tree, root, false);
             } else {
-                TreeUtil.collapseEntireTree(tree, (DefaultMutableTreeNode)selectedPath.getLastPathComponent(), true);
+                TreeUtil.collapseEntireTree(tree, (DefaultMutableTreeNode) selectedPath.getLastPathComponent(), true);
             }
         }
     }
@@ -3812,23 +3334,12 @@ public class MainGUI extends JFrame {
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
                 TreeUtil.expandEntireTree(tree, root, false);
             } else {
-                TreeUtil.expandEntireTree(tree, (DefaultMutableTreeNode)selectedPath.getLastPathComponent(), true);
+                TreeUtil.expandEntireTree(tree, (DefaultMutableTreeNode) selectedPath.getLastPathComponent(), true);
             }
         }
     }
 
-    private class ImagesToViewListListener implements ListSelectionListener {
 
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            int selectedIndex = imagesToViewList.getSelectedIndex();
-
-            if (selectedIndex > -1) {
-                JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(imagesToViewListModel.get(selectedIndex));
-                imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
-            }
-        }
-    }
 
     /**
      * This method flushes out all changes to the currently loaded set of
@@ -3869,7 +3380,7 @@ public class MainGUI extends JFrame {
         Map<String, Boolean> javaPegIdToImportedAndCategories = null;
 
         // Set the state for this client "AND" button...
-        javaPegIdToImportedAndCategories = new HashMap<String, Boolean>();
+        javaPegIdToImportedAndCategories = new HashMap<>();
         javaPegIdToImportedAndCategories.put(configuration.getJavapegClientId(), andRadioButton.isSelected());
 
         // And set the state of the "AND" button for any imported categories.
@@ -3883,7 +3394,7 @@ public class MainGUI extends JFrame {
                     AbstractButton abstractButton = abstractButtons.nextElement();
 
                     if (abstractButton.isSelected()) {
-                        javaPegIdToImportedAndCategories.put(abstractButton.getName(), abstractButton.getActionCommand().equals("AND") ? true : false);
+                        javaPegIdToImportedAndCategories.put(abstractButton.getName(), abstractButton.getActionCommand().equals("AND"));
                     }
                 }
             }
@@ -3924,30 +3435,7 @@ public class MainGUI extends JFrame {
         checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
     }
 
-    /**
-     * This method adds an image to the image view list {@link ListModel} and
-     * set this image is also set as the selected image. It also updates the
-     * label that displays the amount of images in the list. It also adds the
-     * image to the {@link ImageViewer} if that one is displayed.
-     *
-     * @param image
-     *            is the image to add.
-     * @param addMetaData
-     *            specifies if the meta data that is associated to the images to
-     *            view list should be updated or not.
-     */
-    private void handleAddImageToImageList(File image, boolean addMetaData) {
-        imagesToViewListModel.addElement(image);
 
-        if (addMetaData) {
-            imagesToViewList.setSelectedIndex(imagesToViewListModel.getSize() - 1);
-            imagesToViewList.ensureIndexIsVisible(imagesToViewList.getSelectedIndex());
-        }
-
-        if (ApplicationContext.getInstance().isImageViewerDisplayed()) {
-            imageViewer.addImage(image);
-        }
-    }
 
     private class MouseButtonListener extends MouseAdapter{
         @Override
@@ -3997,7 +3485,7 @@ public class MainGUI extends JFrame {
                 rightClickMenuView.show(e.getComponent(),e.getX(), e.getY());
             } else if ((!e.isPopupTrigger()) && (e.getClickCount() == 2) && (mainTabbedPane.getSelectedIndex() == 3)) {
                 File image = new File(((JToggleButton)e.getComponent()).getActionCommand());
-                handleAddImageToImageList(image, true);
+                viewPanelListSection.handleAddImageToImageList(image, true);
             }
         }
     }
@@ -4354,9 +3842,9 @@ public class MainGUI extends JFrame {
                 TreePath selectedPath = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree().getPathForLocation(e.getX(), e.getY());
 
                 if(e.isPopupTrigger()) {
-                    String collapseCategory = "";
-                    String expandCategory = "";
-                    String addCategory = "";
+                    String collapseCategory;
+                    String expandCategory;
+                    String addCategory;
                     String renameCategory = "";
                     String removeCategory = "";
 
@@ -4465,7 +3953,7 @@ public class MainGUI extends JFrame {
         }
 
         public TreePath getPath(TreeNode treeNode) {
-            List<Object> nodes = new ArrayList<Object>();
+            List<Object> nodes = new ArrayList<>();
             if (treeNode != null) {
                 nodes.add(treeNode);
                 treeNode = treeNode.getParent();
@@ -4656,9 +4144,7 @@ public class MainGUI extends JFrame {
                 if (ApplicationContext.getInstance().isRestartNeeded()) {
                     displayInformationMessage(lang.get("common.application.restart.needed"));
                 }
-            } catch (InterruptedException e) {
-                logger.logERROR(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 logger.logERROR(e);
             }
             logger.logDEBUG("Image Meta Data Context initialization Finished");
@@ -4702,14 +4188,10 @@ public class MainGUI extends JFrame {
 
                 try {
                     repositoryPathContainsJPEGFiles = JPEGUtil.containsJPEGFiles(repositoryPath);
-                } catch (FileNotFoundException fnfex) {
+                } catch (IOException iox) {
                     repositoryPathContainsJPEGFiles = false;
                     logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
-                    logger.logDEBUG(fnfex);
-                } catch (IOException ioex) {
-                    repositoryPathContainsJPEGFiles = false;
-                    logger.logDEBUG("Problem with determining nr of JPEG files in directory: " + totalPath);
-                    logger.logDEBUG(ioex);
+                    logger.logDEBUG(iox);
                 }
 
                 setRatingCommentAndCategoryEnabled(false);
@@ -4736,7 +4218,7 @@ public class MainGUI extends JFrame {
                         // and answer then just do nothing
                         if (!ImageMetaDataDataBaseHandler.addPathToRepositoryAccordingToPolicy(getThis(), repositoryPath)) {
                             thumbNailsPanelHeading.setIcon(Icons.DB_ADD, lang.get("imagerepository.directory.not.added"));
-                            thumbNailsPanelHeading.setListener(addSelecetedPathToImageRepository);
+                            thumbNailsPanelHeading.setListener(addSelectedPathToImageRepository);
                             return null;
                         }
 

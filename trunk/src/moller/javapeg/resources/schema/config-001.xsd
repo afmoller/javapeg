@@ -148,6 +148,7 @@
                             <xs:enumeration value="previewAndComment" />
                             <xs:enumeration value="previewCommentCategoriesRating" />
                             <xs:enumeration value="imageMetaData" />
+                            <xs:enumeration value="mainToImageList" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
