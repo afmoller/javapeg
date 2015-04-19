@@ -38,9 +38,9 @@ public class JPEGUtil {
 	 *             skall kontrolleras
 	 * @return     Ett booleskt värde som talar om ifall filen
 	 *             är en jpg-fil eller inte.
-	 * @throws FileNotFoundException, IOException
+	 * @throws IOException
 	 */
-	public static boolean isJPEG(File file) throws FileNotFoundException, IOException{
+	public static boolean isJPEG(File file) throws IOException {
 		if (file.isFile() && file.canRead()) {
 
 			byte [] ffd8 = new byte [2];
@@ -170,7 +170,7 @@ public class JPEGUtil {
 	 * @throws IOException
 	 */
 	public static List<File> getJPEGFiles(File directory) throws FileNotFoundException, IOException {
-		List<File> jpegFiles = new ArrayList<File>();
+		List<File> jpegFiles = new ArrayList<>();
 
 		for(File file : directory.listFiles()) {
 			if(isJPEG(file)){
@@ -189,14 +189,13 @@ public class JPEGUtil {
 	 * @return a boolean value indicating whether there is JPEG files in the
 	 *         directory specified by the directory parameter.
 	 *
-	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static boolean containsJPEGFiles(File directory) throws FileNotFoundException, IOException {
+	public static boolean containsJPEGFiles(File directory) throws IOException {
 	    if (directory.canRead()) {
 	        File[] files = directory.listFiles();
-	        List<File> potentialJPEGFiles = new ArrayList<File>();
-	        List<File> otherFiles = new ArrayList<File>();
+	        List<File> potentialJPEGFiles = new ArrayList<>();
+	        List<File> otherFiles = new ArrayList<>();
 
 	        if (files != null) {
 	            for (File file : files) {
