@@ -132,6 +132,7 @@ public enum ConfigElement implements IXmlElement {
     EXPOSURETIME_FILTER("exposureTimeFilter"),
     FILTER_MASK("filterMask"),
     SELECTED_MAIN_GUI_TAB("selectedMainGUITab"),
+    MAIN_TO_IMAGELIST("mainToImageList"),
     NO_OPERATION("");
 
     private String elementValue;
