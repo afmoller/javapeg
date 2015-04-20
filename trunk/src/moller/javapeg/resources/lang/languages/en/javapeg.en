@@ -395,7 +395,7 @@ statusbar.message.selectedPath              = Selected Path:
 ##############################################################################################################
 tabbedpane.imageMerge  = MERGE IMAGES
 tabbedpane.imageRename = RENAME IMAGES
-tabbedpane.imageView   = SEARCH / VIEW IMAGES
+tabbedpane.imageView   = SEARCH IMAGES
 tabbedpane.imageTag    = TAG IMAGES
 
 ##############################################################################################################

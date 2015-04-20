@@ -397,7 +397,7 @@ statusbar.message.selectedPath              = Vald sökväg:
 ##############################################################################################################
 tabbedpane.imageMerge  = SLÅ IHOP BILDER
 tabbedpane.imageRename = BYT NAMN PÅ BILDER
-tabbedpane.imageView   = SÖK / VISA BILDER
+tabbedpane.imageView   = SÖK BILDER
 tabbedpane.imageTag    = TAGGA BILDER
 
 ##############################################################################################################
