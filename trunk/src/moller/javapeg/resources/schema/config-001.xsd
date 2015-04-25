@@ -149,6 +149,9 @@
                             <xs:enumeration value="previewCommentCategoriesRating" />
                             <xs:enumeration value="imageMetaData" />
                             <xs:enumeration value="mainToImageList" />
+                            <xs:enumeration value="imageMergeDirectoriesToProcessLog" />
+                            <xs:enumeration value="imageSearchImageExifMetaDataToRatingCommentAndButton" />
+                            <xs:enumeration value="imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>

@@ -27,6 +27,9 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <splitPane id="previewAndComment">160</splitPane>
       <splitPane id="previewCommentCategoriesRating">400</splitPane>
       <splitPane id="mainToImageList">800</splitPane>
+      <splitPane id="imageMergeDirectoriesToProcessLog">200</splitPane>
+      <splitPane id="imageSearchImageExifMetaDataToRatingCommentAndButton">200</splitPane>
+      <splitPane id="imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton">200</splitPane>
     </main>
     <imageViewer>
       <xLocation>10</xLocation>

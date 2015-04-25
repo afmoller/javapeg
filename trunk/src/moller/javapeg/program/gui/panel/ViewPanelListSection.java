@@ -215,13 +215,13 @@ public class ViewPanelListSection extends JPanel {
 
         backgroundPanel.add(previewLabel, posBackgroundPanel);
         backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.NORTH));
-        backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow().width(2));
 
-        backgroundPanel.add(horizontalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.WEST));
-        backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(horizontalButtonPanel, posBackgroundPanel.nextRow().nextCol().align(GridBagConstraints.WEST));
+        backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.NORTH));
 
-        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
-        backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
+//        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
+        backgroundPanel.add(spImageList, posBackgroundPanel.nextCol().expandH().expandW());
 
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(5, 2, 0, 2));
