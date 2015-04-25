@@ -175,19 +175,22 @@
 	</target>
 		
 	<target name="create_release_src" description="Packs all necessary files for the source code release into one zip archive">
-	        <zip destfile="${zip_src.name}" update="false">
-	            <fileset dir="./">
-	                <include name="src/moller/**" />
-	                <include name="build.xml" />
-	                <include name="gpl.txt" />
-	            	<include name="CHANGELOG.html" />
-	                <include name="TODO.txt" />
-	                <include name="libraries/metadata-extractor-2.6.4.jar" />
-	            	<include name="libraries/xmpcore.jar" />
-	            	<include name="libraries/imgscalr-lib-4.2.jar" />
-	            	<include name="libraries/jcommon-1.0.23.jar" />
-	            	<include name="libraries/jfreechart-1.0.19.jar" />
-	            </fileset>
-	        </zip>
-	    </target>
+	    <delete file="CHANGELOG.html" />
+        <copy file="src/moller/javapeg/resources/help/common/version_information.html" tofile="CHANGELOG.html" />
+		<zip destfile="${zip_src.name}" update="false">
+            <fileset dir="./">
+                <include name="src/moller/**" />
+                <include name="build.xml" />
+                <include name="gpl.txt" />
+                <include name="CHANGELOG.html" />
+                <include name="TODO.txt" />
+                <include name="libraries/metadata-extractor-2.6.4.jar" />
+                <include name="libraries/xmpcore.jar" />
+                <include name="libraries/imgscalr-lib-4.2.jar" />
+                <include name="libraries/jcommon-1.0.23.jar" />
+                <include name="libraries/jfreechart-1.0.19.jar" />
+            </fileset>
+        </zip>
+        <delete file="CHANGELOG.html" />
+    </target>
 </project>
