@@ -19,8 +19,13 @@ package moller.javapeg.program.gui.tab;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.Config;
 import moller.javapeg.program.config.model.Configuration;
+import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.GUIWindow;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.components.DestinationDirectorySelector;
 import moller.javapeg.program.gui.dialog.ImageMergeConflictViewer;
 import moller.javapeg.program.gui.frames.MainGUI;
@@ -92,6 +97,8 @@ public class ImageMergeTab extends JPanel {
 
     private DestinationDirectorySelector destinationDirectorySelector;
 
+    private JSplitPane directoriesProcessLogSplitPanel;
+
     private ImageMergeWorker imw;
 
     /**
@@ -129,9 +136,18 @@ public class ImageMergeTab extends JPanel {
 
         GBHelper posBackground = new GBHelper();
 
-        this.add(this.createDirectoriesPanel(), posBackground.expandH());
-        this.add(Box.createHorizontalStrut(2), posBackground.nextCol());
-        this.add(this.createProcessLogPanel(), posBackground.nextCol().expandH().expandW());
+        GUI gUI = configuration.getgUI();
+
+        GUIWindow mainGUI = gUI.getMain();
+        List<GUIWindowSplitPane> guiWindowSplitPanes = mainGUI.getGuiWindowSplitPane();
+
+        directoriesProcessLogSplitPanel = new JSplitPane();
+        directoriesProcessLogSplitPanel.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_MERGE_DIRECTORIES_TO_PROCESS_LOG));
+
+        directoriesProcessLogSplitPanel.setLeftComponent(this.createDirectoriesPanel());
+        directoriesProcessLogSplitPanel.setRightComponent(this.createProcessLogPanel());
+
+        this.add(directoriesProcessLogSplitPanel, posBackground.expandH().expandW());
     }
 
     private JPanel createProcessLogPanel() {
@@ -152,6 +168,10 @@ public class ImageMergeTab extends JPanel {
         backgroundPanel.add(sp, posBackgroundPanel.nextRow().expandH().expandW());
 
         return backgroundPanel;
+    }
+
+    public int getImageMergeDirectoriesToProcessLogSplitPaneDividerLocation() {
+        return directoriesProcessLogSplitPanel.getDividerLocation();
     }
 
     private JPanel createDirectoriesPanel() {
