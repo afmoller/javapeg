@@ -22,7 +22,7 @@ category.metadatavalue.selection.values = VÄRDEN
 category.enterNameForNewCategory    = Ange ett namn för den nya kategorin
 category.enterNameForNewSubCategory = Ange ett namn för den nya underkategorin
 category.enterNewNameForCategory    = Ange ett nytt namn för den kategorin:
-categrory.rename                    = Byt namn på kategori
+category.rename                     = Byt namn på kategori
 
 category.errormessage.categoryNameCanNotStartWithSpace = Kategorinamnet kan inte börja med ett mellanslag:
 category.errormessage.categoryNameAlreadyExistsInScope = existerar redan som en kategori i vald kontext, välj ett annat namn
