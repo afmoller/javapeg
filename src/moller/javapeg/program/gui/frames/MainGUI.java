@@ -184,7 +184,7 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuSaveSelectedCategoriesToAllImages;
     private JMenuItem popupMenuExpandCategoriesTreeStructure;
     private JMenuItem popupMenuCollapseCategoriesTreeStructure;
-    private JMenuItem popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList;
+    private JMenuItem popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList;
     private JMenuItem popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList;
 
     private JPopupMenu rightClickMenuCategories;
@@ -1187,9 +1187,9 @@ public class MainGUI extends JFrame {
         popupMenuSaveSelectedCategoriesToAllImages.addActionListener(new SaveSelectedCategoriesToAllImages());
         popupMenuCollapseCategoriesTreeStructure.addActionListener(new CollapseCategoryTreeStructure());
         popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
-        popupMenuAddImagePathToImageRepository.addActionListener(addSelectedPathToImageRepository);
+        popupMenuAddImagePathToImageRepository.addActionListener(addSelectedPathToImageRepository = new AddSelectedPathToImageRepository());
         popupMenuRemoveImagePathFromImageRepository.addActionListener(new RemoveSelectedPathFromImageRepository());
-        popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList());
+        popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList());
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.addActionListener(new AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList());
 
         mainTabbedPane.addChangeListener(new MainTabbedPaneListener());
@@ -1338,11 +1338,11 @@ public class MainGUI extends JFrame {
     }
 
     public void createRightClickMenuDirectoryTree() {
-        popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label"));
+        popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label"));
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToNeverAddAutomaticallyList.label"));
 
         rightClickMenuDirectoryTree = new JPopupMenu();
-        rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList);
+        rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList);
         rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList);
     }
 
@@ -2113,7 +2113,7 @@ public class MainGUI extends JFrame {
             }
 
             if (!alwaysAdd && !neverAdd && !isParent) {
-                popupMenuAddDirectoryToAllwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
+                popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
                 popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
                 rightClickMenuDirectoryTree.show(event.getComponent(), event.getX(), event.getY());
             } else {
