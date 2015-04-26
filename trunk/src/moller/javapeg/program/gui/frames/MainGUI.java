@@ -1139,7 +1139,7 @@ public class MainGUI extends JFrame {
 
     public void showRootFile() {
         // ensure the main files are displayed
-        tree.setSelectionInterval(0,0);
+        tree.setSelectionInterval(0, 0);
     }
 
     public void addListeners(){
@@ -1347,10 +1347,27 @@ public class MainGUI extends JFrame {
     }
 
     public void initiateProgram(){
-        GUI gUI = configuration.getgUI();
-        mainTabbedPane.setSelectedIndex(gUI.getSelectedMainGUITab().getGuiOrder());
 
+        selectLastSelectedTab();
         Update.updateAllUIs();
+    }
+
+    /**
+     * Selects the tab which was selected the last time JavaPEG was running.
+     */
+    private void selectLastSelectedTab() {
+        GUI gUI = configuration.getgUI();
+
+        // Force a state changed of the tabs, which in turn makes the title of
+        // the selected tab bold, if the last selected tab is the first tab,
+        // which by construction also is the tab to be automatically selected,
+        // and therefore is no state changed, when that tab is programmatically
+        // selected in this method.
+        if (gUI.getSelectedMainGUITab().getGuiOrder() == 0) {
+            mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount() - 1);
+        }
+
+        mainTabbedPane.setSelectedIndex(gUI.getSelectedMainGUITab().getGuiOrder());
     }
 
     public void initiateApplicationContext() {
