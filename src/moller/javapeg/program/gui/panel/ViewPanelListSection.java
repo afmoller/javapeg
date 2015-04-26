@@ -214,7 +214,7 @@ public class ViewPanelListSection extends JPanel {
         previewBackgroundPanel.add(previewPanel, posPreviewPanel);
 
         backgroundPanel.add(previewLabel, posBackgroundPanel);
-        backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.NORTH));
+        backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextRow().width(2).align(GridBagConstraints.NORTH));
         backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow().width(2));
 
         backgroundPanel.add(horizontalButtonPanel, posBackgroundPanel.nextRow().nextCol().align(GridBagConstraints.WEST));

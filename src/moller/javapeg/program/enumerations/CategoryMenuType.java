@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.enumerations;
 
-public enum CategoryMenueType {
+public enum CategoryMenuType {
     ALL,
     NO_COLLAPSE,
     NO_EXPAND,
