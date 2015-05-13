@@ -173,21 +173,18 @@ public class ViewPanelListSection extends JPanel {
         JPanel verticalButtonPanel = new JPanel(new GridBagLayout());
         verticalButtonPanel.add(removeSelectedImagesButton, posVerticalButtonPanel);
         verticalButtonPanel.add(removeAllImagesButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(Box.createVerticalStrut(15), posVerticalButtonPanel.nextRow());
         verticalButtonPanel.add(moveToTopButton, posVerticalButtonPanel.nextRow());
         verticalButtonPanel.add(moveUpButton, posVerticalButtonPanel.nextRow());
         verticalButtonPanel.add(moveDownButton, posVerticalButtonPanel.nextRow());
         verticalButtonPanel.add(moveToBottomButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(Box.createVerticalStrut(15), posVerticalButtonPanel.nextRow());
         verticalButtonPanel.add(openImageResizerButton, posVerticalButtonPanel.nextRow());
-
-        GBHelper posHorizontalButtonPanel = new GBHelper();
-
-        JPanel horizontalButtonPanel = new JPanel(new GridBagLayout());
-
-        horizontalButtonPanel.add(openImageListButton, posHorizontalButtonPanel);
-        horizontalButtonPanel.add(saveImageListButton, posHorizontalButtonPanel.nextCol());
-        horizontalButtonPanel.add(exportImageListButton, posHorizontalButtonPanel.nextCol());
-        horizontalButtonPanel.add(openImageViewerButton, posHorizontalButtonPanel.nextCol());
-        horizontalButtonPanel.add(copyImageListButton, posHorizontalButtonPanel.nextCol());
+        verticalButtonPanel.add(openImageListButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(saveImageListButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(exportImageListButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(openImageViewerButton, posVerticalButtonPanel.nextRow());
+        verticalButtonPanel.add(copyImageListButton, posVerticalButtonPanel.nextRow());
 
         GBHelper posBackgroundPanel = new GBHelper();
 
@@ -213,15 +210,11 @@ public class ViewPanelListSection extends JPanel {
 
         previewBackgroundPanel.add(previewPanel, posPreviewPanel);
 
-        backgroundPanel.add(previewLabel, posBackgroundPanel);
+        backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.width(2));
+        backgroundPanel.add(spImageList, posBackgroundPanel.nextRow().expandH().expandW());
+        backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextCol().align(GridBagConstraints.NORTH));
+        backgroundPanel.add(previewLabel, posBackgroundPanel.nextRow());
         backgroundPanel.add(previewBackgroundPanel, posBackgroundPanel.nextRow().width(2).align(GridBagConstraints.NORTH));
-        backgroundPanel.add(amountOfImagesInImageListLabel, posBackgroundPanel.nextRow().width(2));
-
-        backgroundPanel.add(horizontalButtonPanel, posBackgroundPanel.nextRow().nextCol().align(GridBagConstraints.WEST));
-        backgroundPanel.add(verticalButtonPanel, posBackgroundPanel.nextRow().align(GridBagConstraints.NORTH));
-
-//        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
-        backgroundPanel.add(spImageList, posBackgroundPanel.nextCol().expandH().expandW());
 
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(5, 2, 0, 2));

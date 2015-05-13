@@ -151,6 +151,12 @@ configviewer.metadata.isofilter.removed = The following ISO filter has been remo
 configviewer.metadata.exposuretimefilter.removed = The following exposure time filter has been removed:
 
 ##############################################################################################################
+# M E T A  D A T A                                                                                           #
+##############################################################################################################
+configviewer.userinterface.splitpanedividerthickness.thin = Thin
+configviewer.userinterface.splitpanedividerthickness.thick = Thick
+
+##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
 configviewer.errormessage.rotateLogSizeToLargeKiB   = The log rotate size is to large: Maximum allowed is 100000 KiB 
@@ -169,6 +175,7 @@ configviewer.tree.node.language  = Language
 configviewer.tree.node.thumbnail = Thumbnail
 configviewer.tree.node.tag       = Tag
 configviewer.tree.node.metadata  = Meta data
+configviewer.tree.node.gui       = User Interface
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #

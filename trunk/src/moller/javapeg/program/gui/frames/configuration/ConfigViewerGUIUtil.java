@@ -23,7 +23,7 @@ import javax.swing.tree.TreeNode;
 
 public class ConfigViewerGUIUtil {
 
-public static TreeNode createNodes() {
+    public static TreeNode createNodes() {
         Language lang = Language.getInstance();
 
         DefaultMutableTreeNode root      = new DefaultMutableTreeNode(lang.get("configviewer.tree.root"));
@@ -34,6 +34,7 @@ public static TreeNode createNodes() {
         DefaultMutableTreeNode thumbnail = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.thumbnail"));
         DefaultMutableTreeNode tag       = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.tag"));
         DefaultMutableTreeNode metadata  = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.metadata"));
+        DefaultMutableTreeNode gui       = new DefaultMutableTreeNode(lang.get("configviewer.tree.node.gui"));
 
         root.add(logging);
         root.add(updates);
@@ -42,6 +43,7 @@ public static TreeNode createNodes() {
         root.add(thumbnail);
         root.add(tag);
         root.add(metadata);
+        root.add(gui);
 
         return root;
     }

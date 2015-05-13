@@ -21,6 +21,7 @@ import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.gui.GUIDefaults;
 import moller.javapeg.program.gui.frames.configuration.panels.*;
+import moller.javapeg.program.gui.frames.configuration.panels.userinterface.GUIConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
@@ -46,8 +47,7 @@ public class ConfigViewerGUI extends JFrame {
     private final MetadataConfigurationPanel metadataConfigurationPanel;
     private final RenameConfigurationPanel renameConfigurationPanel;
     private final LoggingConfigurationPanel loggingConfigurationPanel;
-
-    private JSplitPane splitPane;
+    private final GUIConfigurationPanel guiConfigurationPanel;
 
     private JButton okButton;
     private JButton applyButton;
@@ -71,6 +71,7 @@ public class ConfigViewerGUI extends JFrame {
         thumbnailConfigurationPanel = new ThumbnailConfigurationPanel();
         tagConfigurationPanel = new TagConfigurationPanel();
         metadataConfigurationPanel = new MetadataConfigurationPanel();
+        guiConfigurationPanel = new GUIConfigurationPanel();
 
         this.addListeners();
     }
@@ -115,7 +116,7 @@ public class ConfigViewerGUI extends JFrame {
     private JSplitPane initiateSplitPane() {
         backgroundsPanel = new JPanel(new BorderLayout());
 
-        splitPane = new JSplitPane();
+        JSplitPane splitPane = new JSplitPane();
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(200);
         splitPane.add(this.initiateJTree(), JSplitPane.LEFT);
@@ -158,8 +159,8 @@ public class ConfigViewerGUI extends JFrame {
 
     private JScrollPane initiateJTree() {
         tree = new JTree(ConfigViewerGUIUtil.createNodes());
-        tree.setShowsRootHandles (true);
-        tree.addMouseListener(new Mouselistener());
+        tree.setShowsRootHandles(true);
+        tree.addMouseListener(new MouseListener());
 
         return new JScrollPane(tree);
     }
@@ -218,6 +219,11 @@ public class ConfigViewerGUI extends JFrame {
          */
         metadataConfigurationPanel.updateConfiguration();
 
+        /**
+         * Update GUI Configuration
+         */
+        guiConfigurationPanel.updateConfiguration();
+
         return true;
     }
 
@@ -234,6 +240,7 @@ public class ConfigViewerGUI extends JFrame {
         displayMessage.append(loggingConfigurationPanel.getChangedConfigurationMessage());
         displayMessage.append(renameConfigurationPanel.getChangedConfigurationMessage());
         displayMessage.append(metadataConfigurationPanel.getChangedConfigurationMessage());
+        displayMessage.append(guiConfigurationPanel.getChangedConfigurationMessage());
 
         if(displayMessage.length() > 0) {
             JOptionPane.showMessageDialog(this, preMessage + "\n\n" + displayMessage +  "\n" + postMessage, lang.get("errormessage.maingui.informationMessageLabel"), JOptionPane.INFORMATION_MESSAGE);
@@ -252,7 +259,7 @@ public class ConfigViewerGUI extends JFrame {
     /**
      * Mouse listener
      */
-    private class Mouselistener extends MouseAdapter{
+    private class MouseListener extends MouseAdapter{
         @Override
         public void mousePressed(MouseEvent e){
 
@@ -276,6 +283,8 @@ public class ConfigViewerGUI extends JFrame {
                     backgroundsPanel.add(tagConfigurationPanel);
                 } else if (selRow == 7) {
                     backgroundsPanel.add(metadataConfigurationPanel);
+                } else if (selRow == 8) {
+                    backgroundsPanel.add(guiConfigurationPanel);
                 }
             }
         }

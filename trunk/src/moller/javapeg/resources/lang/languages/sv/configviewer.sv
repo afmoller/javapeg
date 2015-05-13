@@ -151,6 +151,12 @@ configviewer.metadata.isofilter.removed = Följande ISO-filter har tagits bort:
 configviewer.metadata.exposuretimefilter.removed = Följande Exponeringstids-filter har tagits bort:
 
 ##############################################################################################################
+# M E T A  D A T A                                                                                           #
+##############################################################################################################
+configviewer.userinterface.splitpanedividerthickness.thin = Tunn
+configviewer.userinterface.splitpanedividerthickness.thick = Tjock
+
+##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################
 configviewer.errormessage.rotateLogSizeToLargeKiB   = Loggroteringsstorleken är för stor: Maximalt tillåtna är 100000 KiB 
@@ -169,6 +175,7 @@ configviewer.tree.node.language  = Språk
 configviewer.tree.node.thumbnail = Tumnagel
 configviewer.tree.node.tag       = Taggar
 configviewer.tree.node.metadata  = Metadata
+configviewer.tree.node.gui       = Grafiska inställningar
 
 ##############################################################################################################
 # C H A N G E D  C O N F I G U R A T I O N  N O T I F I C A T I O N                                          #
