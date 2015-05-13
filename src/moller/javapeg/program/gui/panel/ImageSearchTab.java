@@ -390,7 +390,7 @@ public class ImageSearchTab extends JPanel {
             }
         }
 
-        ratingPanel.add(new JPanel(), posRatingPanel.nextCol().expandW());
+        ratingPanel.add(Box.createHorizontalGlue(), posRatingPanel.nextCol().expandW());
 
         JLabel commentLabel = new JLabel(lang.get("findimage.comment.label"));
         commentLabel.setForeground(Color.GRAY);
