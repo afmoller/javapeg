@@ -36,4 +36,24 @@ public class GUIWindow {
     public void setGuiWindowSplitPane(List<GUIWindowSplitPane> guiWindowSplitPane) {
         this.guiWindowSplitPane = guiWindowSplitPane;
     }
+
+    /**
+     * This method returns the {@link GUIWindowSplitPane} with a name which
+     * matches the name given in the name parameter or null if there is no
+     * match.
+     *
+     * @param name
+     * @return
+     */
+    public GUIWindowSplitPane getGUIWindowSplitPane(String name) {
+        if (guiWindowSplitPane == null) {
+            return null;
+        }
+        for (GUIWindowSplitPane windowSplitPane : guiWindowSplitPane) {
+            if (windowSplitPane.getName().equals(name)) {
+                return windowSplitPane;
+            }
+        }
+        return null;
+    }
 }

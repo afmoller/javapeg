@@ -224,7 +224,7 @@ public class ImageViewer extends JavaPEGBaseFrame {
 
         List<GUIWindowSplitPane> gUIWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
-        imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
+        imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA).getDividerSizeInPixels());
         imageMetaDataSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
         imageMetaDataSplitPane.setLeftComponent(imageBackground);
         imageMetaDataSplitPane.setRightComponent(metaDataPanel);
@@ -503,7 +503,7 @@ public class ImageViewer extends JavaPEGBaseFrame {
         List<GUIWindowSplitPane> guiWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
         GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerLocation());
-        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerSize());
+//        GUIWindowSplitPaneUtil.setGUIWindowSplitPaneDividerWidth(guiWindowSplitPanes, ConfigElement.IMAGE_META_DATA, imageMetaDataSplitPane.getDividerSize());
 
         ImageViewerState imageViewerState = getConfiguration().getImageViewerState();
 
@@ -711,7 +711,7 @@ public class ImageViewer extends JavaPEGBaseFrame {
 
         List<GUIWindowSplitPane> gUIWindowSplitPanes = getGUIWindowConfig().getGuiWindowSplitPane();
 
-        imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA));
+        imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA).getDividerSizeInPixels());
         imageMetaDataSplitPane.setDividerLocation(imageMetaDataSplitPaneDividerLocation);
         imageMetaDataSplitPane.setRightComponent(metaDataPanel);
 

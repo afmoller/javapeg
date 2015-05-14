@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
-import moller.javapeg.program.enumerations.SplitPaneDividerThickness;
+import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.language.Language;
 
 import javax.swing.*;
@@ -27,10 +27,24 @@ import javax.swing.*;
 public class SplitPaneDividerThicknessComboBox extends JComboBox<SplitPaneDividerThicknessWrapper> {
 
     public SplitPaneDividerThicknessComboBox(Language lang) {
-        SplitPaneDividerThicknessWrapper thin = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thin"), SplitPaneDividerThickness.THIN);
-        SplitPaneDividerThicknessWrapper thick = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thick"), SplitPaneDividerThickness.THICK);
+        SplitPaneDividerThicknessWrapper thin = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thin"), SplitPaneDividerSize.THIN);
+        SplitPaneDividerThicknessWrapper thick = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thick"), SplitPaneDividerSize.THICK);
 
         addItem(thin);
         addItem(thick);
+    }
+
+    public void setSelectedThickness(SplitPaneDividerSize selectedThickness) {
+        switch (selectedThickness) {
+            case THIN:
+                setSelectedIndex(0);
+                break;
+            case THICK:
+                setSelectedIndex(1);
+                break;
+            default:
+                setSelectedIndex(0);
+                break;
+        }
     }
 }

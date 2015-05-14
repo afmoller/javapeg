@@ -16,26 +16,28 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
+import moller.javapeg.program.enumerations.SplitPaneDividerSize;
+
 public class GUIWindowSplitPane {
 
-    private Integer Location;
-    private Integer width;
+    private Integer location;
+    private SplitPaneDividerSize dividerSize;
     private String name;
 
     public Integer getLocation() {
-        return Location;
+        return location;
     }
-    public Integer getWidth() {
-        return width;
+    public SplitPaneDividerSize getDividerSize() {
+        return dividerSize;
     }
     public String getName() {
         return name;
     }
     public void setLocation(Integer location) {
-        Location = location;
+        this.location = location;
     }
-    public void setWidth(Integer width) {
-        this.width = width;
+    public void setDividerSize(SplitPaneDividerSize dividerSize) {
+        this.dividerSize = dividerSize;
     }
     public void setId(String name) {
         this.name = name;
