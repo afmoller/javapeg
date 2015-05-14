@@ -16,10 +16,10 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
-import moller.javapeg.program.enumerations.SplitPaneDividerThickness;
+import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 
 /**
- * This class wraps the {@link SplitPaneDividerThickness} {@link Enum} with an
+ * This class wraps the {@link SplitPaneDividerSize} {@link Enum} with an
  * display string. This class is to be used as an object in a
  * {@link javax.swing.JComboBox} and the display string property is the
  * {@link String} which will be displayed in the GUI
@@ -29,15 +29,15 @@ import moller.javapeg.program.enumerations.SplitPaneDividerThickness;
 public class SplitPaneDividerThicknessWrapper {
 
     private String displayString;
-    private SplitPaneDividerThickness splitPaneDividerThickness;
+    private SplitPaneDividerSize splitPaneDividerSize;
 
-    public SplitPaneDividerThicknessWrapper(String displayString, SplitPaneDividerThickness splitPaneDividerThickness) {
+    public SplitPaneDividerThicknessWrapper(String displayString, SplitPaneDividerSize splitPaneDividerSize) {
         this.displayString = displayString;
-        this.splitPaneDividerThickness = splitPaneDividerThickness;
+        this.splitPaneDividerSize = splitPaneDividerSize;
     }
 
-    public SplitPaneDividerThickness getSplitPaneDividerThickness() {
-        return splitPaneDividerThickness;
+    public SplitPaneDividerSize getSplitPaneDividerSize() {
+        return splitPaneDividerSize;
     }
 
     @Override

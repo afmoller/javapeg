@@ -21,22 +21,22 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <yLocation>10</yLocation>
       <width>1280</width>
       <height>768</height>
-      <splitPane id="main">150</splitPane>
-      <splitPane id="vertical">300</splitPane>
-      <splitPane id="thumbNailMetaDataPanel">640</splitPane>
-      <splitPane id="previewAndComment">160</splitPane>
-      <splitPane id="previewCommentCategoriesRating">400</splitPane>
-      <splitPane id="mainToImageList">800</splitPane>
-      <splitPane id="imageMergeDirectoriesToProcessLog">200</splitPane>
-      <splitPane id="imageSearchImageExifMetaDataToRatingCommentAndButton">200</splitPane>
-      <splitPane id="imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton">200</splitPane>
+      <splitPane id="main" width="THIN">150</splitPane>
+      <splitPane id="vertical" width="THIN">300</splitPane>
+      <splitPane id="thumbNailMetaDataPanel" width="THIN">640</splitPane>
+      <splitPane id="previewAndComment" width="THIN">160</splitPane>
+      <splitPane id="previewCommentCategoriesRating" width="THIN">400</splitPane>
+      <splitPane id="mainToImageList" width="THIN">800</splitPane>
+      <splitPane id="imageMergeDirectoriesToProcessLog" width="THIN">200</splitPane>
+      <splitPane id="imageSearchImageExifMetaDataToRatingCommentAndButton" width="THIN">200</splitPane>
+      <splitPane id="imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton" width="THIN">200</splitPane>
     </main>
     <imageViewer>
       <xLocation>10</xLocation>
       <yLocation>10</yLocation>
       <width>1024</width>
       <height>768</height>
-      <splitPane id="imageMetaData" width="10">500</splitPane>
+      <splitPane id="imageMetaData" width="THIN">500</splitPane>
     </imageViewer>
     <imageSearchResultViewer>
       <xLocation>10</xLocation>
@@ -61,7 +61,7 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <yLocation>10</yLocation>
       <width>1280</width>
       <height>700</height>
-      <splitPane id="vertical">440</splitPane>
+      <splitPane id="vertical" width="THIN">440</splitPane>
     </imageResizer>
     <imageConflictViewer>
       <xLocation>10</xLocation>

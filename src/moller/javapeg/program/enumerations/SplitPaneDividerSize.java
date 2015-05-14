@@ -17,9 +17,22 @@
 package moller.javapeg.program.enumerations;
 
 /**
+ * This enumeration lists predefined SplitPane divider sizes and har the
+ * ability to return the size in pixels.
+ *
  * Created by Fredrik on 2015-05-13.
  */
-public enum SplitPaneDividerThickness {
-    THIN,
-    THICK
+public enum SplitPaneDividerSize {
+    THIN(5),
+    THICK(10);
+
+    private int dividerSizeInPixels;
+
+    private SplitPaneDividerSize(int dividerSizeInPixels) {
+        this.dividerSizeInPixels = dividerSizeInPixels;
+    }
+
+    public int getDividerSizeInPixels() {
+        return dividerSizeInPixels;
+    }
 }

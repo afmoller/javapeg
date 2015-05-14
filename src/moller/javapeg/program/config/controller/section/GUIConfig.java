@@ -20,6 +20,7 @@ import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.SelectedMainGUITab;
+import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;
 import moller.util.string.Tab;
@@ -82,7 +83,7 @@ public class GUIConfig {
 
     private static GUIWindow createGUIWindow(Node windowNode) {
         GUIWindow guiWindow = new GUIWindow();
-        List<GUIWindowSplitPane> guiWindowSplitPanes = new ArrayList<GUIWindowSplitPane>();
+        List<GUIWindowSplitPane> guiWindowSplitPanes = new ArrayList<>();
 
         Rectangle sizeAndLocation = new Rectangle();
 
@@ -138,7 +139,7 @@ public class GUIConfig {
         }
 
         guiWindowSplitPane.setId(id);
-        guiWindowSplitPane.setWidth(width.equals("") ? null : Integer.parseInt(width));
+        guiWindowSplitPane.setDividerSize(SplitPaneDividerSize.valueOf(width));
 
         return guiWindowSplitPane;
     }
@@ -248,7 +249,7 @@ public class GUIConfig {
         for (GUIWindowSplitPane guiWindowSplitPane : guiWindowSplitPanes) {
 
             String id = guiWindowSplitPane.getName();
-            Integer width = guiWindowSplitPane.getWidth();
+            SplitPaneDividerSize width = guiWindowSplitPane.getDividerSize();
 
             XMLAttribute idAttribute = new XMLAttribute(ConfigElement.ID.getElementValue(), id);
             XMLAttribute widthAttribute;
@@ -256,7 +257,7 @@ public class GUIConfig {
             XMLAttribute[] attributes;
 
             if (width != null) {
-                widthAttribute = new XMLAttribute(ConfigElement.WIDTH.getElementValue(), Integer.toString(width));
+                widthAttribute = new XMLAttribute(ConfigElement.WIDTH.getElementValue(), width.name());
 
                 attributes = new XMLAttribute[2];
                 attributes[0] = idAttribute;

@@ -668,18 +668,8 @@ public class MainGUI extends JFrame {
 
         List<GUIWindowSplitPane> guiWindowSplitPanes = mainGUI.getGuiWindowSplitPane();
 
-        mainSplitPane = new JSplitPane();
-        mainSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN));
-        mainSplitPane.setOneTouchExpandable(true);
 
-        verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        verticalSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL));
-        verticalSplitPane.setOneTouchExpandable(true);
 
-        thumbNailMetaPanelSplitPane = new JSplitPane();
-        thumbNailMetaPanelSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL));
-        thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
-        thumbNailMetaPanelSplitPane.setDividerSize(10);
 
         thumbNailsPanelHeading = new HeadingPanel(lang.get("picture.panel.pictureLabel"), Color.GRAY, null);
 
@@ -702,12 +692,26 @@ public class MainGUI extends JFrame {
         mainTabbedPane.addTab(lang.get("tabbedpane.imageView"), this.createViewPanel());
 
         imageMetaDataPanel = new MetaDataPanel();
+
+        thumbNailMetaPanelSplitPane = new JSplitPane();
+        thumbNailMetaPanelSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL));
+        thumbNailMetaPanelSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(guiWindowSplitPanes, ConfigElement.THUMB_NAIL_META_DATA_PANEL).getDividerSizeInPixels());
+        thumbNailMetaPanelSplitPane.setOneTouchExpandable(true);
+
         thumbNailMetaPanelSplitPane.setLeftComponent(thumbNailsBackgroundsPanel);
         thumbNailMetaPanelSplitPane.setRightComponent(imageMetaDataPanel);
 
+        verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        verticalSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.VERTICAL));
+        verticalSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(guiWindowSplitPanes, ConfigElement.VERTICAL).getDividerSizeInPixels());
+        verticalSplitPane.setOneTouchExpandable(true);
         verticalSplitPane.setTopComponent(mainTabbedPane);
         verticalSplitPane.setBottomComponent(thumbNailMetaPanelSplitPane);
 
+        mainSplitPane = new JSplitPane();
+        mainSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN));
+        mainSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(guiWindowSplitPanes, ConfigElement.MAIN).getDividerSizeInPixels());
+        mainSplitPane.setOneTouchExpandable(true);
         mainSplitPane.setLeftComponent(createTreePanel());
         mainSplitPane.setRightComponent(verticalSplitPane);
 
@@ -715,7 +719,7 @@ public class MainGUI extends JFrame {
 
         mainSplitPaneImageViewListSplitPane = new JSplitPane();
         mainSplitPaneImageViewListSplitPane.setDividerLocation(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerLocation(guiWindowSplitPanes, ConfigElement.MAIN_TO_IMAGELIST));
-        mainSplitPaneImageViewListSplitPane.setDividerSize(10);
+        mainSplitPaneImageViewListSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(guiWindowSplitPanes, ConfigElement.MAIN_TO_IMAGELIST).getDividerSizeInPixels());
         mainSplitPaneImageViewListSplitPane.setOneTouchExpandable(true);
         mainSplitPaneImageViewListSplitPane.setLeftComponent(mainSplitPane);
         mainSplitPaneImageViewListSplitPane.setRightComponent(viewPanelListSection);
