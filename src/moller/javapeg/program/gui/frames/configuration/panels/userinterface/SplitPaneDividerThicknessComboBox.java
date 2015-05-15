@@ -27,8 +27,8 @@ import javax.swing.*;
 public class SplitPaneDividerThicknessComboBox extends JComboBox<SplitPaneDividerThicknessWrapper> {
 
     public SplitPaneDividerThicknessComboBox(Language lang) {
-        SplitPaneDividerThicknessWrapper thin = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thin"), SplitPaneDividerSize.THIN);
-        SplitPaneDividerThicknessWrapper thick = new SplitPaneDividerThicknessWrapper(lang.get("configviewer.userinterface.splitpanedividerthickness.thick"), SplitPaneDividerSize.THICK);
+        SplitPaneDividerThicknessWrapper thin = new SplitPaneDividerThicknessWrapper(lang.get(SplitPaneDividerSize.THIN.getLocalizationKey()), SplitPaneDividerSize.THIN);
+        SplitPaneDividerThicknessWrapper thick = new SplitPaneDividerThicknessWrapper(lang.get(SplitPaneDividerSize.THICK.getLocalizationKey()), SplitPaneDividerSize.THICK);
 
         addItem(thin);
         addItem(thick);

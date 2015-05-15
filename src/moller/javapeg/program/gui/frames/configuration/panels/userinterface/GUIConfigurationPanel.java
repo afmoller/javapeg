@@ -79,29 +79,25 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         GUI gui = getConfiguration().getgUI();
         GUIWindow main = gui.getMain();
 
-        //TODO: Fix hard coded string
-        JLabel treeToCenterLabel = new JLabel("Tree to Center:");
+        JLabel treeToCenterLabel = new JLabel(getLang().get("configviewer.userinterface.main.dividersize.text"));
         treeToCenterComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane mainGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.MAIN.getElementValue());
         treeToCenterComboBox.setSelectedThickness(mainGuiWindowSplitPane.getDividerSize());
 
-        //TODO: Fix hard coded string
-        JLabel thumbNailsToTabsLabel = new JLabel("Thumbnails to Tabs:");
+        JLabel thumbNailsToTabsLabel = new JLabel(getLang().get("configviewer.userinterface.thumbNailsToTabs.dividersize.text"));
         thumbNailsToTabsComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane verticalGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue());
         thumbNailsToTabsComboBox.setSelectedThickness(verticalGuiWindowSplitPane.getDividerSize());
 
-        //TODO: Fix hard coded string
-        JLabel thumbNailsToMetaDataLabel = new JLabel("Thumbnails to Meta data:");
+        JLabel thumbNailsToMetaDataLabel = new JLabel(getLang().get("configviewer.userinterface.thumbNailsToMetaData.dividersize.text"));
         thumbNailsToMetaDataComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane thumbNailsToMetaDataGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue());
         thumbNailsToMetaDataComboBox.setSelectedThickness(thumbNailsToMetaDataGuiWindowSplitPane.getDividerSize());
 
-        //TODO: Fix hard coded string
-        JLabel centerToImageListLabel = new JLabel("Center to image list:");
+        JLabel centerToImageListLabel = new JLabel(getLang().get("configviewer.userinterface.centerToImageList.dividersize.text"));
         centerToImageListComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane centerToImageListGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue());
@@ -162,36 +158,30 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        GUI gui = getConfiguration().getgUI();
-
-        GUIWindow main = gui.getMain();
+        GUIWindow main = getConfiguration().getgUI().getMain();
 
         SplitPaneDividerSize mainConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.MAIN.getElementValue()).getDividerSize();
         SplitPaneDividerSize mainConfigurationGuiDividerSize = treeToCenterComboBox.getItemAt(treeToCenterComboBox.getSelectedIndex()).getSplitPaneDividerSize();
         if (mainConfigurationDividerSize != mainConfigurationGuiDividerSize) {
-            //TODO: Fix correct text
-            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + mainConfigurationGuiDividerSize + " (" + mainConfigurationDividerSize + ")\n");
+            displayMessage.append(getLang().get("configviewer.userinterface.main.dividersize.text") + ": " + getLang().get(mainConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(mainConfigurationDividerSize.getLocalizationKey()) + ")\n");
         }
 
         SplitPaneDividerSize verticalConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue()).getDividerSize();
         SplitPaneDividerSize verticalConfigurationGuiDividerSize = thumbNailsToTabsComboBox.getItemAt(thumbNailsToTabsComboBox.getSelectedIndex()).getSplitPaneDividerSize();
         if (verticalConfigurationDividerSize != verticalConfigurationGuiDividerSize) {
-            //TODO: Fix correct text
-            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + verticalConfigurationGuiDividerSize + " (" + verticalConfigurationDividerSize + ")\n");
+            displayMessage.append(getLang().get("configviewer.userinterface.thumbNailsToTabs.dividersize.text") + ": " + getLang().get(verticalConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(verticalConfigurationDividerSize.getLocalizationKey()) + ")\n");
         }
 
         SplitPaneDividerSize thumbNailsToMetaDataConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue()).getDividerSize();
         SplitPaneDividerSize thumbNailsToMetaDataConfigurationGuiDividerSize = thumbNailsToMetaDataComboBox.getItemAt(thumbNailsToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize();
         if (thumbNailsToMetaDataConfigurationDividerSize != thumbNailsToMetaDataConfigurationGuiDividerSize) {
-            //TODO: Fix correct text
-            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + thumbNailsToMetaDataConfigurationGuiDividerSize + " (" + thumbNailsToMetaDataConfigurationDividerSize + ")\n");
+            displayMessage.append(getLang().get("configviewer.userinterface.thumbNailsToMetaData.dividersize.text") + ": " + getLang().get(thumbNailsToMetaDataConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(thumbNailsToMetaDataConfigurationDividerSize.getLocalizationKey()) + ")\n");
         }
 
         SplitPaneDividerSize centerToImageListConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue()).getDividerSize();
         SplitPaneDividerSize centerToImageListConfigurationGuiDividerSize = centerToImageListComboBox.getItemAt(centerToImageListComboBox.getSelectedIndex()).getSplitPaneDividerSize();
         if (centerToImageListConfigurationDividerSize != centerToImageListConfigurationGuiDividerSize) {
-            //TODO: Fix correct text
-            displayMessage.append(getLang().get("configviewer.logging.label.developerMode.text") + ": " + centerToImageListConfigurationGuiDividerSize + " (" + centerToImageListConfigurationDividerSize + ")\n");
+            displayMessage.append(getLang().get("configviewer.userinterface.centerToImageList.dividersize.text") + ": " + getLang().get(centerToImageListConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(centerToImageListConfigurationDividerSize.getLocalizationKey()) + ")\n");
         }
 
         return displayMessage.toString();
