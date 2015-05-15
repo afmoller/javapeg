@@ -23,16 +23,22 @@ package moller.javapeg.program.enumerations;
  * Created by Fredrik on 2015-05-13.
  */
 public enum SplitPaneDividerSize {
-    THIN(5),
-    THICK(10);
+    THIN(5, "configviewer.userinterface.splitpanedividerthickness.thin"),
+    THICK(10, "configviewer.userinterface.splitpanedividerthickness.thick");
 
     private int dividerSizeInPixels;
+    private String localizationKey;
 
-    private SplitPaneDividerSize(int dividerSizeInPixels) {
+    private SplitPaneDividerSize(int dividerSizeInPixels, String localizationKey) {
         this.dividerSizeInPixels = dividerSizeInPixels;
+        this.localizationKey = localizationKey;
     }
 
     public int getDividerSizeInPixels() {
         return dividerSizeInPixels;
+    }
+
+    public String getLocalizationKey() {
+        return localizationKey;
     }
 }
