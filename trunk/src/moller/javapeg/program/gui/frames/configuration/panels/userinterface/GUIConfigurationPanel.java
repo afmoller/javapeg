@@ -24,6 +24,8 @@ import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.enumerations.TabPosition;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,24 +82,28 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         GUIWindow main = gui.getMain();
 
         JLabel treeToCenterLabel = new JLabel(getLang().get("configviewer.userinterface.main.dividersize.text"));
+        treeToCenterLabel.setForeground(new Color(34, 177, 76));
         treeToCenterComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane mainGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.MAIN.getElementValue());
         treeToCenterComboBox.setSelectedThickness(mainGuiWindowSplitPane.getDividerSize());
 
         JLabel thumbNailsToTabsLabel = new JLabel(getLang().get("configviewer.userinterface.thumbNailsToTabs.dividersize.text"));
+        thumbNailsToTabsLabel.setForeground(new Color(63, 72, 204));
         thumbNailsToTabsComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane verticalGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue());
         thumbNailsToTabsComboBox.setSelectedThickness(verticalGuiWindowSplitPane.getDividerSize());
 
         JLabel thumbNailsToMetaDataLabel = new JLabel(getLang().get("configviewer.userinterface.thumbNailsToMetaData.dividersize.text"));
+        thumbNailsToMetaDataLabel.setForeground(new Color(163, 73, 164));
         thumbNailsToMetaDataComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane thumbNailsToMetaDataGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue());
         thumbNailsToMetaDataComboBox.setSelectedThickness(thumbNailsToMetaDataGuiWindowSplitPane.getDividerSize());
 
         JLabel centerToImageListLabel = new JLabel(getLang().get("configviewer.userinterface.centerToImageList.dividersize.text"));
+        centerToImageListLabel.setForeground(new Color(0, 162, 232));
         centerToImageListComboBox = new SplitPaneDividerThicknessComboBox(getLang());
 
         GUIWindowSplitPane centerToImageListGuiWindowSplitPane = main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue());
@@ -110,13 +116,23 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         GBHelper posBackgroundPanel = new GBHelper();
 
         backgroundPanel.add(treeToCenterLabel, posBackgroundPanel);
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(treeToCenterComboBox, posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
+        backgroundPanel.add(new JLabel(IconLoader.getIcon(Icons.CONFIG_GUI_MAIN_GUI_SPLITPANES)), posBackgroundPanel.nextCol().height(7));
+        backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
         backgroundPanel.add(thumbNailsToTabsLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(thumbNailsToTabsComboBox, posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
         backgroundPanel.add(thumbNailsToMetaDataLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(thumbNailsToMetaDataComboBox, posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
         backgroundPanel.add(centerToImageListLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(centerToImageListComboBox, posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalGlue(), posBackgroundPanel.nextRow().nextRow().nextCol().nextCol().nextCol().nextCol().nextCol().expandW()); // Align everything to the left.
 
         return backgroundPanel;
     }
