@@ -25,6 +25,7 @@ import moller.util.java.SystemProperties;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.Properties;
 
 public class Language {
@@ -118,6 +119,8 @@ public class Language {
             if (StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/javapeg." + languageCode) == null) {
                 languageCode = "en";
             }
+
+            Locale.setDefault(new Locale(languageCode));
 
             langFileJavaPEG               = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/javapeg."               + languageCode), C.UTF8);
             langFileImageViewer           = new InputStreamReader(StartJavaPEG.class.getResourceAsStream(RESOURCES_LANG_LANGUAGES + languageCode + "/imageviewer."           + languageCode), C.UTF8);

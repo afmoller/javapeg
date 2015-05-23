@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
+package moller.javapeg.program.enumerations.wrappers;
 
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 
@@ -26,22 +26,16 @@ import moller.javapeg.program.enumerations.SplitPaneDividerSize;
  *
  * Created by Fredrik on 2015-05-13.
  */
-public class SplitPaneDividerThicknessWrapper {
+public class SplitPaneDividerThicknessWrapper extends BaseEnumWrapper {
 
-    private String displayString;
     private SplitPaneDividerSize splitPaneDividerSize;
 
     public SplitPaneDividerThicknessWrapper(String displayString, SplitPaneDividerSize splitPaneDividerSize) {
-        this.displayString = displayString;
+        super.displayString = displayString;
         this.splitPaneDividerSize = splitPaneDividerSize;
     }
 
     public SplitPaneDividerSize getSplitPaneDividerSize() {
         return splitPaneDividerSize;
-    }
-
-    @Override
-    public String toString() {
-        return displayString;
     }
 }

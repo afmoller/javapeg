@@ -17,10 +17,22 @@
 package moller.javapeg.program.enumerations;
 
 /**
+ * This enumeration lists predefined tab positions
+ *
  * Created by Fredrik on 2015-04-26.
  */
 public enum TabPosition {
 
-    TOP,
-    BOTTOM
+    TOP(5, "configviewer.userinterface.tabPosition.top"),
+    BOTTOM(10, "configviewer.userinterface.tabPosition.bottom");
+
+    private String localizationKey;
+
+    private TabPosition(int dividerSizeInPixels, String localizationKey) {
+        this.localizationKey = localizationKey;
+    }
+
+    public String getLocalizationKey() {
+        return localizationKey;
+    }
 }

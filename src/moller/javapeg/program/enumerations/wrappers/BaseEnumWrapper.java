@@ -14,31 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.enumerations;
+package moller.javapeg.program.enumerations.wrappers;
 
 /**
- * This enumeration lists predefined SplitPane divider sizes and has the
- * ability to return the size in pixels.
+ * Base class for the enum wrapper classes, classes which are intended to be
+ * used in an Graphical component, where each enumeration also do have an
+ * localized string value.
  *
- * Created by Fredrik on 2015-05-13.
+ * Created by Fredrik on 2015-05-23.
  */
-public enum SplitPaneDividerSize {
-    THIN(5, "configviewer.userinterface.splitpanedividerthickness.thin"),
-    THICK(10, "configviewer.userinterface.splitpanedividerthickness.thick");
+public class BaseEnumWrapper {
 
-    private int dividerSizeInPixels;
-    private String localizationKey;
+    // The field is protected due to be able to be accessed in subclass
+    // constructors.
+    protected String displayString;
 
-    private SplitPaneDividerSize(int dividerSizeInPixels, String localizationKey) {
-        this.dividerSizeInPixels = dividerSizeInPixels;
-        this.localizationKey = localizationKey;
-    }
-
-    public int getDividerSizeInPixels() {
-        return dividerSizeInPixels;
-    }
-
-    public String getLocalizationKey() {
-        return localizationKey;
+    @Override
+    public String toString() {
+        return displayString;
     }
 }

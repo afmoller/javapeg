@@ -14,31 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.enumerations;
+package moller.javapeg.program.enumerations.wrappers;
+
+import moller.javapeg.program.enumerations.TabPosition;
 
 /**
- * This enumeration lists predefined SplitPane divider sizes and has the
- * ability to return the size in pixels.
+ * This class wraps the {@link TabPosition} {@link Enum} with an
+ * display string. This class is to be used as an object in a
+ * {@link javax.swing.JComboBox} and the display string property is the
+ * {@link String} which will be displayed in the GUI
  *
  * Created by Fredrik on 2015-05-13.
  */
-public enum SplitPaneDividerSize {
-    THIN(5, "configviewer.userinterface.splitpanedividerthickness.thin"),
-    THICK(10, "configviewer.userinterface.splitpanedividerthickness.thick");
+public class TabPositionWrapper extends BaseEnumWrapper {
 
-    private int dividerSizeInPixels;
-    private String localizationKey;
+    private TabPosition tabPosition;
 
-    private SplitPaneDividerSize(int dividerSizeInPixels, String localizationKey) {
-        this.dividerSizeInPixels = dividerSizeInPixels;
-        this.localizationKey = localizationKey;
+    public TabPositionWrapper(String displayString, TabPosition tabPosition) {
+        super.displayString = displayString;
+        this.tabPosition = tabPosition;
     }
 
-    public int getDividerSizeInPixels() {
-        return dividerSizeInPixels;
+    public TabPosition getTabPosition() {
+        return tabPosition;
     }
 
-    public String getLocalizationKey() {
-        return localizationKey;
-    }
+
 }
