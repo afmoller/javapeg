@@ -155,10 +155,14 @@ configviewer.metadata.exposuretimefilter.removed = The following exposure time f
 ##############################################################################################################
 configviewer.userinterface.splitpanedividerthickness.thin = Thin
 configviewer.userinterface.splitpanedividerthickness.thick = Thick
+
 configviewer.userinterface.main.dividersize.text = Tree to Center
 configviewer.userinterface.thumbNailsToTabs.dividersize.text = Thumbnails to Tabs
 configviewer.userinterface.thumbNailsToMetaData.dividersize.text = Thumbnails to Meta data
 configviewer.userinterface.centerToImageList.dividersize.text = Center to image list
+
+configviewer.userinterface.tabPosition.top = Top
+configviewer.userinterface.tabPosition.bottom = Bottom
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

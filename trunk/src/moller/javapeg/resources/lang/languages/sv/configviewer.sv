@@ -155,10 +155,14 @@ configviewer.metadata.exposuretimefilter.removed = Följande Exponeringstids-fil
 ##############################################################################################################
 configviewer.userinterface.splitpanedividerthickness.thin = Tunn
 configviewer.userinterface.splitpanedividerthickness.thick = Tjock
+
 configviewer.userinterface.main.dividersize.text = Träd till Mittre
 configviewer.userinterface.thumbNailsToTabs.dividersize.text = Tumnaglar till Flikar
 configviewer.userinterface.thumbNailsToMetaData.dividersize.text = Tumnaglar till Meta data
 configviewer.userinterface.centerToImageList.dividersize.text = Mittre till bildlista
+
+configviewer.userinterface.tabPosition.top = Topp
+configviewer.userinterface.tabPosition.bottom = Botten
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

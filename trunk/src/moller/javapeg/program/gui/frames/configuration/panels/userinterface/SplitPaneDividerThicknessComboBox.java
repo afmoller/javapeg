@@ -17,6 +17,7 @@
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
+import moller.javapeg.program.enumerations.wrappers.SplitPaneDividerThicknessWrapper;
 import moller.javapeg.program.language.Language;
 
 import javax.swing.*;

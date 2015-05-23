@@ -21,7 +21,6 @@ import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
-import moller.javapeg.program.enumerations.TabPosition;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
@@ -31,6 +30,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 
 /**
  * Created by Fredrik on 2015-04-25.
@@ -38,12 +38,13 @@ import java.awt.event.ActionListener;
 public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     private JButton tabTextColorChooserButton;
-    private JPanel tabTextColorPreviewPanel;
 
     private SplitPaneDividerThicknessComboBox treeToCenterComboBox;
     private SplitPaneDividerThicknessComboBox thumbNailsToTabsComboBox;
     private SplitPaneDividerThicknessComboBox thumbNailsToMetaDataComboBox;
     private SplitPaneDividerThicknessComboBox centerToImageListComboBox;
+
+    private TabPositionComboBox tabPositionComboBox;
 
     @Override
     public boolean isValidConfiguration() {
@@ -115,24 +116,23 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        backgroundPanel.add(treeToCenterLabel, posBackgroundPanel);
+        backgroundPanel.add(treeToCenterLabel, posBackgroundPanel.expandW());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(treeToCenterComboBox, posBackgroundPanel.nextCol());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(new JLabel(IconLoader.getIcon(Icons.CONFIG_GUI_MAIN_GUI_SPLITPANES)), posBackgroundPanel.nextCol().height(7));
         backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
-        backgroundPanel.add(thumbNailsToTabsLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(thumbNailsToTabsLabel, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(thumbNailsToTabsComboBox, posBackgroundPanel.nextCol());
         backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
-        backgroundPanel.add(thumbNailsToMetaDataLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(thumbNailsToMetaDataLabel, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(thumbNailsToMetaDataComboBox, posBackgroundPanel.nextCol());
         backgroundPanel.add(Box.createVerticalStrut(5), posBackgroundPanel.nextRow());
-        backgroundPanel.add(centerToImageListLabel, posBackgroundPanel.nextRow());
+        backgroundPanel.add(centerToImageListLabel, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(centerToImageListComboBox, posBackgroundPanel.nextCol());
-        backgroundPanel.add(Box.createHorizontalGlue(), posBackgroundPanel.nextRow().nextRow().nextCol().nextCol().nextCol().nextCol().nextCol().expandW()); // Align everything to the left.
 
         return backgroundPanel;
     }
@@ -141,15 +141,10 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         //TODO: Fix hard coded string
         JLabel tabPositionLabel = new JLabel("Position Tabs:");
-
-        JComboBox<TabPosition> tabPositionComboBox = new JComboBox<>();
-        tabPositionComboBox.addItem(TabPosition.TOP);
-        tabPositionComboBox.addItem(TabPosition.BOTTOM);
+        tabPositionComboBox = new TabPositionComboBox(getLang());
 
         //TODO: Fix hard coded string
         JLabel tabTextColorLabel = new JLabel("Tab text color:");
-
-        tabTextColorPreviewPanel = new JPanel();
 
         //TODO: Fix hard coded string
         tabTextColorChooserButton = new JButton("Choose color");
@@ -161,10 +156,9 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         GBHelper posBackgroundPanel = new GBHelper();
 
-        backgroundPanel.add(tabPositionLabel, posBackgroundPanel);
+        backgroundPanel.add(tabPositionLabel, posBackgroundPanel.expandW());
         backgroundPanel.add(tabPositionComboBox, posBackgroundPanel.nextCol().width(2));
-        backgroundPanel.add(tabTextColorLabel, posBackgroundPanel.nextRow());
-        backgroundPanel.add(tabTextColorPreviewPanel, posBackgroundPanel.nextCol());
+        backgroundPanel.add(tabTextColorLabel, posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(tabTextColorChooserButton, posBackgroundPanel.nextCol());
 
         return backgroundPanel;
@@ -176,31 +170,28 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         GUIWindow main = getConfiguration().getgUI().getMain();
 
-        SplitPaneDividerSize mainConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.MAIN.getElementValue()).getDividerSize();
-        SplitPaneDividerSize mainConfigurationGuiDividerSize = treeToCenterComboBox.getItemAt(treeToCenterComboBox.getSelectedIndex()).getSplitPaneDividerSize();
-        if (mainConfigurationDividerSize != mainConfigurationGuiDividerSize) {
-            displayMessage.append(getLang().get("configviewer.userinterface.main.dividersize.text") + ": " + getLang().get(mainConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(mainConfigurationDividerSize.getLocalizationKey()) + ")\n");
-        }
-
-        SplitPaneDividerSize verticalConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue()).getDividerSize();
-        SplitPaneDividerSize verticalConfigurationGuiDividerSize = thumbNailsToTabsComboBox.getItemAt(thumbNailsToTabsComboBox.getSelectedIndex()).getSplitPaneDividerSize();
-        if (verticalConfigurationDividerSize != verticalConfigurationGuiDividerSize) {
-            displayMessage.append(getLang().get("configviewer.userinterface.thumbNailsToTabs.dividersize.text") + ": " + getLang().get(verticalConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(verticalConfigurationDividerSize.getLocalizationKey()) + ")\n");
-        }
-
-        SplitPaneDividerSize thumbNailsToMetaDataConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue()).getDividerSize();
-        SplitPaneDividerSize thumbNailsToMetaDataConfigurationGuiDividerSize = thumbNailsToMetaDataComboBox.getItemAt(thumbNailsToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize();
-        if (thumbNailsToMetaDataConfigurationDividerSize != thumbNailsToMetaDataConfigurationGuiDividerSize) {
-            displayMessage.append(getLang().get("configviewer.userinterface.thumbNailsToMetaData.dividersize.text") + ": " + getLang().get(thumbNailsToMetaDataConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(thumbNailsToMetaDataConfigurationDividerSize.getLocalizationKey()) + ")\n");
-        }
-
-        SplitPaneDividerSize centerToImageListConfigurationDividerSize = main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue()).getDividerSize();
-        SplitPaneDividerSize centerToImageListConfigurationGuiDividerSize = centerToImageListComboBox.getItemAt(centerToImageListComboBox.getSelectedIndex()).getSplitPaneDividerSize();
-        if (centerToImageListConfigurationDividerSize != centerToImageListConfigurationGuiDividerSize) {
-            displayMessage.append(getLang().get("configviewer.userinterface.centerToImageList.dividersize.text") + ": " + getLang().get(centerToImageListConfigurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(centerToImageListConfigurationDividerSize.getLocalizationKey()) + ")\n");
-        }
+        appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN, treeToCenterComboBox, "configviewer.userinterface.main.dividersize.text");
+        appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.VERTICAL, thumbNailsToTabsComboBox, "configviewer.userinterface.thumbNailsToTabs.dividersize.text");
+        appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.THUMB_NAIL_META_DATA_PANEL, thumbNailsToMetaDataComboBox, "configviewer.userinterface.thumbNailsToMetaData.dividersize.text");
+        appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN_TO_IMAGELIST, centerToImageListComboBox, "configviewer.userinterface.centerToImageList.dividersize.text");
 
         return displayMessage.toString();
+    }
+
+    private void appendConfigurationDisplayMessage(StringBuilder displayMessage, GUIWindow guiWindow, ConfigElement configElement, SplitPaneDividerThicknessComboBox splitPaneDividerThicknessComboBox, String languageKey) {
+        SplitPaneDividerSize configurationDividerSize = getSplitPaneDividerSizeFromConfiguration(guiWindow, configElement);
+        SplitPaneDividerSize configurationGuiDividerSize = getSplitPaneDividerSizeFromConfigurationGui(splitPaneDividerThicknessComboBox);
+        if (configurationDividerSize != configurationGuiDividerSize) {
+            displayMessage.append(getLang().get(languageKey) + ": " + getLang().get(configurationGuiDividerSize.getLocalizationKey()) + " (" + getLang().get(configurationDividerSize.getLocalizationKey()) + ")\n");
+        }
+    }
+
+    private SplitPaneDividerSize getSplitPaneDividerSizeFromConfiguration(GUIWindow guiWindow, ConfigElement configElement) {
+        return guiWindow.getGUIWindowSplitPane(configElement.getElementValue()).getDividerSize();
+    }
+
+    private SplitPaneDividerSize getSplitPaneDividerSizeFromConfigurationGui(SplitPaneDividerThicknessComboBox splitPaneDividerThicknessComboBox) {
+        return splitPaneDividerThicknessComboBox.getItemAt(splitPaneDividerThicknessComboBox.getSelectedIndex()).getSplitPaneDividerSize();
     }
 
     @Override
@@ -217,10 +208,12 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
     private class TabTextColorChooserButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            JColorChooser.setDefaultLocale(Locale.getDefault());
+
             //TODO: Fix hard coded string
             Color selectedColor = JColorChooser.showDialog(null, "Choose a Color", null);
             if (selectedColor != null) {
-                tabTextColorPreviewPanel.setBackground(selectedColor);
+                tabTextColorChooserButton.setForeground(selectedColor);
             }
         }
     }
