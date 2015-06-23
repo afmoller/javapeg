@@ -18,8 +18,8 @@ package moller.javapeg.program.config.controller.section;
 
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
-import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
-import moller.javapeg.program.config.model.GUI.SelectedMainGUITab;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.tab.SelectedMainGUITab;
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.StringUtil;

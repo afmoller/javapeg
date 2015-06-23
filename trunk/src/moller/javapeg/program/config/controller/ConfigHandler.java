@@ -174,6 +174,9 @@ public class ConfigHandler {
                     case GUI:
                         configuration.setgUI(GUIConfig.getGUIConfig(node));
                         break;
+                    case GUI_TABS:
+                        configuration.setgUITabs(GUITabsConfig.getGUITabsConfig(node));
+                        break;
                     case JAVAPEG_CLIENT_ID:
                         configuration.setJavapegClientId(JavapegClientIdConfig.getJavapegClientIdConfig(node.getTextContent()));
                         break;
@@ -278,6 +281,9 @@ public class ConfigHandler {
 
             // GUI
             GUIConfig.writeGUIConfig(configuration.getgUI(), Tab.TWO, w);
+
+            // GUITabs
+            GUITabsConfig.writeGUITabsConfig(configuration.getgUITabs(), Tab.TWO, w);
 
             // UPDATES CHECKER
             UpdatesCheckerConfig.writeUpdatesCheckerConfig(configuration.getUpdatesChecker(), Tab.TWO, w);

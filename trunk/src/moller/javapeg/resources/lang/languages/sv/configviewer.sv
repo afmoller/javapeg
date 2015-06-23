@@ -151,7 +151,7 @@ configviewer.metadata.isofilter.removed = Följande ISO-filter har tagits bort:
 configviewer.metadata.exposuretimefilter.removed = Följande Exponeringstids-filter har tagits bort:
 
 ##############################################################################################################
-# M E T A  D A T A                                                                                           #
+# U S E R  I N T E R F A C E                                                                                 #
 ##############################################################################################################
 configviewer.userinterface.splitpanedividerthickness.thin = Tunn
 configviewer.userinterface.splitpanedividerthickness.thick = Tjock
@@ -163,6 +163,9 @@ configviewer.userinterface.centerToImageList.dividersize.text = Mittre till bild
 
 configviewer.userinterface.tabPosition.top = Topp
 configviewer.userinterface.tabPosition.bottom = Botten
+
+configviewer.userinterface.tabPosition.label.text = Position flikar
+
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

@@ -16,6 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
+import moller.javapeg.program.config.model.GUI.tab.SelectedMainGUITab;
+
 public class GUI {
 
     private GUIWindow main;

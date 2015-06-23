@@ -19,8 +19,12 @@ package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
-import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.tab.GUITab;
+import moller.javapeg.program.config.model.GUI.tab.GUITabs;
+import moller.javapeg.program.config.model.GUI.tab.GUITabsUtil;
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
+import moller.javapeg.program.enumerations.TabPosition;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
@@ -139,8 +143,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     private JPanel createTabsConfigurationPanel() {
 
-        //TODO: Fix hard coded string
-        JLabel tabPositionLabel = new JLabel("Position Tabs:");
+        JLabel tabPositionLabel = new JLabel(getLang().get("configviewer.userinterface.tabPosition.label.text"));
         tabPositionComboBox = new TabPositionComboBox(getLang());
 
         //TODO: Fix hard coded string
@@ -175,6 +178,13 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.THUMB_NAIL_META_DATA_PANEL, thumbNailsToMetaDataComboBox, "configviewer.userinterface.thumbNailsToMetaData.dividersize.text");
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN_TO_IMAGELIST, centerToImageListComboBox, "configviewer.userinterface.centerToImageList.dividersize.text");
 
+        TabPosition configurationGuiTabPosition = tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition();
+        TabPosition configurationTabPosition = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue()).getPosition();
+
+        if (configurationGuiTabPosition != configurationTabPosition) {
+            displayMessage.append(getLang().get("configviewer.userinterface.tabPosition.label.text") + ": " + getLang().get(configurationGuiTabPosition.getLocalizationKey()) + " (" + getLang().get(configurationTabPosition.getLocalizationKey()) + ")\n");
+        }
+
         return displayMessage.toString();
     }
 
@@ -203,6 +213,11 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue()).setDividerSize(thumbNailsToTabsComboBox.getItemAt(thumbNailsToTabsComboBox.getSelectedIndex()).getSplitPaneDividerSize());
         main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue()).setDividerSize(thumbNailsToMetaDataComboBox.getItemAt(thumbNailsToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize());
         main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue()).setDividerSize(centerToImageListComboBox.getItemAt(centerToImageListComboBox.getSelectedIndex()).getSplitPaneDividerSize());
+
+        GUITabs guiTabs = getConfiguration().getgUITabs();
+        GUITab mainGuiApplicationModeGuiTab = GUITabsUtil.getGUITab(guiTabs.getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
+        mainGuiApplicationModeGuiTab.setPosition(tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition());
+
     }
 
     private class TabTextColorChooserButtonListener implements ActionListener {
@@ -210,7 +225,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         public void actionPerformed(ActionEvent e) {
             JColorChooser.setDefaultLocale(Locale.getDefault());
 
-            //TODO: Fix hard coded string
+            // TODO: Fix hard coded string
             Color selectedColor = JColorChooser.showDialog(null, "Choose a Color", null);
             if (selectedColor != null) {
                 tabTextColorChooserButton.setForeground(selectedColor);

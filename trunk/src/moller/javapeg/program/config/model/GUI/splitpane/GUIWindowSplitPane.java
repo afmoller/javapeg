@@ -14,12 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.enumerations.xml;
+package moller.javapeg.program.config.model.GUI.splitpane;
 
-/**
- * Created by Fredrik on 2015-04-06.
- */
-public interface IXmlElement {
+import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 
-    public String getElementValue();
+public class GUIWindowSplitPane {
+
+    private Integer location;
+    private SplitPaneDividerSize dividerSize;
+    private String name;
+
+    public Integer getLocation() {
+        return location;
+    }
+    public SplitPaneDividerSize getDividerSize() {
+        return dividerSize;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setLocation(Integer location) {
+        this.location = location;
+    }
+    public void setDividerSize(SplitPaneDividerSize dividerSize) {
+        this.dividerSize = dividerSize;
+    }
+    public void setId(String name) {
+        this.name = name;
+    }
 }
