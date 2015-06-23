@@ -8,6 +8,7 @@
             <xs:element name="logging"                      type="config:Logging" />
             <xs:element name="javapegClientId"              type="xs:string" />
             <xs:element name="gui"                          type="config:Gui" />
+            <xs:element name="guiTabs"                      type="config:GuiTabs" />
             <xs:element name="updatesChecker"               type="config:UpdatesChecker" />
             <xs:element name="language"                     type="config:Language" />
             <xs:element name="renameImages"                 type="config:RenameImages" />
@@ -124,6 +125,29 @@
             <xs:element name="imageConflictViewer" type="config:GuiWindow" />
             <xs:element name="imageRepositoryStatisticsViewer" type="config:GuiWindow" />
         </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="GuiTabs">
+        <xs:sequence>
+            <xs:element name="tab" type="config:GuiTab" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="GuiTab">
+        <xs:all>
+            <xs:element name="textColor" type="xs:string" />
+            <xs:element name="position" >
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="TOP" />
+                        <xs:enumeration value="BOTTOM" />
+                        <xs:enumeration value="LEFT" />
+                        <xs:enumeration value="RIGHT" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="id" use="required" />
     </xs:complexType>
     
     <xs:complexType name="GuiWindow">

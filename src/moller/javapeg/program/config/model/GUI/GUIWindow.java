@@ -16,6 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
+
 import java.awt.*;
 import java.util.List;
 

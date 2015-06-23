@@ -14,32 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.config.model.GUI;
+package moller.javapeg.program.config.model.GUI.tab;
 
-import moller.javapeg.program.enumerations.SplitPaneDividerSize;
+import java.util.List;
 
-public class GUIWindowSplitPane {
+/**
+ * This class has utility methods which are working with the {@link GUITab} class.
+ * Created by Fredrik on 2015-06-23.
+ */
+public class GUITabsUtil {
 
-    private Integer location;
-    private SplitPaneDividerSize dividerSize;
-    private String name;
-
-    public Integer getLocation() {
-        return location;
-    }
-    public SplitPaneDividerSize getDividerSize() {
-        return dividerSize;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-    public void setDividerSize(SplitPaneDividerSize dividerSize) {
-        this.dividerSize = dividerSize;
-    }
-    public void setId(String name) {
-        this.name = name;
+    /**
+     * Returns the {@link GUITab} which have the id which is specified by the parameter id
+     *
+     * @param guiTabs is the total list of {@link GUITab} objects.
+     * @param id      specifies the id to search for.
+     * @return
+     */
+    public static GUITab getGUITab(List<GUITab> guiTabs, String id) {
+        for (GUITab guiTab : guiTabs) {
+            if (guiTab.getId().equals(id)) {
+                return guiTab;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected id value: " + id);
     }
 }

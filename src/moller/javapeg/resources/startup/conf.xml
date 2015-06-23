@@ -76,6 +76,12 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <height>600</height>
     </imageRepositoryStatisticsViewer>
   </gui>
+  <guiTabs>
+    <tab id="applicationMode">
+      <textColor>000000</textColor>
+      <position>TOP</position>
+    </tab>
+  </guiTabs>
   <updatesChecker>
     <enabled>true</enabled>
     <attachVersionInformation>true</attachVersionInformation>

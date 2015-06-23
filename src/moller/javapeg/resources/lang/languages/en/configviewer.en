@@ -151,7 +151,7 @@ configviewer.metadata.isofilter.removed = The following ISO filter has been remo
 configviewer.metadata.exposuretimefilter.removed = The following exposure time filter has been removed:
 
 ##############################################################################################################
-# M E T A  D A T A                                                                                           #
+# U S E R  I N T E R F A C E                                                                                           #
 ##############################################################################################################
 configviewer.userinterface.splitpanedividerthickness.thin = Thin
 configviewer.userinterface.splitpanedividerthickness.thick = Thick
@@ -163,6 +163,8 @@ configviewer.userinterface.centerToImageList.dividersize.text = Center to image 
 
 configviewer.userinterface.tabPosition.top = Top
 configviewer.userinterface.tabPosition.bottom = Bottom
+
+configviewer.userinterface.tabPosition.label.text = Position tabs
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

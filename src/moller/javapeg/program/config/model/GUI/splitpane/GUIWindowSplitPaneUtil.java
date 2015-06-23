@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package moller.javapeg.program.config.model.GUI;
+package moller.javapeg.program.config.model.GUI.splitpane;
 
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
@@ -45,14 +45,6 @@ public class GUIWindowSplitPaneUtil {
         for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
             if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
                 guiWindowSplitPane.setLocation(splitPaneLocation);
-            }
-        }
-    }
-
-    public static void setGUIWindowSplitPaneDividerWidth(List<GUIWindowSplitPane> gUIWindowSplitPanes, ConfigElement name, SplitPaneDividerSize dividerSize) {
-        for (GUIWindowSplitPane guiWindowSplitPane : gUIWindowSplitPanes) {
-            if (guiWindowSplitPane.getName().equals(name.getElementValue())) {
-                guiWindowSplitPane.setDividerSize(dividerSize);
             }
         }
     }

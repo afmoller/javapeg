@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class contains constants for each XML element and element attributes
+ * This enumeration contains entries for each XML element and element attributes
  * that exists in the configuration XML file. The constants are used when the
  * configuration file is read and written.
  *
@@ -136,6 +136,11 @@ public enum ConfigElement implements IXmlElement {
     IMAGE_MERGE_DIRECTORIES_TO_PROCESS_LOG("imageMergeDirectoriesToProcessLog"),
     IMAGE_SEARCH_IMAGE_EXIF_META_DATA_TO_RATING_COMMENT_AND_BUTTON("imageSearchImageExifMetaDataToRatingCommentAndButton"),
     IMAGE_SEARCH_CATEGORIES_TO_IMAGE_EXIF_META_DATA_AND_RATING_COMMENT_AND_BUTTON("imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton"),
+    TAB("tab"),
+    TEXT_COLOR("textColor"),
+    POSITION("position"),
+    GUI_TABS("guiTabs"),
+    MAIN_GUI_APPLICATION_MODE_TABS("mainGUIApplicationModeTabs"),
     NO_OPERATION("");
 
     private String elementValue;
@@ -158,7 +163,7 @@ public enum ConfigElement implements IXmlElement {
     private static final Map<String, ConfigElement> strValMap = new HashMap<>();
 
     static {
-        for(final ConfigElement en : ConfigElement.values()) {
+        for(final ConfigElement en : values()) {
             strValMap.put(en.elementValue, en);
         }
     }

@@ -1,4 +1,4 @@
-package moller.javapeg.program.config.model.GUI;
+package moller.javapeg.program.config.model.GUI.tab;
 
 /**
  * This enumeration lists all the tabs which are present in the main GUI. And

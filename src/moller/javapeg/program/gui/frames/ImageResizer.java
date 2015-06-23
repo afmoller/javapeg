@@ -18,8 +18,8 @@ package moller.javapeg.program.gui.frames;
 
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
-import moller.javapeg.program.config.model.GUI.GUIWindowSplitPane;
-import moller.javapeg.program.config.model.GUI.GUIWindowSplitPaneUtil;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPaneUtil;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.GUIDefaults;

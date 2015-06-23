@@ -29,6 +29,11 @@ import moller.javapeg.program.config.ConfigUtil;
 import moller.javapeg.program.config.controller.section.CategoriesConfig;
 import moller.javapeg.program.config.model.Configuration;
 import moller.javapeg.program.config.model.GUI.*;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPaneUtil;
+import moller.javapeg.program.config.model.GUI.tab.GUITab;
+import moller.javapeg.program.config.model.GUI.tab.GUITabsUtil;
+import moller.javapeg.program.config.model.GUI.tab.SelectedMainGUITab;
 import moller.javapeg.program.config.model.ToolTips;
 import moller.javapeg.program.config.model.UpdatesChecker;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
@@ -41,10 +46,7 @@ import moller.javapeg.program.config.model.repository.RepositoryPaths;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.contexts.ImageMetaDataDataBaseItemsToUpdateContext;
-import moller.javapeg.program.enumerations.CategoryMenuType;
-import moller.javapeg.program.enumerations.FileLoadingAction;
-import moller.javapeg.program.enumerations.ImageMetaDataContextAction;
-import moller.javapeg.program.enumerations.MainTabbedPaneComponent;
+import moller.javapeg.program.enumerations.*;
 import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.*;
 import moller.javapeg.program.gui.checktree.CategoryCheckTreeUtil;
@@ -685,7 +687,9 @@ public class MainGUI extends JFrame {
 
         imageMergeTab = new ImageMergeTab();
 
-        mainTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        GUITab mainGuiApplicationModeTabs = GUITabsUtil.getGUITab(configuration.getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
+
+        mainTabbedPane = new JTabbedPane(getJTabbedPaneConstant(mainGuiApplicationModeTabs.getPosition()));
         mainTabbedPane.addTab(lang.get("tabbedpane.imageMerge"), imageMergeTab);
         mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
         mainTabbedPane.addTab(lang.get("tabbedpane.imageTag"), this.createCategorizePanel());
@@ -731,6 +735,18 @@ public class MainGUI extends JFrame {
         statusBar = new StatusPanel(timerStatus);
 
         this.add(statusBar, BorderLayout.SOUTH);
+    }
+
+    private int getJTabbedPaneConstant(TabPosition tabPosition) {
+        switch (tabPosition) {
+
+            case TOP:
+                return JTabbedPane.TOP;
+            case BOTTOM:
+                return  JTabbedPane.BOTTOM;
+            default:
+                return JTabbedPane.TOP;
+        }
     }
 
     private JPanel createTreePanel() {

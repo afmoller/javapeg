@@ -17,6 +17,7 @@
 package moller.javapeg.program.config.model;
 
 import moller.javapeg.program.config.model.GUI.GUI;
+import moller.javapeg.program.config.model.GUI.tab.GUITabs;
 import moller.javapeg.program.config.model.applicationmode.rename.RenameImages;
 import moller.javapeg.program.config.model.applicationmode.resize.ResizeImages;
 import moller.javapeg.program.config.model.applicationmode.tag.TagImages;
@@ -33,6 +34,7 @@ public class Configuration {
     private Logging logging;
     private String javapegClientId;
     private GUI gUI;
+    private GUITabs gUITabs;
     private UpdatesChecker updatesChecker;
     private Language language;
     private RenameImages renameImages;
@@ -95,6 +97,9 @@ public class Configuration {
     public ImageSearchResultViewerState getImageSearchResultViewerState() {
         return imageSearchResultViewerState;
     }
+    public GUITabs getgUITabs() {
+        return gUITabs;
+    }
     public void setLogging(Logging logging) {
         this.logging = logging;
     }
@@ -143,5 +148,7 @@ public class Configuration {
     public void setMetadata(MetaData metaData) {
         this.metadata = metaData;
     }
-
+    public void setgUITabs(GUITabs gUITabs) {
+        this.gUITabs = gUITabs;
+    }
 }
