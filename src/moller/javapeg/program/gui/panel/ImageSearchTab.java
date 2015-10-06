@@ -16,6 +16,47 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.panel;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.categories.Categories;
 import moller.javapeg.program.categories.CategoryUtil;
@@ -46,19 +87,6 @@ import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogEqua
 import moller.javapeg.program.gui.metadata.impl.MetaDataValueSelectionDialogLessEqualGreater;
 import moller.javapeg.program.language.Language;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.*;
-import java.util.List;
-
 /**
  * This class constructs the search images panel in which it is possible to
  * search for images which are part of the {@link ImageMetaDataContext}.
@@ -66,6 +94,8 @@ import java.util.List;
  * Created by Fredrik on 2015-04-24.
  */
 public class ImageSearchTab extends JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private JButton searchImagesButton;
     private JButton displayImageRepositoryStatisticsViewerButton;

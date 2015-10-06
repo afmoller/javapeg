@@ -16,6 +16,19 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Locale;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
@@ -29,17 +42,14 @@ import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Locale;
+import moller.util.color.ColorUtil;
 
 /**
  * Created by Fredrik on 2015-04-25.
  */
 public class GUIConfigurationPanel extends BaseConfigurationPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private JButton tabTextColorChooserButton;
 
@@ -143,15 +153,17 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     private JPanel createTabsConfigurationPanel() {
 
+        GUITab mainGUIApplicationModeTabs = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
+
         JLabel tabPositionLabel = new JLabel(getLang().get("configviewer.userinterface.tabPosition.label.text"));
         tabPositionComboBox = new TabPositionComboBox(getLang());
+        tabPositionComboBox.setSelectedPosition(mainGUIApplicationModeTabs.getPosition());
 
-        //TODO: Fix hard coded string
-        JLabel tabTextColorLabel = new JLabel("Tab text color:");
+        JLabel tabTextColorLabel = new JLabel(getLang().get("configviewer.userinterface.tabTextColor.label.text"));
 
         //TODO: Fix hard coded string
         tabTextColorChooserButton = new JButton("Choose color");
-
+        tabTextColorChooserButton.setForeground(ColorUtil.getColorFromRGBString(mainGUIApplicationModeTabs.getTextColor()));
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         //TODO: Fix hard coded string
@@ -179,10 +191,20 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN_TO_IMAGELIST, centerToImageListComboBox, "configviewer.userinterface.centerToImageList.dividersize.text");
 
         TabPosition configurationGuiTabPosition = tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition();
-        TabPosition configurationTabPosition = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue()).getPosition();
+
+        GUITab mainGUIApplicationModeTabs = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
+
+        TabPosition configurationTabPosition = mainGUIApplicationModeTabs.getPosition();
 
         if (configurationGuiTabPosition != configurationTabPosition) {
             displayMessage.append(getLang().get("configviewer.userinterface.tabPosition.label.text") + ": " + getLang().get(configurationGuiTabPosition.getLocalizationKey()) + " (" + getLang().get(configurationTabPosition.getLocalizationKey()) + ")\n");
+        }
+
+        String mainGUIApplicationModeTabstextColorFromConfiguration = mainGUIApplicationModeTabs.getTextColor();
+        String mainGUIApplicationModeTabstextColorFromConfigurationGUI = ColorUtil.getColorAsRGBString(tabTextColorChooserButton.getForeground());
+
+        if (!mainGUIApplicationModeTabstextColorFromConfigurationGUI.equals(mainGUIApplicationModeTabstextColorFromConfiguration)) {
+            displayMessage.append(getLang().get("configviewer.userinterface.tabTextColor.label.text") + ": " + "new: " + mainGUIApplicationModeTabstextColorFromConfigurationGUI + " (" + "old" + mainGUIApplicationModeTabstextColorFromConfiguration + ")\n");
         }
 
         return displayMessage.toString();
@@ -217,7 +239,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         GUITabs guiTabs = getConfiguration().getgUITabs();
         GUITab mainGuiApplicationModeGuiTab = GUITabsUtil.getGUITab(guiTabs.getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
         mainGuiApplicationModeGuiTab.setPosition(tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition());
-
+        mainGuiApplicationModeGuiTab.setTextColor(ColorUtil.getColorAsRGBString(tabTextColorChooserButton.getForeground()));
     }
 
     private class TabTextColorChooserButtonListener implements ActionListener {

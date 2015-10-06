@@ -77,8 +77,8 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
     </imageRepositoryStatisticsViewer>
   </gui>
   <guiTabs>
-    <tab id="applicationMode">
-      <textColor>000000</textColor>
+    <tab id="mainGUIApplicationModeTabs">
+      <textColor>0 0 0</textColor>
       <position>TOP</position>
     </tab>
   </guiTabs>

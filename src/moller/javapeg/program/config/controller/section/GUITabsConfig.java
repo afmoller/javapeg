@@ -1,5 +1,10 @@
 package moller.javapeg.program.config.controller.section;
 
+import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import moller.javapeg.program.config.model.GUI.tab.GUITab;
 import moller.javapeg.program.config.model.GUI.tab.GUITabs;
 import moller.javapeg.program.enumerations.TabPosition;
@@ -7,13 +12,10 @@ import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.util.List;
 
 /**
  * Created by Fredrik on 2015-06-21.
@@ -72,7 +74,7 @@ public class GUITabsConfig {
         //  GUITabs start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.GUI_TABS, baseIndent, xmlsw);
 
-        writeTabs(guiTabs.getGuiTabs(), Tab.SIX, xmlsw);
+        writeTabs(guiTabs.getGuiTabs(), Tab.FOUR, xmlsw);
 
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //  GUITabs end
@@ -88,11 +90,11 @@ public class GUITabsConfig {
             // Tab start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.TAB, attributes, indent, xmlsw);
 
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.TEXT_COLOR, Tab.EIGHT, guiTab.getTextColor(), xmlsw);
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.POSITION, Tab.EIGHT, guiTab.getPosition().toString(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.TEXT_COLOR, Tab.SIX, guiTab.getTextColor(), xmlsw);
+            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.POSITION, Tab.SIX, guiTab.getPosition().toString(), xmlsw);
 
             // Tab end
-            XMLUtil.writeElementEnd(xmlsw);
+            XMLUtil.writeElementEndWithLineBreak(xmlsw, indent);
         }
     }
 }

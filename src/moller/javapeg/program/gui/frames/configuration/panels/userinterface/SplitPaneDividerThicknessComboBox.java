@@ -16,16 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
+import javax.swing.JComboBox;
+
 import moller.javapeg.program.enumerations.SplitPaneDividerSize;
 import moller.javapeg.program.enumerations.wrappers.SplitPaneDividerThicknessWrapper;
 import moller.javapeg.program.language.Language;
-
-import javax.swing.*;
 
 /**
  * Created by Fredrik on 2015-05-13.
  */
 public class SplitPaneDividerThicknessComboBox extends JComboBox<SplitPaneDividerThicknessWrapper> {
+
+    private static final long serialVersionUID = 1L;
 
     public SplitPaneDividerThicknessComboBox(Language lang) {
         SplitPaneDividerThicknessWrapper thin = new SplitPaneDividerThicknessWrapper(lang.get(SplitPaneDividerSize.THIN.getLocalizationKey()), SplitPaneDividerSize.THIN);

@@ -149,6 +149,7 @@ public enum ConfigElement implements IXmlElement {
         this.elementValue = elementValue;
     }
 
+    @Override
     public String getElementValue() {
         return elementValue;
     }

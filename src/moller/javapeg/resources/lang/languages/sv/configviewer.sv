@@ -165,7 +165,7 @@ configviewer.userinterface.tabPosition.top = Topp
 configviewer.userinterface.tabPosition.bottom = Botten
 
 configviewer.userinterface.tabPosition.label.text = Position flikar
-
+configviewer.userinterface.tabTextColor.label.text = Färg fliktext
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

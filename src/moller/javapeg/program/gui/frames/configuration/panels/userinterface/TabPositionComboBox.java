@@ -16,16 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
+import javax.swing.JComboBox;
+
 import moller.javapeg.program.enumerations.TabPosition;
 import moller.javapeg.program.enumerations.wrappers.TabPositionWrapper;
 import moller.javapeg.program.language.Language;
-
-import javax.swing.*;
 
 /**
  * Created by Fredrik on 2015-05-23.
  */
 public class TabPositionComboBox extends JComboBox<TabPositionWrapper> {
+
+    private static final long serialVersionUID = 1L;
 
     public TabPositionComboBox(Language lang) {
         TabPositionWrapper top = new TabPositionWrapper(lang.get(TabPosition.TOP.getLocalizationKey()), TabPosition.TOP);

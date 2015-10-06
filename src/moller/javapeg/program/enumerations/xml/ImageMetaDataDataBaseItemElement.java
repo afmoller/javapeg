@@ -44,6 +44,7 @@ public enum ImageMetaDataDataBaseItemElement implements IXmlElement {
         this.elementValue = elementValue;
     }
 
+    @Override
     public String getElementValue() {
         return elementValue;
     }
