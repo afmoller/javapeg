@@ -158,7 +158,7 @@ configviewer.userinterface.splitpanedividerthickness.thick = Tjock
 
 configviewer.userinterface.main.dividersize.text = Träd till Mittre
 configviewer.userinterface.thumbNailsToTabs.dividersize.text = Tumnaglar till Flikar
-configviewer.userinterface.thumbNailsToMetaData.dividersize.text = Tumnaglar till Meta data
+configviewer.userinterface.thumbNailsToMetaData.dividersize.text = Tumnaglar till metadata
 configviewer.userinterface.centerToImageList.dividersize.text = Mittre till bildlista
 
 configviewer.userinterface.tabPosition.top = Topp
@@ -166,6 +166,8 @@ configviewer.userinterface.tabPosition.bottom = Botten
 
 configviewer.userinterface.tabPosition.label.text = Position flikar
 configviewer.userinterface.tabTextColor.label.text = Färg fliktext
+
+configviewer.userinterface.imageviewer.image.to.metadata.dividersize.text = Bild til metadata
 
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #

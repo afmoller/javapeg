@@ -167,6 +167,8 @@ configviewer.userinterface.tabPosition.bottom = Bottom
 configviewer.userinterface.tabPosition.label.text = Position tabs
 configviewer.userinterface.tabTextColor.label.text = Tab text color
 
+configviewer.userinterface.imageviewer.image.to.metadata.dividersize.text = Image to Meta data
+
 ##############################################################################################################
 # E R R O R  M E S S A G E S                                                                                 #
 ##############################################################################################################

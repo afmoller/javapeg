@@ -16,25 +16,30 @@
  ******************************************************************************/
 package moller.javapeg.program.jpeg;
 
+import moller.javapeg.program.metadata.MetaData;
+
 /**
  * This class is an container for the byte content of an thumbnail in JPEG
- * format.
+ * format. It can also hold meta data in the form of an {@link MetaData} object
+ * from the original JPEG image.
  *
  * @author Fredrik
  *
  */
 public class JPEGThumbNail {
 
-    /**
-     * Instance variables
-     */
+    private final MetaData metaData;
     private byte [] thumbNailData;
 
     /**
      * Default constructor
+     *
+     * @param metaData contains the meta data which is associated with the
+     *        original image.
      */
-    public JPEGThumbNail () {
+    public JPEGThumbNail (MetaData metaData) {
         thumbNailData = null;
+        this.metaData = metaData;
     }
 
     /**
@@ -45,6 +50,7 @@ public class JPEGThumbNail {
      */
     public JPEGThumbNail (byte [] thumbNailData) {
         this.thumbNailData = thumbNailData;
+        metaData = null;
     }
 
     /**
@@ -73,6 +79,14 @@ public class JPEGThumbNail {
      */
     public void setThumbNailData(byte[] thumbNailData) {
         this.thumbNailData = thumbNailData;
+    }
+
+    /**
+     * Retrieves a {@link MetaData} object which contains meta information about the original image.
+     * @return
+     */
+    public MetaData getMetaData() {
+        return metaData;
     }
 
     /**

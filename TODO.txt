@@ -1,5 +1,6 @@
 3.0:
 ====
+
 - Make it possible to select background colour in the image viewer
 - Add new sections to the help: Metadata.
 - Make it possible to specify if the aspect ratio shall be preserved in the image resizer

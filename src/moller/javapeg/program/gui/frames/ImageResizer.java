@@ -16,6 +16,47 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
@@ -32,27 +73,6 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.progress.CustomizedJTextArea;
 import moller.util.image.ImageUtil;
 import moller.util.io.DirectoryUtil;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ImageResizer extends JavaPEGBaseFrame {
 
@@ -72,6 +92,8 @@ public class ImageResizer extends JavaPEGBaseFrame {
     private JButton removeSelectedImagesButton;
 
     private JLabel imagePreviewLabel;
+    private final JLabel originalImageWidth = new JLabel();
+    private final JLabel originalImageHeight = new JLabel();
 
     private final List<File> imagesToResize;
 
@@ -86,6 +108,7 @@ public class ImageResizer extends JavaPEGBaseFrame {
     private JSplitPane leftAndRightSplitpane;
 
     private DestinationDirectorySelector destinationDirectorySelector;
+
 
     public ImageResizer(List<File> imagesToResize) {
 
@@ -257,20 +280,27 @@ public class ImageResizer extends JavaPEGBaseFrame {
         JLabel previewLabel = new JLabel(getLang().get("maingui.tabbedpane.imagelist.label.preview"));
         previewLabel.setForeground(Color.GRAY);
 
-        JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
-        previewBackgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
-
-        GBHelper posPreviewPanel = new GBHelper();
-
-        imagePreviewLabel = new JLabel();
-
         JPanel previewPanel = new JPanel();
         previewPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        previewPanel.add(imagePreviewLabel = new JLabel());
 
-        previewPanel.add(imagePreviewLabel);
+        GBHelper posSizePanel = new GBHelper();
+        JPanel imageSizePanel = new JPanel(new GridBagLayout());
+        imageSizePanel.add(new JLabel(getLang().get("imageresizer.resize.input.width")), posSizePanel);
+        imageSizePanel.add(Box.createHorizontalStrut(5), posSizePanel.nextCol());
+        imageSizePanel.add(originalImageWidth, posSizePanel.nextCol());
+        imageSizePanel.add(new JLabel(), posSizePanel.nextCol().expandW());
+        imageSizePanel.add(new JLabel(getLang().get("imageresizer.resize.input.height")), posSizePanel.nextRow());
+        imageSizePanel.add(Box.createHorizontalStrut(5), posSizePanel.nextCol());
+        imageSizePanel.add(originalImageHeight, posSizePanel.nextCol());
+        imageSizePanel.add(new JLabel(), posSizePanel.nextCol().expandW());
 
+        GBHelper posPreviewPanel = new GBHelper();
+        JPanel previewBackgroundPanel = new JPanel(new GridBagLayout());
+        previewBackgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
         previewBackgroundPanel.add(previewLabel, posPreviewPanel);
         previewBackgroundPanel.add(previewPanel, posPreviewPanel.nextRow());
+        previewBackgroundPanel.add(imageSizePanel, posPreviewPanel.nextRow());
         previewBackgroundPanel.add(new JPanel(), posPreviewPanel.nextRow().expandH());
 
         return previewBackgroundPanel;
@@ -404,6 +434,8 @@ public class ImageResizer extends JavaPEGBaseFrame {
             if (selectedIndex > -1) {
                 JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(imagesToViewListModel.get(selectedIndex));
                 imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
+                originalImageHeight.setText(Integer.toString(thumbNail.getMetaData().getExifPictureHeight()));
+                originalImageWidth.setText(Integer.toString(thumbNail.getMetaData().getExifPictureWidth()));
             }
         }
     }

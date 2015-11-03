@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.config.model.GUI.GUI;
@@ -53,10 +54,14 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     private JButton tabTextColorChooserButton;
 
+    // Main Window
     private SplitPaneDividerThicknessComboBox treeToCenterComboBox;
     private SplitPaneDividerThicknessComboBox thumbNailsToTabsComboBox;
     private SplitPaneDividerThicknessComboBox thumbNailsToMetaDataComboBox;
     private SplitPaneDividerThicknessComboBox centerToImageListComboBox;
+
+    // Image Viewer
+    private SplitPaneDividerThicknessComboBox imageToMetaDataComboBox;
 
     private TabPositionComboBox tabPositionComboBox;
 
@@ -72,27 +77,41 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     @Override
     protected void createPanel() {
+
+        JTabbedPane tabs = new JTabbedPane();
+      //TODO: Fix hard coded string
+        tabs.add("Main Window", createMainGUIConfigurationPanel());
+      //TODO: Fix hard coded string
+        tabs.add("Image Viewer", createImageViewerConfigurationPanel());
+
         GBHelper posBackgroundPanel = new GBHelper();
 
         this.setLayout(new GridBagLayout());
-        this.add(createMainGUIConfigurationPanel(), posBackgroundPanel.expandW().expandH());
+        this.add(tabs, posBackgroundPanel.expandW().expandH());
     }
 
     private JPanel createMainGUIConfigurationPanel() {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        //TODO: Fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Main Window"));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
         backgroundPanel.add(createTabsConfigurationPanel(), posBackgroundPanel.expandW());
-        backgroundPanel.add(createSplitPanesConfigurationPanel(), posBackgroundPanel.nextRow().expandW());
+        backgroundPanel.add(createMainGUISplitPanesConfigurationPanel(), posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(Box.createVerticalGlue(), posBackgroundPanel.nextRow().expandH());
 
         return backgroundPanel;
     }
 
-    private JPanel createSplitPanesConfigurationPanel() {
+    private JPanel createImageViewerConfigurationPanel() {
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+
+        GBHelper posBackgroundPanel = new GBHelper();
+        backgroundPanel.add(createImageViewerSplitPanesConfigurationPanel(), posBackgroundPanel.expandW());
+        backgroundPanel.add(Box.createVerticalGlue(), posBackgroundPanel.nextRow().expandH());
+        return backgroundPanel;
+    }
+
+    private JPanel createMainGUISplitPanesConfigurationPanel() {
         GUI gui = getConfiguration().getgUI();
         GUIWindow main = gui.getMain();
 
@@ -151,6 +170,32 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         return backgroundPanel;
     }
 
+    private JPanel createImageViewerSplitPanesConfigurationPanel() {
+        GUI gui = getConfiguration().getgUI();
+        GUIWindow imageViewer = gui.getImageViewer();
+
+        JLabel imageToMetaDataLabel = new JLabel(getLang().get("configviewer.userinterface.imageviewer.image.to.metadata.dividersize.text"));
+        imageToMetaDataLabel.setForeground(new Color(34, 177, 76));
+        imageToMetaDataComboBox = new SplitPaneDividerThicknessComboBox(getLang());
+
+        GUIWindowSplitPane imageViewerWindowSplitPane = imageViewer.getGUIWindowSplitPane(ConfigElement.IMAGE_META_DATA.getElementValue());
+        imageToMetaDataComboBox.setSelectedThickness(imageViewerWindowSplitPane.getDividerSize());
+
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        //TODO: Fix hard coded string
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Split panes"));
+
+        GBHelper posBackgroundPanel = new GBHelper();
+
+        backgroundPanel.add(imageToMetaDataLabel, posBackgroundPanel.expandW());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
+        backgroundPanel.add(imageToMetaDataComboBox, posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
+        backgroundPanel.add(new JLabel(IconLoader.getIcon(Icons.CONFIG_GUI_MAIN_GUI_SPLITPANES)), posBackgroundPanel.nextCol().height(7));
+
+        return backgroundPanel;
+    }
+
     private JPanel createTabsConfigurationPanel() {
 
         GUITab mainGUIApplicationModeTabs = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
@@ -183,12 +228,16 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
     public String getChangedConfigurationMessage() {
         StringBuilder displayMessage = new StringBuilder();
 
-        GUIWindow main = getConfiguration().getgUI().getMain();
+        GUI gUI = getConfiguration().getgUI();
 
+        GUIWindow main = gUI.getMain();
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN, treeToCenterComboBox, "configviewer.userinterface.main.dividersize.text");
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.VERTICAL, thumbNailsToTabsComboBox, "configviewer.userinterface.thumbNailsToTabs.dividersize.text");
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.THUMB_NAIL_META_DATA_PANEL, thumbNailsToMetaDataComboBox, "configviewer.userinterface.thumbNailsToMetaData.dividersize.text");
         appendConfigurationDisplayMessage(displayMessage, main, ConfigElement.MAIN_TO_IMAGELIST, centerToImageListComboBox, "configviewer.userinterface.centerToImageList.dividersize.text");
+
+        GUIWindow imageViewer = gUI.getImageViewer();
+        appendConfigurationDisplayMessage(displayMessage, imageViewer, ConfigElement.IMAGE_META_DATA, imageToMetaDataComboBox, "configviewer.userinterface.imageviewer.image.to.metadata.dividersize.text");
 
         TabPosition configurationGuiTabPosition = tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition();
 
@@ -235,6 +284,9 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         main.getGUIWindowSplitPane(ConfigElement.VERTICAL.getElementValue()).setDividerSize(thumbNailsToTabsComboBox.getItemAt(thumbNailsToTabsComboBox.getSelectedIndex()).getSplitPaneDividerSize());
         main.getGUIWindowSplitPane(ConfigElement.THUMB_NAIL_META_DATA_PANEL.getElementValue()).setDividerSize(thumbNailsToMetaDataComboBox.getItemAt(thumbNailsToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize());
         main.getGUIWindowSplitPane(ConfigElement.MAIN_TO_IMAGELIST.getElementValue()).setDividerSize(centerToImageListComboBox.getItemAt(centerToImageListComboBox.getSelectedIndex()).getSplitPaneDividerSize());
+
+        GUIWindow imageViewer = gui.getImageViewer();
+        imageViewer.getGUIWindowSplitPane(ConfigElement.IMAGE_META_DATA.getElementValue()).setDividerSize(imageToMetaDataComboBox.getItemAt(imageToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize());
 
         GUITabs guiTabs = getConfiguration().getgUITabs();
         GUITab mainGuiApplicationModeGuiTab = GUITabsUtil.getGUITab(guiTabs.getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
