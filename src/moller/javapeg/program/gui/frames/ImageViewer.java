@@ -16,12 +16,57 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
 import moller.javapeg.program.FileSelection;
 import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.config.model.ImageViewerState;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
 import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPaneUtil;
-import moller.javapeg.program.config.model.ImageViewerState;
 import moller.javapeg.program.config.model.thumbnail.ThumbNailGrayFilter;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.datatype.ResizeQualityAndDisplayString;
@@ -40,21 +85,8 @@ import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.util.gui.Update;
 import moller.util.mnemonic.MnemonicConverter;
 import moller.util.string.StringUtil;
-import org.imgscalr.Scalr.Method;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.imgscalr.Scalr.Method;
 
 public class ImageViewer extends JavaPEGBaseFrame {
 
@@ -209,8 +241,10 @@ public class ImageViewer extends JavaPEGBaseFrame {
         this.setIconImage(IconLoader.getIcon(Icons.OPEN).getImage());
 
         imageBackground = new NavigableImagePanel();
+        imageBackground.setOpaque(true);
         imageBackground.setHighQualityRenderingEnabled(true);
         imageBackground.setNavigationImageEnabled(getConfiguration().getImageViewerState().isShowNavigationImage());
+        imageBackground.setBackground(getGUIWindowConfig().getBackgroundColor());
 
         thePicture = new File(imagesToView.get(0).getAbsolutePath());
 
@@ -693,9 +727,6 @@ public class ImageViewer extends JavaPEGBaseFrame {
         imageMetaDataSplitPane.setDividerSize(0);
         imageMetaDataSplitPane.setRightComponent(null);
 
-        imageBackground.setBackground(Color.BLACK);
-        imageBackground.setOpaque(true);
-
         displaySidePanels(false);
 
         fullScreenEnabled = true;
@@ -714,9 +745,6 @@ public class ImageViewer extends JavaPEGBaseFrame {
         imageMetaDataSplitPane.setDividerSize(GUIWindowSplitPaneUtil.getGUIWindowSplitPaneDividerSize(gUIWindowSplitPanes, ConfigElement.IMAGE_META_DATA).getDividerSizeInPixels());
         imageMetaDataSplitPane.setDividerLocation(imageMetaDataSplitPaneDividerLocation);
         imageMetaDataSplitPane.setRightComponent(metaDataPanel);
-
-        imageBackground.setBackground(null);
-        imageBackground.setOpaque(false);
 
         displaySidePanels(true);
 

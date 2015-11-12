@@ -141,7 +141,11 @@ public enum ConfigElement implements IXmlElement {
     POSITION("position"),
     GUI_TABS("guiTabs"),
     MAIN_GUI_APPLICATION_MODE_TABS("mainGUIApplicationModeTabs"),
-    NO_OPERATION("");
+    NO_OPERATION(""),
+    BACKGROUND_COLOR("backgroundColor"),
+    RED("red"),
+    GREEN("green"),
+    BLUE("blue");
 
     private String elementValue;
 

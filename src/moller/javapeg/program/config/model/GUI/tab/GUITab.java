@@ -16,6 +16,8 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI.tab;
 
+import java.awt.Color;
+
 import moller.javapeg.program.enumerations.TabPosition;
 
 /**
@@ -23,7 +25,7 @@ import moller.javapeg.program.enumerations.TabPosition;
  */
 public class GUITab {
 
-    private String textColor;
+    private Color textColor;
     private TabPosition position;
     private String id;
 
@@ -35,11 +37,11 @@ public class GUITab {
         this.position = position;
     }
 
-    public String getTextColor() {
+    public Color getTextColor() {
         return textColor;
     }
 
-    public void setTextColor(String textColor) {
+    public void setTextColor(Color textColor) {
         this.textColor = textColor;
     }
 

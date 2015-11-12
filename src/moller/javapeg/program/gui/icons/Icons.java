@@ -57,7 +57,8 @@ public enum Icons {
     ZOOM("imageviewer/Zoom16.gif"),
     ZOOM_IN("imageviewer/ZoomIn16.gif"),
     ZOOM_OUT("imageviewer/ZoomOut16.gif"),
-    CONFIG_GUI_MAIN_GUI_SPLITPANES("configgui/splitpanes-main.png");
+    CONFIG_GUI_MAIN_GUI_SPLITPANES("configgui/splitpanes-main.png"),
+    CONFIG_GUI_IMAGE_VIEWER_GUI_SPLITPANES("configgui/splitpanes-imageviewer.png");
 
     private static final String PREFIX = "resources/images/";
 

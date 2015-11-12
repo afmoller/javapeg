@@ -207,7 +207,6 @@ import moller.javapeg.program.thumbnailoverview.ThumbNailOverViewCreator;
 import moller.javapeg.program.updates.NewVersionChecker;
 import moller.javapeg.program.updates.NewVersionGUI;
 import moller.util.DefaultLookAndFeel;
-import moller.util.color.ColorUtil;
 import moller.util.datatype.OneSizedList;
 import moller.util.gui.Screen;
 import moller.util.gui.Table;
@@ -790,7 +789,7 @@ public class MainGUI extends JFrame {
         mainTabbedPane.addTab(lang.get("tabbedpane.imageRename"), this.createRenamePanel());
         mainTabbedPane.addTab(lang.get("tabbedpane.imageTag"), this.createCategorizePanel());
         mainTabbedPane.addTab(lang.get("tabbedpane.imageView"), this.createViewPanel());
-        mainTabbedPane.setForeground(ColorUtil.getColorFromRGBString(mainGuiApplicationModeTabs.getTextColor()));
+        mainTabbedPane.setForeground(mainGuiApplicationModeTabs.getTextColor());
 
         imageMetaDataPanel = new MetaDataPanel();
 

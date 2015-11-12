@@ -37,6 +37,11 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
       <width>1024</width>
       <height>768</height>
       <splitPane id="imageMetaData" width="THIN">500</splitPane>
+      <backgroundColor>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+      </backgroundColor>
     </imageViewer>
     <imageSearchResultViewer>
       <xLocation>10</xLocation>
@@ -78,7 +83,11 @@ overwritten by the JavaPEG application or corrupt the file if the change is inva
   </gui>
   <guiTabs>
     <tab id="mainGUIApplicationModeTabs">
-      <textColor>0 0 0</textColor>
+      <textColor>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+      </textColor>
       <position>TOP</position>
     </tab>
   </guiTabs>

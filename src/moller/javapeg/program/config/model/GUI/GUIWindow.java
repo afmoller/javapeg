@@ -16,15 +16,17 @@
  ******************************************************************************/
 package moller.javapeg.program.config.model.GUI;
 
-import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.List;
+
+import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
 
 public class GUIWindow {
 
     private Rectangle sizeAndLocation;
     private List<GUIWindowSplitPane> guiWindowSplitPane;
+    private Color backgroundColor;
 
     public Rectangle getSizeAndLocation() {
         return sizeAndLocation;
@@ -32,11 +34,17 @@ public class GUIWindow {
     public List<GUIWindowSplitPane> getGuiWindowSplitPane() {
         return guiWindowSplitPane;
     }
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
     public void setSizeAndLocation(Rectangle sizeAndLocation) {
         this.sizeAndLocation = sizeAndLocation;
     }
     public void setGuiWindowSplitPane(List<GUIWindowSplitPane> guiWindowSplitPane) {
         this.guiWindowSplitPane = guiWindowSplitPane;
+    }
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     /**

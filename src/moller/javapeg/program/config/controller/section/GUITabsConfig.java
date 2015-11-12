@@ -1,10 +1,12 @@
 package moller.javapeg.program.config.controller.section;
 
+import java.awt.Color;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import moller.javapeg.program.config.controller.section.helper.ColorHelper;
 import moller.javapeg.program.config.model.GUI.tab.GUITab;
 import moller.javapeg.program.config.model.GUI.tab.GUITabs;
 import moller.javapeg.program.enumerations.TabPosition;
@@ -58,7 +60,7 @@ public class GUITabsConfig {
 
             switch (ConfigElement.getEnum(node.getNodeName())) {
                 case TEXT_COLOR:
-                    guiTab.setTextColor(node.getTextContent());
+                    guiTab.setTextColor(ColorHelper.createBackgroundColor(node));
                     break;
                 case POSITION:
                     guiTab.setPosition(TabPosition.valueOf(node.getTextContent()));
@@ -89,12 +91,19 @@ public class GUITabsConfig {
 
             // Tab start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.TAB, attributes, indent, xmlsw);
-
-            XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.TEXT_COLOR, Tab.SIX, guiTab.getTextColor(), xmlsw);
+            writeTextColor(guiTab.getTextColor(), Tab.SIX, xmlsw);
             XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.POSITION, Tab.SIX, guiTab.getPosition().toString(), xmlsw);
 
             // Tab end
             XMLUtil.writeElementEndWithLineBreak(xmlsw, indent);
         }
+    }
+
+    private static void writeTextColor(Color textColor, Tab indent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.TEXT_COLOR, indent, xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.RED, Tab.EIGHT, Integer.toString(textColor.getRed()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.GREEN, Tab.EIGHT, Integer.toString(textColor.getGreen()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.BLUE, Tab.EIGHT, Integer.toString(textColor.getBlue()), xmlsw);
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, indent);
     }
 }

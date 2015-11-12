@@ -153,6 +153,15 @@ configviewer.metadata.exposuretimefilter.removed = Följande Exponeringstids-fil
 ##############################################################################################################
 # U S E R  I N T E R F A C E                                                                                 #
 ##############################################################################################################
+configviewer.userinterface.tabs.main        = Huvudfönster
+configviewer.userinterface.tabs.imageviewer = Bildvisare
+
+configviewer.userinterface.imageViewerBackground.label.text = Bakgrundsfärg bildvisare
+
+configviewer.userinterface.splitpane.title = Fönsterindelning
+configviewer.userinterface.tab.title = Flikar
+configviewer.userinterface.button.colourchooser = Välj färg
+
 configviewer.userinterface.splitpanedividerthickness.thin = Tunn
 configviewer.userinterface.splitpanedividerthickness.thick = Tjock
 

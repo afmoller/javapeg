@@ -17,6 +17,7 @@
 package moller.javapeg.program.gui.frames.configuration.panels.userinterface;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -43,7 +45,6 @@ import moller.javapeg.program.enumerations.xml.ConfigElement;
 import moller.javapeg.program.gui.frames.configuration.panels.base.BaseConfigurationPanel;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
-import moller.util.color.ColorUtil;
 
 /**
  * Created by Fredrik on 2015-04-25.
@@ -53,6 +54,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
     private static final long serialVersionUID = 1L;
 
     private JButton tabTextColorChooserButton;
+    private JButton imageViewerBackgroundColorChooserButton;
 
     // Main Window
     private SplitPaneDividerThicknessComboBox treeToCenterComboBox;
@@ -72,17 +74,17 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
     @Override
     protected void addListeners() {
-        tabTextColorChooserButton.addActionListener(new TabTextColorChooserButtonListener());
+        ColorChooserButtonListener colorChooserButtonListener = new ColorChooserButtonListener();
+        tabTextColorChooserButton.addActionListener(colorChooserButtonListener);
+        imageViewerBackgroundColorChooserButton.addActionListener(colorChooserButtonListener);
     }
 
     @Override
     protected void createPanel() {
 
         JTabbedPane tabs = new JTabbedPane();
-      //TODO: Fix hard coded string
-        tabs.add("Main Window", createMainGUIConfigurationPanel());
-      //TODO: Fix hard coded string
-        tabs.add("Image Viewer", createImageViewerConfigurationPanel());
+        tabs.add(getLang().get("configviewer.userinterface.tabs.main"), createMainGUIConfigurationPanel());
+        tabs.add(getLang().get("configviewer.userinterface.tabs.imageviewer"), createImageViewerConfigurationPanel());
 
         GBHelper posBackgroundPanel = new GBHelper();
 
@@ -107,7 +109,28 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         GBHelper posBackgroundPanel = new GBHelper();
         backgroundPanel.add(createImageViewerSplitPanesConfigurationPanel(), posBackgroundPanel.expandW());
+        backgroundPanel.add(createImageViewerBackgroundColourConfigurationPanel(), posBackgroundPanel.nextRow().expandW());
         backgroundPanel.add(Box.createVerticalGlue(), posBackgroundPanel.nextRow().expandH());
+        return backgroundPanel;
+    }
+
+    private Component createImageViewerBackgroundColourConfigurationPanel() {
+        GUI gui = getConfiguration().getgUI();
+        GUIWindow imageViewer = gui.getImageViewer();
+
+        JLabel imageViewerBackgroundColorLabel = new JLabel(getLang().get("configviewer.userinterface.imageViewerBackground.label.text"));
+
+        imageViewerBackgroundColorChooserButton = new JButton(getLang().get("configviewer.userinterface.button.colourchooser"));
+        imageViewerBackgroundColorChooserButton.setForeground(imageViewer.getBackgroundColor());
+
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.userinterface.tab.title")));
+
+        GBHelper posBackgroundPanel = new GBHelper();
+
+        backgroundPanel.add(imageViewerBackgroundColorLabel, posBackgroundPanel.expandW());
+        backgroundPanel.add(imageViewerBackgroundColorChooserButton, posBackgroundPanel.nextCol());
+
         return backgroundPanel;
     }
 
@@ -144,8 +167,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         centerToImageListComboBox.setSelectedThickness(centerToImageListGuiWindowSplitPane.getDividerSize());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        //TODO: Fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Split panes"));
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.userinterface.splitpane.title")));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
@@ -182,8 +204,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         imageToMetaDataComboBox.setSelectedThickness(imageViewerWindowSplitPane.getDividerSize());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        //TODO: Fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Split panes"));
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.userinterface.splitpane.title")));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
@@ -191,7 +212,7 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
         backgroundPanel.add(imageToMetaDataComboBox, posBackgroundPanel.nextCol());
         backgroundPanel.add(Box.createHorizontalStrut(10), posBackgroundPanel.nextCol());
-        backgroundPanel.add(new JLabel(IconLoader.getIcon(Icons.CONFIG_GUI_MAIN_GUI_SPLITPANES)), posBackgroundPanel.nextCol().height(7));
+        backgroundPanel.add(new JLabel(IconLoader.getIcon(Icons.CONFIG_GUI_IMAGE_VIEWER_GUI_SPLITPANES)), posBackgroundPanel.nextCol().height(7));
 
         return backgroundPanel;
     }
@@ -206,13 +227,11 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         JLabel tabTextColorLabel = new JLabel(getLang().get("configviewer.userinterface.tabTextColor.label.text"));
 
-        //TODO: Fix hard coded string
-        tabTextColorChooserButton = new JButton("Choose color");
-        tabTextColorChooserButton.setForeground(ColorUtil.getColorFromRGBString(mainGUIApplicationModeTabs.getTextColor()));
+        tabTextColorChooserButton = new JButton(getLang().get("configviewer.userinterface.button.colourchooser"));
+        tabTextColorChooserButton.setForeground(mainGUIApplicationModeTabs.getTextColor());
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
-        //TODO: Fix hard coded string
-        backgroundPanel.setBorder(BorderFactory.createTitledBorder("Tabs"));
+        backgroundPanel.setBorder(BorderFactory.createTitledBorder(getLang().get("configviewer.userinterface.tab.title")));
 
         GBHelper posBackgroundPanel = new GBHelper();
 
@@ -239,20 +258,24 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
         GUIWindow imageViewer = gUI.getImageViewer();
         appendConfigurationDisplayMessage(displayMessage, imageViewer, ConfigElement.IMAGE_META_DATA, imageToMetaDataComboBox, "configviewer.userinterface.imageviewer.image.to.metadata.dividersize.text");
 
+        if (!imageViewer.getBackgroundColor().equals(imageViewerBackgroundColorChooserButton.getForeground())) {
+            // TODO: Make html labels with the colors
+            displayMessage.append(getLang().get("configviewer.userinterface.imageViewerBackground.label.text") + ": " + "new: " + imageViewerBackgroundColorChooserButton.getForeground() + " (" + "old" + imageViewer.getBackgroundColor() + ")\n");
+        }
+
         TabPosition configurationGuiTabPosition = tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition();
-
         GUITab mainGUIApplicationModeTabs = GUITabsUtil.getGUITab(getConfiguration().getgUITabs().getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
-
         TabPosition configurationTabPosition = mainGUIApplicationModeTabs.getPosition();
 
         if (configurationGuiTabPosition != configurationTabPosition) {
             displayMessage.append(getLang().get("configviewer.userinterface.tabPosition.label.text") + ": " + getLang().get(configurationGuiTabPosition.getLocalizationKey()) + " (" + getLang().get(configurationTabPosition.getLocalizationKey()) + ")\n");
         }
 
-        String mainGUIApplicationModeTabstextColorFromConfiguration = mainGUIApplicationModeTabs.getTextColor();
-        String mainGUIApplicationModeTabstextColorFromConfigurationGUI = ColorUtil.getColorAsRGBString(tabTextColorChooserButton.getForeground());
+        Color mainGUIApplicationModeTabstextColorFromConfiguration = mainGUIApplicationModeTabs.getTextColor();
+        Color mainGUIApplicationModeTabstextColorFromConfigurationGUI = tabTextColorChooserButton.getForeground();
 
         if (!mainGUIApplicationModeTabstextColorFromConfigurationGUI.equals(mainGUIApplicationModeTabstextColorFromConfiguration)) {
+         // TODO: Make html labels with the colors
             displayMessage.append(getLang().get("configviewer.userinterface.tabTextColor.label.text") + ": " + "new: " + mainGUIApplicationModeTabstextColorFromConfigurationGUI + " (" + "old" + mainGUIApplicationModeTabstextColorFromConfiguration + ")\n");
         }
 
@@ -287,22 +310,25 @@ public class GUIConfigurationPanel extends BaseConfigurationPanel {
 
         GUIWindow imageViewer = gui.getImageViewer();
         imageViewer.getGUIWindowSplitPane(ConfigElement.IMAGE_META_DATA.getElementValue()).setDividerSize(imageToMetaDataComboBox.getItemAt(imageToMetaDataComboBox.getSelectedIndex()).getSplitPaneDividerSize());
+        imageViewer.setBackgroundColor(imageViewerBackgroundColorChooserButton.getForeground());
 
         GUITabs guiTabs = getConfiguration().getgUITabs();
         GUITab mainGuiApplicationModeGuiTab = GUITabsUtil.getGUITab(guiTabs.getGuiTabs(), ConfigElement.MAIN_GUI_APPLICATION_MODE_TABS.getElementValue());
         mainGuiApplicationModeGuiTab.setPosition(tabPositionComboBox.getItemAt(tabPositionComboBox.getSelectedIndex()).getTabPosition());
-        mainGuiApplicationModeGuiTab.setTextColor(ColorUtil.getColorAsRGBString(tabTextColorChooserButton.getForeground()));
+        mainGuiApplicationModeGuiTab.setTextColor(tabTextColorChooserButton.getForeground());
     }
 
-    private class TabTextColorChooserButtonListener implements ActionListener {
+    private class ColorChooserButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JColorChooser.setDefaultLocale(Locale.getDefault());
 
-            // TODO: Fix hard coded string
-            Color selectedColor = JColorChooser.showDialog(null, "Choose a Color", null);
+            Color selectedColor = JColorChooser.showDialog(null, getLang().get("configviewer.userinterface.button.colourchooser"), null);
             if (selectedColor != null) {
-                tabTextColorChooserButton.setForeground(selectedColor);
+                Object source = e.getSource();
+                if (source instanceof JComponent) {
+                    ((JComponent)source).setForeground(selectedColor);
+                }
             }
         }
     }

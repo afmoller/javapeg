@@ -16,6 +16,15 @@
  ******************************************************************************/
 package moller.javapeg.program.config.controller.section;
 
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import moller.javapeg.program.config.controller.section.helper.ColorHelper;
 import moller.javapeg.program.config.model.GUI.GUI;
 import moller.javapeg.program.config.model.GUI.GUIWindow;
 import moller.javapeg.program.config.model.GUI.splitpane.GUIWindowSplitPane;
@@ -26,15 +35,10 @@ import moller.util.string.StringUtil;
 import moller.util.string.Tab;
 import moller.util.xml.XMLAttribute;
 import moller.util.xml.XMLUtil;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GUIConfig {
 
@@ -108,6 +112,8 @@ public class GUIConfig {
             case SPLIT_PANE:
                 guiWindowSplitPanes.add(createGUIWindowSplitPane(node));
                 break;
+            case BACKGROUND_COLOR:
+                guiWindow.setBackgroundColor(ColorHelper.createBackgroundColor(node));
             default:
                 break;
             }
@@ -168,6 +174,7 @@ public class GUIConfig {
 
         writeSizeAndLocation(gUI.getImageViewer().getSizeAndLocation(), Tab.SIX, xmlsw);
         writeSplitPanes(gUI.getImageViewer().getGuiWindowSplitPane(), Tab.SIX, xmlsw);
+        writeBackgroundColor(gUI.getImageViewer().getBackgroundColor(), Tab.SIX, xmlsw);
 
         XMLUtil.writeIndent(xmlsw, baseIndent.value());
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
@@ -236,6 +243,14 @@ public class GUIConfig {
 
         XMLUtil.writeElementEndWithLineBreak(xmlsw, baseIndent);
         //  GUI end
+    }
+
+    private static void writeBackgroundColor(Color backgroundColor, Tab indent, XMLStreamWriter xmlsw) throws XMLStreamException {
+        XMLUtil.writeElementStartWithLineBreak(ConfigElement.BACKGROUND_COLOR, indent, xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.RED, Tab.EIGHT, Integer.toString(backgroundColor.getRed()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.GREEN, Tab.EIGHT, Integer.toString(backgroundColor.getGreen()), xmlsw);
+        XMLUtil.writeElementWithIndentAndLineBreak(ConfigElement.BLUE, Tab.EIGHT, Integer.toString(backgroundColor.getBlue()), xmlsw);
+        XMLUtil.writeElementEndWithLineBreak(xmlsw, indent);
     }
 
     private static void writeSizeAndLocation(Rectangle sizeAndLocation, Tab indent, XMLStreamWriter xmlsw) throws XMLStreamException {

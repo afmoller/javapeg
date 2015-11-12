@@ -135,7 +135,7 @@
 
     <xs:complexType name="GuiTab">
         <xs:all>
-            <xs:element name="textColor" type="xs:string" />
+            <xs:element name="textColor" type="config:Color" />
             <xs:element name="position" >
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
@@ -157,7 +157,16 @@
             <xs:element name="width" type="xs:int" />
             <xs:element name="height" type="xs:int" />
             <xs:element name="splitPane" type="config:SplitPane" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="backgroundColor" type="config:Color" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Color">
+        <xs:all>
+            <xs:element name="red" type="xs:int" />
+            <xs:element name="green" type="xs:int" />
+            <xs:element name="blue" type="xs:int" />
+        </xs:all>
     </xs:complexType>
     
     <xs:complexType name="SplitPane" >
