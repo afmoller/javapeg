@@ -1,17 +1,31 @@
 package moller.javapeg.program.gui.components;
 
-import moller.javapeg.program.metadata.MetaDataUtil;
-import moller.util.image.ImageUtil;
-import org.imgscalr.Scalr;
-import org.imgscalr.Scalr.Method;
-import org.imgscalr.Scalr.Mode;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import moller.javapeg.program.metadata.MetaDataUtil;
+import moller.util.image.ImageUtil;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
 /**
  * <p>
@@ -792,21 +806,24 @@ public class NavigableImagePanel extends JPanel {
             method = Method.SPEED;
         }
 
-        subimage = Scalr.resize(subimage, method, Mode.FIT_EXACT,
-                Math.min((int)(subimage.getWidth() * scale), getWidth()),
-                Math.min((int)(subimage.getHeight() * scale), getHeight()));
+        int width = Math.min((int)(subimage.getWidth() * scale), getWidth());
+        int height = Math.min((int)(subimage.getHeight() * scale), getHeight());
 
-        g2.drawImage(subimage, Math.max(0, originX), Math.max(0, originY), null);
+        if (width > 0 && height > 0) {
+            subimage = Scalr.resize(subimage, method, Mode.FIT_EXACT, width, height);
 
-        //Draw navigation image
-        if (isNavigationImageEnabled()) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            g2.drawImage(navigationImage, 0, 0, getScreenNavImageWidth(), getScreenNavImageHeight(), null);
+            g2.drawImage(subimage, Math.max(0, originX), Math.max(0, originY), null);
 
-            g.setColor(Color.RED);
-            g.drawLine(0, getScreenNavImageHeight() , getScreenNavImageWidth(), getScreenNavImageHeight());
-            g.drawLine(getScreenNavImageWidth(), 0 , getScreenNavImageWidth(), getScreenNavImageHeight());
-            drawZoomAreaOutline(g);
+            //Draw navigation image
+            if (isNavigationImageEnabled()) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                g2.drawImage(navigationImage, 0, 0, getScreenNavImageWidth(), getScreenNavImageHeight(), null);
+
+                g.setColor(Color.RED);
+                g.drawLine(0, getScreenNavImageHeight() , getScreenNavImageWidth(), getScreenNavImageHeight());
+                g.drawLine(getScreenNavImageWidth(), 0 , getScreenNavImageWidth(), getScreenNavImageHeight());
+                drawZoomAreaOutline(g);
+            }
         }
     }
 
