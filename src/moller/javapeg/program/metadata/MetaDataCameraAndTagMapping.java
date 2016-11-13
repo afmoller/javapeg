@@ -16,14 +16,14 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
-import moller.javapeg.program.enumerations.FieldName;
+import moller.javapeg.program.enumerations.ExifFieldName;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MetaDataCameraAndTagMapping {
 
-    private final Map<String, Map<FieldName, String>> makeModelAndTagMappings;
+    private final Map<String, Map<ExifFieldName, String>> makeModelAndTagMappings;
 
     /**
      * The static singleton instance of this class.
@@ -34,7 +34,7 @@ public class MetaDataCameraAndTagMapping {
      * Private constructor.
      */
     private MetaDataCameraAndTagMapping() {
-        makeModelAndTagMappings = new HashMap<String, Map<FieldName, String>>();
+        makeModelAndTagMappings = new HashMap<String, Map<ExifFieldName, String>>();
         this.initMakeModelAndTagMappingsMap();
     }
 
@@ -45,25 +45,25 @@ public class MetaDataCameraAndTagMapping {
 
     }
 
-    private Map<FieldName, String> getMappingsForExifDefault() {
-        Map<FieldName, String> fieldNameAndTagIdMappings = new HashMap<FieldName, String>();
+    private Map<ExifFieldName, String> getMappingsForExifDefault() {
+        Map<ExifFieldName, String> fieldNameAndTagIdMappings = new HashMap<ExifFieldName, String>();
 
-        fieldNameAndTagIdMappings.put(FieldName.FNUMBER, "0x829d");
-        fieldNameAndTagIdMappings.put(FieldName.DATE_TIME_ORIGINAL, "0x9003");
-        fieldNameAndTagIdMappings.put(FieldName.ISO_SPEED_RATINGS, "0x8827");
-        fieldNameAndTagIdMappings.put(FieldName.JPEG_INTERCHANGE_FORMAT, "0x0201");
-        fieldNameAndTagIdMappings.put(FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH, "0x0202");
-        fieldNameAndTagIdMappings.put(FieldName.PIXEL_X_DIMENSION, "0xa002");
-        fieldNameAndTagIdMappings.put(FieldName.PIXEL_Y_DIMENSION, "0xa003");
-        fieldNameAndTagIdMappings.put(FieldName.EXPOSURE_TIME_VALUE, "0x829a");
+        fieldNameAndTagIdMappings.put(ExifFieldName.FNUMBER, "0x829d");
+        fieldNameAndTagIdMappings.put(ExifFieldName.DATE_TIME_ORIGINAL, "0x9003");
+        fieldNameAndTagIdMappings.put(ExifFieldName.ISO_SPEED_RATINGS, "0x8827");
+        fieldNameAndTagIdMappings.put(ExifFieldName.JPEG_INTERCHANGE_FORMAT, "0x0201");
+        fieldNameAndTagIdMappings.put(ExifFieldName.JPEG_INTERCHANGE_FORMAT_LENGTH, "0x0202");
+        fieldNameAndTagIdMappings.put(ExifFieldName.PIXEL_X_DIMENSION, "0xa002");
+        fieldNameAndTagIdMappings.put(ExifFieldName.PIXEL_Y_DIMENSION, "0xa003");
+        fieldNameAndTagIdMappings.put(ExifFieldName.EXPOSURE_TIME_VALUE, "0x829a");
 
         return fieldNameAndTagIdMappings;
     }
 
-    private Map<FieldName, String> getMappingsForCanonPowerShotA95() {
-        Map<FieldName, String> fieldNameAndTagIdMappings = new HashMap<FieldName, String>();
+    private Map<ExifFieldName, String> getMappingsForCanonPowerShotA95() {
+        Map<ExifFieldName, String> fieldNameAndTagIdMappings = new HashMap<ExifFieldName, String>();
 
-        fieldNameAndTagIdMappings.put(FieldName.ISO_SPEED_RATINGS, "0xc110");
+        fieldNameAndTagIdMappings.put(ExifFieldName.ISO_SPEED_RATINGS, "0xc110");
 
         return fieldNameAndTagIdMappings;
     }
@@ -84,7 +84,7 @@ public class MetaDataCameraAndTagMapping {
         }
     }
 
-    public String getTag(String make, String model, FieldName fieldName) {
+    public String getTag(String make, String model, ExifFieldName fieldName) {
         if (makeModelAndTagMappings.containsKey(make+model)) {
             String value = makeModelAndTagMappings.get(make+model).get(fieldName);
             if (value != null) {

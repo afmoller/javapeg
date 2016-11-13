@@ -3428,12 +3428,14 @@ public class MainGUI extends JFrame {
             }
 
             rightClickMenuCategories.addSeparator();
+
+            Categories selectedCategoriesFromTreeModel = CategoryCheckTreeUtil.getSelectedCategoriesFromTreeModel(checkTreeManagerForAssignCategoriesCategoryTree);
+            popupMenuSaveSelectedCategoriesToAllImages.setEnabled(selectedCategoriesFromTreeModel != null && selectedCategoriesFromTreeModel.size() > 0 && loadedThumbnails.size() > 0);
             rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToAllImages);
 
-            // Add this menu item if there is more than one selected image.
-            if (loadedThumbnails.size() > 1) {
-                rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
-            }
+            // Enable this menu item if there is more than one selected image and there is at least one selected category.
+            popupMenuSaveSelectedCategoriesToSelectedImages.setEnabled(selectedCategoriesFromTreeModel != null && selectedCategoriesFromTreeModel.size() > 0 && loadedThumbnails.hasSelectedThumbnails());
+            rightClickMenuCategories.add(popupMenuSaveSelectedCategoriesToSelectedImages);
         }
     }
 

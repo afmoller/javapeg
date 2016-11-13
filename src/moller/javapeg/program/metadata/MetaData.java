@@ -16,11 +16,11 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
-import moller.javapeg.program.datatype.ExposureTime;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import moller.javapeg.program.datatype.ExposureTime;
 
 public class MetaData {
 
@@ -35,6 +35,7 @@ public class MetaData {
     private int thumbNailOffset;
     private int thumbNailLength;
     private File fileObject;
+    private int exifOrientation;
 
     public MetaData() {
         fileName = null;
@@ -48,6 +49,7 @@ public class MetaData {
         thumbNailOffset = -1;
         thumbNailLength = -1;
         fileObject = null;
+        exifOrientation = -1;
     }
 
     public String getFileName() {
@@ -112,6 +114,10 @@ public class MetaData {
         return fileObject;
     }
 
+    public int getExifOrientation() {
+        return exifOrientation;
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
@@ -154,5 +160,9 @@ public class MetaData {
 
     public void setFileObject(File fileObject) {
         this.fileObject = fileObject;
+    }
+
+    public void setExifOrientation(int exifOrientation) {
+        this.exifOrientation = exifOrientation;
     }
 }

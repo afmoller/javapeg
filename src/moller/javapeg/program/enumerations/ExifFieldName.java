@@ -16,7 +16,7 @@
  ******************************************************************************/
 package moller.javapeg.program.enumerations;
 
-public enum FieldName {
+public enum ExifFieldName {
     FNUMBER,
     DATE_TIME_ORIGINAL,
     ISO_SPEED_RATINGS,
@@ -24,5 +24,6 @@ public enum FieldName {
     PIXEL_Y_DIMENSION,
     EXPOSURE_TIME_VALUE,
     JPEG_INTERCHANGE_FORMAT,
-    JPEG_INTERCHANGE_FORMAT_LENGTH;
+    JPEG_INTERCHANGE_FORMAT_LENGTH,
+    ORIENTATION;
 }

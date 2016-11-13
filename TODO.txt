@@ -3,7 +3,6 @@
 
 - Add new sections to the help: Metadata.
 - Make it possible to specify if the aspect ratio shall be preserved in the image resizer
-- Display width and height of the previewed image. 
 - Canon Powershot A95 has strange ISO values.
 - Test all functionality.
 - Update version numbers in language files

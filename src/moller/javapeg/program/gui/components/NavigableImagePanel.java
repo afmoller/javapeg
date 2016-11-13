@@ -809,7 +809,7 @@ public class NavigableImagePanel extends JPanel {
         int width = Math.min((int)(subimage.getWidth() * scale), getWidth());
         int height = Math.min((int)(subimage.getHeight() * scale), getHeight());
 
-        if (width > 0 && height > 0) {
+        if (width > 10 && height > 10) {
             subimage = Scalr.resize(subimage, method, Mode.FIT_EXACT, width, height);
 
             g2.drawImage(subimage, Math.max(0, originX), Math.max(0, originY), null);

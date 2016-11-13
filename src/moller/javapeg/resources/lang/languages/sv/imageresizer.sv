@@ -20,9 +20,11 @@ imageresizer.processlog.image.processed = Bild: %s storleksändrad (%s) millisek
 imageresizer.processlog.image.resize.done = Storleksändringsprocessen tog: %s sekunder
 imageresizer.processlog.image.resize.done.cancelled = Storleksändringsprocessen avbruten efter: %s sekunder
 
-imageresizer.resize.input.width   = Bredd
-imageresizer.resize.input.height  = Höjd
-imageresizer.resize.input.quality = Kvalitet
+imageresizer.resize.input.width           = Bredd
+imageresizer.resize.input.height          = Höjd
+imageresizer.resize.input.keepaspectratio = Begränsande ram
+imageresizer.resize.input.quality         = Kvalitet
+imageresizer.resize.input.path            = Målkatalog
 
 imageresizer.resize.input.button.resize = Storleksändra
 imageresizer.resize.input.button.cancel = Avbryt

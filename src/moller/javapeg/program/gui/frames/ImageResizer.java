@@ -36,6 +36,7 @@ import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -50,6 +51,8 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.AbstractDocument;
@@ -82,6 +85,8 @@ public class ImageResizer extends JavaPEGBaseFrame {
 
     private JTextField widthTextField;
     private JTextField heightTextField;
+
+    private JCheckBox keepAspectRatio;
 
     private JComboBox<Integer> qualityComboBox;
 
@@ -150,6 +155,32 @@ public class ImageResizer extends JavaPEGBaseFrame {
         super.addListeners();
         removeSelectedImagesButton.addActionListener(new RemoveSelectedImagesListener());
         imagesToViewList.addListSelectionListener(new ImagesToViewListListener());
+
+        HeightAndWidthTextfieldListener heightAndWidthTextfieldListener = new HeightAndWidthTextfieldListener();
+
+        heightTextField.getDocument().addDocumentListener(heightAndWidthTextfieldListener);
+        widthTextField.getDocument().addDocumentListener(heightAndWidthTextfieldListener);
+    }
+
+    private class HeightAndWidthTextfieldListener implements DocumentListener {
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            setEnabledStateOfKeepAspectRatioJCheckBox();
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            setEnabledStateOfKeepAspectRatioJCheckBox();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            setEnabledStateOfKeepAspectRatioJCheckBox();
+        }
+
+        private void setEnabledStateOfKeepAspectRatioJCheckBox() {
+            keepAspectRatio.setEnabled(!widthTextField.getText().isEmpty() && !heightTextField.getText().isEmpty());
+        }
     }
 
     private void createMainFrame() {
@@ -173,22 +204,18 @@ public class ImageResizer extends JavaPEGBaseFrame {
 
     private JPanel createLeftPanel() {
 
-        JPanel imageAndPreviewPanel = new JPanel(new GridBagLayout());
-
-        GBHelper posImageAndPreviewPanel = new GBHelper();
-
-        imageAndPreviewPanel.add(this.createImageListPanel(), posImageAndPreviewPanel.expandH().expandW());
-        imageAndPreviewPanel.add(Box.createHorizontalStrut(2), posImageAndPreviewPanel.nextCol());
-        imageAndPreviewPanel.add(this.createPreviewPanel(), posImageAndPreviewPanel.nextCol().expandH());
+        GBHelper posBackgroundPanel = new GBHelper();
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(new EmptyBorder(2, 2, 2, 1));
 
-        GBHelper posBackgroundPanel= new GBHelper();
-
-        backgroundPanel.add(imageAndPreviewPanel, posBackgroundPanel.expandH().expandW());
-        backgroundPanel.add(Box.createVerticalStrut(2), posBackgroundPanel.nextRow());
-        backgroundPanel.add(this.createInputPanel(), posBackgroundPanel.nextRow().expandW());
+        backgroundPanel.add(this.createImageListPanel(), posBackgroundPanel.expandH().expandW().height(4));
+        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextCol());
+        backgroundPanel.add(this.createPreviewPanel(), posBackgroundPanel.nextCol().expandH());
+        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextRow().nextCol());
+        backgroundPanel.add(this.createSizePanel(), posBackgroundPanel.nextCol());
+        backgroundPanel.add(Box.createHorizontalStrut(3), posBackgroundPanel.nextRow().nextCol());
+        backgroundPanel.add(this.createInputPanel(), posBackgroundPanel.nextCol());
 
         return backgroundPanel;
     }
@@ -261,6 +288,7 @@ public class ImageResizer extends JavaPEGBaseFrame {
 
         JLabel imageListLabel = new JLabel(getLang().get("maingui.tabbedpane.imagelist.label.list"));
         imageListLabel.setForeground(Color.GRAY);
+        imageListLabel.setText(imageListLabel.getText() + " (" + imagesToViewListModel.size() + ")");
 
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
@@ -308,17 +336,8 @@ public class ImageResizer extends JavaPEGBaseFrame {
 
     private JPanel createInputPanel() {
 
-        destinationDirectorySelector = new DestinationDirectorySelector(false);
-
-        JLabel widthLabel = new JLabel(getLang().get("imageresizer.resize.input.width"));
-
-        widthTextField = new JTextField();
-        ((AbstractDocument)widthTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
-
-        JLabel heightLabel = new JLabel(getLang().get("imageresizer.resize.input.height"));
-
-        heightTextField = new JTextField();
-        ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
+        JLabel destinationPathLabel = new JLabel(getLang().get("imageresizer.resize.input.path"));
+        destinationDirectorySelector = new DestinationDirectorySelector(false, destinationPathLabel);
 
         JLabel qualityLabel = new JLabel(getLang().get("imageresizer.resize.input.quality"));
 
@@ -343,18 +362,42 @@ public class ImageResizer extends JavaPEGBaseFrame {
         JPanel backgroundPanel = new JPanel(new GridBagLayout());
         backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
 
-        backgroundPanel.add(destinationDirectorySelector, posBackground);
+        backgroundPanel.add(qualityLabel, posBackground);
+        backgroundPanel.add(qualityComboBox, posBackground.nextRow().expandW());
         backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
+        backgroundPanel.add(destinationDirectorySelector, posBackground.nextRow());
+        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
+        backgroundPanel.add(buttonPanel, posBackground.nextRow());
+
+        return backgroundPanel;
+    }
+
+    private JPanel createSizePanel() {
+
+        JLabel widthLabel = new JLabel(getLang().get("imageresizer.resize.input.width"));
+
+        widthTextField = new JTextField();
+        ((AbstractDocument)widthTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
+
+        JLabel heightLabel = new JLabel(getLang().get("imageresizer.resize.input.height"));
+
+        heightTextField = new JTextField();
+        ((AbstractDocument)heightTextField.getDocument()).setDocumentFilter(new IntegerDocumentFilter());
+
+        keepAspectRatio = new JCheckBox(getLang().get("imageresizer.resize.input.keepaspectratio"));
+
+        GBHelper posBackground = new GBHelper();
+
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        backgroundPanel.setBorder(BorderFactory.createCompoundBorder(new TitledBorder(""), new EmptyBorder(2, 2, 2, 2)));
+
         backgroundPanel.add(widthLabel, posBackground.nextRow());
         backgroundPanel.add(widthTextField, posBackground.nextRow().expandW());
         backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
         backgroundPanel.add(heightLabel, posBackground.nextRow());
         backgroundPanel.add(heightTextField, posBackground.nextRow().expandW());
         backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
-        backgroundPanel.add(qualityLabel, posBackground.nextRow());
-        backgroundPanel.add(qualityComboBox, posBackground.nextRow().expandW());
-        backgroundPanel.add(Box.createVerticalStrut(3), posBackground.nextRow());
-        backgroundPanel.add(buttonPanel, posBackground.nextRow());
+        backgroundPanel.add(keepAspectRatio, posBackground.nextRow());
 
         return backgroundPanel;
     }
@@ -487,7 +530,7 @@ public class ImageResizer extends JavaPEGBaseFrame {
                         long startTimeImageResize = System.currentTimeMillis();
 
                         float floatQuality = quality / 100;
-                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality);
+                        ImageUtil.resizeAndStoreImage(imagesToViewListModel.get(index), width, height, destinationDirectory, floatQuality, keepAspectRation());
                         publish(String.format(getLang().get("imageresizer.processlog.image.processed"), imagesToViewListModel.get(index).getAbsolutePath(), (System.currentTimeMillis() - startTimeImageResize)));
                         setProgress((index + 1) * 100 / size);
                     } else {
@@ -506,6 +549,10 @@ public class ImageResizer extends JavaPEGBaseFrame {
                     return getLang().get("imageresizer.resize.process.cancelled");
                 }
             }
+        }
+
+        private boolean keepAspectRation() {
+            return keepAspectRatio.isEnabled() && keepAspectRatio.isSelected();
         }
 
         @Override

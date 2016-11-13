@@ -16,21 +16,31 @@
  ******************************************************************************/
 package moller.util.image;
 
-import org.imgscalr.Scalr;
-import org.imgscalr.Scalr.Method;
-import org.imgscalr.Scalr.Mode;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+
+import moller.javapeg.program.metadata.MetaDataUtil;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
+import org.imgscalr.Scalr.Rotation;
 
 public class ImageUtil {
 
@@ -136,11 +146,12 @@ public class ImageUtil {
 	 * @param height is the desired height of the resized image
 	 * @param destinationDirectory is to which directory the resized image
 	 *        shall be stored.
+	 * @param keepAspectRatio specifies if the aspect ratio shall be respected.
 	 * @param resizeMethod specifies which {@link Scalr.Method} to be used when
 	 *        the image is resized.
 	 * @throws IOException
 	 */
-	public static void resizeAndStoreImage(File fileToResize, int width, int height, File destinationDirectory, float quality) throws IOException {
+	public static void resizeAndStoreImage(File fileToResize, int width, int height, File destinationDirectory, float quality, boolean keepAspectRatio) throws IOException {
 
 	    // Check size values
 	    if (width < 1 && height < 1) {
@@ -159,14 +170,20 @@ public class ImageUtil {
 
 	    BufferedImage fileToResizeBufferedImage = ImageIO.read(fileToResize);
 
-
-	    // When both width and height are given the respect those values,
+	    // When both width and height are given then respect those values,
 	    // otherwise let Scalr calculate the missing value according to the
-	    // images aspect ratio.
+	    // images aspect ratio. If the height and width are given and the
+	    // keepAspectRatio is true, then the resulting image will have the
+	    // size in which it fits into the "box" defined by the width and
+	    // height and with the aspect ratio of the image kept intact.
 	    Scalr.Mode mode;
 
 	    if (width > 0 && height > 0) {
-	        mode = Mode.FIT_EXACT;
+	        if (keepAspectRatio) {
+	            mode = Mode.AUTOMATIC;
+	        } else {
+	            mode = Mode.FIT_EXACT;
+	        }
 	    } else {
 	        if (width == 0) {
 	            mode = Mode.FIT_TO_HEIGHT;
@@ -191,8 +208,29 @@ public class ImageUtil {
 	    BufferedImage resizedBufferedImage = Scalr.resize(fileToResizeBufferedImage, resizeMethod, mode, width, height);
 	    fileToResizeBufferedImage.flush();
 
-	    writeJpeg(resizedBufferedImage, new File(destinationDirectory, fileToResize.getName()), quality);
+	    Scalr.Rotation rotation = null;
 
+	    int orientationTag = MetaDataUtil.getOrientationTag(fileToResize);
+
+	    switch (orientationTag) {
+	    case 3:
+            rotation = Rotation.CW_180;
+            break;
+        case 6:
+            rotation = Rotation.CW_90;
+            break;
+        case 8:
+            rotation = Rotation.CW_270;
+            break;
+        default:
+            break;
+        }
+
+	    if (rotation != null) {
+	        resizedBufferedImage = Scalr.rotate(resizedBufferedImage, rotation);
+	    }
+
+	    writeJpeg(resizedBufferedImage, new File(destinationDirectory, fileToResize.getName()), quality);
 	}
 
 	/**

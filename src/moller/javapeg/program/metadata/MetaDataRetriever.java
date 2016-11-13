@@ -16,18 +16,18 @@
  ******************************************************************************/
 package moller.javapeg.program.metadata;
 
-import moller.javapeg.program.datatype.ExposureTime;
-import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
-import moller.javapeg.program.enumerations.FieldName;
-import moller.javapeg.program.logger.Logger;
-import moller.util.string.StringUtil;
-
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import moller.javapeg.program.datatype.ExposureTime;
+import moller.javapeg.program.datatype.ExposureTime.ExposureTimeException;
+import moller.javapeg.program.enumerations.ExifFieldName;
+import moller.javapeg.program.logger.Logger;
+import moller.util.string.StringUtil;
 
 public class MetaDataRetriever {
 
@@ -51,15 +51,15 @@ public class MetaDataRetriever {
         if (cameraMake != null && cameraModel != null) {
             MetaDataCameraAndTagMapping mdcatm = MetaDataCameraAndTagMapping.getInstance();
 
-            String fNumberTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.FNUMBER);
-            String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.DATE_TIME_ORIGINAL);
-            String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.ISO_SPEED_RATINGS);
-            String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_X_DIMENSION);
-            String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.PIXEL_Y_DIMENSION);
-            String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.EXPOSURE_TIME_VALUE);
+            String fNumberTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.FNUMBER);
+            String dateTimeOriginalTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.DATE_TIME_ORIGINAL);
+            String isoSpeedRatingsTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.ISO_SPEED_RATINGS);
+            String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.PIXEL_X_DIMENSION);
+            String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.PIXEL_Y_DIMENSION);
+            String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.EXPOSURE_TIME_VALUE);
 
-            String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT);
-            String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, FieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
+            String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.JPEG_INTERCHANGE_FORMAT);
+            String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
 
             metaData.setExifFNumber(getDoubleTagValue(tagAndValueMappings, fNumberTag));
             metaData.setExifCameraModel(cameraModel);
@@ -70,6 +70,7 @@ public class MetaDataRetriever {
             metaData.setExifExposureTime(getExposureTimeTagValue(tagAndValueMappings, exposureTimeValueTag));
             metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
             metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
+            metaData.setExifOrientation(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
         }
     }
 

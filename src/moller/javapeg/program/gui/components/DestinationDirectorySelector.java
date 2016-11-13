@@ -16,17 +16,25 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.components;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import moller.javapeg.program.GBHelper;
 import moller.javapeg.program.contexts.ApplicationContext;
 import moller.javapeg.program.gui.icons.IconLoader;
 import moller.javapeg.program.gui.icons.Icons;
 import moller.javapeg.program.language.Language;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * This class constructs a reusable GUI component that consists of a
@@ -69,7 +77,22 @@ public class DestinationDirectorySelector extends JPanel {
 
         lang = Language.getInstance();
 
-        this.construct(ignoreSourcePath);
+        this.construct(ignoreSourcePath, null);
+    }
+
+    /**
+     * @param ignoreSourcePath
+     *            defines whether or not the selected path shall be validated
+     *            against a selected source path which is stored in the
+     *            {@link ApplicationContext} or not.
+     *
+     * @param customDestinationPathLabel
+     *            makes it possible to supply a custom label to this component.
+     */
+    public DestinationDirectorySelector(boolean ignoreSourcePath, JLabel customDestinationPathLabel) {
+        lang = Language.getInstance();
+
+        this.construct(ignoreSourcePath, customDestinationPathLabel);
     }
 
     /**
@@ -79,10 +102,19 @@ public class DestinationDirectorySelector extends JPanel {
      *            defines whether or not the selected path shall be validated
      *            against a selected source path which is stored in the
      *            {@link ApplicationContext} or not.
+     *
+     * @param customDestinationPathLabel
+     *            makes it possible to supply a custom label to this component.
      */
-    private void construct(boolean ignoreSourcePath) {
-        JLabel destinationPathLabel = new JLabel(lang.get("labels.destinationPath"));
-        destinationPathLabel.setForeground(Color.GRAY);
+    private void construct(boolean ignoreSourcePath, JLabel customDestinationPathLabel) {
+        JLabel destinationPathLabel;
+
+        if (customDestinationPathLabel == null) {
+            destinationPathLabel = new JLabel(lang.get("labels.destinationPath"));
+            destinationPathLabel.setForeground(Color.GRAY);
+        } else {
+            destinationPathLabel = customDestinationPathLabel;
+        }
 
         destinationPathTextField = new JTextField();
         destinationPathTextField.setEditable(false);
@@ -103,7 +135,6 @@ public class DestinationDirectorySelector extends JPanel {
         this.add(destinationPathLabel, posBackground);
         this.add(destinationPathTextField, posBackground.nextRow().expandW());
         this.add(destinationPathButton, posBackground.nextCol());
-
     }
 
     /**
