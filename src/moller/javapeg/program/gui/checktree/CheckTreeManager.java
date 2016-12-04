@@ -15,14 +15,20 @@
 
 package moller.javapeg.program.gui.checktree;
 
-import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JTree;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * @author Santhosh Kumar T
@@ -35,6 +41,7 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
     protected JTree tree = new JTree();
     int hotspot = new JCheckBox().getPreferredSize().width;
     private boolean selectionEnabled;
+    private final List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 
     public CheckTreeManager(JTree tree, boolean dig, TreePathSelectable selectable, boolean smartSelection){
         this.tree = tree;
@@ -109,8 +116,14 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
 
                 if(selected) {
                     removeSelectionPaths(clickedPath);
+                    for (ChangeListener changeListener : changeListeners) {
+                        changeListener.stateChanged(new ChangeEvent(this));
+                    }
                 } else {
                     addSelectionPaths(clickedPath);
+                    for (ChangeListener changeListener : changeListeners) {
+                        changeListener.stateChanged(new ChangeEvent(this));
+                    }
                 }
             } finally{
                 selectionModel.addTreeSelectionListener(this);
@@ -142,5 +155,13 @@ public class CheckTreeManager extends MouseAdapter implements TreeSelectionListe
 
     public void setSelectionEnabled(boolean selectionEnabled) {
         this.selectionEnabled = selectionEnabled;
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        changeListeners.remove(listener);
     }
 }

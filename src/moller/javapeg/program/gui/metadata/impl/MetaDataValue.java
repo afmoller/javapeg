@@ -16,15 +16,21 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.metadata.impl;
 
-import moller.javapeg.program.GBHelper;
-import moller.javapeg.program.gui.icons.IconLoader;
-import moller.javapeg.program.gui.icons.Icons;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+
+import moller.javapeg.program.GBHelper;
+import moller.javapeg.program.gui.icons.IconLoader;
+import moller.javapeg.program.gui.icons.Icons;
 
 public class MetaDataValue extends JPanel {
 
@@ -34,7 +40,7 @@ public class MetaDataValue extends JPanel {
 
     private final JButton clearTextFieldButton;
 
-    public MetaDataValue(String name) {
+    public MetaDataValue(String name, ActionListener clearFilterFieldListener) {
         super();
 
         textField = new JTextField();
@@ -50,6 +56,7 @@ public class MetaDataValue extends JPanel {
         }
 
         clearTextFieldButton = new JButton(IconLoader.getIcon(Icons.REMOVE));
+        clearTextFieldButton.addActionListener(clearFilterFieldListener);
         clearTextFieldButton.addActionListener(new ActionListener() {
 
             @Override
@@ -82,6 +89,5 @@ public class MetaDataValue extends JPanel {
     @Override
     public void setEnabled(boolean enabled) {
         textField.setEnabled(enabled);
-
     }
 }

@@ -2,7 +2,6 @@
 ====
 
 - Add new sections to the help: Metadata.
-- Make it possible to specify if the aspect ratio shall be preserved in the image resizer
 - Canon Powershot A95 has strange ISO values.
 - Test all functionality.
 - Update version numbers in language files
@@ -17,7 +16,6 @@
 - Add list of compatible cameras in the help section of the application.
 - Implement image cache for the Image Viewer.
 - Implement Context aware menu in the menu bar.
-- Instantly view, as tooltip on the search image button, how many images that will be set to the result set with current image search query.
 - Add histogram functionality in the image viewer
 - Add functionality that keeps track if a configuration change requires a restart or not to take effect.
 - Changes in the image list shall be reflected in the Image Viewer, if it is displayed.

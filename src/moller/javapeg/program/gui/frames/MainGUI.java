@@ -3484,6 +3484,7 @@ public class MainGUI extends JFrame {
         @Override
         protected void done() {
             imageSearchTab.activateFieldsAfterMetaDataContextLoadingFinished();
+            imageSearchTab.addListenersToFilterFields();
 
             try {
                 ResultObject<String[]> result = get();

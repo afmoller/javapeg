@@ -55,6 +55,10 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import moller.javapeg.program.GBHelper;
@@ -101,6 +105,8 @@ public class ImageSearchTab extends JPanel {
     private JButton displayImageRepositoryStatisticsViewerButton;
     private JButton clearCategoriesSelectionButton;
     private JButton clearAllMetaDataParameters;
+
+    private JLabel matchingImagesLabel;
 
     private MetaDataValue yearMetaDataValue;
     private MetaDataValue monthMetaDataValue;
@@ -335,27 +341,35 @@ public class ImageSearchTab extends JPanel {
         JLabel shutterSpeedLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.EXPOSURE_TIME.toString()));
         JLabel apertureValueLabel = new JLabel(lang.get("metadata.field.name." + MetaDataValueFieldName.APERTURE_VALUE.toString()));
 
-        yearMetaDataValue = new MetaDataValue(MetaDataValueFieldName.YEAR.toString());
+        ActionListener clearFilterFieldListener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateMatchingImagesLabel();
+            }
+        };
+
+        yearMetaDataValue = new MetaDataValue(MetaDataValueFieldName.YEAR.toString(), clearFilterFieldListener);
         yearMetaDataValue.setEnabled(false);
-        monthMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MONTH.toString());
+        monthMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MONTH.toString(),clearFilterFieldListener);
         monthMetaDataValue.setEnabled(false);
-        dayMetaDataValue = new MetaDataValue(MetaDataValueFieldName.DAY.toString());
+        dayMetaDataValue = new MetaDataValue(MetaDataValueFieldName.DAY.toString(),clearFilterFieldListener);
         dayMetaDataValue.setEnabled(false);
-        hourMetaDataValue = new MetaDataValue(MetaDataValueFieldName.HOUR.toString());
+        hourMetaDataValue = new MetaDataValue(MetaDataValueFieldName.HOUR.toString(),clearFilterFieldListener);
         hourMetaDataValue.setEnabled(false);
-        minuteMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MINUTE.toString());
+        minuteMetaDataValue = new MetaDataValue(MetaDataValueFieldName.MINUTE.toString(),clearFilterFieldListener);
         minuteMetaDataValue.setEnabled(false);
-        secondMetaDataValue = new MetaDataValue(MetaDataValueFieldName.SECOND.toString());
+        secondMetaDataValue = new MetaDataValue(MetaDataValueFieldName.SECOND.toString(),clearFilterFieldListener);
         secondMetaDataValue.setEnabled(false);
-        imagesSizeMetaDataValue = new MetaDataValue(MetaDataValueFieldName.IMAGE_SIZE.toString());
+        imagesSizeMetaDataValue = new MetaDataValue(MetaDataValueFieldName.IMAGE_SIZE.toString(),clearFilterFieldListener);
         imagesSizeMetaDataValue.setEnabled(false);
-        isoMetaDataValue = new MetaDataValue(MetaDataValueFieldName.ISO.toString());
+        isoMetaDataValue = new MetaDataValue(MetaDataValueFieldName.ISO.toString(),clearFilterFieldListener);
         isoMetaDataValue.setEnabled(false);
-        shutterSpeedMetaDataValue = new MetaDataValue(MetaDataValueFieldName.EXPOSURE_TIME.toString());
+        shutterSpeedMetaDataValue = new MetaDataValue(MetaDataValueFieldName.EXPOSURE_TIME.toString(),clearFilterFieldListener);
         shutterSpeedMetaDataValue.setEnabled(false);
-        apertureValueMetaDataValue = new MetaDataValue(MetaDataValueFieldName.APERTURE_VALUE.toString());
+        apertureValueMetaDataValue = new MetaDataValue(MetaDataValueFieldName.APERTURE_VALUE.toString(),clearFilterFieldListener);
         apertureValueMetaDataValue.setEnabled(false);
-        cameraModelMetaDataValue = new MetaDataValue(MetaDataValueFieldName.CAMERA_MODEL.toString());
+        cameraModelMetaDataValue = new MetaDataValue(MetaDataValueFieldName.CAMERA_MODEL.toString(),clearFilterFieldListener);
         cameraModelMetaDataValue.setEnabled(false);
 
         final int size = 5;
@@ -437,7 +451,9 @@ public class ImageSearchTab extends JPanel {
         JScrollPane scrollPane = new JScrollPane(commentTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         commentPanel.add(scrollPane, posCommentPanel.nextRow().expandH().expandW());
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        GBHelper posButtonPanel = new GBHelper();
+
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         displayImageRepositoryStatisticsViewerButton = new JButton(IconLoader.getIcon(Icons.STATISTICS));
@@ -447,13 +463,19 @@ public class ImageSearchTab extends JPanel {
         clearAllMetaDataParameters = new JButton(IconLoader.getIcon(Icons.REMOVE));
         clearAllMetaDataParameters.setToolTipText(lang.get("findimage.clearAllMetaDataParameters.tooltip"));
 
+        matchingImagesLabel = new JLabel();
+        matchingImagesLabel.setToolTipText(lang.get("findimage.searchImages.numberOfMatchingImages.tooltip"));
+        matchingImagesLabel.setText(lang.get("findimage.searchImages.numberOfMatchingImages.initializing"));
+
         searchImagesButton = new JButton(IconLoader.getIcon(Icons.FIND));
         searchImagesButton.setToolTipText(lang.get("findimage.searchImages.initializing.imagecontext.tooltip"));
         searchImagesButton.setEnabled(false);
 
-        buttonPanel.add(searchImagesButton);
-        buttonPanel.add(clearAllMetaDataParameters);
-        buttonPanel.add(displayImageRepositoryStatisticsViewerButton);
+        buttonPanel.add(searchImagesButton, posButtonPanel);
+        buttonPanel.add(clearAllMetaDataParameters, posButtonPanel.nextCol());
+        buttonPanel.add(displayImageRepositoryStatisticsViewerButton, posButtonPanel.nextCol());
+        buttonPanel.add(Box.createHorizontalBox(), posButtonPanel.nextCol().expandW());
+        buttonPanel.add(matchingImagesLabel, posButtonPanel.nextCol());
 
         imageMetaDataContextLoadingProgressBar = new JProgressBar();
         imageMetaDataContextLoadingProgressBar.setStringPainted(true);
@@ -478,6 +500,7 @@ public class ImageSearchTab extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             javaPegIdToCheckTreeManager.get(configuration.getJavapegClientId()).getSelectionModel().clearSelection();
+            updateMatchingImagesLabel();
         }
     }
 
@@ -498,6 +521,7 @@ public class ImageSearchTab extends JPanel {
             if (checkTreeManager != null) {
                 checkTreeManager.getSelectionModel().clearSelection();
             }
+            updateMatchingImagesLabel();
         }
     }
 
@@ -528,6 +552,8 @@ public class ImageSearchTab extends JPanel {
             }
 
             commentTextArea.setText("");
+
+            updateMatchingImagesLabel();
         }
     }
 
@@ -545,26 +571,38 @@ public class ImageSearchTab extends JPanel {
 
         yearMetaDataValue.setEnabled(true);
         yearMetaDataValue.setMouseListener(mdtl);
+
         monthMetaDataValue.setEnabled(true);
         monthMetaDataValue.setMouseListener(mdtl);
+
         dayMetaDataValue.setEnabled(true);
         dayMetaDataValue.setMouseListener(mdtl);
+
         hourMetaDataValue.setEnabled(true);
         hourMetaDataValue.setMouseListener(mdtl);
+
         minuteMetaDataValue.setEnabled(true);
         minuteMetaDataValue.setMouseListener(mdtl);
+
         secondMetaDataValue.setEnabled(true);
         secondMetaDataValue.setMouseListener(mdtl);
+
         imagesSizeMetaDataValue.setEnabled(true);
         imagesSizeMetaDataValue.setMouseListener(mdtl);
+
         isoMetaDataValue.setEnabled(true);
         isoMetaDataValue.setMouseListener(mdtl);
+
         shutterSpeedMetaDataValue.setEnabled(true);
         shutterSpeedMetaDataValue.setMouseListener(mdtl);
+
         apertureValueMetaDataValue.setEnabled(true);
         apertureValueMetaDataValue.setMouseListener(mdtl);
+
         cameraModelMetaDataValue.setEnabled(true);
         cameraModelMetaDataValue.setMouseListener(mdtl);
+
+        updateMatchingImagesLabel();
     }
 
     private class SearchImagesListener implements ActionListener {
@@ -741,6 +779,60 @@ public class ImageSearchTab extends JPanel {
 
             textField.setText(mdvsd.getResult());
             textField.setToolTipText(mdvsd.getResult());
+
+            updateMatchingImagesLabel();
+        }
+    }
+
+    private void updateMatchingImagesLabel() {
+        Set<File> performImageSearch = ImageMetaDataContextUtil.performImageSearch(collectSearchParameters());
+        matchingImagesLabel.setText(Integer.toString(performImageSearch.size()));
+    }
+
+    public void addListenersToFilterFields() {
+
+        for (JCheckBox ratingCheckBox : ratingCheckBoxes) {
+            ratingCheckBox.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    updateMatchingImagesLabel();
+                }
+            });
+        }
+
+        commentTextArea.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateMatchingImagesLabel();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateMatchingImagesLabel();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateMatchingImagesLabel();
+            }
+        });
+
+        FilterParameterChangeListener filterParameterChangeListener = new FilterParameterChangeListener();
+
+        for (CheckTreeManager checkTreeManager : javaPegIdToCheckTreeManager.values()) {
+            checkTreeManager.addChangeListener(filterParameterChangeListener);
+        }
+
+        andRadioButton.addChangeListener(filterParameterChangeListener);
+    }
+
+    private class FilterParameterChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            updateMatchingImagesLabel();
         }
     }
 }
