@@ -26,6 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Enumeration;
@@ -80,7 +81,6 @@ public class ConfigHandlerUtil {
      * @param w
      * @throws XMLStreamException
      */
-    @SuppressWarnings("unchecked")
     public static void storeChild(DefaultMutableTreeNode node, String indent, XMLStreamWriter w) throws XMLStreamException {
         XMLAttribute[] xmlAttributes = new XMLAttribute[2];
 
@@ -91,10 +91,10 @@ public class ConfigHandlerUtil {
             xmlAttributes[1] = new XMLAttribute("name", cuo.getName());
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.CATEGORY, indent, xmlAttributes, w);
 
-            Enumeration<DefaultMutableTreeNode> children = node.children();
+            Enumeration<TreeNode> children = node.children();
 
             while (children.hasMoreElements()) {
-                storeChild(children.nextElement(), indent + Tab.TWO.value(), w);
+                storeChild((DefaultMutableTreeNode)children.nextElement(), indent + Tab.TWO.value(), w);
             }
 
             XMLUtil.writeElementEndWithLineBreak(w, indent);

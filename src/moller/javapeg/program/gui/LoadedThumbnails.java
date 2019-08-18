@@ -51,7 +51,7 @@ public class LoadedThumbnails extends ArrayList<JToggleButton> {
      * every button will be de-selected.
      */
     public void clearSelections() {
-        if (size() > 0) {
+        if (!isEmpty()) {
             Iterator<JToggleButton> iterator = iterator();
             while ( iterator.hasNext()) {
                 JToggleButton jToggleButton = iterator.next();

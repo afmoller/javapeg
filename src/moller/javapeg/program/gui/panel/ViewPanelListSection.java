@@ -39,7 +39,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -615,7 +615,7 @@ public class ViewPanelListSection extends JPanel {
     }
 
     /**
-     * This method adds an image to the image view list {@link ListModel} and
+     * This method adds an image to the image view list {@link JList} and
      * set this image is also set as the selected image. It also updates the
      * label that displays the amount of images in the list. It also adds the
      * image to the {@link ImageViewer} if that one is displayed.

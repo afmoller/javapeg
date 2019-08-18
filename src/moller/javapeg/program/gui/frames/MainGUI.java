@@ -535,23 +535,23 @@ public class MainGUI extends JFrame {
 
         // Skapa menyrader i arkiv-menyn
         openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
-        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
         startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
-        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
         startProcessJMenuItem.setEnabled(false);
 
         shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
-        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         exportCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.export.long.title"));
         exportCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.export.long.title.tooltip"));
-        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         importCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.import.long.title"));
         importCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.import.long.title.tooltip"));
-        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu fileMenu = new JMenu(lang.get("menu.file"));
         fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
@@ -565,7 +565,7 @@ public class MainGUI extends JFrame {
 
         // Create rows in the Configuration menu
         configGUIJMenuItem = new JMenuItem(lang.get("menu.item.configuration"));
-        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu configMenu = new JMenu(lang.get("menu.configuration"));
         configMenu.setMnemonic(lang.get("menu.mnemonic.configuration").charAt(0));
@@ -577,7 +577,7 @@ public class MainGUI extends JFrame {
         helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
 
         aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
-        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu helpMenu = new JMenu(lang.get("menu.help"));
         helpMenu.setMnemonic(lang.get("menu.mnemonic.help").charAt(0));
@@ -2400,10 +2400,10 @@ public class MainGUI extends JFrame {
             Object source = e.getSource();
 
             if (source instanceof JToggleButton) {
-                JToggleButton toggleButton = (JToggleButton)source;
+                JToggleButton selectedThumbnail = (JToggleButton)source;
 
                 // An image is selected
-                if (toggleButton.isSelected()) {
+                if (selectedThumbnail.isSelected()) {
                     ApplicationContext ac = ApplicationContext.getInstance();
 
                     if (ac.isImageMetaDataDataBaseFileLoaded() &&
@@ -2417,9 +2417,34 @@ public class MainGUI extends JFrame {
                     int percentage = grayFilter.getPercentage();
 
                     if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        loadedThumbnails.addSelection(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.addSelection(selectedThumbnail, pixelsBrightened, percentage);
+                    }
+
+                    // Set all thumbnails from the previous selected to to the
+                    // currently selected to selected or all previous thumbnails
+                    // if none of the previous are selected.
+                    else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK) {
+
+                        List<JToggleButton> deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected = new ArrayList<>();
+
+                        for (JToggleButton thumbNail : thumbNailsPanel.getJToggleButtons()) {
+                            deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected.add(thumbNail);
+
+                            if(thumbNail.isSelected() && thumbNail != selectedThumbnail) {
+                                deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected.clear();
+                            }
+
+                            if (thumbNail == selectedThumbnail) {
+                                break;
+                            }
+                        }
+
+                        for (JToggleButton currentlyDeSelectedThumbnail : deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected) {
+                            loadedThumbnails.addSelection(currentlyDeSelectedThumbnail, pixelsBrightened, percentage);
+                        }
+
                     } else {
-                        loadedThumbnails.set(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.set(selectedThumbnail, pixelsBrightened, percentage);
                     }
 
                     File jpegImage = new File(e.getActionCommand());
@@ -2465,7 +2490,7 @@ public class MainGUI extends JFrame {
                 }
                 // An image is deselected
                 else {
-                    deSelectAllImages(e, toggleButton);
+                    deSelectAllImages(e, selectedThumbnail);
                 }
             }
         }
@@ -2506,19 +2531,18 @@ public class MainGUI extends JFrame {
     /**
      * @param categories
      */
-    @SuppressWarnings("unchecked")
     private void setCategories(Categories categories) {
 
         checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
 
         if (categories != null && categories.size() > 0) {
             DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
-            Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
+            Enumeration<TreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 
             List<TreePath> treePaths = new ArrayList<>();
 
             while (elements.hasMoreElements()) {
-                DefaultMutableTreeNode element = elements.nextElement();
+                DefaultMutableTreeNode element = (DefaultMutableTreeNode)elements.nextElement();
 
                 CategoryUserObject cuo = ((CategoryUserObject)element.getUserObject());
                 String id = cuo.getIdentity();
@@ -2572,7 +2596,7 @@ public class MainGUI extends JFrame {
      * overview to the list of images to display in the {@link ImageViewer} GUI.
      *
      * @author Fredrik
-     *
+     *ctrl
      */
     private class AddSelectedImagesToViewList implements ActionListener {
         @Override
@@ -2671,6 +2695,7 @@ public class MainGUI extends JFrame {
                     }
                 }
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2702,6 +2727,7 @@ public class MainGUI extends JFrame {
                     TreeUtil.sortNodesAlphabetically(parent, model);
                 }
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2734,6 +2760,7 @@ public class MainGUI extends JFrame {
             if (result == 0) {
                 model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2785,7 +2812,7 @@ public class MainGUI extends JFrame {
                     if (imageMetaDataBaseItem != null) {
                         Categories currentlyStoredCategories = imageMetaDataBaseItem.getCategories();
 
-                        if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
+                        if (currentlyStoredCategories.mergeCategories(selectedCategoriesFromTreeModel.getCategories())) {
                             imddbituc.setFlushNeeded(true);
                             imageMetaDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
                         }
@@ -3346,8 +3373,7 @@ public class MainGUI extends JFrame {
             if (selectionPath != null) {
                 DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode)selectionPath.getLastPathComponent();
 
-                @SuppressWarnings("unchecked")
-                Enumeration<DefaultMutableTreeNode> preOrderEnumeration = lastPathComponent.preorderEnumeration();
+                Enumeration<TreeNode> preOrderEnumeration = lastPathComponent.preorderEnumeration();
                 while(preOrderEnumeration.hasMoreElements()){
                     categoriesTree.getSelectionModel().addSelectionPath(getPath(preOrderEnumeration.nextElement()));
                 }

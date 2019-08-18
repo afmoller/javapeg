@@ -33,12 +33,12 @@ public class Categories {
 
     public Categories() {
         super();
-        this.categories = new TreeSet<String>();
+        this.categories = new TreeSet<>();
     }
 
     public Categories(String[] categories) {
         super();
-        this.categories = new TreeSet<String>();
+        this.categories = new TreeSet<>();
         for (String category : categories) {
             addCategory(category);
         }
@@ -105,17 +105,26 @@ public class Categories {
     }
 
     /**
-     * Adds a set of categories to the already, if any, set categories
+     *  Merges a set of categories to the already, if any, set categories
+     *  (add and or remove of categories)
      * 
-     * @param categoriesToAdd
-     *            is the {@link Set} of categories to add to the existing
+     * @param categoriesToMerge
+     *            is the {@link Set} of categories to merge with the existing
      *            {@link Set} of categories.
-     * @return a boolean value indicating if any category was added to the set
-     *         or not. True means that atleast one of the categories in the
-     *         parameter to this method was added to the {@link Set} of already
-     *         existing categories.
+     * @return a boolean value indicating if any category was added or removed
+     *         from the set or not. True means that at least one of the
+     *         categories in the parameter to this method was added to the
+     *         {@link Set} of already existing categories or that one category
+     *         was removed from the set of already existing categories.
      */
-    public boolean addCategories(Set<String> categoriesToAdd) {
-        return categories.addAll(categoriesToAdd);
+    public boolean mergeCategories(Set<String> categoriesToMerge) {
+        boolean differences = !categories.equals(categoriesToMerge);
+
+        if (differences) {
+            categories.clear();
+            categories.addAll(categoriesToMerge);
+        }
+
+        return differences;
     }
 }
