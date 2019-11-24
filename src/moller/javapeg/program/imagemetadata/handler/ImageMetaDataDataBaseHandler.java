@@ -70,7 +70,7 @@ public class ImageMetaDataDataBaseHandler {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
-             db = dbf.newDocumentBuilder();
+            db = dbf.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             Logger logger = Logger.getInstance();
             logger.logFATAL("Could not get an DocumentBuilder");
@@ -86,11 +86,10 @@ public class ImageMetaDataDataBaseHandler {
      * whether a path shall be added to the image meta data repository or not.
      *
      * @param path the directory to check policy against.
-     *
      * @return a boolean value indicating whether the path shall be added to
-     *         the image meta data repository or not. A return value of true
-     *         means that the path shall be added to the image meta data
-     *         repository.
+     * the image meta data repository or not. A return value of true
+     * means that the path shall be added to the image meta data
+     * repository.
      */
     public static boolean addPathToRepositoryAccordingToPolicy(Component parentComponent, File path) {
 
@@ -101,38 +100,38 @@ public class ImageMetaDataDataBaseHandler {
         // The following switch statement will check exceptions to the
         // additions policy.
         switch (policy) {
-        case 0:
-            for (File neverAdd : repositoryExceptions.getNeverAdd()) {
-                if (PathUtil.isChild(path, neverAdd)) {
-                    policy = 2;
-                    break;
+            case 0:
+                for (File neverAdd : repositoryExceptions.getNeverAdd()) {
+                    if (PathUtil.isChild(path, neverAdd)) {
+                        policy = 2;
+                        break;
+                    }
                 }
-            }
-        case 2:
-            for (File allwaysAdd : repositoryExceptions.getAllwaysAdd()) {
-                if (PathUtil.isChild(path, allwaysAdd)) {
-                    policy = 0;
-                    break;
+            case 2:
+                for (File allwaysAdd : repositoryExceptions.getAllwaysAdd()) {
+                    if (PathUtil.isChild(path, allwaysAdd)) {
+                        policy = 0;
+                        break;
+                    }
                 }
-            }
-        default:
-            // Do nothing
-            break;
+            default:
+                // Do nothing
+                break;
         }
 
         // Check what to do..
         switch (policy) {
-        // Add without a question.
-        case 0:
-            return true;
-        // Ask first if addition shall be done.
-        case 1:
-            return addPathToImageRepository(parentComponent, path);
-        // Do not add.
-        case 2:
-            return false;
-        default:
-            return addPathToImageRepository(parentComponent, path);
+            // Add without a question.
+            case 0:
+                return true;
+            // Ask first if addition shall be done.
+            case 1:
+                return addPathToImageRepository(parentComponent, path);
+            // Do not add.
+            case 2:
+                return false;
+            default:
+                return addPathToImageRepository(parentComponent, path);
         }
     }
 
@@ -141,23 +140,23 @@ public class ImageMetaDataDataBaseHandler {
 
         JCheckBox rememberSelectionCheckBox = new JCheckBox(lang.get("category.rememberMySelection"));
 
-        Object[] array = { lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo") + "\n\n",
-                           rememberSelectionCheckBox };
+        Object[] array = {lang.get("category.addToImageRepositoryQuestionPartOne") + "\n" + directory.getAbsolutePath() + "\n" + lang.get("category.addToImageRepositoryQuestionPartTwo") + "\n\n",
+                rememberSelectionCheckBox};
 
         int result = JOptionPane.showConfirmDialog(parentComponent, array, lang.get("category.addToImageRepositoryHeader"), JOptionPane.YES_NO_OPTION);
 
         if (rememberSelectionCheckBox.isSelected()) {
-           Integer checkBoxState = null;
+            Integer checkBoxState = null;
 
-           if (result == JOptionPane.YES_OPTION) {
-               checkBoxState = 0;
-           } else if (result == JOptionPane.NO_OPTION) {
-               checkBoxState = 2;
-           }
+            if (result == JOptionPane.YES_OPTION) {
+                checkBoxState = 0;
+            } else if (result == JOptionPane.NO_OPTION) {
+                checkBoxState = 2;
+            }
 
-           if (checkBoxState != null) {
-               configuration.getTagImages().getImagesPaths().setAddToRepositoryPolicy(checkBoxState);
-           }
+            if (checkBoxState != null) {
+                configuration.getTagImages().getImagesPaths().setAddToRepositoryPolicy(checkBoxState);
+            }
         }
 
         if (result == JOptionPane.YES_OPTION) {
@@ -221,8 +220,8 @@ public class ImageMetaDataDataBaseHandler {
 
                 XMLUtil.writeStartDocument(encoding, "1.0", w);
                 XMLUtil.writeComment("This XML file contains meta data information of all JPEG image" + C.LS +
-                                     "files that exists in the directory where this XML file is to be found." + C.LS +
-                                     "The content of this file is used and modified by the application JavaPEG", w);
+                        "files that exists in the directory where this XML file is to be found." + C.LS +
+                        "The content of this file is used and modified by the application JavaPEG", w);
 
                 XMLAttribute[] xmlAttributes = new XMLAttribute[4];
                 xmlAttributes[0] = new XMLAttribute("version", C.IMAGE_META_DATA_DATA_BASE_VERSION);
@@ -234,7 +233,7 @@ public class ImageMetaDataDataBaseHandler {
                 XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.JAVAPEG_ID, configuration.getJavapegClientId(), w);
 
                 logger.logDEBUG("Start writing image elements");
-                for(File image : imageMetaDataDataBaseItems.keySet()) {
+                for (File image : imageMetaDataDataBaseItems.keySet()) {
                     ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
                     CategoryImageExifMetaData ciemd = imddbi.getImageExifMetaData();
 
@@ -242,12 +241,12 @@ public class ImageMetaDataDataBaseHandler {
                     XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.IMAGE, ImageMetaDataDataBaseItemElement.FILE.getElementValue(), imddbi.getImage().getName(), w);
                     XMLUtil.writeElementStart(ImageMetaDataDataBaseItemElement.EXIF_META_DATA, w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.F_NUMBER, Double.toString(ciemd.getFNumber()), w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.CAMERA_MODEL  , ciemd.getCameraModel()  , w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.DATE_TIME     , ciemd.getDateTimeAsString()         , w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.ISO_VALUE     , Integer.toString(ciemd.getIsoValue())     , w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.CAMERA_MODEL, ciemd.getCameraModel(), w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.DATE_TIME, ciemd.getDateTimeAsString(), w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.ISO_VALUE, Integer.toString(ciemd.getIsoValue()), w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.PICTURE_HEIGHT, Integer.toString(ciemd.getPictureHeight()), w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.PICTURE_WIDTH , Integer.toString(ciemd.getPictureWidth()) , w);
-                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.EXPOSURE_TIME , ciemd.getExposureTime() == null ? "" : ciemd.getExposureTime().toString() , w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.PICTURE_WIDTH, Integer.toString(ciemd.getPictureWidth()), w);
+                    XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.EXPOSURE_TIME, ciemd.getExposureTime() == null ? "" : ciemd.getExposureTime().toString(), w);
                     XMLUtil.writeElementEnd(w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.COMMENT, imddbi.getComment(), w);
                     XMLUtil.writeElement(ImageMetaDataDataBaseItemElement.RATING, Integer.toString(imddbi.getRating()), w);
@@ -265,21 +264,21 @@ public class ImageMetaDataDataBaseHandler {
                 logger.logDEBUG("File: " + destination.getAbsolutePath() + C.FS + C.JAVAPEG_IMAGE_META_NAME + " has been updated with the changes made to the content");
 
                 switch (imageMetaDataContextAction) {
-                case ADD:
-                    for(File image : imageMetaDataDataBaseItems.keySet()) {
-                        ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
-                        populateImageMetaDataContext(configuration.getJavapegClientId(), imddbi);
-                    }
-                    break;
-                case UPDATE:
-                    for(File image : imageMetaDataDataBaseItems.keySet()) {
-                        ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
-                        if (imddbi.isNeedsToBeSyncedWithImageMetaDataContext()) {
-                            updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
-                            imddbi.setNeedsToBeSyncedWithImageMetaDataContext(false);
+                    case ADD:
+                        for (File image : imageMetaDataDataBaseItems.keySet()) {
+                            ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
+                            populateImageMetaDataContext(configuration.getJavapegClientId(), imddbi);
                         }
-                    }
-                    break;
+                        break;
+                    case UPDATE:
+                        for (File image : imageMetaDataDataBaseItems.keySet()) {
+                            ImageMetaDataItem imddbi = imageMetaDataDataBaseItems.get(image);
+                            if (imddbi.isNeedsToBeSyncedWithImageMetaDataContext()) {
+                                updateImageMetaDataContext(configuration.getJavapegClientId(), image, imddbi.getComment(), imddbi.getRating(), imddbi.getCategories());
+                                imddbi.setNeedsToBeSyncedWithImageMetaDataContext(false);
+                            }
+                        }
+                        break;
                 }
             } catch (XMLStreamException xsex) {
                 logger.logERROR("Could not write to XMLStream");
@@ -302,7 +301,7 @@ public class ImageMetaDataDataBaseHandler {
         Logger logger = Logger.getInstance();
         Language lang = Language.getInstance();
 
-        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, lang.get("categoryimportexport.import.long.title"), new Rectangle(100, 100, 500,200), imageMetaDataDataBase);
+        CategoryImportExportPopup ciep = new CategoryImportExportPopup(true, lang.get("categoryimportexport.import.long.title"), new Rectangle(100, 100, 500, 200), imageMetaDataDataBase);
         if (ciep.isActionButtonClicked()) {
             ImportedCategories importedCategoriesFromFile = CategoriesConfig.importCategoriesConfig(ciep.getCategoryFileToImportExport());
 
@@ -326,11 +325,10 @@ public class ImageMetaDataDataBaseHandler {
      * This method constructs an {@link ImageMetaDataDataBase} object from an
      * the XML file specified by the parameter imageMetaDataDataBase.
      *
-     * @param imageMetaDataDataBase
-     *            specifies which XML file to create an
-     *            {@link ImageMetaDataDataBase} object of.
+     * @param imageMetaDataDataBase specifies which XML file to create an
+     *                              {@link ImageMetaDataDataBase} object of.
      * @return an {@link ImageMetaDataDataBase} object from the XML file
-     *         specified by the input parameter imageMetaDataDataBase.
+     * specified by the input parameter imageMetaDataDataBase.
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
@@ -374,12 +372,10 @@ public class ImageMetaDataDataBaseHandler {
      * is given to this method as an input parameter is not created by the
      * current running JavaPEG instance.
      *
-     * @param imageMetaDataDataBase
-     *            is the file to check if there is a need to do a category
-     *            import for.
-     * @param javaPegIdValue
-     *            specifies which JavaPEG client that has created the filed
-     *            defined in the parameter imageMetaDataDataBase.
+     * @param imageMetaDataDataBase is the file to check if there is a need to do a category
+     *                              import for.
+     * @param javaPegIdValue        specifies which JavaPEG client that has created the filed
+     *                              defined in the parameter imageMetaDataDataBase.
      */
     public static void showCategoryImportDialogIfNeeded(File imageMetaDataDataBase, String javaPegIdValue) {
         ApplicationContext ac = ApplicationContext.getInstance();
@@ -450,7 +446,7 @@ public class ImageMetaDataDataBaseHandler {
                      */
                     if (!newComment.equals(comment)) {
                         indices.remove(index);
-                        if(indices.size() == 0) {
+                        if (indices.size() == 0) {
                             comments.remove(comment);
                         }
                         imdc.addComment(javaPegIdValue, newComment, image.getAbsolutePath());
@@ -472,18 +468,13 @@ public class ImageMetaDataDataBaseHandler {
      * base. If the rating has changed for an image, then the rating meta data
      * base will be updated to reflect this change.
      *
-     * @param javaPegIdValue
-     *            defines for which part of the rating meta data base to do an
-     *            update .
-     * @param image
-     *            defines for which image the update shall be done.
-     * @param rating
-     *            is the rating to set
-     * @param imdc
-     *            is the {@link ImageMetaDataContext} which holds all meta data
-     *            base information
-     * @param ipai
-     *            is the repository of image paths to index mappings.
+     * @param javaPegIdValue defines for which part of the rating meta data base to do an
+     *                       update .
+     * @param image          defines for which image the update shall be done.
+     * @param rating         is the rating to set
+     * @param imdc           is the {@link ImageMetaDataContext} which holds all meta data
+     *                       base information
+     * @param ipai           is the repository of image paths to index mappings.
      */
     private static void updateImageRating(String javaPegIdValue, File image, int rating, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
         Map<Integer, Set<Integer>> ratings = imdc.getRatings(javaPegIdValue);
@@ -511,7 +502,7 @@ public class ImageMetaDataDataBaseHandler {
                          * rating and add the new rating value to the
                          * ImageMetaDataContext.
                          */
-                        if (ratings.get(index).contains(imageIndex)) {
+                        if (ratings.containsKey(index) && ratings.get(index).contains(imageIndex)) {
                             ratings.get(index).remove(imageIndex);
                             imdc.addRating(javaPegIdValue, rating, image.getAbsolutePath());
                             break search;
@@ -530,16 +521,12 @@ public class ImageMetaDataDataBaseHandler {
      * that comes to this method as the image parameter into the category meta
      * data base.
      *
-     * @param image
-     *            is the image to update the categories for.
-     * @param categories
-     *            are the currently selected categories for the image specifies
-     *            by the parameter image
-     * @param imdc
-     *            is the {@link ImageMetaDataContext} which holds all meta data
-     *            base information
-     * @param ipai
-     *            is the repository of image paths to index mappings.
+     * @param image      is the image to update the categories for.
+     * @param categories are the currently selected categories for the image specifies
+     *                   by the parameter image
+     * @param imdc       is the {@link ImageMetaDataContext} which holds all meta data
+     *                   base information
+     * @param ipai       is the repository of image paths to index mappings.
      */
     private static void updateImageCategories(File image, Categories categories, ImageMetaDataContext imdc, ImagePathAndIndex ipai) {
         Map<String, Map<String, Set<Integer>>> javaPegIdToCategoriesMap = imdc.getCategories();
@@ -548,58 +535,58 @@ public class ImageMetaDataDataBaseHandler {
 
         List<String> categoriesToRemove = new ArrayList<String>();
 
-         Map<String, Set<Integer>> categoriesMap = javaPegIdToCategoriesMap.get(configuration.getJavapegClientId());
+        Map<String, Set<Integer>> categoriesMap = javaPegIdToCategoriesMap.get(configuration.getJavapegClientId());
 
-         /**
-          * Only do this if there are any categories defined for this
-          * JavapegClientId.
-          */
-         if (categoriesMap != null) {
-             /**
-              * Remove any unselected categories from the ImageMetaDataContext
-              */
-             for (String category : categoriesMap.keySet()) {
-                 Set<Integer> indices = categoriesMap.get(category);
+        /**
+         * Only do this if there are any categories defined for this
+         * JavapegClientId.
+         */
+        if (categoriesMap != null) {
+            /**
+             * Remove any unselected categories from the ImageMetaDataContext
+             */
+            for (String category : categoriesMap.keySet()) {
+                Set<Integer> indices = categoriesMap.get(category);
 
-                 if (indices.contains(imageIndex)) {
-                     if (categories == null || !categories.getCategories().contains(category)) {
-                         indices.remove(imageIndex);
-                         if(indices.size() == 0) {
-                             categoriesToRemove.add(category);
-                         }
-                     }
-                 }
-             }
+                if (indices.contains(imageIndex)) {
+                    if (categories == null || !categories.getCategories().contains(category)) {
+                        indices.remove(imageIndex);
+                        if (indices.size() == 0) {
+                            categoriesToRemove.add(category);
+                        }
+                    }
+                }
+            }
 
-             /**
-              *  Remove any empty categories.
-              */
-             for (String categoryToRemove : categoriesToRemove) {
-                 javaPegIdToCategoriesMap.remove(categoryToRemove);
-             }
-         }
+            /**
+             *  Remove any empty categories.
+             */
+            for (String categoryToRemove : categoriesToRemove) {
+                javaPegIdToCategoriesMap.remove(categoryToRemove);
+            }
+        }
 
-         /**
-          * Add any newly selected categories to the ImageMetaDataContext
-          */
-         if (categories != null) {
-             for (String category : categories.getCategories()) {
-                 if (categoriesMap != null) {
-                     Set<Integer> indices = categoriesMap.get(category);
+        /**
+         * Add any newly selected categories to the ImageMetaDataContext
+         */
+        if (categories != null) {
+            for (String category : categories.getCategories()) {
+                if (categoriesMap != null) {
+                    Set<Integer> indices = categoriesMap.get(category);
 
-                     if (indices == null || !indices.contains(imageIndex)) {
-                         imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
-                     }
-                 } else {
-                     /**
-                      * This will only happen the first time a meta data file is
-                      * created and when categories are added without an
-                      * application restart in between.
-                      */
-                     imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
-                 }
-             }
-         }
+                    if (indices == null || !indices.contains(imageIndex)) {
+                        imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
+                    }
+                } else {
+                    /**
+                     * This will only happen the first time a meta data file is
+                     * created and when categories are added without an
+                     * application restart in between.
+                     */
+                    imdc.addCategory(configuration.getJavapegClientId(), category, image.getAbsolutePath());
+                }
+            }
+        }
     }
 
     /**
@@ -610,12 +597,10 @@ public class ImageMetaDataDataBaseHandler {
      * {@link File} object in the {@link ImageMetaDataItem} objects also
      * exist in the directory where the meta data base XML file is stored.
      *
-     * @param imageMetaDataDataBase
-     *            is the {@link ImageMetaDataDataBase} object to make a
-     *            consistency check on
-     * @param directory
-     *            is the directory in which the meta data base XML file is
-     *            stored and, where the related JPEG files are stored.
+     * @param imageMetaDataDataBase is the {@link ImageMetaDataDataBase} object to make a
+     *                              consistency check on
+     * @param directory             is the directory in which the meta data base XML file is
+     *                              stored and, where the related JPEG files are stored.
      * @return true point 1 above is true, otherwise false.
      */
     public static boolean isConsistent(ImageMetaDataDataBase imageMetaDataDataBase, File directory) {
@@ -638,12 +623,11 @@ public class ImageMetaDataDataBaseHandler {
      * Utility method which tests if an meta data base file (XML) is valid
      * (checked against an Schema).
      *
-     * @param metaDataBaseFile
-     *            is the meta data base file to check the validity of
+     * @param metaDataBaseFile is the meta data base file to check the validity of
      * @return a {@link ResultObject} indicating whether or not the meta data
-     *         base file is valid against the specified schema. If the meta data
-     *         base file is not valid then is the cause of invalidity attached
-     *         as an exception
+     * base file is valid against the specified schema. If the meta data
+     * base file is not valid then is the cause of invalidity attached
+     * as an exception
      */
     public static ResultObject<Exception> isMetaDataBaseValid(File metaDataBaseFile) {
         String configSchemaLocation = C.PATH_SCHEMA_META_DATA + SchemaUtil.getMetaDataSchemaForVersion(C.JAVAPEG_VERSION).getSchemaName();
