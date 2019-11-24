@@ -30,16 +30,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -3764,8 +3755,25 @@ public class MainGUI extends JFrame {
                         return true;
                     }
                 }
+
+                if (e.getID() == KeyEvent.KEY_PRESSED  && inputForRatingButtonsAccepted(e.getKeyChar())) {
+                    JRadioButton ratingRadioButton = ratingRadioButtons[e.getKeyChar() - 48];
+                    if (ratingRadioButton.isEnabled()) {
+                        if (ratingRadioButton.isSelected()) {
+                            ratingRadioButtons[0].setSelected(true);
+                        } else {
+                            ratingRadioButton.setSelected(true);
+                        }
+                        return true;
+                    }
+                }
             }
             return false;
+        }
+
+        private boolean inputForRatingButtonsAccepted(int keyCode) {
+            // numeric keyboard key number: 1 to 5
+            return keyCode >= 49 && keyCode <= 53;
         }
     }
 
