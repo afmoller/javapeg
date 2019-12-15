@@ -68,7 +68,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     // Holds the list of all images which are part of the search result set.
     // If this set is larger then the current amount of images to display, then
     // there will be a paged display with several pages with images.
-    private final List<File> imagesInResultSet;
+    private final List<File> imagesInSearchResult;
 
     private GridLayout thumbNailGridLayout;
 
@@ -79,7 +79,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     // This Set keeps track on which thumbnails that are selected in the
     //result set. This is necessary to keep track of because of the paged
     // result views.
-    private final Set<File> selectedImageFiles;
+    private final Set<FileIndex> selectedImageFileIndexObjects;
 
     private final Map<File, ImageIcon> imageFileToSelectedImageMapping;
     private final LoadedThumbnails loadedThumbnails;
@@ -100,17 +100,17 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
      */
     private int currentStartIndexForDisplayedImages;
 
-    public ImageSearchResultViewer(List<File> imagesInResultSet) {
+    public ImageSearchResultViewer(List<File> imagesInSearchResult) {
 
         // Must be set before the executeLoadThumbnailsProcess method is called
-        this.imagesInResultSet = imagesInResultSet;
-        nrOfImagesInResultSet = imagesInResultSet.size();
+        this.imagesInSearchResult = imagesInSearchResult;
+        nrOfImagesInResultSet = imagesInSearchResult.size();
 
         currentStartIndexForDisplayedImages = 0;
 
         loadedThumbnails = new LoadedThumbnails();
         imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
-        selectedImageFiles = new HashSet<File>();
+        selectedImageFileIndexObjects = new TreeSet<>(new FileIndexComparator());
 
         this.createMainFrame();
         this.createToolBar();
@@ -119,7 +119,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         this.initiateNumberOfImagesToDisplay();
         this.addListeners();
 
-        List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+        List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInSearchResult);
 
         this.loadThumbnailImages(initialimagesToLoad);
         this.setInitialStateOfNextAndPreviousButtons(initialimagesToLoad.size());
@@ -138,7 +138,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
     private void setInitialStateOfNextAndPreviousButtons(int nrOfInitialImagesToLoad) {
         loadPreviousImages.setEnabled(false);
-        loadNextImages.setEnabled(nrOfInitialImagesToLoad < imagesInResultSet.size());
+        loadNextImages.setEnabled(nrOfInitialImagesToLoad < imagesInSearchResult.size());
     }
 
     private List<File> getInitialimagesToLoad(List<File> imagesInResultSet) {
@@ -393,8 +393,8 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                 popupMenuCopyImageToSystemClipBoard.setActionCommand(((JToggleButton)e.getComponent()).getActionCommand());
 
                 // Only set these as enabled if there are any selected images.
-                popupMenuCopySelectedImagesToSystemClipBoard.setEnabled(selectedImageFiles.size() > 0);
-                popupMenuSetSelectedToViewList.setEnabled(selectedImageFiles.size() > 0);
+                popupMenuCopySelectedImagesToSystemClipBoard.setEnabled(selectedImageFileIndexObjects.size() > 0);
+                popupMenuSetSelectedToViewList.setEnabled(selectedImageFileIndexObjects.size() > 0);
             }
         }
     }
@@ -404,8 +404,8 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         public void actionPerformed(ActionEvent e) {
             ImagesToViewModel imagesToViewModel = ModelInstanceLibrary.getInstance().getImagesToViewModel();
 
-            for (File selectedImageFile : selectedImageFiles) {
-                imagesToViewModel.addElement(selectedImageFile);
+            for (FileIndex selectedImageFile : selectedImageFileIndexObjects) {
+                imagesToViewModel.addElement(selectedImageFile.getFile());
             }
         }
     }
@@ -427,7 +427,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                     jToggleButton.setIcon(imageFileToSelectedImageMapping.get(imageFile));
                 }
             }
-            selectedImageFiles.addAll(imagesInResultSet);
+            for (int i = 0; i < imagesInSearchResult.size(); i++) {
+                selectedImageFileIndexObjects.add(new FileIndex(imagesInSearchResult.get(i), i));
+
+            }
         }
     }
 
@@ -440,7 +443,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                     jToggleButton.setSelected(false);
                 }
             }
-            selectedImageFiles.clear();
+            selectedImageFileIndexObjects.clear();
         }
     }
 
@@ -458,7 +461,12 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     private class RightClickMenuListenerCopySelectedImagesToSystemClipBoard implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileSelection fileSelection = new FileSelection(new ArrayList<File>(selectedImageFiles));
+            List<File> selectedFiles = new ArrayList<>();
+            for (FileIndex selectedImageFileIndexObject : selectedImageFileIndexObjects) {
+                selectedFiles.add(selectedImageFileIndexObject.getFile());
+            }
+
+            FileSelection fileSelection = new FileSelection(selectedFiles);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileSelection, null);
         }
     }
@@ -514,10 +522,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                 // is performed.
                 currentStartIndexForDisplayedImages = 0;
 
-                List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInResultSet);
+                List<File> initialimagesToLoad = getInitialimagesToLoad(imagesInSearchResult);
 
                 loadPreviousImages.setEnabled(false);
-                loadNextImages.setEnabled(initialimagesToLoad.size() < imagesInResultSet.size());
+                loadNextImages.setEnabled(initialimagesToLoad.size() < imagesInSearchResult.size());
 
                 loadThumbnailImages(initialimagesToLoad);
 
@@ -548,8 +556,8 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             // Set the new start index.
             currentStartIndexForDisplayedImages += getCurrentValueOfNumberOfImagesToDisplay();
 
-            if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInResultSet.size() - 1) {
-                toIndex = imagesInResultSet.size();
+            if (currentStartIndexForDisplayedImages + getCurrentValueOfNumberOfImagesToDisplay() > imagesInSearchResult.size() - 1) {
+                toIndex = imagesInSearchResult.size();
                 loadNextImages.setEnabled(false);
                 loadPreviousImages.setEnabled(true);
             } else {
@@ -557,7 +565,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                 loadNextImages.setEnabled(true);
                 loadPreviousImages.setEnabled(true);
             }
-            imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+            imagesToLoad = imagesInSearchResult.subList(currentStartIndexForDisplayedImages, toIndex);
             break;
         case PREVIOUS:
             // First get the to index as the current start index...
@@ -569,7 +577,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             loadPreviousImages.setEnabled(currentStartIndexForDisplayedImages != 0);
             loadNextImages.setEnabled(true);
 
-            imagesToLoad = imagesInResultSet.subList(currentStartIndexForDisplayedImages, toIndex);
+            imagesToLoad = imagesInSearchResult.subList(currentStartIndexForDisplayedImages, toIndex);
             break;
         default:
             break;
@@ -581,7 +589,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     }
 
     private void setWindowTitle(int toIndex) {
-        setTitle(String.format(getLang().get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInResultSet.size()));
+        setTitle(String.format(getLang().get("imagesearchresultviewer.title"), currentStartIndexForDisplayedImages + 1, toIndex, imagesInSearchResult.size()));
     }
 
     /**
@@ -621,13 +629,15 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
         public void actionPerformed(ActionEvent e) {
             JToggleButton toggleButton = (JToggleButton)e.getSource();
 
+            FileIndex fileIndex = new FileIndex(loadedThumbnails.getFileObject(toggleButton), (int) toggleButton.getClientProperty("ListIndex"));
+
             if (toggleButton.isSelected()) {
                 ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
                 ButtonIconUtil.setSelectedThumbNailImage(toggleButton, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
-                selectedImageFiles.add(loadedThumbnails.getFileObject(toggleButton));
+                selectedImageFileIndexObjects.add(fileIndex);
             } else {
                 ButtonIconUtil.setDeSelectedThumbNailImage(toggleButton);
-                selectedImageFiles.remove(loadedThumbnails.getFileObject(toggleButton));
+                selectedImageFileIndexObjects.remove(fileIndex);
             }
         }
     }
@@ -664,6 +674,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
             double progress = 0;
             double nrOfImages = images.size();
+            int listIndex = 0;
 
             for (File image : images) {
                 if (image.exists()) {
@@ -671,7 +682,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
                     JToggleButton thumbContainer = new JToggleButton();
                     thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
-                    if (selectedImageFiles.contains(image)) {
+                    thumbContainer.putClientProperty("ListIndex", listIndex);
+                    listIndex++;
+
+                    if (selectedImageFileIndexObjects.contains(image)) {
                         ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
                         final int percentage = grayFilter.getPercentage();
                         final boolean pixelsBrightened = grayFilter.isPixelsBrightened();
@@ -729,5 +743,39 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     @Override
     public Dimension getDefaultSize() {
         return new Dimension(GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_WIDTH, GUIDefaults.IMAGE_SEARCH_RESULT_VIEWER_HEIGHT);
+    }
+
+    private class FileIndex {
+        private int index;
+        private File file;
+
+        public FileIndex(File file, int index) {
+            this.file = file;
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
+    }
+
+    private class FileIndexComparator implements Comparator<FileIndex> {
+
+        @Override
+        public int compare(FileIndex o1, FileIndex o2) {
+            return Integer.compare(o1.getIndex(), o2.getIndex());
+        }
     }
 }
