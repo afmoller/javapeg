@@ -784,7 +784,7 @@ public class ImageSearchTab extends JPanel {
         }
     }
 
-    private void updateMatchingImagesLabel() {
+    public void updateMatchingImagesLabel() {
         Set<File> performImageSearch = ImageMetaDataContextUtil.performImageSearch(collectSearchParameters());
         matchingImagesLabel.setText(Integer.toString(performImageSearch.size()));
     }

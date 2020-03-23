@@ -42,6 +42,11 @@ public class ExposureTime implements Comparable<ExposureTime> {
     private float exposureTimeAsFloat = DEFAULT_EXPOSURETIME_AS_FLOAT;
 
     public ExposureTime(String exposureTime) throws ExposureTimeException {
+
+        if (exposureTime == null) {
+            return;
+        }
+
         exposureTime = StringUtil.removeAnyPrecedingAndTrailingNonIntegerCharacters(exposureTime);
 
         if (exposureTime.contains(Rational.DELIMITER)) {

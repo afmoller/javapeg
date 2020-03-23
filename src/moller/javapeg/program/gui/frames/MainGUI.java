@@ -2127,7 +2127,7 @@ public class MainGUI extends JFrame {
 
     /**
      * This listener class listens for mouse clicks made on the
-     * FilesSystemDirectory three and performs the appropiate actions depending
+     * FilesSystemDirectory three and performs the appropriate actions depending
      * on if it was a "right click" or "left click" with the mouse.
      */
     private class FileSystemDirectoryTreeMouseListener extends MouseAdapter {
@@ -3591,7 +3591,7 @@ public class MainGUI extends JFrame {
                     // in the scope of potentially loading a new one.
                     ac.setImageMetaDataDataBaseFileLoaded(false);
 
-                    // Load thumb nails for all JPEG images that exists in the
+                    // Load thumbnails for all JPEG images that exists in the
                     // selected path.
                     loadThumbNails(repositoryPath);
 
@@ -3654,6 +3654,13 @@ public class MainGUI extends JFrame {
                              * persisted upon application exit.
                              */
                             configuration.getRepository().getPaths().getPaths().add(repositoryPath);
+                            Config.getInstance().save();
+
+                            /**
+                             * Update the label with the amount of images matching
+                             * the currently selected filter in the search tab
+                             */
+                            imageSearchTab.updateMatchingImagesLabel();
                         } catch (ParserConfigurationException pcex) {
                             logger.logERROR("Could not create a DocumentBuilder");
                             logger.logERROR(pcex);
