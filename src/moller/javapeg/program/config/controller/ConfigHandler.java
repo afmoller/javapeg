@@ -60,9 +60,9 @@ public class ConfigHandler {
         StringBuilder errorMessage = null;
 
         ResultObject<Exception> validationResult = XMLUtil.validate(configFile, configSchema);
-        ResultObject<Exception> storeCorruptConfigurationResult = new ResultObject<Exception>(true, null);
+        ResultObject<Exception> storeCorruptConfigurationResult = new ResultObject<>(true, null);
 
-        ResultObject<Exception> restoreResult = null;
+        ResultObject<Exception> restoreResult;
 
         if (!validationResult.getResult()) {
 
@@ -83,7 +83,8 @@ public class ConfigHandler {
             if (storeCorruptConfigurationResult.getResult()) {
                 errorMessage.append("The corrupt configuration file is stored in the directory: ");
                 errorMessage.append(C.LS);
-                errorMessage.append(configFile.getParentFile().getAbsolutePath() + C.FS + "corrupt");
+                errorMessage.append(configFile.getParentFile().getAbsolutePath());
+                errorMessage.append(C.FS).append("corrupt");
             } else {
                 errorMessage.append("The corrupt configuration file could not be stored into a \"corrupt\" directory");
                 errorMessage.append(C.LS);
@@ -143,7 +144,7 @@ public class ConfigHandler {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
         Document doc;
-        Configuration configuration = null;
+        Configuration configuration;
 
         try {
             db = dbf.newDocumentBuilder();
@@ -332,15 +333,10 @@ public class ConfigHandler {
             // application sessions.
             ZipUtil.zip(configurationFile);
 
-        } catch (XMLStreamException xse) {
+        } catch (XMLStreamException | FileNotFoundException ex) {
             Logger logger = Logger.getInstance();
             logger.logFATAL("Could not store content of repository file (" + configurationFile.getAbsolutePath() + "). See stacktrace below for details");
-            logger.logFATAL(xse);
-            displayErrorMessage = true;
-        } catch (FileNotFoundException fnex) {
-            Logger logger = Logger.getInstance();
-            logger.logFATAL("Could not store content of repository file (" + configurationFile.getAbsolutePath() + "). See stacktrace below for details");
-            logger.logFATAL(fnex);
+            logger.logFATAL(ex);
             displayErrorMessage = true;
         } catch (IOException iox) {
             Logger logger = Logger.getInstance();

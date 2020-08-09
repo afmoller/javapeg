@@ -32,7 +32,7 @@ public class ConfigUtil {
     public static  String [] listLanguagesFiles() {
         Set<String> languageFiles = ApplicationContext.getInstance().getJarFileEmbeddedLanguageFiles();
 
-        List <String> languageNames = new ArrayList<String>(languageFiles.size());
+        List <String> languageNames = new ArrayList<>(languageFiles.size());
 
         ISO639 iso639 = ISO639.getInstance();
         String code = "";
@@ -120,8 +120,8 @@ public class ConfigUtil {
         try {
             ZipUtil.unzip(configurationBackupFile, configurationBackupFile.getParentFile());
         } catch (IOException iox) {
-            return new ResultObject<Exception>(false, iox);
+            return new ResultObject<>(false, iox);
         }
-        return new ResultObject<Exception>(true, null);
+        return new ResultObject<>(true, null);
     }
 }

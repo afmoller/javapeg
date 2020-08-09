@@ -37,7 +37,7 @@ public class SchemaUtil {
 
     public static List<String> getTransformersForSchema(ConfigurationSchema configurationSchema) {
 
-        List<String> transformers = new ArrayList<String>();
+        List<String> transformers = new ArrayList<>();
 
         switch (configurationSchema) {
         case CONFIG_001_XSD:

@@ -33,12 +33,12 @@ public class Categories {
 
     public Categories() {
         super();
-        this.categories = new TreeSet<String>();
+        this.categories = new TreeSet<>();
     }
 
     public Categories(String[] categories) {
         super();
-        this.categories = new TreeSet<String>();
+        this.categories = new TreeSet<>();
         for (String category : categories) {
             addCategory(category);
         }

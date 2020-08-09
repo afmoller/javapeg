@@ -25,6 +25,7 @@ import moller.javapeg.program.enumerations.Operator;
 import moller.javapeg.program.logger.Logger;
 import moller.util.string.StringUtil;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -197,9 +198,7 @@ public class FindBy {
             }
             break;
         case EQUAL:
-            for (String valueAsString : valuesAsStrings) {
-                valuesToGet.add(valueAsString);
-            }
+            valuesToGet.addAll(Arrays.asList(valuesAsStrings));
             break;
         case GREATER:
             while (iterator.hasNext()) {

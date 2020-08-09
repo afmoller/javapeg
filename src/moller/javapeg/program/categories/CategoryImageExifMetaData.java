@@ -35,7 +35,7 @@ public class CategoryImageExifMetaData {
     private ExposureTime exposureTime;
 
     public CategoryImageExifMetaData() {
-        fNumber = -1;;
+        fNumber = -1;
         cameraModel = "";
         dateTime = null;
         isoValue = -1;

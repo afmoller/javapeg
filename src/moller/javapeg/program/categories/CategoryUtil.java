@@ -112,7 +112,7 @@ public class CategoryUtil {
 
         Map<String, ImportedCategories> importedCategories = Config.getInstance().get().getImportedCategoriesConfig();
 
-        Map<String, ImportedCategoryTreeAndDisplayJavaPegID> categoriesTreesMap = new HashMap<String, ImportedCategoryTreeAndDisplayJavaPegID>(importedCategories.size());
+        Map<String, ImportedCategoryTreeAndDisplayJavaPegID> categoriesTreesMap = new HashMap<>(importedCategories.size());
 
         for (String javaPegID : importedCategories.keySet()) {
             ImportedCategories importedCategory = importedCategories.get(javaPegID);
@@ -145,7 +145,7 @@ public class CategoryUtil {
         public static String askForANewDisplayName(Component parent, String displayName, Map<String, ImportedCategories> importedCategoriesConfig) {
             String newDisplayName = displayName;
 
-            while (newDisplayName == null /** Cancel button was clicked **/ || newDisplayName.trim().length() == 0 || displayNameAlreadyInUse(newDisplayName, importedCategoriesConfig.values())) {
+            while (newDisplayName == null /* Cancel button was clicked */ || newDisplayName.trim().length() == 0 || displayNameAlreadyInUse(newDisplayName, importedCategoriesConfig.values())) {
 
                 Language lang = Language.getInstance();
 

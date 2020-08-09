@@ -30,7 +30,7 @@ import java.util.List;
 
 public class ConfigImporter {
 
-    public static Configuration doConfigurationImport(File importPath, Configuration config) {
+    public static Configuration doConfigurationImport(File importPath) {
 
         ConfigurationSchema configurationSchema = getConfigurationSchema(importPath);
 

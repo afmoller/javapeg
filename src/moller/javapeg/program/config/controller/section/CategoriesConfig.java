@@ -56,8 +56,8 @@ public class CategoriesConfig {
 
     public static ImportedCategories importCategoriesConfig(File categoryFileToImport) {
 
-        ImportedCategories importedCategories = null;
-        DefaultMutableTreeNode root = null;
+        ImportedCategories importedCategories;
+        DefaultMutableTreeNode root;
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -96,11 +96,10 @@ public class CategoriesConfig {
         //  CATEGORIES start
         XMLUtil.writeElementStartWithLineBreak(ConfigElement.CATEGORIES, rootAttributes, baseIndent, xmlsw);
 
-        @SuppressWarnings("unchecked")
-        Enumeration<DefaultMutableTreeNode> children = root.children();
+        Enumeration<? extends TreeNode> children = root.children();
 
         while (children.hasMoreElements()) {
-            ConfigHandlerUtil.storeChild(children.nextElement(), baseIndent.value() + Tab.TWO.value(), xmlsw);
+            ConfigHandlerUtil.storeChild((DefaultMutableTreeNode)children.nextElement(), baseIndent.value() + Tab.TWO.value(), xmlsw);
         }
 
         //  CATEGORIES end
@@ -123,11 +122,10 @@ public class CategoriesConfig {
         // Start
         XMLUtil.writeElementStartWithLineBreak(element, rootAttributes, baseIndent, xmlsw);
 
-        @SuppressWarnings("unchecked")
-        Enumeration<DefaultMutableTreeNode> children = root.children();
+        Enumeration<? extends TreeNode> children = root.children();
 
         while (children.hasMoreElements()) {
-            ConfigHandlerUtil.storeChild(children.nextElement(), baseIndent.value() + Tab.TWO.value(), xmlsw);
+            ConfigHandlerUtil.storeChild((DefaultMutableTreeNode)children.nextElement(), baseIndent.value() + Tab.TWO.value(), xmlsw);
         }
 
         // End

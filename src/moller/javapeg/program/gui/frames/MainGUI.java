@@ -356,7 +356,7 @@ public class MainGUI extends JFrame {
      */
     private final LoadedThumbnails loadedThumbnails = new LoadedThumbnails();
 
-    private final Map<File, ImageIcon> imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<File, ImageIcon>());
+    private final Map<File, ImageIcon> imageFileToSelectedImageMapping = Collections.synchronizedMap(new HashMap<>());
     private SelectedImageIconGenerator selectedImageIconGenerator;
 
     /** Provides nice icons and names for files. */
@@ -367,7 +367,7 @@ public class MainGUI extends JFrame {
         // Make pre configured logging, logging...
         long startTestWriteAccess = System.currentTimeMillis();
         if(!FileUtil.testWriteAccess(new File(C.USER_HOME))) {
-            JOptionPane.showMessageDialog(null, "Can not create files in direcotry: " + C.USER_HOME);
+            JOptionPane.showMessageDialog(null, "Can not create files in directory: " + C.USER_HOME);
         }
         long finishedTestWriteAccess = System.currentTimeMillis();
 
@@ -535,23 +535,23 @@ public class MainGUI extends JFrame {
 
         // Skapa menyrader i arkiv-menyn
         openDestinationFileChooserJMenuItem = new JMenuItem(lang.get("menu.item.openDestinationFileChooser"));
-        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        openDestinationFileChooserJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.openDestinationFileChooser.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         startProcessJMenuItem = new JMenuItem(lang.get("menu.item.startProcess"));
         startProcessJMenuItem.setToolTipText(lang.get("tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory"));
-        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        startProcessJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.startProcess.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
         startProcessJMenuItem.setEnabled(false);
 
         shutDownProgramJMenuItem = new JMenuItem(lang.get("menu.item.exit"));
-        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        shutDownProgramJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.iten.exit.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         exportCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.export.long.title"));
         exportCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.export.long.title.tooltip"));
-        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        exportCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('E'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         importCategoryTreeStructureJMenuItem = new JMenuItem(lang.get("categoryimportexport.import.long.title"));
         importCategoryTreeStructureJMenuItem.setToolTipText(lang.get("categoryimportexport.import.long.title.tooltip"));
-        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        importCategoryTreeStructureJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('I'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu fileMenu = new JMenu(lang.get("menu.file"));
         fileMenu.setMnemonic(lang.get("menu.mnemonic.file").charAt(0));
@@ -565,7 +565,7 @@ public class MainGUI extends JFrame {
 
         // Create rows in the Configuration menu
         configGUIJMenuItem = new JMenuItem(lang.get("menu.item.configuration"));
-        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        configGUIJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent('c'), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu configMenu = new JMenu(lang.get("menu.configuration"));
         configMenu.setMnemonic(lang.get("menu.mnemonic.configuration").charAt(0));
@@ -577,7 +577,7 @@ public class MainGUI extends JFrame {
         helpJMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
 
         aboutJMenuItem = new JMenuItem(lang.get("menu.item.about"));
-        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_MASK + InputEvent.ALT_MASK));
+        aboutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(MnemonicConverter.convertAtoZCharToKeyEvent(lang.get("menu.item.about.accelerator").charAt(0)), InputEvent.CTRL_DOWN_MASK + InputEvent.ALT_DOWN_MASK));
 
         JMenu helpMenu = new JMenu(lang.get("menu.help"));
         helpMenu.setMnemonic(lang.get("menu.mnemonic.help").charAt(0));
@@ -1786,11 +1786,9 @@ public class MainGUI extends JFrame {
 
                 RenameImages renameImages = configuration.getRenameImages();
 
-                /**
-                 * Kontrollera s� att sparad s�kv�g fortfarande existerar
-                 * och i annat fall hoppa upp ett steg i tr�dstrukturen och
-                 * kontrollera ifall den s�kv�gen existerar
-                 **/
+                // Kontrollera s� att sparad s�kv�g fortfarande existerar
+                // och i annat fall hoppa upp ett steg i tr�dstrukturen och
+                // kontrollera ifall den s�kv�gen existerar
                 File pathDestination = renameImages.getPathDestination();
 
                 boolean exists = false;
@@ -2285,8 +2283,6 @@ public class MainGUI extends JFrame {
         tree.addMouseListener(mouseListener);
     }
 
-
-
     private void setStatusMessages() {
         int nrOfImages =  FileRetriever.getInstance().handleNrOfJpegImages(FileLoadingAction.RETRIEVE);
 
@@ -2506,19 +2502,18 @@ public class MainGUI extends JFrame {
     /**
      * @param categories
      */
-    @SuppressWarnings("unchecked")
     private void setCategories(Categories categories) {
 
         checkTreeManagerForAssignCategoriesCategoryTree.getSelectionModel().clearSelection();
 
         if (categories != null && categories.size() > 0) {
             DefaultTreeModel model = (DefaultTreeModel)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel();
-            Enumeration<DefaultMutableTreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
+            Enumeration<TreeNode> elements = ((DefaultMutableTreeNode)model.getRoot()).preorderEnumeration();
 
             List<TreePath> treePaths = new ArrayList<>();
 
             while (elements.hasMoreElements()) {
-                DefaultMutableTreeNode element = elements.nextElement();
+                DefaultMutableTreeNode element = (DefaultMutableTreeNode)elements.nextElement();
 
                 CategoryUserObject cuo = ((CategoryUserObject)element.getUserObject());
                 String id = cuo.getIdentity();
@@ -2764,8 +2759,8 @@ public class MainGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<File> allThmbnailButtonsAsFiles = loadedThumbnails.getAllAsFileObjects();
-            setSelectedCategoriesToImages(allThmbnailButtonsAsFiles);
+            List<File> allThumbnailButtonsAsFiles = loadedThumbnails.getAllAsFileObjects();
+            setSelectedCategoriesToImages(allThumbnailButtonsAsFiles);
         }
     }
 
@@ -2906,13 +2901,11 @@ public class MainGUI extends JFrame {
                 ac.setMainTabbedPaneComponent(mainTabbedPaneComponent);
                 break;
             case CATEGORIZE:
-                /**
-                 * Since the only thing to do is to update the
-                 * ImageMetaDataContext there is nothing to do here, except
-                 * from updating the ApplicationContext with the currently
-                 * selected tab since the selected tab is the only one that can
-                 * have unsaved meta data.
-                 */
+                // Since the only thing to do is to update the
+                // ImageMetaDataContext there is nothing to do here, except
+                // from updating the ApplicationContext with the currently
+                // selected tab since the selected tab is the only one that can
+                // have unsaved meta data.
                 ac.setMainTabbedPaneComponent(MainTabbedPaneComponent.CATEGORIZE);
                 break;
             }
@@ -2949,11 +2942,9 @@ public class MainGUI extends JFrame {
             try {
                 ImageMetaDataDataBase imageMetaDataDataBase;
 
-                /**
-                 * If an image meta data base file already exists in the
-                 * selected directory, then deserialize that file and make some
-                 * validity testing.
-                 */
+                // If an image meta data base file already exists in the
+                // selected directory, then deserialize that file and make some
+                // validity testing.
                 if (imageMetaDataDataBaseFile.exists()) {
                     if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
                         displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
@@ -2968,10 +2959,8 @@ public class MainGUI extends JFrame {
 
                     ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                 }
-                /**
-                 * Create the image meta data base file if not already
-                 * existing.
-                 */
+                // Create the image meta data base file if not already
+                // existing.
                 else {
                     if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
                         return;
@@ -2980,17 +2969,13 @@ public class MainGUI extends JFrame {
                     imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                 }
 
-                /**
-                 * Populate the image meta data context with content form the
-                 * deserialized XML file.
-                 */
+                // Populate the image meta data context with content form the
+                // deserialized XML file.
                 ImageMetaDataDataBaseHandler.populateImageMetaDataContext(imageMetaDataDataBase.getJavaPEGId(), imageMetaDataDataBase.getImageMetaDataItems());
 
-                /**
-                 * If the meta data base file is created by this JavaPEG
-                 * instance then shall it be possible to make changes to it, if
-                 * the file is writable for the current user.
-                 */
+                // If the meta data base file is created by this JavaPEG
+                // instance then shall it be possible to make changes to it, if
+                // the file is writable for the current user.
                 ac.setImageMetaDataDataBaseFileWritable(imageMetaDataDataBaseFile.canWrite());
 
                 if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && ac.isImageMetaDataDataBaseFileWritable()) {
@@ -3002,17 +2987,13 @@ public class MainGUI extends JFrame {
                     ac.setImageMetaDataDataBaseFileLoaded(true);
                 }
 
-                /**
-                 * Populate the image repository model with the currently
-                 * selected path.
-                 */
+                // Populate the image repository model with the currently
+                // selected path.
                 ImageRepositoryItem iri = new ImageRepositoryItem(repositoryPath, Status.EXISTS);
                 imageRepositoriesTableModel.addRow(iri);
 
-                /**
-                 * Add the path to the configuration, so the entry will be
-                 * persisted upon application exit.
-                 */
+                // Add the path to the configuration, so the entry will be
+                // persisted upon application exit.
                 configuration.getRepository().getPaths().getPaths().add(repositoryPath);
 
                 if (ac.isImageMetaDataDataBaseFileWritable()) {
@@ -3280,9 +3261,7 @@ public class MainGUI extends JFrame {
 
                     JTree categoryTree = checkTreeManagerForAssignCategoriesCategoryTree.getCheckedJtree();
 
-                    /**
-                     * If no category has been selected.
-                     */
+                    // If no category has been selected.
                     if (selectedPath == null) {
                         DefaultMutableTreeNode root = (DefaultMutableTreeNode)checkTreeManagerForAssignCategoriesCategoryTree.getTreeModel().getRoot();
 
@@ -3317,9 +3296,8 @@ public class MainGUI extends JFrame {
                             this.createMenu(CategoryMenuType.NO_RENAME_REMOVE_EXPAND_COLLAPSE);
                         }
                     }
-                    /**
-                     * If a category has been selected
-                     */
+
+                    // If a category has been selected
                     else {
                         if (treeNode.getChildCount() > 0) {
                             if (categoryTree.isExpanded(selectedPath)) {
@@ -3346,8 +3324,7 @@ public class MainGUI extends JFrame {
             if (selectionPath != null) {
                 DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode)selectionPath.getLastPathComponent();
 
-                @SuppressWarnings("unchecked")
-                Enumeration<DefaultMutableTreeNode> preOrderEnumeration = lastPathComponent.preorderEnumeration();
+                Enumeration<TreeNode> preOrderEnumeration = lastPathComponent.preorderEnumeration();
                 while(preOrderEnumeration.hasMoreElements()){
                     categoriesTree.getSelectionModel().addSelectionPath(getPath(preOrderEnumeration.nextElement()));
                 }
@@ -3595,11 +3572,10 @@ public class MainGUI extends JFrame {
                         }
 
                         try {
-                            /**
-                             * If an image meta data base file already exists in the
-                             * selected directory, then deserialize that file and make some
-                             * validity testing.
-                             */
+
+                            // If an image meta data base file already exists in the
+                            // selected directory, then deserialize that file and make some
+                            // validity testing.
                             if (imageMetaDataDataBaseFile.exists()) {
                                 if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
                                     displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
@@ -3615,10 +3591,9 @@ public class MainGUI extends JFrame {
 
                                 ImageMetaDataDataBaseHandler.showCategoryImportDialogIfNeeded(imageMetaDataDataBaseFile, imageMetaDataDataBase.getJavaPEGId());
                             }
-                            /**
-                             * Create the image meta data base file if it is
-                             * not already existing.
-                             */
+
+                            // Create the image meta data base file if it is
+                            // not already existing.
                             else {
                                 if (!ImageMetaDataDataBaseHandler.createImageMetaDataDataBaseFileIn(repositoryPath)) {
                                     return null;
@@ -3626,16 +3601,12 @@ public class MainGUI extends JFrame {
                                 imageMetaDataDataBase = ImageMetaDataDataBaseHandler.deserializeImageMetaDataDataBaseFile(imageMetaDataDataBaseFile);
                             }
 
-                            /**
-                             * Populate the image meta data context with content form the
-                             * deserialized XML file.
-                             */
+                            // Populate the image meta data context with content form the
+                            // deserialized XML file.
                             ImageMetaDataDataBaseHandler.populateImageMetaDataContext(imageMetaDataDataBase.getJavaPEGId(), imageMetaDataDataBase.getImageMetaDataItems());
 
-                            /**
-                             * Add the path to the configuration, so the entry will be
-                             * persisted upon application exit.
-                             */
+                            // * Add the path to the configuration, so the entry will be
+                            // * persisted upon application exit.
                             configuration.getRepository().getPaths().getPaths().add(repositoryPath);
                         } catch (ParserConfigurationException pcex) {
                             logger.logERROR("Could not create a DocumentBuilder");
@@ -3649,11 +3620,9 @@ public class MainGUI extends JFrame {
                         }
                     } else {
 
-                        /**
-                         * If an image meta data base file already exists in the
-                         * selected directory, then deserialize that file and make some
-                         * validity testing.
-                         */
+                        // If an image meta data base file already exists in the
+                        // selected directory, then deserialize that file and make some
+                        // validity testing.
                         if (imageMetaDataDataBaseFile.exists()) {
                             if (!ImageMetaDataDataBaseHandler.isMetaDataBaseValid(imageMetaDataDataBaseFile).getResult()) {
                                 displayErrorMessage(lang.get("imagerepository.repository.corrupt"));
@@ -3684,11 +3653,9 @@ public class MainGUI extends JFrame {
                         }
                     }
 
-                    /**
-                     * If the meta data base file is created by this JavaPEG
-                     * instance then it shall be possible to make changes to it, if
-                     * the file is writable for the current user.
-                     */
+                    // If the meta data base file is created by this JavaPEG
+                    // instance then it shall be possible to make changes to it, if
+                    // the file is writable for the current user.
                     boolean canWrite = imageMetaDataDataBaseFile.canWrite();
 
                     if (ac.isImageMetaDataDataBaseFileCreatedByThisJavaPEGInstance() && canWrite) {
@@ -3699,10 +3666,8 @@ public class MainGUI extends JFrame {
                         ac.setImageMetaDataDataBaseFileLoaded(true);
                     }
 
-                    /**
-                     * Populate the image repository model with any
-                     * unpopulated paths.
-                     */
+                    // Populate the image repository model with any
+                    // unpopulated paths.
                     if(!imageRepositoriesTableModel.contains(iri)) {
                         imageRepositoriesTableModel.addRow(iri);
                     }

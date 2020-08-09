@@ -38,10 +38,6 @@ public class CategoryUserObject {
         this.name = name;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
-    }
-
     @Override
     public String toString() {
         return name;

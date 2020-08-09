@@ -121,7 +121,7 @@ public class ThumbNailConfig {
                 thumbNailGrayFilter.setPercentage(StringUtil.getIntValue(node.getTextContent(), 35));
                 break;
             case PIXELS_BRIGHTENED:
-                thumbNailGrayFilter.setPixelsBrightened(Boolean.valueOf(node.getTextContent()));
+                thumbNailGrayFilter.setPixelsBrightened(Boolean.parseBoolean(node.getTextContent()));
                 break;
             default:
                 break;

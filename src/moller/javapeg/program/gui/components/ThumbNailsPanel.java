@@ -33,7 +33,7 @@ public class ThumbNailsPanel extends JPanel {
     }
 
     public List<JToggleButton> getJToggleButtons() {
-        List<JToggleButton> jToggleButtons = new ArrayList<JToggleButton>();
+        List<JToggleButton> jToggleButtons = new ArrayList<>();
 
         Component[] components = getComponents();
 

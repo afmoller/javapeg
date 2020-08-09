@@ -49,8 +49,6 @@ public class ApplicationBootUtil {
 
     /**
      * This method deletes the first application launch marker file.
-     *
-     * @throws IOException
      */
     public static void removeFirstApplicationLaunchMarkerFile() throws IOException {
         File firstLaunchFile = new File(javaPEGHome, FIRST_LAUNCH);

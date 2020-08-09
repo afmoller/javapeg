@@ -19,38 +19,37 @@ package moller.util.gui;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.util.*;
 
 public class TreeUtil {
 
-	@SuppressWarnings("unchecked")
 	public static void expandEntireTree(JTree tree, DefaultMutableTreeNode root, boolean expandRoot) {
 
 		if (expandRoot) {
 			tree.expandPath(new TreePath(root.getPath()));
 		}
 
-		Enumeration<DefaultMutableTreeNode> children = root.children();
+		Enumeration<TreeNode> children = root.children();
 
 		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = children.nextElement();
+			TreeNode child = children.nextElement();
 
-			tree.expandPath(new TreePath(child.getPath()));
+			tree.expandPath(new TreePath(((DefaultMutableTreeNode)child).getPath()));
 
 			if(child.children().hasMoreElements()) {
-				expandEntireTree(tree, child, expandRoot);
+				expandEntireTree(tree, (DefaultMutableTreeNode)child, expandRoot);
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void collapseEntireTree(JTree tree, DefaultMutableTreeNode root, boolean collapseRoot) {
 
-		Enumeration<DefaultMutableTreeNode> children = root.children();
+		Enumeration<TreeNode> children = root.children();
 
 		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = children.nextElement();
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
 
 			if(child.children().hasMoreElements()) {
 				collapseEntireTree(tree, child, collapseRoot);
@@ -63,9 +62,8 @@ public class TreeUtil {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void insertNodeInAlphabeticalOrder(DefaultMutableTreeNode childNode, DefaultMutableTreeNode parentNode, DefaultTreeModel model) {
-		Enumeration<DefaultMutableTreeNode> children = parentNode.children();
+		Enumeration<TreeNode> children = parentNode.children();
 
 		String nodeName = childNode.toString();
 		int index = 0;
@@ -88,16 +86,16 @@ public class TreeUtil {
 		int nrOfChildren = nodeToSort.getChildCount();
 
 		if (nrOfChildren > 1) {
-			Map<String, DefaultMutableTreeNode> nameNodeMap = new HashMap<String, DefaultMutableTreeNode>(nrOfChildren);
+			Map<String, DefaultMutableTreeNode> nameNodeMap = new HashMap<>(nrOfChildren);
 
 			for (int i = 0; i < nrOfChildren; i++) {
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode)nodeToSort.getChildAt(i);
 				nameNodeMap.put(child.toString(), child);
 			}
 
-			List<String> names = new ArrayList<String>(nameNodeMap.keySet());
+			List<String> names = new ArrayList<>(nameNodeMap.keySet());
 
-			Collections.sort(names, new IgnoreCaseComparator());
+			names.sort(new IgnoreCaseComparator());
 
 			for (DefaultMutableTreeNode node : nameNodeMap.values()) {
 				model.removeNodeFromParent(node);

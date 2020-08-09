@@ -28,6 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Enumeration;
@@ -37,7 +38,7 @@ import java.util.Map;
 public class ImportedCategoriesConfig {
 
     public static Map<String, ImportedCategories> getImportedCategoriesConfig(Node importedCategoriesNode) {
-        Map<String, ImportedCategories> importedCategoriesConfig = new HashMap<String, ImportedCategories>();
+        Map<String, ImportedCategories> importedCategoriesConfig = new HashMap<>();
 
         NodeList childNodes = importedCategoriesNode.getChildNodes();
 
@@ -93,11 +94,10 @@ public class ImportedCategoriesConfig {
             //  INSTANCE start
             XMLUtil.writeElementStartWithLineBreak(ConfigElement.INSTANCE, xmlAttributes, Tab.FOUR, xmlsw);
 
-            @SuppressWarnings("unchecked")
-            Enumeration<DefaultMutableTreeNode> children = importedCategories.getRoot().children();
+            Enumeration<TreeNode> children = importedCategories.getRoot().children();
 
             while (children.hasMoreElements()) {
-                ConfigHandlerUtil.storeChild(children.nextElement(), Tab.FOUR.value() + Tab.TWO.value(), xmlsw);
+                ConfigHandlerUtil.storeChild((DefaultMutableTreeNode)children.nextElement(), Tab.FOUR.value() + Tab.TWO.value(), xmlsw);
             }
 
             //  INSTANCE end

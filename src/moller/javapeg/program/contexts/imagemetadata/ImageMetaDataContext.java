@@ -109,12 +109,12 @@ public class ImageMetaDataContext {
         if (!javaPegIdToCameraModels.containsKey(javaPegIdValue)) {
             Map<String, Set<Integer>> cameraModelToIndex = new HashMap<>();
 
-            cameraModelToIndex.put(cameraModel, new HashSet<Integer>());
+            cameraModelToIndex.put(cameraModel, new HashSet<>());
             javaPegIdToCameraModels.put(javaPegIdValue, cameraModelToIndex);
         }
 
         if (!javaPegIdToCameraModels.get(javaPegIdValue).containsKey(cameraModel)) {
-            javaPegIdToCameraModels.get(javaPegIdValue).put(cameraModel, new HashSet<Integer>());
+            javaPegIdToCameraModels.get(javaPegIdValue).put(cameraModel, new HashSet<>());
         }
 
         javaPegIdToCameraModels.get(javaPegIdValue).get(cameraModel).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
@@ -136,12 +136,12 @@ public class ImageMetaDataContext {
         if (!mapToAddTo.containsKey(javaPegIdValue)) {
             Map<Integer, Set<Integer>> valuesToIndex = new HashMap<>();
 
-            valuesToIndex.put(value, new HashSet<Integer>());
+            valuesToIndex.put(value, new HashSet<>());
             mapToAddTo.put(javaPegIdValue, valuesToIndex);
         }
 
         if (!mapToAddTo.get(javaPegIdValue).containsKey(value)) {
-            mapToAddTo.get(javaPegIdValue).put(value, new HashSet<Integer>());
+            mapToAddTo.get(javaPegIdValue).put(value, new HashSet<>());
         }
         mapToAddTo.get(javaPegIdValue).get(value).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
     }
@@ -157,12 +157,12 @@ public class ImageMetaDataContext {
             if (!javaPegIdToExposureTimeValues.containsKey(javaPegIdValue)) {
                 Map<String, Set<Integer>> exposureTimeValuesToIndex = new HashMap<>();
 
-                exposureTimeValuesToIndex.put(exposureTime.toString(), new HashSet<Integer>());
+                exposureTimeValuesToIndex.put(exposureTime.toString(), new HashSet<>());
                 javaPegIdToExposureTimeValues.put(javaPegIdValue, exposureTimeValuesToIndex);
             }
 
             if (!javaPegIdToExposureTimeValues.get(javaPegIdValue).containsKey(exposureTime.toString())) {
-                javaPegIdToExposureTimeValues.get(javaPegIdValue).put(exposureTime.toString(), new HashSet<Integer>());
+                javaPegIdToExposureTimeValues.get(javaPegIdValue).put(exposureTime.toString(), new HashSet<>());
             }
 
             exposureTimeStringExposureTimeMappings.put(exposureTime.toString(), exposureTime);
@@ -174,12 +174,12 @@ public class ImageMetaDataContext {
         if (!javaPegIdToImageSizeValues.containsKey(javaPegIdValue)) {
             Map<String, Set<Integer>> imageSizeValuesToIndex = new HashMap<>();
 
-            imageSizeValuesToIndex.put(imageSize.toString(), new HashSet<Integer>());
+            imageSizeValuesToIndex.put(imageSize.toString(), new HashSet<>());
             javaPegIdToImageSizeValues.put(javaPegIdValue, imageSizeValuesToIndex);
         }
 
         if (!javaPegIdToImageSizeValues.get(javaPegIdValue).containsKey(imageSize.toString())) {
-            javaPegIdToImageSizeValues.get(javaPegIdValue).put(imageSize.toString(), new HashSet<Integer>());
+            javaPegIdToImageSizeValues.get(javaPegIdValue).put(imageSize.toString(), new HashSet<>());
         }
 
         imageSizeStringImageSizeMappings.put(imageSize.toString(), imageSize);
@@ -190,12 +190,12 @@ public class ImageMetaDataContext {
         if (!javaPegIdToFNumberValues.containsKey(javaPegIdValue)) {
             Map<Double, Set<Integer>> fNumberValuesToIndex = new HashMap<>();
 
-            fNumberValuesToIndex.put(fNumber, new HashSet<Integer>());
+            fNumberValuesToIndex.put(fNumber, new HashSet<>());
             javaPegIdToFNumberValues.put(javaPegIdValue, fNumberValuesToIndex);
         }
 
         if (!javaPegIdToFNumberValues.get(javaPegIdValue).containsKey(fNumber)) {
-            javaPegIdToFNumberValues.get(javaPegIdValue).put(fNumber, new HashSet<Integer>());
+            javaPegIdToFNumberValues.get(javaPegIdValue).put(fNumber, new HashSet<>());
         }
 
         javaPegIdToFNumberValues.get(javaPegIdValue).get(fNumber).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
@@ -204,12 +204,12 @@ public class ImageMetaDataContext {
     public void addRating(String javaPegIdValue, int rating, String imagePath) {
         if (!javaPegIdToRatings.containsKey(javaPegIdValue)) {
             Map<Integer, Set<Integer>> ratingToIndex = new HashMap<>();
-            ratingToIndex.put(rating, new HashSet<Integer>());
+            ratingToIndex.put(rating, new HashSet<>());
             javaPegIdToRatings.put(javaPegIdValue, ratingToIndex);
         }
 
         if (!javaPegIdToRatings.get(javaPegIdValue).containsKey(rating)) {
-            javaPegIdToRatings.get(javaPegIdValue).put(rating, new HashSet<Integer>());
+            javaPegIdToRatings.get(javaPegIdValue).put(rating, new HashSet<>());
         }
 
         // Ignore all other ratings than between 0 and 4.. Since what is used
@@ -224,12 +224,12 @@ public class ImageMetaDataContext {
         if (!javaPegIdToCategories.containsKey(javaPegId)) {
             Map<String, Set<Integer>> categoryIdToIndex = new HashMap<>();
 
-            categoryIdToIndex.put(categoryId, new HashSet<Integer>());
+            categoryIdToIndex.put(categoryId, new HashSet<>());
             javaPegIdToCategories.put(javaPegId, categoryIdToIndex);
         }
 
         if (!javaPegIdToCategories.get(javaPegId).containsKey(categoryId)) {
-            javaPegIdToCategories.get(javaPegId).put(categoryId, new HashSet<Integer>());
+            javaPegIdToCategories.get(javaPegId).put(categoryId, new HashSet<>());
         }
 
         javaPegIdToCategories.get(javaPegId).get(categoryId).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
@@ -239,12 +239,12 @@ public class ImageMetaDataContext {
         if (!javaPegIdToComments.containsKey(javaPegIdValue)) {
             Map<String, Set<Integer>> commentToIndex = new HashMap<>();
 
-            commentToIndex.put(comment, new HashSet<Integer>());
+            commentToIndex.put(comment, new HashSet<>());
             javaPegIdToComments.put(javaPegIdValue, commentToIndex);
         }
 
         if (!javaPegIdToComments.get(javaPegIdValue).containsKey(comment)) {
-            javaPegIdToComments.get(javaPegIdValue).put(comment, new HashSet<Integer>());
+            javaPegIdToComments.get(javaPegIdValue).put(comment, new HashSet<>());
         }
 
         javaPegIdToComments.get(javaPegIdValue).get(comment).add(ImagePathAndIndex.getInstance().getIndexForImagePath(imagePath));
@@ -314,21 +314,11 @@ public class ImageMetaDataContext {
     }
 
     public Set<ExposureTime> getExposureTimeValues() {
-        Set<ExposureTime> exposureTimeObjects = new TreeSet<>();
-
-        for (ExposureTime exposureTime : exposureTimeStringExposureTimeMappings.values()) {
-            exposureTimeObjects.add(exposureTime);
-        }
-        return exposureTimeObjects;
+        return new TreeSet<>(exposureTimeStringExposureTimeMappings.values());
     }
 
     public Set<ImageSize> getImageSizeValues() {
-        Set<ImageSize> imageSizeObjects = new TreeSet<>();
-
-        for (ImageSize imageSize : imageSizeStringImageSizeMappings.values()) {
-            imageSizeObjects.add(imageSize);
-        }
-        return imageSizeObjects;
+        return new TreeSet<>(imageSizeStringImageSizeMappings.values());
     }
 
     public Set<File> findImagesByComment(String javaPegId, String commentToSearchFor) {

@@ -91,7 +91,7 @@ public class RenameImagesConfig {
     }
 
     private static Set<String> getTemplates(Node templatesNode) {
-        Set<String> templates = new TreeSet<String>();
+        Set<String> templates = new TreeSet<>();
 
         NodeList childNodes = templatesNode.getChildNodes();
 

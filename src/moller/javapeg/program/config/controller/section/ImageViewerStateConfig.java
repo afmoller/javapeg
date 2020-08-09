@@ -39,19 +39,19 @@ public class ImageViewerStateConfig {
 
             switch (ConfigElement.getEnum(node.getNodeName())) {
             case AUTOMATICALLY_RESIZE_IMAGES:
-                imageViewerState.setAutomaticallyResizeImages(Boolean.valueOf(node.getTextContent()));
+                imageViewerState.setAutomaticallyResizeImages(Boolean.parseBoolean(node.getTextContent()));
                 break;
             case AUTOMATICALLY_ROTATE_IMAGES:
-                imageViewerState.setAutomaticallyRotateImages(Boolean.valueOf(node.getTextContent()));
+                imageViewerState.setAutomaticallyRotateImages(Boolean.parseBoolean(node.getTextContent()));
                 break;
             case SHOW_NAVIGATION_IMAGE:
-                imageViewerState.setShowNavigationImage(Boolean.valueOf(node.getTextContent()));
+                imageViewerState.setShowNavigationImage(Boolean.parseBoolean(node.getTextContent()));
                 break;
             case RESIZE_QUALITY:
                 imageViewerState.setResizeQuality(getMethodFromResizeQualityString(node.getTextContent()));
                 break;
             case SLIDE_SHOW_DELAY_IN_SECONDS:
-                imageViewerState.setSlideShowDelay(Integer.valueOf(node.getTextContent()));
+                imageViewerState.setSlideShowDelay(Integer.parseInt(node.getTextContent()));
                 break;
             default:
                 break;
@@ -75,7 +75,6 @@ public class ImageViewerStateConfig {
     }
 
     private static Method getMethodFromResizeQualityString(String resizeQualityString) {
-        Method valueOf = Method.valueOf(resizeQualityString);
-        return valueOf;
+        return Method.valueOf(resizeQualityString);
     }
 }

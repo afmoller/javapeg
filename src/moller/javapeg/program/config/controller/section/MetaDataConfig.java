@@ -57,7 +57,7 @@ public class MetaDataConfig {
     }
 
     private static List<MetaDataFilter<ExposureTimeFilterMask>> getExposureTimeFilters(Node exposureTimesFiltersNode) {
-        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = new ArrayList<MetaDataFilter<ExposureTimeFilterMask>>();
+        List<MetaDataFilter<ExposureTimeFilterMask>> exposureTimeFilters = new ArrayList<>();
 
         NodeList childNodes = exposureTimesFiltersNode.getChildNodes();
 
@@ -76,7 +76,7 @@ public class MetaDataConfig {
     }
 
     private static List<MetaDataFilter<ISOFilterMask>> getIsoFilters(Node isoFiltersNode) {
-        List<MetaDataFilter<ISOFilterMask>> isoFilters = new ArrayList<MetaDataFilter<ISOFilterMask>>();
+        List<MetaDataFilter<ISOFilterMask>> isoFilters = new ArrayList<>();
 
         NodeList childNodes = isoFiltersNode.getChildNodes();
 
@@ -115,7 +115,7 @@ public class MetaDataConfig {
             }
         }
 
-        MetaDataFilter<ISOFilterMask> isoFilter = new MetaDataFilter<ISOFilterMask>();
+        MetaDataFilter<ISOFilterMask> isoFilter = new MetaDataFilter<>();
         isoFilter.setCameraModel(cameraModel);
         isoFilter.setFilterMask(isoFilterMask);
 
@@ -143,7 +143,7 @@ public class MetaDataConfig {
             }
         }
 
-        MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = new MetaDataFilter<ExposureTimeFilterMask>();
+        MetaDataFilter<ExposureTimeFilterMask> exposureTimeFilter = new MetaDataFilter<>();
         exposureTimeFilter.setCameraModel(cameraModel);
         exposureTimeFilter.setFilterMask(exposureTimeFilterMask);
 

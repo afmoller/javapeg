@@ -23,7 +23,7 @@ public class ImageSearchResultViewerStateConfig {
 
             switch (ConfigElement.getEnum(node.getNodeName())) {
             case NUMBER_OF_IMAGES_TO_DISPLAY:
-                imageSearchResultViewerState.setNumberOfImagesToDisplay(Integer.valueOf(node.getTextContent()));
+                imageSearchResultViewerState.setNumberOfImagesToDisplay(Integer.parseInt(node.getTextContent()));
                 break;
             default:
                 break;

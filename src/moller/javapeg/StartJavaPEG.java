@@ -129,7 +129,7 @@ public class StartJavaPEG {
             JOptionPane.showMessageDialog(null, initialLanguage.get("configuration.file.missing"));
             return false;
         } else {
-            Configuration importedConfig = ConfigImporter.doConfigurationImport(importPath, Config.getInstance().get());
+            Configuration importedConfig = ConfigImporter.doConfigurationImport(importPath);
             Config.getInstance().set(importedConfig);
             ConfigHandler.store(importedConfig, new File(C.PATH_TO_CONFIGURATION_FILE));
             return true;

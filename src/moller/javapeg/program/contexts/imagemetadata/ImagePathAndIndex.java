@@ -61,7 +61,7 @@ public class ImagePathAndIndex {
 
         if (null == index) {
             imagePathIndex++;
-            index = new Integer(imagePathIndex);
+            index = Integer.valueOf(imagePathIndex);
             imagePathAndIndex.put(imagePath, index);
             indexAndImagePath.put(index, imagePath);
         }

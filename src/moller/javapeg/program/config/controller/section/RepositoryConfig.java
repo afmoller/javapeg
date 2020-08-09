@@ -57,7 +57,7 @@ public class RepositoryConfig {
     }
 
     private static RepositoryPaths getRepositoryPaths(Node pathsNode) {
-        List<File> paths = new ArrayList<File>();
+        List<File> paths = new ArrayList<>();
 
         NodeList childNodes = pathsNode.getChildNodes();
 
@@ -85,8 +85,8 @@ public class RepositoryConfig {
     private static RepositoryExceptions getRepositoryExceptions(Node exceptionsNode) {
         RepositoryExceptions repositoryExceptions = new RepositoryExceptions();
 
-        List<File> allwaysAdd = new ArrayList<File>();
-        List<File> neverAdd = new ArrayList<File>();
+        List<File> allwaysAdd = new ArrayList<>();
+        List<File> neverAdd = new ArrayList<>();
 
         NodeList childNodes = exceptionsNode.getChildNodes();
 
