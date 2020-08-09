@@ -54,7 +54,7 @@ public class SourceAndDestinationPath {
         /***
          * Kontrollera så att källsökvägen inte är tom
          **/
-        if(sourcePath.equals("")){
+        if(sourcePath == null){
             errorMessage = lang.get("validator.sourceanddestinationpath.noSourcePathError") + "\n";
         }
         /***

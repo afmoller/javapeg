@@ -30,16 +30,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -2134,7 +2125,7 @@ public class MainGUI extends JFrame {
 
     /**
      * This listener class listens for mouse clicks made on the
-     * FilesSystemDirectory three and performs the appropiate actions depending
+     * FilesSystemDirectory three and performs the appropriate actions depending
      * on if it was a "right click" or "left click" with the mouse.
      */
     private class FileSystemDirectoryTreeMouseListener extends MouseAdapter {
@@ -2396,10 +2387,10 @@ public class MainGUI extends JFrame {
             Object source = e.getSource();
 
             if (source instanceof JToggleButton) {
-                JToggleButton toggleButton = (JToggleButton)source;
+                JToggleButton selectedThumbnail = (JToggleButton)source;
 
                 // An image is selected
-                if (toggleButton.isSelected()) {
+                if (selectedThumbnail.isSelected()) {
                     ApplicationContext ac = ApplicationContext.getInstance();
 
                     if (ac.isImageMetaDataDataBaseFileLoaded() &&
@@ -2413,9 +2404,34 @@ public class MainGUI extends JFrame {
                     int percentage = grayFilter.getPercentage();
 
                     if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK) {
-                        loadedThumbnails.addSelection(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.addSelection(selectedThumbnail, pixelsBrightened, percentage);
+                    }
+
+                    // Set all thumbnails from the previous selected to to the
+                    // currently selected to selected or all previous thumbnails
+                    // if none of the previous are selected.
+                    else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK) {
+
+                        List<JToggleButton> deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected = new ArrayList<>();
+
+                        for (JToggleButton thumbNail : thumbNailsPanel.getJToggleButtons()) {
+                            deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected.add(thumbNail);
+
+                            if(thumbNail.isSelected() && thumbNail != selectedThumbnail) {
+                                deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected.clear();
+                            }
+
+                            if (thumbNail == selectedThumbnail) {
+                                break;
+                            }
+                        }
+
+                        for (JToggleButton currentlyDeSelectedThumbnail : deSelectedButtonsBetweenPreviousSelectedAndCurrentlySelected) {
+                            loadedThumbnails.addSelection(currentlyDeSelectedThumbnail, pixelsBrightened, percentage);
+                        }
+
                     } else {
-                        loadedThumbnails.set(toggleButton, pixelsBrightened, percentage);
+                        loadedThumbnails.set(selectedThumbnail, pixelsBrightened, percentage);
                     }
 
                     File jpegImage = new File(e.getActionCommand());
@@ -2461,7 +2477,7 @@ public class MainGUI extends JFrame {
                 }
                 // An image is deselected
                 else {
-                    deSelectAllImages(e, toggleButton);
+                    deSelectAllImages(e, selectedThumbnail);
                 }
             }
         }
@@ -2567,7 +2583,7 @@ public class MainGUI extends JFrame {
      * overview to the list of images to display in the {@link ImageViewer} GUI.
      *
      * @author Fredrik
-     *
+     *ctrl
      */
     private class AddSelectedImagesToViewList implements ActionListener {
         @Override
@@ -2666,6 +2682,7 @@ public class MainGUI extends JFrame {
                     }
                 }
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2697,6 +2714,7 @@ public class MainGUI extends JFrame {
                     TreeUtil.sortNodesAlphabetically(parent, model);
                 }
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2729,6 +2747,7 @@ public class MainGUI extends JFrame {
             if (result == 0) {
                 model.removeNodeFromParent((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
             }
+            Config.getInstance().save();
         }
     }
 
@@ -2780,7 +2799,7 @@ public class MainGUI extends JFrame {
                     if (imageMetaDataBaseItem != null) {
                         Categories currentlyStoredCategories = imageMetaDataBaseItem.getCategories();
 
-                        if (currentlyStoredCategories.addCategories(selectedCategoriesFromTreeModel.getCategories())) {
+                        if (currentlyStoredCategories.mergeCategories(selectedCategoriesFromTreeModel.getCategories())) {
                             imddbituc.setFlushNeeded(true);
                             imageMetaDataBaseItem.setNeedsToBeSyncedWithImageMetaDataContext(true);
                         }
@@ -3551,7 +3570,7 @@ public class MainGUI extends JFrame {
                     // in the scope of potentially loading a new one.
                     ac.setImageMetaDataDataBaseFileLoaded(false);
 
-                    // Load thumb nails for all JPEG images that exists in the
+                    // Load thumbnails for all JPEG images that exists in the
                     // selected path.
                     loadThumbNails(repositoryPath);
 
@@ -3608,6 +3627,13 @@ public class MainGUI extends JFrame {
                             // * Add the path to the configuration, so the entry will be
                             // * persisted upon application exit.
                             configuration.getRepository().getPaths().getPaths().add(repositoryPath);
+                            Config.getInstance().save();
+
+                            /**
+                             * Update the label with the amount of images matching
+                             * the currently selected filter in the search tab
+                             */
+                            imageSearchTab.updateMatchingImagesLabel();
                         } catch (ParserConfigurationException pcex) {
                             logger.logERROR("Could not create a DocumentBuilder");
                             logger.logERROR(pcex);
@@ -3703,8 +3729,25 @@ public class MainGUI extends JFrame {
                         return true;
                     }
                 }
+
+                if (e.getID() == KeyEvent.KEY_PRESSED  && inputForRatingButtonsAccepted(e.getKeyChar())) {
+                    JRadioButton ratingRadioButton = ratingRadioButtons[e.getKeyChar() - 48];
+                    if (ratingRadioButton.isEnabled()) {
+                        if (ratingRadioButton.isSelected()) {
+                            ratingRadioButtons[0].setSelected(true);
+                        } else {
+                            ratingRadioButton.setSelected(true);
+                        }
+                        return true;
+                    }
+                }
             }
             return false;
+        }
+
+        private boolean inputForRatingButtonsAccepted(int keyCode) {
+            // numeric keyboard key number: 1 to 5
+            return keyCode >= 49 && keyCode <= 53;
         }
     }
 
