@@ -675,6 +675,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             double progress = 0;
             double nrOfImages = images.size();
             int listIndex = 0;
+            int numberOfColumns = 0;
 
             for (File image : images) {
                 if (image.exists()) {
@@ -717,6 +718,12 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                 }
 
                 setProgress((int)((progress++ / nrOfImages) * 100));
+
+                int currentNumberOfColumns = thumbNailGridLayout.getColumns();
+                if (currentNumberOfColumns > numberOfColumns) {
+                    triggerOptimizeColumnLayout();
+                    numberOfColumns = currentNumberOfColumns;
+                }
             }
             return null;
         }
@@ -732,7 +739,16 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
             //for the JToggleButtons.
             selectedImageIconGenerator = new SelectedImageIconGenerator(loadedThumbnails, imageFileToSelectedImageMapping);
             selectedImageIconGenerator.execute();
+
+            // re calculate / optimize thumbnail grid size
+            triggerOptimizeColumnLayout();
         }
+    }
+
+    private void triggerOptimizeColumnLayout() {
+        Arrays.asList(getThis().getComponentListeners()).forEach(componentListener -> {
+            componentListener.componentResized(new ComponentEvent(getThis(), ComponentEvent.COMPONENT_RESIZED));
+        });
     }
 
     @Override
