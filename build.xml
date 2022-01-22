@@ -27,7 +27,7 @@
 
 	<target name="build" depends="clean_build">
 		<mkdir dir="build" />
-		<javac srcdir="src" destdir="build" target="1.7" debug="true">
+		<javac srcdir="src" destdir="build" target="11" debug="true">
 			<classpath>
 				<fileset dir="libraries" includes="*.jar" />
 			</classpath>
@@ -100,7 +100,7 @@
 		<jar destfile="${jar.name.javapeg}" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class.javepeg}" />
-				<attribute name="Class-Path" value="lib/metadata-extractor-2.6.4.jar lib/${jar.name.util} lib/xmpcore.jar lib/imgscalr-lib-4.2.jar lib/jcommon-1.0.23.jar lib/jfreechart-1.0.19.jar" />
+				<attribute name="Class-Path" value="lib/metadata-extractor-2.16.0.jar lib/${jar.name.util} lib/xmpcore-6.1.11.jar lib/imgscalr-lib-4.2.jar lib/jcommon-1.0.23.jar lib/jfreechart-1.0.19.jar" />
 				<attribute name="SplashScreen-Image" value="${splashscreen.image}" />
 			</manifest>
 			<fileset dir="build">
@@ -184,8 +184,8 @@
                 <include name="gpl.txt" />
                 <include name="CHANGELOG.html" />
                 <include name="TODO.txt" />
-                <include name="libraries/metadata-extractor-2.6.4.jar" />
-                <include name="libraries/xmpcore.jar" />
+                <include name="libraries/metadata-extractor-2.16.0.jar" />
+                <include name="libraries/xmpcore-6.1.11.jar" />
                 <include name="libraries/imgscalr-lib-4.2.jar" />
                 <include name="libraries/jcommon-1.0.23.jar" />
                 <include name="libraries/jfreechart-1.0.19.jar" />

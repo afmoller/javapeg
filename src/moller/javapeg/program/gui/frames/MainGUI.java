@@ -16,21 +16,9 @@
  ******************************************************************************/
 package moller.javapeg.program.gui.frames;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -2000,8 +1988,12 @@ public class MainGUI extends JFrame {
 
                             JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(jpegFile);
 
+                            ImageIcon imageIcon = new ImageIcon(tn.getThumbNailData());
+                            imageIcon = ImageUtil.rotateIfNeeded(imageIcon, tn.getMetaData());
+
                             JToggleButton thumbContainer = new JToggleButton();
-                            thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+
+                            thumbContainer.setIcon(imageIcon);
                             thumbContainer.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
                             ToolTips toolTips = configuration.getToolTips();
@@ -2358,13 +2350,14 @@ public class MainGUI extends JFrame {
 
             Image scaledImage;
             if (thumbnail != null) {
-                Icon thumbNailIcon = new ImageIcon(thumbnail.getThumbNailData());
+                ImageIcon thumbNailImageIcon = new ImageIcon(thumbnail.getThumbNailData());
+                thumbNailImageIcon = ImageUtil.rotateIfNeeded(thumbNailImageIcon, thumbnail.getMetaData());
 
-                if (thumbNailIcon.getIconHeight() > height || thumbNailIcon.getIconWidth() > width) {
+                if (thumbNailImageIcon.getIconHeight() > height || thumbNailImageIcon.getIconWidth() > width) {
                     scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(thumbnail.getThumbNailData(), width, height);
                     imageTagPreviewLabel.setIcon(new ImageIcon(scaledImage));
                 } else {
-                    imageTagPreviewLabel.setIcon(thumbNailIcon);
+                    imageTagPreviewLabel.setIcon(thumbNailImageIcon);
                 }
             } else {
                 scaledImage = ImageUtil.createThumbNailAdaptedToAvailableSpace(jpegImage, width, height);

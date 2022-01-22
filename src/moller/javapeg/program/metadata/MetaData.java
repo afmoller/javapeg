@@ -163,6 +163,7 @@ public class MetaData {
     }
 
     public void setExifOrientation(int exifOrientation) {
+        System.out.println("exifOrientation:" + exifOrientation);
         this.exifOrientation = exifOrientation;
     }
 }

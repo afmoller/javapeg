@@ -115,17 +115,17 @@
         <!-- The core files -->
         <pack name="Core" required="yes">
             <description>The JavaPEG core files, which are needed to run the application.</description>
-            <file src="readme/README.html"                        targetdir="${INSTALL_PATH}"/>
-            <file src="text/gpl.txt"                              targetdir="${INSTALL_PATH}"/>
-            <file src="images/javapeg.ico"                        targetdir="${INSTALL_PATH}"/>
-            <file src="../JavaPEG.jar"                            targetdir="${INSTALL_PATH}"/>
-            <file src="../lib/Util.jar"                           targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="../libraries/metadata-extractor-2.6.4.jar" targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="../libraries/xmpcore.jar"                  targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="../libraries/imgscalr-lib-4.2.jar"         targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="../libraries/jcommon-1.0.23.jar"           targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="../libraries/jfreechart-1.0.19.jar"        targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
-            <file src="firstLaunch/firstLaunch"                   targetdir="${USER_HOME}${FILE_SEPARATOR}javapeg-${APP_VER}"/>
+            <file src="readme/README.html"                         targetdir="${INSTALL_PATH}"/>
+            <file src="text/gpl.txt"                               targetdir="${INSTALL_PATH}"/>
+            <file src="images/javapeg.ico"                         targetdir="${INSTALL_PATH}"/>
+            <file src="../JavaPEG.jar"                             targetdir="${INSTALL_PATH}"/>
+            <file src="../lib/Util.jar"                            targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/metadata-extractor-2.16.0.jar" targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/xmpcore-6.1.11.jar"            targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/imgscalr-lib-4.2.jar"          targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/jcommon-1.0.23.jar"            targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="../libraries/jfreechart-1.0.19.jar"         targetdir="${INSTALL_PATH}${FILE_SEPARATOR}lib"/>
+            <file src="firstLaunch/firstLaunch"                    targetdir="${USER_HOME}${FILE_SEPARATOR}javapeg-${APP_VER}"/>
         </pack>
     </packs>
 

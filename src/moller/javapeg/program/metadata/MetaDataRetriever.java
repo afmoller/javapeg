@@ -57,6 +57,7 @@ public class MetaDataRetriever {
             String pixelXDimensionTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.PIXEL_X_DIMENSION);
             String pixelYDimensionTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.PIXEL_Y_DIMENSION);
             String exposureTimeValueTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.EXPOSURE_TIME_VALUE);
+            String orientationTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.ORIENTATION);
 
             String jpegInterchangeFormatTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.JPEG_INTERCHANGE_FORMAT);
             String jpegInterchangeFormatLengthTag = mdcatm.getTag(cameraMake, cameraModel, ExifFieldName.JPEG_INTERCHANGE_FORMAT_LENGTH);
@@ -64,13 +65,13 @@ public class MetaDataRetriever {
             metaData.setExifFNumber(getDoubleTagValue(tagAndValueMappings, fNumberTag));
             metaData.setExifCameraModel(cameraModel);
             metaData.setExifDateTime(getDateTimeOriginalTagValue(tagAndValueMappings, dateTimeOriginalTag));
-            metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings,isoSpeedRatingsTag));
+            metaData.setExifISOValue(getIntegerTagValue(tagAndValueMappings, isoSpeedRatingsTag));
             metaData.setExifPictureHeight(getIntegerTagValue(tagAndValueMappings, pixelYDimensionTag));
             metaData.setExifPictureWidth(getIntegerTagValue(tagAndValueMappings, pixelXDimensionTag));
             metaData.setExifExposureTime(getExposureTimeTagValue(tagAndValueMappings, exposureTimeValueTag));
             metaData.setThumbNailOffset(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatTag));
             metaData.setThumbNailLength(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
-            metaData.setExifOrientation(getIntegerTagValue(tagAndValueMappings, jpegInterchangeFormatLengthTag));
+            metaData.setExifOrientation(getIntegerTagValue(tagAndValueMappings, orientationTag));
         }
     }
 
@@ -79,7 +80,7 @@ public class MetaDataRetriever {
             return -1;
         } else {
             try {
-            return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
+                return Integer.parseInt(removeNonIntegerCharacters(tagAndValueMappings.get(tag)));
             } catch (NumberFormatException nfex) {
                 Logger logger = Logger.getInstance();
                 logger.logERROR("Could not parse String: " + removeNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a int value");
@@ -109,7 +110,7 @@ public class MetaDataRetriever {
 
     private static ExposureTime getExposureTimeTagValue(Map<String, String> tagAndValueMappings, String tag) {
         try {
-             return new ExposureTime(tagAndValueMappings.get(tag));
+            return new ExposureTime(tagAndValueMappings.get(tag));
         } catch (ExposureTimeException e) {
             return null;
         }

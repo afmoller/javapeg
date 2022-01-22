@@ -1,6 +1,9 @@
 package moller.javapeg.program.gui;
 
+import moller.javapeg.program.jpeg.JPEGThumbNail;
 import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
+import moller.javapeg.program.metadata.MetaData;
+import moller.util.image.ImageUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +14,16 @@ import java.io.File;
 public class ButtonIconUtil {
 
     public static void setSelectedThumbNailImage(AbstractButton button, boolean brightened, int percentage) {
-        Image disabledImage = getSelectedIcon(button, brightened, percentage);
-        button.setIcon(new ImageIcon(disabledImage));
+        ImageIcon disabledImage = getSelectedIcon(button, brightened, percentage);
+        button.setIcon(disabledImage);
     }
 
-    public static Image getSelectedIcon(AbstractButton button, boolean brightened, int percentage) {
+    public static ImageIcon getSelectedIcon(AbstractButton button, boolean brightened, int percentage) {
         GrayFilter filter = new GrayFilter(brightened, percentage);
         ImageProducer prod = new FilteredImageSource(((ImageIcon)button.getIcon()).getImage().getSource(), filter);
-        return Toolkit.getDefaultToolkit().createImage(prod);
+        Image image = Toolkit.getDefaultToolkit().createImage(prod);
+
+        return new ImageIcon(image);
     }
 
     public static void setDeSelectedThumbNailImage(AbstractButton button) {
@@ -26,7 +31,8 @@ public class ButtonIconUtil {
     }
 
     public static void setDeSelectedThumbNailImage(AbstractButton button, File image) {
-        button.setIcon(new ImageIcon(JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image).getThumbNailData()));
+        JPEGThumbNail jpegThumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
+        ImageIcon imageIcon = new ImageIcon(jpegThumbNail.getThumbNailData());
+        button.setIcon(ImageUtil.rotateIfNeeded(imageIcon, jpegThumbNail.getMetaData()));
     }
-
 }

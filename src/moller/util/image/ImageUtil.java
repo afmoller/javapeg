@@ -16,13 +16,7 @@
  ******************************************************************************/
 package moller.util.image;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,7 +28,9 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
+import javax.swing.*;
 
+import moller.javapeg.program.metadata.MetaData;
 import moller.javapeg.program.metadata.MetaDataUtil;
 
 import org.imgscalr.Scalr;
@@ -43,6 +39,47 @@ import org.imgscalr.Scalr.Mode;
 import org.imgscalr.Scalr.Rotation;
 
 public class ImageUtil {
+
+	/**
+	 * This method rotates an image according to the associated Exif meta data
+	 * orientation value given in the @metaData parameter.
+	 *
+	 * @param imageIcon
+	 * @param metaData
+	 * @return
+	 */
+	public static ImageIcon rotateIfNeeded(ImageIcon imageIcon, MetaData metaData) {
+		int exifOrientation = metaData.getExifOrientation();
+
+		double rotation;
+		switch (exifOrientation) {
+			case 180:
+				rotation = 180;
+				break;
+			case 270:
+				rotation = -90;
+				break;
+			case 90:
+				rotation = 90;
+				break;
+			default:
+				return imageIcon;
+		}
+
+		BufferedImage bi = new BufferedImage(
+				imageIcon.getIconWidth(),
+				imageIcon.getIconHeight(),
+				BufferedImage.TYPE_INT_RGB);
+
+		Graphics g = bi.createGraphics();
+		imageIcon.paintIcon(null, g, 0,0);
+		g.dispose();
+
+		BufferedImage bufferedImage = ImageUtil.rotateImage(bi, rotation);
+		imageIcon.setImage(bufferedImage);
+
+		return imageIcon;
+	}
 
 	/**
 	 * @param jpegFile
@@ -63,7 +100,6 @@ public class ImageUtil {
 	}
 
 	/**
-	 * @param jpegFile
 	 * @param availableWidth
 	 * @param availableHeight
 	 * @return

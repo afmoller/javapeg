@@ -56,6 +56,7 @@ public class MetaDataCameraAndTagMapping {
         fieldNameAndTagIdMappings.put(ExifFieldName.PIXEL_X_DIMENSION, "0xa002");
         fieldNameAndTagIdMappings.put(ExifFieldName.PIXEL_Y_DIMENSION, "0xa003");
         fieldNameAndTagIdMappings.put(ExifFieldName.EXPOSURE_TIME_VALUE, "0x829a");
+        fieldNameAndTagIdMappings.put(ExifFieldName.ORIENTATION, "0x0112");
 
         return fieldNameAndTagIdMappings;
     }

@@ -65,6 +65,7 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.language.Language;
 import moller.javapeg.program.logger.Logger;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+import moller.util.image.ImageUtil;
 import moller.util.io.FileUtil;
 
 /**
@@ -421,7 +422,8 @@ public class ViewPanelListSection extends JPanel {
 
             if (selectedIndex > -1) {
                 JPEGThumbNail thumbNail = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(imagesToViewListModel.get(selectedIndex));
-                imagePreviewLabel.setIcon(new ImageIcon(thumbNail.getThumbNailData()));
+                ImageIcon imageIcon = ImageUtil.rotateIfNeeded(new ImageIcon(thumbNail.getThumbNailData()), thumbNail.getMetaData());
+                imagePreviewLabel.setIcon(imageIcon);
             }
         }
     }

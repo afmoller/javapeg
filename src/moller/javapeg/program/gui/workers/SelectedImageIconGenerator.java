@@ -66,8 +66,8 @@ public class SelectedImageIconGenerator extends SwingWorker<Void, String> {
                 @Override
                 public void run() {
                     if (!imageFileToSelectedImageMapping.containsKey(actionCommandAsFile)) {
-                        Image selectedIcon = ButtonIconUtil.getSelectedIcon(loadedThumbnail, pixelsBrightened, percentage);
-                        imageFileToSelectedImageMapping.put(actionCommandAsFile, new ImageIcon(selectedIcon));
+                        ImageIcon selectedIcon = ButtonIconUtil.getSelectedIcon(loadedThumbnail, pixelsBrightened, percentage);
+                        imageFileToSelectedImageMapping.put(actionCommandAsFile, selectedIcon);
                     }
                 }
             });

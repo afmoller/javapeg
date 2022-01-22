@@ -627,9 +627,9 @@ public class ImageViewer extends JavaPEGBaseFrame {
 
         ThumbNailGrayFilter grayFilter = getConfiguration().getThumbNail().getGrayFilter();
 
-        Image selectedIcon = ButtonIconUtil.getSelectedIcon(jButtonForThumbnailForCurrentImageToDisplay, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
+        ImageIcon selectedIcon = ButtonIconUtil.getSelectedIcon(jButtonForThumbnailForCurrentImageToDisplay, grayFilter.isPixelsBrightened(), grayFilter.getPercentage());
 
-        jButtonForThumbnailForCurrentImageToDisplay.setIcon(new ImageIcon(selectedIcon));
+        jButtonForThumbnailForCurrentImageToDisplay.setIcon(selectedIcon);
 
         if (jButtonForThumbnailForCurrentImageToDisplay != null) {
             imageOverViewPanel.scrollRectToVisible(jButtonForThumbnailForCurrentImageToDisplay.getBounds());
