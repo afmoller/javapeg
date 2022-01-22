@@ -35,6 +35,7 @@ import moller.javapeg.program.jpeg.JPEGThumbNailRetriever;
 import moller.javapeg.program.metadata.MetaDataUtil;
 import moller.javapeg.program.model.ImagesToViewModel;
 import moller.javapeg.program.model.ModelInstanceLibrary;
+import moller.util.image.ImageUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,7 +93,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
 
     private CustomKeyEventDispatcher customKeyEventDispatcher;
 
-    private ImageSearhResultLoader imageSearhResultLoader = null;
+    private ImageSearchResultLoader imageSearchResultLoader = null;
 
     /**
      * Stores which index in the search result set List<File> that is the first
@@ -126,13 +127,13 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     }
 
     private void loadThumbnailImages(List<File> imagesToLoad) {
-        if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+        if (imageSearchResultLoader == null || imageSearchResultLoader.isDone()) {
             // Display the progress bar, if it is hidden.
             thumbNailLoadingProgressBar.setVisible(true);
 
-            imageSearhResultLoader = new ImageSearhResultLoader(imagesToLoad);
-            imageSearhResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
-            imageSearhResultLoader.execute();
+            imageSearchResultLoader = new ImageSearchResultLoader(imagesToLoad);
+            imageSearchResultLoader.addPropertyChangeListener(new ImageSearhResultLoaderPropertyListener());
+            imageSearchResultLoader.execute();
         }
     }
 
@@ -487,7 +488,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     private class LoadPreviousImagesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+            if (imageSearchResultLoader == null || imageSearchResultLoader.isDone()) {
                 List<File> imagesToLoad = getImagesToLoad(Direction.PREVIOUS);
                 loadThumbnailImages(imagesToLoad);
             }
@@ -497,7 +498,7 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
     private class LoadNextImagesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (imageSearhResultLoader == null || imageSearhResultLoader.isDone()) {
+            if (imageSearchResultLoader == null || imageSearchResultLoader.isDone()) {
                 List<File> imagesToLoad = getImagesToLoad(Direction.NEXT);
                 loadThumbnailImages(imagesToLoad);
             }
@@ -649,11 +650,11 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
      * @author Fredrik
      *
      */
-    private class ImageSearhResultLoader extends SwingWorker<Void, String> {
+    private class ImageSearchResultLoader extends SwingWorker<Void, String> {
 
         List<File> images;
 
-        public ImageSearhResultLoader(List<File> images) {
+        public ImageSearchResultLoader(List<File> images) {
             this.images = images;
         }
 
@@ -682,7 +683,10 @@ public class ImageSearchResultViewer extends JavaPEGBaseFrame {
                     JPEGThumbNail tn = JPEGThumbNailRetriever.getInstance().retrieveThumbNailFrom(image);
 
                     JToggleButton thumbContainer = new JToggleButton();
-                    thumbContainer.setIcon(new ImageIcon(tn.getThumbNailData()));
+                    ImageIcon imageIcon = new ImageIcon(tn.getThumbNailData());
+                    imageIcon = ImageUtil.rotateIfNeeded(imageIcon, tn.getMetaData());
+
+                    thumbContainer.setIcon(imageIcon);
                     thumbContainer.putClientProperty("ListIndex", listIndex);
                     listIndex++;
 
