@@ -60,7 +60,6 @@ public class ImageRepositoryStatisticsViewer extends JavaPEGBaseFrame {
     @Override
     protected void addListeners() {
         super.addListeners();
-
     }
 
     private void createMainFrame() {
