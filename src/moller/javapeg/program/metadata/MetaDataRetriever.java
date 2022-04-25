@@ -84,6 +84,7 @@ public class MetaDataRetriever {
             } catch (NumberFormatException nfex) {
                 Logger logger = Logger.getInstance();
                 logger.logERROR("Could not parse String: " + removeNonIntegerCharacters(tagAndValueMappings.get(tag)) + " to a int value");
+                logger.logERROR("Original value:" + tagAndValueMappings.get(tag) + " tag name: " + tag);
                 logger.logERROR(nfex);
                 return -1;
             }
