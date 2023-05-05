@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://moller.javapeg.layout.com" xmlns:lay="http://moller.javapeg.layout.com" elementFormDefault="qualified">
+    
+    <xs:element name="document" type="lay:Document"/>
+          
+    <xs:complexType name="Document">
+            <xs:sequence>
+                <xs:element name="documenttitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="row" type="lay:Row" minOccurs="1" maxOccurs="1"/>    
+            </xs:sequence>
+        </xs:complexType>    
+        
+    <xs:complexType name="Row">
+        <xs:sequence>
+            <xs:element name="column" type="lay:Column" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class"  type="xs:string"  use="optional"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Column">
+        <xs:sequence>
+            <xs:element name="image" type="lay:Image" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="meta"  type="lay:Meta"  minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class"  type="xs:string"  use="optional"/>
+        <xs:attribute name="amount" type="xs:integer" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Image">
+        <xs:attribute name="class" type="xs:string" use="optional"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Meta">
+        <xs:sequence>
+            <xs:element name="metaitem" type="lay:MetaItem" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class"  type="xs:string"  use="optional"/>  
+    </xs:complexType>
+    
+    <xs:complexType name="MetaItem">
+        <xs:attribute name="class" type="xs:string" use="optional"/>
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="meta"  type="lay:MetaEnumeration" use="required"/>
+    </xs:complexType>
+        
+    <xs:simpleType name="MetaEnumeration">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="fileName"/>
+            <xs:enumeration value="date"/>
+            <xs:enumeration value="time"/>
+            <xs:enumeration value="cameraModel"/>
+            <xs:enumeration value="exposureTime"/>
+            <xs:enumeration value="isoValue"/>
+            <xs:enumeration value="pictureWidth"/>
+            <xs:enumeration value="pictureHeight"/>
+            <xs:enumeration value="apertureValue"/>
+            <xs:enumeration value="fileSize"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>

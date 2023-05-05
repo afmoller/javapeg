@@ -1,0 +1,43 @@
+###################################################################################################
+# This is the English language file for HelpViewer.
+#
+# The structure of the file is as follows:
+#
+# A line starting with "#" is interpreted as a comment.
+#
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+#
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+#
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+###################################################################################################
+helpViewerGUI.window.locationError = Could not set window location according to settings. See logs for details 
+helpViewerGUI.window.title         = Help
+helpViewerGUI.errorMessage         = Could not load help file, see log file for details.
+
+helpViewerGUI.tree.content                    = Content
+helpViewerGUI.tree.programHelpOverView        = PROGRAM DESCRIPTION
+helpViewerGUI.tree.programHelpMerge           = MERGE IMAGES
+helpViewerGUI.tree.programHelpRename          = RENAME IMAGES
+helpViewerGUI.tree.programHelpViewImages      = VIEW IMAGES
+helpViewerGUI.tree.programHelpImagesTag       = TAG IMAGES
+helpViewerGUI.tree.programHelpImagesSearch    = SEARCH IMAGES
+helpViewerGUI.tree.programHelpImageViewer     = IMAGE VIEWER
+helpViewerGUI.tree.programHelpImageResizer    = IMAGE RESIZER
+helpViewerGUI.tree.programHelpOverviewCreator = CREATE THUMBNAIL OVERVIEW
+helpViewerGUI.tree.versionInformation         = VERSION INFORMATION
+helpViewerGUI.tree.references                 = REFERENCES / CREDITS
+helpViewerGUI.tree.configuration              = Configuration
+helpViewerGUI.tree.logging                    = LOGGING
+helpViewerGUI.tree.updates                    = UPDATES
+helpViewerGUI.tree.rename                     = RENAME
+helpViewerGUI.tree.language                   = LANGUAGE
+helpViewerGUI.tree.thumbnail                  = THUMBNAIL
+helpViewerGUI.tree.tag                        = TAG
+helpViewerGUI.tree.functionality              = Functionality
+helpViewerGUI.tree.problems                   = Problems
+helpViewerGUI.tree.corrupt                    = META DATA BASE CORRUPT
+helpViewerGUI.tree.inconsistent               = META DATA BASE INCONSISTENT

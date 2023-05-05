@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://moller.javapeg.config.com" xmlns:config="http://moller.javapeg.config.com" elementFormDefault="qualified">
+    
+    <xs:element name="config" type="config:Config"/>
+          
+    <xs:complexType name="Config">
+        <xs:all>
+            <xs:element name="logging"                      type="config:Logging" />
+            <xs:element name="javapegClientId"              type="xs:string" />
+            <xs:element name="gui"                          type="config:Gui" />
+            <xs:element name="guiTabs"                      type="config:GuiTabs" />
+            <xs:element name="updatesChecker"               type="config:UpdatesChecker" />
+            <xs:element name="language"                     type="config:Language" />
+            <xs:element name="renameImages"                 type="config:RenameImages" />
+            <xs:element name="resizeImages"                 type="config:ResizeImages" />
+            <xs:element name="imageViewerState"             type="config:ImageViewerState" />
+            <xs:element name="imageSearchResultViewerState" type="config:ImageSearchResultViewerState" />
+            <xs:element name="tagImages"                    type="config:TagImages" />
+            <xs:element name="thumbNail"                    type="config:ThumbNail" />
+            <xs:element name="toolTips"                     type="config:ToolTips" />
+            <xs:element name="categories"                   type="config:Categories" />
+            <xs:element name="importedcategories"           type="config:Importedcategories" />
+            <xs:element name="repository"                   type="config:Repository" />
+            <xs:element name="metadata"                     type="config:Metadata" />
+        </xs:all>   
+    </xs:complexType> 
+    
+    <xs:complexType name="Metadata">
+        <xs:sequence>
+        <xs:element name="isoFilters" type="config:IsoFilters" />
+        <xs:element name="exposureTimeFilters" type="config:ExposureTimeFilters" />
+        </xs:sequence>
+    </xs:complexType>  
+
+    <xs:complexType name="IsoFilters">
+        <xs:sequence>
+            <xs:element name="isoFilter" type="config:IsoFilter" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+	<xs:complexType name="IsoFilter">
+		<xs:all>
+			<xs:element name="cameraModel" type="xs:string" />
+			<xs:element name="filterMask">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="NO_MASK" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FIRST" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_SECOND" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_THIRD" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FOURTH" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_FIFTH" />
+						<xs:enumeration value="MASK_UP_TO_POSITON_SIXTH" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	
+	 <xs:complexType name="ExposureTimeFilters">
+        <xs:sequence>
+            <xs:element name="exposureTimeFilter" type="config:ExposureTimeFilter" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+	
+	<xs:complexType name="ExposureTimeFilter">
+        <xs:all>
+            <xs:element name="cameraModel" type="xs:string" />
+            <xs:element name="filterMask">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="NO_MASK" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FIRST" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_SECOND" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_THIRD" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FOURTH" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_FIFTH" />
+                        <xs:enumeration value="MASK_UP_TO_POSITON_SIXTH" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Logging">
+        <xs:all>
+            <xs:element name="developerMode" type="xs:boolean" />
+            <xs:element name="fileName" type="xs:string" />
+            <xs:element name="level">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="DEBUG"/>
+                        <xs:enumeration value="INFO"/>
+                        <xs:enumeration value="WARN"/>
+                        <xs:enumeration value="ERROR"/>
+                        <xs:enumeration value="FATAL"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="rotate" type="xs:boolean" />
+            <xs:element name="rotateSize" type="xs:long" />
+            <xs:element name="rotateZip" type="xs:boolean" />
+            <xs:element name="timestampFormat" type="xs:string" />
+        </xs:all>
+    </xs:complexType>  
+       
+    <xs:complexType name="Gui">
+        <xs:all>
+            <xs:element name="selectedMainGUITab">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="MERGE" />
+                        <xs:enumeration value="RENAME" />
+                        <xs:enumeration value="TAG" />
+                        <xs:enumeration value="SEARCH_VIEW" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="main" type="config:GuiWindow" />
+            <xs:element name="imageViewer" type="config:GuiWindow" />
+            <xs:element name="imageSearchResultViewer" type="config:GuiWindow" />
+            <xs:element name="configViewer" type="config:GuiWindow" />
+            <xs:element name="helpViewer" type="config:GuiWindow" />
+            <xs:element name="imageResizer" type="config:GuiWindow" />
+            <xs:element name="imageConflictViewer" type="config:GuiWindow" />
+            <xs:element name="imageRepositoryStatisticsViewer" type="config:GuiWindow" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="GuiTabs">
+        <xs:sequence>
+            <xs:element name="tab" type="config:GuiTab" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="GuiTab">
+        <xs:all>
+            <xs:element name="textColor" type="config:Color" />
+            <xs:element name="position" >
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="TOP" />
+                        <xs:enumeration value="BOTTOM" />
+                        <xs:enumeration value="LEFT" />
+                        <xs:enumeration value="RIGHT" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="id" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="GuiWindow">
+        <xs:sequence>
+            <xs:element name="xLocation" type="xs:int" />
+            <xs:element name="yLocation" type="xs:int" />
+            <xs:element name="width" type="xs:int" />
+            <xs:element name="height" type="xs:int" />
+            <xs:element name="splitPane" type="config:SplitPane" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="backgroundColor" type="config:Color" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Color">
+        <xs:all>
+            <xs:element name="red" type="xs:int" />
+            <xs:element name="green" type="xs:int" />
+            <xs:element name="blue" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="SplitPane" >
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" use="required" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="main" />
+                            <xs:enumeration value="vertical" />
+                            <xs:enumeration value="thumbNailMetaDataPanel" />
+                            <xs:enumeration value="previewAndComment" />
+                            <xs:enumeration value="previewCommentCategoriesRating" />
+                            <xs:enumeration value="imageMetaData" />
+                            <xs:enumeration value="mainToImageList" />
+                            <xs:enumeration value="imageMergeDirectoriesToProcessLog" />
+                            <xs:enumeration value="imageSearchImageExifMetaDataToRatingCommentAndButton" />
+                            <xs:enumeration value="imageSearchCategoriesToImageExifMetaDataAndRatingCommentAndButton" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="width" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="THIN" />
+                            <xs:enumeration value="THICK" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+        
+    <xs:complexType name="UpdatesChecker">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" />
+            <xs:element name="attachVersionInformation" type="xs:boolean" />
+            <xs:element name="timeout" type="xs:int" />
+            <xs:element name="urlVersion" type="xs:anyURI" />
+            <xs:element name="urlVersionInformation" type="xs:anyURI" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Language">
+        <xs:all>
+            <xs:element name="automaticSelection" type="xs:boolean" />
+            <xs:element name="gUILanguageISO6391" type="xs:string" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="RenameImages">
+        <xs:all>
+            <xs:element name="pathSource" type="xs:anyURI" />
+            <xs:element name="pathDestination" type="xs:anyURI" />
+            <xs:element name="templateSubDirectoryName" type="xs:string" />
+            <xs:element name="templatesSubDirectoryName" type="config:RenameTemplates" />
+            <xs:element name="templateFileName" type="xs:string" />
+            <xs:element name="templatesFileName" type="config:RenameTemplates" />
+            <xs:element name="createThumbNails" type="xs:boolean" />
+            <xs:element name="useLastModifiedDate" type="xs:boolean" />
+            <xs:element name="useLastModifiedTime" type="xs:boolean" />
+            <xs:element name="cameraModelNameMaximumLength" type="xs:int" />
+            <xs:element name="progressLogTimestampFormat" type="xs:string" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="RenameTemplates">
+        <xs:sequence>
+            <xs:element name="template" type="xs:string" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ResizeImages">
+        <xs:all>
+            <xs:element name="height" type="xs:int" nillable="true" />
+            <xs:element name="width" type="xs:int" nillable="true" />
+            <xs:element name="pathDestination" type="xs:anyURI" />
+            <xs:element name="selectedQualityIndex">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:minInclusive value="0" />
+                        <xs:maxInclusive value="3" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ImageViewerState">
+        <xs:all>
+            <xs:element name="automaticallyRotateImages" type="xs:boolean" />
+            <xs:element name="automaticallyResizeImages" type="xs:boolean" />
+            <xs:element name="showNavigationImage" type="xs:boolean" />
+            <xs:element name="resizeQuality">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="AUTOMATIC" />
+                        <xs:enumeration value="SPEED" />
+                        <xs:enumeration value="BALANCED" />
+                        <xs:enumeration value="QUALITY" />
+                        <xs:enumeration value="ULTRA_QUALITY" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="slideShowDelayInSeconds" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ImageSearchResultViewerState">
+        <xs:all>
+            <xs:element name="numberOfImagesToDisplay" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="TagImages">
+        <xs:all>
+            <xs:element name="categories" type="config:TagImagesCategories" />
+            <xs:element name="paths" type="config:TagImagesPaths" />
+            <xs:element name="preview" type="config:TagImagesPreview" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="TagImagesCategories">
+        <xs:all>
+            <xs:element name="warnWhenRemove" type="xs:boolean" />
+            <xs:element name="warnWhenRemoveWithSubCategories" type="xs:boolean" />
+            <xs:element name="orRadioButtonIsSelected" type="xs:boolean" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="TagImagesPaths">
+        <xs:all>
+            <xs:element name="addToRepositoryPolicy" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="TagImagesPreview">
+        <xs:all>
+            <xs:element name="useEmbeddedThumbnail" type="xs:boolean" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ThumbNail">
+        <xs:all>
+            <xs:element name="cache" type="config:Cache" />
+            <xs:element name="creation" type="config:Creation" />
+            <xs:element name="grayfilter" type="config:GrayFilter" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Cache">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" />
+            <xs:element name="maxSize" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Creation">
+        <xs:all>
+            <xs:element name="ifMissingOrCorrupt" type="xs:boolean" />
+            <xs:element name="algorithm">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SMOOTH" />
+                        <xs:enumeration value="FAST" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="width" type="xs:int" />
+            <xs:element name="height" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="GrayFilter">
+        <xs:all>
+            <xs:element name="pixelsBrightened" type="xs:boolean" />
+            <xs:element name="percentage" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="ToolTips">
+        <xs:all>
+            <xs:element name="overviewState" type="xs:int" />
+            <xs:element name="imageSearchResultState" type="xs:int" />
+            <xs:element name="overviewImageViewerState" type="xs:int" />
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="Categories">
+        <xs:sequence>
+            <xs:element name="category" type="config:Category" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="highest-used-id" type="xs:int" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="Category">
+        <xs:sequence>
+            <xs:element name="category" type="config:Category" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:int" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="Importedcategories">
+        <xs:sequence>
+            <xs:element name="instance" type="config:Instance" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Instance">
+        <xs:sequence>
+            <xs:element name="category" type="config:Category" minOccurs="0" maxOccurs="unbounded" />    
+        </xs:sequence>
+        <xs:attribute name="displayname" type="xs:string" use="required" />
+        <xs:attribute name="javapegclientid" type="xs:string" use="required" />
+        <xs:attribute name="highest-used-id" type="xs:string" use="required" />
+    </xs:complexType>
+        
+    <xs:complexType name="Repository">
+        <xs:all>
+            <xs:element name="paths" type="config:Paths" />
+            <xs:element name="exceptions" type="config:Exceptions" />
+        </xs:all>
+    </xs:complexType>    
+        
+    <xs:complexType name="Paths">
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Exceptions">
+        <xs:all>
+            <xs:element name="allwaysAdd" type="config:AllwaysAdd" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="neverAdd" type="config:NeverAdd" minOccurs="1" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="AllwaysAdd">
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
+    </xs:complexType>
+    
+     <xs:complexType name="NeverAdd">
+        <xs:sequence>
+            <xs:element name="path" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/> 
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

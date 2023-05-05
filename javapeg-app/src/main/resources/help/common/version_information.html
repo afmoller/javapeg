@@ -1,0 +1,758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <style type="text/css">
+            .addition {
+            color: green;
+            font-weight: bold;
+            }
+
+            .bugfix {
+            color: red;
+            font-weight: bold;
+            }
+
+            .change {
+            color: orange;
+            font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <table border="1" align="center" width="100%">
+            <tr>
+                <td align="center">
+                    J a v a P E G
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    V E R S I O N&nbsp;&nbsp;I N F O R M A T I O N
+                </td>
+            </tr>
+        </table>
+
+        <br />
+
+        <span class="addition">+</span> = Additions since previous version<br />
+        <span class="bugfix">!</span> = Bug fixes since previous version<br />
+        <span class="change">~</span> = Changes since previous version<br />
+        <br />
+
+        <b>3.0 (2015-xx-xx)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>The background color of the Imageviewer is now configurable.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>The position of the Tabs in the main GUI (Top or Bottom is now configurable).
+                    It is also possible to configure the color of the text displayed in the tab 
+                    title. The thickness of all panel dividers in the MainGUI are now 
+                    configurable: Thin or Thick.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>All sections (Panels) in the main GUI which can benefit from resizing
+                    are now possible to resize.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>JavaPEG does remember, between application sessions, which tab in the
+                    main GUI which was last active.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>In the Imageviewer is it possible to copy the currently displayed image
+                    to the System clipboard.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A slide show functionality with selectable delays have been added to the
+                    Imageviewer.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to display the images loaded in the Imageviewer in a
+                    full screen mode. Full screen means that all borders, the toolbar, the meta
+                    data and overview sections are hidden, to give the displayed image as much
+                    space as possible.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>The, in the Imageviewer, currently displayed image and the images in the
+                    image overview to the left of the Imageviewer is synchronized in the way
+                    that the currently displayed image is always automatically visible
+                    (automatic scrolling if needed) and the displayed image is grayed to
+                    visualize which image that is currently displayed.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to add a, in the thumbnail overview, selected set of images
+                    to the list of images to display in the image viewer.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to copy a, in the thumbnail overview, selected set of images
+                    to the system clipboard.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to zoom an displayed image in the Image Viewer. It is also
+                    possible to move the image by dragging it with the mouse. If wanted it is
+                    also possible to display an "Navigation image" a small variant of the
+                    displayed image in which it is possible to click and the large image will
+                    then be centered at the clicked position. It is also possible to center
+                    a displayed image.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to select which scaling method JavaPEG shall use when an
+                    image in the ImageViewer is to be scaled. This way it is possible to select
+                    the quality and thereby the speed of scaling an image (higher quality
+                    requires longer scaling time.)</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>When an image is removed from the image view list then the preview image is
+                    automatically updated to the newly (automatically) selected image in the
+                    image view list.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>When an image is added to the image view list, then this image is also
+                    automatically selected in the list and thereby displayed in the preview
+                    area.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to save an unlimited amount of File name and Sub folder
+                    rename templates. Any saved template will end up in a drop down box and when
+                    selected, it will be used as the current template used by the rename
+                    functionality.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A new image merge mode has been added to JavaPEG. This means that it is
+                    possible to merge image files (copy files from different directories into
+                    one destination directory, but without any possible duplicates) from an
+                    unlimited amount of source directories.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>An image resize functionality has been added to JavaPEG. It can batch resize
+                    images into specified sizes and qualities, either by specifying the width
+                    (height will be calculated), height (width will be calculated) or both (the
+                    exact given sizes will be used without taking the original images aspect
+                    ratios into consideration)</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>At the first start of JavaPEG the user will be shown an application
+                    configuration form, in which it is either possible to set the language to be
+                    used by JavaPEG, or to do a full import of a configuration from an
+                    previously made installation. It is possible to import configurations from
+                    JavaPEG versions ranging from 3.0 and forwards. There is no support of
+                    importing configurations from an older version.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Configuration validation against Schema at application start. If the
+                    configuration is invalid then the invalid configuration will be stored into
+                    a "corrupt" directory and the configuration will be restored from a zipped
+                    backup. If that backup also is corrupt, then the configuration will be
+                    restored from a built in fall back configuration.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Row sorting, by column, added to the meta data tables.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Possible to reorder columns and sort the rows by any column in the METADATA
+                    and PREVIEW tables in the RENAME IMAGES mode.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>If the Automatic Image Resize button is selected in the ImageViewer then a
+                    deselection of this button will resize a loaded image to the original size.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>If an image thumbnail is double clicked when JavaPEG is in
+                    SEARCH / VIEW IMAGE mode the image will be added to the end of the image
+                    list. If the Image Viewer is displayed the image will also be added to the
+                    collection of viewable images in the Image Viewer.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>An image tagging functionality has been implemented. It is possible to tag
+                    an image with an unlimited amount of categories, set an image rating between
+                    1 and 5 and to enter a comment. This meta data and additional image specific
+                    data, such as ISO rating, exposure data and time, shutterspeed,... is
+                    persistently stored in xml files.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A search engine that searches in an in memory database compiled by all
+                    existing xml meta data files mentioned in the section above.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to have the images automatically rotated in the ImageViewer.
+                    The rotation is done according to the stored orientation meta data in each
+                    image. If there is no such information stored in the image, the image can
+                    not be rotated automatically.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to rotate the images in the ImageViewer, counterwise or
+                    clockwise in steps of 90 degrees.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to set the detail level of the thumbnail tooltips. Three
+                    levels exists: Disabled, Enabled and Extended, where Disabled; means no
+                    tooltips at all, Enabled; the file name of the image is shown and Extended;
+                    is the file name and some other meta data of the image (the same as it was
+                    in the tooltip in earlier versions of JavaPEG. It is also possible to
+                    configure the tooltips independendently for the thumbnails in the main
+                    application window, image search result viewer and the image viewer. This
+                    means that it is possible to have different tooltips in the different parts
+                    of the JavaPEG application.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Added the possibility to copy image(s) to system clipboard. It is either
+                    possible to copy one image to clipboard or all images in a selected directory
+                    via popup menu or to copy a list of images at once, by populating an image
+                    list in the SEARCH / VIEW IMAGES tab and click on the copy image list to
+                    system clipboard button or by selecting images in the thumbnail overview by
+                    clicking on each image to copy and at the same time holding down the Ctrl
+                    button and then selecting the "Copy selected image(s) to system clipboard"
+                    menu item in the context menu.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>If a JPEG file is missing an embedded thumbnail or if the exif data holds
+                    corrupt information about where the thumbnail is stored and JavaPEG does not
+                    find it by scanning the entire JPEG file or if the stored thumbnail is
+                    corrupt, then it is possible to let JavaPEG create a thumbnail to be used by
+                    JavaPEG. The original JPEG file will not be updated with the created
+                    thumbnail.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to enable and disable the thumbnail cache that JavaPEG uses
+                    internally. It is also possible to set the max size (number of thumbnails to
+                    cache) of the cache and to entirely clear the cache from thumbnails.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If the "Apply" button was clicked in the Configuration GUI and changes was
+                    made to the configuration, then those changes was viewed in a dialog not
+                    only when clicking the "Apply" button but also when clicking the "OK"
+                    button.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If the Unbuffered logging setting in the logging configuration was
+                    activated then the log level setting was not respected (all levels was
+                    logged)</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If a file was copied incorrect when it was renamed the, rename process log
+                    window did incorrectly state that the file was both copied correct and with
+                    failure.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If time and, or date was missing in the Exif data the time and, or date was
+                    not used from file time stamp even if the configuration was set to do that.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>JavaPEG did crash as a result of a null pointer exception when a directory
+                    without read access, for the current user, was browsed in the tree view.
+                    Bug seen in Windows 7, but is probably existing in any Operating system with
+                    user access control.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>In the thumbnail tooltips the swedish string "Filnamn", (File name) was hard
+                    coded.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If the keyboard was used to change image in the Image Viewer and the change
+                    image key was held down, then the change of images did not stop at once when
+                    the key was released. This has been fixed in this version.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>It is now possible to add images to the image view list via the
+                    context menu or via a double click in all application modes: Merge,
+                    Rename, Tag, Search.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The Image list has been moved into an always visible panel to the right in the
+                    main GUI.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The texts displayed in the Help viewer are now in HTML format instead of
+                    plain text.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The thumbnails in the main GUI are explicitly loaded in date order (oldest
+                    first) and not as it was before, in unspecified order.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The rename parameters have been aligned between the English and Swedish
+                    translations. This will avoid having "incorrect" rename parameters in any
+                    stored template, if the language is changed.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>All sections in all configuration pages in the Configuration GUI have their
+                    configuration content (check boxes, input fields, ...) aligned top-left in
+                    their respectively section.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The JavaPEG configuration file now uses a custom XML format specifically
+                    developed for this application.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The directory selection tree to the left in the main windows is enhanced to
+                    look like, with icons and content, as the icons in the native file explorer.
+                    For instance the Desktop and Computer folders are displayed in an Windows
+                    environment.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>Made the JPEG filtering a little bit more relaxed. All images with the
+                    suffixes (case insensitive) JPG or JPEG that is able to be loaded by the
+                    JAVA Virtual Machine is treated as JPEG files that shall be handles as
+                    images by JavaPEG, for instance in the rename mode of JavaPEG. This change
+                    makes it possible to load images which have some garbage bytes in the file,
+                    but which are possible to load by the JAVA Virtual Machine.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The help content can now be opened by just pushing F1 button instead of
+                    Ctrl + Alt + F1.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The possibility to override the application embedded language and help files
+                    has been removed.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The progress bar displayed when loading images has been changed from being a
+                    separate window to be integrated in the thumbnail display area.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The error message that is displayed if the configuration file is missing or
+                    corrupt has been improved by not only saying that the file is missing it
+                    also says that the file might be corrupt.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The value of the Exif Picture Width and Exif Picture Height was stripped
+                    from any occurrences of non integer characters. In for instance some of the
+                    Canon cameras the value of any of the above was: "2592 pixels". From now on
+                    the value is only "2592"</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The length of the Exif parameter: Camera Model was hard coded to a maximum
+                    of 15 characters. That has been changed to instead being a configurable
+                    length. The configuration is made in the configuration GUI. A value of 0
+                    (zero) means unlimited length.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The Exif parameter shutter speed has been changed to the Exif parameter
+                    exposure time, since that is what was meant from the beginning. The
+                    exposure time parameter gives values which corresponds to them seen in the
+                    camera during a photo session and the shutter speed values are slightly
+                    different. See Exif standard for details.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The Exif parameter aperture value has been changed to the Exif parameter
+                    F-Number, since that is what was meant from the beginning. The
+                    F-Number parameter gives values which corresponds to them seen in the
+                    camera during a photo session and the aperture values are slightly
+                    different. See Exif standard for details.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>2.4 (2009-11-17)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Possible to create customized help files. Either by overriding an existing
+                    language or to create help files for a new language (to match a new not
+                    embedded language file)</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Added move to top and bottom buttons for the images in the Image List at the
+                    VIEW IMAGES tab.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to let JavaPEG compress the rotated log files in zip-files.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A graphical user interface for the configuration parameters has been added.
+                    This removes the insecure way of manually changing (Although it is still
+                    possible if wanted) the parameter values in the conf.xml file.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>For statistical purposes it is possible to let JavaPEG attach the version
+                    number to the version update check request made to the version update
+                    server. The only information sent is which version of JavaPEG that is making
+                    the version update check. In other words this is totally anonymous, no
+                    system unique information is sent.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible (by configuration parameters) to let JavaPEG use the latest
+                    modified timestamp for the image files to populate the date and time
+                    variables if they are missing in the Exif meta data.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A new Image List format has been added. It is from now on possible to export
+                    image lists supported by the XnView image viewer.
+                    <br/>
+                    <br/>
+                    XnView (http://www.xnview.com/)</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>An ImageViewer has been added. It is opened from the "VIEW IMAGES"
+                    (Previous "CREATE IMAGE LISTS" tab) tab and it will show all the images that
+                    has been selected and added to the IMAGE LIST The Image Viewer opens in a
+                    separate window.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>As a bonus for the fix of the bug described below, with wrong help files
+                    (possibly non existing) being loaded there is now support for creating
+                    localized help files in the same manner as for the language files.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If the automatic rotation of log file was disabled, then the log was
+                    rotated for each entry written to log, resulting in a lot of log files with
+                    only one log entry in each log file.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>If a new language file was created (with a new language) then the help file
+                    management tried to load help files for that language. The solution was to
+                    load default language help files if desired files does not exist.</td>
+            </tr>
+
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The Language selection GUI has been removed and all settings that was made
+                    via that interface has been moved to the new graphical configuration
+                    interface.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The image loading (When selecting a directory in the tree structure to the
+                    left) has been improved by reducing the initial lag when a directory was
+                    selected. The lag was linear to the amount of images in selected directory</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>In Windows Vista, Windows 7 or other Operating system that restricts file
+                    access according to user rights there where problems with JavaPEG. All files
+                    and directories that are dynamic have been moved from the application
+                    installation directory to a directory named
+                    "javapeg-&lt;JAVEPEG_VERSION_NUMBER&gt;" in the home directory for the user that
+                    starts JavaPEG. For instance: C:\Users\Fredrik\javapeg-2.4 in a Windows
+                    Vista or Windows 7 environment.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>2.3 (2009-08-03)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>The embedded download functionality which downloads the latest version
+                    JavaPEG was broken and still is in all prior versions to this version, which
+                    supports version check against a version server (2.1 & 2.2). The reason for
+                    this bug to arise was that SourceForge made changes to the format of the URL
+                    to the released files. And unfortunately JavaPEG of earlier versions was not
+                    generic enough to handle that change.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>2.2 (2009-08-02)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Spanish translation added. The translation was performed by: Angel Bueno</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A new variable has been added to the set of variables. The new variable
+                    gives access to the original file name. So by using this new variable in the
+                    file name template the original file name except the suffix will be inserted
+                    at the position of the variable. The code for this new variable was written
+                    by: Angel Bueno</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A new mode to the application has been added. It is from now on possible to
+                    create images lists to be used in external applications. Lists compatible
+                    with the following applications are possible to create:
+                    <br />
+                    <br />
+                    PolyView  (http://www.polybytes.com/)
+                    IrfanView (http://www.irfanview.com/)
+                    <br />
+                    <br />
+                    It is also possible to save lists in JavaPEG format which later on can be
+                    exported to a supported 3rd party list format or having images added or
+                    removed.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Status bar added to the bottom of the GUI, displaying selected directory,
+                    number of images in selected directory and number of columns and rows in the
+                    thumbnail grid.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Detailed meta data information is available in a panel next to the
+                    thumbnails panel for each image shown. The meta data for a specific image
+                    is shown when the thumbnail is clicked.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>At application start the Main GUI sets it size to the size it had when it
+                    was shut down the the previous time.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>The progress bar for loading thumbnails was not always centered to the main
+                    GUI window when thumbnails was loading.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>Main GUI is from now on resizable and the layout is handled by layout
+                    managers.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>The file chooser GUI, as a separate window, has been replaced by an always
+                    visible and accessible tree structure in the main GUI.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>2.1 (2009-05-21)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Detailed information about the JPEG rename process, process of copy any non
+                    JPEG files and the file integrity after the rename and file copy to the
+                    rename process progress window.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>JavaPEG can from now, do an optional (configurable) version check at
+                    application start. It does it against an version server. If there is a new
+                    version available, the changes for that version compared to the current used
+                    version is presented. It is also possible to download the new version
+                    through JavaPEG</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Validation of the content in any existing external layout.xml file against
+                    a schema.</td>
+            </tr>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>Fixed the problems with the accelerator keys for menu items and buttons.
+                    The where collisions between globally defined accelerator keys and JavaPEG
+                    defined.</td>
+            </tr>
+            <tr>
+                <td class="change" valign="top">~</td>
+                <td>GUI behavior changed after a rename process has finished. It was changed
+                    from being cleared from all inputs, as it is at application start, to not be
+                    cleared at all.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>2.0 (2009-05-05)</b><br />
+
+        Version 2.0 of JavaPEG is more or less a complete rewrite compared to the 1.x
+        versions. Despite this the concept is still the same: A simple to use and
+        secure tool to rename images created by a digital camera.
+        <br />
+        <br />
+        The application still need a path to a source directory with images. When the
+        source directory has been chosen the destination directory must be selected.
+        After this a file name and sub directory template must be provided. As a last
+        step before the actual rename process can begin, it is possible to select
+        whether a thumb nail overview shall be created or not.
+        <br />
+        <br />
+        A major difference with this version compared to the 1.x versions it that this
+        version only supports renaming of copied image files. The reason for this is
+        to minimize the risk for data losses.
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>The file chooser used to find the directory containing the images that shall
+                    be renamed will show thumb nail versions of the images in the selected
+                    directory. This will ease up the work with finding the images to rename.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Thumb nails will be shown in the main application window, when a directory
+                    with images has been selected in the file chooser and the Ok button has been
+                    clicked.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>There is an instant preview of the resulting file names when the templates
+                    for either the file name or the sub directory has been changed.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>There is an instant errormessage shown if an illegal variable or an illegal
+                    character is used in the templates or the maximum path length has been
+                    exceeded for the resulting file names in the selected destination directory.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Before the rename process starts there is a validation process which makes
+                    sure that: all input is valid, that maximum path length has not been
+                    exceeded, that the sub directory does not exist in the destination
+                    directory, that there is enough space to store the copied files in the
+                    destination directory and that it is possible to create all the files in the
+                    destination directory that exists in the source directory.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>A validation takes place after the rename process has finished. This
+                    validation will check that all files that has been copied from the source
+                    directory to the destination directory has been given the correct name and
+                    has the exact same content.</td>
+            </tr>
+
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Under the rename process, there is a status window showing the progress of
+                    the rename process.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>It is possible to change the look and layout of the optional thumb nail
+                    overview.</td>
+            </tr>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>For potential error that can occur, there is logging to file.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>1.01 (2007-02-02)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="bugfix" valign="top">!</td>
+                <td>Version 1.01 of JavaPEG is a pure bug fix version. It corrects incorrect
+                    behavior in rename engine and a problem with wrong error message.
+                    <br />
+                    <br />
+                    The program hang if a dot was present as first or last character in file
+                    name template or sub folder name template. The exact same problem was also
+                    present if there was white spaces first or last in templates. Besides from
+                    this there was a correction of two error messages which was mixed up in the
+                    English language file.</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <b>1.0 (2006-11-27)</b>
+        <br />
+
+        <table>
+            <tr>
+                <td class="addition" valign="top">+</td>
+                <td>Version 1.0 of JavaPEG has the possibility to rename image files of type jpeg
+                    if they have embedded Exif-information.
+                    <br />
+                    <br />
+                    The program will rename the files according to a, in the field
+                    "FILENAME TEMPLATE", by the user, given template. There is a couple of
+                    variables available and they can be found in the window with heading
+                    "VARIABLES".
+                    <br />
+                    <br />
+                    The user has the possibility to choose whether to rename the original files
+                    or copies of them, which will be saved in the same directory as original
+                    files, or in another directory or in a sub directory in another directory
+                    than original directory. It is possible to give the sub directory a name in
+                    the same way as the files, in other words: by using variables.
+                    <br />
+                    <br />
+                    Before rename process starts the user has the possibility to choose whether
+                    JavaPEG shall create any thumb nails of renamed images. If there will be any
+                    thumb nails there will also be a HTML file created, which will show all the
+                    created thumb nails and the thumb nails will link to the full size images.
+                    <br />
+                    <br />
+                    As last option, it is also possible to instruct the program to open
+                    destination directory after finished rename process.</td>
+            </tr>
+        </table>
+    </body>
+</html>

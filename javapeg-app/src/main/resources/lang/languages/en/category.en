@@ -1,0 +1,36 @@
+# This is the English language file for the category strings.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
+category.categoriesModel.create.error = Could not load categories.\nJavaPEG will be shut down.\n\nSee log file for details
+category.categoriesModel.store.error  = Could not store categories.\nJavaPEG will be shut down.\n\nSee log file for details
+
+category.metadatavalue.selection.mode   = SELECTION MODE
+category.metadatavalue.selection.values = VALUES
+
+category.enterNameForNewCategory    = Please enter a name for the new category
+category.enterNameForNewSubCategory = Please enter a name for the sub category
+category.enterNewNameForCategory    = Please enter a new name for category:
+category.rename                     = Rename category
+
+category.errormessage.categoryNameCanNotStartWithSpace = The category name can not start with a white space:
+category.errormessage.categoryNameAlreadyExistsInScope = already exists as a category in the selected scope, please choose another name
+
+category.addToImageRepositoryHeader = Add image(s) to image repository?
+category.addToImageRepositoryQuestionPartOne = Add image(s) in directory:
+category.addToImageRepositoryQuestionPartTwo = to image repository?
+
+category.rememberMySelection = Remember my selection (can be changed in the configuration)
+
+category.mineCategoriesTab = Mine

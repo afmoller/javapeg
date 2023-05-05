@@ -1,0 +1,455 @@
+# This is the English language file for JavaPEG.
+
+# The structure of the file is as follows:
+
+# A line starting with "#" is interpreted as a comment.
+
+# A valid non comment line may look like "file = Arkiv" where "file" is the variable, = the
+# separator and "Arkiv" is the value of the variable, in this case the Swedish word for file.
+
+# There might be whitespaces or tabs in between the variable and the "=". Any whitespace
+# or other character after the value of the variable will be trimmed away.
+
+# For more information regarding the rules for the syntax of this file please visit:
+# http://java.sun.com/javase/6/docs/api/java/util/Properties.html
+
+#############################################################################################################
+# M E N U                                                                                                   #
+#############################################################################################################
+menu.file          = File
+menu.help          = Help
+menu.configuration = Configuration
+
+#############################################################################################################
+# M E N U  I T E M S                                                                                        #
+#############################################################################################################
+menu.item.exit                       = Exit
+menu.item.openDestinationFileChooser = Open Destination File Chooser
+menu.item.startProcess               = Start Rename Process
+menu.item.programHelp                = Program help
+menu.item.versionInformation         = Version information
+menu.item.about                      = About JavaPEG 3.0
+menu.item.configuration              = Configuration
+
+#############################################################################################################
+# M E N U  M N E M O N I C                                                                                  #
+#############################################################################################################
+menu.mnemonic.file          = F
+menu.mnemonic.help          = H
+menu.mnemonic.configuration = C
+
+#############################################################################################################
+# M E N U  A C C E L E R A T O R                                                                            #
+#############################################################################################################
+menu.iten.openDestinationFileChooser.accelerator = D
+menu.iten.startProcess.accelerator               = P
+menu.iten.exit.accelerator                       = X
+menu.item.versionInformation.accelerator         = V
+menu.item.about.accelerator                      = A
+
+##############################################################################################################
+# L A B E L S                                                                                                #
+##############################################################################################################
+labels.sourcePath       = SOURCE DIRECTORY
+labels.destinationPath  = PATH TO DESTINATION DIRECTORY
+labels.subFolderName    = SUB DIRECTORY NAME TEMPLATE
+labels.fileNameTemplate = FILENAME TEMPLATE
+labels.variables        = VARIABLES
+
+##############################################################################################################
+# V A R I A B L E S                                                                                          #
+##############################################################################################################
+variable.pictureDateVariable   = d
+variable.pictureDate           = Shooting date of picture
+variable.pictureTimeVariable   = t
+variable.pictureTime           = Shooting time of picture
+variable.cameraModelVariable   = m
+variable.cameraModel           = Camera model
+variable.shutterSpeedVariable  = e
+variable.shutterSpeed          = Exposure Time
+variable.isoValueVariable      = i
+variable.isoValue              = ISO value
+variable.pictureWidthVariable  = w
+variable.pictureWidth 	       = Picture width in pixels
+variable.pictureHeightVariable = h
+variable.pictureHeight         = Picture height in pixels
+variable.apertureValueVariable = f
+variable.apertureValue         = F-Number
+variable.dateOftodayVariable   = td
+variable.dateOftoday           = Today's date
+variable.sourceNameVariable    = sn
+variable.sourceName            = Original file name
+
+##############################################################################################################
+# V A R I A B L E S  C O M M E N T                                                                           #
+##############################################################################################################
+variable.comment.infoLabelA = * = These variables might be
+variable.comment.infoLabelB = used when naming a subdirectory
+variable.comment.fileName   = File name
+
+##############################################################################################################
+# C H E C K  B O X E S                                                                                       #
+##############################################################################################################
+checkbox.createThumbNails = CREATE THUMBNAIL OVERVIEW
+
+##############################################################################################################
+# T O O L T I P S                                                                                            #
+##############################################################################################################
+tooltip.destinationPathButton                                  = Browse for destination directory
+tooltip.subFolderName                                          = Specify name of folder with possible variables here
+tooltip.fileNameTemplate                                       = Specify filename template with possible variables here
+tooltip.createThumbNails                                       = Create thumbnail overview of name changed files
+tooltip.openDestinationFolder                                  = Open folder where name changed files will be present after finished process
+tooltip.beginNameChangeProcessButton                           = Start name change process
+tooltip.selectSourceDirectoryWithImages                        = Select a directory with images
+tooltip.selectDestinationDirectory                             = Select a destination directory
+tooltip.selectSourceDirectoryWithImagesAndDestinationDirectory = Select a directory with images and a destination directory
+tooltip.enableTemplateFields                                   = To enable, select a destination directory
+tooltip.saveTemplateToTemplatesList                            = Save template to the list of available templates
+tooltip.deleteTemplateFromTemplateList                         = Remove the selected template from the list of saved templates
+##############################################################################################################
+# F I L E  S E L E C T I O N  D I A L O G S                                                                  #
+##############################################################################################################
+fileSelectionDialog.destinationPathFileChooser = Choose destination folder
+
+##############################################################################################################
+# A B O U T  D I A L O G                                                                                     #
+##############################################################################################################
+aboutDialog.Label    = About JavaPEG 3.0
+aboutDialog.TextRowA = JavaPEG, ver: 3.0
+aboutDialog.TextRowB = Copyright © 2005 - 2013
+aboutDialog.TextRowC = This program is coded in Java (JDK 1.7).
+aboutDialog.TextRowD = Programmed between 2005-05-24 - 2013-**-**.
+aboutDialog.TextRowE = Version 3.0 released 2013-**-**.
+aboutDialog.TextRowF = Developer:
+aboutDialog.TextRowG = Fredrik Möller
+aboutDialog.TextRowH = _______________________________________
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  M A I N G U I                                                                  #
+##############################################################################################################
+errormessage.maingui.errorMessageLabel             = Error
+errormessage.maingui.warningMessageLabel           = Warning
+errormessage.maingui.informationMessageLabel       = Information
+errormessage.maingui.locationError                 = Could not set window location according to settings. See logs for details
+errormessage.maingui.sameSourceAndDestination      = Source and destination folder are the same
+errormessage.maingui.notEnoughMemory               = Memory Error - Application start is aborted.\n\nJavaPEG has to be started with the supplied shortcut file or with -Xmx384m as JVM parameter.\nSee log file for details.
+errormessage.maingui.onlyOneImageViewer            = It is only possible to start one image viewer.
+
+##############################################################################################################
+# P R O G R E S S B A R                                                                                      #
+##############################################################################################################
+progress.ThumbNailLoading.title = Loading thumbnails
+
+progress.RenameProcess.title.processStarting                                  = Renaming images...
+progress.RenameProcess.title.processFinished                                  = Rename process finished
+progress.RenameProcess.dismissWindowButton.mnemonic                           = C
+progress.RenameProcess.dismissWindowButton.processStarting                    = wait..
+progress.RenameProcess.dismissWindowButton.processFinished                    = Close
+progress.RenameProcess.dismissWindowButton.processStarting.toolTip            = Rename in progress...
+progress.RenameProcess.dismissWindowButton.processFinished.toolTip            = Close this window
+progress.RenameProcess.openDestinationDirectoryButton.mnemonic                = O
+progress.RenameProcess.openDestinationDirectoryButton.processStarting         = wait..
+progress.RenameProcess.openDestinationDirectoryButton.processFinished         = Open
+progress.RenameProcess.openDestinationDirectoryButton.processStarting.toolTip = Rename in progress...
+progress.RenameProcess.openDestinationDirectoryButton.processFinished.toolTip = Open destination directory in an explorer window
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  J P G R E N A M E                                                              #
+##############################################################################################################
+errormessage.jpgrename.joptionPaneYes          = Yes
+errormessage.jpgrename.joptionPaneNo           = No
+errormessage.jpgrename.noImagesInPathLabel     = Fault message
+errormessage.jpgrename.noImagesInPath          = Chosen path contains no image files
+errormessage.jpgrename.noExifInImage           = No Exif information could be found. To redo process from the beginning, delete following file from the files which shall be renamed:
+errormessage.jpgrename.noExifInImageLabel      = No Exif
+errormessage.jpgrename.imageViewerMustBeClosed = The rename process can not start when the image viewer is started.\nPlease close the image viewer and restart the rename process.
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  F I L E H A N D L E R                                                          #
+##############################################################################################################
+errormessage.filehandler.fileNotFoundExceptionA = The file:
+errormessage.filehandler.fileNotFoundExceptionB = can not be found
+errormessage.filehandler.canNotReadFile         = Not possible to access the file:
+errormessage.filehandler.canNotWriteFile        = Can not write:
+
+##############################################################################################################
+# E R R O R  M E S S A G E S  U N C A U G H T  E X C E P T I O N S                                           #
+##############################################################################################################
+errormessage.uncaughtexceptionhandler.outOfMemoryError        = JavaPEG has run out of memory.\n\nSee logfile for more details and consult the README file\nin installation directory to find a solution\n\nJavaPEG will be shut down.
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartOne  = An unexpected error has occurred:
+errormessage.uncaughtexceptionhandler.unexpectedErrorPartTwo  = .\n\nSee log file for details and consult the README file\nin installation directory to find a solution\n\nJavaPEG will be shut down.
+
+##############################################################################################################
+# M A I N  G U I  T A B B E D  P A N E                                                                       #
+##############################################################################################################
+maingui.tabbedpane.imagelist.label.list                 = IMAGE LIST
+maingui.tabbedpane.imagelist.label.preview              = PREVIEW
+maingui.tabbedpane.imagelist.label.numberOfImagesInList = Number of images in list:
+
+maingui.tabbedpane.imagelist.button.removeSelectedImages     = Remove selected image from the list
+maingui.tabbedpane.imagelist.button.removeAllImages          = Remove all images from the list
+maingui.tabbedpane.imagelist.button.openImageList            = Open an saved image list
+maingui.tabbedpane.imagelist.button.saveImageList            = Save the image list
+maingui.tabbedpane.imagelist.button.exportImageList          = Export the image list
+maingui.tabbedpane.imagelist.button.moveUp                   = Move selected image upwards in the list
+maingui.tabbedpane.imagelist.button.moveDown                 = Move selected image downwards in the list
+maingui.tabbedpane.imagelist.button.viewImages               = View selected images in the ImageViewer
+maingui.tabbedpane.imagelist.button.moveToTop                = Move selected image to top of the list
+maingui.tabbedpane.imagelist.button.moveToBottom             = Move selected image to bottom of the list
+maingui.tabbedpane.imagelist.button.copyImageListToClipboard = Copy Images in List to System Clipboard
+maingui.tabbedpane.imagelist.button.openImageResizer         = Open the Image Resizer
+
+maingui.tabbedpane.imagelist.filechooser.openImageList.title                    = Open 
+maingui.tabbedpane.imagelist.filechooser.openImageList.nonSavedImageListMessage = Non saved image list exists, overwrite?
+maingui.tabbedpane.imagelist.filechooser.openImageList.missingFilesErrorMessage = The following files listed in the selected file does not exist, and was not loaded to the list:
+maingui.tabbedpane.imagelist.filechooser.openImageList.couldNotReadFile         = Could not read the file, see log file for details. 
+
+maingui.tabbedpane.imagelist.filechooser.saveImageList.title = Save
+
+maingui.tabbedpane.imagelist.filechooser.exportImageList.title = Export
+
+maingui.tabbedpane.imagelist.imagelistformat.imageList.listAlreadyExists = already exists. Overwrite?
+
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.successfullySaved        = The image list was successfully saved.
+maingui.tabbedpane.imagelist.imagelistformat.javaPEG.notSuccessfullySaved     = The image list could not be saved, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.polyView.successfullyCreated     = The Image list in PolyView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.polyView.notSuccessfullyCreated  = The Image list in PolyView format could not be created, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.successfullyCreated    = The Image list in IrfanView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.irfanView.notSuccessfullyCreated = The Image list in IrfanView format could not be created, see log file for details.
+
+maingui.tabbedpane.imagelist.imagelistformat.xnView.successfullyCreated    = The Image list in XnView format was successfully created.
+maingui.tabbedpane.imagelist.imagelistformat.xnView.notSuccessfullyCreated = The Image list in XnView format could not be created, see log file for details.
+
+##############################################################################################################
+# M A I N  G U I  P O P U P  M E N U                                                                         #
+##############################################################################################################
+maingui.popupmenu.addImageToList                     = Add image to image list
+maingui.popupmenu.addSelectedImagesToList            = Add selected image(s) to image list
+maingui.popupmenu.addAllImagesToList                 = Add all images to image list
+maingui.popupmenu.addImagePathToImageRepository      = Add directory to image repository
+maingui.popupmenu.removeImagePathFromImageRepository = Remove directory from image repository
+maingui.popupmenu.copyToSystemClipboard              = Copy image to System Clipboard
+maingui.popupmenu.copySelectedToSystemClipboard      = Copy selected image(s) to System Clipboard
+maingui.popupmenu.copyAllToSystemClipboard           = Copy all images to System Clipboard
+maingui.popupmenu.selectAllImages                    = Select all images
+maingui.popupmenu.deSelectAllImages                  = Deselect all images
+
+##############################################################################################################
+# I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
+##############################################################################################################
+information.window.userHelpWindowTitle           = Program help
+information.window.versionInformationWindowTitle = Version information
+
+##############################################################################################################
+# P I C T U R E  P A N E L                                                                                   #
+##############################################################################################################
+picture.panel.pictureLabel = IMAGES IN SELECTED DIRECTORY
+
+##############################################################################################################
+# I N F O R M A T I O N  P A N E L                                                                           #
+##############################################################################################################
+information.panel.informationLabel   = INFORMATION
+information.panel.columnNameFileName = File name
+information.panel.fileNameCurrent    = Current file name
+information.panel.fileNamePreview    = File name preview
+information.panel.metaDataLabel      = METADATA
+information.panel.previewLabel       = PREVIEW
+information.panel.progressLabel      = PROCESS
+information.panel.subFolderNameLabel = Subfolder name
+
+##############################################################################################################
+# R E N A M E  P R O C E S S  I N F O R M A T I O N  M E S S A G E                                           #
+##############################################################################################################
+rename.PreFileProcessor.starting                           = Pre File Processing Started
+rename.PreFileProcessor.error                              = Pre File Processing Found Following Errors:
+rename.PreFileProcessor.finished                           = Pre File Processing Finished
+rename.PreFileProcessor.sourceAndDestinationPath           = Validating Source and Destination Paths
+rename.PreFileProcessor.fileAndSubDirectoryTemplate        = Validating File Name and Sub Directory Name Template
+rename.PreFileProcessor.destinationDirectoryDoesNotExist   = Validating Destination Directory Not Existing
+rename.PreFileProcessor.uniqueFilesInSourceDirectory       = Validating Unique Files In Source Directory
+rename.PreFileProcessor.jPEGTotalPathLength                = Validating Total Path Lengths Of JPEG Files
+rename.PreFileProcessor.nonJPEGTotalPathLength             = Validating Total Path Lengths Of Non JPEG Files
+rename.PreFileProcessor.availableDiskSpace                 = Validating Available Disk Space
+rename.PreFileProcessor.fileCreationAtDestinationDirectory = Validating File Creation At Destination Directory
+rename.PreFileProcessor.externalOverviewLayout             = Validating Layout For Thumbnail Overview
+
+rename.FileProcessor.starting                               = File Processing Has Started
+rename.FileProcessor.finished                               = File Processing Has Finished
+rename.FileProcessor.createSubDirectory                     = Sub Directory Creation
+rename.FileProcessor.createThumbNailsDirectory              = Thumb Nails Directory Creation
+rename.FileProcessor.createAndTransferContentOfJPEGFiles    = JPEG Files Copy And Rename
+rename.FileProcessor.createThumbNails                       = Thumb Nails Creation
+rename.FileProcessor.createAndTransferContentOfNonJPEGFiles = Copy Non JPEG Files
+rename.FileProcessor.renameFromLabel                        = File:
+rename.FileProcessor.renameToLabel                          = Renamed To:
+rename.FileProcessor.renameFailed                           = Could not rename file:
+rename.FileProcessor.copyFailed                             = Could not copy file:
+
+rename.PostFileProcessor.integrityCheck.starting = File Integrity Check Started
+rename.PostFileProcessor.integrityCheck.finished = File Integrity Check Finished
+rename.PostFileProcessor.integrityCheck.error    = Not All Files Where Copied Correct, See Log File For Details
+rename.PostFileProcessor.integrityCheck.checking = Integrity Of Copied Files Are Checked
+rename.PostFileProcessor.renameFromLabel         = File:
+rename.PostFileProcessor.copiedWithError         = Copied with ERROR to:
+rename.PostFileProcessor.copiedOK                = Copied OK to:
+rename.PostFileProcessor.renamedWithError        = Renamed with ERROR to:
+rename.PostFileProcessor.renamedOK               = Renamed OK to:
+
+##############################################################################################################
+# P R E  F I L E  P R O C E S S O R  V A L I D A T O R S                                                     #
+##############################################################################################################
+#
+# Available disk space validator
+validator.availablediskspace.notEnoughDiskSpace = Not enough disk space at selected destination.
+
+# Destination directory does not exist validator
+validator.destinationdirectorydoesnotexist.existingSubDirectory = Destination folder already exists.
+
+# File and sub directory template validator
+validator.fileandsubdirectorytemplate.noSubFolderNameError                  = Sub folder must have a name
+validator.fileandsubdirectorytemplate.invalidCharactersInSubFolderNameError = Sub folder name contains illegal characters
+validator.fileandsubdirectorytemplate.invalidVariablesInSubFolderNameError  = Sub folder name may only contain these variables:
+validator.fileandsubdirectorytemplate.dotFirstInSubFolderNameTemplate       = A dot is not valid as first character in sub folder name
+validator.fileandsubdirectorytemplate.dotLastInSubFolderNameTemplate        = A dot is not valid as last character in sub folder name
+validator.fileandsubdirectorytemplate.noFileNameError                       = A filename template must be set
+validator.fileandsubdirectorytemplate.invalidCharactersInFileNameError      = Filename template contains illegal characters
+validator.fileandsubdirectorytemplate.dotFirstInFileNameTemplate            = A dot is not valid as first character in filename template
+validator.fileandsubdirectorytemplate.dotLastInFileNameTemplate             = A dot is not valid as last character in filename template
+
+# File creation at destination directory validator
+validator.filecreationatdestinationdirectory.couldNotCreateSubDirectory       = Could not create sub directory
+validator.filecreationatdestinationdirectory.couldNotCreateAllJPEGFiles       = Could not create all JPEG Files
+validator.filecreationatdestinationdirectory.couldNotCreateThumbNailDirectory = Could not create thumb nail directory
+validator.filecreationatdestinationdirectory.couldNotCreateAllThumbNails      = Could not create all thumb nails
+validator.filecreationatdestinationdirectory.couldNotCreateAllNonJPEGFiles    = Could not create all non JPEG files
+validator.filecreationatdestinationdirectory.couldNotDeleateSubDirectory      = Could not delete sub directory
+
+# JPEG total path length validator
+validator.jpegtotalpathlength.toLongFileName               = With the current destination directory and templates the total paths\nof the renamed files will be longer than what is allowed.\n\nTo avoid this, either change the destination folder or change the\ntemplates.
+validator.jpegtotalpathlength.noJPEGFIlesInSourceDirectory = No JPEG files in selected source directory
+
+# Non JPEG total path length validator
+validator.nonjpegtotalpathlength.toLongFileName      = The total path with the current destination directory will be to long for the file:
+validator.nonjpegtotalpathlength.toLongDirectoryPath = The total path with the current destination directory will be to long for the directory:
+
+# Source and destination path validator
+validator.sourceanddestinationpath.noSourcePathError                       = A path to source folder must be set
+validator.sourceanddestinationpath.noDestinationPathError                  = A path to destination folder must be set
+validator.sourceanddestinationpath.invalidCharactersInSourcePathError      = Path to source folder contains illegal characters
+validator.sourceanddestinationpath.invalidCharactersInDestinationPathError = Path to destination folder contains illegal characters
+
+# Thumb nail overview layout validator
+validator.externalOverviewLayout.invalidXMLFile = The content of the file layout.xml is invalid. See log file for details. 
+
+##############################################################################################################
+# T H U M B N A I L  O V E R V I E W                                                                         #
+##############################################################################################################
+thumbnailoverview.ThumbNailOverViewCreator.starting             = Thumb Nail Overview Creation Started
+thumbnailoverview.ThumbNailOverViewCreator.finished             = Thumb Nail Overview Creation Finished
+thumbnailoverview.ThumbNailOverViewCreator.error.createCSSFile  = Could not create CSS file in destination directory. See log file for details.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessCSSFile  = Could not access CSS file. See log file for details.
+thumbnailoverview.ThumbNailOverViewCreator.error.createHTMLFile = Could not create HTML file in destination directory.
+thumbnailoverview.ThumbNailOverViewCreator.error.accessHTMLFile = Could not access HTML file. See log file for details.
+
+thumbnailoverview.LayoutParser.wrongElementAmount = The file layout.xml contains wrong amount of element:
+thumbnailoverview.LayoutParser.parseError         = Error when parsing layout.xml. See log file for details.
+
+##############################################################################################################
+# U P D A T E  C H E C K E R                                                                                 #
+##############################################################################################################
+updatechecker.errormessage.uRLInvalid                  = Invalid format of the url to the update server. See log file for details.
+updatechecker.errormessage.uRLWrong                    = Wrong url to the update server. See log file for details.
+updatechecker.errormessage.networkTimeOut              = Update server did not respond, a retry will be done next application start.
+updatechecker.errormessage.downloadError               = Could not download the latest version. See log file for details.
+updatechecker.errormessage.parseException              = Could not read the fetched file. See log file for details.
+updatechecker.errormessage.parseConfigurationException = Could not configure an XML parser. See log file for details.
+
+updatechecker.informationmessage.downloadFinished = Download Finished
+
+updatechecker.gui.title          = New version available
+updatechecker.gui.newVersion     = There is a newer version of JavaPEG available. See change log below for the changes.
+updatechecker.gui.downloadButton = Download
+updatechecker.gui.closeButton    = Close
+
+##############################################################################################################
+# M E T A  D A T A  P A N E L                                                                                #
+##############################################################################################################
+metadatapanel.titleDefaultText     = META DATA FOR IMAGE:
+metadatapanel.tableheader.type     = TYPE
+metadatapanel.tableheader.property = PROPERTY
+metadatapanel.tableheader.value    = VALUE
+
+##############################################################################################################
+# S T A T U S  B A R  M E S S A G E S                                                                        #
+##############################################################################################################
+statusbar.message.amountOfRows              = Number of rows
+statusbar.message.amountOfColumns           = Number of columns
+statusbar.message.amountOfImagesInDirectory = Amount of Images in directory
+statusbar.message.selectedPath              = Selected Path:
+
+##############################################################################################################
+# T A B B E D  P A N E (M A I N  F U N C T I O N S)                                                          #
+##############################################################################################################
+tabbedpane.imageMerge  = MERGE IMAGES
+tabbedpane.imageRename = RENAME IMAGES
+tabbedpane.imageView   = SEARCH IMAGES
+tabbedpane.imageTag    = TAG IMAGES
+
+##############################################################################################################
+# F I L E  R E T R I E V E R                                                                                 #
+##############################################################################################################
+fileretriever.canNotFindFile     = Can not find file, see log file for details.
+fileretriever.canNotReadFromFile = Can not read from file, It might be another application that has locked the file. See log file for details.
+
+metadata.field.name.APERTURE_VALUE = F-NUMBER
+metadata.field.name.CAMERA_MODEL = CAMERA MODEL
+metadata.field.name.IMAGE_SIZE = IMAGE SIZE 
+metadata.field.name.ISO = ISO
+metadata.field.name.EXPOSURE_TIME = EXPOSURE TIME
+metadata.field.name.YEAR = YEAR
+metadata.field.name.MONTH = MONTH
+metadata.field.name.DAY = DAY
+metadata.field.name.HOUR = HOUR
+metadata.field.name.MINUTE = MINUTE
+metadata.field.name.SECOND = SECOND
+
+##############################################################################################################
+# F I N D  I M A G E  S E C T I O N                                                                          #
+##############################################################################################################
+findimage.categories.label                                  = CATEGORIES
+findimage.categories.andRadioButton.label                   = AND
+findimage.categories.andRadioButton.tooltip                 = <html>An image must have all the selected categories<br/>assigned to be added to the search result.</html>
+findimage.categories.orRadioButton.label                    = OR
+findimage.categories.orRadioButton.tooltip                  = <html>An image may have any combination of the selected<br/>categories assigned to be added to the search result.</html>
+findimage.categories.clearCategoriesSelectionButton.label   = Clear selected categories
+findimage.categories.removeAllCategoriesAndSubCategories1   = Remove category:
+findimage.categories.removeAllCategoriesAndSubCategories2   = and all sub categories?
+findimage.categories.removeAllCategoriesAndSubCategories3   = ?
+findimage.categories.addNewTopLevelCategory                 = Add new top level category
+findimage.categories.collapseTopLevelCategories             = Collapse top level categories
+findimage.categories.expandTopLevelCategories               = Expand top level categories
+findimage.categories.collapseCategory                       = Collapse category:
+findimage.categories.expandCategory                         = Expand category:
+findimage.categories.addNewSubCategoryToCategory            = Add new sub category to category:
+findimage.categories.renameSelectedCategory                 = Rename selected category:
+findimage.categories.removeSelectedCategory                 = Remove selected category:
+findimage.categories.saveSelectedCategoriesToSelectedImages = Add the selected categories to all selected images
+findimage.categories.saveSelectedCategoriesToAllImages      = Add the selected categories to all images
+findimage.imagemetadata.label = IMAGE META DATA
+findimage.rating.label         = RATING
+findimage.rating.label.unrated = UNRATED
+findimage.rating.tooltip.bad   = Bad
+findimage.rating.tooltip.good  = Good
+findimage.comment.label              = COMMENT
+findimage.comment.defaultCommentText = Add Comment Here
+findimage.preview.label = PREVIEW
+findimage.clearAllMetaDataParameters.tooltip = Clear all selected meta data parameters
+findimage.displayImageRepositoryStatisticsViewer.tooltip = Open the image repository statistics viewer 
+findimage.searchImages.initializing.imagecontext.tooltip = Image meta data base is loading...
+findimage.searchImages.tooltip = Search for images
+findimage.searchImages.result = No images found
+findimage.searchImages.numberOfMatchingImages.tooltip = Number of matching images with current filter parameters
+findimage.searchImages.numberOfMatchingImages.initializing = Calculating...
