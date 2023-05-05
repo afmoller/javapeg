@@ -21,7 +21,7 @@
 
         <version-jfreechart>1.0.19</version-jfreechart>
         <version-imgscalr-lib>4.2</version-imgscalr-lib>
-        <version-metadata-extractor>2.16.0</version-metadata-extractor>
+        <version-metadata-extractor>2.18.0</version-metadata-extractor>
         <version-junit-jupiter-api>5.9.1</version-junit-jupiter-api>
     </properties>
 
