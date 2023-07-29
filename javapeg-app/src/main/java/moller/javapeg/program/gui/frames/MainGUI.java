@@ -261,6 +261,7 @@ public class MainGUI extends JFrame {
     private JMenuItem popupMenuSaveSelectedCategoriesToAllImages;
     private JMenuItem popupMenuExpandCategoriesTreeStructure;
     private JMenuItem popupMenuCollapseCategoriesTreeStructure;
+    private JMenuItem popupMenuRefreshCurrentlySelectedDirectory;
     private JMenuItem popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList;
     private JMenuItem popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList;
 
@@ -1210,24 +1211,38 @@ public class MainGUI extends JFrame {
         return new JScrollPane(tree);
     }
 
+    private void reloadChildren(final DefaultMutableTreeNode node) {
+        try {
+            tree.setEnabled(false);
+            node.removeAllChildren();
+            showChildren(node);
+            ((DefaultTreeModel)tree.getModel()).nodeStructureChanged(node);
+        } finally {
+            tree.setEnabled(true);
+        }
+    }
+
     private void showChildren(final DefaultMutableTreeNode node) {
-        tree.setEnabled(false);
+        try {
+            tree.setEnabled(false);
 
-        File file = (File) node.getUserObject();
-        if (file.isDirectory()) {
-            File[] files = fileSystemView.getFiles(file, true);
+            File file = (File) node.getUserObject();
+            if (file.isDirectory()) {
+                File[] files = fileSystemView.getFiles(file, true);
 
-            Arrays.sort(files);
+                Arrays.sort(files);
 
-            if (node.isLeaf()) {
-                for (File child : files) {
-                    if (child.isDirectory()) {
-                        node.add(new DefaultMutableTreeNode(child));
+                if (node.isLeaf()) {
+                    for (File child : files) {
+                        if (child.isDirectory()) {
+                            node.add(new DefaultMutableTreeNode(child));
+                        }
                     }
                 }
             }
+        } finally {
+            tree.setEnabled(true);
         }
-        tree.setEnabled(true);
     }
 
     public void showRootFile() {
@@ -1282,6 +1297,7 @@ public class MainGUI extends JFrame {
         popupMenuExpandCategoriesTreeStructure.addActionListener(new ExpandCategoryTreeStructure());
         popupMenuAddImagePathToImageRepository.addActionListener(addSelectedPathToImageRepository = new AddSelectedPathToImageRepository());
         popupMenuRemoveImagePathFromImageRepository.addActionListener(new RemoveSelectedPathFromImageRepository());
+        popupMenuRefreshCurrentlySelectedDirectory.addActionListener(new RefreshCurrentlySelectedDirectory());
         popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList.addActionListener(new AddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList());
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.addActionListener(new AddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList());
 
@@ -1431,10 +1447,12 @@ public class MainGUI extends JFrame {
     }
 
     public void createRightClickMenuDirectoryTree() {
+        popupMenuRefreshCurrentlySelectedDirectory  = new JMenuItem(lang.get("maingui.popupmenu.refreshCurrentlySelectedDirectory"));
         popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToAllwaysAddAutomaticallyList.label"));
         popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList = new JMenuItem(lang.get("imagerepository.addDirectoryToNeverAddAutomaticallyList.label"));
 
         rightClickMenuDirectoryTree = new JPopupMenu();
+        rightClickMenuDirectoryTree.add(popupMenuRefreshCurrentlySelectedDirectory);
         rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList);
         rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList);
     }
@@ -2115,7 +2133,7 @@ public class MainGUI extends JFrame {
 
     /**
      * This listener class listens for mouse clicks made on the
-     * FilesSystemDirectory three and performs the appropriate actions depending
+     * FilesSystemDirectory tree and performs the appropriate actions depending
      * on if it was a "right click" or "left click" with the mouse.
      */
     private class FileSystemDirectoryTreeMouseListener extends MouseAdapter {
@@ -2225,6 +2243,8 @@ public class MainGUI extends JFrame {
             }
 
             if (!alwaysAdd && !neverAdd && !isParent) {
+                rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList);
+                rightClickMenuDirectoryTree.add(popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList);
                 popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList.setActionCommand(totalPath);
                 popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList.setActionCommand(totalPath);
                 rightClickMenuDirectoryTree.show(event.getComponent(), event.getX(), event.getY());
@@ -2236,6 +2256,11 @@ public class MainGUI extends JFrame {
                 } else {
                     displayInformationMessage(lang.get("imagerepository.directory.is.parent.to.already.added.directory"));
                 }
+
+                rightClickMenuDirectoryTree.remove(popupMenuAddDirectoryToAlwaysAutomaticallyAddToImageRepositoryList);
+                rightClickMenuDirectoryTree.remove(popupMenuAddDirectoryToDoNotAutomaticallyAddDirectoryToImageRepositoryList);
+
+                rightClickMenuDirectoryTree.show(event.getComponent(), event.getX(), event.getY());
             }
         }
     }
@@ -3045,6 +3070,14 @@ public class MainGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             ImageRepositoryItem iri = new ImageRepositoryItem(ApplicationContext.getInstance().getSourcePath(), Status.EXISTS);
             imageRepositoriesTableModel.removeRow(iri);
+        }
+    }
+
+    private class RefreshCurrentlySelectedDirectory implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            TreePath selectionPath = tree.getSelectionPath();
+            reloadChildren((DefaultMutableTreeNode)selectionPath.getLastPathComponent());
         }
     }
 

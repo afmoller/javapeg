@@ -236,6 +236,7 @@ maingui.popupmenu.copySelectedToSystemClipboard      = Copy selected image(s) to
 maingui.popupmenu.copyAllToSystemClipboard           = Copy all images to System Clipboard
 maingui.popupmenu.selectAllImages                    = Select all images
 maingui.popupmenu.deSelectAllImages                  = Deselect all images
+maingui.popupmenu.refreshCurrentlySelectedDirectory  = Refresh directory content
 
 ##############################################################################################################
 # I N F O R M A T I O N  W I N D O W  ( U S E R  H E L P  A N D  V E R S I O N  I N F O R M A T I O N )      #
