@@ -38,16 +38,16 @@ public class ParseVMArguments {
             }
         }
 
-        int intValue = Integer.parseInt(xmxString.substring(beginIndex, endIndex));
+        long longValue = Long.parseLong(xmxString.substring(beginIndex, endIndex));
 
         String suffix = xmxString.substring(endIndex);
 
         if ("k".equalsIgnoreCase(suffix)) {
-            return intValue * 1024;
+            return longValue * 1024L;
         } else if ("m".equalsIgnoreCase(suffix)) {
-            return intValue * 1024 * 1024;
+            return longValue * 1024L * 1024L;
         } else {
-            return intValue;
+            return longValue;
         }
     }
 }
